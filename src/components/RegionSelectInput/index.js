@@ -161,7 +161,6 @@ export default class RegionSelectInput extends React.PureComponent {
 
         const options = this.createSingleList(provinces, districts, municipalities);
         const Input = maxOptions > 0 ? SearchSelectInput : SelectInput;
-        console.log('options', options);
         return (
             <div className={_cs(className, styles.regionSelectInput)}>
                 {/*

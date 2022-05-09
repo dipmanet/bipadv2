@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Citizen Reports': 'Citizen Reports',
         'Economic Loss': 'Economic Loss',
         'Owner Name': 'Owner Name',
         'Add Livestock Loss': 'Add Livestock Loss',
@@ -742,6 +743,7 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Citizen Reports': 'नागरिक रिपोर्ट',
         'Economic Loss': 'आर्थिक घाटा',
         'Owner Name': 'घरमुलि को नाम',
         'Add Livestock Loss': 'पशुधन हानि थप्नुहोस्',

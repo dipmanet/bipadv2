@@ -226,24 +226,24 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal
-                className={_cs(styles.addCitizenReportFormModal,
-                    className, language === 'np' && styles.languageFont)}
-                // onClose={closeModal}
-            >
-                <Faram
-                    className={styles.form}
-                    schema={schema}
-                    onChange={this.handleFaramChange}
-                    value={faramValues}
-                    error={faramErrors}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    disabled={pending}
-                >
-                    <Translation>
-                        {
-                            t => (
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            className={_cs(styles.addCitizenReportFormModal,
+                                className, language === 'np' && styles.languageFont)}
+                        >
+                            <Faram
+                                className={styles.form}
+                                schema={schema}
+                                onChange={this.handleFaramChange}
+                                value={faramValues}
+                                error={faramErrors}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                disabled={pending}
+                            >
+
                                 <ModalHeader
                                     className={styles.header}
                                     title={t('Report an incident')}
@@ -256,29 +256,21 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                                         />
                                     )}
                                 />
-                            )
-                        }
-                    </Translation>
 
-                    <ModalBody className={styles.body}>
-                        <NonFieldErrors faramElement />
-                        <Translation>
-                            {
-                                t => (
+
+                                <ModalBody className={styles.body}>
+                                    <NonFieldErrors faramElement />
+
                                     <TextArea
                                         className={styles.input}
                                         faramElementName="description"
                                         label={t('Description')}
                                         autoFocus
                                     />
-                                )
-                            }
-                        </Translation>
 
-                        <div className={styles.inputGroup}>
-                            <Translation>
-                                {
-                                    t => (
+
+                                    <div className={styles.inputGroup}>
+
                                         <SelectInput
                                             className={styles.input}
                                             faramElementName="hazard"
@@ -288,44 +280,31 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                                             label={t('Hazard')}
                                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         />
-                                    )
-                                }
-                            </Translation>
 
-                            <div className={styles.dateTimeInput}>
-                                <Translation>
-                                    {
-                                        t => (
+
+                                        <div className={styles.dateTimeInput}>
+
                                             <DateInput
                                                 label={t('Incident on')}
                                                 className={styles.input}
                                                 faramElementName="incidentOnDate"
                                             />
-                                        )
-                                    }
-                                </Translation>
 
-                                <TimeInput
-                                    className={styles.input}
-                                    faramElementName="incidentOnTime"
-                                />
-                            </div>
-                        </div>
-                        <Translation>
-                            {
-                                t => (
+
+                                            <TimeInput
+                                                className={styles.input}
+                                                faramElementName="incidentOnTime"
+                                            />
+                                        </div>
+                                    </div>
+
                                     <TextInput
                                         className={styles.input}
                                         faramElementName="streetAddress"
                                         label={t('Street Address')}
                                     />
-                                )
-                            }
-                        </Translation>
 
-                        <Translation>
-                            {
-                                t => (
+
                                     <RawFileInput
                                         className={styles.fileInput}
                                         faramElementName="image"
@@ -334,29 +313,34 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                                     >
                                         {t('Upload Image')}
                                     </RawFileInput>
-                                )
-                            }
-                        </Translation>
 
-                        <LocationInput
-                            className={_cs(styles.locationInput, styles.input)}
-                            faramElementName="location"
-                        />
-                        <ReCaptcha
-                            faramElementName="recaptcha"
-                            siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <PrimaryButton
-                            type="submit"
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+
+                                    <LocationInput
+                                        className={_cs(styles.locationInput, styles.input)}
+                                        faramElementName="location"
+                                    />
+                                    <ReCaptcha
+                                        faramElementName="recaptcha"
+                                        siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+
+
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
