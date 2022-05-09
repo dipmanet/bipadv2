@@ -25,7 +25,7 @@ const state: PageState = {
         region: {},
         hazard: [],
         dataDateRange: {
-            rangeInDays: 7,
+            rangeInDays: '',
             startDate: undefined,
             endDate: undefined,
         },

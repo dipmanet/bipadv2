@@ -115,19 +115,31 @@ class PastDateRangeInput extends React.Component<Props> {
 
 	public state = {
 		customActive: false,
+		testState: false,
 	};
+
+	// private testFunction() {
+	// 	const { value } = this.props;
+	// 	if (value.rangeInDays === 'custom') {
+	// 		this.setState({ testState: true });
+	// 		return;
+	// 	}
+	// 	this.setState({ testState: false });
+	// }
 
 	private handleRadioInputChange = (rangeInDays: number | 'custom') => {
 		const { onChange } = this.props;
 		this.setState({ customActive: true });
 
 		if (rangeInDays === 'custom') {
+			this.setState({ testState: true });
 			onChange({
 				rangeInDays,
 				startDate: undefined,
 				endDate: undefined,
 			});
 		} else {
+			this.setState({ testState: false });
 			onChange({
 				rangeInDays,
 				startDate: undefined,
@@ -156,7 +168,6 @@ class PastDateRangeInput extends React.Component<Props> {
 			startDate: newStartDate,
 			endDate: value ? value.endDate : undefined,
 		});
-		console.log('start values is', value);
 	}
 
 	private handleEndDateInputChange = (newEndDate: string) => {
@@ -171,16 +182,19 @@ class PastDateRangeInput extends React.Component<Props> {
 			startDate: value ? value.startDate : undefined,
 			endDate: newEndDate,
 		});
-		console.log('end values is', value);
 	}
+
 
 	public render() {
 		const {
 			className,
 			value,
 		} = this.props;
+
+
 		const {
 			customActive,
+			testState,
 		} = this.state;
 		const { activeRouteDetails: { name: activePage } } = this.context;
 
@@ -194,7 +208,7 @@ class PastDateRangeInput extends React.Component<Props> {
 					value={value.rangeInDays}
 					contentClassName={styles.dateRanges}
 				/>
-				{value.rangeInDays === 'custom' && (
+				{testState && (
 					<div className={styles.customRange}>
 						<Translation>
 							{
