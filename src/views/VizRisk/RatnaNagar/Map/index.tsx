@@ -47,7 +47,6 @@ const Map = (props: any) => {
     const demographicsData = keyValueJsonData && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
     )[0].value;
-    console.log('demographicsData', demographicsData);
 
     function noop() { }
 
