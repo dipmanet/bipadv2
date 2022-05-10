@@ -52,7 +52,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-interface Props{}
+interface Props { }
 
 const VizRiskMainPage = (props: Props) => {
     const [showMenu, setShowMenu] = useState(true);
@@ -61,24 +61,23 @@ const VizRiskMainPage = (props: Props) => {
     const [munThemeId, setmunThemeId] = useState<number>();
     const [municipalityId, setmunicipalityId] = useState<number>();
     const [pendingMainPage, setpendingMainPage] = useState<boolean>(true);
-	const [togglingBetweenMun, settogglingBetweenMun] = useState<boolean>(false);
-	const [provinceId, setprovinceId] = useState<number>();
+    const [togglingBetweenMun, settogglingBetweenMun] = useState<boolean>(false);
+    const [provinceId, setprovinceId] = useState<number>();
 
 
     const handleMenuIconClick = () => {
         setShowMenu(true);
-		settogglingBetweenMun(true);
+        settogglingBetweenMun(true);
     };
 
     const handleMenuTitleClick = (municipality: string, themeid: number, provinceIdIs: number, munId: number) => {
         setShowMenu(false);
-		setprovinceId(provinceIdIs);
+        setprovinceId(provinceIdIs);
         setMun(municipality);
         setmunThemeId(themeid);
         setmunicipalityId(munId);
-			settogglingBetweenMun(true);
+        settogglingBetweenMun(true);
     };
-
 
     const floodMunicipality = vizRiskId.filter(item => item.category === 'Visualizing Flood Exposure');
     const LandslideMunicipality = vizRiskId.filter(item => item.category === 'Visualizing Landslide Exposure');
@@ -93,9 +92,9 @@ const VizRiskMainPage = (props: Props) => {
 
     const getBtnStyle = () => {
         if (mun === 'pachpokhari'
-        || mun === 'jugal'
-        || mun === 'barabise'
-        || mun === 'bhotekoshi'
+            || mun === 'jugal'
+            || mun === 'barabise'
+            || mun === 'bhotekoshi'
 
         ) {
             if (showMenu) {
@@ -111,10 +110,10 @@ const VizRiskMainPage = (props: Props) => {
     };
 
     const { requests:
-		{
-		    vizRiskThemeIdRequest,
+        {
+            vizRiskThemeIdRequest,
 
-		} } = props;
+        } } = props;
 
     useEffect(() => {
         if (pendingMainPage) {
@@ -150,11 +149,11 @@ const VizRiskMainPage = (props: Props) => {
                                             className={styles.hamburgerBtnIcon}
                                         />
                                         {!showMenu
-				&& (
-				    <>
-    <span className={styles.strong} />
-				    </>
-				)
+                                            && (
+                                                <>
+                                                    <span className={styles.strong} />
+                                                </>
+                                            )
                                         }
                                     </Button>
                                 </div>
@@ -187,10 +186,10 @@ const VizRiskMainPage = (props: Props) => {
                                                 </div>
                                             </>
                                         ) : ((munThemeId === 103 && <Rajapur />)
-		 || (munThemeId === 104 && <Tikapur />)
-		  || (munThemeId === 106 && <Dhangadi />)
-		  || (munThemeId === 105 && <Gulariya />)
-		  )
+                                            || (munThemeId === 104 && <Tikapur />)
+                                            || (munThemeId === 106 && <Dhangadi />)
+                                            || (munThemeId === 105 && <Gulariya />)
+                                        )
                                         }
                                         {showMenu ? (
                                             <>
@@ -217,8 +216,8 @@ const VizRiskMainPage = (props: Props) => {
                                                 </div>
                                             </>
                                         ) : ((munThemeId === 107 && <Barabise />)
-		 || (munThemeId === 108 && <Bhotekoshi />)
-		  )
+                                            || (munThemeId === 108 && <Bhotekoshi />)
+                                        )
                                         }
                                         {showMenu ? (
                                             <>
@@ -248,12 +247,12 @@ const VizRiskMainPage = (props: Props) => {
                                                 </div>
                                             </>
                                         ) : ((munThemeId === 101 && <Butwal municipalityId={municipalityId} togglingBetweenMun={togglingBetweenMun} munThemeId={munThemeId} />)
-		 || (munThemeId === 109 && <Jugal />)
-		 || (munThemeId === 110 && <Panchpokhari />)
-		 || ((munThemeId === 300 && provinceId === 2) && <ProvinceTwo />)
-		 || ((munThemeId === 300 && provinceId === 6) && <Karnali />)
-		 || ((munThemeId === 301) && <Ratnanagar />)
-		 )
+                                            || (munThemeId === 109 && <Jugal />)
+                                            || (munThemeId === 110 && <Panchpokhari />)
+                                            || ((munThemeId === 300 && provinceId === 2) && <ProvinceTwo />)
+                                            || ((munThemeId === 300 && provinceId === 6) && <Karnali />)
+                                            || ((munThemeId === 301) && <Ratnanagar />)
+                                        )
                                         }
                                     </div>
                                 )
