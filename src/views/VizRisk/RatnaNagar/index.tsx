@@ -68,6 +68,26 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: false,
         // extras: { schemaName: 'jsonResponse' },
     },
+
+    houseHoldDataRequest: {
+        url: '/vizrisk-household/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            limit: -1,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: jsonData = [] } = response as Response;
+            if (params) {
+                params.setHouseholdData(jsonData);
+            }
+            // params.setPending(false);
+        },
+        onMount: false,
+        // extras: { schemaName: 'jsonResponse' },
+    },
     cIGetRequest: {
         url: '/resource/',
         method: methods.GET,
@@ -97,8 +117,10 @@ const Ratnanagar = (props: any) => {
     const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
     const [keyValueJsonData, setKeyValueJsonData] = useState([]);
     const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>();
+    const [householdData, setHouseholdData] = useState([]);
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
-
+    const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
+    const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
     // state for requested data
     const [cIData, setcIData] = useState<CIData>([]);
 
@@ -107,6 +129,7 @@ const Ratnanagar = (props: any) => {
         cIGetRequest,
         htmlDataRequest,
         jsonDataRequest,
+        houseHoldDataRequest,
     } } = props;
 
     const municipalityId = 35007;
@@ -128,14 +151,18 @@ const Ratnanagar = (props: any) => {
             municipalityId,
         });
         htmlDataRequest.do();
+        houseHoldDataRequest.setDefaultParams({
+            setHouseholdData,
+        });
+        houseHoldDataRequest.do();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (cIData.length > 0 && keyValueJsonData.length > 0) {
+        if (cIData.length > 0 && keyValueJsonData.length > 0 && householdData.length > 0) {
             setpending(false);
         }
-    }, [cIData, keyValueJsonData]);
+    }, [cIData, keyValueJsonData, householdData]);
 
     const onButtonClick = (item: number) => {
         setLeftElement(item);
@@ -150,6 +177,29 @@ const Ratnanagar = (props: any) => {
             setunClickedCIName(prevState => [...new Set([...prevState, ciName])]);
         }
     };
+
+
+    const enableNavBtns = (val: string) => {
+        if (val === 'Right') {
+            setdisableNavRightBtn(false);
+        } else if (val === 'Left') {
+            setdisableNavLeftBtn(false);
+        }
+        setdisableNavLeftBtn(false);
+        setdisableNavRightBtn(false);
+    };
+
+
+    const disableNavBtns = (val: string) => {
+        if (val === 'Right') {
+            setdisableNavRightBtn(true);
+        } else if (val === 'Left') {
+            setdisableNavLeftBtn(true);
+        }
+        setdisableNavLeftBtn(true);
+        setdisableNavRightBtn(true);
+    };
+
 
     const geoJsonCI = {
         type: 'FeatureCollection',
@@ -176,8 +226,11 @@ const Ratnanagar = (props: any) => {
         keyValueHtmlData,
         keyValueJsonData,
         setCurrentHeaderVal,
-    };
+        householdData,
+        disableNavRightBtn,
+        disableNavLeftBtn,
 
+    };
 
     return (
         <>
@@ -204,6 +257,9 @@ const Ratnanagar = (props: any) => {
                                                 ciNameList={ciNameList}
                                                 setciNameList={setciNameList}
                                                 unClickedCIName={unClickedCIName}
+                                                enableNavBtns={enableNavBtns}
+                                                disableNavBtns={disableNavBtns}
+
                                             />
                                             <LeftTopBar currentHeaderVal={currentHeaderVal} />
                                         </>

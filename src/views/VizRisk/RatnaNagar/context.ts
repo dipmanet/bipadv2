@@ -40,6 +40,8 @@ interface MainPageData {
     keyValueJsonData: [];
     setCurrentHeaderVal: React.Dispatch<React.SetStateAction<string>>;
     keyValueHtmlData: [];
+    disableNavRightBtn: boolean;
+    disableNavLeftBtn: boolean;
 }
 const initialMainPageData: MainPageData = {
     leftElement: 1,
@@ -52,6 +54,9 @@ const initialMainPageData: MainPageData = {
     keyValueJsonData: [],
     setCurrentHeaderVal: () => undefined,
     keyValueHtmlData: [],
+    disableNavRightBtn: true,
+    disableNavLeftBtn: true,
+
 };
 
 export const MainPageDataContext = React.createContext(initialMainPageData);

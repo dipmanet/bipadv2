@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import PopulationChart from '#views/VizRisk/Butwal/Charts/PopulationChart';
 
-import styles from './styles.scss';
 import { populationCustomTooltip } from '#views/VizRisk/Butwal/Functions';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
+import styles from './styles.scss';
 
 const DemographicSlide = () => {
     const {

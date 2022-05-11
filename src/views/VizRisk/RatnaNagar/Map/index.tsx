@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 import Education from '#resources/icons/Educationcopy.png';
 import Finance from '#resources/icons/bank.png';
 import Health from '#resources/icons/healthcopy.png';
@@ -12,16 +11,18 @@ import Culture from '#resources/icons/culture.png';
 import Fireengine from '#resources/icons/Fireengine.png';
 import Heli from '#resources/icons/Heli.png';
 import { getGeoJSONPH } from '#views/VizRisk/Butwal/utils';
-import PopupOnMapClick from '../Components/PopupOnMapClick';
-import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
 import mapSources from '#constants/mapSources';
 import { wardsSelector } from '#selectors';
 import { AppState } from '#types';
 import { getWardFilter } from '#utils/domain';
 import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
-import { MainPageDataContext } from '../context';
 import DemoGraphicsLegends from '#views/VizRisk/Butwal/Legends/DemographicsLegends';
+import { MainPageDataContext } from '../context';
+import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
+import PopupOnMapClick from '../Components/PopupOnMapClick';
+import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
+import { getHouseHoldDataColor, getHouseHoldDataStatus } from '../utils';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -34,7 +35,12 @@ const mapStateToProps = (state: AppState) => ({
 let clickedId: string | number | undefined;
 let hoveredWardId: number | string | undefined;
 const Map = (props: any) => {
-    const { municipalityId, CIData, leftElement, ciNameList, setciNameList, clickedCiName, unClickedCIName, wards } = props;
+    const { municipalityId,
+        CIData, leftElement,
+        ciNameList, setciNameList,
+        clickedCiName, unClickedCIName,
+        wards, enableNavBtns,
+        disableNavBtns } = props;
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -42,6 +48,7 @@ const Map = (props: any) => {
 
     const {
         keyValueJsonData,
+        householdData,
     } = useContext(MainPageDataContext);
 
     const demographicsData = keyValueJsonData && keyValueJsonData.filter(
@@ -81,87 +88,81 @@ const Map = (props: any) => {
         },
 
     ];
-    const ratnaNagarVizriskCoordinates = [
-        {
-            id: 1,
-            geometry: { type: 'Point', coordinates: [84.49574, 27.61634] },
-            properties: {
-                name: 'dummy a',
-                color: 'red',
-            },
-        },
-        {
-            id: 2,
-            geometry: { type: 'Point', coordinates: [84.49735, 27.61905] },
-            properties: {
-                name: 'dummy b',
-                color: 'blue',
-
-            },
-        },
-        {
-            id: 3,
-            geometry: { type: 'Point', coordinates: [84.50101, 27.62052] },
-            properties: {
-                name: 'dummy c',
-                color: 'pink',
-
-            },
-        },
-        {
-            id: 4,
-            geometry: { type: 'Point', coordinates: [84.50503, 27.61976] },
-            properties: {
-                name: 'dummy d',
-                color: 'orange',
-            },
-        },
-        {
-            id: 5,
-            geometry: { type: 'Point', coordinates: [84.5050, 27.619] },
-            properties: {
-                name: 'dummy d',
-                color: 'orange',
-            },
-        },
-        {
-            id: 6,
-            geometry: { type: 'Point', coordinates: [84.505, 27.6155] },
-            properties: {
-                name: 'dummy d',
-                color: 'orange',
-            },
-        },
-        {
-            id: 7,
-            geometry: { type: 'Point', coordinates: [84.5, 27.5] },
-            properties: {
-                name: 'dummy d',
-                color: 'orange',
-            },
-        },
-    ];
 
 
     const landoverLayers = ['farmland-ratnanagar', 'industrial', 'forestratnanagar', 'waterratnanagar'];
 
-    const dummyGeojson = {
+    const exposureGeoJson = {
         type: 'FeatureCollection',
-        features: ratnaNagarVizriskCoordinates.map(item => ({
+        features: householdData.map(item => ({
             type: 'Feature',
             id: item.id,
-            geometry: item.geometry,
-            properties: item.properties,
+            geometry: item.point,
+            properties: {
+                value: item.exposure / 10,
+                color: getHouseHoldDataColor(item.exposure / 10),
+                status: getHouseHoldDataStatus(item.exposure / 10),
+            },
         })),
     };
 
+    const hazardGeoJson = {
+        type: 'FeatureCollection',
+        features: householdData.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                value: item.hazard / 10,
+                color: getHouseHoldDataColor(item.hazard / 10),
+                status: getHouseHoldDataStatus(item.hazard / 10),
+
+            },
+        })),
+    };
+    const sensitivityGeoJson = {
+        type: 'FeatureCollection',
+        features: householdData.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                value: item.sensitivity / 10,
+                color: getHouseHoldDataColor(item.sensitivity / 10),
+                status: getHouseHoldDataStatus(item.sensitivity / 10),
+
+            },
+        })),
+    };
+    const adaptiveCapacityGeoJson = {
+        type: 'FeatureCollection',
+        features: householdData.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                value: item.adaptiveCapacity / 10,
+                color: getHouseHoldDataColor(item.adaptiveCapacity / 10),
+                status: getHouseHoldDataStatus(item.adaptiveCapacity / 10),
+
+            },
+        })),
+    };
+
+
+    const allHouseHoldDataTypes = [
+        { name: 'Exposure', data: exposureGeoJson },
+        { name: 'Hazard', data: hazardGeoJson },
+        { name: 'Sensitivity', data: sensitivityGeoJson },
+        { name: 'AdaptiveCapacity', data: adaptiveCapacityGeoJson },
+    ];
     const populationStepColor = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
-    const totalPopulationByWard = demographicsData.map(item => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }));
+    const totalPopulationByWard = demographicsData.map(item => (
+        { ward: item.name, totalpop: item.MalePop + item.FemalePop }));
+
     const arrayValue = totalPopulationByWard.map(item => item.totalpop);
-    const maxPop = Math.max(...arrayValue);
-    const minPop = Math.min(...arrayValue);
-    const popStep = Math.floor((maxPop - minPop) / 5);
+
     const mainArray = Array.from({ length: arrayValue.length }, (v, i) => i + 1);
     const divider = Math.ceil(arrayValue.length / 5);
     arrayValue.sort((a, b) => a - b);
@@ -175,17 +176,28 @@ const Map = (props: any) => {
 
 
     const getColor = (wardId: string | number) => {
-        const colorCondition1 = totalPopulationByWard.filter(item => item.totalpop <= intervals[0]);
-        const colorCondition2 = totalPopulationByWard.filter(item => item.totalpop >= intervals[0] && item.totalpop <= intervals[1]);
-        const colorCondition3 = totalPopulationByWard.filter(item => item.totalpop >= intervals[1] && item.totalpop <= intervals[2]);
-        const colorCondition4 = totalPopulationByWard.filter(item => item.totalpop >= intervals[2] && item.totalpop <= intervals[3]);
-        const colorCondition5 = totalPopulationByWard.filter(item => item.totalpop >= intervals[3]);
+        const colorCondition1 = totalPopulationByWard.filter(
+            item => item.totalpop <= intervals[0],
+        );
+        const colorCondition2 = totalPopulationByWard.filter(
+            item => item.totalpop >= intervals[0] && item.totalpop <= intervals[1],
+        );
+        const colorCondition3 = totalPopulationByWard.filter(
+            item => item.totalpop >= intervals[1] && item.totalpop <= intervals[2],
+        );
+        const colorCondition4 = totalPopulationByWard.filter(
+            item => item.totalpop >= intervals[2] && item.totalpop <= intervals[3],
+        );
+        const colorCondition5 = totalPopulationByWard.filter(
+            item => item.totalpop >= intervals[3],
+        );
 
         const filteredWards1 = colorCondition1.map(item => item.ward);
         const filteredWards2 = colorCondition2.map(item => item.ward);
         const filteredWards3 = colorCondition3.map(item => item.ward);
         const filteredWards4 = colorCondition4.map(item => item.ward);
         const filteredWards5 = colorCondition5.map(item => item.ward);
+
         if (filteredWards1.includes(`Ward ${wardId}`)) {
             return populationStepColor[0];
         } if (filteredWards2.includes(`Ward ${wardId}`)) {
@@ -253,6 +265,16 @@ const Map = (props: any) => {
         multihazardMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
         multihazardMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        multihazardMap.on('idle', () => {
+            if (leftElement === 0) {
+                enableNavBtns('Right');
+            } else if (leftElement === 9) {
+                enableNavBtns('Left');
+            }
+            enableNavBtns('both');
+        });
+
 
         multihazardMap.on('style.load', () => {
             // --------------------------------------SLIDE-3----------------------------------------
@@ -462,90 +484,92 @@ const Map = (props: any) => {
             });
 
             // Hazard ,exposure dummy data
+            allHouseHoldDataTypes.map((household) => {
+                multihazardMap.addSource(`household-${household.name}`, {
+                    type: 'geojson',
+                    data: household.data,
+                    // cluster: true,
+                    // clusterRadius: 50,
+                });
 
-            multihazardMap.addSource('exposure', {
-                type: 'geojson',
-                data: dummyGeojson,
-            });
+                multihazardMap.addLayer({
+                    id: `household-point-${household.name}`,
+                    type: 'circle',
+                    source: `household-${household.name}`,
 
-            multihazardMap.addLayer({
-                id: 'exposure-point',
-                type: 'circle',
-                source: 'exposure',
-                // filter: ['!', ['has', 'point_count']],
-                paint: {
-                    'circle-color': ['get', 'color'],
-                    'circle-radius': [
-                        'case',
-                        ['boolean', ['feature-state', 'clicked'], false],
-                        9,
-                        6,
-                    ],
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#fff',
-                },
-                layout: {
-                    visibility: 'none',
-                },
-            });
-
-
-            multihazardMap.on('click', 'exposure-point', (e) => {
-                e.preventDefault();
-                const { lngLat } = e;
-                const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
-
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                const popupNode = document.createElement('div');
-
-
-                if (clickedId) {
-                    multihazardMap.setFeatureState(
-                        {
-                            id: clickedId,
-                            source: 'exposure',
-                        },
-                        { clicked: false },
-                    );
-                }
-                if (e.features) {
-                    clickedId = e.features[0].id;
-                }
-                multihazardMap.setFeatureState(
-                    {
-                        id: clickedId,
-                        source: 'exposure',
+                    // filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': ['get', 'color'],
+                        'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 1.5, 15, 6],
                     },
-                    { clicked: true },
-                );
+                    layout: {
+                        visibility: 'none',
+                    },
+                });
+
+                multihazardMap.on('click', `household-point-${household.name}`, (e) => {
+                    e.preventDefault();
+                    const { lngLat } = e;
+                    const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
+
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                    const popupNode = document.createElement('div');
 
 
-                ReactDOM.render(
-                    <PopupOnMapClick mainType={'Hazard'} />, popupNode,
-                );
-                new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setDOMContent(popupNode)
-                    .addTo(multihazardMap);
-            });
-
-            multihazardMap.on('click', (e) => {
-                if (e.defaultPrevented === false) {
+                    if (clickedId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                id: clickedId,
+                                source: 'exposure',
+                            },
+                            { clicked: false },
+                        );
+                    }
+                    if (e.features) {
+                        clickedId = e.features[0].id;
+                    }
                     multihazardMap.setFeatureState(
                         {
                             id: clickedId,
                             source: 'exposure',
                         },
-                        { clicked: false },
+                        { clicked: true },
                     );
-                }
+
+
+                    ReactDOM.render(
+                        <PopupOnMapClick
+                            mainType={household.name}
+                            data={e.features[0].properties}
+                        />, popupNode,
+                    );
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setDOMContent(popupNode)
+                        .addTo(multihazardMap);
+                });
+
+                multihazardMap.on('click', (e) => {
+                    if (e.defaultPrevented === false) {
+                        multihazardMap.setFeatureState(
+                            {
+                                id: clickedId,
+                                source: 'exposure',
+                            },
+                            { clicked: false },
+                        );
+                    }
+                });
+                return null;
             });
+
 
             multihazardMap.setZoom(1);
 
             mapZoomEffect.current = setTimeout(() => {
+                disableNavBtns('both');
                 multihazardMap.easeTo({
                     pitch: 25,
                     center: [
@@ -572,7 +596,7 @@ const Map = (props: any) => {
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
             // -------------------------------------LANDCOVER LAYER-------------------------------
-            if (leftElement === 1) {
+            if (leftElement === 1 || leftElement === 3) {
                 landoverLayers.map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -637,14 +661,6 @@ const Map = (props: any) => {
                 });
             }
 
-            if (leftElement === 4) {
-                if (map.current) {
-                    map.current.setLayoutProperty('exposure-point', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('exposure-point', 'visibility', 'none');
-            }
-
             if (leftElement > 3 && leftElement < 9) {
                 if (map.current) {
                     map.current.setLayoutProperty('municipalitygeo', 'visibility', 'none');
@@ -656,12 +672,48 @@ const Map = (props: any) => {
                 map.current.setPaintProperty('wardgeo', 'line-color', '#514d4d');
                 map.current.setPaintProperty('wardname', 'text-color', '#000000');
             }
+
+
+            if (leftElement === 4) {
+                if (map.current) {
+                    map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'none');
+            }
+            if (leftElement === 6) {
+                if (map.current) {
+                    map.current.setLayoutProperty('household-point-Hazard', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('household-point-Hazard', 'visibility', 'none');
+            }
+            if (leftElement === 7) {
+                if (map.current) {
+                    map.current.setLayoutProperty('household-point-Sensitivity', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('household-point-Sensitivity', 'visibility', 'none');
+            }
+            if (leftElement === 8) {
+                if (map.current) {
+                    map.current.setLayoutProperty('household-point-AdaptiveCapacity', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('household-point-AdaptiveCapacity', 'visibility', 'none');
+            }
         }
-    }, [ciNameList, clickedCiName, landoverLayers, leftElement, unClickedCIName]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ciNameList, clickedCiName,
+        landoverLayers, leftElement, unClickedCIName]);
 
 
     return (
-        <div ref={mapContainerRef} className={leftElement === 9 ? styles.mapCSSNone : styles.mapCSS}>
+        <div
+            ref={mapContainerRef}
+            className={leftElement === 9
+                ? styles.mapCSSNone : styles.mapCSS}
+        >
             {leftElement > 3 && leftElement < 9 && <RangeStatusLegend />}
             {leftElement === 2 && <DemoGraphicsLegends demographicsData={demographicsData} />}
             {leftElement === 1 && <LandCoverLegends />}

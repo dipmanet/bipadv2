@@ -12,16 +12,11 @@ import styles from './styles.scss';
 const LeftpaneSlide4 = () => {
     const {
         keyValueHtmlData,
-        keyValueJsonData,
     } = useContext(MainPageDataContext);
 
     const htmlData = keyValueHtmlData && keyValueHtmlData.filter(
-        (item: any) => item.key === 'vizrisk_ratnanagar_page4_htmldata_301_3_35_35007',
+        (item: any) => item.key === 'vizrisk_ratnanagar_page6_htmldata_301_3_35_35007',
     )[0];
-
-    const munName = 'Ratnanagar Municipality';
-    const factorScore = 3;
-    const scoreSattus = 'Low';
 
     const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
 
@@ -68,12 +63,6 @@ const LeftpaneSlide4 = () => {
                 stackBarChartTitle={stackBarChartTitle}
                 data={data}
             />
-            <p>
-                The value of individual households is
-                calculated based on the scoring of the
-                selected indicators. The indicators used to
-                quantify hazard are
-            </p>
             <SelectComponent />
             <CommonBarChart barTitle={barTitle} barData={barData} />
         </div>
