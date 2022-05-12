@@ -1,14 +1,3 @@
-@font-face {
-    font-family: "Kalimati Regular";
-    src: url("../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
-    unicode-range: U+30-39;
-    }
-    
-  .languageFont{
-    font-family: "Kalimati Regular"!important;
-    color:rgba(0, 0, 0, 1);
-   }
-
 
 button {
     outline: none;
@@ -312,6 +301,17 @@ button {
 }
 
 :global {
+    @font-face {
+        font-family: "Kalimati Regular";
+        src:url("../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+        unicode-range: U+30-39;
+        }
+        
+      .languageFont{
+        font-family: "Kalimati Regular"!important;
+        color:rgba(0, 0, 0, 1);
+       }
+
 	.nepaliDatePicker,.nepaliEndDatePicker{
 		opacity: 0;
 	}
