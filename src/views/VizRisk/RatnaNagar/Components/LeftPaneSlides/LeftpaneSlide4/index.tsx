@@ -1,12 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
-/* eslint-disable react/jsx-indent-props */
-/* eslint-disable react/jsx-indent */
-/* eslint-disable indent */
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-tabs */
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useContext } from 'react';
+import ReactHtmlParser from 'react-html-parser';
+import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
+import {
+    getHouseHoldDataColor,
+    getHouseHoldDataStatus,
+    percentageCalculator,
+} from '#views/VizRisk/RatnaNagar/utils';
 import CommonBarChart from '../../Charts/Barcharts';
 import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
@@ -15,81 +15,82 @@ import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
 
 const LeftpaneSlide4 = () => {
-	const munName = 'Ratnanagar Municipality';
-	const factorScore = 3;
-	const scoreSattus = 'Low';
+    const {
+        keyValueHtmlData,
+        householdData,
+    } = useContext(MainPageDataContext);
 
-	const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
+    const htmlDataTop = keyValueHtmlData && keyValueHtmlData.filter(
+        (item: any) => item.key === 'vizrisk_ratnanagar_page6_htmldata_301_3_35_35007',
+    )[0];
+    const htmlDataBottom = keyValueHtmlData && keyValueHtmlData.filter(
+        (item: any) => item.key === 'vizrisk_ratnanagar_page6_bottom_htmldata_301_3_35_35007',
+    )[0];
 
-	const data = [
-		{
-			'Very High': 5,
-			High: 30,
-			Medium: 10,
-			Low: 20,
-			'Very Low': 35,
-		},
-	];
+    const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
 
-	const barTitle = 'DISTRIBUTION OF HOUSEHOLD BY FAMILY SIZE';
-	const barData = [
-		{
-			name: 'Page A',
-			'Number of Household': 4000,
-		},
-		{
-			name: 'Page B',
-			'Number of Household': 1398,
-		},
-		{
-			name: 'Page C',
-			'Number of Household': 2000,
-		},
-		{
-			name: 'Page D',
-			'Number of Household': 2780,
-		},
-		{
-			name: 'Page E',
-			'Number of Household': 1890,
-		},
-	];
-	return (
-		<div className={styles.vrSideBar}>
-			<h1>Exposure</h1>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
+    const municipalityName = 'Ratnanagar Municipality ';
+    const mainData = householdData.map(item => item.exposure);
+    const dataArr = percentageCalculator(mainData, householdData);
 
-			</p>
-			<Factors
-				municipalityName={munName}
-				factorScore={factorScore}
-				scoreStatus={scoreSattus}
-			/>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
+    const averageExposureScore: any = ((mainData.reduce(
+        (total: number, singleData: number) => total + singleData,
+    )) / householdData.length / 10).toFixed(1);
 
-			</p>
-			<StackChart
-				stackBarChartTitle={stackBarChartTitle}
-				data={data}
-			/>
-			<p>
-				The value of individual households is
-				calculated based on the scoring of the
-				selected indicators. The indicators used to
-				quantify hazard are
-			</p>
-			<SelectComponent />
-			<CommonBarChart barTitle={barTitle} barData={barData} />
-		</div>
-	);
+    const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
+    const color = getHouseHoldDataColor(averageExposureScore);
+
+    const barTitle = 'DISTRIBUTION OF HOUSEHOLD BY FAMILY SIZE';
+    const barData = [
+        {
+            name: 'Page A',
+            'Number of Household': 4000,
+        },
+        {
+            name: 'Page B',
+            'Number of Household': 1398,
+        },
+        {
+            name: 'Page C',
+            'Number of Household': 2000,
+        },
+        {
+            name: 'Page D',
+            'Number of Household': 2780,
+        },
+        {
+            name: 'Page E',
+            'Number of Household': 1890,
+        },
+    ];
+
+    return (
+        <div className={styles.vrSideBar}>
+            <div className="mainTitleDiv">
+                {htmlDataTop && htmlDataTop.value && (
+                    ReactHtmlParser(htmlDataTop.value)
+
+                )}
+            </div>
+
+            <Factors
+                municipalityName={municipalityName}
+                factorScore={averageExposureScore}
+                scoreStatus={scoreStatus}
+                color={color}
+            />
+            {htmlDataBottom && htmlDataBottom.value && (
+                ReactHtmlParser(htmlDataBottom.value)
+
+            )}
+            <StackChart
+                stackBarChartTitle={stackBarChartTitle}
+                dataArr={dataArr}
+            />
+            <SelectComponent />
+            <CommonBarChart barTitle={barTitle} barData={barData} />
+        </div>
+    );
 };
 
 

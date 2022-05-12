@@ -1,18 +1,13 @@
-/* eslint-disable react/jsx-indent */
-/* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
-/* eslint-disable indent */
-/* eslint-disable no-tabs */
-/* eslint-disable @typescript-eslint/indent */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import {
-	ClientAttributes,
-	createConnectedRequestCoordinator,
-	createRequestClient,
-	methods,
+    ClientAttributes,
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    methods,
 } from '#request';
 import * as PageTypes from '#store/atom/page/types';
 import Leftpane1 from './Leftpanes/Leftpane1/index';
@@ -29,218 +24,305 @@ import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
 import LeftTopBar from './Components/LeftTopBar';
-
-import { CIData, Params, PostionInitialValues, ReduxProps, ScrollTopInitialValues } from './interfaces';
-import { MainPageDataContext, positionInitialValues, scrollTopPageInitialValues } from './context';
-
-const mapStateToProps = (state: any) => { };
-const mapDispatchToProps = (state: any) => { };
+import './global.css';
+import {
+    CIData,
+    HtmlData,
+    Params,
+    PostionInitialValues,
+    ReduxProps,
+    ScrollTopInitialValues,
+} from './interfaces';
+import {
+    MainPageDataContext,
+    positionInitialValues,
+    scrollTopPageInitialValues,
+} from './context';
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    htmlDataRequest: {
+        url: '/keyvalue-html/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            municipality: params.municipalityId,
+            limit: -1,
+        }),
 
-	jsonDataRequest: {
-		url: '/keyvalue-json/',
-		method: methods.GET,
-		query: ({ params }) => ({
-			// eslint-disable-next-line @typescript-eslint/camelcase
-			municipality: params.municipalityId,
-			limit: -1,
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.HtmlData[] }
+            const { results: htmlData = [] } = response as Response;
+            params.setKeyValueHtmlData(htmlData);
+            // params.setPending(false);
+        },
+        onMount: false,
+        // extras: { schemaName: 'htmlResponse' },
+    },
 
-		}),
-		onSuccess: ({ params, response }) => {
-			interface Response { results: PageTypes.Incident[] }
-			const { results: jsonData = [] } = response as Response;
-			if (params) {
-				params.setKeyValueJsonData(jsonData);
-			}
-			// params.setPending(false);
-		},
-		onMount: false,
-		// extras: { schemaName: 'jsonResponse' },
-	},
-	cIGetRequest: {
-		url: '/resource/',
-		method: methods.GET,
-		query: ({ params }) => ({
-			municipality: params && params.municipalityId,
-			limit: -1,
-		}),
-		onSuccess: ({ params, response }) => {
-			interface Response { results: PageTypes.Incident[] }
-			const { results: cI = [] } = response as Response;
-			if (params) {
-				params.setcIData(cI);
-			}
-		},
-		onMount: false,
-	},
+    jsonDataRequest: {
+        url: '/keyvalue-json/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            municipality: params.municipalityId,
+            limit: -1,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: jsonData = [] } = response as Response;
+            if (params) {
+                params.setKeyValueJsonData(jsonData);
+            }
+            // params.setPending(false);
+        },
+        onMount: false,
+        // extras: { schemaName: 'jsonResponse' },
+    },
+
+    houseHoldDataRequest: {
+        url: '/vizrisk-household/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            limit: -1,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: jsonData = [] } = response as Response;
+            if (params) {
+                params.setHouseholdData(jsonData);
+            }
+            // params.setPending(false);
+        },
+        onMount: false,
+        // extras: { schemaName: 'jsonResponse' },
+    },
+    cIGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            municipality: params && params.municipalityId,
+            limit: -1,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: cI = [] } = response as Response;
+            if (params) {
+                params.setcIData(cI);
+            }
+        },
+        onMount: false,
+    },
 
 };
 
 const Ratnanagar = (props: any) => {
-	const [pending, setpending] = useState<boolean>(true);
-	const [leftElement, setLeftElement] = useState<number>(0);
-	const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
-	const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
-	const [clickedCiName, setclickedCiName] = useState<string[]>(['finance']);
-	const [ciNameList, setciNameList] = useState<string[]>([]);
-	const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
-	const [keyValueJsonData, setKeyValueJsonData] = useState([]);
-	const [currentHeaderVal, setCurrentHeaderVal] = useState('');
-
-	// state for requested data
-	const [cIData, setcIData] = useState<CIData>([]);
-
-
-	const { requests: {
-		cIGetRequest,
-		jsonDataRequest,
-	} } = props;
-
-	const municipalityId = 35007;
+    const [pending, setpending] = useState<boolean>(true);
+    const [leftElement, setLeftElement] = useState<number>(0);
+    const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
+    const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
+    const [clickedCiName, setclickedCiName] = useState<string[]>(['finance']);
+    const [ciNameList, setciNameList] = useState<string[]>([]);
+    const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
+    const [keyValueJsonData, setKeyValueJsonData] = useState([]);
+    const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>();
+    const [householdData, setHouseholdData] = useState([]);
+    const [currentHeaderVal, setCurrentHeaderVal] = useState('');
+    const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
+    const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
+    // state for requested data
+    const [cIData, setcIData] = useState<CIData>([]);
 
 
-	useEffect(() => {
-		cIGetRequest.setDefaultParams({
-			setcIData,
-			municipalityId,
-		});
-		cIGetRequest.do();
-		jsonDataRequest.setDefaultParams({
-			setKeyValueJsonData,
-			municipalityId,
-		});
-		jsonDataRequest.do();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+    const { requests: {
+        cIGetRequest,
+        htmlDataRequest,
+        jsonDataRequest,
+        houseHoldDataRequest,
+    } } = props;
 
-	useEffect(() => {
-		if (cIData.length > 0 && keyValueJsonData.length > 0) {
-			setpending(false);
-		}
-	}, [cIData, keyValueJsonData]);
-
-	const onButtonClick = (item: number) => {
-		setLeftElement(item);
-	};
-
-	const handleCIClick = (ciName: string) => {
-		setclickedCiName(prevState => [...prevState, ciName]);
-		setunClickedCIName(prevState => prevState.filter(ciItem => ciItem !== ciName));
-
-		if (clickedCiName.includes(ciName)) {
-			setclickedCiName(prevState => prevState.filter(ciItem => ciItem !== ciName));
-			setunClickedCIName(prevState => [...new Set([...prevState, ciName])]);
-		}
-	};
-
-	const geoJsonCI = {
-		type: 'FeatureCollection',
-		features: cIData.map(item => ({
-			type: 'Feature',
-			id: item.id,
-			geometry: item.point,
-			properties: {
-				Name: item.title,
-				layer: item.resourceType,
-				Type: item.resourceType,
-			},
-		})),
-	};
-
-	const contextValues = {
-		leftElement,
-		setLeftElement,
-		scrollTopValuesPerPage,
-		setScrollTopValuesPerPage,
-		postionsPerPage,
-		setPostionsPerPage,
-		onButtonClick,
-		keyValueJsonData,
-		setCurrentHeaderVal,
-	};
+    const municipalityId = 35007;
 
 
-	return (
-		<>
-			<MainPageDataContext.Provider value={contextValues}>
-				{
-					pending ? (
-						<div className={styles.loaderInfo}>
-							<Loader loaded={!pending} color="#fff" className={styles.loader} />
-							<p className={styles.loaderText}>
-								Loading Data...
-							</p>
-						</div>
-					)
-						: (
-							<>
-								{
-									leftElement < 10 && (
-										<>
-											<Map
-												municipalityId={municipalityId}
-												leftElement={leftElement}
-												CIData={geoJsonCI}
-												clickedCiName={clickedCiName}
-												ciNameList={ciNameList}
-												setciNameList={setciNameList}
-												unClickedCIName={unClickedCIName}
-											/>
-											<LeftTopBar currentHeaderVal={currentHeaderVal} />
-										</>
+    useEffect(() => {
+        cIGetRequest.setDefaultParams({
+            setcIData,
+            municipalityId,
+        });
+        cIGetRequest.do();
+        jsonDataRequest.setDefaultParams({
+            setKeyValueJsonData,
+            municipalityId,
+        });
+        jsonDataRequest.do();
+        htmlDataRequest.setDefaultParams({
+            setKeyValueHtmlData,
+            municipalityId,
+        });
+        htmlDataRequest.do();
+        houseHoldDataRequest.setDefaultParams({
+            setHouseholdData,
+        });
+        houseHoldDataRequest.do();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-									)
-								}
-								{leftElement === 0 && (
-									<Leftpane1 />
-								)}
-								{leftElement === 1 && (
-									<Leftpane2 />
-								)}
-								{leftElement === 2 && (
-									<Demographic />
-								)}
-								{leftElement === 3 && (
-									<Leftpane3
-										clickedCiName={clickedCiName}
-										handleCIClick={handleCIClick}
-										cIData={cIData}
-									/>
-								)}
-								{leftElement === 4 && (
-									<Leftpane4 />
-								)}
-								{leftElement === 5 && (
-									<Leftpane5 />
-								)}
-								{leftElement === 6 && (
-									<Leftpane6 />
-								)}
-								{leftElement === 7 && (
-									<Leftpane7 />
-								)}
-								{leftElement === 8 && (
-									<Leftpane8 />
-								)}
-								{leftElement === 9 && (
-									<Leftpane10 />
-								)}
-								{/* {leftElement === 10 && (
-									<Leftpane10 />
-								)} */}
-							</>
-						)
-				}
-			</MainPageDataContext.Provider>
-		</>
-	);
+    useEffect(() => {
+        if (cIData.length > 0 && keyValueJsonData.length > 0 && householdData.length > 0) {
+            setpending(false);
+        }
+    }, [cIData, keyValueJsonData, householdData]);
+
+    const onButtonClick = (item: number) => {
+        setLeftElement(item);
+    };
+
+    const handleCIClick = (ciName: string) => {
+        setclickedCiName(prevState => [...prevState, ciName]);
+        setunClickedCIName(prevState => prevState.filter(ciItem => ciItem !== ciName));
+
+        if (clickedCiName.includes(ciName)) {
+            setclickedCiName(prevState => prevState.filter(ciItem => ciItem !== ciName));
+            setunClickedCIName(prevState => [...new Set([...prevState, ciName])]);
+        }
+    };
+
+
+    const enableNavBtns = (val: string) => {
+        if (val === 'Right') {
+            setdisableNavRightBtn(false);
+        } else if (val === 'Left') {
+            setdisableNavLeftBtn(false);
+        }
+        setdisableNavLeftBtn(false);
+        setdisableNavRightBtn(false);
+    };
+
+
+    const disableNavBtns = (val: string) => {
+        if (val === 'Right') {
+            setdisableNavRightBtn(true);
+        } else if (val === 'Left') {
+            setdisableNavLeftBtn(true);
+        }
+        setdisableNavLeftBtn(true);
+        setdisableNavRightBtn(true);
+    };
+
+
+    const geoJsonCI = {
+        type: 'FeatureCollection',
+        features: cIData.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                Name: item.title,
+                layer: item.resourceType,
+                Type: item.resourceType,
+            },
+        })),
+    };
+
+    const contextValues = {
+        leftElement,
+        setLeftElement,
+        scrollTopValuesPerPage,
+        setScrollTopValuesPerPage,
+        postionsPerPage,
+        setPostionsPerPage,
+        onButtonClick,
+        keyValueHtmlData,
+        keyValueJsonData,
+        setCurrentHeaderVal,
+        householdData,
+        disableNavRightBtn,
+        disableNavLeftBtn,
+
+    };
+
+    return (
+        <>
+            <MainPageDataContext.Provider value={contextValues}>
+                {
+                    pending ? (
+                        <div className={styles.loaderInfo}>
+                            <Loader loaded={!pending} color="#fff" className={styles.loader} />
+                            <p className={styles.loaderText}>
+                                Loading Data...
+                            </p>
+                        </div>
+                    )
+                        : (
+                            <>
+                                {
+                                    leftElement < 10 && (
+                                        <>
+                                            <Map
+                                                municipalityId={municipalityId}
+                                                leftElement={leftElement}
+                                                CIData={geoJsonCI}
+                                                clickedCiName={clickedCiName}
+                                                ciNameList={ciNameList}
+                                                setciNameList={setciNameList}
+                                                unClickedCIName={unClickedCIName}
+                                                enableNavBtns={enableNavBtns}
+                                                disableNavBtns={disableNavBtns}
+
+                                            />
+                                            <LeftTopBar currentHeaderVal={currentHeaderVal} />
+                                        </>
+
+                                    )
+                                }
+                                {leftElement === 0 && (
+                                    <Leftpane1 />
+                                )}
+                                {leftElement === 1 && (
+                                    <Leftpane2 />
+                                )}
+                                {leftElement === 2 && (
+                                    <Demographic />
+                                )}
+                                {leftElement === 3 && (
+                                    <Leftpane3
+                                        clickedCiName={clickedCiName}
+                                        handleCIClick={handleCIClick}
+                                        cIData={cIData}
+                                    />
+                                )}
+                                {leftElement === 4 && (
+                                    <Leftpane4 />
+                                )}
+                                {leftElement === 5 && (
+                                    <Leftpane5 />
+                                )}
+                                {leftElement === 6 && (
+                                    <Leftpane6 />
+                                )}
+                                {leftElement === 7 && (
+                                    <Leftpane7 />
+                                )}
+                                {leftElement === 8 && (
+                                    <Leftpane8 />
+                                )}
+                                {leftElement === 9 && (
+                                    <Leftpane10 />
+                                )}
+
+                            </>
+                        )
+                }
+            </MainPageDataContext.Provider>
+        </>
+    );
 };
 
 
 export default compose(
-	// connect(mapStateToProps, mapDispatchToProps),
-	createConnectedRequestCoordinator<ReduxProps>(),
-	createRequestClient(requests),
+    // connect(mapStateToProps, mapDispatchToProps),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
 )(Ratnanagar);
