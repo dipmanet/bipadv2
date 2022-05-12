@@ -69,11 +69,12 @@ const LeftpaneSlide1 = () => {
     };
     return (
         <div className={styles.vrSideBar}>
-            {htmlData && htmlData.value && (
-                ReactHtmlParser(htmlData.value)
+            <div className="mainTitleDiv">
+                {htmlData && htmlData.value && (
+                    ReactHtmlParser(htmlData.value)
 
-            )}
-
+                )}
+            </div>
             <div className={styles.climateChart}>
                 <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
                 <div className={styles.mainLineChart}>

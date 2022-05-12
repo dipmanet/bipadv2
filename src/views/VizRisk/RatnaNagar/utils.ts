@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const findOcc = (arr: [], key: string) => {
     const arr2: [] = [];
 
@@ -31,7 +30,9 @@ export const dummy = 'a';
 
 
 export const getMainArrayForColor = (demographicsData: any) => {
-    const totalPopulationByWard = demographicsData.map((item: any) => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }));
+    const totalPopulationByWard = demographicsData.map(
+        (item: any) => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }),
+    );
     const arrayValue = totalPopulationByWard.map((item: any) => item.totalpop);
     const mainArray = Array.from({ length: arrayValue.length }, (v, i) => i + 1);
     return mainArray;
@@ -98,4 +99,56 @@ export const getHouseHoldDataStatus = (number: number) => {
         default:
             return 'None';
     }
+};
+
+
+export const percentageCalculator = (arr: [], totalArr: []) => {
+    const veryLowCount = arr.filter(
+        number => number >= 0 && number <= 20,
+    ).length;
+
+    const veryLowPercentage = (veryLowCount / totalArr.length) * 100;
+
+    const lowCount = arr.filter(
+        number => number > 20 && number <= 35,
+    ).length;
+
+    const lowPercentage = (lowCount / totalArr.length) * 100;
+
+    const mediumCount = arr.filter(
+        number => number > 35 && number <= 50,
+    ).length;
+
+    const mediumPercentage = (mediumCount / totalArr.length) * 100;
+
+    const highCount = arr.filter(
+        number => number > 50 && number <= 65,
+    ).length;
+
+    const highPercentage = (highCount / totalArr.length) * 100;
+
+    const veryHighCount = arr.filter(
+        number => number > 65,
+    ).length;
+
+    const veryHighPercentage = (veryHighCount / totalArr.length) * 100;
+
+    return {
+        dataKeyName: [
+            `${Math.ceil(veryHighPercentage)}% Very High`,
+            `${Math.ceil(highPercentage)}% High`,
+            `${Math.ceil(mediumPercentage)}% Medium`,
+            `${Math.ceil(lowPercentage)}% Low`,
+            `${Math.ceil(veryLowPercentage)}% Very Low`,
+        ],
+        chartData: [
+            {
+                [`${Math.ceil(veryLowPercentage)}% Very Low`]: veryLowCount,
+                [`${Math.ceil(lowPercentage)}% Low`]: lowCount,
+                [`${Math.ceil(mediumPercentage)}% Medium`]: mediumCount,
+                [`${Math.ceil(highPercentage)}% High`]: highCount,
+                [`${Math.ceil(veryHighPercentage)}% Very High`]: veryHighCount,
+            },
+        ],
+    };
 };

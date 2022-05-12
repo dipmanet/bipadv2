@@ -158,6 +158,7 @@
         "@turf/turf": "^5.1.6",
         "@types/geojson": "^7946.0.8",
         "@types/mapbox-gl": "^1.7.0",
+        "@types/react-html-parser": "^2.0.2",
         "@watergis/mapbox-gl-legend": "^1.1.5",
         "anime": "^0.1.2",
         "bikram-sambat-js": "^1.0.1",

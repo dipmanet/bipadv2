@@ -39,6 +39,7 @@ interface MainPageData {
     onButtonClick: (item: number) => void;
     keyValueJsonData: [];
     setCurrentHeaderVal: React.Dispatch<React.SetStateAction<string>>;
+    householdData: [];
     keyValueHtmlData: [];
     disableNavRightBtn: boolean;
     disableNavLeftBtn: boolean;
@@ -54,6 +55,7 @@ const initialMainPageData: MainPageData = {
     keyValueJsonData: [],
     setCurrentHeaderVal: () => undefined,
     keyValueHtmlData: [],
+    householdData: [],
     disableNavRightBtn: true,
     disableNavLeftBtn: true,
 

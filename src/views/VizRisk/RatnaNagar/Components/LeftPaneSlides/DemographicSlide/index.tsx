@@ -21,9 +21,12 @@ const DemographicSlide = () => {
 
     return (
         <div className={styles.vrSideBar}>
-            {htmlData && htmlData.value && (
-                ReactHtmlParser(htmlData.value)
-            )}
+            <div className="mainTitleDiv">
+                {htmlData && htmlData.value && (
+                    ReactHtmlParser(htmlData.value)
+
+                )}
+            </div>
             {
                 populationData && populationData.value && populationData.value.length > 0 && (
                     <PopulationChart

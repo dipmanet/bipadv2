@@ -90,7 +90,13 @@ const Map = (props: any) => {
     ];
 
 
-    const landoverLayers = ['farmland-ratnanagar', 'industrial', 'forestratnanagar', 'waterratnanagar'];
+    const landoverLayers = [
+        'farmland-ratnanagar',
+        'industrial',
+        'forestratnanagar',
+        'waterratnanagar',
+        'grasslandratnanagar',
+        'countourratnanagar'];
 
     const exposureGeoJson = {
         type: 'FeatureCollection',
@@ -500,7 +506,7 @@ const Map = (props: any) => {
                     // filter: ['has', 'point_count'],
                     paint: {
                         'circle-color': ['get', 'color'],
-                        'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 1.5, 15, 6],
+                        'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 0.8, 15, 6],
                     },
                     layout: {
                         visibility: 'none',
@@ -541,6 +547,7 @@ const Map = (props: any) => {
 
                     ReactDOM.render(
                         <PopupOnMapClick
+                            houseId={e.features[0].id}
                             mainType={household.name}
                             data={e.features[0].properties}
                         />, popupNode,
@@ -663,14 +670,14 @@ const Map = (props: any) => {
 
             if (leftElement > 3 && leftElement < 9) {
                 if (map.current) {
-                    map.current.setLayoutProperty('municipalitygeo', 'visibility', 'none');
+                    map.current.setPaintProperty('municipalitygeo', 'fill-color', '#eff1f1');
                     map.current.setPaintProperty('wardgeo', 'line-color', 'white');
-                    map.current.setPaintProperty('wardname', 'text-color', '#ede9dd');
+                    // map.current.setPaintProperty('wardname', 'text-color', '#ede9dd');
                 }
             } else {
-                map.current.setLayoutProperty('municipalitygeo', 'visibility', 'visible');
+                map.current.setPaintProperty('municipalitygeo', 'fill-color', '#ffffff');
                 map.current.setPaintProperty('wardgeo', 'line-color', '#514d4d');
-                map.current.setPaintProperty('wardname', 'text-color', '#000000');
+                // map.current.setPaintProperty('wardname', 'text-color', '#000000');
             }
 
 

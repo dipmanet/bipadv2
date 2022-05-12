@@ -76,10 +76,12 @@ const LeftpaneSlide2 = () => {
 
     return (
         <div className={styles.vrSideBar}>
-            {htmlData && htmlData.value && (
-                ReactHtmlParser(htmlData.value)
+            <div className="mainTitleDiv">
+                {htmlData && htmlData.value && (
+                    ReactHtmlParser(htmlData.value)
 
-            )}
+                )}
+            </div>
             {landCoverData && landCoverData.value && landCoverData.value.length > 0 && (
                 <ResponsiveContainer height={400}>
                     <Treemap

@@ -24,9 +24,20 @@ import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
 import LeftTopBar from './Components/LeftTopBar';
-
-import { CIData, HtmlData, Params, PostionInitialValues, ReduxProps, ScrollTopInitialValues } from './interfaces';
-import { MainPageDataContext, positionInitialValues, scrollTopPageInitialValues } from './context';
+import './global.css';
+import {
+    CIData,
+    HtmlData,
+    Params,
+    PostionInitialValues,
+    ReduxProps,
+    ScrollTopInitialValues,
+} from './interfaces';
+import {
+    MainPageDataContext,
+    positionInitialValues,
+    scrollTopPageInitialValues,
+} from './context';
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {

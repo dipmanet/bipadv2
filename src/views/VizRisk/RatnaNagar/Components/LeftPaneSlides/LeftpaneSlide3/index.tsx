@@ -2,10 +2,10 @@
 /* eslint-disable max-len */
 import React, { useContext } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import styles from './styles.scss';
-import Tick from '../../../../Common/Icons/Tick.svg';
 import { findOcc } from '#views/VizRisk/RatnaNagar/utils';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
+import styles from './styles.scss';
+import Tick from '../../../../Common/Icons/Tick.svg';
 
 
 interface Props {
@@ -93,10 +93,12 @@ const LeftpaneSlide3 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             {' '}
-            {htmlData && htmlData.value && (
-                ReactHtmlParser(htmlData.value)
+            <div className="mainTitleDiv">
+                {htmlData && htmlData.value && (
+                    ReactHtmlParser(htmlData.value)
 
-            )}
+                )}
+            </div>
 
             <p style={{ fontWeight: 'bold' }}>Click to view Critical Infrastructures</p>
             <div className={styles.bubbleChart}>
