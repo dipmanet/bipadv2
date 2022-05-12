@@ -1,5 +1,5 @@
 .mainTitleDiv > h1{
-    position: fixed;
+    position: fixed !important;
     background-color: #0c2432;
     width: calc(30% - 78px);
     z-index: 9999;

@@ -1,6 +1,3 @@
-/* eslint-disable no-tabs */
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable react/jsx-indent */
 import React from 'react';
 import styles from './styles.scss';
 
@@ -10,7 +7,7 @@ const SelectComponent = () => {
         <div className={styles.selectComponent}>
             <select className={styles.mainSelect} name="" id="">
                 {
-				  selectOptions.map(item => (
+                    selectOptions.map(item => (
                         <>
                             <option
                                 className={styles.mainOptions}
@@ -21,8 +18,8 @@ const SelectComponent = () => {
 
                             </option>
                         </>
-				  ))
-			  }
+                    ))
+                }
             </select>
         </div>
     );

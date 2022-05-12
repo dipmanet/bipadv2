@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import {
     ClientAttributes,
@@ -19,7 +18,6 @@ import Leftpane5 from './Leftpanes/Leftpane5/index';
 import Leftpane6 from './Leftpanes/Leftpane6/index';
 import Leftpane7 from './Leftpanes/Leftpane7/index';
 import Leftpane8 from './Leftpanes/Leftpane8/index';
-import Leftpane9 from './Leftpanes/Leftpane9/index';
 import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
@@ -28,6 +26,7 @@ import './global.css';
 import {
     CIData,
     HtmlData,
+    JsonData,
     Params,
     PostionInitialValues,
     ReduxProps,
@@ -127,8 +126,8 @@ const Ratnanagar = (props: any) => {
     const [ciNameList, setciNameList] = useState<string[]>([]);
     const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
     const [keyValueJsonData, setKeyValueJsonData] = useState([]);
-    const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>();
-    const [householdData, setHouseholdData] = useState([]);
+    const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>([]);
+    const [householdData, setHouseholdData] = useState<JsonData>([]);
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
     const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
@@ -170,10 +169,11 @@ const Ratnanagar = (props: any) => {
     }, []);
 
     useEffect(() => {
-        if (cIData.length > 0 && keyValueJsonData.length > 0 && householdData.length > 0) {
+        if (cIData.length > 0 && keyValueJsonData.length > 0
+            && householdData.length > 0 && keyValueHtmlData.length > 0) {
             setpending(false);
         }
-    }, [cIData, keyValueJsonData, householdData]);
+    }, [cIData, keyValueJsonData, householdData, keyValueHtmlData]);
 
     const onButtonClick = (item: number) => {
         setLeftElement(item);

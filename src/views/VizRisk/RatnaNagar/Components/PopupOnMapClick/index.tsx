@@ -48,7 +48,7 @@ const PopupOnMapClick = (props: Props) => {
                     <>
                         <h2 className={styles.titleType}>
                             House ID :
-                            {data.id}
+                            {houseId}
                         </h2>
                         <div className={styles.mainContents}>
                             <h3

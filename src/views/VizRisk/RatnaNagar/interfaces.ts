@@ -39,10 +39,15 @@ export interface CIDataList {
     resourceType: string;
 
 }
-
-export interface HtmlData {
+interface HtmlDataContents {
     value: [];
 }
+export type HtmlData = HtmlDataContents[]
+
+interface JsonDataContents {
+
+}
+export type JsonData = JsonDataContents[]
 
 export type CIData = CIDataList[]
 
