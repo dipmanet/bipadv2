@@ -35,6 +35,7 @@ import {
     RegionValueElement,
     Layer,
     FiltersElement,
+    Language,
 } from '#types';
 
 
@@ -42,7 +43,6 @@ import {
     District,
     Province,
     Municipality,
-    Language,
     // HazardType,
 } from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
@@ -179,7 +179,6 @@ const routes = routeSettings.map(({ load, ...settings }) => {
     );
 
     const Component = errorBound<typeof settings>(ErrorInPage)(Com);
-
     return (
         <Component
             key={settings.name}
@@ -395,6 +394,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             isTilesLoaded: false,
             toggleAnimationMapDownloadButton: false,
             elementStatus: false,
+            showLanguageToolbar: false,
         };
     }
 
@@ -432,6 +432,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             pending: oldPending,
         } = this.props;
 
+
         const {
             pending: newPending,
             provinces,
@@ -449,13 +450,18 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     public componentDidUpdate(prevProps) {
-        const { boundingClientRect } = this.props;
+        const { boundingClientRect, setLanguage } = this.props;
+        const { showLanguageToolbar } = this.state;
         this.setLeftPanelWidth(boundingClientRect);
         const { language: { language } } = this.props;
         if (prevProps.language !== language) {
             i18n.changeLanguage(language);
         }
+        if (language === 'np' && !showLanguageToolbar) {
+            setLanguage({ language: 'en' });
+        }
 
+        // Km to nepali translation//
         // const x = document.getElementsByClassName('mapboxgl-ctrl mapboxgl-ctrl-scale')[0];
 
         // if (language === 'np' && x && x.innerHTML.includes('km')) {
@@ -831,6 +837,34 @@ class Multiplexer extends React.PureComponent<Props, State> {
         return 'Unknown';
     }
 
+    private getRegionDetails = (
+        selectedRegion: RegionValueElement,
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+    ) => {
+        if (!selectedRegion || !selectedRegion.adminLevel) {
+            return 'National';
+        }
+
+        const adminLevels: {
+            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
+        } = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regionList = adminLevels[selectedRegion.adminLevel];
+        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+
+        if (currentRegion) {
+            return currentRegion;
+        }
+
+        return 'Unknown';
+    }
+
     private handleToggleLeftContainerVisibilityButtonClick = () => {
         const { toggleLeftPaneButtonStretched } = this.state;
         this.setState(
@@ -1085,37 +1119,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ toggleAnimationMapDownloadButton: boolean });
     }
 
-    private clickHandler=(data) => {
-        const { activeRouteDetails } = this.context;
-        this.setState({ mapDataOnClick: data });
-        this.setState({ tooltipClicked: true });
-        this.setState({
-            tooltipLatlng: data.lngLat,
-        });
-    }
+    private handleModalLanguage = () => {
+        console.log('working from multiplexer');
 
-    private closeTooltip=(data) => {
-        this.setState({ tooltipLatlng: data });
-    }
+        // const RequiredRoutes = [
+        //     'Situation Report', 'Relief', 'Reported incidents',
+        //     'Report an incident', 'Feedback & Support', 'About Us', 'Login'];
 
-    private handleLandslidePolygonImageMap=(data) => {
-        this.setState({
-            landslidePolygonImagemap: data,
-        });
-    }
-
-    private handlelandslidePolygonChoroplethMapData=(data) => {
-        this.setState({
-            landslidePolygonChoroplethMapData: data,
-        });
-    }
-
-    private setClimateChangeSelectedDistrict=(data) => {
-        const { id, properties: { title } } = data;
-
-        this.setState({
-            climateChangeSelectedDistrict: { id, title },
-        });
+        // if (RequiredRoutes.includes(identity)) {
+        //     console.log(identity, 'included');
+        // }
     }
 
     public render() {
@@ -1129,6 +1142,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             // hazardList,
         // hazardList,
         } = this.props;
+
 
         const {
             leftContent,
@@ -1170,6 +1184,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             checkFullScreenStatus,
             isTilesLoaded,
             toggleAnimationMapDownloadButton,
+            showLanguageToolbar,
         } = this.state;
 
 
@@ -1237,6 +1252,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
         );
 
+
         const resetLocation = () => {
             // if (this.state.geoLocationStatus && this.geoLocationRef.current) {
             const dotElement = document.querySelector('.mapboxgl-user-location-dot');
@@ -1295,8 +1311,17 @@ class Multiplexer extends React.PureComponent<Props, State> {
             this.setState({ lattitude: val });
         };
         const queryStringParams = window.location.href.split('#/')[1];
+
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
+        const Routes = ['', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
+        const queryStringParamsTranlation = window.location.href.split('/')[3];
+
+        if (Routes.includes(queryStringParamsTranlation)) {
+            this.setState({ showLanguageToolbar: true });
+        } else {
+            this.setState({ showLanguageToolbar: false });
+        }
 
         return (
             <PageContext.Provider value={pageProps}>
@@ -1311,6 +1336,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         <div className={_cs(styles.content, 'bipad-main-content')}>
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
+                                    activeRouteName={activeRouteName}
+                                    hideMap={hideMap}
+                                    toggleLeftPaneButtonStretched={toggleLeftPaneButtonStretched}
                                     handleTilesLoad={this.handleTilesLoad}
                                     isTilesLoaded={isTilesLoaded}
                                     mapStyle={mapStyle}
@@ -1474,7 +1502,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 </div>
 
                                             )}
-                                            <LanguageToggle />
+                                            { showLanguageToolbar && <LanguageToggle />}
 
                                             {!hideFilter && (
                                                 <Filters
@@ -1493,6 +1521,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     )}
                                     {this.renderRoutes()}
                                     <MapOrder ordering={orderedLayers} />
+
                                 </Map>
                             </RiskInfoLayerContext.Provider>
                         </div>
