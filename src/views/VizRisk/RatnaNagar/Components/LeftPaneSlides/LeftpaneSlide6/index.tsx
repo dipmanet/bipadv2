@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import ReactHtmlParser from 'react-html-parser';
+import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
     getHouseHoldDataColor,
     getHouseHoldDataStatus,
