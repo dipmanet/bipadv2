@@ -24,7 +24,6 @@ const PopupOnMapClick = (props: Props) => {
         fetchHouseData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log('houseData', houseData);
 
     return (
         <div
@@ -48,7 +47,7 @@ const PopupOnMapClick = (props: Props) => {
                     <>
                         <h2 className={styles.titleType}>
                             House ID :
-                            {data.id}
+                            {houseId}
                         </h2>
                         <div className={styles.mainContents}>
                             <h3

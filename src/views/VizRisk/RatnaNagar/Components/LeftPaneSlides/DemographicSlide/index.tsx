@@ -12,10 +12,10 @@ const DemographicSlide = () => {
         keyValueJsonData,
     } = useContext(MainPageDataContext);
 
-    const htmlData = keyValueHtmlData && keyValueHtmlData.filter(
+    const htmlData: any = keyValueHtmlData && keyValueHtmlData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_htmldata_301_3_35_35007',
     )[0];
-    const populationData = keyValueJsonData && keyValueJsonData.filter(
+    const populationData: any = keyValueJsonData && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
     )[0];
 

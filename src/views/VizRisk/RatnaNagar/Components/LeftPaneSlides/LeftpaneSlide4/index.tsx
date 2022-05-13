@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
@@ -18,7 +18,21 @@ const LeftpaneSlide4 = () => {
     const {
         keyValueHtmlData,
         householdData,
+        householdChartData,
     } = useContext(MainPageDataContext);
+    const exposureChartData = householdChartData && householdChartData.Exposure;
+
+    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
+
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState(selectFieldValues[0]);
+    const [curerntChartData, setCurerntChartData] = useState([]);
+
+    useEffect(() => {
+        const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
+
+        setCurerntChartData(currentChartSelectedData);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selctFieldCurrentValue]);
 
     const htmlDataTop = keyValueHtmlData && keyValueHtmlData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page6_htmldata_301_3_35_35007',
@@ -41,28 +55,7 @@ const LeftpaneSlide4 = () => {
     const color = getHouseHoldDataColor(averageExposureScore);
 
     const barTitle = 'DISTRIBUTION OF HOUSEHOLD BY FAMILY SIZE';
-    const barData = [
-        {
-            name: 'Page A',
-            'Number of Household': 4000,
-        },
-        {
-            name: 'Page B',
-            'Number of Household': 1398,
-        },
-        {
-            name: 'Page C',
-            'Number of Household': 2000,
-        },
-        {
-            name: 'Page D',
-            'Number of Household': 2780,
-        },
-        {
-            name: 'Page E',
-            'Number of Household': 1890,
-        },
-    ];
+
 
     return (
         <div className={styles.vrSideBar}>
@@ -87,8 +80,12 @@ const LeftpaneSlide4 = () => {
                 stackBarChartTitle={stackBarChartTitle}
                 dataArr={dataArr}
             />
-            <SelectComponent />
-            <CommonBarChart barTitle={barTitle} barData={barData} />
+            <SelectComponent
+                selectFieldValues={selectFieldValues}
+                selctFieldCurrentValue={selctFieldCurrentValue}
+                setSelctFieldCurrentValue={setSelctFieldCurrentValue}
+            />
+            <CommonBarChart barTitle={barTitle} barData={curerntChartData} />
         </div>
     );
 };

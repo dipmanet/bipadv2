@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
@@ -16,7 +16,21 @@ const LeftpaneSlide6 = () => {
     const {
         keyValueHtmlData,
         householdData,
+        householdChartData,
     } = useContext(MainPageDataContext);
+    const exposureChartData = householdChartData && householdChartData['Flood Hazard'];
+
+    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
+
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState(selectFieldValues[0]);
+    const [curerntChartData, setCurerntChartData] = useState([]);
+
+    useEffect(() => {
+        const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
+
+        setCurerntChartData(currentChartSelectedData);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selctFieldCurrentValue]);
 
     const htmlDataTop = keyValueHtmlData && keyValueHtmlData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page7_htmldata_301_3_35_35007',
@@ -84,8 +98,13 @@ const LeftpaneSlide6 = () => {
                 stackBarChartTitle={stackBarChartTitle}
                 dataArr={dataArr}
             />
-            <SelectComponent />
-            <CommonBarChart barTitle={barTitle} barData={barData} />
+            <SelectComponent
+                selectFieldValues={selectFieldValues}
+                selctFieldCurrentValue={selctFieldCurrentValue}
+                setSelctFieldCurrentValue={setSelctFieldCurrentValue}
+            />
+            {' '}
+            <CommonBarChart barTitle={barTitle} barData={curerntChartData} />
         </div>
     );
 };

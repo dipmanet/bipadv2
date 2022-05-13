@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import {
     ClientAttributes,
@@ -19,15 +18,14 @@ import Leftpane5 from './Leftpanes/Leftpane5/index';
 import Leftpane6 from './Leftpanes/Leftpane6/index';
 import Leftpane7 from './Leftpanes/Leftpane7/index';
 import Leftpane8 from './Leftpanes/Leftpane8/index';
-import Leftpane9 from './Leftpanes/Leftpane9/index';
 import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
 import LeftTopBar from './Components/LeftTopBar';
-import './global.css';
 import {
     CIData,
     HtmlData,
+    JsonData,
     Params,
     PostionInitialValues,
     ReduxProps,
@@ -115,6 +113,21 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: false,
     },
+    chartDataGetRequest: {
+        url: '/vizrisk-household/?municipality=35007&aggrigated=true',
+        method: methods.GET,
+        query: ({ params }) => ({
+            // municipality: params && params.municipalityId,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { aggrigated: chartData } = response as Response;
+            if (params) {
+                params.setHouseholdChartData(chartData);
+            }
+        },
+        onMount: false,
+    },
 
 };
 
@@ -127,13 +140,14 @@ const Ratnanagar = (props: any) => {
     const [ciNameList, setciNameList] = useState<string[]>([]);
     const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
     const [keyValueJsonData, setKeyValueJsonData] = useState([]);
-    const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>();
-    const [householdData, setHouseholdData] = useState([]);
+    const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>([]);
+    const [householdData, setHouseholdData] = useState<JsonData>([]);
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
     const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
     // state for requested data
     const [cIData, setcIData] = useState<CIData>([]);
+    const [householdChartData, setHouseholdChartData] = useState({});
 
 
     const { requests: {
@@ -141,6 +155,7 @@ const Ratnanagar = (props: any) => {
         htmlDataRequest,
         jsonDataRequest,
         houseHoldDataRequest,
+        chartDataGetRequest,
     } } = props;
 
     const municipalityId = 35007;
@@ -166,14 +181,21 @@ const Ratnanagar = (props: any) => {
             setHouseholdData,
         });
         houseHoldDataRequest.do();
+        chartDataGetRequest.setDefaultParams({
+            setHouseholdChartData,
+        });
+        chartDataGetRequest.do();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (cIData.length > 0 && keyValueJsonData.length > 0 && householdData.length > 0) {
+        if (cIData.length > 0 && keyValueJsonData.length > 0
+            && householdData.length > 0 && keyValueHtmlData.length > 0
+            && Object.keys(householdChartData).length > 0
+        ) {
             setpending(false);
         }
-    }, [cIData, keyValueJsonData, householdData]);
+    }, [cIData, keyValueJsonData, householdData, keyValueHtmlData, householdChartData]);
 
     const onButtonClick = (item: number) => {
         setLeftElement(item);
@@ -236,6 +258,7 @@ const Ratnanagar = (props: any) => {
         onButtonClick,
         keyValueHtmlData,
         keyValueJsonData,
+        householdChartData,
         setCurrentHeaderVal,
         householdData,
         disableNavRightBtn,
