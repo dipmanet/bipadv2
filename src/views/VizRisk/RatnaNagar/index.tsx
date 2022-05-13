@@ -22,7 +22,6 @@ import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
 import LeftTopBar from './Components/LeftTopBar';
-import './global.css';
 import {
     CIData,
     HtmlData,
@@ -114,6 +113,21 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: false,
     },
+    chartDataGetRequest: {
+        url: '/vizrisk-household/?municipality=35007&aggrigated=true',
+        method: methods.GET,
+        query: ({ params }) => ({
+            // municipality: params && params.municipalityId,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { aggrigated: chartData } = response as Response;
+            if (params) {
+                params.setHouseholdChartData(chartData);
+            }
+        },
+        onMount: false,
+    },
 
 };
 
@@ -133,6 +147,7 @@ const Ratnanagar = (props: any) => {
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
     // state for requested data
     const [cIData, setcIData] = useState<CIData>([]);
+    const [householdChartData, setHouseholdChartData] = useState({});
 
 
     const { requests: {
@@ -140,6 +155,7 @@ const Ratnanagar = (props: any) => {
         htmlDataRequest,
         jsonDataRequest,
         houseHoldDataRequest,
+        chartDataGetRequest,
     } } = props;
 
     const municipalityId = 35007;
@@ -165,15 +181,21 @@ const Ratnanagar = (props: any) => {
             setHouseholdData,
         });
         houseHoldDataRequest.do();
+        chartDataGetRequest.setDefaultParams({
+            setHouseholdChartData,
+        });
+        chartDataGetRequest.do();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         if (cIData.length > 0 && keyValueJsonData.length > 0
-            && householdData.length > 0 && keyValueHtmlData.length > 0) {
+            && householdData.length > 0 && keyValueHtmlData.length > 0
+            && Object.keys(householdChartData).length > 0
+        ) {
             setpending(false);
         }
-    }, [cIData, keyValueJsonData, householdData, keyValueHtmlData]);
+    }, [cIData, keyValueJsonData, householdData, keyValueHtmlData, householdChartData]);
 
     const onButtonClick = (item: number) => {
         setLeftElement(item);
@@ -236,6 +258,7 @@ const Ratnanagar = (props: any) => {
         onButtonClick,
         keyValueHtmlData,
         keyValueJsonData,
+        householdChartData,
         setCurrentHeaderVal,
         householdData,
         disableNavRightBtn,

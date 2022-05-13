@@ -31,8 +31,6 @@ const LeftpaneSlide1 = () => {
         (item: any) => item.key === 'vizrisk_ratnanagar_page1_rainfalldata_301_3_35_35007',
     )[0];
 
-    console.log('htmlData', htmlData);
-
     const renderLegend = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (

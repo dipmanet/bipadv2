@@ -23,6 +23,7 @@ import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
 import { getHouseHoldDataColor, getHouseHoldDataStatus } from '../utils';
+import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -283,7 +284,7 @@ const Map = (props: any) => {
 
 
         multihazardMap.on('style.load', () => {
-            // --------------------------------------SLIDE-3----------------------------------------
+            // --------------------------------------SLIDE-3 -> CI layer----------------------------------------
             const ciCategory: any = [...new Set(CIData.features.map(
                 (item: any) => item.properties.Type,
             ))];
@@ -406,7 +407,7 @@ const Map = (props: any) => {
                 return null;
             });
 
-            // -----------------------------DEMOFRAPHICS LAYER-----------------------------
+            // -----------------------------DEMOGRAPHICS LAYER-----------------------------
             multihazardMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
@@ -489,7 +490,7 @@ const Map = (props: any) => {
                 hoveredWardId = undefined;
             });
 
-            // Hazard ,exposure dummy data
+            // Hazard ,exposure layer data
             allHouseHoldDataTypes.map((household) => {
                 multihazardMap.addSource(`household-${household.name}`, {
                     type: 'geojson',
@@ -571,6 +572,30 @@ const Map = (props: any) => {
                 });
                 return null;
             });
+
+            /**
+ * Inundation layer
+ */
+            multihazardMap.addSource('floodInundation', {
+                type: 'raster',
+                tiles: [getCommonRasterLayer('wfp_ratnanagar_2017')],
+                tileSize: 256,
+            });
+
+            multihazardMap.addLayer(
+                {
+                    id: 'inundationLayer',
+                    type: 'raster',
+                    source: 'floodInundation',
+                    layout: {
+                        visibility: 'none',
+                    },
+                    paint: {
+                        'raster-opacity': 1,
+                    },
+                },
+
+            );
 
 
             multihazardMap.setZoom(1);
@@ -688,6 +713,14 @@ const Map = (props: any) => {
             } else {
                 map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'none');
             }
+            if (leftElement === 5) {
+                if (map.current) {
+                    map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
+            }
+
             if (leftElement === 6) {
                 if (map.current) {
                     map.current.setLayoutProperty('household-point-Hazard', 'visibility', 'visible');
@@ -721,7 +754,7 @@ const Map = (props: any) => {
             className={leftElement === 9
                 ? styles.mapCSSNone : styles.mapCSS}
         >
-            {leftElement > 3 && leftElement < 9 && <RangeStatusLegend />}
+            {leftElement > 3 && leftElement < 9 && leftElement !== 5 && <RangeStatusLegend />}
             {leftElement === 2 && <DemoGraphicsLegends demographicsData={demographicsData} />}
             {leftElement === 1 && <LandCoverLegends />}
         </div>

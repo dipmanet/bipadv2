@@ -1,13 +1,18 @@
 import React from 'react';
 import styles from './styles.scss';
 
-const SelectComponent = () => {
-    const selectOptions = ['Family Size', 'Family Planning'];
+const SelectComponent = (props) => {
+    const { selectFieldValues, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
+
     return (
         <div className={styles.selectComponent}>
-            <select className={styles.mainSelect} name="" id="">
+            <select
+                className={styles.mainSelect}
+                value={selctFieldCurrentValue}
+                onChange={e => setSelctFieldCurrentValue(e.target.value)}
+            >
                 {
-                    selectOptions.map(item => (
+                    selectFieldValues.map(item => (
                         <>
                             <option
                                 className={styles.mainOptions}
