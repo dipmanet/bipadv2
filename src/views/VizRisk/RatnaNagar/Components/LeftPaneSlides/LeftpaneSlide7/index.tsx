@@ -40,7 +40,7 @@ const LeftpaneSlide7 = () => {
     )[0];
 
 
-    const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
+    const stackBarChartTitle = 'SENSITIVITY OF HOUSEHOLDS';
 
     const municipalityName = 'Ratnanagar Municipality ';
     const mainData = householdData.map(item => item.sensitivity);

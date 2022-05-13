@@ -22,45 +22,45 @@ const SankeyChart = (props: Props) => {
     const { barTitle, barData } = props;
     const data0 = {
         nodes: [
-		  {
+            {
                 name: 'Visit',
-		  },
-		  {
+            },
+            {
                 name: 'Direct-Favourite',
-		  },
-		  {
+            },
+            {
                 name: 'Page-Click',
-		  },
-		  {
+            },
+            {
                 name: 'Detail-Favourite',
-		  },
-		  {
+            },
+            {
                 name: 'Lost',
-		  },
+            },
         ],
         links: [
-		  {
+            {
                 source: 0,
                 target: 1,
                 value: 6242,
-		  },
-		  {
+            },
+            {
                 source: 0,
                 target: 2,
                 value: 6242,
-		  },
-		  {
+            },
+            {
                 source: 0,
                 target: 3,
                 value: 6242,
-		  },
-		  {
+            },
+            {
                 source: 0,
                 target: 4,
                 value: 6242,
-		  },
+            },
         ],
-	  };
+    };
     return (
         <div className={styles.mainBarChart}>
             <h3 className={styles.barTitle}>{barTitle}</h3>
@@ -79,9 +79,7 @@ const SankeyChart = (props: Props) => {
                     margin={{ left: 15, right: 25 }}
 
                     link={{ stroke: '#77c878' }}
-                >
-                    <Tooltip />
-                </Sankey>
+                />
             </ResponsiveContainer>
         </div>
     );

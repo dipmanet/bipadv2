@@ -49,8 +49,6 @@ const LeftpaneSlide2 = () => {
                                     stroke="white"
                                     fontSize={size < 10 ? 10 : 14}
                                     fontWeight={300}
-                                    transform="rotate(45deg)"
-
                                 >
                                     {name}
                                 </text>
