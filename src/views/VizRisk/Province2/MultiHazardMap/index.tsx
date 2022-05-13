@@ -37,14 +37,14 @@ import { hdiData, hpiData } from '../Data/vulnerabilityData';
 import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
 
 
-interface State{
+interface State {
     lat: number;
     lng: number;
     zoom: number;
     ciCategoryCritical: string[];
 }
 
-interface OwnProps{
+interface OwnProps {
     rightElement: number;
     showPopulation: string;
     criticalElement: string;
@@ -93,7 +93,7 @@ interface Region {
     geoarea: number;
 }
 
-interface CIData{
+interface CIData {
     type: geojson.GeoJsonTypes;
     features: Feature[];
 }
@@ -156,9 +156,9 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     districts: districtsSelector(state),
 });
 
-let hoveredWardId: (string | number |undefined);
+let hoveredWardId: (string | number | undefined);
 let draw;
-function noop() {}
+function noop() { }
 const MultiHazardMap = (props: Props) => {
     const {
         MAINKEYNAME,
@@ -413,20 +413,34 @@ const MultiHazardMap = (props: Props) => {
 
 
     const images = [
-        { name: 'education',
-            url: Education },
-        { name: 'finance',
-            url: Finance },
-        { name: 'health',
-            url: Health },
-        { name: 'governance',
-            url: Governance },
-        { name: 'cultural',
-            url: Culture },
-        { name: 'fireengine',
-            url: Fireengine },
-        { name: 'helipad',
-            url: Heli },
+        {
+            name: 'education',
+            url: Education,
+        },
+        {
+            name: 'finance',
+            url: Finance,
+        },
+        {
+            name: 'health',
+            url: Health,
+        },
+        {
+            name: 'governance',
+            url: Governance,
+        },
+        {
+            name: 'cultural',
+            url: Culture,
+        },
+        {
+            name: 'fireengine',
+            url: Fireengine,
+        },
+        {
+            name: 'helipad',
+            url: Heli,
+        },
 
     ];
 
@@ -638,9 +652,9 @@ const MultiHazardMap = (props: Props) => {
 
             alertsData.map((layer) => {
                 multihazardMap.addSource(layer, {
-				 type: 'geojson',
-				 data: getGeoJSONPH(layer, alerts),
-			 });
+                    type: 'geojson',
+                    data: getGeoJSONPH(layer, alerts),
+                });
 
                 multihazardMap.addLayer(
                     {
@@ -1121,11 +1135,11 @@ const MultiHazardMap = (props: Props) => {
                     filter: ['!', ['has', 'point_count']],
                     layout: {
                         'icon-image': (layer === 'education' && 'education')
-						 || (layer === 'finance' && 'finance')
-						 || (layer === 'health' && 'health')
-						 || (layer === 'governance' && 'governance')
-						 || (layer === 'cultural' && 'cultural') || (layer === 'fireengine' && 'fireengine')
-						 || (layer === 'helipad' && 'helipad'),
+                            || (layer === 'finance' && 'finance')
+                            || (layer === 'health' && 'health')
+                            || (layer === 'governance' && 'governance')
+                            || (layer === 'cultural' && 'cultural') || (layer === 'fireengine' && 'fireengine')
+                            || (layer === 'helipad' && 'helipad'),
                         'icon-size': 0.08,
                         'icon-anchor': 'bottom',
                         visibility: 'none',
@@ -1164,14 +1178,14 @@ const MultiHazardMap = (props: Props) => {
                 ...new Set(contactGeoJson.features.map(item => item.properties.name))];
 
             multihazardMap.addSource('contactInfo', {
-				 type: 'geojson',
-				 data: contactGeoJson,
-				 cluster: true,
+                type: 'geojson',
+                data: contactGeoJson,
+                cluster: true,
                 clusterMaxZoom: 14,
                 clusterRadius: 50,
-			 });
+            });
 
-			 multihazardMap.addLayer(
+            multihazardMap.addLayer(
                 {
                     id: 'contacts-layer',
                     type: 'circle',
@@ -1383,15 +1397,15 @@ const MultiHazardMap = (props: Props) => {
                     setdistrictIdIs(districtId);
                     if (tempSelectedData === 'temp2010') {
                         const data = getChartData('temp', districtId).filter(item => item.year <= 2010);
-					    setclimateLineChartData(data);
+                        setclimateLineChartData(data);
                     }
                     if (tempSelectedData === 'temp2045') {
                         const data = getChartData('temp', districtId).filter(item => item.year <= 2045 && item.year >= 2015);
-					    setclimateLineChartData(data);
+                        setclimateLineChartData(data);
                     }
                     if (tempSelectedData === 'temp2065') {
                         const data = getChartData('temp', districtId).filter(item => item.year <= 2065 && item.year >= 2035);
-					    setclimateLineChartData(data);
+                        setclimateLineChartData(data);
                     }
                 });
                 return null;
@@ -1409,15 +1423,15 @@ const MultiHazardMap = (props: Props) => {
                     setdistrictIdIs(districtId);
                     if (prepSelectedData === 'prep2010') {
                         const data = getChartData('prep', districtId).filter(item => item.year <= 2010);
-					    setclimateLineChartData(data);
+                        setclimateLineChartData(data);
                     }
                     if (prepSelectedData === 'prep2045') {
                         const data = getChartData('prep', districtId).filter(item => item.year <= 2045 && item.year >= 2015);
-					    setclimateLineChartData(data);
+                        setclimateLineChartData(data);
                     }
                     if (prepSelectedData === 'prep2065') {
                         const data = getChartData('prep', districtId).filter(item => item.year <= 2065 && item.year >= 2035);
-					    setclimateLineChartData(data);
+                        setclimateLineChartData(data);
                     }
                 });
                 return null;
@@ -1522,7 +1536,7 @@ const MultiHazardMap = (props: Props) => {
             }
             // ----------------------------Third Page-----------------------------
             if ((ciPages && rightElement === 6 && clickedArr[0] === 1)
-			 || (rightElement === 3 && exposureElementsArr[1] === 1)) {
+                || (rightElement === 3 && exposureElementsArr[1] === 1)) {
                 ciCategoryCritical.map((item: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
@@ -1731,7 +1745,7 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('contacts-unclustered-point', 'visibility', 'none');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         rightElement,
         ciCategoryCritical,
@@ -1756,11 +1770,11 @@ const MultiHazardMap = (props: Props) => {
             {rightElement === 1 && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0' }}>
-                        {clickedFatalityInfraDamage === 'Fatality' ? 'People Death' : 'Infrastructural Damage Count' }
+                        {clickedFatalityInfraDamage === 'Fatality' ? 'People Death' : 'Infrastructural Damage Count'}
                         {' '}
                     </p>
                     <div className={styles.scale}>
-                        { lossLegendsData.map((c, i) => {
+                        {lossLegendsData.map((c, i) => {
                             if (i % 2 === 0) {
                                 return null;
                             }
@@ -1776,7 +1790,7 @@ const MultiHazardMap = (props: Props) => {
                                         }}
                                     />
                                     <div className={styles.value}>
-                                        { Math.round(lossLegendsData[i - 1]) }
+                                        {Math.round(lossLegendsData[i - 1])}
                                     </div>
                                 </div>
                             );
@@ -1787,7 +1801,7 @@ const MultiHazardMap = (props: Props) => {
 
             {rightElement === 5 && (
                 <div className={styles.mainLegendDiv}>
-                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{climateDataType === 'Temperature' ? 'Temperature (°C) ' : 'Precipitation (mm/year) ' }</p>
+                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{climateDataType === 'Temperature' ? 'Temperature (°C) ' : 'Precipitation (mm/year) '}</p>
                     <div className={styles.scale}>
                         {(climateDataType === 'Temperature' ? colorForTemp : colorForPrep).map((c, i) => {
                             if (i % 2 === 0) {
@@ -1805,7 +1819,7 @@ const MultiHazardMap = (props: Props) => {
                                         }}
                                     />
                                     <div className={styles.value}>
-                                        { climateDataType === 'Temperature' ? colorForTemp[i - 1].toFixed(2) : Math.round(colorForPrep[i - 1])}
+                                        {climateDataType === 'Temperature' ? colorForTemp[i - 1].toFixed(2) : Math.round(colorForPrep[i - 1])}
                                     </div>
                                 </div>
                             );
@@ -1856,7 +1870,7 @@ const MultiHazardMap = (props: Props) => {
                                         }}
                                     />
                                     <div className={styles.value}>
-                                        { colorForEarthquake[i - 1].toFixed(2)}
+                                        {colorForEarthquake[i - 1].toFixed(2)}
                                     </div>
                                 </div>
                             );
@@ -1870,7 +1884,7 @@ const MultiHazardMap = (props: Props) => {
                 && (
                     <>
                         <p className={_cs(styles.sliderLabel)}>
-                           Flood Layer Opacity
+                            Flood Layer Opacity
                         </p>
                         <input
                             onChange={e => handleFloodChange(e, 'flood')}
@@ -1897,7 +1911,7 @@ const MultiHazardMap = (props: Props) => {
                 && (
                     <>
                         <p className={_cs(styles.sliderLabel2)}>
-                           Landslide Layer Opacity
+                            Landslide Layer Opacity
                         </p>
                         <input
                             onChange={e => handleFloodChange(e, 'sus')}

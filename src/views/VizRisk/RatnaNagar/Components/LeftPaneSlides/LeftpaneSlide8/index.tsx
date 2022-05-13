@@ -38,7 +38,7 @@ const LeftpaneSlide8 = () => {
     const htmlDataBottom = keyValueHtmlData && keyValueHtmlData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page9_bottom_htmldata_301_3_35_35007',
     )[0];
-    const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
+    const stackBarChartTitle = 'ADAPTIVE CAPACITY OF HOUSEHOLDS';
 
     const municipalityName = 'Ratnanagar Municipality ';
     const mainData = householdData.map(item => item.adaptiveCapacity);

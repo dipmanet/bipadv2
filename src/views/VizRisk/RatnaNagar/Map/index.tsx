@@ -87,7 +87,42 @@ const Map = (props: any) => {
             name: 'helipad',
             url: Heli,
         },
-
+        {
+            name: 'communication',
+            url: Heli,
+        },
+        {
+            name: 'industry',
+            url: Heli,
+        },
+        {
+            name: 'bridge',
+            url: Heli,
+        },
+        {
+            name: 'evacuationcentre',
+            url: Heli,
+        },
+        {
+            name: 'sanitation',
+            url: Heli,
+        },
+        {
+            name: 'watersupply',
+            url: Heli,
+        },
+        {
+            name: 'waterway',
+            url: Heli,
+        },
+        {
+            name: 'electricity',
+            url: Heli,
+        },
+        {
+            name: 'roadway',
+            url: Heli,
+        },
     ];
 
 
@@ -373,7 +408,15 @@ const Map = (props: any) => {
                             || (layer === 'governance' && 'governance')
                             || (layer === 'cultural' && 'cultural')
                             || (layer === 'fireengine' && 'fireengine')
-                            || (layer === 'helipad' && 'helipad'),
+                            || (layer === 'communication' && 'communication')
+                            || (layer === 'industry' && 'industry')
+                            || (layer === 'watersupply' && 'watersupply')
+                            || (layer === 'waterway' && 'waterway')
+                            || (layer === 'evacuationcentre' && 'evacuationcentre')
+                            || (layer === 'sanitation' && 'helipad')
+                            || (layer === 'bridge' && 'bridge')
+                            || (layer === 'electricity' && 'electricity')
+                            || (layer === 'roadway' && 'roadway'),
                         'icon-size': 0.08,
                         'icon-anchor': 'bottom',
                         visibility: 'none',
