@@ -53,29 +53,6 @@ const LeftpaneSlide7 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
-    const barTitle = 'DISTRIBUTION OF HOUSEHOLD BY FAMILY SIZE';
-    const barData = [
-        {
-            name: 'Page A',
-            'Number of Household': 4000,
-        },
-        {
-            name: 'Page B',
-            'Number of Household': 1398,
-        },
-        {
-            name: 'Page C',
-            'Number of Household': 2000,
-        },
-        {
-            name: 'Page D',
-            'Number of Household': 2780,
-        },
-        {
-            name: 'Page E',
-            'Number of Household': 1890,
-        },
-    ];
     return (
         <div className={styles.vrSideBar}>
             <div className="mainTitleDiv">
@@ -104,7 +81,7 @@ const LeftpaneSlide7 = () => {
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
             {' '}
-            <CommonBarChart barTitle={barTitle} barData={curerntChartData} />
+            <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
         </div>
     );
 };

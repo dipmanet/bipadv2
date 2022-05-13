@@ -400,9 +400,6 @@ const Map = (props: any) => {
                     multihazardMap.getCanvas().style.cursor = '';
                     popup.remove();
                 }));
-                multihazardMap.moveLayer(`unclustered-point-${layer}`);
-                multihazardMap.moveLayer(`clusters-${layer}`);
-                multihazardMap.moveLayer(`clusters-count-${layer}`);
 
                 return null;
             });
@@ -654,26 +651,20 @@ const Map = (props: any) => {
                 clickedCiName.map((layerName: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'visible');
-                        map.current.moveLayer(`clusters-${layerName}`);
 
                         map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'visible');
-                        map.current.moveLayer(`clusters-count-${layerName}`);
 
                         map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'visible');
-                        map.current.moveLayer(`unclustered-point-${layerName}`);
                     }
                     return null;
                 });
                 unClickedCIName.map((layerName: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
-                        map.current.moveLayer(`clusters-${layerName}`);
 
                         map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
-                        map.current.moveLayer(`clusters-count-${layerName}`);
 
                         map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
-                        map.current.moveLayer(`unclustered-point-${layerName}`);
                     }
                     return null;
                 });
@@ -681,13 +672,10 @@ const Map = (props: any) => {
                 ciNameList.map((layerName: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
-                        map.current.moveLayer(`clusters-${layerName}`);
 
                         map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
-                        map.current.moveLayer(`clusters-count-${layerName}`);
 
                         map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
-                        map.current.moveLayer(`unclustered-point-${layerName}`);
                     }
                     return null;
                 });

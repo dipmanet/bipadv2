@@ -54,8 +54,6 @@ const LeftpaneSlide4 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
-    const barTitle = 'DISTRIBUTION OF HOUSEHOLD BY FAMILY SIZE';
-
 
     return (
         <div className={styles.vrSideBar}>
@@ -85,7 +83,7 @@ const LeftpaneSlide4 = () => {
                 selctFieldCurrentValue={selctFieldCurrentValue}
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
-            <CommonBarChart barTitle={barTitle} barData={curerntChartData} />
+            <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
         </div>
     );
 };

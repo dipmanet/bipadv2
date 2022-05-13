@@ -24,11 +24,11 @@ const CommonBarChart = (props: Props) => {
             <h3 className={styles.barTitle}>{barTitle}</h3>
             <ResponsiveContainer
                 width={'100%'}
-                height={600}
+                height={400}
             >
                 <BarChart
                     width={200}
-                    height={500}
+                    height={400}
                     data={barData}
                     layout="vertical"
                 // margin={{ left: 0, right: 25 }}
