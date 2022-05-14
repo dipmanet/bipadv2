@@ -142,17 +142,17 @@ const PopupOnMapClick = (props: Props) => {
                 name: 'Access to community building',
                 value: houseData.metadata.hasCommunityCenter,
             },
-            {
-                name: 'Access to financial institution',
-                value: houseData.metadata.houseBuildingType,
-            },
-            {
-                name: 'Distance from municipality office',
-                value: houseData.metadata.houseBuildingType,
-            },
+            // {
+            //     name: 'Access to financial institution',
+            //     value: houseData.metadata.houseBuildingType,
+            // },
+            // {
+            //     name: 'Distance from municipality office',
+            //     value: houseData.metadata.houseBuildingType,
+            // },
             {
                 name: 'Yearly saving of your house (NPR)',
-                value: houseData.metadata.houseBuildingType,
+                value: houseData.metadata.yearlySaving,
             },
             {
                 name: 'Access to educational institutions',

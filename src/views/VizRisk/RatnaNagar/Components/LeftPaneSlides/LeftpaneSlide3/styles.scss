@@ -126,11 +126,11 @@ $button-color: rgb(0, 170, 223);
             animation: movingBubbles 1s ease-in-out 0.001s alternate-reverse;
 
             &:nth-child(2n+1) {
-                margin: 10px;
+                margin: 8px;
             }
 
             &:nth-child(2n+2) {
-                margin: 30px;
+                margin: 15px;
             }
 
             &:hover {
@@ -188,11 +188,11 @@ $button-color: rgb(0, 170, 223);
             outline: none;
 
             &:nth-child(2n+1) {
-                margin: 10px;
+                margin: 5px;
             }
 
             &:nth-child(2n+2) {
-                margin: 33px;
+                margin: 15px;
             }
 
             h1 {

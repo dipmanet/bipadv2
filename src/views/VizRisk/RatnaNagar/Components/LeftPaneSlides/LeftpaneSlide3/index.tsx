@@ -103,7 +103,7 @@ const LeftpaneSlide3 = (props: Props) => {
             <p style={{ fontWeight: 'bold' }}>Click to view Critical Infrastructures</p>
             <div className={styles.bubbleChart}>
                 {
-                    mainCIData.length > 0 && mainCIData.sort((a, b) => b.count - a.count).map(
+                    mainCIData.length > 0 && mainCIData.map(
                         item => (
                             <button
                                 type="submit"

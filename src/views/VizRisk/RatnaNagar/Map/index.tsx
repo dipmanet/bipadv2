@@ -24,6 +24,7 @@ import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
 import { getHouseHoldDataColor, getHouseHoldDataStatus } from '../utils';
 import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
+import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -738,7 +739,7 @@ const Map = (props: any) => {
                 });
             }
 
-            if (leftElement > 3 && leftElement < 9) {
+            if (leftElement > 4 && leftElement < 9) {
                 if (map.current) {
                     map.current.setPaintProperty('municipalitygeo', 'fill-color', '#eff1f1');
                     map.current.setPaintProperty('wardgeo', 'line-color', 'white');
@@ -753,17 +754,18 @@ const Map = (props: any) => {
 
             if (leftElement === 4) {
                 if (map.current) {
-                    map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'none');
-            }
-            if (leftElement === 5) {
-                if (map.current) {
                     map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
                 }
             } else {
                 map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
+            }
+
+            if (leftElement === 5) {
+                if (map.current) {
+                    map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'none');
             }
 
             if (leftElement === 6) {
@@ -799,9 +801,10 @@ const Map = (props: any) => {
             className={leftElement === 9
                 ? styles.mapCSSNone : styles.mapCSS}
         >
-            {leftElement > 3 && leftElement < 9 && leftElement !== 5 && <RangeStatusLegend />}
+            {leftElement > 4 && leftElement < 9 && <RangeStatusLegend />}
             {leftElement === 2 && <DemoGraphicsLegends demographicsData={demographicsData} />}
             {leftElement === 1 && <LandCoverLegends />}
+            {leftElement === 4 && <FloodHistoryLegends />}
         </div>
     );
 };
