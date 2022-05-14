@@ -46,6 +46,7 @@ const Map = (props: any) => {
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapZoomEffect = useRef<any | undefined>(null);
+    const popupRef = useRef<mapboxgl.Popup>();
 
     const {
         keyValueJsonData,
@@ -329,8 +330,7 @@ const Map = (props: any) => {
                 closeOnClick: false,
                 className: 'popup',
             });
-            // setciCategoryCritical(ciCategory);
-
+            // setciCategoryCritical(ciCategory)
 
             images.forEach((img) => {
                 if (map.current) {
@@ -593,11 +593,16 @@ const Map = (props: any) => {
                             data={e.features[0].properties}
                         />, popupNode,
                     );
-                    new mapboxgl.Popup()
+                    const householdPopUp = new mapboxgl.Popup()
                         .setLngLat(coordinates)
                         .setDOMContent(popupNode)
                         .addTo(multihazardMap);
+
+                    if (popupRef) {
+                        popupRef.current = householdPopUp;
+                    }
                 });
+
 
                 multihazardMap.on('click', (e) => {
                     if (e.defaultPrevented === false) {
@@ -612,10 +617,10 @@ const Map = (props: any) => {
                 });
                 return null;
             });
-
             /**
- * Inundation layer
- */
+             * Innundation Layer
+             */
+
             multihazardMap.addSource('floodInundation', {
                 type: 'raster',
                 tiles: [getCommonRasterLayer('wfp_ratnanagar_2017')],
@@ -663,6 +668,15 @@ const Map = (props: any) => {
         return destroyMap;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    /**
+     * Removing popups on next or previous click
+     */
+    useEffect(() => {
+        if (popupRef && popupRef.current) {
+            popupRef.current.remove();
+        }
+    }, [leftElement]);
 
 
     useEffect(() => {
