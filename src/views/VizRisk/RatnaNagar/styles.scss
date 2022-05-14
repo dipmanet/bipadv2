@@ -20,9 +20,11 @@
         h1{
         position: fixed !important;
         background-color: #0c2432;
-        width: calc(30% - 78px);
+        width: calc(30% - 80px);
         z-index: 9999;
         top:60px;
+        left: 0;
+        padding: 2px 16px;
         font-family:none;
         color:white;
         font-size:25px;

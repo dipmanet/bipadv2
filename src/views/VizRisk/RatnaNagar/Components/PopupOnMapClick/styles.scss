@@ -1,6 +1,9 @@
 .popupOnMapClick {
     width: 240px;
     border-radius: 3px;
+    height: 300px;
+    background-color: #18202b;
+    overflow-y: scroll;
 
     .titleType {
         font-size: 17px;
@@ -15,9 +18,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
         background-color: #18202b;
         border-bottom: 1px solid grey;
-        height: 35px;
+        // height: 35px;
         padding: 5px 10px;
 
         .mainTitle {
