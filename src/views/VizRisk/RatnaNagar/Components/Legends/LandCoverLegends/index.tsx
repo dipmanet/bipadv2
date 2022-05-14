@@ -13,7 +13,7 @@ const LandCoverLegends = () => (
                         style={{
                             stroke: '#f3f2f2',
                             strokeWidth: 50,
-                            fill: '#964B00',
+                            fill: '#d2d0d0',
 
                         }}
                         className={styles.buildingIcon}
