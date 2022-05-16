@@ -20,7 +20,7 @@ import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } 
 import LossDetails from '#components/LossDetails';
 
 import {
-    hazardTypesSelector,
+    hazardTypesSelector, languageSelector,
 } from '#selectors';
 import {
     setIncidentActionIP,
@@ -172,6 +172,7 @@ class LeftPane extends React.PureComponent {
             onIncidentHover,
             hoveredIncidentId,
             dateRange,
+            language: { language },
         } = this.props;
 
         const {
@@ -185,7 +186,7 @@ class LeftPane extends React.PureComponent {
         let startDate;
         let endDate;
         if (rangeInDays !== 'custom') {
-            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays, language));
         } else {
             ({ startDate, endDate } = dateRange);
         }
@@ -349,6 +350,7 @@ class LeftPane extends React.PureComponent {
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);

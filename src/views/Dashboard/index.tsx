@@ -123,7 +123,7 @@ const transformDataRangeToFilter = (
     });
 
     if (rangeInDays !== 'custom') {
-        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays, '');
         return getFilter(startDate, endDate);
     }
 
@@ -165,7 +165,7 @@ const transformDataRangeToLocaleFilter = (
     });
 
     if (rangeInDays !== 'custom') {
-        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays, '');
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
         return getNonCustomFilter(formattedStartDate, formattedEndDate);
