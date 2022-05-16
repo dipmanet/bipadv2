@@ -13,6 +13,7 @@ import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 
 import styles from './styles.scss';
+import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
 const LeftpaneSlide4 = () => {
     const {
@@ -95,6 +96,7 @@ const LeftpaneSlide4 = () => {
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
             <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
+            <RangeStatusLegend />
         </div>
     );
 };

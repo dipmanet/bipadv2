@@ -161,3 +161,12 @@ export const getDataFromKey = (mainKey: string, contentKey: string, suffix: stri
     }
     return '';
 };
+
+
+export const filterByRangeValue = (range1, range2, data: []) => {
+    if (data.length > 0) {
+        const filterdData = data.filter(value => data > range1 && value < range2);
+        return filterdData;
+    }
+    return [];
+};

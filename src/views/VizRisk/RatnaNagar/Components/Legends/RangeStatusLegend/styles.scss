@@ -2,7 +2,7 @@
     position: absolute;
     width: 200px;
     bottom: 100px;
-    right: 40px;
+    right: 100px;
     padding: 5px 15px;
     z-index: 999;
     background-color: #0e141d99;
@@ -23,6 +23,10 @@
             color: white;
             font-size: 13px;
             text-align: left;
+            cursor: pointer;
+            &:hover{
+                color : green
+            }
         }
     }
 }

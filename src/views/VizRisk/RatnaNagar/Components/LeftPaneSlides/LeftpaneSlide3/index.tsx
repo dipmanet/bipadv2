@@ -6,6 +6,7 @@ import { findOcc } from '#views/VizRisk/RatnaNagar/utils';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import styles from './styles.scss';
 import Tick from '../../../../Common/Icons/Tick.svg';
+import CriticalInfraLegends from '../../Legends/CriticalInfraLegends';
 
 
 interface Props {
@@ -100,7 +101,10 @@ const LeftpaneSlide3 = (props: Props) => {
                 )}
             </div>
 
-            <p style={{ fontWeight: 'bold' }}>Click to view Critical Infrastructures</p>
+            <p style={{ fontWeight: 'light' }}>
+                {' '}
+                <em>Click to view Critical Infrastructures</em>
+            </p>
             <div className={styles.bubbleChart}>
                 {
                     mainCIData.length > 0 && mainCIData.map(
@@ -156,6 +160,7 @@ const LeftpaneSlide3 = (props: Props) => {
                     )
                 }
             </div>
+            <CriticalInfraLegends cITypeName={mainCIData.map(item => item.resourceType)} />
         </div>
 
     );

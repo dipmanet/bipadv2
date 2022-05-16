@@ -18,7 +18,6 @@ import { getWardFilter } from '#utils/domain';
 import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
 import DemoGraphicsLegends from '#views/VizRisk/Butwal/Legends/DemographicsLegends';
 import { MainPageDataContext } from '../context';
-import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
@@ -36,6 +35,7 @@ const mapStateToProps = (state: AppState) => ({
 
 let clickedId: string | number | undefined;
 let hoveredWardId: number | string | undefined;
+
 const Map = (props: any) => {
     const { municipalityId,
         CIData, leftElement,
@@ -52,11 +52,40 @@ const Map = (props: any) => {
     const {
         keyValueJsonData,
         householdData,
+        rangeValues,
     } = useContext(MainPageDataContext);
+
+    const [currentMapDataGeoJson, setCurrentMapDataGeoJson] = useState();
 
     const demographicsData = keyValueJsonData && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
     )[0].value;
+
+    useEffect(() => {
+        if (leftElement === 5) {
+            if (rangeValues && rangeValues.length > 0) {
+                const filteredDataByRange = householdData.filter(item => (item.exposure / 10)
+                    > rangeValues[0] && (item.exposure / 10) < rangeValues[1]);
+
+                const exposureGeoJson = {
+                    type: 'FeatureCollection',
+                    features: filteredDataByRange.map(item => ({
+                        type: 'Feature',
+                        id: item.id,
+                        geometry: item.point,
+                        properties: {
+                            value: item.exposure / 10,
+                            color: getHouseHoldDataColor(item.exposure / 10),
+                            status: getHouseHoldDataStatus(item.exposure / 10),
+                        },
+                    })),
+                };
+                setCurrentMapDataGeoJson(exposureGeoJson);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [leftElement, rangeValues]);
+    console.log('currentMapDataGeoJson', currentMapDataGeoJson);
 
     function noop() { }
 
@@ -649,7 +678,7 @@ const Map = (props: any) => {
             mapZoomEffect.current = setTimeout(() => {
                 disableNavBtns('both');
                 multihazardMap.easeTo({
-                    pitch: 25,
+                    pitch: 35,
                     center: [
                         84.51393887409917,
                         27.619152424687197,
@@ -702,9 +731,12 @@ const Map = (props: any) => {
             if (leftElement === 2) {
                 if (!map.current) return;
                 map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                map.current.setLayoutProperty('buildingratnanagar', 'visibility', 'none');
             } else {
                 map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                map.current.setLayoutProperty('buildingratnanagar', 'visibility', 'visible');
             }
+
             if (leftElement === 3) {
                 clickedCiName.map((layerName: string) => {
                     if (map.current) {
@@ -801,7 +833,6 @@ const Map = (props: any) => {
             className={leftElement === 9
                 ? styles.mapCSSNone : styles.mapCSS}
         >
-            {leftElement > 4 && leftElement < 9 && <RangeStatusLegend />}
             {leftElement === 2 && <DemoGraphicsLegends demographicsData={demographicsData} />}
             {leftElement === 1 && <LandCoverLegends />}
             {leftElement === 4 && <FloodHistoryLegends />}

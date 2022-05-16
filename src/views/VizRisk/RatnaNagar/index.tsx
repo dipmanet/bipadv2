@@ -145,6 +145,12 @@ const Ratnanagar = (props: any) => {
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
     const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
+
+    /**
+     * filtering data on tmap
+     */
+    const [rangeValues, setRangeValues] = useState<number[]>([]);
+    const [rangeNames, setRangeNames] = useState<string[]>([]);
     // state for requested data
     const [cIData, setcIData] = useState<CIData>([]);
     const [householdChartData, setHouseholdChartData] = useState({});
@@ -269,8 +275,10 @@ const Ratnanagar = (props: any) => {
         householdData,
         disableNavRightBtn,
         disableNavLeftBtn,
-
+        rangeValues,
+        setRangeValues,
     };
+
 
     return (
         <>

@@ -45,6 +45,8 @@ interface MainPageData {
     keyValueHtmlData: [];
     disableNavRightBtn: boolean;
     disableNavLeftBtn: boolean;
+    rangeValues: number[];
+    setRangeValues: React.Dispatch<React.SetStateAction<number[]>>;
 }
 const initialMainPageData: MainPageData = {
     mainKey: '',
@@ -62,6 +64,8 @@ const initialMainPageData: MainPageData = {
     householdData: [],
     disableNavRightBtn: true,
     disableNavLeftBtn: true,
+    rangeValues: [],
+    setRangeValues: () => undefined,
 
 };
 
