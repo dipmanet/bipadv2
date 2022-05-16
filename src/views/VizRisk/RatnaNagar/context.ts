@@ -30,6 +30,8 @@ export const positionInitialValues: PostionInitialValues = {
 };
 
 interface MainPageData {
+    mainKey: string;
+    suffix: string;
     leftElement: number;
     setLeftElement: React.Dispatch<React.SetStateAction<number>>;
     scrollTopValuesPerPage: ScrollTopInitialValues;
@@ -45,6 +47,8 @@ interface MainPageData {
     disableNavLeftBtn: boolean;
 }
 const initialMainPageData: MainPageData = {
+    mainKey: '',
+    suffix: '',
     leftElement: 1,
     setLeftElement: () => undefined,
     scrollTopValuesPerPage: scrollTopPageInitialValues,

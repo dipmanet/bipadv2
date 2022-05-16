@@ -67,6 +67,12 @@ const LeftpaneSlide6 = () => {
                 scoreStatus={scoreStatus}
                 color={color}
             />
+            <p>
+                The flood hazard value of the municipality is veryhigh (
+                {averageExposureScore}
+                /10).
+                The higher the value of hazards, the greater is the chance of flood occurrence.
+            </p>
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 

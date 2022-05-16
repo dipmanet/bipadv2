@@ -248,7 +248,13 @@ const Ratnanagar = (props: any) => {
         })),
     };
 
+    const mainKey = 'vizrisk_ratnanagar';
+    const suffix = '301_3_35_35007';
+
+
     const contextValues = {
+        mainKey,
+        suffix,
         leftElement,
         setLeftElement,
         scrollTopValuesPerPage,

@@ -67,6 +67,13 @@ const LeftpaneSlide7 = () => {
                 scoreStatus={scoreStatus}
                 color={color}
             />
+            <p>
+                The sensitivity value of the municipality is very high(
+                {averageExposureScore}
+                /10).
+                The higher the value of sensitivity, the greater the potential impact.
+
+            </p>
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 

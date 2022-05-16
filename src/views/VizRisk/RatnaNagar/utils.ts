@@ -152,3 +152,12 @@ export const percentageCalculator = (arr: [], totalArr: []) => {
         ],
     };
 };
+
+
+export const getDataFromKey = (mainKey: string, contentKey: string, suffix: string, data: []) => {
+    if (data.length > 0) {
+        const filteredData = data.filter(value => value.key === `${`${mainKey}_${contentKey}_${suffix}`}`);
+        return filteredData[0];
+    }
+    return '';
+};

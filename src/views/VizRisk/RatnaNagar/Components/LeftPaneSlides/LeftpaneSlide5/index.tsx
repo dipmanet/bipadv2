@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
+    getDataFromKey,
     getHouseHoldDataColor,
     getHouseHoldDataStatus,
     percentageCalculator,
@@ -33,9 +34,9 @@ const LeftpaneSlide4 = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selctFieldCurrentValue]);
 
-    const htmlDataTop = keyValueHtmlData && keyValueHtmlData.filter(
-        (item: any) => item.key === 'vizrisk_ratnanagar_page6_htmldata_301_3_35_35007',
-    )[0];
+    const htmlDataTop = keyValueHtmlData && getDataFromKey('vizrisk_ratnanagar', 'page6_htmldata', '301_3_35_35007',
+        keyValueHtmlData);
+
     const htmlDataBottom = keyValueHtmlData && keyValueHtmlData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page6_bottom_htmldata_301_3_35_35007',
     )[0];
@@ -53,6 +54,7 @@ const LeftpaneSlide4 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
+    console.log('htmlDataTop', htmlDataTop);
 
     return (
         <div className={styles.vrSideBar}>
@@ -69,6 +71,16 @@ const LeftpaneSlide4 = () => {
                 scoreStatus={scoreStatus}
                 color={color}
             />
+            <p>
+                The exposure scores range from 0 to 10 and are divided into 5 classes,
+                each represented by a different color. The exposure value of the municipality
+                is low (
+                {averageExposureScore}
+                /10). A large family size corresponds to more exposure.
+                Likewise, materials used for building construction and the type of building
+                itself represent varying degrees of exposure.
+            </p>
+
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 
