@@ -40,23 +40,29 @@ import Loader from 'react-loader';
 import { ActionCreator, Dispatch } from 'redux';
 import DeleteIconSvg from 'src/admin/resources/deleteicon.svg';
 import SearchIcon from 'src/admin/resources/searchicon.svg';
+import memoize from 'memoize-one';
 import styles from './styles.module.scss';
 import { tableTitleRef, institutionDetails, downloadedTitle } from './utils';
 import HealthForm from '../HealthForm';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 // import { getHealthTable, deleteHealthTable, formDataForEdit, setInventoryItem, healthDataLoading } from '../../Redux/actions';
-
+import { getSanitizedIncidents } from '../../../views/LossAndDamage/common';
 import { SetHealthInfrastructurePageAction, SetIncidentPageAction } from '#actionCreators';
 import {
 	healthInfrastructurePageSelector,
 	incidentPageSelector,
 	userSelector,
+	provinceList,
+	districtList,
+	municipalityList,
 } from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
 	healthInfrastructurePage: healthInfrastructurePageSelector(state),
 	userDataMain: userSelector(state),
-	incidentPage: incidentPageSelector(state),
+	provinceList: provincesSelector(state),
+	districtList: districtsSelector(state),
+	municipalityList: municipalitiesSelector(state),
 });
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 	setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
@@ -97,7 +103,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 			offset: params.offset,
 			limit: 100,
 			count: true,
-			expand: ['ward', 'ward.municipality', 'ward.municipality.district', 'ward.municipality.district.province'],
+			expand: ['wards', 'loss', 'event'],
 			ordering: '-last_modified_date',
 		}),
 		onSuccess: ({ response, props, params }) => {
@@ -419,6 +425,9 @@ const HealthTable = (props) => {
 			setfilteredRowDatas(healthTableData);
 		}
 	}, [healthTableData]);
+
+	console.log('This is final test', incidentTableData);
+
 
 	// new code
 	const Dataforcsv = () => {
