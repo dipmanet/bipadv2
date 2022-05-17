@@ -1,3 +1,6 @@
+import mapboxgl from 'mapbox-gl';
+import { Ref } from 'react';
+
 export const findOcc = (arr: [], key: string) => {
     const arr2: [] = [];
 
@@ -69,15 +72,15 @@ export const fillPaint = (mainArray: any, getColorFunc: (item: string) => void) 
 
 export const getHouseHoldDataColor = (number: number) => {
     switch (true) {
-        case number >= 0 && number <= 2:
+        case number >= 0 && number <= 1.9:
             return '#457ded';
-        case number > 2 && number <= 3.5:
+        case number >= 2 && number <= 3.4:
             return '#45c4fe';
-        case number > 3.5 && number <= 5:
+        case number >= 3.5 && number <= 4.9:
             return '#2af5ac';
-        case number > 5 && number <= 6.5:
+        case number >= 5 && number <= 6.4:
             return '#e79546';
-        case number > 6.5:
+        case number > 6.4:
             return '#e75d4f';
         default:
             return 'white';
@@ -86,15 +89,15 @@ export const getHouseHoldDataColor = (number: number) => {
 
 export const getHouseHoldDataStatus = (number: number) => {
     switch (true) {
-        case number >= 0 && number <= 2:
+        case number >= 0 && number <= 1.9:
             return 'Very Low';
-        case number > 2 && number <= 3.5:
+        case number >= 2 && number <= 3.4:
             return 'Low';
-        case number > 3.5 && number <= 5:
+        case number >= 3.5 && number <= 4.9:
             return 'Medium';
-        case number > 5 && number <= 6.5:
+        case number >= 5 && number <= 6.4:
             return 'High';
-        case number > 6.5:
+        case number > 6.4:
             return 'Very High';
         default:
             return 'None';
@@ -163,10 +166,40 @@ export const getDataFromKey = (mainKey: string, contentKey: string, suffix: stri
 };
 
 
-export const filterByRangeValue = (range1, range2, data: []) => {
+export const filterByRangeValue = (range1: number, range2: number, data: []) => {
     if (data.length > 0) {
-        const filterdData = data.filter(value => data > range1 && value < range2);
+        const filterdData = data.filter(value => value > range1 && value < range2);
         return filterdData;
     }
     return [];
+};
+
+export const getCurrentType = (leftElement: number) => {
+    switch (leftElement) {
+        case 5:
+            return 'hazard';
+        case 6:
+            return 'exposure';
+        case 7:
+            return 'sensitivity';
+        case 8:
+            return 'adaptiveCapacity';
+
+        default:
+            return '';
+    }
+};
+
+export const showMapLayers = (layerName: string,
+    map: React.MutableRefObject<mapboxgl.Map | null>) => {
+    if (map.current) {
+        map.current.setLayoutProperty(layerName, 'visibility', 'visible');
+    }
+};
+
+export const hideMapLayers = (layerName: string,
+    map: React.MutableRefObject<mapboxgl.Map | null>) => {
+    if (map.current) {
+        map.current.setLayoutProperty(layerName, 'visibility', 'none');
+    }
 };

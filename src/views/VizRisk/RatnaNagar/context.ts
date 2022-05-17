@@ -41,12 +41,12 @@ interface MainPageData {
     onButtonClick: (item: number) => void;
     keyValueJsonData: [];
     setCurrentHeaderVal: React.Dispatch<React.SetStateAction<string>>;
+    navIdleStatus: boolean;
     householdData: [];
     keyValueHtmlData: [];
-    disableNavRightBtn: boolean;
-    disableNavLeftBtn: boolean;
     rangeValues: number[];
-    setRangeValues: React.Dispatch<React.SetStateAction<number[]>>;
+    handleRangeLegendClick: (item: any) => undefined;
+    setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const initialMainPageData: MainPageData = {
     mainKey: '',
@@ -62,10 +62,10 @@ const initialMainPageData: MainPageData = {
     setCurrentHeaderVal: () => undefined,
     keyValueHtmlData: [],
     householdData: [],
-    disableNavRightBtn: true,
-    disableNavLeftBtn: true,
+    navIdleStatus: false,
     rangeValues: [],
-    setRangeValues: () => undefined,
+    handleRangeLegendClick: () => undefined,
+    setNavIdleStatus: () => undefined,
 
 };
 

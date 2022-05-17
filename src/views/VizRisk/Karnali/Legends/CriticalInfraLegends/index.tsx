@@ -27,7 +27,7 @@ import style from '#mapStyles/rasterStyle';
 
 
 const CriticalInfraLegends = (props) => {
-    const { handleCritical, criticalFlood, cITypeName, clickedArr, exposureElementArr, leftElement,	CIState } = props;
+    const { cITypeName } = props;
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
     const handleCriticalToggle = () => {
@@ -45,7 +45,7 @@ const CriticalInfraLegends = (props) => {
                         onClick={handleCriticalToggle}
                     >
                         <h4>
-	 Infrastructures
+                            Infrastructures
 
 
                         </h4>
@@ -55,76 +55,54 @@ const CriticalInfraLegends = (props) => {
                                 name="chevronRight"
                                 className={styles.chevrontoggle}
                             />
-					   )
-					    : (
+                        )
+                            : (
                                 <Icon
                                     name="chevronLeft"
                                     className={styles.chevrontoggle}
                                 />
-						 )}
+                            )}
                     </button>
                     {showCriticalElements && (
 
                         <div className={styles.criticalIcons}>
 
                             <div className={styles.toggleContainer}>
-                                <div className={styles.infraIconContainer}>
-
-                                    <button
-                                        type="button"
-                                        className={criticalFlood === 'all' || CIState
-                                            ? styles.criticalButtonSelected
-                                            : styles.criticalButton}
-                                        onClick={() => handleCritical('all')}
-                                    >
-                                        <Icon
-                                            name="circle"
-                                            className={criticalFlood === 'all' || CIState ? styles.allIconSelected : styles.allIcon}
-                                        />
-
-
-SHOW ALL
-                                    </button>
-
-                                </div>
 
                                 {cITypeName.map((item, i) => (
                                     <div className={styles.infraIconContainer} key={item}>
                                         <button
                                             type="button"
-                                            className={criticalFlood === item && !CIState
-			 ? styles.criticalButtonSelected
-			  : styles.criticalButton}
-                                            onClick={() => handleCritical(item)}
+                                            className={styles.criticalButtonSelected}
                                         >
 
 
                                             <ScalableVectorGraphics
                                                 className={styles.svgIcon}
                                                 src={
-					     (item === 'education' && Education)
-					     || (item === 'governance' && Governance)
-					     || (item === 'hotelandrestaurant' && Hotel)
-					     || (item === 'health' && Health)
-					     || (item === 'cultural' && Culture)
-					     || (item === 'finance' && Bank)
-						 || (item === 'fireengine' && Fireengine)
-						 || (item === 'bridge' && Bridge)
-						 || (item === 'airway' && Bridge)
-						 || (item === 'communication' && Communication)
-						 || (item === 'watersupply' && Water)
-						 || (item === 'sanitation' && Sanitation)
-						 || (item === 'industry' && Industry)
-						 || (item === 'communityspace' && Communication)
-						 || (item === 'helipad' && Heli)
-						 || (item === 'roadway' && Road)
-						 || (item === 'firefightingapparatus' && Fireengine)
-						 || (item === 'waterway' && Waterway)
+                                                    (item === 'education' && Education)
+                                                    || (item === 'governance' && Governance)
+                                                    || (item === 'hotelandrestaurant' && Hotel)
+                                                    || (item === 'health' && Health)
+                                                    || (item === 'cultural' && Culture)
+                                                    || (item === 'finance' && Bank)
+                                                    || (item === 'fireengine' && Fireengine)
+                                                    || (item === 'bridge' && Bridge)
+                                                    || (item === 'airway' && Bridge)
+                                                    || (item === 'communication' && Communication)
+                                                    || (item === 'watersupply' && Water)
+                                                    || (item === 'sanitation' && Sanitation)
+                                                    || (item === 'industry' && Industry)
+                                                    || (item === 'communityspace' && Communication)
+                                                    || (item === 'helipad' && Heli)
+                                                    || (item === 'roadway' && Road)
+                                                    || (item === 'firefightingapparatus' && Fireengine)
+                                                    || (item === 'waterway' && Waterway)
                                                 }
                                             />
 
 
-                                            { item.toUpperCase()}
+                                            {item.toUpperCase()}
                                         </button>
                                     </div>
                                 ))}

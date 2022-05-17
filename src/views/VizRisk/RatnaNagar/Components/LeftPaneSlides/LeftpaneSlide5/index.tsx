@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
-    getDataFromKey,
     getHouseHoldDataColor,
     getHouseHoldDataStatus,
     percentageCalculator,
@@ -11,17 +10,16 @@ import CommonBarChart from '../../Charts/Barcharts';
 import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
-
 import styles from './styles.scss';
 import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
-const LeftpaneSlide4 = () => {
+const LeftpaneSlide6 = () => {
     const {
         keyValueHtmlData,
         householdData,
         householdChartData,
     } = useContext(MainPageDataContext);
-    const exposureChartData = householdChartData && householdChartData.Exposure;
+    const exposureChartData = householdChartData && householdChartData['Flood Hazard'];
 
     const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
 
@@ -35,17 +33,18 @@ const LeftpaneSlide4 = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selctFieldCurrentValue]);
 
-    const htmlDataTop = keyValueHtmlData && getDataFromKey('vizrisk_ratnanagar', 'page6_htmldata', '301_3_35_35007',
-        keyValueHtmlData);
-
+    const htmlDataTop = keyValueHtmlData && keyValueHtmlData.filter(
+        (item: any) => item.key === 'vizrisk_ratnanagar_page7_htmldata_301_3_35_35007',
+    )[0];
     const htmlDataBottom = keyValueHtmlData && keyValueHtmlData.filter(
-        (item: any) => item.key === 'vizrisk_ratnanagar_page6_bottom_htmldata_301_3_35_35007',
+        (item: any) => item.key === 'vizrisk_ratnanagar_page7_bottom_htmldata_301_3_35_35007',
     )[0];
 
-    const stackBarChartTitle = 'EXPOSURE OF HOUSEHOLDS';
+
+    const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
 
     const municipalityName = 'Ratnanagar Municipality ';
-    const mainData = householdData.map(item => item.exposure);
+    const mainData = householdData.map(item => item.hazard);
     const dataArr = percentageCalculator(mainData, householdData);
 
     const averageExposureScore: any = ((mainData.reduce(
@@ -55,8 +54,6 @@ const LeftpaneSlide4 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
-    console.log('htmlDataTop', htmlDataTop);
-
     return (
         <div className={styles.vrSideBar}>
             <div className="mainTitleDiv">
@@ -65,7 +62,6 @@ const LeftpaneSlide4 = () => {
 
                 )}
             </div>
-
             <Factors
                 municipalityName={municipalityName}
                 factorScore={averageExposureScore}
@@ -73,15 +69,11 @@ const LeftpaneSlide4 = () => {
                 color={color}
             />
             <p>
-                The exposure scores range from 0 to 10 and are divided into 5 classes,
-                each represented by a different color. The exposure value of the municipality
-                is low (
+                The flood hazard value of the municipality is veryhigh (
                 {averageExposureScore}
-                /10). A large family size corresponds to more exposure.
-                Likewise, materials used for building construction and the type of building
-                itself represent varying degrees of exposure.
+                /10).
+                The higher the value of hazards, the greater is the chance of flood occurrence.
             </p>
-
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 
@@ -95,11 +87,11 @@ const LeftpaneSlide4 = () => {
                 selctFieldCurrentValue={selctFieldCurrentValue}
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
+            {' '}
             <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
-            <RangeStatusLegend />
         </div>
     );
 };
 
 
-export default LeftpaneSlide4;
+export default LeftpaneSlide6;

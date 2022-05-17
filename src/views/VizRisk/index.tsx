@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
@@ -38,10 +39,9 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     vizRiskThemeIdRequest: {
-        url: '/vizrisk-theme/',
+        url: '/vizrisk-theme/?is_active=true',
         method: methods.GET,
         query: ({ params }) => ({
-            limit: -1,
         }),
         onSuccess: ({ params, response }) => {
             const { results: vizRiskId = [] } = response as Response;

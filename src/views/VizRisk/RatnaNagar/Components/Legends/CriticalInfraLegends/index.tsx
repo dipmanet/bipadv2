@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
@@ -8,59 +9,99 @@ import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
 import Culture from '#resources/icons/icon_set_religion.svg';
 import Health from '#resources/icons/icon_set_health-01.svg';
-import Industry from '#resources/icons/icon_set_industry.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
 import Bank from '#resources/icons/icon_set_bank.svg';
 import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
+import Bridge from '#resources/icons/bridge copy.svg';
+import Communication from '#resources/icons/communication.svg';
+import Sanitation from '../../../../Common/Icons/sanitationviz.svg';
+import Hotel from '../../../../Common/Icons/hotelci.svg';
+import Industry from '#resources/icons/IndustryVR.svg';
 import Icon from '#rscg/Icon';
 import Fireengine from '../../../../Common/Icons/Fireengine.svg';
 import Heli from '../../../../Common/Icons/Heli.svg';
-import style from '#mapStyles/rasterStyle';
-import ManualIcon from '#resources/images/manualicon.png';
+import Road from '../../../../Common/Icons/road2.svg';
+import Waterway from '#resources/icons/Spring-water.svg';
+import Electricity from '#resources/icons/Electricity.svg';
 
 
 const CriticalInfraLegends = (props) => {
-    const { cITypeName } = props;
+    const { handleCritical, criticalFlood, cITypeName, clickedArr, exposureElementArr, leftElement, CIState } = props;
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
+    const handleCriticalToggle = () => {
+        const newVal = !showCriticalElements;
+        setshowCriticalElements(newVal);
+    };
 
     return (
         <>
-            {(
+            {
                 <div className={styles.mainDivPop}>
                     <button
                         type="button"
                         className={styles.toggleCritical}
+                        onClick={handleCriticalToggle}
                     >
-                        <h3 style={{ fontSize: 14 }}>
+                        <h4>
                             Infrastructures
-                        </h3>
+
+
+                        </h4>
+
+                        {showCriticalElements === true ? (
+                            <Icon
+                                name="chevronRight"
+                                className={styles.chevrontoggle}
+                            />
+                        )
+                            : (
+                                <Icon
+                                    name="chevronLeft"
+                                    className={styles.chevrontoggle}
+                                />
+                            )}
                     </button>
                     {showCriticalElements && (
 
                         <div className={styles.criticalIcons}>
 
                             <div className={styles.toggleContainer}>
-
                                 {cITypeName.map((item, i) => (
                                     <div className={styles.infraIconContainer} key={item}>
                                         <button
                                             type="button"
-                                            className={
-                                                styles.criticalButton}
+                                            className={criticalFlood === item && !CIState
+                                                ? styles.criticalButtonSelected
+                                                : styles.criticalButton}
+                                            onClick={() => handleCritical(item)}
                                         >
 
 
                                             <ScalableVectorGraphics
                                                 className={styles.svgIcon}
-                                                src={(item === 'education' && Education)
+                                                src={
+                                                    (item === 'education' && Education)
                                                     || (item === 'governance' && Governance)
+                                                    || (item === 'hotelandrestaurant' && Hotel)
                                                     || (item === 'health' && Health)
                                                     || (item === 'cultural' && Culture)
                                                     || (item === 'finance' && Bank)
                                                     || (item === 'fireengine' && Fireengine)
-                                                    || (item === 'helipad' && Heli)}
+                                                    || (item === 'bridge' && Bridge)
+                                                    || (item === 'airway' && Bridge)
+                                                    || (item === 'communication' && Communication)
+                                                    || (item === 'watersupply' && Water)
+                                                    || (item === 'sanitation' && Sanitation)
+                                                    || (item === 'industry' && Industry)
+                                                    || (item === 'communityspace' && Communication)
+                                                    || (item === 'helipad' && Heli)
+                                                    || (item === 'roadway' && Road)
+                                                    || (item === 'firefightingapparatus' && Fireengine)
+                                                    || (item === 'waterway' && Waterway)
+                                                    || (item === 'electricity' && Electricity)
+                                                }
                                             />
 
 
@@ -76,7 +117,7 @@ const CriticalInfraLegends = (props) => {
 
 
                 </div>
-            )}
+            }
         </>
     );
 };

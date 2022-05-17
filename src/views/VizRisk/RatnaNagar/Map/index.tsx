@@ -21,8 +21,11 @@ import { MainPageDataContext } from '../context';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
-import { getHouseHoldDataColor, getHouseHoldDataStatus } from '../utils';
+import { getCurrentType, getHouseHoldDataColor, getHouseHoldDataStatus, hideMapLayers, showMapLayers } from '../utils';
 import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
+import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
+import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
+import InnundationLegend from '../Components/Legends/InnundationLegend';
 import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
@@ -41,8 +44,12 @@ const Map = (props: any) => {
         CIData, leftElement,
         ciNameList, setciNameList,
         clickedCiName, unClickedCIName,
-        wards, enableNavBtns,
-        disableNavBtns } = props;
+        wards,
+        rangeNames,
+        setRangeNames,
+        floodLayer,
+        setFloodLayer,
+        setNavIdleStatus } = props;
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -55,37 +62,10 @@ const Map = (props: any) => {
         rangeValues,
     } = useContext(MainPageDataContext);
 
-    const [currentMapDataGeoJson, setCurrentMapDataGeoJson] = useState();
-
+    const [opacityFlood, setOpacityFlood] = useState(0.25);
     const demographicsData = keyValueJsonData && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
     )[0].value;
-
-    useEffect(() => {
-        if (leftElement === 5) {
-            if (rangeValues && rangeValues.length > 0) {
-                const filteredDataByRange = householdData.filter(item => (item.exposure / 10)
-                    > rangeValues[0] && (item.exposure / 10) < rangeValues[1]);
-
-                const exposureGeoJson = {
-                    type: 'FeatureCollection',
-                    features: filteredDataByRange.map(item => ({
-                        type: 'Feature',
-                        id: item.id,
-                        geometry: item.point,
-                        properties: {
-                            value: item.exposure / 10,
-                            color: getHouseHoldDataColor(item.exposure / 10),
-                            status: getHouseHoldDataStatus(item.exposure / 10),
-                        },
-                    })),
-                };
-                setCurrentMapDataGeoJson(exposureGeoJson);
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [leftElement, rangeValues]);
-    console.log('currentMapDataGeoJson', currentMapDataGeoJson);
 
     function noop() { }
 
@@ -165,70 +145,6 @@ const Map = (props: any) => {
         'grasslandratnanagar',
         'countourratnanagar'];
 
-    const exposureGeoJson = {
-        type: 'FeatureCollection',
-        features: householdData.map(item => ({
-            type: 'Feature',
-            id: item.id,
-            geometry: item.point,
-            properties: {
-                value: item.exposure / 10,
-                color: getHouseHoldDataColor(item.exposure / 10),
-                status: getHouseHoldDataStatus(item.exposure / 10),
-            },
-        })),
-    };
-
-    const hazardGeoJson = {
-        type: 'FeatureCollection',
-        features: householdData.map(item => ({
-            type: 'Feature',
-            id: item.id,
-            geometry: item.point,
-            properties: {
-                value: item.hazard / 10,
-                color: getHouseHoldDataColor(item.hazard / 10),
-                status: getHouseHoldDataStatus(item.hazard / 10),
-
-            },
-        })),
-    };
-    const sensitivityGeoJson = {
-        type: 'FeatureCollection',
-        features: householdData.map(item => ({
-            type: 'Feature',
-            id: item.id,
-            geometry: item.point,
-            properties: {
-                value: item.sensitivity / 10,
-                color: getHouseHoldDataColor(item.sensitivity / 10),
-                status: getHouseHoldDataStatus(item.sensitivity / 10),
-
-            },
-        })),
-    };
-    const adaptiveCapacityGeoJson = {
-        type: 'FeatureCollection',
-        features: householdData.map(item => ({
-            type: 'Feature',
-            id: item.id,
-            geometry: item.point,
-            properties: {
-                value: item.adaptiveCapacity / 10,
-                color: getHouseHoldDataColor(item.adaptiveCapacity / 10),
-                status: getHouseHoldDataStatus(item.adaptiveCapacity / 10),
-
-            },
-        })),
-    };
-
-
-    const allHouseHoldDataTypes = [
-        { name: 'Exposure', data: exposureGeoJson },
-        { name: 'Hazard', data: hazardGeoJson },
-        { name: 'Sensitivity', data: sensitivityGeoJson },
-        { name: 'AdaptiveCapacity', data: adaptiveCapacityGeoJson },
-    ];
     const populationStepColor = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
     const totalPopulationByWard = demographicsData.map(item => (
@@ -313,6 +229,16 @@ const Map = (props: any) => {
         };
     };
 
+    const floodHazardLayersArr = [{
+        year: '5',
+        layerName: 'Ratnanagar_FD_1in5',
+    }, {
+        year: '20',
+        layerName: 'Ratnanagar_FD_1in20',
+    }, {
+        year: '100',
+        layerName: 'Ratnanagar_FD_1in100',
+    }];
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -339,15 +265,20 @@ const Map = (props: any) => {
 
         multihazardMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        multihazardMap.on('idle', () => {
-            if (leftElement === 0) {
-                enableNavBtns('Right');
-            } else if (leftElement === 9) {
-                enableNavBtns('Left');
-            }
-            enableNavBtns('both');
-        });
-
+        mapZoomEffect.current = setTimeout(() => {
+            multihazardMap.on('idle', () => {
+                setNavIdleStatus(true);
+            });
+            multihazardMap.easeTo({
+                pitch: 35,
+                center: [
+                    84.51393887409917,
+                    27.619152424687197,
+                ],
+                zoom: 11.7,
+                duration: 8000,
+            });
+        }, 4000);
 
         multihazardMap.on('style.load', () => {
             // --------------------------------------SLIDE-3 -> CI layer----------------------------------------
@@ -560,93 +491,6 @@ const Map = (props: any) => {
                 hoveredWardId = undefined;
             });
 
-            // Hazard ,exposure layer data
-            allHouseHoldDataTypes.map((household) => {
-                multihazardMap.addSource(`household-${household.name}`, {
-                    type: 'geojson',
-                    data: household.data,
-                    // cluster: true,
-                    // clusterRadius: 50,
-                });
-
-                multihazardMap.addLayer({
-                    id: `household-point-${household.name}`,
-                    type: 'circle',
-                    source: `household-${household.name}`,
-
-                    // filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': ['get', 'color'],
-                        'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 0.8, 15, 6],
-                    },
-                    layout: {
-                        visibility: 'none',
-                    },
-                });
-
-                multihazardMap.on('click', `household-point-${household.name}`, (e) => {
-                    e.preventDefault();
-                    const { lngLat } = e;
-                    const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
-
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-                    const popupNode = document.createElement('div');
-
-
-                    if (clickedId) {
-                        multihazardMap.setFeatureState(
-                            {
-                                id: clickedId,
-                                source: 'exposure',
-                            },
-                            { clicked: false },
-                        );
-                    }
-                    if (e.features) {
-                        clickedId = e.features[0].id;
-                    }
-                    multihazardMap.setFeatureState(
-                        {
-                            id: clickedId,
-                            source: 'exposure',
-                        },
-                        { clicked: true },
-                    );
-
-
-                    ReactDOM.render(
-                        <PopupOnMapClick
-                            houseId={e.features[0].id}
-                            mainType={household.name}
-                            data={e.features[0].properties}
-                        />, popupNode,
-                    );
-                    const householdPopUp = new mapboxgl.Popup()
-                        .setLngLat(coordinates)
-                        .setDOMContent(popupNode)
-                        .addTo(multihazardMap);
-
-                    if (popupRef) {
-                        popupRef.current = householdPopUp;
-                    }
-                });
-
-
-                multihazardMap.on('click', (e) => {
-                    if (e.defaultPrevented === false) {
-                        multihazardMap.setFeatureState(
-                            {
-                                id: clickedId,
-                                source: 'exposure',
-                            },
-                            { clicked: false },
-                        );
-                    }
-                });
-                return null;
-            });
             /**
              * Innundation Layer
              */
@@ -672,21 +516,30 @@ const Map = (props: any) => {
 
             );
 
+            floodHazardLayersArr.map((layer) => {
+                multihazardMap.addSource(`floodraster${layer.year}`, {
+                    type: 'raster',
+                    tiles: [getCommonRasterLayer(layer.layerName)],
+                    tileSize: 256,
+                });
+                multihazardMap.addLayer(
+                    {
+                        id: `raster-flood-${layer.year}`,
+                        type: 'raster',
+                        source: `floodraster${layer.year}`,
+                        layout: {
+                            visibility: 'none',
+                        },
+                        paint: {
+                            'raster-opacity': opacityFlood,
+                        },
+                    },
+                );
+                return null;
+            });
+
 
             multihazardMap.setZoom(1);
-
-            mapZoomEffect.current = setTimeout(() => {
-                disableNavBtns('both');
-                multihazardMap.easeTo({
-                    pitch: 35,
-                    center: [
-                        84.51393887409917,
-                        27.619152424687197,
-                    ],
-                    zoom: 11.7,
-                    duration: 8000,
-                });
-            }, 4000);
         });
 
 
@@ -699,133 +552,229 @@ const Map = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    /**
-     * Removing popups on next or previous click
-     */
-    useEffect(() => {
-        if (popupRef && popupRef.current) {
-            popupRef.current.remove();
-        }
-    }, [leftElement]);
 
+    useEffect(() => {
+        const switchFloodRasters = (floodlayer: string) => {
+            if (floodHazardLayersArr && floodHazardLayersArr.length > 0 && map.current) {
+                floodHazardLayersArr.map((layer) => {
+                    if (map.current) {
+                        hideMapLayers(`raster-flood-${layer.year}`, map);
+                    }
+                    return null;
+                });
+                showMapLayers(`raster-flood-${floodlayer}`, map);
+            }
+        };
+
+        if (map.current && floodHazardLayersArr && map.current.isStyleLoaded()) {
+            switchFloodRasters(floodLayer);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [floodLayer]);
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
-            // -------------------------------------LANDCOVER LAYER-------------------------------
+            /**
+             * Landcover Layer
+             */
             if (leftElement === 1 || leftElement === 3) {
+                if (map.current) {
+                    map.current.easeTo({
+                        pitch: 45,
+                        zoom: 12,
+                        duration: 1000,
+                    });
+                }
                 landoverLayers.map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
-                    }
+                    showMapLayers(layer, map);
                     return null;
                 });
             } else {
                 landoverLayers.map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'none');
-                    }
+                    hideMapLayers(layer, map);
                     return null;
                 });
+                if (map.current) {
+                    map.current.easeTo({
+                        pitch: 38,
+                        duration: 1000,
+                    });
+                }
             }
 
             if (leftElement === 2) {
-                if (!map.current) return;
-                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-                map.current.setLayoutProperty('buildingratnanagar', 'visibility', 'none');
+                showMapLayers('ward-fill-local', map);
+                hideMapLayers('buildingratnanagar', map);
             } else {
-                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                map.current.setLayoutProperty('buildingratnanagar', 'visibility', 'visible');
+                hideMapLayers('ward-fill-local', map);
+                showMapLayers('buildingratnanagar', map);
             }
 
             if (leftElement === 3) {
                 clickedCiName.map((layerName: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'visible');
+                    showMapLayers(`clusters-${layerName}`, map);
+                    showMapLayers(`clusters-count-${layerName}`, map);
+                    showMapLayers(`unclustered-point-${layerName}`, map);
 
-                        map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'visible');
-
-                        map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'visible');
-                    }
                     return null;
                 });
                 unClickedCIName.map((layerName: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
+                    hideMapLayers(`clusters-${layerName}`, map);
+                    hideMapLayers(`clusters-count-${layerName}`, map);
+                    hideMapLayers(`unclustered-point-${layerName}`, map);
 
-                        map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
-
-                        map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
-                    }
                     return null;
                 });
             } else {
                 ciNameList.map((layerName: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
-
-                        map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
-
-                        map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
-                    }
+                    hideMapLayers(`clusters-${layerName}`, map);
+                    hideMapLayers(`clusters-count-${layerName}`, map);
+                    hideMapLayers(`unclustered-point-${layerName}`, map);
                     return null;
                 });
+            }
+
+            if (leftElement === 4) {
+                if (map.current) {
+                    showMapLayers('inundationLayer', map);
+                }
+            } else {
+                hideMapLayers('inundationLayer', map);
+            }
+            if (leftElement === 5) {
+                showMapLayers(`raster-flood-${floodLayer}`, map);
+            } else {
+                hideMapLayers(`raster-flood-${floodLayer}`, map);
             }
 
             if (leftElement > 4 && leftElement < 9) {
                 if (map.current) {
                     map.current.setPaintProperty('municipalitygeo', 'fill-color', '#eff1f1');
                     map.current.setPaintProperty('wardgeo', 'line-color', 'white');
-                    // map.current.setPaintProperty('wardname', 'text-color', '#ede9dd');
                 }
             } else {
                 map.current.setPaintProperty('municipalitygeo', 'fill-color', '#ffffff');
                 map.current.setPaintProperty('wardgeo', 'line-color', '#514d4d');
-                // map.current.setPaintProperty('wardname', 'text-color', '#000000');
-            }
 
+                /**
+                 * Checking the housepoint layer before setting layout property
+                 */
 
-            if (leftElement === 4) {
-                if (map.current) {
-                    map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
+                if (map.current.getLayer('household-point')) {
+                    hideMapLayers('household-point', map);
                 }
-            } else {
-                map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
-            }
-
-            if (leftElement === 5) {
-                if (map.current) {
-                    map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('household-point-Exposure', 'visibility', 'none');
-            }
-
-            if (leftElement === 6) {
-                if (map.current) {
-                    map.current.setLayoutProperty('household-point-Hazard', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('household-point-Hazard', 'visibility', 'none');
-            }
-            if (leftElement === 7) {
-                if (map.current) {
-                    map.current.setLayoutProperty('household-point-Sensitivity', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('household-point-Sensitivity', 'visibility', 'none');
-            }
-            if (leftElement === 8) {
-                if (map.current) {
-                    map.current.setLayoutProperty('household-point-AdaptiveCapacity', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('household-point-AdaptiveCapacity', 'visibility', 'none');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ciNameList, clickedCiName,
-        landoverLayers, leftElement, unClickedCIName]);
+    }, [ciNameList, clickedCiName, leftElement, unClickedCIName, floodLayer]);
 
+    useEffect(() => {
+        if (popupRef.current) {
+            popupRef.current.remove();
+        }
+        const filteredDataByRange: [] = [];
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < rangeValues.length; index++) {
+            if (index % 2 !== 0) {
+                // eslint-disable-next-line no-continue
+                continue;
+            }
+            const filteredData = householdData.filter(
+                item => (item[getCurrentType(leftElement)] / 10)
+                    >= rangeValues[index] && (item[getCurrentType(leftElement)] / 10)
+                    <= rangeValues[index + 1],
+            );
+            filteredDataByRange.push(...filteredData);
+        }
+
+        const geoJsonMain = {
+            type: 'FeatureCollection',
+            features: (rangeValues && rangeValues.length > 0 ? filteredDataByRange : householdData).map(item => ({
+                type: 'Feature',
+                id: item.id,
+                geometry: item.point,
+                properties: {
+                    name: getCurrentType(leftElement),
+                    value: item[getCurrentType(leftElement)] / 10,
+                    color: getHouseHoldDataColor(item[getCurrentType(leftElement)] / 10),
+                    status: getHouseHoldDataStatus(item[getCurrentType(leftElement)] / 10),
+                },
+            })),
+        };
+
+
+        if (map && map.current
+            && leftElement > 4 && leftElement < 9) {
+            if (map.current.getLayer('household-point')) {
+                map.current.removeLayer('household-point');
+            }
+
+            if (map.current.getSource('householddata')) {
+                map.current.removeSource('householddata');
+            }
+
+            map.current.addSource('householddata', {
+                type: 'geojson',
+                data: geoJsonMain,
+            });
+
+            map.current.addLayer({
+                id: 'household-point',
+                type: 'circle',
+                source: 'householddata',
+                paint: {
+                    'circle-color': ['get', 'color'],
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 0.8, 15, 6],
+                },
+                layout: {
+                    visibility: 'visible',
+                },
+            });
+
+            map.current.on('click', 'household-point', (e) => {
+                if (popupRef.current) {
+                    popupRef.current.remove();
+                }
+                const { lngLat } = e;
+                const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
+
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                const popupNode = document.createElement('div');
+
+
+                ReactDOM.render(
+                    <PopupOnMapClick
+                        houseId={e.features && e.features[0].id}
+                        data={e.features && e.features[0].properties}
+                    />, popupNode,
+                );
+                if (map.current) {
+                    const householdPopUp = new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setDOMContent(popupNode)
+                        .addTo(map.current);
+
+                    popupRef.current = householdPopUp;
+                }
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [leftElement, rangeValues]);
+
+
+    const handleFloodChange = (e) => {
+        const opacity = e.target.value;
+        setOpacityFlood(opacity);
+        floodHazardLayersArr.map((l) => {
+            if (map.current) {
+                map.current.setPaintProperty(`raster-flood-${l.year}`,
+                    'raster-opacity', Number(opacity));
+            }
+            return null;
+        });
+    };
 
     return (
         <div
@@ -833,9 +782,49 @@ const Map = (props: any) => {
             className={leftElement === 9
                 ? styles.mapCSSNone : styles.mapCSS}
         >
-            {leftElement === 2 && <DemoGraphicsLegends demographicsData={demographicsData} />}
+            {leftElement === 2 && (
+                <DemoGraphicsLegends
+                    demographicsData={demographicsData}
+                />
+            )}
             {leftElement === 1 && <LandCoverLegends />}
-            {leftElement === 4 && <FloodHistoryLegends />}
+            {leftElement === 4 && <InnundationLegend />}
+            {leftElement > 4 && leftElement < 9 && (
+                <RangeStatusLegend
+                    rangeNames={rangeNames}
+                    setRangeNames={setRangeNames}
+                />
+            )
+            }
+            {
+                (leftElement === 5
+                    && (
+                        <>
+                            <div className={styles.sliderContainer}>
+                                <p className={styles.sliderLabelRatna}>
+                                    Flood Layer Opacity
+                                </p>
+                                <input
+                                    onChange={e => handleFloodChange(e)}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={String(opacityFlood)}
+                                    className={styles.slider}
+                                />
+                                <p className={styles.opacityLevel}>
+                                    <span>0</span>
+                                    <span>0.5</span>
+                                    <span>1</span>
+                                </p>
+                                <FloodHistoryLegends />
+                                <FloodHazardLegends setFloodLayer={setFloodLayer} />
+                            </div>
+                        </>
+
+                    ))}
         </div>
     );
 };
