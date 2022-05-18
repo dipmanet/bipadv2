@@ -24,8 +24,8 @@ export const pastDaysToDateRange = (pastDays: number, language) => {
     const todayDateCheck = language === 'np' ? todayNepali : today;
     const lastDateCheck = language === 'np' ? lastDateNepali : lastDate;
     return {
-        startDate: todayDateCheck,
-        endDate: lastDateCheck,
+        startDate: lastDateCheck,
+        endDate: todayDateCheck,
     };
 };
 
