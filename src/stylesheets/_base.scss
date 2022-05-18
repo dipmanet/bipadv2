@@ -16,8 +16,7 @@ $font-weight-heading: 900;
 * {
     box-sizing: border-box;
     .languageFont{
-    font-family: "Kalimati Regular"!important;
-    color:rgba(0, 0, 0, 1);
+        font-family: "Kalimati Regular","Fira Sans", sans-serif !important;
     }
     ::-webkit-scrollbar-track {
         background-color: $color-background-scrollbar;
