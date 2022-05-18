@@ -30,6 +30,8 @@ export const positionInitialValues: PostionInitialValues = {
 };
 
 interface MainPageData {
+    mainKey: string;
+    suffix: string;
     leftElement: number;
     setLeftElement: React.Dispatch<React.SetStateAction<number>>;
     scrollTopValuesPerPage: ScrollTopInitialValues;
@@ -39,12 +41,16 @@ interface MainPageData {
     onButtonClick: (item: number) => void;
     keyValueJsonData: [];
     setCurrentHeaderVal: React.Dispatch<React.SetStateAction<string>>;
+    navIdleStatus: boolean;
     householdData: [];
     keyValueHtmlData: [];
-    disableNavRightBtn: boolean;
-    disableNavLeftBtn: boolean;
+    rangeValues: number[];
+    handleRangeLegendClick: (item: any) => undefined;
+    setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const initialMainPageData: MainPageData = {
+    mainKey: '',
+    suffix: '',
     leftElement: 1,
     setLeftElement: () => undefined,
     scrollTopValuesPerPage: scrollTopPageInitialValues,
@@ -56,8 +62,10 @@ const initialMainPageData: MainPageData = {
     setCurrentHeaderVal: () => undefined,
     keyValueHtmlData: [],
     householdData: [],
-    disableNavRightBtn: true,
-    disableNavLeftBtn: true,
+    navIdleStatus: false,
+    rangeValues: [],
+    handleRangeLegendClick: () => undefined,
+    setNavIdleStatus: () => undefined,
 
 };
 

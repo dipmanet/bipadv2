@@ -13,16 +13,14 @@ const SelectComponent = (props) => {
             >
                 {
                     selectFieldValues.map(item => (
-                        <>
-                            <option
-                                className={styles.mainOptions}
-                                key={item}
-                                value={item}
-                            >
-                                {item}
+                        <option
+                            className={styles.mainOptions}
+                            key={`select-${item}`}
+                            value={item}
+                        >
+                            {item}
 
-                            </option>
-                        </>
+                        </option>
                     ))
                 }
             </select>

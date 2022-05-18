@@ -16,23 +16,26 @@
 
     .mainContents {
         display: flex;
-        justify-content: space-between;
+        justify-content:space-between;
         align-items: center;
-        flex-wrap: wrap;
+        // flex-wrap: wrap;
         background-color: #18202b;
         border-bottom: 1px solid grey;
         // height: 35px;
         padding: 5px 10px;
 
         .mainTitle {
+            width: 70%;
             font-size: 12px;
             margin: 0;
             padding: 0;
-            color: white
+            color: white;            
         }
 
         .mainStatus {
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: end;
             margin: 0;
             padding: 0;
             color: white;

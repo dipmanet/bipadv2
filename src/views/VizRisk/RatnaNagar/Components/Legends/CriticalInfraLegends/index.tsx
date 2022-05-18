@@ -1,6 +1,3 @@
-/* eslint-disable no-tabs */
-/* eslint-disable react/jsx-indent */
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { Item } from 'semantic-ui-react';
 import styles from './styles.scss';
@@ -11,23 +8,23 @@ import Culture from '#resources/icons/icon_set_religion.svg';
 import Health from '#resources/icons/icon_set_health-01.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
 import Bank from '#resources/icons/icon_set_bank.svg';
-import Trade from '#resources/icons/trade.svg';
+import Evacuation from '../../../../Common/Icons/IDP-refugee-camp.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Bridge from '#resources/icons/bridge copy.svg';
 import Communication from '#resources/icons/communication.svg';
-import Sanitation from '../../../Common/Icons/sanitationviz.svg';
-import Hotel from '../../../Common/Icons/hotelci.svg';
+import Sanitation from '../../../../Common/Icons/sanitationviz.svg';
+import Hotel from '../../../../Common/Icons/hotelci.svg';
 import Industry from '#resources/icons/IndustryVR.svg';
+import Electricity from '#resources/icons/Electricity.svg';
 import Icon from '#rscg/Icon';
-import Fireengine from '../../../Common/Icons/Fireengine.svg';
-import Heli from '../../../Common/Icons/Heli.svg';
-import Road from '../../../Common/Icons/road2.svg';
-import Waterway from '#resources/icons/Spring-water.svg';
-import style from '#mapStyles/rasterStyle';
+import Fireengine from '../../../../Common/Icons/Fireengine.svg';
+import Heli from '../../../../Common/Icons/Heli.svg';
+import Road from '../../../../Common/Icons/road2.svg';
+import Waterway from '../../../../Common/Icons/Spring-water.svg';
 
 
 const CriticalInfraLegends = (props) => {
-    const { cITypeName } = props;
+    const { handleCritical, criticalFlood, cITypeName, CIState } = props;
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
     const handleCriticalToggle = () => {
@@ -38,7 +35,7 @@ const CriticalInfraLegends = (props) => {
     return (
         <>
             {
-                <div className={styles.mainDivPopExposure}>
+                <div className={styles.mainDivPop}>
                     <button
                         type="button"
                         className={styles.toggleCritical}
@@ -73,7 +70,9 @@ const CriticalInfraLegends = (props) => {
                                     <div className={styles.infraIconContainer} key={item}>
                                         <button
                                             type="button"
-                                            className={styles.criticalButtonSelected}
+                                            className={criticalFlood === item && !CIState
+                                                ? styles.criticalButtonSelected
+                                                : styles.criticalButton}
                                         >
 
 
@@ -98,6 +97,8 @@ const CriticalInfraLegends = (props) => {
                                                     || (item === 'roadway' && Road)
                                                     || (item === 'firefightingapparatus' && Fireengine)
                                                     || (item === 'waterway' && Waterway)
+                                                    || (item === 'electricity' && Electricity)
+                                                    || (item === 'evacuationcentre' && Evacuation)
                                                 }
                                             />
 

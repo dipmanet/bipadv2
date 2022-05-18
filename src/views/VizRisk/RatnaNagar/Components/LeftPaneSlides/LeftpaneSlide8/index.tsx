@@ -11,6 +11,7 @@ import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
+import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
 const LeftpaneSlide8 = () => {
     const {
@@ -65,6 +66,15 @@ const LeftpaneSlide8 = () => {
                 scoreStatus={scoreStatus}
                 color={color}
             />
+
+            <p>
+                The adaptive capacity value of the municipality is moderate
+                for Ratnanagar (
+                {averageExposureScore}
+                /10).The higher the value of adaptive capacity,
+                the greater the ability to respond to the
+                consequences of disasters.
+            </p>
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 

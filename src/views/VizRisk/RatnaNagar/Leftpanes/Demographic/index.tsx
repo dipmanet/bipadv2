@@ -16,7 +16,7 @@ function Demographic(props: Props) {
         setPostionsPerPage,
         onButtonClick,
         setCurrentHeaderVal,
-
+        setNavIdleStatus,
     } = useContext(MainPageDataContext);
 
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -47,7 +47,8 @@ function Demographic(props: Props) {
 
     useEffect(() => {
         articleRef.current.scrollTo(0, scrollTopValuesPerPage.demographicScrolltopValue);
-    }, [articleRef, scrollTopValuesPerPage.demographicScrolltopValue]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onPreviousClick = () => {
         articleRef.current.scrollTo({
@@ -56,6 +57,7 @@ function Demographic(props: Props) {
         });
         if (postionsPerPage.demographicPositionValue === 1) {
             setLeftElement(leftElement - 1);
+            setNavIdleStatus(false);
         }
     };
 
@@ -67,6 +69,7 @@ function Demographic(props: Props) {
 
         if (postionsPerPage.demographicPositionValue === 0) {
             setLeftElement(leftElement + 1);
+            setNavIdleStatus(false);
         }
     };
 

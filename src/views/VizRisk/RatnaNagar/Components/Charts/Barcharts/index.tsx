@@ -9,6 +9,7 @@ import {
     XAxis,
     YAxis,
     Legend,
+    Label,
 } from 'recharts';
 import styles from './styles.scss';
 
@@ -31,21 +32,25 @@ const CommonBarChart = (props: Props) => {
                     height={400}
                     data={barData}
                     layout="vertical"
-                // margin={{ left: 0, right: 25 }}
+                    margin={{ left: 0, bottom: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} opacity={0.5} />
-                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                        <Label
+                            value="Number of households"
+                            offset={-10}
+                            position="insideBottom"
+                            style={{
+                                textAnchor: 'middle',
+                                fill: 'rgba(255, 255, 255, 0.87)',
+                                // margin: '10px',
+                            }}
+                        />
+                    </XAxis>
                     <YAxis
                         type="category"
                         dataKey="name"
                         tick={{ fill: '#94bdcf' }}
-                    />
-                    <Legend
-                        verticalAlign="bottom"
-                        height={36}
-                        iconType="circle"
-                        align="left"
-                        margin={{ left: 15 }}
                     />
                     {/* <Tooltip
                         cursor={{ fill: '#1c333f' }}

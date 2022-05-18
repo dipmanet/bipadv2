@@ -16,6 +16,7 @@ function LeftPane1() {
         setPostionsPerPage,
         onButtonClick,
         setCurrentHeaderVal,
+        setNavIdleStatus,
     } = useContext(MainPageDataContext);
 
 
@@ -47,7 +48,8 @@ function LeftPane1() {
 
     useEffect(() => {
         articleRef.current.scrollTo(0, scrollTopValuesPerPage.page1ScrolltopValue);
-    }, [articleRef, scrollTopValuesPerPage.page1ScrolltopValue]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onPreviousClick = () => {
         articleRef.current.scrollTo({
@@ -56,6 +58,7 @@ function LeftPane1() {
         });
         if (postionsPerPage.page1PositionValue === 1) {
             setLeftElement(leftElement - 1);
+            setNavIdleStatus(false);
         }
     };
 
@@ -67,6 +70,7 @@ function LeftPane1() {
 
         if (postionsPerPage.page1PositionValue === 0) {
             setLeftElement(leftElement + 1);
+            setNavIdleStatus(false);
         }
     };
 

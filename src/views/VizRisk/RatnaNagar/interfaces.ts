@@ -40,7 +40,8 @@ export interface CIDataList {
 
 }
 interface HtmlDataContents {
-    value: [];
+    key: '';
+    value: '';
 }
 export type HtmlData = HtmlDataContents[]
 

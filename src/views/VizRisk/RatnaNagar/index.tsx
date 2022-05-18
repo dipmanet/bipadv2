@@ -143,8 +143,15 @@ const Ratnanagar = (props: any) => {
     const [keyValueHtmlData, setKeyValueHtmlData] = useState<HtmlData>([]);
     const [householdData, setHouseholdData] = useState<JsonData>([]);
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
-    const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
-    const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
+    const [navIdleStatus, setNavIdleStatus] = useState(false);
+    const [floodLayer, setFloodLayer] = useState(5);
+
+    /**
+     * filtering data on tmap
+     */
+    const [rangeValues, setRangeValues] = useState<number[]>([]);
+    const [rangeNames, setRangeNames] = useState<string[]>([]);
+
     // state for requested data
     const [cIData, setcIData] = useState<CIData>([]);
     const [householdChartData, setHouseholdChartData] = useState({});
@@ -197,8 +204,10 @@ const Ratnanagar = (props: any) => {
         }
     }, [cIData, keyValueJsonData, householdData, keyValueHtmlData, householdChartData]);
 
+
     const onButtonClick = (item: number) => {
         setLeftElement(item);
+        setNavIdleStatus(false);
     };
 
     const handleCIClick = (ciName: string) => {
@@ -212,27 +221,10 @@ const Ratnanagar = (props: any) => {
     };
 
 
-    const enableNavBtns = (val: string) => {
-        if (val === 'Right') {
-            setdisableNavRightBtn(false);
-        } else if (val === 'Left') {
-            setdisableNavLeftBtn(false);
-        }
-        setdisableNavLeftBtn(false);
-        setdisableNavRightBtn(false);
+    const handleReset = () => {
+        setRangeNames([]);
+        setRangeValues([]);
     };
-
-
-    const disableNavBtns = (val: string) => {
-        if (val === 'Right') {
-            setdisableNavRightBtn(true);
-        } else if (val === 'Left') {
-            setdisableNavLeftBtn(true);
-        }
-        setdisableNavLeftBtn(true);
-        setdisableNavRightBtn(true);
-    };
-
 
     const geoJsonCI = {
         type: 'FeatureCollection',
@@ -248,7 +240,25 @@ const Ratnanagar = (props: any) => {
         })),
     };
 
+    const mainKey = 'vizrisk_ratnanagar';
+    const suffix = '301_3_35_35007';
+
+    const handleRangeLegendClick = (rangeData: number[]) => {
+        setRangeValues(prevState => [...new Set([...prevState, ...rangeData])]
+            .sort((a: number, b: number) => a - b));
+
+        if (rangeData.length > 0
+            && (rangeValues.includes(rangeData[0]) || rangeValues.includes(rangeData[1]))) {
+            setRangeValues(prevState => prevState.filter(
+                item => item !== rangeData[0] && item !== rangeData[1],
+            ));
+        }
+    };
+
+
     const contextValues = {
+        mainKey,
+        suffix,
         leftElement,
         setLeftElement,
         scrollTopValuesPerPage,
@@ -261,10 +271,13 @@ const Ratnanagar = (props: any) => {
         householdChartData,
         setCurrentHeaderVal,
         householdData,
-        disableNavRightBtn,
-        disableNavLeftBtn,
-
+        rangeValues,
+        navIdleStatus,
+        setNavIdleStatus,
+        handleRangeLegendClick,
+        handleReset,
     };
+
 
     return (
         <>
@@ -291,8 +304,11 @@ const Ratnanagar = (props: any) => {
                                                 ciNameList={ciNameList}
                                                 setciNameList={setciNameList}
                                                 unClickedCIName={unClickedCIName}
-                                                enableNavBtns={enableNavBtns}
-                                                disableNavBtns={disableNavBtns}
+                                                setNavIdleStatus={setNavIdleStatus}
+                                                rangeNames={rangeNames}
+                                                setRangeNames={setRangeNames}
+                                                floodLayer={floodLayer}
+                                                setFloodLayer={setFloodLayer}
 
                                             />
                                             <LeftTopBar currentHeaderVal={currentHeaderVal} />

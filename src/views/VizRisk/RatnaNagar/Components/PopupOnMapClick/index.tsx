@@ -4,9 +4,8 @@ import Loader from 'react-loader';
 import styles from './styles.scss';
 
 interface Props {
-    mainType: string;
     data: any;
-    houseId: number;
+    houseId: number | undefined | string;
 }
 
 interface HouseHold {
@@ -14,7 +13,7 @@ interface HouseHold {
 }
 
 const PopupOnMapClick = (props: Props) => {
-    const { mainType, data, houseId } = props;
+    const { data, houseId } = props;
     const [houseData, setHouseData] = useState<HouseHold>();
     const [loading, setLoading] = useState(true);
 
@@ -53,8 +52,8 @@ const PopupOnMapClick = (props: Props) => {
     const popUpHazardData = houseData && Object.keys(houseData).length > 0
         ? [
             {
-                name: 'Flood return period',
-                value: houseData.metadata.numberOfFloodsPastThirtyYears,
+                name: 'Flood return period(yrs)',
+                value: houseData.metadata.returnPeriod,
             },
         ] : [];
 
@@ -128,7 +127,8 @@ const PopupOnMapClick = (props: Props) => {
             },
             {
                 name: 'Distance from ward office',
-                value: houseData.metadata.distanceFromSecurityForcesMeter ? 'Yes' : 'No',
+                value: houseData.metadata.nearestWardOffice
+                    ? houseData.metadata.nearestWardOffice.toFixed(2) : 'No data',
             },
             {
                 name: 'Access to natural resource',
@@ -142,14 +142,15 @@ const PopupOnMapClick = (props: Props) => {
                 name: 'Access to community building',
                 value: houseData.metadata.hasCommunityCenter,
             },
-            // {
-            //     name: 'Access to financial institution',
-            //     value: houseData.metadata.houseBuildingType,
-            // },
-            // {
-            //     name: 'Distance from municipality office',
-            //     value: houseData.metadata.houseBuildingType,
-            // },
+            {
+                name: 'Access to financial institution',
+                value: houseData.metadata.hasCommunityCenter,
+            },
+            {
+                name: 'Distance from municipality office(m)',
+                value: houseData.metadata.nearestMunicipalityOffice
+                    ? houseData.metadata.nearestMunicipalityOffice.toFixed(2) : 'No data',
+            },
             {
                 name: 'Yearly saving of your house (NPR)',
                 value: houseData.metadata.yearlySaving,
@@ -222,10 +223,10 @@ const PopupOnMapClick = (props: Props) => {
             //     name: 'Access to financial institution for people with disability',
             //     value: houseData.metadata.houseBuildingType,
             // },
-            // {
-            //     name: 'Distance from municipality office for people with disability',
-            //     value: houseData.metadata.houseBuildingType,
-            // },
+            {
+                name: 'Distance from municipality office for people with disability',
+                value: houseData.metadata.nearestMunicipalityOffice,
+            },
             {
                 name: 'Raised plinth, proper drainage and roof accessible during emergency',
                 value: houseData.metadata.hasHouseRaisedPlinth,
@@ -289,6 +290,20 @@ const PopupOnMapClick = (props: Props) => {
             },
         ] : [];
 
+    const currentPopupData = (type) => {
+        switch (type) {
+            case 'exposure':
+                return popUpExposureData;
+            case 'hazard':
+                return popUpHazardData;
+            case 'sensitivity':
+                return popUpSensitivityData;
+            case 'adaptiveCapacity':
+                return popUpAdaptiveCapacityData;
+            default:
+                return [];
+        }
+    };
     return (
         <div
             className={styles.popupOnMapClick}
@@ -318,7 +333,7 @@ const PopupOnMapClick = (props: Props) => {
                                 style={{ color: data.color, fontSize: 15 }}
                                 className={styles.mainTitle}
                             >
-                                {mainType}
+                                {data.name && data.name.charAt(0).toUpperCase() + data.name.slice(1)}
 
                             </h3>
                             <h3 style={{ color: data.color, fontSize: 15 }} className={styles.mainStatus}>
@@ -330,73 +345,22 @@ const PopupOnMapClick = (props: Props) => {
                         </div>
 
                         {
-                            mainType === 'Exposure' && (
-                                popUpExposureData.map(exposurePopData => (
-                                    <div className={styles.mainContents}>
-                                        <h3 className={styles.mainTitle}>
-                                            {exposurePopData.name}
-                                            {' '}
-                                            {':'}
-                                        </h3>
-                                        <h3 className={styles.mainStatus}>
-                                            {exposurePopData.value ? exposurePopData.value : 'No data'}
-                                        </h3>
-                                    </div>
+                            (currentPopupData(data.name)).map(exposurePopData => (
+                                <div className={styles.mainContents}>
+                                    <h3 className={styles.mainTitle}>
+                                        {exposurePopData.name}
+                                        {' '}
+                                        {':'}
+                                    </h3>
+                                    <h3 className={styles.mainStatus}>
+                                        {exposurePopData.value ? exposurePopData.value : 'No data'}
+                                    </h3>
+                                </div>
 
-                                ))
-                            )
-                        }
-                        {
-                            mainType === 'Hazard' && (
-                                popUpHazardData.map(exposurePopData => (
-                                    <div className={styles.mainContents}>
-                                        <h3 className={styles.mainTitle}>
-                                            {exposurePopData.name}
-                                            {' '}
-                                            {':'}
-                                        </h3>
-                                        <h3 className={styles.mainStatus}>
-                                            {exposurePopData.value ? exposurePopData.value : 'No data'}
-                                        </h3>
-                                    </div>
+                            ))
 
-                                ))
-                            )
                         }
-                        {
-                            mainType === 'Sensitivity' && (
-                                popUpSensitivityData.map(exposurePopData => (
-                                    <div className={styles.mainContents}>
-                                        <h3 className={styles.mainTitle}>
-                                            {exposurePopData.name}
-                                            {' '}
-                                            {':'}
-                                        </h3>
-                                        <h3 className={styles.mainStatus}>
-                                            {exposurePopData.value ? exposurePopData.value : 'No data'}
-                                        </h3>
-                                    </div>
 
-                                ))
-                            )
-                        }
-                        {
-                            mainType === 'AdaptiveCapacity' && (
-                                popUpAdaptiveCapacityData.map(exposurePopData => (
-                                    <div className={styles.mainContents}>
-                                        <h3 className={styles.mainTitle}>
-                                            {exposurePopData.name}
-                                            {' '}
-                                            {':'}
-                                        </h3>
-                                        <h3 className={styles.mainStatus}>
-                                            {exposurePopData.value ? exposurePopData.value : 'No data'}
-                                        </h3>
-                                    </div>
-
-                                ))
-                            )
-                        }
                         <div className={styles.dummyBlankSpace} />
                     </>
                 )

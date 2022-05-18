@@ -11,6 +11,7 @@ import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
+import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
 const LeftpaneSlide7 = () => {
     const {
@@ -67,6 +68,13 @@ const LeftpaneSlide7 = () => {
                 scoreStatus={scoreStatus}
                 color={color}
             />
+            <p>
+                The sensitivity value of the municipality is very high(
+                {averageExposureScore}
+                /10).
+                The higher the value of sensitivity, the greater the potential impact.
+
+            </p>
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 

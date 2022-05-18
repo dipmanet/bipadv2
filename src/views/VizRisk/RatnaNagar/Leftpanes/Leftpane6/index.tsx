@@ -18,6 +18,7 @@ function LeftPane6(props: Props) {
         setPostionsPerPage,
         onButtonClick,
         setCurrentHeaderVal,
+        setNavIdleStatus,
     } = useContext(MainPageDataContext);
 
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -48,7 +49,8 @@ function LeftPane6(props: Props) {
 
     useEffect(() => {
         articleRef.current.scrollTo(0, scrollTopValuesPerPage.page7ScrolltopValue);
-    }, [articleRef, scrollTopValuesPerPage.page7ScrolltopValue]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onPreviousClick = () => {
         articleRef.current.scrollTo({
@@ -58,6 +60,7 @@ function LeftPane6(props: Props) {
 
         if (postionsPerPage.page7PositionValue === (1 || NaN)) {
             setLeftElement(leftElement - 1);
+            setNavIdleStatus(false);
         }
     };
 
@@ -69,6 +72,7 @@ function LeftPane6(props: Props) {
 
         if (postionsPerPage.page7PositionValue === 0) {
             setLeftElement(leftElement + 1);
+            setNavIdleStatus(false);
         }
     };
 

@@ -22,6 +22,27 @@ const LeftpaneSlide5 = () => {
                     ReactHtmlParser(htmlData.value)
 
                 )}
+                <div>
+                    <h3 style={{ fontSize: 16 }}>A repeat of the 2017 flood in 2022 would inundate</h3>
+                    <p>
+                        {' '}
+                        <span style={{ fontSize: 20, fontWeight: 'bold' }}>1500 </span>
+                        {' '}
+                        Building
+                    </p>
+                    <p>
+                        {' '}
+                        <span style={{ fontSize: 20, fontWeight: 'bold' }}> 27,719</span>
+                        {' '}
+                        km of roads
+                    </p>
+                    <p>
+                        <span style={{ fontSize: 20, fontWeight: 'bold' }}>2.98 sq.km</span>
+                        {' '}
+                        of agricultural land
+                    </p>
+                </div>
+                <p><em>Source: WPP, OpenSteetMap</em></p>
             </div>
         </div>
     );

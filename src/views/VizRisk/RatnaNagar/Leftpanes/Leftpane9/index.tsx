@@ -49,7 +49,8 @@ function LeftPane9(props: Props) {
 
     useEffect(() => {
         articleRef.current.scrollTo(0, scrollTopValuesPerPage.page10ScrolltopValue);
-    }, [articleRef, scrollTopValuesPerPage.page10ScrolltopValue]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onPreviousClick = () => {
         articleRef.current.scrollTo({

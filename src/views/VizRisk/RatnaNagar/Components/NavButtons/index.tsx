@@ -24,8 +24,7 @@ const Navbuttons = (props: Props) => {
     } = props;
 
     const {
-        disableNavRightBtn,
-        disableNavLeftBtn,
+        navIdleStatus,
     } = useContext(MainPageDataContext);
     const navRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
@@ -52,7 +51,7 @@ const Navbuttons = (props: Props) => {
         if (leftElement > 5) {
             navRef.current.scrollTo(150, 0);
         }
-    }, []);
+    }, [leftElement, navRef]);
 
 
     return (
@@ -61,11 +60,13 @@ const Navbuttons = (props: Props) => {
                 type="submit"
                 onClick={onPreviousClick}
                 disabled={(leftElement === 0 && postionsPerPage.page1PositionValue === 1)
-                    || disableNavLeftBtn || disableNavRightBtn}
+                    || !navIdleStatus
+                }
                 className={styles.previousNextButton}
                 style={{
                     cursor: ((leftElement === 0 && postionsPerPage.page1PositionValue === 1)
-                        || disableNavLeftBtn || disableNavRightBtn) ? 'not-allowed' : 'pointer',
+                        || !navIdleStatus
+                    ) ? 'not-allowed' : 'pointer',
                 }}
             >
                 <ScalableVectorGraphics
@@ -83,9 +84,10 @@ const Navbuttons = (props: Props) => {
                             className={leftElement === indexNumber
                                 ? styles.buttonFill : styles.button}
                             onClick={() => onButtonClick(indexNumber)}
-                            disabled={disableNavLeftBtn || disableNavRightBtn}
+                            disabled={!navIdleStatus}
                             style={{
-                                cursor: (disableNavLeftBtn || disableNavRightBtn) ? 'not-allowed' : 'pointer',
+                                cursor: !navIdleStatus
+                                    ? 'not-allowed' : 'pointer',
                             }}
                         >
                             {
@@ -118,10 +120,12 @@ const Navbuttons = (props: Props) => {
                 type="submit"
                 onClick={onNextClick}
                 disabled={(postionsPerPage.page10PositionValue === 0 && leftElement === 9)
-                    || disableNavRightBtn || disableNavLeftBtn}
+                    || !navIdleStatus
+                }
                 style={{
                     cursor: ((leftElement === 10 && postionsPerPage.page10PositionValue === 1)
-                        || disableNavLeftBtn || disableNavRightBtn) ? 'not-allowed' : 'pointer',
+                        || !navIdleStatus
+                    ) ? 'not-allowed' : 'pointer',
                 }}
                 className={styles.previousNextButton}
             >

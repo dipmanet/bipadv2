@@ -1,49 +1,77 @@
-/* eslint-disable react/jsx-indent */
-/* eslint-disable react/jsx-indent-props */
-/* eslint-disable max-len */
-/* eslint-disable indent */
-/* eslint-disable no-tabs */
-/* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useContext, useEffect, useState } from 'react';
+import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
+import Return from '#resources/icons/Reset.svg';
+
+import rangeData from '#views/VizRisk/RatnaNagar/expressions';
 import styles from './styles.scss';
 
-const RangeStatusLegend = () => {
-	const data = [
-		{
-			status: 'Very High(6.5 - 10)',
-			color: '#e75d4f',
-		},
-		{
-			status: 'High(5 - 6.4)',
-			color: '#e79546',
-		},
-		{
-			status: 'Medium(3.5 - 4.9)',
-			color: '#2af5ac',
-		},
-		{
-			status: 'Low(2 - 3.4)',
-			color: '#45c4fe',
-		},
-		{
-			status: 'Very Low(0 - 1.9)',
-			color: '#457ded',
-		},
-	];
+const RangeStatusLegend = (props) => {
+    const { rangeNames, setRangeNames } = props;
+    const {
+        handleReset,
+        handleRangeLegendClick,
+    } = useContext(MainPageDataContext);
 
-	return (
-		<div className={styles.mainStatusLegendContainer}>
-			{
-				data.map(item => (
-					<div key={item.status} className={styles.statusSection}>
-						<div style={{ backgroundColor: item.color }} className={styles.statusColor} />
-						<p className={styles.statusname}>{item.status}</p>
-					</div>
-				))
-			}
-		</div>
+    const handleClick = (range, rangeName) => {
+        handleRangeLegendClick(range);
+        setRangeNames(prevState => [...prevState, rangeName]);
 
-	);
+        if (rangeNames.includes(rangeName)) {
+            setRangeNames(prevState => prevState.filter(item => item !== rangeName));
+        }
+    };
+
+
+    return (
+        <div className={styles.mainStatusLegendContainer}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={styles.resetIcon}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                strokeWidth="1"
+                onClick={handleReset}
+            >
+                <path
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+            </svg>
+            {
+                rangeData.map(item => (
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                    <div
+                        key={item.status}
+                        className={styles.statusSection}
+                        onClick={() => handleClick(item.range, item.name)}
+                    >
+                        <div
+                            style={{ backgroundColor: item.color }}
+                            className={styles.statusColor}
+                        />
+                        <p
+                            className={rangeNames.includes(item.name) ? styles.statusnameActive
+                                : styles.statusname}
+                            style={{
+                                color: rangeNames.includes(item.name)
+                                    ? item.color : 'white',
+                            }}
+                        >
+                            {item.status}
+
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
+
+    );
 };
 
 export default RangeStatusLegend;

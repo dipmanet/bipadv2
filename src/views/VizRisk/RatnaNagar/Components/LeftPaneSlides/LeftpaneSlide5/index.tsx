@@ -10,16 +10,16 @@ import CommonBarChart from '../../Charts/Barcharts';
 import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
-
 import styles from './styles.scss';
+import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
-const LeftpaneSlide4 = () => {
+const LeftpaneSlide6 = () => {
     const {
         keyValueHtmlData,
         householdData,
         householdChartData,
     } = useContext(MainPageDataContext);
-    const exposureChartData = householdChartData && householdChartData.Exposure;
+    const exposureChartData = householdChartData && householdChartData['Flood Hazard'];
 
     const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
 
@@ -34,16 +34,17 @@ const LeftpaneSlide4 = () => {
     }, [selctFieldCurrentValue]);
 
     const htmlDataTop = keyValueHtmlData && keyValueHtmlData.filter(
-        (item: any) => item.key === 'vizrisk_ratnanagar_page6_htmldata_301_3_35_35007',
+        (item: any) => item.key === 'vizrisk_ratnanagar_page7_htmldata_301_3_35_35007',
     )[0];
     const htmlDataBottom = keyValueHtmlData && keyValueHtmlData.filter(
-        (item: any) => item.key === 'vizrisk_ratnanagar_page6_bottom_htmldata_301_3_35_35007',
+        (item: any) => item.key === 'vizrisk_ratnanagar_page7_bottom_htmldata_301_3_35_35007',
     )[0];
 
-    const stackBarChartTitle = 'EXPOSURE OF HOUSEHOLDS';
+
+    const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
 
     const municipalityName = 'Ratnanagar Municipality ';
-    const mainData = householdData.map(item => item.exposure);
+    const mainData = householdData.map(item => item.hazard);
     const dataArr = percentageCalculator(mainData, householdData);
 
     const averageExposureScore: any = ((mainData.reduce(
@@ -53,7 +54,6 @@ const LeftpaneSlide4 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
-
     return (
         <div className={styles.vrSideBar}>
             <div className="mainTitleDiv">
@@ -62,13 +62,18 @@ const LeftpaneSlide4 = () => {
 
                 )}
             </div>
-
             <Factors
                 municipalityName={municipalityName}
                 factorScore={averageExposureScore}
                 scoreStatus={scoreStatus}
                 color={color}
             />
+            <p>
+                The flood hazard value of the municipality is veryhigh (
+                {averageExposureScore}
+                /10).
+                The higher the value of hazards, the greater is the chance of flood occurrence.
+            </p>
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 
@@ -82,10 +87,11 @@ const LeftpaneSlide4 = () => {
                 selctFieldCurrentValue={selctFieldCurrentValue}
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
+            {' '}
             <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
         </div>
     );
 };
 
 
-export default LeftpaneSlide4;
+export default LeftpaneSlide6;
