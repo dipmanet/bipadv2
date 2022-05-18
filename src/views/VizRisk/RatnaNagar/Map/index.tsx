@@ -3,13 +3,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import Education from '#resources/icons/Educationcopy.png';
-import Finance from '#resources/icons/bank.png';
-import Health from '#resources/icons/healthcopy.png';
-import Governance from '#resources/icons/governance.png';
-import Culture from '#resources/icons/culture.png';
-import Fireengine from '#resources/icons/Fireengine.png';
-import Heli from '#resources/icons/Heli.png';
 import { getGeoJSONPH } from '#views/VizRisk/Butwal/utils';
 import mapSources from '#constants/mapSources';
 import { wardsSelector } from '#selectors';
@@ -21,12 +14,19 @@ import { MainPageDataContext } from '../context';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
-import { getCurrentType, getHouseHoldDataColor, getHouseHoldDataStatus, hideMapLayers, showMapLayers } from '../utils';
+import {
+    getCurrentType,
+    getHouseHoldDataColor,
+    getHouseHoldDataStatus,
+    hideMapLayers,
+    showMapLayers,
+} from '../utils';
 import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
 import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
 import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
 import InnundationLegend from '../Components/Legends/InnundationLegend';
 import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
+import mapImages from './MapImages';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -36,7 +36,6 @@ const mapStateToProps = (state: AppState) => ({
     wards: wardsSelector(state),
 });
 
-let clickedId: string | number | undefined;
 let hoveredWardId: number | string | undefined;
 
 const Map = (props: any) => {
@@ -68,74 +67,6 @@ const Map = (props: any) => {
     )[0].value;
 
     function noop() { }
-
-    const images = [
-        {
-            name: 'education',
-            url: Education,
-        },
-        {
-            name: 'finance',
-            url: Finance,
-        },
-        {
-            name: 'health',
-            url: Health,
-        },
-        {
-            name: 'governance',
-            url: Governance,
-        },
-        {
-            name: 'cultural',
-            url: Culture,
-        },
-        {
-            name: 'fireengine',
-            url: Fireengine,
-        },
-        {
-            name: 'helipad',
-            url: Heli,
-        },
-        {
-            name: 'communication',
-            url: Heli,
-        },
-        {
-            name: 'industry',
-            url: Heli,
-        },
-        {
-            name: 'bridge',
-            url: Heli,
-        },
-        {
-            name: 'evacuationcentre',
-            url: Heli,
-        },
-        {
-            name: 'sanitation',
-            url: Heli,
-        },
-        {
-            name: 'watersupply',
-            url: Heli,
-        },
-        {
-            name: 'waterway',
-            url: Heli,
-        },
-        {
-            name: 'electricity',
-            url: Heli,
-        },
-        {
-            name: 'roadway',
-            url: Heli,
-        },
-    ];
-
 
     const landoverLayers = [
         'farmland-ratnanagar',
@@ -293,7 +224,7 @@ const Map = (props: any) => {
             });
             // setciCategoryCritical(ciCategory)
 
-            images.forEach((img) => {
+            mapImages.forEach((img) => {
                 if (map.current) {
                     map.current.loadImage(
                         img.url,

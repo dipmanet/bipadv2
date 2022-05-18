@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     vizRiskThemeIdRequest: {
-        url: '/vizrisk-theme/?is_active=true',
+        url: '/vizrisk-theme/?is_active=2',
         method: methods.GET,
         query: ({ params }) => ({
         }),

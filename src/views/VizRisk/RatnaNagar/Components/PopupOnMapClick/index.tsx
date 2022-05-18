@@ -127,7 +127,8 @@ const PopupOnMapClick = (props: Props) => {
             },
             {
                 name: 'Distance from ward office',
-                value: houseData.metadata.distanceFromSecurityForcesMeter ? 'Yes' : 'No',
+                value: houseData.metadata.nearestWardOffice
+                    ? houseData.metadata.nearestWardOffice.toFixed(2) : 'No data',
             },
             {
                 name: 'Access to natural resource',
@@ -141,14 +142,15 @@ const PopupOnMapClick = (props: Props) => {
                 name: 'Access to community building',
                 value: houseData.metadata.hasCommunityCenter,
             },
-            // {
-            //     name: 'Access to financial institution',
-            //     value: houseData.metadata.houseBuildingType,
-            // },
-            // {
-            //     name: 'Distance from municipality office',
-            //     value: houseData.metadata.houseBuildingType,
-            // },
+            {
+                name: 'Access to financial institution',
+                value: houseData.metadata.hasCommunityCenter,
+            },
+            {
+                name: 'Distance from municipality office(m)',
+                value: houseData.metadata.nearestMunicipalityOffice
+                    ? houseData.metadata.nearestMunicipalityOffice.toFixed(2) : 'No data',
+            },
             {
                 name: 'Yearly saving of your house (NPR)',
                 value: houseData.metadata.yearlySaving,
@@ -221,10 +223,10 @@ const PopupOnMapClick = (props: Props) => {
             //     name: 'Access to financial institution for people with disability',
             //     value: houseData.metadata.houseBuildingType,
             // },
-            // {
-            //     name: 'Distance from municipality office for people with disability',
-            //     value: houseData.metadata.houseBuildingType,
-            // },
+            {
+                name: 'Distance from municipality office for people with disability',
+                value: houseData.metadata.nearestMunicipalityOffice,
+            },
             {
                 name: 'Raised plinth, proper drainage and roof accessible during emergency',
                 value: houseData.metadata.hasHouseRaisedPlinth,
