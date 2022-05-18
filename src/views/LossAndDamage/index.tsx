@@ -410,7 +410,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     <DateInput
                                         showLabel={false}
                                         showHintAndError={false}
-                                        className={styles.dateFromInput}
+                                        className={'startDateInput'}
                                         value={startDate}
                                         onChange={this.handleStartDateChange}
                                     />
@@ -426,7 +426,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     <DateInput
                                         showLabel={false}
                                         showHintAndError={false}
-                                        className={styles.dateToInput}
+                                        className={'endDateInput'}
                                         value={endDate}
                                         onChange={this.handleEndDateChange}
                                     />
