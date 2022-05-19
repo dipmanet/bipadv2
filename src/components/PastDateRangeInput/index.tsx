@@ -23,74 +23,74 @@ const pastDataKeySelector = d => d.key;
 
 
 const pastDateRangeOptions = [
-    {
-        label: '3 days',
-        labelNe: '३ दिन',
-        key: 3,
-    },
-    {
-        label: '7 days',
-        labelNe: '७ दिन',
-        key: 7,
-    },
-    {
-        label: '2 weeks',
-        labelNe: '२ हप्‍ता',
-        key: 14,
-    },
-    {
-        label: '1 month',
-        labelNe: '१ महिना',
-        key: 30,
-    },
-    {
-        label: '6 months',
-        labelNe: '६ महिना',
-        key: 183,
-    },
-    {
-        label: '1 year',
-        labelNe: '१ वर्ष',
-        key: 365,
-    },
-    {
-        label: 'Custom',
-        labelNe: 'कस्टम',
-        key: 'custom',
-    },
+	{
+		label: '3 days',
+		labelNe: '३ दिन',
+		key: 3,
+	},
+	{
+		label: '7 days',
+		labelNe: '७ दिन',
+		key: 7,
+	},
+	{
+		label: '2 weeks',
+		labelNe: '२ हप्‍ता',
+		key: 14,
+	},
+	{
+		label: '1 month',
+		labelNe: '१ महिना',
+		key: 30,
+	},
+	{
+		label: '6 months',
+		labelNe: '६ महिना',
+		key: 183,
+	},
+	{
+		label: '1 year',
+		labelNe: '१ वर्ष',
+		key: 365,
+	},
+	{
+		label: 'Custom',
+		labelNe: 'कस्टम',
+		key: 'custom',
+	},
 ];
 
 const pastDateRangeDashboardOptions = [
-    {
-        label: '3 days',
-        labelNe: '३ दिन',
-        key: 3,
-    },
-    {
-        label: '7 days',
-        labelNe: '७ दिन',
-        key: 7,
-    },
-    {
-        label: '2 weeks',
-        labelNe: '२ हप्‍ता',
-        key: 14,
-    },
-    {
-        label: '1 month',
-        labelNe: '१ महिना',
-        key: 30,
-    },
-    {
-        label: '6 months',
-        labelNe: '६ महिना',
-        key: 183,
-    },
-    {
-        label: '1 year',
-        labelNe: '१ वर्ष',
-        key: 365,
-    },
+	{
+		label: '3 days',
+		labelNe: '३ दिन',
+		key: 3,
+	},
+	{
+		label: '7 days',
+		labelNe: '७ दिन',
+		key: 7,
+	},
+	{
+		label: '2 weeks',
+		labelNe: '२ हप्‍ता',
+		key: 14,
+	},
+	{
+		label: '1 month',
+		labelNe: '१ महिना',
+		key: 30,
+	},
+	{
+		label: '6 months',
+		labelNe: '६ महिना',
+		key: 183,
+	},
+	{
+		label: '1 year',
+		labelNe: '१ वर्ष',
+		key: 365,
+	},
 ];
 
 interface InputValue {
@@ -148,8 +148,7 @@ class PastDateRangeInput extends React.Component<Props> {
 		}
 	}
 
-	private pastDataLabelSelector = (d) => {
-		const { language: { language } } = this.props;
+	private pastDataLabelSelector = (d, language) => {
 		if (language === 'en') {
 			return d.label;
 		}
@@ -189,6 +188,7 @@ class PastDateRangeInput extends React.Component<Props> {
 		const {
 			className,
 			value,
+			language: { language },
 		} = this.props;
 
 		const {
@@ -201,7 +201,7 @@ class PastDateRangeInput extends React.Component<Props> {
 			<div className={_cs(styles.pastDateRangeInput, className)}>
 				<RadioInput
 					keySelector={pastDataKeySelector}
-					labelSelector={this.pastDataLabelSelector}
+					labelSelector={d => this.pastDataLabelSelector(d, language)}
 					options={activePage === 'dashboard' ? pastDateRangeDashboardOptions : pastDateRangeOptions}
 					onChange={this.handleRadioInputChange}
 					value={value.rangeInDays}
