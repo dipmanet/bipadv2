@@ -21,6 +21,7 @@ import {
 } from 'recharts';
 import { Translation } from 'react-i18next';
 
+import { BSToAD } from 'bikram-sambat-js';
 import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -42,6 +43,7 @@ import {
     hazardFilterSelector,
     regionFilterSelector,
     regionsSelector,
+    languageSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -66,6 +68,7 @@ import {
 
 import styles from './styles.scss';
 import Overview from './Overview';
+
 
 const ModalButton = modalize(Button);
 
@@ -341,17 +344,29 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         this.setState({ endDate });
     }
 
-    private handleSubmitClick = () => {
+    private handleSubmitClick = (language) => {
         const { startDate, endDate } = this.state;
+
+        if (language === 'np' && startDate && endDate) {
+            const bsToAdStartDate = BSToAD(startDate);
+            const bstoAdEndDate = BSToAD(endDate);
+            const { requests: { incidentsGetRequest } } = this.props;
+            incidentsGetRequest.do({
+                ...getDatesInLocaleTime(bsToAdStartDate, bstoAdEndDate),
+            });
+            this.setState({ submittedStartDate: bsToAdStartDate, submittedEndDate: bstoAdEndDate });
+        }
 
         if (startDate > endDate) {
             return;
         }
-        const { requests: { incidentsGetRequest } } = this.props;
-        incidentsGetRequest.do({
-            ...getDatesInLocaleTime(startDate, endDate),
-        });
-        this.setState({ submittedStartDate: startDate, submittedEndDate: endDate });
+        if (language === 'en' && startDate && endDate) {
+            const { requests: { incidentsGetRequest } } = this.props;
+            incidentsGetRequest.do({
+                ...getDatesInLocaleTime(startDate, endDate),
+            });
+            this.setState({ submittedStartDate: startDate, submittedEndDate: endDate });
+        }
     }
 
     public render() {
@@ -361,6 +376,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             hazardFilter,
             regionFilter,
             regions,
+            language: { language },
         } = this.props;
 
         const {
@@ -432,7 +448,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     />
                                     <div
                                         className={styles.submitButton}
-                                        onClick={this.handleSubmitClick}
+                                        onClick={() => this.handleSubmitClick(language)}
                                         role="presentation"
                                     >
                                         <Translation>
@@ -442,16 +458,16 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </Translation>
                                     </div>
                                 </div>
-                                { startDate > endDate
-                                        && (
-                                            <div className={styles.warningText}>
-                                                <Translation>
-                                                    {
-                                                        t => <span>{t('DateMismatchWarning')}</span>
-                                                    }
-                                                </Translation>
-                                            </div>
-                                        )
+                                {startDate > endDate
+                                    && (
+                                        <div className={styles.warningText}>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('DateMismatchWarning')}</span>
+                                                }
+                                            </Translation>
+                                        </div>
+                                    )
                                 }
                                 <div className={styles.sourceDetails}>
                                     <div className={styles.infoIconContainer}>
@@ -546,7 +562,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.chartList}
                                     id="chartList"
                                 >
-                                    { Object.values(incidentMetricChartParams).map(metric => (
+                                    {Object.values(incidentMetricChartParams).map(metric => (
                                         <div
                                             key={metric.dataKey}
                                             className={styles.chartContainer}
@@ -653,6 +669,7 @@ const mapStateToProps = state => ({
     hazardFilter: hazardFilterSelector(state),
     regionFilter: regionFilterSelector(state),
     regions: regionsSelector(state),
+    language: languageSelector(state),
 });
 
 export default compose(
