@@ -201,12 +201,12 @@ const Map = (props: any) => {
                 setNavIdleStatus(true);
             });
             multihazardMap.easeTo({
-                pitch: 35,
+                pitch: 30,
                 center: [
                     84.51393887409917,
                     27.619152424687197,
                 ],
-                zoom: 11.7,
+                zoom: 12,
                 duration: 8000,
             });
         }, 4000);
@@ -505,17 +505,17 @@ const Map = (props: any) => {
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
+            if (map.current) {
+                map.current.easeTo({
+                    pitch: 45,
+                    zoom: 12,
+                    duration: 1000,
+                });
+            }
             /**
              * Landcover Layer
              */
             if (leftElement === 1 || leftElement === 3) {
-                if (map.current) {
-                    map.current.easeTo({
-                        pitch: 45,
-                        zoom: 12,
-                        duration: 1000,
-                    });
-                }
                 landoverLayers.map((layer) => {
                     showMapLayers(layer, map);
                     return null;
@@ -525,12 +525,6 @@ const Map = (props: any) => {
                     hideMapLayers(layer, map);
                     return null;
                 });
-                if (map.current) {
-                    map.current.easeTo({
-                        pitch: 38,
-                        duration: 1000,
-                    });
-                }
             }
 
             if (leftElement === 2) {

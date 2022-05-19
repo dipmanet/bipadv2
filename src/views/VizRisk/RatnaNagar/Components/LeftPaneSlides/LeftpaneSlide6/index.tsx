@@ -63,13 +63,6 @@ const LeftpaneSlide4 = () => {
 
                 )}
             </div>
-
-            <Factors
-                municipalityName={municipalityName}
-                factorScore={averageExposureScore}
-                scoreStatus={scoreStatus}
-                color={color}
-            />
             <p>
                 The exposure scores range from 0 to 10 and are divided into 5 classes,
                 each represented by a different color. The exposure value of the municipality
@@ -80,6 +73,12 @@ const LeftpaneSlide4 = () => {
                 itself represent varying degrees of exposure.
             </p>
 
+            <Factors
+                municipalityName={municipalityName}
+                factorScore={averageExposureScore}
+                scoreStatus={scoreStatus}
+                color={color}
+            />
             {htmlDataBottom && htmlDataBottom.value && (
                 ReactHtmlParser(htmlDataBottom.value)
 

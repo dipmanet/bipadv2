@@ -84,7 +84,7 @@ const Navbuttons = (props: Props) => {
                             className={leftElement === indexNumber
                                 ? styles.buttonFill : styles.button}
                             onClick={() => onButtonClick(indexNumber)}
-                            disabled={!navIdleStatus}
+                            disabled={leftElement === indexNumber || !navIdleStatus}
                             style={{
                                 cursor: !navIdleStatus
                                     ? 'not-allowed' : 'pointer',
