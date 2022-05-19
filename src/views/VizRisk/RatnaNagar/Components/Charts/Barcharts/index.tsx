@@ -32,7 +32,7 @@ const CommonBarChart = (props: Props) => {
                     height={400}
                     data={barData}
                     layout="vertical"
-                    margin={{ left: 0, bottom: 25 }}
+                    margin={{ left: 45, bottom: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} opacity={0.5} />
                     <XAxis type="number" tick={{ fill: '#94bdcf' }}>

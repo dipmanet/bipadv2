@@ -77,7 +77,7 @@ export const getHouseHoldDataColor = (number: number) => {
         case number >= 2 && number <= 3.4:
             return '#45c4fe';
         case number >= 3.5 && number <= 4.9:
-            return '#2af5ac';
+            return 'yellow';
         case number >= 5 && number <= 6.4:
             return '#e79546';
         case number > 6.4:
