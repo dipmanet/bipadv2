@@ -15,6 +15,7 @@ import { _cs, isDefined } from '@togglecorp/fujs';
 import Faram from '@togglecorp/faram';
 import memoize from 'memoize-one';
 import { Translation } from 'react-i18next';
+import { BSToAD } from 'bikram-sambat-js';
 import PageContext from '#components/PageContext';
 
 import Button from '#rsca/Button';
@@ -38,6 +39,7 @@ import {
 	carKeysSelector,
 	userSelector,
 	projectsProfileFiltersSelector,
+	languageSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -82,6 +84,7 @@ const mapStateToProps = (state: AppState) => ({
 	carKeys: carKeysSelector(state),
 	user: userSelector(state),
 	projectFilters: projectsProfileFiltersSelector(state),
+	language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -538,20 +541,31 @@ class Filters extends React.PureComponent<Props, State> {
 	}
 
 	private handleSubmitClick = () => {
-		const { setFilters, carKeys, FilterClickedStatus } = this.props;
+		const { setFilters, carKeys, FilterClickedStatus, language: { language } } = this.props;
 		const { faramValues, disableSubmitButton } = this.state;
 		const { filters: propFilters } = this.props;
 		FilterClickedStatus(true);
-		if (!disableSubmitButton) {
+		if (!disableSubmitButton && language === 'en') {
 			this.setState({ disableSubmitButton: true });
 			setFilters({ filters: faramValues });
-			// if (faramValues) {
-			//     setFilters({ filters: faramValues });
-			// }
-			// else {
-			//     setFilters({ filters: propFilters });
-			// }
 		}
+
+		if (!disableSubmitButton && language === 'np') {
+			const dataDateRangeNepali = {
+				endDate: BSToAD(faramValues.dataDateRange.endDate),
+				rangeInDays: faramValues.dataDateRange.rangeInDays,
+				startDate: BSToAD(faramValues.dataDateRange.endDate),
+			};
+			const faramValuesReplace = { ...faramValues, dataDateRange: dataDateRangeNepali };
+			this.setState({ disableSubmitButton: true });
+			setFilters({ filters: faramValuesReplace });
+		}
+		// if (faramValues) {
+		//     setFilters({ filters: faramValues });
+		// }
+		// else {
+		//     setFilters({ filters: propFilters });
+		// }
 
 		const { activeRouteDetails } = this.context;
 
