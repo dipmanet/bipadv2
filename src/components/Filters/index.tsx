@@ -50,6 +50,7 @@ import PastDateRangeInput from '#components/PastDateRangeInput';
 import { getAuthState } from '#utils/session';
 import { colorScheme } from '#constants';
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 
 interface ComponentProps {
@@ -541,25 +542,30 @@ class Filters extends React.PureComponent<Props, State> {
 	}
 
 	private handleSubmitClick = () => {
+		console.log('triggered');
 		const { setFilters, carKeys, FilterClickedStatus, language: { language } } = this.props;
 		const { faramValues, disableSubmitButton } = this.state;
 		const { filters: propFilters } = this.props;
 		FilterClickedStatus(true);
-		if (!disableSubmitButton && language === 'en') {
+		if (!disableSubmitButton) {
 			this.setState({ disableSubmitButton: true });
 			setFilters({ filters: faramValues });
 		}
 
-		if (!disableSubmitButton && language === 'np') {
-			const dataDateRangeNepali = {
-				endDate: BSToAD(faramValues.dataDateRange.endDate),
-				rangeInDays: faramValues.dataDateRange.rangeInDays,
-				startDate: BSToAD(faramValues.dataDateRange.endDate),
-			};
-			const faramValuesReplace = { ...faramValues, dataDateRange: dataDateRangeNepali };
-			this.setState({ disableSubmitButton: true });
-			setFilters({ filters: faramValuesReplace });
-		}
+		console.log(faramValues.dataDateRange, 'test');
+
+		// if (!disableSubmitButton && language === 'np' && faramValues.dataDateRange) {
+		// 	const dataDateRangeNepali = {
+		// 		endDate: convertDateAccToLanguage(faramValues.dataDateRange.endDate, 'en'),
+		// 		rangeInDays: faramValues.dataDateRange.rangeInDays,
+		// 		startDate: convertDateAccToLanguage(faramValues.dataDateRange.endDate, 'en'),
+		// 	};
+		// 	console.log(dataDateRangeNepali, 'coming from nepali');
+		// 	const faramValuesReplace = { ...faramValues, dataDateRange: dataDateRangeNepali };
+		// 	this.setState({ disableSubmitButton: true });
+		// 	setFilters({ filters: faramValuesReplace });
+		// }
+
 		// if (faramValues) {
 		//     setFilters({ filters: faramValues });
 		// }

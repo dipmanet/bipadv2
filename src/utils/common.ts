@@ -4,6 +4,7 @@ import {
     isObject,
     isList,
 } from '@togglecorp/fujs';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
@@ -291,4 +292,20 @@ export const checkSameRegionPermission = (user, region) => {
         permission = false;
     }
     return permission;
+};
+
+
+// conver date according to language
+export const convertDateAccToLanguage = (date, language, forceAD = false) => {
+    if (date) {
+        let dateToReturn = date;
+
+        if (!forceAD && (language === 'np')) {
+            dateToReturn = ADToBS(date);
+        } else if (!forceAD && (language === 'en')) {
+            dateToReturn = date;
+        }
+        return dateToReturn;
+    }
+    return '';
 };

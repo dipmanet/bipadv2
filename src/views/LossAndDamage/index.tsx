@@ -37,6 +37,7 @@ import {
     sum,
     saveChart,
     encodeDate,
+    convertDateAccToLanguage,
 } from '#utils/common';
 import {
     hazardTypesSelector,
@@ -347,26 +348,19 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     private handleSubmitClick = (language) => {
         const { startDate, endDate } = this.state;
 
-        if (language === 'np' && startDate && endDate) {
-            const bsToAdStartDate = BSToAD(startDate);
-            const bstoAdEndDate = BSToAD(endDate);
-            const { requests: { incidentsGetRequest } } = this.props;
-            incidentsGetRequest.do({
-                ...getDatesInLocaleTime(bsToAdStartDate, bstoAdEndDate),
-            });
-            this.setState({ submittedStartDate: bsToAdStartDate, submittedEndDate: bstoAdEndDate });
-        }
-
         if (startDate > endDate) {
             return;
         }
-        if (language === 'en' && startDate && endDate) {
-            const { requests: { incidentsGetRequest } } = this.props;
-            incidentsGetRequest.do({
-                ...getDatesInLocaleTime(startDate, endDate),
-            });
-            this.setState({ submittedStartDate: startDate, submittedEndDate: endDate });
-        }
+        const convertedEndDate = convertDateAccToLanguage(endDate, language, true);
+        const convertedStartDate = convertDateAccToLanguage(startDate, language, true);
+        const { requests: { incidentsGetRequest } } = this.props;
+        incidentsGetRequest.do({
+            ...getDatesInLocaleTime(convertedStartDate, convertedEndDate),
+        });
+        this.setState({
+            submittedStartDate: convertedStartDate,
+            submittedEndDate: convertedEndDate,
+        });
     }
 
     public render() {
@@ -427,7 +421,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         showLabel={false}
                                         showHintAndError={false}
                                         className={'startDateInput'}
-                                        value={startDate}
+                                        value={convertDateAccToLanguage(startDate, language)}
                                         onChange={this.handleStartDateChange}
                                     />
                                     <div className={styles.label}>
@@ -443,7 +437,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         showLabel={false}
                                         showHintAndError={false}
                                         className={'endDateInput'}
-                                        value={endDate}
+                                        value={convertDateAccToLanguage(endDate, language)}
                                         onChange={this.handleEndDateChange}
                                     />
                                     <div

@@ -18,6 +18,7 @@ import {
 } from '#selectors';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const pastDataKeySelector = d => d.key;
 
@@ -190,7 +191,6 @@ class PastDateRangeInput extends React.Component<Props> {
 			value,
 			language: { language },
 		} = this.props;
-
 		const {
 			customActive,
 			customState,
@@ -218,7 +218,7 @@ class PastDateRangeInput extends React.Component<Props> {
 										className={'startDateInput'}
 										label={t('Start Date')}
 										faramElementName="start"
-										value={value.startDate}
+										value={convertDateAccToLanguage(value.startDate, language)}
 									/>
 								)
 							}
@@ -231,7 +231,7 @@ class PastDateRangeInput extends React.Component<Props> {
 										className={'endDateInput'}
 										label={t('End Date')}
 										faramElementName="end"
-										value={value.endDate}
+										value={convertDateAccToLanguage(value.endDate, language)}
 									/>
 								)
 							}
