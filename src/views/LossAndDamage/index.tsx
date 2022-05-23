@@ -21,7 +21,6 @@ import {
 } from 'recharts';
 import { Translation } from 'react-i18next';
 
-import { BSToAD } from 'bikram-sambat-js';
 import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -331,8 +330,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         // incidentsGetRequest.do({
         //     ...getDatesInIsoString(startDate, endDate),
         // });
-
-        this.setState({ startDate });
+        const { language: { language } } = this.props;
+        const newConvertedStartDate = convertDateAccToLanguage(startDate, language, true);
+        this.setState({ startDate: newConvertedStartDate });
     }
 
     private handleEndDateChange = (endDate) => {
@@ -342,24 +342,26 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         // incidentsGetRequest.do({
         //     ...getDatesInIsoString(startDate, endDate),
         // });
-        this.setState({ endDate });
+        const { language: { language } } = this.props;
+        const newConvertedEndDate = convertDateAccToLanguage(endDate, language, true);
+
+        this.setState({ endDate: newConvertedEndDate });
     }
 
-    private handleSubmitClick = (language) => {
+    private handleSubmitClick = () => {
         const { startDate, endDate } = this.state;
 
         if (startDate > endDate) {
             return;
         }
-        const convertedEndDate = convertDateAccToLanguage(endDate, language, true);
-        const convertedStartDate = convertDateAccToLanguage(startDate, language, true);
+
         const { requests: { incidentsGetRequest } } = this.props;
         incidentsGetRequest.do({
-            ...getDatesInLocaleTime(convertedStartDate, convertedEndDate),
+            ...getDatesInLocaleTime(startDate, endDate),
         });
         this.setState({
-            submittedStartDate: convertedStartDate,
-            submittedEndDate: convertedEndDate,
+            submittedStartDate: startDate,
+            submittedEndDate: endDate,
         });
     }
 
@@ -442,7 +444,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     />
                                     <div
                                         className={styles.submitButton}
-                                        onClick={() => this.handleSubmitClick(language)}
+                                        onClick={this.handleSubmitClick}
                                         role="presentation"
                                     >
                                         <Translation>

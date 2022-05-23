@@ -542,8 +542,7 @@ class Filters extends React.PureComponent<Props, State> {
 	}
 
 	private handleSubmitClick = () => {
-		console.log('triggered');
-		const { setFilters, carKeys, FilterClickedStatus, language: { language } } = this.props;
+		const { setFilters, carKeys, FilterClickedStatus } = this.props;
 		const { faramValues, disableSubmitButton } = this.state;
 		const { filters: propFilters } = this.props;
 		FilterClickedStatus(true);
@@ -551,20 +550,8 @@ class Filters extends React.PureComponent<Props, State> {
 			this.setState({ disableSubmitButton: true });
 			setFilters({ filters: faramValues });
 		}
+		console.log('date value', faramValues.dataDateRange);
 
-		console.log(faramValues.dataDateRange, 'test');
-
-		// if (!disableSubmitButton && language === 'np' && faramValues.dataDateRange) {
-		// 	const dataDateRangeNepali = {
-		// 		endDate: convertDateAccToLanguage(faramValues.dataDateRange.endDate, 'en'),
-		// 		rangeInDays: faramValues.dataDateRange.rangeInDays,
-		// 		startDate: convertDateAccToLanguage(faramValues.dataDateRange.endDate, 'en'),
-		// 	};
-		// 	console.log(dataDateRangeNepali, 'coming from nepali');
-		// 	const faramValuesReplace = { ...faramValues, dataDateRange: dataDateRangeNepali };
-		// 	this.setState({ disableSubmitButton: true });
-		// 	setFilters({ filters: faramValuesReplace });
-		// }
 
 		// if (faramValues) {
 		//     setFilters({ filters: faramValues });

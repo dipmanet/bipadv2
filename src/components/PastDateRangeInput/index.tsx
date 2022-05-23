@@ -161,11 +161,11 @@ class PastDateRangeInput extends React.Component<Props> {
 		const {
 			value,
 			onChange,
+			language: { language },
 		} = this.props;
-
 		onChange({
 			rangeInDays: 'custom',
-			startDate: newStartDate,
+			startDate: convertDateAccToLanguage(newStartDate, language, true),
 			endDate: value ? value.endDate : undefined,
 		});
 	}
@@ -174,13 +174,12 @@ class PastDateRangeInput extends React.Component<Props> {
 		const {
 			value,
 			onChange,
+			language: { language },
 		} = this.props;
-
-
 		onChange({
 			rangeInDays: 'custom',
 			startDate: value ? value.startDate : undefined,
-			endDate: newEndDate,
+			endDate: convertDateAccToLanguage(newEndDate, language, true),
 		});
 	}
 

@@ -297,15 +297,18 @@ export const checkSameRegionPermission = (user, region) => {
 
 // conver date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
-    if (date) {
-        let dateToReturn = date;
-
-        if (!forceAD && (language === 'np')) {
+    if (!date) {
+        return '';
+    }
+    let dateToReturn = date;
+    if (forceAD && (language === 'np')) {
+        dateToReturn = BSToAD(date);
+    } else if (language === 'np') {
+        try {
             dateToReturn = ADToBS(date);
-        } else if (!forceAD && (language === 'en')) {
+        } catch (e) {
             dateToReturn = date;
         }
-        return dateToReturn;
     }
-    return '';
+    return dateToReturn;
 };
