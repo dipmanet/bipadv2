@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/indent */
 import produce from 'immer';
 import { listToMap } from '@togglecorp/fujs';
 
+import { ModelEnum } from '#types';
 import * as Type from './types';
 import initialState from './initialState';
 
-import { ModelEnum } from '#types';
 // ACTION CREATORS
 
 export const setRegionAction = (
@@ -92,54 +93,54 @@ export const setWardsAction = (
 
 
 export const setShowProvinceAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_PROVINCE,
     value,
 });
 
 export const setShowDistrictAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_DISTRICT,
     value,
 });
 
 export const setShowMunicipalityAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_MUNICIPALITY,
     value,
 });
 
 export const setShowWardAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_WARD,
     value,
 });
 
-export const setLossListAction = ({ lossList }: { lossList: Type.Loss[]}) => ({
+export const setLossListAction = ({ lossList }: { lossList: Type.Loss[] }) => ({
     type: Type.PageType.SET_LOSS_LIST,
     lossList,
 });
 
 export const setDocumentCategoryListAction = (
-    { documentCategoryList }: { documentCategoryList: Type.DocumentCategory[]},
+    { documentCategoryList }: { documentCategoryList: Type.DocumentCategory[] },
 ) => ({
     type: Type.PageType.SET_DOCUMENT_CATEGORY_LIST,
     documentCategoryList,
 });
 
 export const setCountryListAction = (
-    { countryList }: { countryList: Type.Country[]},
+    { countryList }: { countryList: Type.Country[] },
 ) => ({
     type: Type.PageType.SET_COUNTRY_LIST,
     countryList,
 });
 
 export const setAgricultureLossTypeListAction = (
-    { agricultureLossTypeList }: { agricultureLossTypeList: Type.AgricultureLossType[]},
+    { agricultureLossTypeList }: { agricultureLossTypeList: Type.AgricultureLossType[] },
 ) => ({
     type: Type.PageType.SET_AGRICULTURE_LOSS_TYPE_LIST,
     agricultureLossTypeList,
@@ -148,12 +149,12 @@ export const setAgricultureLossTypeListAction = (
 
 // dashboard action creator
 
-export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) => ({
+export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[] }) => ({
     type: Type.PageType.DP__SET_ALERTS,
     alertList,
 });
 
-export const setEventListAction = ({ eventList }: { eventList: Type.Event[]}) => ({
+export const setEventListAction = ({ eventList }: { eventList: Type.Event[] }) => ({
     type: Type.PageType.DP__SET_EVENTS,
     eventList,
 });
@@ -176,7 +177,7 @@ export const setFiltersActionDP = (
 
 // incident action creator
 
-export const setIncidentListActionIP = ({ incidentList }: { incidentList: Type.Incident[]}) => ({
+export const setIncidentListActionIP = ({ incidentList }: { incidentList: Type.Incident[] }) => ({
     type: Type.PageType.IP__SET_INCIDENT_LIST,
     incidentList,
 });
@@ -211,7 +212,7 @@ export const setFiltersActionIP = (
 
 // response action creator
 
-export const setResourceListActionRP = ({ resourceList }: {resourceList: Type.Resource[]}) => ({
+export const setResourceListActionRP = ({ resourceList }: { resourceList: Type.Resource[] }) => ({
     type: Type.PageType.RP__SET_RESOURCE_LIST,
     resourceList,
 });
@@ -233,14 +234,14 @@ export const setInventoryItemListActionRP = (
 // real time monitoring action creator
 
 export const setRealTimeRainListAction = (
-    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]},
+    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST,
     realTimeRainList,
 });
 
 export const setRealTimeRiverListAction = (
-    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]},
+    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
     realTimeRiverList,
@@ -248,7 +249,7 @@ export const setRealTimeRiverListAction = (
 
 export const setRealTimeEarthquakeListAction = (
     { realTimeEarthquakeList }:
-    { realTimeEarthquakeList: Type.RealTimeEarthquake[]},
+        { realTimeEarthquakeList: Type.RealTimeEarthquake[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST,
     realTimeEarthquakeList,
@@ -256,7 +257,7 @@ export const setRealTimeEarthquakeListAction = (
 
 export const setRealTimeFireListAction = (
     { realTimeFireList }:
-    { realTimeFireList: Type.RealTimeFire[]},
+        { realTimeFireList: Type.RealTimeFire[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST,
     realTimeFireList,
@@ -264,7 +265,7 @@ export const setRealTimeFireListAction = (
 
 export const setRealTimePollutionListAction = (
     { realTimePollutionList }:
-    { realTimePollutionList: Type.RealTimePollution[]},
+        { realTimePollutionList: Type.RealTimePollution[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST,
     realTimePollutionList,
@@ -283,77 +284,88 @@ export const setRealTimeFiltersAction = (
 
 export const setDataArchiveRainListAction = (
     { dataArchiveRainList }:
-    { dataArchiveRainList: Type.DataArchiveRain[]}) => ({
+        { dataArchiveRainList: Type.DataArchiveRain[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST,
     dataArchiveRainList,
 });
 
 export const setDataArchiveRiverListAction = (
     { dataArchiveRiverList }:
-    { dataArchiveRiverList: Type.DataArchiveRiver[]}) => ({
+        { dataArchiveRiverList: Type.DataArchiveRiver[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST,
     dataArchiveRiverList,
 });
 
 export const setDataArchivePollutionListAction = (
     { dataArchivePollutionList }:
-    { dataArchivePollutionList: Type.DataArchivePollution[]}) => ({
+        { dataArchivePollutionList: Type.DataArchivePollution[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST,
     dataArchivePollutionList,
 });
 
 export const setDataArchiveEarthquakeListAction = (
     { dataArchiveEarthquakeList }:
-    { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[]}) => ({
+        { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST,
     dataArchiveEarthquakeList,
 });
 
 export const setDataArchiveEarthquakeFilterAction = (
     { dataArchiveEarthquakeFilters }:
-    { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters']}) => ({
+        { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS,
     dataArchiveEarthquakeFilters,
 });
 
 export const setDataArchivePollutionFilterAction = (
     { dataArchivePollutionFilters }:
-    { dataArchivePollutionFilters: Type.SetDataArchivePollutionFilters['dataArchivePollutionFilters']}) => ({
+        { dataArchivePollutionFilters: Type.SetDataArchivePollutionFilters['dataArchivePollutionFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS,
     dataArchivePollutionFilters,
 });
 
 export const setDataArchiveRainFilterAction = (
     { dataArchiveRainFilters }:
-    { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters']}) => ({
+        { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS,
     dataArchiveRainFilters,
 });
 
 export const setDataArchiveRiverFilterAction = (
     { dataArchiveRiverFilters }:
-    { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters']}) => ({
+        { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS,
     dataArchiveRiverFilters,
 });
 
 export const setDataArchivePollutionStationAction = (
     { dataArchivePollutionStations }:
-    { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations']}) => ({
+        { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS,
     dataArchivePollutionStations,
 });
 
 export const setDataArchiveRainStationAction = (
     { dataArchiveRainStations }:
-    { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations']}) => ({
+        { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS,
     dataArchiveRainStations,
 });
 
 export const setDataArchiveRiverStationAction = (
     { dataArchiveRiverStations }:
-    { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations']}) => ({
+        { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS,
     dataArchiveRiverStations,
 });

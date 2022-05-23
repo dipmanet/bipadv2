@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import Redux, { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -33,9 +34,9 @@ import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 
-import styles from './styles.scss';
 import { colorScheme } from '#constants';
 import { getAuthState } from '#utils/session';
+import styles from './styles.scss';
 
 
 interface ComponentProps {
@@ -269,8 +270,8 @@ class Filters extends React.PureComponent<Props, State> {
 
         if (
             (Object.keys(municipalities).length > 0
-            || Object.keys(districts).length > 0
-            || Object.keys(provinces).length > 0) && !locRecv
+                || Object.keys(districts).length > 0
+                || Object.keys(provinces).length > 0) && !locRecv
         ) {
             const subDomain = window.location.href.split('//')[1].split('.')[0];
             const municipalityMatch = municipalities.filter(
@@ -361,7 +362,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <HazardSelectionInput
                     className={styles.activeView}
                     faramElementName="hazard"
-                    // autoFocus
+                // autoFocus
                 />
             ),
         },
@@ -370,7 +371,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <div className={styles.activeView}>
                     <PastDateRangeInput
                         faramElementName="dataDateRange"
-                        // autoFocus
+                    // autoFocus
                     />
                 </div>
             ),
@@ -383,7 +384,7 @@ class Filters extends React.PureComponent<Props, State> {
                         this.props.extraContentContainerClassName,
                     )}
                     >
-                        { this.props.extraContent }
+                        {this.props.extraContent}
                     </div>
                 ) : null
             ),
@@ -454,7 +455,8 @@ class Filters extends React.PureComponent<Props, State> {
                 setFilters({ filters: tempF });
                 this.setState({ faramValues: tempF, activeView: undefined });
             } else {
-                this.setState({ activeView: undefined,
+                this.setState({
+                    activeView: undefined,
                     faramValues: {
                         dataDateRange: {
                             rangeInDays: 7,
@@ -463,7 +465,8 @@ class Filters extends React.PureComponent<Props, State> {
                         },
                         hazard: [],
                         region: {},
-                    } });
+                    },
+                });
 
                 setFilters({ filters: this.state.faramValues });
             }
@@ -480,7 +483,8 @@ class Filters extends React.PureComponent<Props, State> {
             setFilters({ filters: tempF });
             this.setState({ faramValues: tempF, activeView: undefined });
         } else {
-            this.setState({ activeView: undefined,
+            this.setState({
+                activeView: undefined,
                 faramValues: {
                     dataDateRange: {
                         rangeInDays: 7,
@@ -489,7 +493,8 @@ class Filters extends React.PureComponent<Props, State> {
                     },
                     hazard: [],
                     region: {},
-                } });
+                },
+            });
 
             setFilters({ filters: this.state.faramValues });
         }
@@ -532,8 +537,8 @@ class Filters extends React.PureComponent<Props, State> {
             hideHazardFilter,
             hideDataRangeFilter,
         ): {
-            [key in TabKey]?: string;
-        } => {
+                [key in TabKey]?: string;
+            } => {
             const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
@@ -641,7 +646,7 @@ class Filters extends React.PureComponent<Props, State> {
                         {validActiveView && (
                             <header className={styles.header}>
                                 <h3 className={styles.heading}>
-                                    { tabs[validActiveView] }
+                                    {tabs[validActiveView]}
                                 </h3>
                                 <Button
                                     className={styles.closeButton}
@@ -662,7 +667,7 @@ class Filters extends React.PureComponent<Props, State> {
                             className={styles.submitButton}
                             role="presentation"
                         >
-                        Submit
+                            Submit
                         </div>
                     )}
                 </div>

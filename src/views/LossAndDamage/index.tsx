@@ -51,16 +51,13 @@ import {
 import LossDetails from '#components/LossDetails';
 import Loading from '#components/Loading';
 import Page from '#components/Page';
-
-import TabularView from './TabularView';
-import Comparative from './Comparative';
-import { getSanitizedIncidents } from './common';
-
 import {
     getResults,
     getPending,
 } from '#utils/request';
-
+import TabularView from './TabularView';
+import Comparative from './Comparative';
+import { getSanitizedIncidents } from './common';
 import styles from './styles.scss';
 import Overview from './Overview';
 
@@ -410,12 +407,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         Submit
                                     </div>
                                 </div>
-                                { startDate > endDate
-                                        && (
-                                            <div className={styles.warningText}>
-                                                WARNING! Start date cannot be greater than End Date
-                                            </div>
-                                        )
+                                {startDate > endDate
+                                    && (
+                                        <div className={styles.warningText}>
+                                            WARNING! Start date cannot be greater than End Date
+                                        </div>
+                                    )
                                 }
                                 <div className={styles.sourceDetails}>
                                     <div className={styles.infoIconContainer}>
@@ -486,13 +483,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.chartList}
                                     id="chartList"
                                 >
-                                    { Object.values(incidentMetricChartParams).map(metric => (
+                                    {Object.values(incidentMetricChartParams).map(metric => (
                                         <div
                                             key={metric.dataKey}
                                             className={styles.chartContainer}
                                         >
                                             <h4 className={styles.heading}>
-                                                { metric.title }
+                                                {metric.title}
                                             </h4>
                                             <div className={styles.content}>
                                                 <ResponsiveContainer>

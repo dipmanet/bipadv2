@@ -7,14 +7,12 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
 import {
-    rainLegendItems,
-    newRiverLegendItems,
-    earthquakeLegendItems,
-    forestFireLegendItems,
-    pollutionLegendItems,
-    noLegend,
-} from './legendItems';
-import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
+    isAnyRequestPending,
+} from '#utils/request';
+import FireIcon from '#resources/icons/Forest-fire.svg';
+import PollutionIcon from '#resources/icons/AirQuality.svg';
+
+
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import { FiltersElement, MapStateElement } from '#types';
@@ -55,8 +53,15 @@ import Loading from '#components/Loading';
 import RainIcon from '#resources/icons/Rain.svg';
 import RiverIcon from '#resources/icons/Wave.svg';
 import EarthquakeIcon from '#resources/icons/Earthquake.svg';
-import PollutionIcon from '#resources/icons/AirQuality.svg';
-import FireIcon from '#resources/icons/Forest-fire.svg';
+import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
+import {
+    rainLegendItems,
+    newRiverLegendItems,
+    earthquakeLegendItems,
+    forestFireLegendItems,
+    pollutionLegendItems,
+    noLegend,
+} from './legendItems';
 
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
@@ -67,16 +72,14 @@ import MiniPollution from './MiniPollution';
 import MiniFire from './MiniFire';
 
 import styles from './styles.scss';
-import {
-    isAnyRequestPending,
-} from '#utils/request';
+
 
 interface State {
     activeView?: ActiveView;
     hoveredHazardId?: number;
 }
-interface Params {}
-interface OwnProps {}
+interface Params { }
+interface OwnProps { }
 interface PropsFromDispatch {
     setRealTimeRainList: typeof setRealTimeRainListAction;
     setRealTimeRiverList: typeof setRealTimeRiverListAction;
@@ -279,7 +282,7 @@ interface Source {
     title: ActiveView;
 }
 
-class RealTimeMonitoring extends React.PureComponent <Props, State> {
+class RealTimeMonitoring extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -462,7 +465,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showEarthquake && (
+                {showEarthquake && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <ScalableVectorGraphics
@@ -501,7 +504,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showPollution && (
+                {showPollution && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <ScalableVectorGraphics
@@ -548,7 +551,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showFire && (
+                {showFire && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <ScalableVectorGraphics
@@ -584,7 +587,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showStreamflow && (
+                {showStreamflow && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <svg className={styles.legendIcon}>
