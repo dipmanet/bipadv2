@@ -550,8 +550,6 @@ class Filters extends React.PureComponent<Props, State> {
 			this.setState({ disableSubmitButton: true });
 			setFilters({ filters: faramValues });
 		}
-		console.log('date value', faramValues.dataDateRange);
-
 
 		// if (faramValues) {
 		//     setFilters({ filters: faramValues });
