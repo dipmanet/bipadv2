@@ -38,6 +38,7 @@ import {
 } from '#utils/transformations';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const AccentModalButton = modalize(AccentButton);
 const ModalButton = modalize(Button);
@@ -195,8 +196,8 @@ class LeftPane extends React.PureComponent {
             <div className={_cs(className, styles.leftPane)}>
                 <DateRangeInfo
                     className={styles.dateRange}
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={convertDateAccToLanguage(startDate, language)}
+                    endDate={convertDateAccToLanguage(endDate, language)}
                 />
                 <div className={styles.sourceDetails}>
                     <div className={styles.infoIconContainer}>

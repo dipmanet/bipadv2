@@ -295,8 +295,9 @@ export const checkSameRegionPermission = (user, region) => {
 };
 
 
-// conver date according to language
+// convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
+    console.log(date, 'fnc');
     if (!date) {
         return '';
     }
