@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { getGeoJSONPH } from '#views/VizRisk/Butwal/utils';
+import { getGeoJSONPH, getHillShadeLayer } from '#views/VizRisk/Butwal/utils';
 import mapSources from '#constants/mapSources';
 import { wardsSelector } from '#selectors';
 import { AppState } from '#types';
@@ -27,6 +27,7 @@ import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
 import InnundationLegend from '../Components/Legends/InnundationLegend';
 import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import mapImages from './MapImages';
+import RadioButton from '../Components/RadioButton';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -39,7 +40,7 @@ const mapStateToProps = (state: AppState) => ({
 let hoveredWardId: number | string | undefined;
 
 const Map = (props: any) => {
-    const { municipalityId,
+    const { mapRef, municipalityId,
         CIData, leftElement,
         ciNameList, setciNameList,
         clickedCiName, unClickedCIName,
@@ -50,6 +51,7 @@ const Map = (props: any) => {
         setFloodLayer,
         setNavIdleStatus } = props;
 
+    const [currentOsmLayer, setCurrentOsmLayer] = useState<string>('Satellite Layer');
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapZoomEffect = useRef<any | undefined>(null);
@@ -62,6 +64,8 @@ const Map = (props: any) => {
     } = useContext(MainPageDataContext);
 
     const [opacityFlood, setOpacityFlood] = useState(0.25);
+    const [innundationOpacity, setInnundationOpacity] = useState(0.5);
+
     const demographicsData = keyValueJsonData && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
     )[0].value;
@@ -170,6 +174,12 @@ const Map = (props: any) => {
         year: '100',
         layerName: 'Ratnanagar_FD_1in100',
     }];
+
+    const handleRadioButton = (layerName: string) => {
+        setCurrentOsmLayer(layerName);
+    };
+
+
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -192,6 +202,10 @@ const Map = (props: any) => {
 
         map.current = multihazardMap;
 
+        if (mapRef) {
+            mapRef.current = map.current;
+        }
+
         multihazardMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
         multihazardMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -200,13 +214,16 @@ const Map = (props: any) => {
             multihazardMap.on('idle', () => {
                 setNavIdleStatus(true);
             });
+            multihazardMap.fitBounds(
+                [82.9045981623205,
+                    27.5472027536931,
+                    83.1180839586179,
+                    27.8206868107314],
+            );
+
             multihazardMap.easeTo({
-                pitch: 30,
-                center: [
-                    84.51393887409917,
-                    27.619152424687197,
-                ],
-                zoom: 12,
+                // pitch: 30,
+                zoom: 12.1,
                 duration: 8000,
             });
         }, 4000);
@@ -223,6 +240,29 @@ const Map = (props: any) => {
                 className: 'popup',
             });
             // setciCategoryCritical(ciCategory)
+
+            /**
+             * Satellite layer
+             */
+
+            // multihazardMap.addSource('satelliteImage', {
+            //     type: 'raster',
+            //     tiles: [getHillShadeLayer('Ratnanagar_Satellite')],
+            //     tileSize: 256,
+            // });
+            // multihazardMap.addLayer(
+            //     {
+            //         id: 'satelliteImageLayer',
+            //         type: 'raster',
+            //         source: 'satelliteImage',
+            //         layout: {
+            //             visibility: 'none',
+            //         },
+            //         paint: {
+            //             'raster-opacity': 1,
+            //         },
+            //     },
+            // );
 
             mapImages.forEach((img) => {
                 if (map.current) {
@@ -441,7 +481,7 @@ const Map = (props: any) => {
                         visibility: 'none',
                     },
                     paint: {
-                        'raster-opacity': 1,
+                        'raster-opacity': innundationOpacity,
                     },
                 },
 
@@ -469,7 +509,6 @@ const Map = (props: any) => {
                 return null;
             });
 
-
             multihazardMap.setZoom(1);
         });
 
@@ -483,6 +522,27 @@ const Map = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleFloodChange = (e) => {
+        const opacity = e.target.value;
+        setOpacityFlood(opacity);
+        floodHazardLayersArr.map((l) => {
+            if (map.current) {
+                map.current.setPaintProperty(`raster-flood-${l.year}`,
+                    'raster-opacity', Number(opacity));
+            }
+            return null;
+        });
+    };
+
+    const handleInnundationChange = (e) => {
+        const opacity = e.target.value;
+        setInnundationOpacity(opacity);
+        if (map.current) {
+            map.current.setPaintProperty('inundationLayer',
+                'raster-opacity', Number(opacity));
+        }
+        return null;
+    };
 
     useEffect(() => {
         const switchFloodRasters = (floodlayer: string) => {
@@ -507,8 +567,8 @@ const Map = (props: any) => {
         if (map.current && map.current.isStyleLoaded()) {
             if (map.current) {
                 map.current.easeTo({
-                    pitch: 45,
-                    zoom: 12,
+                    pitch: 35,
+                    zoom: 12.1,
                     duration: 1000,
                 });
             }
@@ -535,30 +595,6 @@ const Map = (props: any) => {
                 showMapLayers('buildingratnanagar', map);
             }
 
-            if (leftElement === 3) {
-                clickedCiName.map((layerName: string) => {
-                    showMapLayers(`clusters-${layerName}`, map);
-                    showMapLayers(`clusters-count-${layerName}`, map);
-                    showMapLayers(`unclustered-point-${layerName}`, map);
-
-                    return null;
-                });
-                unClickedCIName.map((layerName: string) => {
-                    hideMapLayers(`clusters-${layerName}`, map);
-                    hideMapLayers(`clusters-count-${layerName}`, map);
-                    hideMapLayers(`unclustered-point-${layerName}`, map);
-
-                    return null;
-                });
-            } else {
-                ciNameList.map((layerName: string) => {
-                    hideMapLayers(`clusters-${layerName}`, map);
-                    hideMapLayers(`clusters-count-${layerName}`, map);
-                    hideMapLayers(`unclustered-point-${layerName}`, map);
-                    return null;
-                });
-            }
-
             if (leftElement === 4) {
                 if (map.current) {
                     showMapLayers('inundationLayer', map);
@@ -571,7 +607,6 @@ const Map = (props: any) => {
             } else {
                 hideMapLayers(`raster-flood-${floodLayer}`, map);
             }
-
             if (leftElement > 4 && leftElement < 9) {
                 if (map.current) {
                     map.current.setPaintProperty('municipalitygeo', 'fill-color', '#eff1f1');
@@ -591,7 +626,38 @@ const Map = (props: any) => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ciNameList, clickedCiName, leftElement, unClickedCIName, floodLayer]);
+    }, [leftElement, floodLayer]);
+
+
+    /**
+     * handling critical infrastructures
+     */
+
+    useEffect(() => {
+        if (leftElement === 3) {
+            clickedCiName.map((layerName: string) => {
+                showMapLayers(`clusters-${layerName}`, map);
+                showMapLayers(`clusters-count-${layerName}`, map);
+                showMapLayers(`unclustered-point-${layerName}`, map);
+
+                return null;
+            });
+            unClickedCIName.map((layerName: string) => {
+                hideMapLayers(`clusters-${layerName}`, map);
+                hideMapLayers(`clusters-count-${layerName}`, map);
+                hideMapLayers(`unclustered-point-${layerName}`, map);
+
+                return null;
+            });
+        } else {
+            ciNameList.map((layerName: string) => {
+                hideMapLayers(`clusters-${layerName}`, map);
+                hideMapLayers(`clusters-count-${layerName}`, map);
+                hideMapLayers(`unclustered-point-${layerName}`, map);
+                return null;
+            });
+        }
+    }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
 
     useEffect(() => {
         if (popupRef.current) {
@@ -649,7 +715,7 @@ const Map = (props: any) => {
                 source: 'householddata',
                 paint: {
                     'circle-color': ['get', 'color'],
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 0.8, 15, 6],
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 1.5, 13, 3, 15, 12],
                 },
                 layout: {
                     visibility: 'visible',
@@ -684,22 +750,12 @@ const Map = (props: any) => {
                     popupRef.current = householdPopUp;
                 }
             });
+            // map.current.moveLayer('satelliteImageLayer', 'household-point');
+            // map.current.moveLayer('satelliteImageLayer', `raster-flood-${floodLayer}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftElement, rangeValues]);
 
-
-    const handleFloodChange = (e) => {
-        const opacity = e.target.value;
-        setOpacityFlood(opacity);
-        floodHazardLayersArr.map((l) => {
-            if (map.current) {
-                map.current.setPaintProperty(`raster-flood-${l.year}`,
-                    'raster-opacity', Number(opacity));
-            }
-            return null;
-        });
-    };
 
     return (
         <div
@@ -715,10 +771,16 @@ const Map = (props: any) => {
             {leftElement === 1 && <LandCoverLegends />}
             {leftElement === 4 && <InnundationLegend />}
             {leftElement > 4 && leftElement < 9 && (
-                <RangeStatusLegend
-                    rangeNames={rangeNames}
-                    setRangeNames={setRangeNames}
-                />
+                <>
+                    <RangeStatusLegend
+                        rangeNames={rangeNames}
+                        setRangeNames={setRangeNames}
+                    />
+                    {/* <RadioButton
+                        currentOsmLayer={currentOsmLayer}
+                        handleRadioButton={handleRadioButton}
+                    /> */}
+                </>
             )
             }
             {
@@ -746,6 +808,34 @@ const Map = (props: any) => {
                                 </p>
                                 <FloodHistoryLegends />
                                 <FloodHazardLegends setFloodLayer={setFloodLayer} />
+                            </div>
+                        </>
+
+                    ))}
+
+            {
+                (leftElement === 4
+                    && (
+                        <>
+                            <div className={styles.innundationSliderContainer}>
+                                <p className={styles.sliderLabelRatna}>
+                                    Innundation Layer Opacity
+                                </p>
+                                <input
+                                    onChange={e => handleInnundationChange(e)}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={String(innundationOpacity)}
+                                    className={styles.slider}
+                                />
+                                <p className={styles.opacityLevel}>
+                                    <span>0</span>
+                                    <span>0.5</span>
+                                    <span>1</span>
+                                </p>
                             </div>
                         </>
 

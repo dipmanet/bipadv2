@@ -44,7 +44,7 @@ const LeftpaneSlide4 = () => {
 
     const stackBarChartTitle = 'EXPOSURE OF HOUSEHOLDS';
 
-    const municipalityName = 'Ratnanagar Municipality ';
+    const municipalityName = 'Flood Exposure in Municipality ';
     const mainData = householdData.map(item => item.exposure);
     const dataArr = percentageCalculator(mainData, householdData);
 

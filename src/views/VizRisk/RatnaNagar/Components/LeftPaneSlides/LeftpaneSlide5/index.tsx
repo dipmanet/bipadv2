@@ -43,7 +43,7 @@ const LeftpaneSlide6 = () => {
 
     const stackBarChartTitle = 'HAZARD OF HOUSEHOLDS';
 
-    const municipalityName = 'Ratnanagar Municipality ';
+    const municipalityName = 'Flood Occurrrence in Municipality ';
     const mainData = householdData.map(item => item.hazard);
     const dataArr = percentageCalculator(mainData, householdData);
 

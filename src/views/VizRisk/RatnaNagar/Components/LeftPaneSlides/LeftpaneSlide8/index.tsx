@@ -41,7 +41,7 @@ const LeftpaneSlide8 = () => {
     )[0];
     const stackBarChartTitle = 'ADAPTIVE CAPACITY OF HOUSEHOLDS';
 
-    const municipalityName = 'Ratnanagar Municipality ';
+    const municipalityName = 'Adaptive Capacity of Municipality ';
     const mainData = householdData.map(item => item.adaptiveCapacity);
     const dataArr = percentageCalculator(mainData, householdData);
 

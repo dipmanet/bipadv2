@@ -41,7 +41,7 @@ const DemoGraphicsLegends = (props) => {
                 {showPopulationWard
                     && (
                         <div>
-                            <h4 style={{ marginLeft: '10px', color: 'white' }}>Population by ward</h4>
+                            <h4 style={{ marginLeft: '10px', color: 'white' }}>Population by Ward</h4>
                             <div className={styles.populationContainer}>
                                 <div className={styles.populationIndContainerShort}>
                                     <div className={styles.populationIndicator1} />

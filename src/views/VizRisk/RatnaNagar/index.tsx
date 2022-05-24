@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { compose } from 'redux';
 import Loader from 'react-loader';
+import mapboxgl from 'mapbox-gl';
 import {
     ClientAttributes,
     createConnectedRequestCoordinator,
@@ -34,6 +35,7 @@ import {
 import {
     MainPageDataContext,
     positionInitialValues,
+    RatnaNagarMapContext,
     scrollTopPageInitialValues,
 } from './context';
 
@@ -145,6 +147,7 @@ const Ratnanagar = (props: any) => {
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
     const [navIdleStatus, setNavIdleStatus] = useState(false);
     const [floodLayer, setFloodLayer] = useState(5);
+    const mapRef = useRef<mapboxgl.Map>();
 
     /**
      * filtering data on tmap
@@ -278,82 +281,88 @@ const Ratnanagar = (props: any) => {
         handleReset,
     };
 
+    const mapValue = {
+        map: mapRef.current,
+    };
 
     return (
         <>
             <MainPageDataContext.Provider value={contextValues}>
-                {
-                    pending ? (
-                        <div className={styles.loaderInfo}>
-                            <Loader loaded={!pending} color="#fff" className={styles.loader} />
-                            <p className={styles.loaderText}>
-                                Loading Data...
-                            </p>
-                        </div>
-                    )
-                        : (
-                            <>
-                                {
-                                    leftElement < 10 && (
-                                        <>
-                                            <Map
-                                                municipalityId={municipalityId}
-                                                leftElement={leftElement}
-                                                CIData={geoJsonCI}
-                                                clickedCiName={clickedCiName}
-                                                ciNameList={ciNameList}
-                                                setciNameList={setciNameList}
-                                                unClickedCIName={unClickedCIName}
-                                                setNavIdleStatus={setNavIdleStatus}
-                                                rangeNames={rangeNames}
-                                                setRangeNames={setRangeNames}
-                                                floodLayer={floodLayer}
-                                                setFloodLayer={setFloodLayer}
-
-                                            />
-                                            <LeftTopBar currentHeaderVal={currentHeaderVal} />
-                                        </>
-
-                                    )
-                                }
-                                {leftElement === 0 && (
-                                    <Leftpane1 />
-                                )}
-                                {leftElement === 1 && (
-                                    <Leftpane2 />
-                                )}
-                                {leftElement === 2 && (
-                                    <Demographic />
-                                )}
-                                {leftElement === 3 && (
-                                    <Leftpane3
-                                        clickedCiName={clickedCiName}
-                                        handleCIClick={handleCIClick}
-                                        cIData={cIData}
-                                    />
-                                )}
-                                {leftElement === 4 && (
-                                    <Leftpane4 />
-                                )}
-                                {leftElement === 5 && (
-                                    <Leftpane5 />
-                                )}
-                                {leftElement === 6 && (
-                                    <Leftpane6 />
-                                )}
-                                {leftElement === 7 && (
-                                    <Leftpane7 />
-                                )}
-                                {leftElement === 8 && (
-                                    <Leftpane8 />
-                                )}
-                                {leftElement === 9 && (
-                                    <Leftpane10 />
-                                )}
-
-                            </>
+                <RatnaNagarMapContext.Provider value={mapValue}>
+                    {
+                        pending ? (
+                            <div className={styles.loaderInfo}>
+                                <Loader loaded={!pending} color="#fff" className={styles.loader} />
+                                <p className={styles.loaderText}>
+                                    Loading Data...
+                                </p>
+                            </div>
                         )
-                }
+                            : (
+                                <>
+                                    {
+                                        leftElement < 10 && (
+                                            <>
+                                                <Map
+                                                    mapRef={mapRef}
+                                                    municipalityId={municipalityId}
+                                                    leftElement={leftElement}
+                                                    CIData={geoJsonCI}
+                                                    clickedCiName={clickedCiName}
+                                                    ciNameList={ciNameList}
+                                                    setciNameList={setciNameList}
+                                                    unClickedCIName={unClickedCIName}
+                                                    setNavIdleStatus={setNavIdleStatus}
+                                                    rangeNames={rangeNames}
+                                                    setRangeNames={setRangeNames}
+                                                    floodLayer={floodLayer}
+                                                    setFloodLayer={setFloodLayer}
+
+                                                />
+                                                <LeftTopBar currentHeaderVal={currentHeaderVal} />
+                                            </>
+
+                                        )
+                                    }
+                                    {leftElement === 0 && (
+                                        <Leftpane1 />
+                                    )}
+                                    {leftElement === 1 && (
+                                        <Leftpane2 />
+                                    )}
+                                    {leftElement === 2 && (
+                                        <Demographic />
+                                    )}
+                                    {leftElement === 3 && (
+                                        <Leftpane3
+                                            clickedCiName={clickedCiName}
+                                            handleCIClick={handleCIClick}
+                                            cIData={cIData}
+                                        />
+                                    )}
+                                    {leftElement === 4 && (
+                                        <Leftpane4 />
+                                    )}
+                                    {leftElement === 5 && (
+                                        <Leftpane5 />
+                                    )}
+                                    {leftElement === 6 && (
+                                        <Leftpane6 />
+                                    )}
+                                    {leftElement === 7 && (
+                                        <Leftpane7 />
+                                    )}
+                                    {leftElement === 8 && (
+                                        <Leftpane8 />
+                                    )}
+                                    {leftElement === 9 && (
+                                        <Leftpane10 />
+                                    )}
+
+                                </>
+                            )
+                    }
+                </RatnaNagarMapContext.Provider>
             </MainPageDataContext.Provider>
         </>
     );

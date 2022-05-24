@@ -3,7 +3,7 @@
 import React, { useContext } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { findOcc } from '#views/VizRisk/RatnaNagar/utils';
-import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
+import { MainPageDataContext, RatnaNagarMapContext } from '#views/VizRisk/RatnaNagar/context';
 import styles from './styles.scss';
 import Tick from '../../../../Common/Icons/Tick.svg';
 import CriticalInfraLegends from '../../Legends/CriticalInfraLegends';
@@ -27,12 +27,31 @@ const LeftpaneSlide3 = (props: Props) => {
         keyValueJsonData,
     } = useContext(MainPageDataContext);
 
+    const { map } = useContext(RatnaNagarMapContext);
+
     const htmlData = keyValueHtmlData && keyValueHtmlData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page4_htmldata_301_3_35_35007',
     )[0];
     const mainCIData: MainCIData[] = findOcc(cIData, 'resourceType');
 
     const totalCI = mainCIData.map(item => item.count).reduce((a, b) => a + b);
+
+    const handleResetMap = () => {
+        if (map) {
+            map.fitBounds(
+                [82.9045981623205,
+                    27.5472027536931,
+                    83.1180839586179,
+                    27.8206868107314],
+            );
+
+            map.easeTo({
+                // pitch: 30,
+                zoom: 12.0,
+                duration: 1000,
+            });
+        }
+    };
 
     const calculateBubbleWidthHeight = (itemCounts: number, totalCounts: number) => {
         let height;
@@ -101,7 +120,7 @@ const LeftpaneSlide3 = (props: Props) => {
                 )}
             </div>
 
-            <p style={{ fontWeight: 'light' }}>
+            <p style={{ fontWeight: 'light', color: '#24c3f3' }}>
                 {' '}
                 <em>Click to view Critical Infrastructures</em>
             </p>
@@ -160,7 +179,10 @@ const LeftpaneSlide3 = (props: Props) => {
                     )
                 }
             </div>
-            <CriticalInfraLegends cITypeName={mainCIData.map(item => item.resourceType)} />
+            <CriticalInfraLegends
+                cITypeName={mainCIData.map(item => item.resourceType)}
+                handleResetMap={handleResetMap}
+            />
         </div>
 
     );

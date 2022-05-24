@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
 import { Item } from 'semantic-ui-react';
 import styles from './styles.scss';
@@ -24,7 +26,7 @@ import Waterway from '../../../../Common/Icons/Spring-water.svg';
 
 
 const CriticalInfraLegends = (props) => {
-    const { handleCritical, criticalFlood, cITypeName, CIState } = props;
+    const { handleResetMap, criticalFlood, cITypeName, CIState } = props;
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
     const handleCriticalToggle = () => {
@@ -39,26 +41,37 @@ const CriticalInfraLegends = (props) => {
                     <button
                         type="button"
                         className={styles.toggleCritical}
-                        onClick={handleCriticalToggle}
+
                     >
+                        <div onClick={handleResetMap}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={styles.resetIcon}
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="white"
+                                strokeWidth="1"
+                            >
+                                <path
+                                    fill="none"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
+                            </svg>
+                        </div>
+
                         <h4>
                             Infrastructures
 
 
                         </h4>
-
-                        {showCriticalElements === true ? (
-                            <Icon
-                                name="chevronRight"
-                                className={styles.chevrontoggle}
-                            />
+                        <Icon
+                            name="chevronRight"
+                            onClick={handleCriticalToggle}
+                            className={styles.chevrontoggle}
+                        />
                         )
-                            : (
-                                <Icon
-                                    name="chevronLeft"
-                                    className={styles.chevrontoggle}
-                                />
-                            )}
                     </button>
                     {showCriticalElements && (
 

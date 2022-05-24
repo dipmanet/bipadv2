@@ -47,3 +47,37 @@
       
       }
 }
+.innundationSliderContainer{
+    position: fixed;
+    right: 100px;
+    bottom: 50px !important;
+
+    .sliderLabelRatna{
+        color: white;
+        z-index: 201;
+        opacity: 1 !important;
+      }
+      
+      .opacityLevel{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        bottom: 460px !important;
+        color: white;
+        z-index: 201;
+      }
+      .slider {
+        z-index: 201;
+        -webkit-appearance: none;
+        width: 185px;
+        height: 6px;
+        background: #d3d3d3;
+        outline: none;
+        border-radius: 4px;
+        opacity: 0.9;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        cursor: pointer;
+      
+
+}}

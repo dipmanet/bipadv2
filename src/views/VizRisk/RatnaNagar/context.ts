@@ -1,3 +1,4 @@
+import mapboxgl from 'mapbox-gl';
 import React from 'react';
 import { PostionInitialValues, ScrollTopInitialValues } from './interfaces';
 
@@ -46,8 +47,15 @@ interface MainPageData {
     keyValueHtmlData: [];
     rangeValues: number[];
     handleRangeLegendClick: (item: any) => undefined;
+    handleReset: (item: any) => undefined;
     setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+interface MapData {
+    map?: mapboxgl.Map;
+}
+
+
 const initialMainPageData: MainPageData = {
     mainKey: '',
     suffix: '',
@@ -65,8 +73,14 @@ const initialMainPageData: MainPageData = {
     navIdleStatus: false,
     rangeValues: [],
     handleRangeLegendClick: () => undefined,
+    handleReset: () => undefined,
     setNavIdleStatus: () => undefined,
 
 };
 
+const mapInitialData: MapData = {
+    map: undefined,
+};
+
 export const MainPageDataContext = React.createContext(initialMainPageData);
+export const RatnaNagarMapContext = React.createContext(mapInitialData);

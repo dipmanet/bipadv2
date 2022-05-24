@@ -23,7 +23,7 @@ const LeftpaneSlide5 = () => {
 
                 )}
                 <div>
-                    <h3 style={{ fontSize: 16 }}>A repeat of the 2017 flood in 2022 would inundate</h3>
+                    <h3 style={{ fontSize: 16 }}>A repeat of the similar  flood in 2022 would inundate</h3>
                     <p>
                         {' '}
                         <span style={{ fontSize: 20, fontWeight: 'bold' }}>1500 </span>
@@ -32,17 +32,17 @@ const LeftpaneSlide5 = () => {
                     </p>
                     <p>
                         {' '}
-                        <span style={{ fontSize: 20, fontWeight: 'bold' }}> 27,719</span>
+                        <span style={{ fontSize: 20, fontWeight: 'bold' }}> 27,719  km</span>
                         {' '}
-                        km of roads
+                        of Roads
                     </p>
                     <p>
                         <span style={{ fontSize: 20, fontWeight: 'bold' }}>2.98 sq.km</span>
                         {' '}
-                        of agricultural land
+                        of Agricultural Land
                     </p>
                 </div>
-                <p><em>Source: WPP, OpenSteetMap</em></p>
+                <p><em>Source: WFP, OpenSteetMap</em></p>
             </div>
         </div>
     );
