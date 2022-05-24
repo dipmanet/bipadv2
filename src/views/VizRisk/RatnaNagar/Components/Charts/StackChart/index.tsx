@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar, BarChart, Legend, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styles from './styles.scss';
 
 interface BarData {
@@ -36,6 +36,7 @@ const StackChart = (props: Props) => {
                     <Bar dataKey={dataArr.dataKeyName[2]} fill="#2af5ac" stackId="a" />
                     <Bar dataKey={dataArr.dataKeyName[3]} fill="#45c4fe" stackId="a" />
                     <Bar dataKey={dataArr.dataKeyName[4]} fill="#457ded" stackId="a" radius={[0, 4, 4, 0]} />
+                    <Tooltip cursor={{ fill: '#00000050' }} />
                 </BarChart>
             </ResponsiveContainer>
         </div>
