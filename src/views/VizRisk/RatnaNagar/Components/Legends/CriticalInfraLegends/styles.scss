@@ -41,7 +41,13 @@
 	transform: rotate(90deg);
         // display: none;
     }
+    .resetIcon{
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+    }
 }
+
 .criticalIcons{
     // border: 1px solid red;
     .toggleContainer{

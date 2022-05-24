@@ -43,7 +43,7 @@ const LeftpaneSlide7 = () => {
 
     const stackBarChartTitle = 'SENSITIVITY OF HOUSEHOLDS';
 
-    const municipalityName = 'Ratnanagar Municipality ';
+    const municipalityName = 'Sensitivity of Municipality ';
     const mainData = householdData.map(item => item.sensitivity);
     const dataArr = percentageCalculator(mainData, householdData);
 
@@ -69,7 +69,7 @@ const LeftpaneSlide7 = () => {
                 color={color}
             />
             <p>
-                The sensitivity value of the municipality is very high(
+                The sensitivity value of the municipality is moderate(
                 {averageExposureScore}
                 /10).
                 The higher the value of sensitivity, the greater the potential impact.

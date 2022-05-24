@@ -42,7 +42,7 @@ const LeftpaneSlide1 = () => {
                 )}
             </div>
             <div className={styles.climateChart}>
-                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
+                <p style={{ marginBottom: '0px', marginTop: '5px', fontWeight: 'bold' }}> Temperature</p>
                 <div className={styles.mainLineChart}>
                     {
                         tempData && tempData.value && tempData.value.length > 0
@@ -71,7 +71,7 @@ const LeftpaneSlide1 = () => {
                                     <Legend iconType="circle" iconSize={10} align="center" />
                                     <Tooltip content={RenderLegend} />
                                     {/* <Line type="monotone" dataKey="Max" stroke="#ffbf00" strokeWidth={5} /> */}
-                                    <Line type="monotone" dataKey="Avg" stroke="#00d725" strokeWidth={5} />
+                                    <Line type="monotone" dataKey="Average Temperature" stroke="#00d725" strokeWidth={5} />
                                     {/* <Line type="monotone" dataKey="Min" stroke="#347eff" strokeWidth={5} /> */}
                                 </LineChart>
                             </ResponsiveContainer>
@@ -80,7 +80,7 @@ const LeftpaneSlide1 = () => {
                 </div>
             </div>
             <div className={styles.climateChart}>
-                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
+                <p style={{ marginBottom: '0px', marginTop: '20px', fontWeight: 'bold' }}> Rainfall</p>
                 <div className={styles.mainLineChart}>
                     {
                         rainFallData && rainFallData.value && rainFallData.value.length > 0 && (
@@ -106,7 +106,7 @@ const LeftpaneSlide1 = () => {
                                     />
                                     <Legend iconType="circle" iconSize={10} align="center" />
                                     <Tooltip content={RenderLegendRainfall} />
-                                    <Line type="monotone" dataKey="Averagerainfall" stroke="#ffbf00" strokeWidth={5} />
+                                    <Line type="monotone" dataKey="Average Rainfall" stroke="#ffbf00" strokeWidth={5} />
 
                                 </LineChart>
                             </ResponsiveContainer>

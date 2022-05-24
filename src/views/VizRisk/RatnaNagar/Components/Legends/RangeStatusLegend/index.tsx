@@ -7,10 +7,12 @@ import Return from '#resources/icons/Reset.svg';
 
 import rangeData from '#views/VizRisk/RatnaNagar/expressions';
 import styles from './styles.scss';
+import { getCurrentType } from '#views/VizRisk/RatnaNagar/utils';
 
 const RangeStatusLegend = (props) => {
     const { rangeNames, setRangeNames } = props;
     const {
+        leftElement,
         handleReset,
         handleRangeLegendClick,
     } = useContext(MainPageDataContext);
@@ -27,22 +29,30 @@ const RangeStatusLegend = (props) => {
 
     return (
         <div className={styles.mainStatusLegendContainer}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={styles.resetIcon}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="white"
-                strokeWidth="1"
-                onClick={handleReset}
-            >
-                <path
+            <div className={styles.reloadAndTitle}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={styles.resetIcon}
                     fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-            </svg>
+                    viewBox="0 0 24 24"
+                    stroke="white"
+                    strokeWidth="1"
+                    onClick={handleReset}
+                >
+                    <path
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                </svg>
+                <p className={styles.titleName}>
+                    {`${getCurrentType(leftElement).charAt(0).toUpperCase()
+                        + getCurrentType(leftElement).slice(1)} Score`
+                    }
+
+                </p>
+            </div>
             {
                 rangeData.map(item => (
                     // eslint-disable-next-line jsx-a11y/click-events-have-key-events

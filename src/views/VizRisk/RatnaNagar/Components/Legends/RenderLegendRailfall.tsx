@@ -8,7 +8,7 @@ const RenderLegendRainfall = ({ active, payload, label }) => {
                 {/* {payload[0].payload.Max
                     && <p>{`Maximum: ${payload[0].payload.Max} ℃`}</p>
                 } */}
-                <p style={{ margin: 0, fontSize: 14, color: '#ffbf00' }}>{`Average: ${payload[0].payload.Averagerainfall} mm`}</p>
+                <p style={{ margin: 0, fontSize: 14, color: '#ffbf00' }}>{`Average: ${payload[0].payload['Average Rainfall']} mm`}</p>
                 {/* {payload[0].payload.Min
                     && <p>{`Minimum: ${payload[0].payload.Min} ℃`}</p>
                 } */}

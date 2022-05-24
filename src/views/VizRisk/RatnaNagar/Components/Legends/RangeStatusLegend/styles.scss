@@ -6,7 +6,16 @@
     padding: 5px 15px;
     z-index: 999;
     background-color: #0e141d99;
-
+    .reloadAndTitle{
+        display: flex;
+        align-items: center;
+        .titleName{
+            color: white;
+            padding-left: 5px;
+            font-weight: 15px;
+            font-weight: 600;
+        }
+    }
     .statusSection {
         display: flex;
         align-items: center;

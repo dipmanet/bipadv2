@@ -8,7 +8,7 @@ const RenderLegend = ({ active, payload, label }) => {
                 {/* {payload[0].payload.Max
                     && <p>{`Maximum: ${payload[0].payload.Max} ℃`}</p>
                 } */}
-                <p style={{ margin: 0, fontSize: 14, color: '#00d725' }}>{`Average: ${payload[0].payload.Avg} ℃`}</p>
+                <p style={{ margin: 0, fontSize: 14, color: '#00d725' }}>{`Average: ${payload[0].payload['Average Temperature']} ℃`}</p>
                 {/* {payload[0].payload.Min
                     && <p>{`Minimum: ${payload[0].payload.Min} ℃`}</p>
                 } */}

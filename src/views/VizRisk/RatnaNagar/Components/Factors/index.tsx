@@ -16,7 +16,11 @@ const Factors = (props: Props) => {
             <h2 className={styles.content}>{municipalityName}</h2>
             <div className={styles.score} style={{ backgroundColor: color }}>
                 <div className={styles.mainScore}>{factorScore}</div>
-                <p className={styles.status}>{scoreStatus}</p>
+                <p className={styles.status}>
+                    {scoreStatus}
+                    {' '}
+                    on Average
+                </p>
             </div>
         </div>
     );

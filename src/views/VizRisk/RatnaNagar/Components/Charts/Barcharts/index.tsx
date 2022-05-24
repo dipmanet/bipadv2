@@ -10,7 +10,9 @@ import {
     YAxis,
     Legend,
     Label,
+    Tooltip,
 } from 'recharts';
+import CommonToolTip from '../../Legends/CommonToolTip';
 import styles from './styles.scss';
 
 interface Props {
@@ -22,7 +24,11 @@ const CommonBarChart = (props: Props) => {
     const { barTitle, barData } = props;
     return (
         <div className={styles.mainBarChart}>
-            <h3 className={styles.barTitle}>{barTitle}</h3>
+            <h3 className={styles.barTitle}>
+                {barTitle === 'Flood return period'
+                    ? 'Number of households likely to ne inundated' : barTitle}
+
+            </h3>
             <ResponsiveContainer
                 width={'100%'}
                 height={400}
@@ -51,10 +57,27 @@ const CommonBarChart = (props: Props) => {
                         type="category"
                         dataKey="name"
                         tick={{ fill: '#94bdcf' }}
+                    >
+                        {barTitle === 'Flood return period'
+                            && (
+                                <Label
+                                    value="Flood return period"
+                                    offset={-10}
+                                    position="insideBottom"
+                                    style={{
+                                        textAnchor: 'middle',
+                                        fill: 'rgba(255, 255, 255, 0.87)',
+                                        // margin: '10px',
+                                    }}
+                                />
+                            )
+                        }
+
+                    </YAxis>
+                    <Tooltip
+                        cursor={{ fill: '#00000050' }}
+                        content={CommonToolTip}
                     />
-                    {/* <Tooltip
-                        cursor={{ fill: '#1c333f' }}
-                    /> */}
                     <Bar
                         dataKey="count"
                         fill="#a8fffb"
