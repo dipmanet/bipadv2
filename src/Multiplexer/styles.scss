@@ -5,7 +5,7 @@
 }
 
 .languageFont {
-  font-family: "Kalimati Regular","Fira Sans", sans-serif !important;
+  font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
 }
 
 button {
@@ -159,6 +159,7 @@ button {
       .map {
         flex-grow: 1;
         background-color: transparent;
+
         // position: absolute;
         // top:0;
         // flex-grow: unset;
@@ -169,6 +170,7 @@ button {
           z-index: -1;
         }
       }
+
       .mapActionsCompressed {
         display: flex;
         position: absolute;
@@ -177,6 +179,7 @@ button {
         top: 10px;
         left: 1%;
         z-index: 1;
+
         .map-actions {
           display: flex;
           position: relative;
@@ -307,10 +310,15 @@ button {
 }
 
 :global {
+
   .nepaliDatePicker,
   .nepaliEndDatePicker {
     opacity: 0;
+    padding: 0;
+    height: 0;
+    width: 0;
   }
+
   .mapboxgl-ctrl-top-left {
     top: 36px !important;
   }
