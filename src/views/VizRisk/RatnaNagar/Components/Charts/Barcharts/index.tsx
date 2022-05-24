@@ -26,7 +26,7 @@ const CommonBarChart = (props: Props) => {
         <div className={styles.mainBarChart}>
             <h3 className={styles.barTitle}>
                 {barTitle === 'Flood return period'
-                    ? 'Number of households likely to ne inundated' : barTitle}
+                    ? 'Number of households likely to be inundated' : barTitle}
 
             </h3>
             <ResponsiveContainer
@@ -63,11 +63,11 @@ const CommonBarChart = (props: Props) => {
                                 <Label
                                     value="Flood return period"
                                     offset={-10}
-                                    position="insideBottom"
+                                    position="insideLeft"
+                                    angle={-90}
                                     style={{
                                         textAnchor: 'middle',
                                         fill: 'rgba(255, 255, 255, 0.87)',
-                                        // margin: '10px',
                                     }}
                                 />
                             )

@@ -4,8 +4,8 @@ import Loader from 'react-loader';
 import styles from './styles.scss';
 
 interface Props {
-    data: any;
-    houseId: number | undefined | string;
+    data?: any;
+    houseId?: number | undefined | string;
 }
 
 interface HouseHold {
@@ -17,17 +17,22 @@ const PopupOnMapClick = (props: Props) => {
     const [houseData, setHouseData] = useState<HouseHold>();
     const [loading, setLoading] = useState(true);
 
+    const fetchHouseData = async () => {
+        const housedata = await fetch(
+            `${process.env.REACT_APP_API_SERVER_URL}/vizrisk-household/${houseId}/?meta=true`,
+        ).then(res => res.json());
+        setHouseData(housedata);
+        setLoading(false);
+    };
+
     useEffect(() => {
-        const fetchHouseData = async () => {
-            const housedata = await fetch(
-                `${process.env.REACT_APP_API_SERVER_URL}/vizrisk-household/${houseId}/?meta=true`,
-            ).then(res => res.json());
-            setHouseData(housedata);
-            setLoading(false);
-        };
         fetchHouseData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+    console.log('Rendered');
+
 
     const popUpExposureData = (houseData && Object.keys(houseData).length > 0)
         ? [
@@ -53,7 +58,7 @@ const PopupOnMapClick = (props: Props) => {
         ? [
             {
                 name: 'Flood return period(yrs)',
-                value: houseData.metadata.returnPeriod,
+                value: houseData.metadata.returnPeriod ? houseData.metadata.returnPeriod : 'Likely not to be inundated',
             },
         ] : [];
 
@@ -128,7 +133,7 @@ const PopupOnMapClick = (props: Props) => {
             {
                 name: 'Distance from ward office',
                 value: houseData.metadata.nearestWardOffice
-                    ? houseData.metadata.nearestWardOffice.toFixed(2) : 'No data',
+                    ? houseData.metadata.nearestWardOffice.toFixed(2) : 'N/A',
             },
             {
                 name: 'Access to natural resource',
@@ -149,7 +154,7 @@ const PopupOnMapClick = (props: Props) => {
             {
                 name: 'Distance from municipality office(m)',
                 value: houseData.metadata.nearestMunicipalityOffice
-                    ? houseData.metadata.nearestMunicipalityOffice.toFixed(2) : 'No data',
+                    ? houseData.metadata.nearestMunicipalityOffice.toFixed(2) : 'N/A',
             },
             {
                 name: 'Yearly saving of your house (NPR)',
@@ -338,7 +343,7 @@ const PopupOnMapClick = (props: Props) => {
                             </h3>
                             <h3 style={{ color: data.color, fontSize: 15 }} className={styles.mainStatus}>
                                 {
-                                    data.value ? data.value.toFixed(2) : 'No data'
+                                    data.value !== null ? data.value.toFixed(2) : 'N/A'
                                 }
 
                             </h3>
@@ -353,7 +358,7 @@ const PopupOnMapClick = (props: Props) => {
                                         {':'}
                                     </h3>
                                     <h3 className={styles.mainStatus}>
-                                        {exposurePopData.value ? exposurePopData.value : 'No data'}
+                                        {exposurePopData.value ? exposurePopData.value : 'N/A'}
                                     </h3>
                                 </div>
 

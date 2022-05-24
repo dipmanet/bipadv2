@@ -179,7 +179,6 @@ const Map = (props: any) => {
         setCurrentOsmLayer(layerName);
     };
 
-
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -661,7 +660,9 @@ const Map = (props: any) => {
 
     useEffect(() => {
         if (popupRef.current) {
+            popupRef.current.off();
             popupRef.current.remove();
+            popupRef.current = undefined;
         }
         const filteredDataByRange: [] = [];
         // eslint-disable-next-line no-plusplus
@@ -724,7 +725,9 @@ const Map = (props: any) => {
 
             map.current.on('click', 'household-point', (e) => {
                 if (popupRef.current) {
+                    popupRef.current.off();
                     popupRef.current.remove();
+                    popupRef.current = undefined;
                 }
                 const { lngLat } = e;
                 const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
@@ -753,6 +756,7 @@ const Map = (props: any) => {
             // map.current.moveLayer('satelliteImageLayer', 'household-point');
             // map.current.moveLayer('satelliteImageLayer', `raster-flood-${floodLayer}`);
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftElement, rangeValues]);
 
