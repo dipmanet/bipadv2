@@ -206,7 +206,7 @@ class PastDateRangeInput extends React.Component<Props> {
 					value={value.rangeInDays}
 					contentClassName={styles.dateRanges}
 				/>
-				{customState && (
+				{
 					<div className={styles.customRange}>
 						<Translation>
 							{
@@ -237,7 +237,7 @@ class PastDateRangeInput extends React.Component<Props> {
 						</Translation>
 
 					</div>
-				)}
+				}
 			</div>
 		);
 	}
