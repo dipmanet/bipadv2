@@ -694,6 +694,36 @@ const Map = (props: any) => {
             })),
         };
 
+        const dummyPop = (e) => {
+            if (popupRef.current) {
+                popupRef.current.off();
+                popupRef.current.remove();
+                popupRef.current = undefined;
+            }
+            const { lngLat } = e;
+            const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            const popupNode = document.createElement('div');
+
+
+            ReactDOM.render(
+                <PopupOnMapClick
+                    houseId={e.features && e.features[0].id}
+                    data={e.features && e.features[0].properties}
+                />, popupNode,
+            );
+            if (map.current) {
+                const householdPopUp = new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setDOMContent(popupNode)
+                    .addTo(map.current);
+
+                popupRef.current = householdPopUp;
+            }
+        };
 
         if (map && map.current
             && leftElement > 4 && leftElement < 9) {
@@ -723,40 +753,16 @@ const Map = (props: any) => {
                 },
             });
 
-            map.current.on('click', 'household-point', (e) => {
-                if (popupRef.current) {
-                    popupRef.current.off();
-                    popupRef.current.remove();
-                    popupRef.current = undefined;
-                }
-                const { lngLat } = e;
-                const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
 
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                const popupNode = document.createElement('div');
-
-
-                ReactDOM.render(
-                    <PopupOnMapClick
-                        houseId={e.features && e.features[0].id}
-                        data={e.features && e.features[0].properties}
-                    />, popupNode,
-                );
-                if (map.current) {
-                    const householdPopUp = new mapboxgl.Popup()
-                        .setLngLat(coordinates)
-                        .setDOMContent(popupNode)
-                        .addTo(map.current);
-
-                    popupRef.current = householdPopUp;
-                }
-            });
+            map.current.on('click', 'household-point', dummyPop);
             // map.current.moveLayer('satelliteImageLayer', 'household-point');
             // map.current.moveLayer('satelliteImageLayer', `raster-flood-${floodLayer}`);
         }
-
+        return () => {
+            if (map && map.current) {
+                map.current.off('click', 'household-point', dummyPop);
+            }
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftElement, rangeValues]);
 
