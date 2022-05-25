@@ -694,7 +694,7 @@ const Map = (props: any) => {
             })),
         };
 
-        const dummyPop = (e) => {
+        const popupMain = (e) => {
             if (popupRef.current) {
                 popupRef.current.off();
                 popupRef.current.remove();
@@ -754,13 +754,13 @@ const Map = (props: any) => {
             });
 
 
-            map.current.on('click', 'household-point', dummyPop);
+            map.current.on('click', 'household-point', popupMain);
             // map.current.moveLayer('satelliteImageLayer', 'household-point');
             // map.current.moveLayer('satelliteImageLayer', `raster-flood-${floodLayer}`);
         }
         return () => {
             if (map && map.current) {
-                map.current.off('click', 'household-point', dummyPop);
+                map.current.off('click', 'household-point', popupMain);
             }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
