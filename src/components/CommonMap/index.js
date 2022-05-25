@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
@@ -137,8 +137,8 @@ class CommonMap extends React.PureComponent {
             showDistrict: showDistrictFromProps,
             showMunicipality: showMunicipalityFromProps,
             showWard: showWardFromProps,
-            language: { language },
             children,
+            language: { language },
         } = this.props;
 
         const isForced = showProvinceFromProps
@@ -188,11 +188,6 @@ class CommonMap extends React.PureComponent {
         const provinceFilter = showProvince
             ? this.getProvinceFilter(provinceId)
             : undefined;
-
-        console.log('showProvince:', showProvinceLabel,
-            'showMuni:', showMunicipalityLabel,
-            'showDistrict:', showDistrictLabel,
-            'showWard:', showWardLabel);
 
         return (
             <Fragment>
@@ -256,115 +251,64 @@ class CommonMap extends React.PureComponent {
                         url: mapSources.nepalCentroid.url,
                     }}
                 >
-                    {
-                        language === 'en'
-                            ? (
-                                <MapLayer
-                                    layerKey="province-label"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.province,
-                                        type: 'symbol',
-                                        paint: mapStyles.provinceLabel.paint,
-                                        layout: showProvinceLabel && mapStyles.provinceLabel.layout,
-                                        filter: provinceFilter,
-                                    }}
-                                />
-                            )
-                            : (
-                                <MapLayer
-                                    layerKey="province-label-nep"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.province,
-                                        type: 'symbol',
-                                        paint: mapStyles.provinceLabel.paint,
-                                        layout: showProvinceLabel && mapStyles.provinceLabelNep.layout,
-                                        filter: provinceFilter,
-                                    }}
-                                />
-                            )
-                    }
-
-                    {
-                        language === 'en'
-                            ? (
-                                <MapLayer
-                                    layerKey="district-label"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.district,
-                                        type: 'symbol',
-                                        paint: mapStyles.districtLabel.paint,
-                                        layout: showDistrictLabel && mapStyles.districtLabel.layout,
-                                        filter: districtFilter,
-                                    }}
-                                />
-                            )
-                            : (
-                                <MapLayer
-                                    layerKey="district-label-nep"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.district,
-                                        type: 'symbol',
-                                        paint: mapStyles.districtLabel.paint,
-                                        layout: showDistrictLabel && mapStyles.districtLabelNep.layout,
-                                        filter: districtFilter,
-                                    }}
-                                />
-                            )
-                    }
-                    {
-                        language === 'en'
-                            ? (
-                                <MapLayer
-                                    layerKey="municipality-label"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.municipality,
-                                        type: 'symbol',
-                                        paint: mapStyles.municipalityLabel.paint,
-                                        layout: showMunicipalityLabel && mapStyles.municipalityLabel.layout,
-                                        filter: municipalityFilter,
-                                    }}
-                                />
-                            )
-                            : (
-                                <MapLayer
-                                    layerKey="municipality-label-nep"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.municipality,
-                                        type: 'symbol',
-                                        paint: mapStyles.municipalityLabel.paint,
-                                        layout: showMunicipalityLabel && mapStyles.municipalityLabelNep.layout,
-                                        filter: municipalityFilter,
-                                    }}
-                                />
-                            )
-                    }
-                    {
-                        language === 'en'
-                            ? (
-                                <MapLayer
-                                    layerKey="ward-label"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.ward,
-                                        type: 'symbol',
-                                        paint: mapStyles.wardLabel.paint,
-                                        layout: showWardLabel && mapStyles.wardLabel.layout,
-                                        filter: wardFilter,
-                                    }}
-                                />
-                            )
-                            : (
-                                <MapLayer
-                                    layerKey="ward-label-nep"
-                                    layerOptions={{
-                                        'source-layer': mapSources.nepalCentroid.layers.ward,
-                                        type: 'symbol',
-                                        paint: mapStyles.wardLabel.paint,
-                                        layout: showWardLabel && mapStyles.wardLabelNep.layout,
-                                        filter: wardFilter,
-                                    }}
-                                />
-                            )
-                    }
+                    <MapLayer
+                        layerKey="province-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.province,
+                            type: 'symbol',
+                            paint: mapStyles.provinceLabel.paint,
+                            layout: showProvinceLabel
+                                ? (language === 'en'
+                                    ? mapStyles.provinceLabel.layout
+                                    : mapStyles.provinceLabelNep.layout
+                                )
+                                : noneLayout,
+                            filter: provinceFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="district-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.district,
+                            type: 'symbol',
+                            paint: mapStyles.districtLabel.paint,
+                            layout: showDistrictLabel
+                                ? (language === 'en'
+                                    ? mapStyles.districtLabel.layout
+                                    : mapStyles.districtLabelNep.layout
+                                ) : noneLayout,
+                            filter: districtFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="municipality-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.municipality,
+                            type: 'symbol',
+                            paint: mapStyles.municipalityLabel.paint,
+                            layout: showMunicipalityLabel
+                                ? (language === 'en'
+                                    ? mapStyles.municipalityLabel.layout
+                                    : mapStyles.municipalityLabelNep.layout
+                                )
+                                : noneLayout,
+                            filter: municipalityFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="ward-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.ward,
+                            type: 'symbol',
+                            paint: mapStyles.wardLabel.paint,
+                            layout: showWardLabel
+                                ? (language === 'en'
+                                    ? mapStyles.wardLabel.layout
+                                    : mapStyles.wardLabelNep.layout)
+                                : noneLayout,
+                            filter: wardFilter,
+                        }}
+                    />
                 </MapSource>
             </Fragment>
         );

@@ -105,12 +105,12 @@ export default {
             'text-halo-width': 2,
         },
         layout: {
-            // visibility: 'visible',
+            visibility: 'visible',
             // 'text-allow-overlap': true,
-            // 'text-font': ['Rubik Bold'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 12,
-            // 'text-transform': 'uppercase',
+            'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -124,9 +124,6 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-allow-overlap': true,
-            // 'text-font': ['Kalimati Regular'],
-            // 'text-field': ['get', 'title_ne'],
             'text-field': ['get', 'title_ne'],
             'text-size': 12,
             'text-transform': 'none',
@@ -142,7 +139,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-font': ['Rubik Bold'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 11,
             'text-justify': 'center',
@@ -157,9 +154,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title_ne'],
-            // 'text-field': ['get', 'title_ne'],
             'text-size': 11,
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -173,7 +168,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-font': ['Rubik Bold'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 10,
             'text-justify': 'center',
@@ -188,9 +183,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title_ne'],
-            // 'text-field': ['get', 'title_ne'],
             'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -204,7 +197,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-font': ['Rubik Bold'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 10,
             'text-justify': 'center',
@@ -219,7 +212,6 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 10,
             'text-justify': 'center',
