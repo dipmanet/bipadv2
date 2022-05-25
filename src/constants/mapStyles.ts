@@ -124,6 +124,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Kalimati Regular'],
             'text-field': ['get', 'title_ne'],
             'text-size': 12,
             'text-transform': 'none',
@@ -154,6 +155,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Kalimati Regular'],
             'text-field': ['get', 'title_ne'],
             'text-size': 11,
             'text-justify': 'center',
@@ -183,6 +185,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Kalimati Regular'],
             'text-field': ['get', 'title_ne'],
             'text-size': 10,
             'text-justify': 'center',
@@ -212,6 +215,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Kalimati Regular'],
             'text-field': ['get', 'title'],
             'text-size': 10,
             'text-justify': 'center',
