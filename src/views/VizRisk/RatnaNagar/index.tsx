@@ -285,6 +285,15 @@ const Ratnanagar = (props: any) => {
         map: mapRef.current,
     };
 
+    const mapCss = {
+        position: 'absolute',
+        width: 'calc(70%)',
+        left: 'calc(30% - 60px)',
+        top: 0,
+        height: '100vh',
+        zIndex: 250,
+    };
+
     return (
         <>
             <MainPageDataContext.Provider value={contextValues}>
@@ -305,6 +314,7 @@ const Ratnanagar = (props: any) => {
                                             <>
                                                 <Map
                                                     mapRef={mapRef}
+                                                    mapCss={mapCss}
                                                     municipalityId={municipalityId}
                                                     leftElement={leftElement}
                                                     CIData={geoJsonCI}
