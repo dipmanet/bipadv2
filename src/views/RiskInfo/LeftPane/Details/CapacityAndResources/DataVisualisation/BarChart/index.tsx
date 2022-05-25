@@ -1,3 +1,8 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -6,78 +11,78 @@ import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, XAx
 import styles from '../styles.scss';
 
 const CustomizedAxisTick = ({ x, y, stroke, payload }) => (
-    <g className={styles.tickFormat} transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={16} textAnchor="middle" fill="#666">
-            {payload.value}
-        </text>
-    </g>
+	<g className={styles.tickFormat} transform={`translate(${x},${y})`}>
+		<text x={0} y={0} dy={16} textAnchor="middle" fill="#666">
+			{payload.value}
+		</text>
+	</g>
 );
 
 const BarChartVisualization = (props) => {
-    const { item } = props;
-    const excludingZeroValueData = item.filter(itm => itm.value !== 0);
-    const BarchartHeight = (data) => {
-        if (data.length === 1) {
-            return 100;
-        } if (data.length < 4) {
-            return 150;
-        }
-        if (data.length < 5) {
-            return data.length * 50;
-        } if (data.length < 10) {
-            return data.length * 45;
-        } if (data.length < 20) {
-            return data.length * 50;
-        }
+	const { item } = props;
+	const excludingZeroValueData = item.filter(itm => itm.value !== 0);
+	const BarchartHeight = (data) => {
+		if (data.length === 1) {
+			return 100;
+		} if (data.length < 4) {
+			return 200;
+		}
+		if (data.length < 5) {
+			return data.length * 50;
+		} if (data.length < 10) {
+			return data.length * 45;
+		} if (data.length < 20) {
+			return data.length * 50;
+		}
 
-        return data.length * 60;
-    };
-
-
-    return (
+		return data.length * 60;
+	};
 
 
-        // <ResponsiveContainer height={(item.length === 1) ? 100 : item.length > 10
-        //     ? (item.length * 30) : (item.length * 80)}
-        // >
-        <ResponsiveContainer height={BarchartHeight(excludingZeroValueData)}>
-            <BarChart
-                layout="vertical"
+	return (
 
 
-                data={excludingZeroValueData}
-                margin={{
-                    top: 20,
-                    right: 60,
-                    left: 30,
-                    bottom: 20,
-                }}
-            >
-                <YAxis dataKey="label" type="category" interval={0} />
-                <XAxis dataKey="value" type="number" />
-                <CartesianGrid strokeDasharray="3 3" />
-                {/* <Tooltip /> */}
-                <Bar
-                    dataKey="value"
-                    fill="#1A70AC"
-                    barSize={20}
-                    radius={[0, 0, 0, 0]}
+		// <ResponsiveContainer height={(item.length === 1) ? 100 : item.length > 10
+		//     ? (item.length * 30) : (item.length * 80)}
+		// >
+		<ResponsiveContainer height={BarchartHeight(excludingZeroValueData)}>
+			<BarChart
+				layout="vertical"
 
-                >
-                    {excludingZeroValueData.map(hazard => (
-                        <Cell key={hazard.label} fill={hazard.color} />
-                    ))}
-                    <LabelList
-                        dataKey="value"
-                        position="right"
-                        angle={0}
-                        className={styles.labelList}
-                    />
-                    {/* <LabelList dataKey="value" position="right" /> */}
-                </Bar>
-            </BarChart>
-        </ResponsiveContainer>
-    );
+
+				data={excludingZeroValueData}
+				margin={{
+					top: 20,
+					right: 60,
+					left: 30,
+					bottom: 20,
+				}}
+			>
+				<YAxis dataKey="label" type="category" interval={0} />
+				<XAxis dataKey="value" type="number" />
+				<CartesianGrid strokeDasharray="3 3" />
+				{/* <Tooltip /> */}
+				<Bar
+					dataKey="value"
+					fill="#1A70AC"
+					barSize={20}
+					radius={[0, 0, 0, 0]}
+
+				>
+					{excludingZeroValueData.map(hazard => (
+						<Cell key={hazard.label} fill={hazard.color} />
+					))}
+					<LabelList
+						dataKey="value"
+						position="right"
+						angle={0}
+						className={styles.labelList}
+					/>
+					{/* <LabelList dataKey="value" position="right" /> */}
+				</Bar>
+			</BarChart>
+		</ResponsiveContainer>
+	);
 };
 
 
