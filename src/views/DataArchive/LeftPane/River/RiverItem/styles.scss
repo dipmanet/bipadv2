@@ -1,0 +1,28 @@
+.river-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-bottom: 1px solid rgba($color: grey, $alpha: 0.5);
+    // cursor: pointer;
+    &:hover {
+        background-color: #f6f6f6;
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+        font-weight: var(--font-weight-bold);
+        margin-left: var(--spacing-small);
+        .name {
+            font-size: var(--font-size-large);
+            margin-bottom: var(--spacing-extra-small);
+        }
+        .status {
+            color: var(--color-text-placeholder);
+        }
+    }
+
+    .right {
+        margin-left: auto;
+    }
+}
