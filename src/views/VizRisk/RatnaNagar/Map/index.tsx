@@ -10,7 +10,7 @@ import { AppState } from '#types';
 import { getWardFilter } from '#utils/domain';
 import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
 import DemoGraphicsLegends from '#views/VizRisk/Butwal/Legends/DemographicsLegends';
-import { MainPageDataContext } from '../context';
+import { MainPageDataContext, RatnaNagarMapContext } from '../context';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
 import LandCoverLegends from '../Components/Legends/LandCoverLegends';
@@ -49,10 +49,11 @@ const Map = (props: any) => {
         setRangeNames,
         floodLayer,
         setFloodLayer,
-        setNavIdleStatus } = props;
+        setNavIdleStatus,
+        children } = props;
 
     const [currentOsmLayer, setCurrentOsmLayer] = useState<string>('Satellite Layer');
-    const map = useRef<mapboxgl.Map | null>(null);
+    const map = useRef<mapboxgl.Map>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapZoomEffect = useRef<any | undefined>(null);
     const popupRef = useRef<mapboxgl.Popup>();
@@ -694,6 +695,36 @@ const Map = (props: any) => {
             })),
         };
 
+        const popupMain = (e) => {
+            if (popupRef.current) {
+                popupRef.current.off();
+                popupRef.current.remove();
+                popupRef.current = undefined;
+            }
+            const { lngLat } = e;
+            const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            const popupNode = document.createElement('div');
+
+
+            ReactDOM.render(
+                <PopupOnMapClick
+                    houseId={e.features && e.features[0].id}
+                    data={e.features && e.features[0].properties}
+                />, popupNode,
+            );
+            if (map.current) {
+                const householdPopUp = new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setDOMContent(popupNode)
+                    .addTo(map.current);
+
+                popupRef.current = householdPopUp;
+            }
+        };
 
         if (map && map.current
             && leftElement > 4 && leftElement < 9) {
@@ -723,128 +754,111 @@ const Map = (props: any) => {
                 },
             });
 
-            map.current.on('click', 'household-point', (e) => {
-                if (popupRef.current) {
-                    popupRef.current.off();
-                    popupRef.current.remove();
-                    popupRef.current = undefined;
-                }
-                const { lngLat } = e;
-                const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
 
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                const popupNode = document.createElement('div');
-
-
-                ReactDOM.render(
-                    <PopupOnMapClick
-                        houseId={e.features && e.features[0].id}
-                        data={e.features && e.features[0].properties}
-                    />, popupNode,
-                );
-                if (map.current) {
-                    const householdPopUp = new mapboxgl.Popup()
-                        .setLngLat(coordinates)
-                        .setDOMContent(popupNode)
-                        .addTo(map.current);
-
-                    popupRef.current = householdPopUp;
-                }
-            });
+            map.current.on('click', 'household-point', popupMain);
             // map.current.moveLayer('satelliteImageLayer', 'household-point');
             // map.current.moveLayer('satelliteImageLayer', `raster-flood-${floodLayer}`);
         }
-
+        return () => {
+            if (map && map.current) {
+                map.current.off('click', 'household-point', popupMain);
+            }
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftElement, rangeValues]);
 
+    const mapValue = {
+        map: map.current,
+    };
 
     return (
-        <div
-            ref={mapContainerRef}
-            className={leftElement === 9
-                ? styles.mapCSSNone : styles.mapCSS}
-        >
-            {leftElement === 2 && (
-                <DemoGraphicsLegends
-                    demographicsData={demographicsData}
-                />
-            )}
-            {leftElement === 1 && <LandCoverLegends />}
-            {leftElement === 4 && <InnundationLegend />}
-            {leftElement > 4 && leftElement < 9 && (
-                <>
-                    <RangeStatusLegend
-                        rangeNames={rangeNames}
-                        setRangeNames={setRangeNames}
+        <RatnaNagarMapContext.Provider value={mapValue}>
+            <div
+                ref={mapContainerRef}
+                className={leftElement === 9
+                    ? styles.mapCSSNone : styles.mapCSS}
+            >
+                {leftElement === 2 && (
+                    <DemoGraphicsLegends
+                        demographicsData={demographicsData}
                     />
-                    {/* <RadioButton
+                )}
+                {leftElement === 1 && <LandCoverLegends />}
+                {leftElement === 4 && <InnundationLegend />}
+                {leftElement > 4 && leftElement < 9 && (
+                    <>
+                        <RangeStatusLegend
+                            rangeNames={rangeNames}
+                            setRangeNames={setRangeNames}
+                        />
+                        {/* <RadioButton
                         currentOsmLayer={currentOsmLayer}
                         handleRadioButton={handleRadioButton}
                     /> */}
-                </>
-            )
-            }
-            {
-                (leftElement === 5
-                    && (
-                        <>
-                            <div className={styles.sliderContainer}>
-                                <p className={styles.sliderLabelRatna}>
-                                    Flood Layer Opacity
-                                </p>
-                                <input
-                                    onChange={e => handleFloodChange(e)}
-                                    id="slider"
-                                    type="range"
-                                    min="0"
-                                    max="1"
-                                    step="0.05"
-                                    value={String(opacityFlood)}
-                                    className={styles.slider}
-                                />
-                                <p className={styles.opacityLevel}>
-                                    <span>0</span>
-                                    <span>0.5</span>
-                                    <span>1</span>
-                                </p>
-                                <FloodHistoryLegends />
-                                <FloodHazardLegends setFloodLayer={setFloodLayer} />
-                            </div>
-                        </>
+                    </>
+                )
+                }
+                {
+                    (leftElement === 5
+                        && (
+                            <>
+                                <div className={styles.sliderContainer}>
+                                    <p className={styles.sliderLabelRatna}>
+                                        Flood Layer Opacity
+                                    </p>
+                                    <input
+                                        onChange={e => handleFloodChange(e)}
+                                        id="slider"
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.05"
+                                        value={String(opacityFlood)}
+                                        className={styles.slider}
+                                    />
+                                    <p className={styles.opacityLevel}>
+                                        <span>0</span>
+                                        <span>0.5</span>
+                                        <span>1</span>
+                                    </p>
+                                    <FloodHistoryLegends />
+                                    <FloodHazardLegends setFloodLayer={setFloodLayer} />
+                                </div>
+                            </>
 
-                    ))}
+                        ))}
 
-            {
-                (leftElement === 4
-                    && (
-                        <>
-                            <div className={styles.innundationSliderContainer}>
-                                <p className={styles.sliderLabelRatna}>
-                                    Innundation Layer Opacity
-                                </p>
-                                <input
-                                    onChange={e => handleInnundationChange(e)}
-                                    id="slider"
-                                    type="range"
-                                    min="0"
-                                    max="1"
-                                    step="0.05"
-                                    value={String(innundationOpacity)}
-                                    className={styles.slider}
-                                />
-                                <p className={styles.opacityLevel}>
-                                    <span>0</span>
-                                    <span>0.5</span>
-                                    <span>1</span>
-                                </p>
-                            </div>
-                        </>
+                {
+                    (leftElement === 4
+                        && (
+                            <>
+                                <div className={styles.innundationSliderContainer}>
+                                    <p className={styles.sliderLabelRatna}>
+                                        Innundation Layer Opacity
+                                    </p>
+                                    <input
+                                        onChange={e => handleInnundationChange(e)}
+                                        id="slider"
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.05"
+                                        value={String(innundationOpacity)}
+                                        className={styles.slider}
+                                    />
+                                    <p className={styles.opacityLevel}>
+                                        <span>0</span>
+                                        <span>0.5</span>
+                                        <span>1</span>
+                                    </p>
+                                </div>
+                            </>
 
-                    ))}
-        </div>
+                        ))}
+                {children}
+            </div>
+        </RatnaNagarMapContext.Provider>
+
     );
 };
 
