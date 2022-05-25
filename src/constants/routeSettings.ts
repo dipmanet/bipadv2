@@ -105,15 +105,6 @@ const routeSettings: SomeRoute[] = [
         iconName: 'eye',
     },
     {
-        name: 'vizrisk',
-        title: 'Viz Risk',
-        path: '/dummy/',
-        load: () => import('../views/VizRisk/Dummy'),
-        navbar: true,
-        disabled: false,
-        iconName: 'eye',
-    },
-    {
         name: 'fourHundredThree',
         title: '403',
         path: '/403/',

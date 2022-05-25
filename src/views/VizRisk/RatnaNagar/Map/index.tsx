@@ -492,7 +492,7 @@ const Map = (props: any) => {
                     type: 'raster',
                     source: 'floodInundation',
                     layout: {
-                        visibility: 'visible',
+                        visibility: 'none',
                     },
                     paint: {
                         'raster-opacity': innundationOpacity,
