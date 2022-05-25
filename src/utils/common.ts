@@ -211,11 +211,13 @@ export const imageUrlToDataUrl = (url, callback) => {
     xhr.send();
 };
 
-export function saveChart(elementId: string, name: string) {
+export function saveChart(elementId: string, name: string, functionData) {
     domtoimage.toBlob(document.getElementById(elementId))
         .then(blob => (
             saveAs(blob, `${name}.png`)
+
         ));
+    functionData();
 }
 
 export const arrayGroupBy = (array: any[], key: any) => array.reduce((result, currentValue) => {

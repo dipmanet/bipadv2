@@ -1,3 +1,6 @@
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import { Obj, isTruthy, isDefined, normalize } from '@togglecorp/fujs';
 import { centroid, AllGeoJSON, convex } from '@turf/turf';
@@ -2437,48 +2440,48 @@ export const capacityResource = [
         subCategory: [
             {
                 id: 81,
-                name: 'Arch',
-                type: 'Arch',
+                name: 'Arch Bridge',
+                type: 'Arch Bridge',
             },
             {
                 id: 82,
-                name: 'Beam',
-                type: 'Beam',
+                name: 'Beam Bridge',
+                type: 'Beam Bridge',
             },
             {
                 id: 83,
-                name: 'Cantilever',
-                type: 'Cantilever',
+                name: 'Cantilever Bridge',
+                type: 'Cantilever Bridge',
             },
             {
                 id: 84,
-                name: 'Wooden',
-                type: 'Wooden',
+                name: 'Wooden Bridge',
+                type: 'Wooden Bridge',
             },
             {
                 id: 85,
-                name: 'Suspension',
-                type: 'Suspension',
+                name: 'Suspension Bridge',
+                type: 'Suspension Bridge',
             },
             {
                 id: 86,
-                name: 'Cable-stayed',
-                type: 'Cable-stayed',
+                name: 'Cable-stayed Bridge',
+                type: 'Cable-stayed Bridge',
             },
             {
                 id: 87,
-                name: 'Culvert',
-                type: 'Culvert',
+                name: 'Culvert Bridge',
+                type: 'Culvert Bridge',
             },
             {
                 id: 88,
-                name: 'Bailey',
-                type: 'Bailey',
+                name: 'Bailey Bridge',
+                type: 'Bailey Bridge',
             },
             {
                 id: 89,
-                name: 'Truss',
-                type: 'Truss',
+                name: 'Truss Bridge',
+                type: 'Truss Bridge',
             },
             {
                 id: 90,
