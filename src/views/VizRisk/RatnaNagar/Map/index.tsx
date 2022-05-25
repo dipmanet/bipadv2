@@ -40,7 +40,9 @@ const mapStateToProps = (state: AppState) => ({
 let hoveredWardId: number | string | undefined;
 
 const Map = (props: any) => {
-    const { mapRef, municipalityId,
+    const { mapRef,
+        mapCss,
+        municipalityId,
         CIData, leftElement,
         ciNameList, setciNameList,
         clickedCiName, unClickedCIName,
@@ -53,7 +55,7 @@ const Map = (props: any) => {
         children } = props;
 
     const [currentOsmLayer, setCurrentOsmLayer] = useState<string>('Satellite Layer');
-    const map = useRef<mapboxgl.Map>(null);
+    const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapZoomEffect = useRef<any | undefined>(null);
     const popupRef = useRef<mapboxgl.Popup>();
@@ -67,7 +69,7 @@ const Map = (props: any) => {
     const [opacityFlood, setOpacityFlood] = useState(0.25);
     const [innundationOpacity, setInnundationOpacity] = useState(0.5);
 
-    const demographicsData = keyValueJsonData && keyValueJsonData.filter(
+    const demographicsData = keyValueJsonData && keyValueJsonData.length > 0 && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
     )[0].value;
 
@@ -83,22 +85,28 @@ const Map = (props: any) => {
 
     const populationStepColor = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
-    const totalPopulationByWard = demographicsData.map(item => (
+    const totalPopulationByWard = demographicsData && demographicsData.map(item => (
         { ward: item.name, totalpop: item.MalePop + item.FemalePop }));
 
-    const arrayValue = totalPopulationByWard.map(item => item.totalpop);
+    const arrayValue = totalPopulationByWard && totalPopulationByWard.map(item => item.totalpop);
 
     const mainArray = Array.from({ length: arrayValue.length }, (v, i) => i + 1);
-    const divider = Math.ceil(arrayValue.length / 5);
-    arrayValue.sort((a, b) => a - b);
-    const dividedSpecificData = new Array(Math.ceil(arrayValue.length / divider))
+    const divider = arrayValue && Math.ceil(arrayValue.length / 5);
+
+    if (arrayValue) {
+        arrayValue.sort((a, b) => a - b);
+    }
+    const dividedSpecificData = arrayValue && new Array(Math.ceil(arrayValue.length / divider))
         .fill()
         .map(_ => arrayValue.splice(0, divider));
     const intervals: number[] = [];
-    const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
-    nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
-        ? Math.max(...d) + 1 : Math.max(...d)));
 
+    const nonEmptyData = dividedSpecificData && dividedSpecificData.filter(r => r.length > 0);
+
+    if (nonEmptyData) {
+        nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+            ? Math.max(...d) + 1 : Math.max(...d)));
+    }
 
     const getColor = (wardId: string | number) => {
         const colorCondition1 = totalPopulationByWard.filter(
@@ -230,10 +238,14 @@ const Map = (props: any) => {
 
         multihazardMap.on('style.load', () => {
             // --------------------------------------SLIDE-3 -> CI layer----------------------------------------
-            const ciCategory: any = [...new Set(CIData.features.map(
+            const ciCategory: any = CIData && [...new Set(CIData.features.map(
                 (item: any) => item.properties.Type,
             ))];
-            setciNameList(ciCategory);
+
+            if (setciNameList) {
+                setciNameList(ciCategory);
+            }
+
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
@@ -277,107 +289,109 @@ const Map = (props: any) => {
                     );
                 }
             });
+            if (ciCategory) {
+                ciCategory.map((layer: string) => {
+                    multihazardMap.addSource(layer, {
+                        type: 'geojson',
+                        data: getGeoJSONPH(layer, CIData),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
 
-            ciCategory.map((layer: string) => {
-                multihazardMap.addSource(layer, {
-                    type: 'geojson',
-                    data: getGeoJSONPH(layer, CIData),
-                    cluster: true,
-                    clusterRadius: 50,
+
+                    multihazardMap.addLayer({
+                        id: `clusters-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        filter: ['has', 'point_count'],
+                        layout: {
+                            visibility: 'none',
+                        },
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#3da1a6',
+                                100,
+                                '#3da1a6',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                    });
+
+                    multihazardMap.addLayer({
+                        id: `clusters-count-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        // paint: { 'circle-color': '#d1e7e8' },
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                            visibility: 'none',
+                        },
+                    });
+                    multihazardMap.addLayer({
+                        id: `unclustered-point-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+
+                            'icon-image': (layer === 'education' && 'education')
+                                || (layer === 'finance' && 'finance')
+                                || (layer === 'health' && 'health')
+                                || (layer === 'governance' && 'governance')
+                                || (layer === 'cultural' && 'cultural')
+                                || (layer === 'fireengine' && 'fireengine')
+                                || (layer === 'communication' && 'communication')
+                                || (layer === 'industry' && 'industry')
+                                || (layer === 'watersupply' && 'watersupply')
+                                || (layer === 'waterway' && 'waterway')
+                                || (layer === 'evacuationcentre' && 'evacuationcentre')
+                                || (layer === 'sanitation' && 'helipad')
+                                || (layer === 'bridge' && 'bridge')
+                                || (layer === 'electricity' && 'electricity')
+                                || (layer === 'roadway' && 'roadway'),
+                            'icon-size': 0.08,
+                            'icon-anchor': 'bottom',
+                            visibility: 'none',
+
+                        },
+                    });
+
+
+                    ciCategory.map((ci: string) => multihazardMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
+                        if (e) {
+                            const { lngLat } = e;
+                            const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.Name;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                `,
+                            ).addTo(multihazardMap);
+                        }
+                    }));
+
+                    ciCategory.map((ci: string) => multihazardMap.on('mouseleave', `unclustered-point-${ci}`, () => {
+                        multihazardMap.getCanvas().style.cursor = '';
+                        popup.remove();
+                    }));
+
+                    return null;
                 });
+            }
 
-
-                multihazardMap.addLayer({
-                    id: `clusters-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['has', 'point_count'],
-                    layout: {
-                        visibility: 'none',
-                    },
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'],
-                            '#3da1a6',
-                            100,
-                            '#3da1a6',
-                        ],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'],
-                            20,
-                            100,
-                            30,
-                            750,
-                            40,
-                        ],
-                    },
-                });
-
-                multihazardMap.addLayer({
-                    id: `clusters-count-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    // paint: { 'circle-color': '#d1e7e8' },
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12,
-                        visibility: 'none',
-                    },
-                });
-                multihazardMap.addLayer({
-                    id: `unclustered-point-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-
-                        'icon-image': (layer === 'education' && 'education')
-                            || (layer === 'finance' && 'finance')
-                            || (layer === 'health' && 'health')
-                            || (layer === 'governance' && 'governance')
-                            || (layer === 'cultural' && 'cultural')
-                            || (layer === 'fireengine' && 'fireengine')
-                            || (layer === 'communication' && 'communication')
-                            || (layer === 'industry' && 'industry')
-                            || (layer === 'watersupply' && 'watersupply')
-                            || (layer === 'waterway' && 'waterway')
-                            || (layer === 'evacuationcentre' && 'evacuationcentre')
-                            || (layer === 'sanitation' && 'helipad')
-                            || (layer === 'bridge' && 'bridge')
-                            || (layer === 'electricity' && 'electricity')
-                            || (layer === 'roadway' && 'roadway'),
-                        'icon-size': 0.08,
-                        'icon-anchor': 'bottom',
-                        visibility: 'none',
-
-                    },
-                });
-
-
-                ciCategory.map((ci: string) => multihazardMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
-                    if (e) {
-                        const { lngLat } = e;
-                        const coordinates: number[] = [lngLat.lng, lngLat.lat];
-                        const ciName = e.features[0].properties.Name;
-                        popup.setLngLat(coordinates).setHTML(
-                            `<div style="padding: 5px;border-radius: 5px">
-                                    <p>${ciName}</p>
-                                </div>
-                        `,
-                        ).addTo(multihazardMap);
-                    }
-                }));
-
-                ciCategory.map((ci: string) => multihazardMap.on('mouseleave', `unclustered-point-${ci}`, () => {
-                    multihazardMap.getCanvas().style.cursor = '';
-                    popup.remove();
-                }));
-
-                return null;
-            });
 
             // -----------------------------DEMOGRAPHICS LAYER-----------------------------
             multihazardMap.addSource('vizrisk-fills', {
@@ -478,7 +492,7 @@ const Map = (props: any) => {
                     type: 'raster',
                     source: 'floodInundation',
                     layout: {
-                        visibility: 'none',
+                        visibility: 'visible',
                     },
                     paint: {
                         'raster-opacity': innundationOpacity,
@@ -649,7 +663,7 @@ const Map = (props: any) => {
 
                 return null;
             });
-        } else {
+        } else if (ciNameList) {
             ciNameList.map((layerName: string) => {
                 hideMapLayers(`clusters-${layerName}`, map);
                 hideMapLayers(`clusters-count-${layerName}`, map);
@@ -771,12 +785,17 @@ const Map = (props: any) => {
         map: map.current,
     };
 
+    const mapCSSNone = {
+        display: 'none',
+    };
+
     return (
         <RatnaNagarMapContext.Provider value={mapValue}>
             <div
                 ref={mapContainerRef}
-                className={leftElement === 9
-                    ? styles.mapCSSNone : styles.mapCSS}
+                // className={leftElement === 9
+                //     ? styles.mapCSSNone : styles.mapCSS}
+                style={leftElement === 9 ? mapCSSNone : mapCss}
             >
                 {leftElement === 2 && (
                     <DemoGraphicsLegends
