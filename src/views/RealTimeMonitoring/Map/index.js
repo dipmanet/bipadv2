@@ -46,18 +46,12 @@ RealTimeTooltip.propTypes = {
 };
 
 const GIS_URL = [
-    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-    '&version=1.1.1',
-    '&service=WMS',
-    '&request=GetMap',
-    '&layers=Bipad:watershed-area',
-    '&tiled=true',
-    '&width=256',
-    '&height=256',
-    '&srs=EPSG:3857',
-    '&bbox={bbox-epsg-3857}',
-    '&transparent=true',
-    '&format=image/png',
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
 ].join('');
 
 
@@ -79,15 +73,15 @@ class RealTimeMap extends React.PureComponent {
         };
     }
 
-    // componentDidMount() {
-    //     let result = '';
-    //     try {
-    //         result = JSON.parse(httpGet(GIS_URL));
-    //         this.setState({ gis: result });
-    //     } catch (error) {
-    //         this.setState({ gis: undefined });
-    //     }
-    // }
+    componentDidMount() {
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
+    }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
@@ -118,7 +112,6 @@ class RealTimeMap extends React.PureComponent {
     });
 
     handleRainClick = (feature) => {
-        console.log('This is feature>>>', feature);
         const { properties: { title, rainId } } = feature;
         this.setState({
             rainTitle: title,
@@ -322,7 +315,6 @@ class RealTimeMap extends React.PureComponent {
 
     handleStreamflowClick = (feature) => {
         const { properties: { comid } } = feature;
-        // console.warn('feature', feature);
         this.setState({
             streamflowId: comid,
         });
@@ -697,7 +689,6 @@ class RealTimeMap extends React.PureComponent {
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
         const riverFeatureCollection = this.getRiverFeatureCollection(realTimeRiverList);
-        console.log('river data: ', riverFeatureCollection);
         const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
             realTimeEarthquakeList,
         );
@@ -807,25 +798,8 @@ class RealTimeMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
-                {(showRain || showRiver) && (
+                {gis && (showRain || showRiver) && (
                     <MapSource
-                        sourceKey="watershed-area"
-                        sourceOptions={{
-                            type: 'raster',
-                            tiles: [getRasterTile({ layername: 'watershed-area' })],
-                            tileSize: 256,
-                        }}
-                    >
-                        <MapLayer
-                            layerKey="raster-layer"
-                            layerOptions={{
-                                type: 'raster',
-                                paint: {
-                                    'raster-opacity': 1,
-                                },
-                            }}
-                        />
-                        {/* <MapSource
                         sourceKey="gis-layer"
                         sourceOptions={{ type: 'geojson' }}
                         geoJson={gis}
@@ -841,7 +815,7 @@ class RealTimeMap extends React.PureComponent {
                                     'line-dasharray': [1, 2],
                                 },
                             }}
-                        /> */}
+                        />
                     </MapSource>
 
                 )}
@@ -953,7 +927,7 @@ class RealTimeMap extends React.PureComponent {
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
                             /> */}
-                            {/* the layer below is to render traingles for rain */}
+                            {/* This layer below is to render traingles for rain */}
                             {/* <MapLayer
                                 layerKey="real-time-rain-triangle"
                                 onClick={this.handleRainClick}
