@@ -9,6 +9,7 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import { MapChildContext } from '#re-map/context';
 import MapBounds from '#re-map/MapBounds';
+import { httpGet } from '#utils/common';
 
 import RainModal from '../../Modals/Rainwatch';
 import {
@@ -37,6 +38,16 @@ const tileUrl = [
     '&bbox={bbox-epsg-3857}',
     '&transparent=true',
     '&format=image/png',
+].join('');
+
+// added
+const GIS_URL = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
 ].join('');
 
 const RainToolTip = ({ renderer: Renderer, params }) => (
@@ -122,7 +133,19 @@ class RainMap extends React.PureComponent {
             tooltipParams: null,
             showModal: false,
             rasterLayers: [],
+            gis: undefined,
         };
+    }
+
+    // added
+    componentDidMount() {
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -324,6 +347,8 @@ class RainMap extends React.PureComponent {
             tooltipParams,
             coordinates,
             rasterLayers,
+            // added
+            gis,
         } = this.state;
 
         if (data) {
@@ -378,6 +403,28 @@ class RainMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
+                {/* added */}
+                {gis && (
+                    <MapSource
+                        sourceKey="gis-layer"
+                        sourceOptions={{ type: 'geojson' }}
+                        geoJson={gis}
+                        supportHover
+                    >
+                        <MapLayer
+                            layerKey="gis-outline"
+                            layerOptions={{
+                                type: 'line',
+                                paint: {
+                                    'line-color': 'purple',
+                                    'line-width': 1.5,
+                                    'line-dasharray': [1, 2],
+                                },
+                            }}
+                        />
+                    </MapSource>
+
+                )}
 
                 {(rasterLayers.length === 0)
                     && (
@@ -391,7 +438,7 @@ class RainMap extends React.PureComponent {
                             }}
                         >
 
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="raster-rain-layer"
                                 layerOptions={{
                                     type: 'raster',
@@ -399,7 +446,7 @@ class RainMap extends React.PureComponent {
                                         'raster-opacity': 0.9,
                                     },
                                 }}
-                            />
+                            /> */}
                         </MapSource>
                     )
                 }

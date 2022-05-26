@@ -7,6 +7,8 @@ import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import { MapChildContext } from '#re-map/context';
+import { httpGet } from '#utils/common';
+
 
 import RiverModal from '../../Modals/Riverwatch';
 import {
@@ -36,6 +38,15 @@ const tileUrl = [
     '&bbox={bbox-epsg-3857}',
     '&transparent=true',
     '&format=image/png',
+].join('');
+
+const GIS_URL = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
 ].join('');
 
 const RiverToolTip = ({ renderer: Renderer, params }) => (
@@ -111,7 +122,18 @@ class RiverMap extends React.PureComponent {
             tooltipParams: null,
             showModal: false,
             rasterLayers: [],
+            gis: undefined,
         };
+    }
+
+    componentDidMount() {
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -277,6 +299,7 @@ class RiverMap extends React.PureComponent {
             tooltipParams,
             coordinates,
             rasterLayers,
+            gis,
         } = this.state;
 
         // sorting to get latest value on map
@@ -322,6 +345,26 @@ class RiverMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
+                {gis && (
+                    <MapSource
+                        sourceKey="gis-layer"
+                        sourceOptions={{ type: 'geojson' }}
+                        geoJson={gis}
+                        supportHover
+                    >
+                        <MapLayer
+                            layerKey="gis-outline"
+                            layerOptions={{
+                                type: 'line',
+                                paint: {
+                                    'line-color': 'purple',
+                                    'line-width': 1.5,
+                                    'line-dasharray': [1, 2],
+                                },
+                            }}
+                        />
+                    </MapSource>
+                )}
                 {(rasterLayers.length === 0)
                     && (
                         <MapSource
@@ -334,7 +377,7 @@ class RiverMap extends React.PureComponent {
                             }}
                         >
 
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="raster-river-layer"
                                 layerOptions={{
                                     type: 'raster',
@@ -342,7 +385,7 @@ class RiverMap extends React.PureComponent {
                                         'raster-opacity': 0.9,
                                     },
                                 }}
-                            />
+                            /> */}
                         </MapSource>
                     )
                 }
