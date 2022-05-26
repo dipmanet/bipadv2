@@ -941,7 +941,7 @@ class RealTimeMap extends React.PureComponent {
                                         />
                                     )
                             }
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="real-time-rain-circle"
                                 onClick={this.handleRainClick}
                                 layerOptions={{
@@ -952,9 +952,9 @@ class RealTimeMap extends React.PureComponent {
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
-                            />
+                            /> */}
                             {/* the layer below is to render traingles for rain */}
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="real-time-rain-triangle"
                                 onClick={this.handleRainClick}
                                 layerOptions={{
@@ -962,7 +962,7 @@ class RealTimeMap extends React.PureComponent {
                                     layout: mapStyles.rainSymbol.layout,
                                     paint: mapStyles.rainSymbol.paint,
                                 }}
-                            />
+                            /> */}
 
                         </>
                     )}
