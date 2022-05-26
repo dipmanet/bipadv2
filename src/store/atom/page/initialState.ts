@@ -284,21 +284,6 @@ const state: PageState = {
         },
     },
 
-    dataArchivePage: {
-        dataArchiveRainList: [],
-        dataArchiveRiverList: [],
-        dataArchiveEarthquakeList: [],
-        // dataArchiveFireList: [],
-        dataArchivePollutionList: [],
-        filters: {
-            faramValues: {
-                realtimeSources: [3, 2],
-            },
-            faramErrors: {},
-            pristine: true,
-        },
-    },
-
     lossAndDamagePage: {
         lossAndDamageList: [],
         filters: {
