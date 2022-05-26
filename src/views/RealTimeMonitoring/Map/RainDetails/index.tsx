@@ -78,10 +78,9 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
         url: '/rain/',
         method: methods.GET,
-        query: ({ props: { title } }) => ({
-            historical: 'true',
+        query: ({ props: { id } }) => ({
             format: 'json',
-            title,
+            id,
         }),
         onMount: true,
         onPropsChanged: ['title'],
