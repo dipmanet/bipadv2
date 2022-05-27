@@ -490,6 +490,15 @@ class RainMap extends React.PureComponent {
                                 paint: mapStyles.rainPoint.circle,
                             }}
                         />
+                        {/* added */}
+                        {/* <MapLayer
+                            layerKey="real-time-rain-text"
+                            layerOptions={{
+                                type: 'symbol',
+                                layout: mapStyles.rain24Text.layout,
+                                paint: mapStyles.rain24Text.paint,
+                            }}
+                        /> */}
                     </React.Fragment>
                 </MapSource>
                 {showModal

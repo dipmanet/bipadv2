@@ -91,6 +91,7 @@ const riverStationToGeojson = (riverStation) => {
                 },
                 properties: {
                     ...river,
+                    waterLevel: river.waterLevel ? Number(river.waterLevel.toFixed(1)) : 0,
                     station: river.id,
                     title: river.title,
                     description: river.description,
@@ -260,8 +261,10 @@ class RiverMap extends React.PureComponent {
 
                 <div className={styles.description}>
                     <div className={styles.key}>MEASURED ON:</div>
-                    <div className={styles.value}>{`${getDate(measuredOn)} ${getTime(measuredOn)}`}</div>
+                    <div className={styles.value}>{measuredOn ? `${getDate(measuredOn)} ${getTime(measuredOn)}` : 'N/A'}</div>
                 </div>
+
+
                 <div className={styles.description}>
                     <div className={styles.key}>WATER LEVEL:</div>
                     <div className={styles.value}>{waterLevel ? `${waterLevel.toFixed(2)} m` : 'N/A'}</div>
@@ -310,7 +313,6 @@ class RiverMap extends React.PureComponent {
         const riverFeatureCollection = this.getRiverFeatureCollection(
             data,
         );
-
         const riverStationFeatureCollection = this.getRiverStationFeatureCollection(
             this.props.riverStation,
         );
@@ -428,6 +430,14 @@ class RiverMap extends React.PureComponent {
                                 layout: mapStyles.riverPoint.layout,
                                 // paint: mapStyles.riverPoint.paint,
                                 paint: mapStyles.riverPoint.text,
+                            }}
+                        />
+                        <MapLayer
+                            layerKey="real-time-river-text"
+                            layerOptions={{
+                                type: 'symbol',
+                                layout: mapStyles.riverText.layout,
+                                paint: mapStyles.riverText.paint,
                             }}
                         />
                     </React.Fragment>
