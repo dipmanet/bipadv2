@@ -203,3 +203,39 @@ export const hideMapLayers = (layerName: string,
         map.current.setLayoutProperty(layerName, 'visibility', 'none');
     }
 };
+
+
+export const layoutSwitch = (layer) => {
+    switch (layer) {
+        case 'education':
+            return 'education';
+        case 'finance':
+            return 'finance';
+        case 'health':
+            return 'health';
+        case 'cultural':
+            return 'cultural';
+        case 'fireengine':
+            return 'fireengine';
+        case 'communication':
+            return 'communication';
+        case 'industry':
+            return 'industry';
+        case 'watersupply':
+            return 'watersupply';
+        case 'waterway':
+            return 'waterway';
+        case 'evacuationcentre':
+            return 'evacuationcentre';
+        case 'sanitation':
+            return 'sanitation';
+        case 'bridge':
+            return 'bridge';
+        case 'electricity':
+            return 'electricity';
+        case 'roadway':
+            return 'roadway';
+        default:
+            return null;
+    }
+};

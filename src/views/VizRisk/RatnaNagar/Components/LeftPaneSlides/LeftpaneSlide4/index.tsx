@@ -32,7 +32,7 @@ const LeftpaneSlide5 = () => {
                     </p>
                     <p>
                         {' '}
-                        <span style={{ fontSize: 20, fontWeight: 'bold' }}> 27,719  km</span>
+                        <span style={{ fontSize: 20, fontWeight: 'bold' }}> 27,719 m</span>
                         {' '}
                         of Roads
                     </p>
