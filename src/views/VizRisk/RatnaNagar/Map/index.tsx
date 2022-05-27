@@ -19,6 +19,7 @@ import {
     getHouseHoldDataColor,
     getHouseHoldDataStatus,
     hideMapLayers,
+    layoutSwitch,
     showMapLayers,
 } from '../utils';
 import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
@@ -345,22 +346,7 @@ const Map = (props: any) => {
                         source: layer,
                         filter: ['!', ['has', 'point_count']],
                         layout: {
-
-                            'icon-image': (layer === 'education' && 'education')
-                                || (layer === 'finance' && 'finance')
-                                || (layer === 'health' && 'health')
-                                || (layer === 'governance' && 'governance')
-                                || (layer === 'cultural' && 'cultural')
-                                || (layer === 'fireengine' && 'fireengine')
-                                || (layer === 'communication' && 'communication')
-                                || (layer === 'industry' && 'industry')
-                                || (layer === 'watersupply' && 'watersupply')
-                                || (layer === 'waterway' && 'waterway')
-                                || (layer === 'evacuationcentre' && 'evacuationcentre')
-                                || (layer === 'sanitation' && 'helipad')
-                                || (layer === 'bridge' && 'bridge')
-                                || (layer === 'electricity' && 'electricity')
-                                || (layer === 'roadway' && 'roadway'),
+                            'icon-image': layoutSwitch(layer),
                             'icon-size': 0.08,
                             'icon-anchor': 'bottom',
                             visibility: 'none',

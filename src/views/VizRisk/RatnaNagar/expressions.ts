@@ -1,4 +1,4 @@
-const rangeData = [
+export const rangeData = [
     {
         name: 'very_high',
         status: 'Very High(6.5 - 10)',
@@ -15,7 +15,7 @@ const rangeData = [
     {
         name: 'medium',
         status: 'Medium(3.5 - 4.9)',
-        color: 'yellow',
+        color: '#2af5ac',
         range: [3.5, 4.9],
 
     },
@@ -35,4 +35,15 @@ const rangeData = [
     },
 ];
 
-export default rangeData;
+export const SlideTitle = [
+    'Ratnanagar Municipality',
+    'Landcover',
+    'Demography',
+    'Critical Infrastructures',
+    'Inundation Map',
+    'Flood Hazard in Ratnanagar',
+    'Visualizing Flood Exposure for Ratnanagar',
+    'Sensitivity of Households',
+    'Adaptive Capacity',
+    'Risk Assessment',
+];

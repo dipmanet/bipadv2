@@ -5,6 +5,7 @@ import BackButton from '../../../Common/Icons/back.svg';
 import ForwardButton from '../../../Common/Icons/forward.svg';
 import { PostionInitialValues } from '../../interfaces';
 import { MainPageDataContext } from '../../context';
+import { SlideTitle } from '#views/VizRisk/RatnaNagar/expressions';
 
 interface Props {
     postionsPerPage: PostionInitialValues;
@@ -85,6 +86,7 @@ const Navbuttons = (props: Props) => {
                                 ? styles.buttonFill : styles.button}
                             onClick={() => onButtonClick(indexNumber)}
                             disabled={leftElement === indexNumber || !navIdleStatus}
+                            title={SlideTitle[indexNumber]}
                             style={{
                                 cursor: !navIdleStatus
                                     ? 'not-allowed' : 'pointer',

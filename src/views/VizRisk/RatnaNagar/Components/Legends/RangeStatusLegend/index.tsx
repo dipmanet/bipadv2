@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import Return from '#resources/icons/Reset.svg';
 
-import rangeData from '#views/VizRisk/RatnaNagar/expressions';
+import { rangeData } from '#views/VizRisk/RatnaNagar/expressions';
 import styles from './styles.scss';
 import { getCurrentType } from '#views/VizRisk/RatnaNagar/utils';
 
