@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -77,8 +78,8 @@ interface State {
     activeView?: ActiveView;
     hoveredHazardId?: number;
 }
-interface Params {}
-interface OwnProps {}
+interface Params { }
+interface OwnProps { }
 interface PropsFromDispatch {
     setRealTimeRainList: typeof setRealTimeRainListAction;
     setRealTimeRiverList: typeof setRealTimeRiverListAction;
@@ -270,7 +271,10 @@ const itemSelector = (d: { label: string }) => d.label;
 // const iconSelector = (d: { icon: string }) => d.icon;
 const radiusSelector = (d: { radius: number }) => d.radius;
 const legendColorSelector = (d: { color: string }) => d.color;
-const legendLabelSelector = (d: { label: string }) => d.label;
+const legendLabelSelector = (d: {
+    label: string;
+    labelNe: string;
+}, lang) => (lang === 'en' ? d.label : d.labelNe);
 
 const classNameSelector = (d: { style: string }) => d.style;
 
@@ -283,7 +287,7 @@ interface Source {
     title: ActiveView;
 }
 
-class RealTimeMonitoring extends React.PureComponent <Props, State> {
+class RealTimeMonitoring extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -401,24 +405,17 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </Translation>
                             </h4>
                         </header>
-                        <Translation>
-                            {
-                                t => (
-                                    <Legend
-                                        className={styles.legend}
-                                        data={rainLegendItems}
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                    // iconSelector={iconSelector}
-                                        labelSelector={d => t(legendLabelSelector(d))}
-                                        symbolClassNameSelector={classNameSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                )
-                            }
-                        </Translation>
-
+                        <Legend
+                            className={styles.legend}
+                            data={rainLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            // iconSelector={iconSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
+                            symbolClassNameSelector={classNameSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -459,31 +456,24 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </Translation>
                             </h4>
                         </header>
-                        <Translation>
-                            {
-                                t => (
-                                    <Legend
-                                        className={styles.legend}
-                                    // data={riverLegendItems}
-                                        // data={newRiverLegendItems}
-                                        data={
-                                            realTimeRiverList.length > 0
-                                                ? autoRiverLegends
-                                                : noLegend
-                                        }
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                    // iconSelector={iconSelector}
-                                        // labelSelector={legendLabelSelector}
-                                        labelSelector={d => t(legendLabelSelector(d))}
-                                        symbolClassNameSelector={classNameSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                )
+                        <Legend
+                            className={styles.legend}
+                            // data={riverLegendItems}
+                            // data={newRiverLegendItems}
+                            data={
+                                realTimeRiverList.length > 0
+                                    ? autoRiverLegends
+                                    : noLegend
                             }
-                        </Translation>
-
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            // iconSelector={iconSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
+                            symbolClassNameSelector={classNameSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -508,7 +498,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showEarthquake && (
+                {showEarthquake && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <ScalableVectorGraphics
@@ -519,33 +509,26 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             <h4 className={styles.heading}>
                                 <Translation>
                                     {
-                                        t => <span>{t(' Earthquake (Richter Scale (ML))')}</span>
+                                        t => <span>{t('Earthquake (Richter Scale (ML))')}</span>
                                     }
                                 </Translation>
 
                             </h4>
                         </header>
-                        <Translation>
-                            {
-                                t => (
-                                    <Legend
-                                        className={styles.legend}
-                                        data={earthquakeLegendItems}
-                                        itemClassName={styles.sizeLegendItem}
-                                        keySelector={itemSelector}
-                                        radiusSelector={radiusSelector}
-                                    // iconSelector={iconSelector}
-                                        // labelSelector={legendLabelSelector}
-                                        labelSelector={d => t(legendLabelSelector(d))}
+                        <Legend
+                            className={styles.legend}
+                            data={earthquakeLegendItems}
+                            itemClassName={styles.sizeLegendItem}
+                            keySelector={itemSelector}
+                            radiusSelector={radiusSelector}
+                            // iconSelector={iconSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
 
-                                        symbolClassNameSelector={classNameSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                )
-                            }
-                        </Translation>
-
+                            symbolClassNameSelector={classNameSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -564,7 +547,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             >
                                 <Translation>
                                     {
-                                        t => <span>{t(' Department of Mines and Geology')}</span>
+                                        t => <span>{t('Department of Mines and Geology')}</span>
                                     }
                                 </Translation>
 
@@ -572,7 +555,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showPollution && (
+                {showPollution && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <ScalableVectorGraphics
@@ -594,28 +577,22 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </Translation>
                             </h4>
                         </header>
-                        <Translation>
-                            {
-                                t => (
-                                    <Legend
-                                        className={styles.legend}
-                                // data={pollutionLegendItems}
-                                        data={
-                                            realTimePollutionList.length > 0
-                                                ? autoPollutionLegends
-                                                : noLegend
-                                        }
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                // labelSelector={legendLabelSelector}
-                                        labelSelector={d => t(legendLabelSelector(d))}
-                                        symbolClassNameSelector={classNameSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                )
+                        <Legend
+                            className={styles.legend}
+                            // data={pollutionLegendItems}
+                            data={
+                                realTimePollutionList.length > 0
+                                    ? autoPollutionLegends
+                                    : noLegend
                             }
-                        </Translation>
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
+                            symbolClassNameSelector={classNameSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -642,7 +619,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showFire && (
+                {showFire && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <ScalableVectorGraphics
@@ -658,24 +635,17 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
                             </h4>
                         </header>
-                        <Translation>
-                            {
-                                t => (
-                                    <Legend
-                                        className={styles.legend}
-                                        data={forestFireLegendItems}
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                    // labelSelector={legendLabelSelector}
-                                        labelSelector={d => t(legendLabelSelector(d))}
-                                        symbolClassNameSelector={classNameSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                )
-                            }
-                        </Translation>
-
+                        <Legend
+                            className={styles.legend}
+                            data={forestFireLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
+                            symbolClassNameSelector={classNameSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -700,7 +670,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
-                { showStreamflow && (
+                {showStreamflow && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
                             <svg className={styles.legendIcon}>
@@ -848,163 +818,162 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     hideHazardFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
-                        <>
-                            <header className={styles.header}>
-                                <div className={styles.tabs}>
-                                    {showRain && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'rainwatch' && styles.active)}
-                                            onClick={this.handleRainWatchButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeRainList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.alertIcon)}
-                                                />
-                                                <div className={styles.text}>
-                                                    <Translation>
-                                                        {
-                                                            t => <span>{t('Rain watch')}</span>
-                                                        }
-                                                    </Translation>
 
-                                                </div>
+                        <Translation>
+                            {
+                                t => (
+                                    <>
+                                        <header className={styles.header}>
+                                            <div className={styles.tabs}>
+                                                {showRain && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'rainwatch' && styles.active)}
+                                                        onClick={this.handleRainWatchButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeRainList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.alertIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                <span>{t('Rain watch')}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showRiver && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'riverwatch' && styles.active)}
+                                                        onClick={this.handleRiverWatchButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeRiverList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                <span>{t('River watch')}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showEarthquake && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'earthquake' && styles.active)}
+                                                        onClick={this.handleEarthquakeButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeEarthquakeList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                {t('Earthquake')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showPollution && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'pollution' && styles.active)}
+                                                        onClick={this.handlePollutionButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimePollutionList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                {t('Pollution')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showFire && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'fire' && styles.active)}
+                                                        onClick={this.handleFireButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeFireList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                {t('Fire')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
-                                    )}
-                                    {showRiver && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'riverwatch' && styles.active)}
-                                            onClick={this.handleRiverWatchButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeRiverList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                        </header>
+                                        <div className={styles.content}>
+                                            {validActiveView === 'riverwatch' && (
+                                                <MiniRiverWatch
+                                                    className={styles.riverwatchList}
+                                                    realTimeRiver={realTimeRiverList}
+                                                    onHazardHover={this.onHazardHover}
                                                 />
-                                                <div className={styles.text}>
-                                                    <Translation>
-                                                        {
-                                                            t => <span>{t('River watch')}</span>
-                                                        }
-                                                    </Translation>
+                                            )}
+                                            {validActiveView === 'rainwatch' && (
+                                                <MiniRainWatch
+                                                    className={styles.rainwatchList}
+                                                    realTimeRain={realTimeRainList}
+                                                    onHazardHover={this.onHazardHover}
+                                                />
+                                            )}
+                                            {validActiveView === 'earthquake' && (
+                                                <MiniEarthquake
+                                                    className={styles.rainwatchList}
+                                                    realTimeEarthquake={realTimeEarthquakeList}
+                                                    onHazardHover={this.onHazardHover}
+                                                />
+                                            )}
+                                            {validActiveView === 'pollution' && (
+                                                <MiniPollution
+                                                    className={styles.rainwatchList}
+                                                    realTimePollution={realTimePollutionList}
+                                                    onHazardHover={this.onHazardHover}
+                                                />
+                                            )}
+                                            {validActiveView === 'fire' && (
+                                                <MiniFire
+                                                    className={styles.rainwatchList}
+                                                    realTimeFire={realTimeFireList}
+                                                    onHazardHover={this.onHazardHover}
+                                                />
+                                            )}
+                                            {!validActiveView && (
+                                                <div
+                                                    className={styles.message}
+                                                >
+                                                    <Message>
+                                                        Select a category to see details
+                                                    </Message>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showEarthquake && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'earthquake' && styles.active)}
-                                            onClick={this.handleEarthquakeButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeEarthquakeList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
-                                                />
-                                                <div className={styles.text}>
-                                                    Earthquake
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showPollution && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'pollution' && styles.active)}
-                                            onClick={this.handlePollutionButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimePollutionList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
-                                                />
-                                                <div className={styles.text}>
-                                                    Pollution
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showFire && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'fire' && styles.active)}
-                                            onClick={this.handleFireButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeFireList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
-                                                />
-                                                <div className={styles.text}>
-                                                    Fire
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </header>
-                            <div className={styles.content}>
-                                {validActiveView === 'riverwatch' && (
-                                    <MiniRiverWatch
-                                        className={styles.riverwatchList}
-                                        realTimeRiver={realTimeRiverList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'rainwatch' && (
-                                    <MiniRainWatch
-                                        className={styles.rainwatchList}
-                                        realTimeRain={realTimeRainList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'earthquake' && (
-                                    <MiniEarthquake
-                                        className={styles.rainwatchList}
-                                        realTimeEarthquake={realTimeEarthquakeList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'pollution' && (
-                                    <MiniPollution
-                                        className={styles.rainwatchList}
-                                        realTimePollution={realTimePollutionList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'fire' && (
-                                    <MiniFire
-                                        className={styles.rainwatchList}
-                                        realTimeFire={realTimeFireList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {!validActiveView && (
-                                    <div
-                                        className={styles.message}
-                                    >
-                                        <Message>
-                                            Select a category to see details
-                                        </Message>
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                                )
+                            }
+                        </Translation>
+
                     )}
                     rightContentContainerClassName={styles.right}
                     rightContent={(

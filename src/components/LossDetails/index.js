@@ -44,7 +44,7 @@ class LossDetails extends React.PureComponent {
         return stat;
     });
 
-    null_check=(m) => {
+    null_check = (m) => {
         const { nullCondition, data = emptyList } = this.props;
         if (nullCondition) {
             const summaryData = this.calculateSummary(data);
@@ -79,6 +79,7 @@ class LossDetails extends React.PureComponent {
                             // value={summaryData[metric.key]}
                             // label={metric.label}
                             value={this.null_check(metric.key)}
+                            language={language}
                         />
 
 

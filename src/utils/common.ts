@@ -3,6 +3,8 @@ import {
     isNotDefined,
     isObject,
     isList,
+    isTruthy,
+    addSeparator,
 } from '@togglecorp/fujs';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
 
@@ -297,7 +299,6 @@ export const checkSameRegionPermission = (user, region) => {
 
 // convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
-    console.log(date, 'fnc');
     if (!date) {
         return '';
     }
@@ -312,4 +313,50 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
         }
     }
     return dateToReturn;
+};
+
+export const DataFormater = (value, lang) => {
+    const decimalRemoveToComma = (num) => {
+        const separator = ',';
+        const decimalSeparator = '.';
+        const [before, after] = String(num).split(decimalSeparator);
+
+        let x1 = before;
+        const rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, `$1${separator}$2`);
+        }
+
+        const x2 = after !== undefined ? `${separator}${after}` : '';
+
+        const result = x1 + x2;
+
+        return result;
+    };
+
+    if (lang === 'np' && value) {
+        if (value > 10000000) {
+            return { number: (decimalRemoveToComma((value / 10000000).toFixed(0))), normalizeSuffix: 'करोड' };
+        } if (value > 100000) {
+            return { number: (decimalRemoveToComma((value / 100000).toFixed(0))), normalizeSuffix: 'लाख' };
+        } if (value > 10000) {
+            return { number: (decimalRemoveToComma((value / 1000))), normalizeSuffix: 'हजार' };
+        }
+        if (value > 1000) {
+            return { number: value.toLocaleString(), normalizeSuffix: 'हजार' };
+        }
+        return { number: value, normalizeSuffix: '' };
+    }
+
+    if (value > 1000000000) {
+        return { number: (decimalRemoveToComma((value / 1000000000).toFixed(0))), normalizeSuffix: 'B' };
+    } if (value > 1000000) {
+        return { number: (decimalRemoveToComma((value / 1000000).toFixed(0))), normalizeSuffix: 'M' };
+    } if (value > 10000) {
+        return { number: (decimalRemoveToComma((value / 1000))), normalizeSuffix: 'K' };
+    }
+    if (value > 1000) {
+        return { number: value.toLocaleString(), normalizeSuffix: 'K' };
+    }
+    return { number: value, normalizeSuffix: '' };
 };

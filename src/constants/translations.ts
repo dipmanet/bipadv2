@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        Streamflow: 'Streamflow',
+        Pollution: 'Pollution',
         'No legends to display': 'No legends to display',
         'Below Warning Level': 'Below Warning Level',
         'Warning Level': 'Warning Level',
@@ -758,7 +760,9 @@ export const enTranslation = {
 };
 
 export const npTranslation = {
+
     translation: {
+        Streamflow: 'Streamflow',
         'No legends to display': 'प्रदर्शन गर्न कुनै पौराणिक कथाहरू छैनन्',
         'Below Warning Level': 'चेतावनी तहभन्दा तल',
         'Warning Level': 'चेतावनी स्तर',
@@ -1440,6 +1444,7 @@ export const npTranslation = {
         'Glacial lake outburst': 'हिमताल विस्फोटन',
         'Microorganism attack': 'किट वा सूक्ष्म जिवाणु आतङ्क',
         'Environmental pollution': 'वातावरणीय प्रदूषण',
+        Pollution: 'प्रदूषण',
         'Heat wave': 'तातो हावाको लहर',
         Storm: 'आँधी',
         'Mine disaster': 'खानी दुर्घटना',
