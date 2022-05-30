@@ -1,13 +1,20 @@
 import React, { useContext } from 'react';
+import { connect } from 'react-redux';
 import * as PageType from '#store/atom/page/types';
 import { LegendItem } from '#views/DataArchive/types';
+import { riverStationsSelector } from '#selectors';
 
-import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
+
+// import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import RiverIcon from '#resources/icons/Wave.svg';
 import Legend from '#rscz/Legend';
 
 import styles from './styles.scss';
+
+interface Props {
+    riverStation: [];
+}
 
 const riverLegendItems = [
     { order: 1, color: '#7CB342', label: 'Below Warning Level and Steady', style: styles.box },
@@ -25,13 +32,19 @@ const noLegend = [
     { color: 'transparent', label: 'No legends to display', style: styles.noSymbol },
 ];
 
+const mapStateToProps = state => ({
+    riverStation: riverStationsSelector(state),
+});
+
+
 export const getAutoRealTimeRiverLegends = (
     dataList: PageType.RealTimeRiver[],
     legendItems: LegendItem[],
 ) => {
-    const uniqueLegendItems = [...new Set(dataList.map(
+    const extractedLegendItems = dataList.map(
         item => `${item.status} and ${item.steady || 'steady'}`.toUpperCase(),
-    ))];
+    );
+    const uniqueLegendItems = [...new Set(extractedLegendItems)];
     const autoLegends: LegendItem[] = [];
     uniqueLegendItems.forEach((item) => {
         legendItems.forEach((legendItem) => {
@@ -49,13 +62,16 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 
-const RiverLegend = () => {
-    const {
-        data,
-    }: DataArchiveContextProps = useContext(DataArchiveContext);
+// data replaced with props.riverStation
+
+const RiverLegend = (props: Props) => {
+    // const {
+    //     data,
+    // }: DataArchiveContextProps = useContext(DataArchiveContext);
     const autoRiverLegends = getAutoRealTimeRiverLegends(
-        data || [], riverLegendItems,
+        props.riverStation || [], riverLegendItems,
     );
+
     return (
         <div className={styles.legendContainer}>
             <header className={styles.header}>
@@ -71,7 +87,8 @@ const RiverLegend = () => {
             <Legend
                 className={styles.legend}
                 data={
-                    (data || []).length
+
+                    (props.riverStation || []).length
                         ? autoRiverLegends
                         : noLegend
                 }
@@ -99,4 +116,5 @@ const RiverLegend = () => {
     );
 };
 
-export default RiverLegend;
+export default connect(mapStateToProps, [])(RiverLegend);
+// export default RiverLegend;
