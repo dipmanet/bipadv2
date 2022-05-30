@@ -1,7 +1,7 @@
 import * as PageType from '#store/atom/page/types';
-import { DatePeriod } from './types';
 import { DARainFiltersElement, DARiverFiltersElement } from '#types';
 import { pastDaysToDateRange } from '#utils/transformations';
+import { DatePeriod } from './types';
 
 type GroupKey = 'pTitle' | 'dTitle' | 'mTitle';
 type Filters = DARainFiltersElement | DARiverFiltersElement;

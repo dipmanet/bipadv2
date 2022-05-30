@@ -22,6 +22,10 @@ const state: PageState = {
     },
 
     filters: {
+        rainBasin: '',
+        rainStation: '',
+        riverBasin: '',
+        riverStation: '',
         region: {},
         hazard: [],
         dataDateRange: {
@@ -267,21 +271,6 @@ const state: PageState = {
             pristine: true,
         },
         duration: 24,
-    },
-
-    dataArchivePage: {
-        dataArchiveRainList: [],
-        dataArchiveRiverList: [],
-        dataArchiveEarthquakeList: [],
-        // dataArchiveFireList: [],
-        dataArchivePollutionList: [],
-        filters: {
-            faramValues: {
-                realtimeSources: [3, 2],
-            },
-            faramErrors: {},
-            pristine: true,
-        },
     },
 
     dataArchivePage: {

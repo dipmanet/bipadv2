@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -27,13 +29,13 @@ import {
 
 import { httpGet } from '#utils/common';
 
+import { realTimeDurationSelector, riverStationsSelector, riverFiltersSelector } from '#selectors';
 import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
-import { realTimeDurationSelector } from '#selectors';
 
-const noop = () => {};
+const noop = () => { };
 
 const RealTimeTooltip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -53,9 +55,10 @@ const GIS_URL = [
     '&outputFormat=application/json',
 ].join('');
 
-
 const mapStateToProps = state => ({
     duration: realTimeDurationSelector(state),
+    riverFilters: riverFiltersSelector(state),
+    riverStations: riverStationsSelector(state),
 });
 
 class RealTimeMap extends React.PureComponent {
@@ -351,8 +354,8 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                1,
+                    3,
+                    1,
                 ],
                 'circle-opacity': 0.9,
             };
@@ -381,8 +384,8 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                1,
+                    3,
+                    1,
                 ],
                 'circle-opacity': 0.9,
             };
@@ -411,8 +414,8 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                1,
+                    3,
+                    1,
                 ],
                 'circle-opacity': 0.9,
             };
@@ -441,8 +444,8 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                1,
+                    3,
+                    1,
                 ],
                 'circle-opacity': 0.9,
             };
@@ -471,8 +474,8 @@ class RealTimeMap extends React.PureComponent {
                 ['boolean', ['feature-state', 'hover'], false],
                 ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
             ],
-            3,
-            1,
+                3,
+                1,
             ],
             'circle-opacity': 0.9,
         };
@@ -503,15 +506,15 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                0,
+                    3,
+                    0,
                 ],
                 'circle-opacity': ['case', ['all',
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                1,
-                0.3,
+                    1,
+                    0.3,
                 ],
             };
         }
@@ -539,15 +542,15 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                0,
+                    3,
+                    0,
                 ],
                 'circle-opacity': ['case', ['all',
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                1,
-                0.3,
+                    1,
+                    0.3,
                 ],
             };
         }
@@ -575,15 +578,15 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                0,
+                    3,
+                    0,
                 ],
                 'circle-opacity': ['case', ['all',
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                1,
-                0.3,
+                    1,
+                    0.3,
                 ],
             };
         }
@@ -611,15 +614,15 @@ class RealTimeMap extends React.PureComponent {
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                3,
-                0,
+                    3,
+                    0,
                 ],
                 'circle-opacity': ['case', ['all',
                     ['boolean', ['feature-state', 'hover'], false],
                     ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
                 ],
-                1,
-                0.3,
+                    1,
+                    0.3,
                 ],
             };
         }
@@ -647,15 +650,15 @@ class RealTimeMap extends React.PureComponent {
                 ['boolean', ['feature-state', 'hover'], false],
                 ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
             ],
-            3,
-            0,
+                3,
+                0,
             ],
             'circle-opacity': ['case', ['all',
                 ['boolean', ['feature-state', 'hover'], false],
                 ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
             ],
-            1,
-            0.3,
+                1,
+                0.3,
             ],
         };
     }
@@ -680,10 +683,27 @@ class RealTimeMap extends React.PureComponent {
             hazardHoveredAttribute,
             isHovered,
             duration,
+            riverFilters,
         } = this.props;
 
-        const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
-        const riverFeatureCollection = this.getRiverFeatureCollection(realTimeRiverList);
+        /**
+         * handling riverdata from filters
+         */
+        const filteredRealTimeRiverList = riverFilters.basin && riverFilters.basin.title
+            && riverFilters.active && riverFilters.active === 'river'
+            ? realTimeRiverList.filter(river => river.basin
+                === riverFilters.basin.title) : realTimeRiverList;
+
+        /**
+         * handling raindata from filters
+         */
+        const filteredRealTimeRainList = riverFilters.basin && riverFilters.basin.title
+            && riverFilters.active && riverFilters.active === 'rain'
+            ? realTimeRainList.filter(rain => rain.basin
+                === riverFilters.basin.title) : realTimeRainList;
+
+        const rainFeatureCollection = this.getRainFeatureCollection(filteredRealTimeRainList);
+        const riverFeatureCollection = this.getRiverFeatureCollection(filteredRealTimeRiverList);
         const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
             realTimeEarthquakeList,
         );
@@ -695,6 +715,7 @@ class RealTimeMap extends React.PureComponent {
         );
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+
 
         const {
             tooltipRenderer,
@@ -711,12 +732,17 @@ class RealTimeMap extends React.PureComponent {
             closeButton: false,
             offset: 8,
         };
+        const region = {
+            adminLevel: riverFilters.municipality ? 3 : null,
+            geoarea: riverFilters.municipality ? riverFilters.municipality : undefined,
+        };
 
         return (
             <React.Fragment>
                 <CommonMap
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
+                    region={riverFilters.municipality ? region : undefined}
                 />
                 {/*
                 <SVGMapIcon
@@ -745,7 +771,7 @@ class RealTimeMap extends React.PureComponent {
                     name="forest-fire"
                 />
                 */}
-                { showStreamflow && (
+                {showStreamflow && (
                     <MapSource
                         sourceKey="streamflow-source"
                         sourceOptions={{
@@ -779,7 +805,7 @@ class RealTimeMap extends React.PureComponent {
                         />
                     </MapSource>
                 )}
-                { coordinates && (
+                {coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
                         tooltipOptions={tooltipOptions}
@@ -817,7 +843,7 @@ class RealTimeMap extends React.PureComponent {
                     supportHover
                     generateId
                 >
-                    { showRain && (
+                    {showRain && (
                         <>
                             <MapLayer
                                 layerKey="real-time-rain-symbol"
@@ -869,42 +895,42 @@ class RealTimeMap extends React.PureComponent {
                             }
                             {
                                 duration === 6
-                                    && (
-                                        <MapLayer
-                                            layerKey="real-time-rain-six-text"
-                                            layerOptions={{
-                                                type: 'symbol',
-                                                layout: mapStyles.rain6Text.layout,
-                                                paint: mapStyles.rain6Text.paint,
-                                            }}
-                                        />
-                                    )
+                                && (
+                                    <MapLayer
+                                        layerKey="real-time-rain-six-text"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            layout: mapStyles.rain6Text.layout,
+                                            paint: mapStyles.rain6Text.paint,
+                                        }}
+                                    />
+                                )
                             }
                             {
                                 duration === 3
-                                    && (
-                                        <MapLayer
-                                            layerKey="real-time-rain-three-text"
-                                            layerOptions={{
-                                                type: 'symbol',
-                                                layout: mapStyles.rain3Text.layout,
-                                                paint: mapStyles.rain3Text.paint,
-                                            }}
-                                        />
-                                    )
+                                && (
+                                    <MapLayer
+                                        layerKey="real-time-rain-three-text"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            layout: mapStyles.rain3Text.layout,
+                                            paint: mapStyles.rain3Text.paint,
+                                        }}
+                                    />
+                                )
                             }
                             {
                                 duration === 1
-                                    && (
-                                        <MapLayer
-                                            layerKey="real-time-rain-one-text"
-                                            layerOptions={{
-                                                type: 'symbol',
-                                                layout: mapStyles.rain1Text.layout,
-                                                paint: mapStyles.rain1Text.paint,
-                                            }}
-                                        />
-                                    )
+                                && (
+                                    <MapLayer
+                                        layerKey="real-time-rain-one-text"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            layout: mapStyles.rain1Text.layout,
+                                            paint: mapStyles.rain1Text.paint,
+                                        }}
+                                    />
+                                )
                             }
                             {/* <MapLayer
                                 layerKey="real-time-rain-circle"
@@ -931,13 +957,13 @@ class RealTimeMap extends React.PureComponent {
 
                         </>
                     )}
-                    { hazardHoveredAttribute
-                    && (
-                        <MapState
-                            attributes={hazardHoveredAttribute}
-                            attributeKey="hover"
-                        />
-                    )
+                    {hazardHoveredAttribute
+                        && (
+                            <MapState
+                                attributes={hazardHoveredAttribute}
+                                attributeKey="hover"
+                            />
+                        )
                     }
 
                 </MapSource>
@@ -948,7 +974,7 @@ class RealTimeMap extends React.PureComponent {
                     supportHover
                     generateId
                 >
-                    { showRiver && (
+                    {showRiver && (
                         <>
                             <MapLayer
                                 layerKey="real-time-river-custom"
@@ -985,12 +1011,12 @@ class RealTimeMap extends React.PureComponent {
                         </>
                     )}
                     {hazardHoveredAttribute
-                    && (
-                        <MapState
-                            attributes={hazardHoveredAttribute}
-                            attributeKey="hover"
-                        />
-                    )
+                        && (
+                            <MapState
+                                attributes={hazardHoveredAttribute}
+                                attributeKey="hover"
+                            />
+                        )
                     }
                 </MapSource>
                 <MapSource
@@ -1000,7 +1026,7 @@ class RealTimeMap extends React.PureComponent {
                     supportHover
                     generateId
                 >
-                    { showEarthquake && (
+                    {showEarthquake && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-earthquake-points-fill"
@@ -1042,12 +1068,12 @@ class RealTimeMap extends React.PureComponent {
                         hovered == true &&
                     } */}
                     {hazardHoveredAttribute
-                    && (
-                        <MapState
-                            attributes={hazardHoveredAttribute}
-                            attributeKey="hover"
-                        />
-                    )
+                        && (
+                            <MapState
+                                attributes={hazardHoveredAttribute}
+                                attributeKey="hover"
+                            />
+                        )
                     }
                 </MapSource>
                 <MapSource
@@ -1057,7 +1083,7 @@ class RealTimeMap extends React.PureComponent {
                     supportHover
                     generateId
                 >
-                    { showFire && (
+                    {showFire && (
                         <>
                             <MapLayer
                                 layerKey="real-time-fire-points-cirle"
@@ -1086,12 +1112,12 @@ class RealTimeMap extends React.PureComponent {
                         </>
                     )}
                     {hazardHoveredAttribute
-                    && (
-                        <MapState
-                            attributes={hazardHoveredAttribute}
-                            attributeKey="hover"
-                        />
-                    )
+                        && (
+                            <MapState
+                                attributes={hazardHoveredAttribute}
+                                attributeKey="hover"
+                            />
+                        )
                     }
                 </MapSource>
                 <MapSource
@@ -1101,7 +1127,7 @@ class RealTimeMap extends React.PureComponent {
                     supportHover
                     generateId
                 >
-                    { showPollution && (
+                    {showPollution && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-pollution-points-fill"
@@ -1140,12 +1166,12 @@ class RealTimeMap extends React.PureComponent {
                         </React.Fragment>
                     )}
                     {hazardHoveredAttribute
-                    && (
-                        <MapState
-                            attributes={hazardHoveredAttribute}
-                            attributeKey="hover"
-                        />
-                    )
+                        && (
+                            <MapState
+                                attributes={hazardHoveredAttribute}
+                                attributeKey="hover"
+                            />
+                        )
                     }
                 </MapSource>
                 {riverTitle && (
@@ -1160,7 +1186,7 @@ class RealTimeMap extends React.PureComponent {
                         handleModalClose={this.handleModalClose}
                     />
                 )}
-                { streamflowId && (
+                {streamflowId && (
                     <StreamflowDetails
                         id={streamflowId}
                         handleModalClose={this.handleModalClose}
@@ -1172,4 +1198,4 @@ class RealTimeMap extends React.PureComponent {
 }
 
 export default
-connect(mapStateToProps)(RealTimeMap);
+    connect(mapStateToProps)(RealTimeMap);

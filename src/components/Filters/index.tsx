@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
@@ -20,7 +21,11 @@ import {
     methods,
 } from '#request';
 
-import { setFiltersAction, setProjectsProfileFiltersAction } from '#actionCreators';
+import {
+    setDataArchiveRiverFilterAction,
+    setFiltersAction,
+    setProjectsProfileFiltersAction,
+} from '#actionCreators';
 import {
     filtersSelector,
     provincesSelector,
@@ -29,17 +34,25 @@ import {
     carKeysSelector,
     userSelector,
     projectsProfileFiltersSelector,
+    riverFiltersSelector,
+    riverStationsSelector,
+    rainFiltersSelector,
+    rainStationsSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
-import { FiltersElement } from '#types';
+import { FiltersElement, RiverFiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 
 import { getAuthState } from '#utils/session';
 import { colorScheme } from '#constants';
-import styles from './styles.scss';
+import RainBasinSelector from '#views/DataArchive/Filters/Rain/Basin/index';
+import RainStationSelector from '#views/DataArchive/Filters/Rain/Station/index';
+import RiverBasinSelector from '#views/DataArchive/Filters/River/Basin/index';
+import RiverStationSelector from '#views/DataArchive/Filters/River/Station/index';
 
+import styles from './styles.scss';
 
 interface ComponentProps {
     className?: string;
@@ -51,7 +64,7 @@ interface ComponentProps {
 }
 
 interface PropsFromAppState {
-    filters: FiltersElement;
+    filters: RiverFiltersElement;
 }
 
 interface PropsFromDispatch {
@@ -59,8 +72,12 @@ interface PropsFromDispatch {
 }
 
 interface State {
+    allStationsRain: [];
+    allStationsRiver: [];
     activeView: TabKey | undefined;
-    faramValues: FiltersElement;
+    faramValues: RiverFiltersElement;
+    filteredRainStation: [] | undefined | {};
+    filteredRiverStation: [] | undefined | {};
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -73,19 +90,30 @@ const mapStateToProps = (state: AppState) => ({
     carKeys: carKeysSelector(state),
     user: userSelector(state),
     projectFilters: projectsProfileFiltersSelector(state),
+    riverFilters: riverFiltersSelector(state),
+    riverStations: riverStationsSelector(state),
+    rainFilters: rainFiltersSelector(state),
+    rainStations: rainStationsSelector(state),
+
 });
+
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setFilters: params => dispatch(setFiltersAction(params)),
     setProjectFilters: params => dispatch(setProjectsProfileFiltersAction(params)),
+    setDataArchiveRiverFilter: params => dispatch(
+        setDataArchiveRiverFilterAction(params),
+    ),
 });
 
-type TabKey = 'location' | 'hazard' | 'dataRange' | 'others';
+type TabKey = 'location' | 'hazard' | 'dataRange' | 'rainBasin' | 'riverBasin' | 'others';
 
 const iconNames: {
     [key in TabKey]: string;
 } = {
     location: 'distance',
+    rainBasin: 'rainicon',
+    riverBasin: 'rivericon',
     hazard: 'warning',
     dataRange: 'dataRange',
     others: 'filter',
@@ -117,30 +145,40 @@ const filterSchema = {
         dataDateRange: [],
         hazard: [],
         region: [],
+        rainBasin: {},
+        rainStation: {},
+        riverBasin: {},
+        riverStation: {},
     },
 };
 
-const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
+const getIsFiltered = (key: TabKey | undefined, filters: RiverFiltersElement) => {
     if (!key || key === 'others') {
         return false;
     }
 
     const tabKeyToFilterMap: {
-        [key in Exclude<TabKey, 'others'>]: keyof FiltersElement;
+        [key in Exclude<TabKey, 'others'>]: keyof RiverFiltersElement;
     } = {
         hazard: 'hazard',
         location: 'region',
         dataRange: 'dataDateRange',
+        rainBasin: 'rainBasin',
+        rainStation: 'rainStation',
+        riverBasin: 'riverBasin',
+        riverStation: 'riverStation',
     };
 
     const filter = filters[tabKeyToFilterMap[key]];
+    console.log('filter is', filter);
+
 
     if (Array.isArray(filter)) {
         return filter.length !== 0;
     }
 
-    const filterKeys = Object.keys(filter);
-    return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
+    const filterKeys = filter && Object.keys(filter);
+    return filterKeys && filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
 };
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -236,6 +274,8 @@ class Filters extends React.PureComponent<Props, State> {
 
     public state = {
         activeView: undefined,
+        allStationsRain: [],
+        allStationsRiver: [],
         faramValues: {
             dataDateRange: {
                 rangeInDays: 7,
@@ -244,7 +284,13 @@ class Filters extends React.PureComponent<Props, State> {
             },
             hazard: [],
             region: {},
+            rainBasin: {},
+            rainStation: {},
+            riverBasin: {},
+            riverStation: {},
         },
+        filteredRainStation: [],
+        filteredRiverStation: [],
         subdomainLoc: {},
         locRecv: false,
         disableSubmitButton: false,
@@ -303,10 +349,18 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     public componentDidUpdate(prevProps, prevState) {
-        const { setFilters, filters } = this.props;
+        const { filters, rainStations, riverStations } = this.props;
         const { faramValues } = this.state;
         if (prevProps.filters !== filters) {
             this.setState({ faramValues: filters });
+        }
+        if (rainStations.length > 120) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ allStationsRain: rainStations });
+        }
+        if (riverStations.length > 120) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ allStationsRiver: riverStations });
         }
     }
 
@@ -389,6 +443,39 @@ class Filters extends React.PureComponent<Props, State> {
                 </div>
             ),
         },
+        rainBasin: {
+            component: () => (
+                <div className={styles.activeView}>
+                    <RainBasinSelector
+                        faramElementName="rainBasin"
+                        basins={this.props.rainFilters.basin}
+                    />
+                    <RainStationSelector
+                        faramElementName="rainStation"
+                        stations={this.state.filteredRainStation.length > 0
+                            ? this.state.filteredRainStation : this.state.allStationsRain}
+
+                    />
+                </div>
+            ),
+        },
+        riverBasin: {
+            component: () => (
+                <div className={styles.activeView}>
+                    <RiverBasinSelector
+                        faramElementName="riverBasin"
+                        basins={this.props.riverFilters.basin}
+
+                    />
+                    <RiverStationSelector
+                        faramElementName="riverStation"
+                        stations={this.state.filteredRiverStation.length > 0
+                            ? this.state.filteredRiverStation : this.state.allStationsRiver}
+                    />
+
+                </div>
+            ),
+        },
         others: {
             component: () => (
                 this.props.extraContent ? (
@@ -422,8 +509,9 @@ class Filters extends React.PureComponent<Props, State> {
 
     private handleResetFiltersButtonClick = () => {
         const authState = getAuthState();
-        const { setFilters, user, filters, setProjectFilters, FilterClickedStatus } = this.props;
-        const { subdomainLoc } = this.state;
+        const { setFilters, user, filters, setProjectFilters,
+            FilterClickedStatus, setDataArchiveRiverFilter } = this.props;
+        const { subdomainLoc, faramValues } = this.state;
         FilterClickedStatus(true);
         setProjectFilters({
             faramValues: {},
@@ -517,6 +605,9 @@ class Filters extends React.PureComponent<Props, State> {
             });
 
             setFilters({ filters: this.state.faramValues });
+            setDataArchiveRiverFilter({
+                dataArchiveRiverFilters: this.state.faramValues,
+            });
         }
     }
 
@@ -524,41 +615,116 @@ class Filters extends React.PureComponent<Props, State> {
         this.setState({ activeView: undefined });
     }
 
-    private handleFaramChange = (faramValues: FiltersElement) => {
+    private handleStationData = (mainVal: any, type: string) => {
+        /**
+       * Handling realtime river filter data
+       */
+        if (type === 'river') {
+            if (mainVal && Object.keys(mainVal.riverBasin).length > 0) {
+                this.setState((prevState: State) => {
+                    if (prevState.faramValues.riverBasin !== mainVal.riverBasin) {
+                        return {
+                            faramValues: {
+                                dataDateRange: {},
+                                hazard: [],
+                                region: {},
+                                rainBasin: '',
+                                rainStation: '',
+                                riverBasin: mainVal.riverBasin,
+                                riverStation: '',
+                            },
+                        };
+                    }
+                    return ({ mainVal });
+                });
+                if (mainVal.riverBasin.title !== undefined) {
+                    const filteredStation = this.state.allStationsRiver
+                        .filter((r: { basin: string }) => r.basin === mainVal.riverBasin.title);
+                    this.setState({ filteredRiverStation: filteredStation });
+                    return;
+                }
+                const filteredStation = this.state.allStationsRiver;
+                this.setState({ filteredRiverStation: filteredStation });
+            }
+        }
+        /**
+    * Handling realtime rain filter data
+    */
+        if (type === 'rain') {
+            if (mainVal && Object.keys(mainVal.rainBasin).length > 0) {
+                this.setState((prevState: State) => {
+                    if (prevState.faramValues.rainBasin !== mainVal.rainBasin) {
+                        return {
+                            faramValues: {
+                                dataDateRange: {},
+                                hazard: [],
+                                region: {},
+                                rainBasin: mainVal.rainBasin,
+                                rainStation: '',
+                                riverBasin: '',
+                                riverStation: '',
+                            },
+                        };
+                    }
+                    return ({ mainVal });
+                });
+                if (mainVal.rainBasin.title !== undefined) {
+                    const filteredStation = this.state.allStationsRain
+                        .filter((r: { basin: string }) => r.basin === mainVal.rainBasin.title);
+                    this.setState({ filteredRainStation: filteredStation });
+                    return;
+                }
+                const filteredStation = this.state.allStationsRiver;
+                this.setState({ filteredRainStation: filteredStation });
+            }
+        }
+    }
+
+
+    private handleFaramChange = (faramValues: RiverFiltersElement) => {
         this.setState({ faramValues });
         this.setState({ disableSubmitButton: false });
+        this.handleStationData(faramValues, 'river');
+        this.handleStationData(faramValues, 'rain');
     }
 
     private handleSubmitClick = () => {
-        const { setFilters, carKeys, FilterClickedStatus } = this.props;
-        const { faramValues, disableSubmitButton } = this.state;
-        const { filters: propFilters } = this.props;
+        const { setFilters,
+            carKeys,
+            FilterClickedStatus,
+            setDataArchiveRiverFilter } = this.props;
+
+        const { faramValues, disableSubmitButton, activeView } = this.state;
+        /**
+     * Setting the current filter value to use it in map section
+     */
+        console.log('subitVal', faramValues);
         FilterClickedStatus(true);
         if (!disableSubmitButton) {
+            if (activeView === 'riverBasin') {
+                setDataArchiveRiverFilter({
+                    dataArchiveRiverFilters: {
+                        point: faramValues.riverStation.point,
+                        municipality: faramValues.riverStation.municipality,
+                        basin: faramValues.riverBasin,
+                        active: 'river',
+                    },
+                });
+            }
+
+            if (activeView === 'rainBasin') {
+                setDataArchiveRiverFilter({
+                    dataArchiveRiverFilters: {
+                        point: faramValues.rainStation.point,
+                        municipality: faramValues.rainStation.municipality,
+                        basin: faramValues.rainBasin,
+                        active: 'rain',
+                    },
+                });
+            }
             this.setState({ disableSubmitButton: true });
             setFilters({ filters: faramValues });
-            // if (faramValues) {
-            //     setFilters({ filters: faramValues });
-            // }
-            // else {
-            //     setFilters({ filters: propFilters });
-            // }
         }
-
-        const { activeRouteDetails } = this.context;
-
-        /** This API is already called in capacity and resource module */
-
-        // if (Object.keys(activeRouteDetails).length !== 0) {
-        //     const { name: activePage } = activeRouteDetails;
-        //     if (activePage === 'riskInfo') {
-        //         this.props.requests.resourceGetRequest.do({
-        //             resourceType: carKeys,
-        //             getRegionDetails: this.getRegionDetails,
-        //             region: this.state.faramValues,
-        //         });
-        //     }
-        // }
     }
 
     private getTabs = memoize(
@@ -568,10 +734,15 @@ class Filters extends React.PureComponent<Props, State> {
             hideHazardFilter,
             hideDataRangeFilter,
         ): { [key in TabKey]?: string; } => {
+            const { activeRouteDetails } = this.props;
+            console.log('activeRouteDetails', activeRouteDetails);
+
             const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
                 dataRange: 'Data range',
+                rainBasin: 'Rain Basin',
+                riverBasin: 'River Basin',
                 others: 'Project',
             };
 
@@ -590,6 +761,12 @@ class Filters extends React.PureComponent<Props, State> {
             if (hideDataRangeFilter) {
                 delete tabs.dataRange;
             }
+            if (activeRouteDetails && activeRouteDetails.path !== '/realtime/') {
+                delete tabs.rainBasin;
+            }
+            if (activeRouteDetails && activeRouteDetails.path !== '/realtime/') {
+                delete tabs.riverBasin;
+            }
 
             return tabs;
         },
@@ -607,6 +784,7 @@ class Filters extends React.PureComponent<Props, State> {
             projectFilters,
         } = this.props;
 
+
         const { faramValues: fv, disableSubmitButton } = this.state;
         const tabs = this.getTabs(
             extraContent,
@@ -614,6 +792,9 @@ class Filters extends React.PureComponent<Props, State> {
             hideHazardFilter,
             hideDataRangeFilter,
         );
+
+        console.log('disableSubmitButton', disableSubmitButton);
+
 
         // if (user && Object.keys(user.profile).length > 0) {
         //     if (user.profile.municipality > 0) {
@@ -639,6 +820,8 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
+
+
         return (
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
@@ -689,6 +872,7 @@ class Filters extends React.PureComponent<Props, State> {
                             views={this.views}
                             active={validActiveView}
                         />
+                        {/* <RiverFilters /> */}
                     </Faram>
                     {validActiveView && activeView !== 'others' && (
                         <div

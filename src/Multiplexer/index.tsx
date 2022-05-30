@@ -69,19 +69,19 @@ import {
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
-import errorBound from '../errorBound';
-import helmetify from '../helmetify';
 import { getFeatureInfo } from '#utils/domain';
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
     ClientAttributes,
     methods,
 } from '#request';
+import ZoomToolBar from '#components/ZoomToolBar';
+import errorBound from '../errorBound';
+import helmetify from '../helmetify';
+import styles from './styles.scss';
 import DownloadButtonOption from './DownloadButtonOption';
 
-import ZoomToolBar from '#components/ZoomToolBar';
 
 function reloadPage() {
     window.location.reload(false);
@@ -987,7 +987,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ toggleAnimationMapDownloadButton: boolean });
     }
 
-    private clickHandler=(data) => {
+    private clickHandler = (data) => {
         const { activeRouteDetails } = this.context;
         this.setState({ mapDataOnClick: data });
         this.setState({ tooltipClicked: true });
@@ -996,23 +996,23 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
-    private closeTooltip=(data) => {
+    private closeTooltip = (data) => {
         this.setState({ tooltipLatlng: data });
     }
 
-    private handleLandslidePolygonImageMap=(data) => {
+    private handleLandslidePolygonImageMap = (data) => {
         this.setState({
             landslidePolygonImagemap: data,
         });
     }
 
-    private handlelandslidePolygonChoroplethMapData=(data) => {
+    private handlelandslidePolygonChoroplethMapData = (data) => {
         this.setState({
             landslidePolygonChoroplethMapData: data,
         });
     }
 
-    private setClimateChangeSelectedDistrict=(data) => {
+    private setClimateChangeSelectedDistrict = (data) => {
         const { id, properties: { title } } = data;
 
         this.setState({
@@ -1027,7 +1027,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
-        // hazardList,
+            // hazardList,
         } = this.props;
 
         const {
@@ -1382,6 +1382,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     extraContentContainerClassName={
                                                         filterContentContainerClassName
                                                     }
+                                                    activeRouteDetails={activeRouteDetails}
                                                 />
                                             )}
                                         </aside>

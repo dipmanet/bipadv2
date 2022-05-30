@@ -32,9 +32,13 @@ import {
     methods,
 } from '#request';
 
+import Graph from '#views/DataArchive/Modals/Riverwatch/Graph';
+import { groupList } from '#utils/common';
+import { parsePeriod, getChartData, arraySorter, isEqualObject } from '#views/DataArchive/Modals/Riverwatch/utils';
+import TableView from '#views/DataArchive/Modals/Riverwatch/TableView';
 import styles from './styles.scss';
 
-interface Params {}
+interface Params { }
 interface OwnProps {
     handleModalClose: () => void;
     title: string;
@@ -70,12 +74,43 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
         url: '/river/',
         method: methods.GET,
-        query: ({ props: { title } }) => ({
-            historical: 'true',
-            format: 'json',
-            title,
-        }),
-        onMount: true,
+        // query: ({ props: { title } }) => ({
+        //     historical: 'true',
+        //     format: 'json',
+        //     title,
+        // }),
+        query: ({ params, props: { title } }) => {
+            if (!params || !params.dataDateRange) {
+                return undefined;
+            }
+            const { startDate, endDate } = params.dataDateRange;
+            return {
+                title,
+                historical: 'true',
+                format: 'json',
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                water_level_on__gt: `${startDate}T00:00:00+05:45`,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                water_level_on__lt: `${endDate}T23:59:59+05:45`,
+                fields: [
+                    'id',
+                    'created_on',
+                    'title',
+                    'basin',
+                    'point',
+                    'water_level',
+                    'danger_level',
+                    'warning_level',
+                    'water_level_on',
+                    'status',
+                    'steady',
+                    'description',
+                    'station',
+                ],
+                limit: -1,
+            };
+        },
+        onMount: false,
         onPropsChanged: ['title'],
     },
 };
@@ -83,6 +118,17 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
 class RiverDetails extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
+
+        this.state = {
+            filterValues: {
+                dataDateRange: {
+                    startDate: new Date(new Date().setDate(new Date()
+                        .getDate() - 3)).toJSON().slice(0, 10).replace(/-/g, '-'),
+                    endDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-'),
+                },
+                period: { periodCode: 'hourly' },
+            },
+        };
 
         this.riverHeader = [
             {
@@ -112,6 +158,15 @@ class RiverDetails extends React.PureComponent<Props> {
                 order: 4,
             },
         ];
+    }
+
+    public componentDidMount() {
+        const { requests: {
+            detailRequest,
+        } } = this.props;
+        const { filterValues } = this.state;
+        const { dataDateRange } = filterValues;
+        detailRequest.do({ dataDateRange });
     }
 
     private riverHeader: Header<RealTimeRiverDetails>[];
@@ -206,6 +261,13 @@ class RiverDetails extends React.PureComponent<Props> {
     })
 
     public render() {
+        const initialFaramValue = {
+            dataDateRange: {
+                startDate: '',
+                endDate: '',
+            },
+            period: {},
+        };
         const {
             requests: {
                 detailRequest: {
@@ -217,6 +279,7 @@ class RiverDetails extends React.PureComponent<Props> {
             handleModalClose,
         } = this.props;
 
+
         let riverDetails: RealTimeRiverDetails[] = [];
         if (!pending && response) {
             const {
@@ -224,6 +287,46 @@ class RiverDetails extends React.PureComponent<Props> {
             } = response as MultiResponse<RealTimeRiverDetails>;
             riverDetails = results;
         }
+
+
+        const riverDataWithPeriod = parsePeriod(riverDetails);
+
+        const minuteWiseGroup = groupList(
+            riverDataWithPeriod.filter(r => r.dateWithMinute),
+            river => river.dateWithMinute,
+        );
+        const hourWiseGroup = groupList(
+            riverDataWithPeriod.filter(r => r.dateWithHour),
+            river => river.dateWithHour,
+        );
+        const dailyWiseGroup = groupList(
+            riverDataWithPeriod.filter(r => r.dateOnly),
+            river => river.dateOnly,
+        );
+
+
+        let filterWiseChartData;
+        const {
+            period: { periodCode },
+        } = this.state.filterValues;
+
+        if (periodCode === 'minute') {
+            filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
+        }
+        if (periodCode === 'hourly') {
+            filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+        }
+        if (periodCode === 'daily') {
+            filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+        }
+
+        console.log('periodCode data', riverDetails);
+
+
+        if (filterWiseChartData) {
+            filterWiseChartData.sort(arraySorter);
+        }
+        const isInitial = isEqualObject(initialFaramValue, this.state.filterValues);
 
         const sortedRiverDetails = this.getSortedRiverData(riverDetails);
         const latestRiverDetail = sortedRiverDetails[0];
@@ -248,8 +351,8 @@ class RiverDetails extends React.PureComponent<Props> {
                     )}
                 />
                 <ModalBody className={styles.body}>
-                    { pending && <LoadingAnimation /> }
-                    { latestRiverDetail && (
+                    {pending && <LoadingAnimation />}
+                    {latestRiverDetail && (
                         <div className={styles.riverDetails}>
                             <div className={styles.top}>
                                 {latestRiverDetail.image ? (
@@ -356,27 +459,50 @@ class RiverDetails extends React.PureComponent<Props> {
                                             Hourly Water Level
                                         </h4>
                                     </header>
-                                    <Table
+                                    <Graph
+                                        stationData={riverDetails}
+                                        filterWiseChartData={filterWiseChartData}
+                                        periodCode={periodCode}
+                                        isInitial={isInitial}
+                                        stationName={title}
+                                        filterValues={this.state.filterValues}
+                                    />
+
+                                </div>
+                                <div className={styles.waterLevelChartContainer}>
+                                    {/* <Table
                                         className={styles.content}
                                         data={hourlyRiverDetails}
                                         headers={this.riverHeader}
                                         keySelector={riverKeySelector}
                                         emptyComponent={RiverEmptyComponent}
+                                    /> */}
+                                    {/* <Graph
+                                        stationData={riverDetails}
+                                        filterWiseChartData={filterWiseChartData}
+                                        periodCode={periodCode}
+                                        isInitial={isInitial}
+                                        stationName={title}
+                                        filterValues={this.state.filterValues}
+                                    /> */}
+                                    <TableView
+                                        filterWiseChartData={filterWiseChartData}
+                                        filterValues={this.state.filterValues}
+                                        isInitial={isInitial}
+                                        stationName={title}
                                     />
-                                </div>
-                                <div className={styles.waterLevelChartContainer}>
-                                    <MultiLineChart
+                                    {/* <MultiLineChart
                                         className={styles.riverChart}
                                         data={hourlyRiverChartData}
-                                    />
-                                    <Legend
+                                    /> */}
+                                    {/* <Legend
                                         className={styles.riverChartLegend}
                                         colorSelector={colorSelector}
                                         data={riverLegendData}
                                         keySelector={keySelector}
                                         labelSelector={labelSelector}
                                         itemClassName={styles.legendItem}
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                         </div>

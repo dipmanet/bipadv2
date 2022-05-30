@@ -1,5 +1,5 @@
-import { ArchiveRain, Errors } from './types';
 import { isValidDate, getDateDiff } from '#views/DataArchive/utils';
+import { ArchiveRain, Errors } from './types';
 
 export const rainToGeojson = (rainList: ArchiveRain[]) => {
     const geojson = {
@@ -104,7 +104,7 @@ export const isEqualObject = (obj1: any, obj2: any) => {
 
 // for interval parsing
 export const getIntervalCode = (interval: number) => {
-    const intervals: {[key in number]: string} = {
+    const intervals: { [key in number]: string } = {
         1: 'oneHour',
         3: 'threeHour',
         6: 'sixHour',
@@ -180,19 +180,21 @@ export const parsePeriod = (rainDetails: ArchiveRain[]) => {
         const [dateWithMinute, minuteName] = getMinuteValues(measuredOn);
         const [dateWithHour, hourName] = getHourlyValues(measuredOn);
         const [dateOnly, dateName] = getDailyValues(measuredOn);
-        return { ...detail,
+        return {
+            ...detail,
             dateWithMinute,
             minuteName,
             dateWithHour,
             hourName,
             dateOnly,
-            dateName };
+            dateName,
+        };
     });
     return withPeriod;
 };
 
 // for chart data
-export const arraySorter = (a: {measuredOn: string}, b: {measuredOn: string}) => {
+export const arraySorter = (a: { measuredOn: string }, b: { measuredOn: string }) => {
     const keyA = new Date(a.measuredOn);
     const keyB = new Date(b.measuredOn);
     if (keyA < keyB) return -1;
@@ -231,7 +233,7 @@ const getAcc = arr => arr.reduce((a, b) => (
 ));
 
 export const getChartData = (
-    data: {key: string | number; value: any[]}[],
+    data: { key: string | number; value: any[] }[],
     labelKey: string,
 ) => {
     const chartData = data.map((singleItem) => {

@@ -8,13 +8,13 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import { MapChildContext } from '#re-map/context';
 
-import RiverModal from '../../Modals/Riverwatch';
 import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
 import { riverFiltersSelector, riverStationsSelector } from '#selectors';
 import { getDate, getTime } from '#views/DataArchive/utils';
+import RiverModal from '../../Modals/Riverwatch';
 
 import styles from './styles.scss';
 
@@ -152,7 +152,7 @@ class RiverMap extends React.PureComponent {
                         // eslint-disable-next-line react/no-did-update-set-state
                         this.setState({ rasterLayers: [] });
                     } else {
-                    // eslint-disable-next-line react/no-did-update-set-state
+                        // eslint-disable-next-line react/no-did-update-set-state
                         this.setState({ rasterLayers: [ourAarray[0]] });
                     }
                 }
@@ -183,10 +183,12 @@ class RiverMap extends React.PureComponent {
     });
 
     handleModalClose = () => {
-        this.setState({ tooltipRenderer: null,
+        this.setState({
+            tooltipRenderer: null,
             coordinates: undefined,
             tooltipParams: null,
-            showModal: false });
+            showModal: false,
+        });
     }
 
     handleRiverClick = (feature, lngLat) => {
@@ -303,6 +305,8 @@ class RiverMap extends React.PureComponent {
 
         const { title: stationName, stationId, geometry } = tooltipParams || {};
         const region = { adminLevel: 3, geoarea: municipality || undefined };
+
+        console.log('riverStations', this.props.riverStations);
         return (
             <div className={styles.dataArchiveRiverMap}>
                 <CommonMap
@@ -322,6 +326,7 @@ class RiverMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
+
                 {(rasterLayers.length === 0)
                     && (
                         <MapSource
@@ -346,7 +351,7 @@ class RiverMap extends React.PureComponent {
                         </MapSource>
                     )
                 }
-                { rasterLayers.map(layer => (
+                {rasterLayers.map(layer => (
                     <MapSource
                         key={`key${layer.key}`}
                         sourceKey={`source${layer.key}`}
@@ -390,14 +395,14 @@ class RiverMap extends React.PureComponent {
                     </React.Fragment>
                 </MapSource>
                 {showModal
-                && (
-                    <RiverModal
-                        handleModalClose={this.handleModalClose}
-                        stationName={stationName}
-                        stationId={stationId}
-                        geometry={geometry}
-                    />
-                )
+                    && (
+                        <RiverModal
+                            handleModalClose={this.handleModalClose}
+                            stationName={stationName}
+                            stationId={stationId}
+                            geometry={geometry}
+                        />
+                    )
                 }
             </div>
         );

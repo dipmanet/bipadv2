@@ -24,6 +24,8 @@ const iconNames = {
     realtime: 'ion-android-wifi',
     indicator: 'ion-ios-speedometer',
     resource: 'ion-android-globe',
+    rainicon: 'ion-android-checkbox-outline-blank',
+    rivericon: 'ion-android-checkbox-outline-blank',
 
     filter: 'ion-android-funnel',
     chevronUp: 'ion-chevron-up',

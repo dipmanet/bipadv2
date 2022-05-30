@@ -3,12 +3,19 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import Page from '#components/Page';
+import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
+import {
+    NewProps,
+} from '#request';
+import { FiltersElement } from '#types';
+import { AppState } from '#store/types';
+import { setFiltersAction } from '#actionCreators';
+import { filtersSelector } from '#selectors';
 import LeftPane from '../LeftPane';
 import EarthquakeMap from '../Map/Earthquake';
 import PollutionMap from '../Map/Pollution';
 import RainMap from '../Map/Rainwatch';
 import RiverMap from '../Map/Riverwatch';
-import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import EarthquakeFilters from '../Filters/Earthquake';
 import PollutionFilters from '../Filters/Pollution';
 import RainFilters from '../Filters/Rain';
@@ -19,22 +26,10 @@ import PollutionLegend from '../Legends/Pollution';
 import RainLegend from '../Legends/Rain';
 import RiverLegend from '../Legends/River';
 
-import {
-    NewProps,
-} from '#request';
-
-import { FiltersElement } from '#types';
-
-import { AppState } from '#store/types';
-
-import { setFiltersAction } from '#actionCreators';
-
-import { filtersSelector } from '#selectors';
-
 
 type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefined;
 
-interface Params {}
+interface Params { }
 interface OwnProps {
     chosenOption: Options;
     handleOptionClick: Function;
@@ -95,7 +90,7 @@ const getLegend = (chosenOption: Options) => {
     }
     return null;
 };
-class RegularPage extends React.PureComponent <Props, State> {
+class RegularPage extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
         this.state = {
