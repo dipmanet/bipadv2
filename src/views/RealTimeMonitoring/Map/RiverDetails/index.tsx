@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import memoize from 'memoize-one';
 import {
@@ -37,9 +39,12 @@ import { groupList } from '#utils/common';
 import {
     parsePeriod, getChartData,
     arraySorter, isEqualObject,
+    parseInterval,
 } from '#views/DataArchive/Modals/Riverwatch/utils';
 import TableView from '#views/DataArchive/Modals/Riverwatch/TableView';
 import styles from './styles.scss';
+import PeriodSelector from '#views/DataArchive/Modals/Riverwatch/Filters/PeriodSelector';
+
 
 interface Params { }
 interface OwnProps {
@@ -121,6 +126,9 @@ class RiverDetails extends React.PureComponent<Props> {
                 },
                 period: { periodCode: 'hourly' },
             },
+            riverDetails: [],
+            filterwiseChartData: [],
+            isInitial: true,
         };
 
         this.riverHeader = [
@@ -162,6 +170,81 @@ class RiverDetails extends React.PureComponent<Props> {
         detailRequest.do({ dataDateRange });
     }
 
+    public componentDidUpdate(prevProps, prevState) {
+        const initialFaramValue = {
+            dataDateRange: {
+                startDate: '',
+                endDate: '',
+            },
+            period: {},
+        };
+
+        if (prevState.filterValues !== this.state.filterValues
+            || prevState.riverDetails !== this.state.riverDetails) {
+            console.log('inside component didupdate');
+
+            const { riverDetails } = this.state;
+            // const rainDataWithParameter = parseInterval(riverDetails);
+            const riverDataWithPeriod = parsePeriod(riverDetails);
+
+            const minuteWiseGroup = groupList(
+                riverDataWithPeriod.filter(r => r.dateWithMinute),
+                river => river.dateWithMinute,
+            );
+            const hourWiseGroup = groupList(
+                riverDataWithPeriod.filter(r => r.dateWithHour),
+                river => river.dateWithHour,
+            );
+            const dailyWiseGroup = groupList(
+                riverDataWithPeriod.filter(r => r.dateOnly),
+                river => river.dateOnly,
+            );
+
+            // const hourWiseGroup = groupList(
+            //     rainDataWithPeriod.filter(r => r.dateWithHour),
+            //     rain => rain.dateWithHour,
+            // );
+
+            // const dailyWiseGroup = groupList(
+            //     rainDataWithPeriod.filter(r => r.dateOnly),
+            //     rain => rain.dateOnly,
+            // );
+
+            // const monthlyWiseGroup = groupList(
+            //     rainDataWithPeriod.filter(r => r.dateOnly),
+            //     rain => rain.dateOnly,
+            // );
+
+            let filterWiseChartData;
+
+            const {
+                period: { periodCode },
+            } = this.state.filterValues;
+
+
+            if (periodCode === 'minute') {
+                filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
+            }
+            if (periodCode === 'hourly') {
+                filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+            }
+            if (periodCode === 'daily') {
+                filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+            }
+
+            console.log('periodCode data', riverDetails);
+
+
+            if (filterWiseChartData) {
+                filterWiseChartData.sort(arraySorter);
+                this.setState({ filterWiseChartData: filterWiseChartData.sort(arraySorter) });
+            }
+            // eslint-disable-next-line react/destructuring-assignment,, react/no-access-state-in-setstate
+            const isInitialCheck = isEqualObject(initialFaramValue, this.state.filterValues);
+            this.setState({ isInitial: isInitialCheck });
+        }
+    }
+
     private riverHeader: Header<RealTimeRiverDetails>[];
 
     private getSortedRiverData = memoize((riverDetails: RealTimeRiverDetails[]) => {
@@ -200,6 +283,20 @@ class RiverDetails extends React.PureComponent<Props> {
 
         return riverHours;
     })
+
+    private handlePeriodChange = (periodName: string) => {
+        this.setState(prevState => ({
+            ...prevState,
+            filterValues: {
+                dataDateRange: {
+                    startDate: new Date(new Date().setDate(new Date()
+                        .getDate() - 3)).toJSON().slice(0, 10).replace(/-/g, '-'),
+                    endDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-'),
+                },
+                period: { periodCode: periodName && periodName.periodCode },
+            },
+        }));
+    };
 
     private getHourlyChartData = memoize((riverDetails: RealTimeRiverDetails[]) => {
         interface ChartData {
@@ -254,13 +351,13 @@ class RiverDetails extends React.PureComponent<Props> {
     })
 
     public render() {
-        const initialFaramValue = {
-            dataDateRange: {
-                startDate: '',
-                endDate: '',
-            },
-            period: {},
-        };
+        // const initialFaramValue = {
+        //     dataDateRange: {
+        //         startDate: '',
+        //         endDate: '',
+        //     },
+        //     period: {},
+        // };
         const {
             requests: {
                 detailRequest: {
@@ -272,6 +369,7 @@ class RiverDetails extends React.PureComponent<Props> {
             handleModalClose,
         } = this.props;
 
+        const { filterValues, filterWiseChartData, intervalCode, isInitial } = this.state;
 
         let riverDetails: RealTimeRiverDetails[] = [];
         if (!pending && response) {
@@ -279,47 +377,52 @@ class RiverDetails extends React.PureComponent<Props> {
                 results,
             } = response as MultiResponse<RealTimeRiverDetails>;
             riverDetails = results;
+            this.setState({ riverDetails });
         }
 
 
-        const riverDataWithPeriod = parsePeriod(riverDetails);
+        // const riverDataWithPeriod = parsePeriod(riverDetails);
 
-        const minuteWiseGroup = groupList(
-            riverDataWithPeriod.filter(r => r.dateWithMinute),
-            river => river.dateWithMinute,
-        );
-        const hourWiseGroup = groupList(
-            riverDataWithPeriod.filter(r => r.dateWithHour),
-            river => river.dateWithHour,
-        );
-        const dailyWiseGroup = groupList(
-            riverDataWithPeriod.filter(r => r.dateOnly),
-            river => river.dateOnly,
-        );
+        // const minuteWiseGroup = groupList(
+        //     riverDataWithPeriod.filter(r => r.dateWithMinute),
+        //     river => river.dateWithMinute,
+        // );
+        // const hourWiseGroup = groupList(
+        //     riverDataWithPeriod.filter(r => r.dateWithHour),
+        //     river => river.dateWithHour,
+        // );
+        // const dailyWiseGroup = groupList(
+        //     riverDataWithPeriod.filter(r => r.dateOnly),
+        //     river => river.dateOnly,
+        // );
 
 
-        let filterWiseChartData;
+        // let filterWiseChartData;
+        // const {
+        //     period: { periodCode },
+        // } = this.state.filterValues;
+
+        // if (periodCode === 'minute') {
+        //     filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
+        // }
+        // if (periodCode === 'hourly') {
+        //     filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+        // }
+        // if (periodCode === 'daily') {
+        //     filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+        // }
+
+        // console.log('periodCode data', riverDetails);
+
+
+        // if (filterWiseChartData) {
+        //     filterWiseChartData.sort(arraySorter);
+        // }
+        // const isInitial = isEqualObject(initialFaramValue, this.state.filterValues);
+
         const {
             period: { periodCode },
         } = this.state.filterValues;
-
-        if (periodCode === 'minute') {
-            filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
-        }
-        if (periodCode === 'hourly') {
-            filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
-        }
-        if (periodCode === 'daily') {
-            filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
-        }
-
-        console.log('periodCode data', riverDetails);
-
-
-        if (filterWiseChartData) {
-            filterWiseChartData.sort(arraySorter);
-        }
-        const isInitial = isEqualObject(initialFaramValue, this.state.filterValues);
 
         const sortedRiverDetails = this.getSortedRiverData(riverDetails);
         const latestRiverDetail = sortedRiverDetails[0];
@@ -461,6 +564,10 @@ class RiverDetails extends React.PureComponent<Props> {
                                         filterValues={this.state.filterValues}
                                     />
 
+                                </div>
+                                <div className={styles.selectComponent}>
+                                    <h3>Period</h3>
+                                    <PeriodSelector onChange={this.handlePeriodChange} />
                                 </div>
                                 <div className={styles.waterLevelChartContainer}>
                                     <TableView
