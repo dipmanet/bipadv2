@@ -47,6 +47,7 @@ import {
 import TableView from '#views/DataArchive/Modals/Rainwatch/TableView';
 
 import Graph from '#views/DataArchive/Modals/Rainwatch/Graph';
+import PeriodSelector from '#views/DataArchive/Modals/Rainwatch/Filters/PeriodSelector';
 import styles from './styles.scss';
 
 interface Params { }
@@ -62,25 +63,6 @@ interface LegendItem {
     label: string;
     color: string;
 }
-
-const RainEmptyComponent = () => (
-    <Message>
-        Data is currently not available
-    </Message>
-);
-
-const rainLegendData: LegendItem[] = [
-    { key: 'averages', label: 'Average Rainfall (mm)', color: '#7fc97f' },
-];
-
-const labelSelector = (d: LegendItem) => d.label;
-const keySelector = (d: LegendItem) => d.label;
-const colorSelector = (d: LegendItem) => d.color;
-
-type Props = NewProps<OwnProps, Params>;
-
-const waterLevelKeySelector = (waterLevel: WaterLevelAverage) => waterLevel.interval;
-const rainKeySelector = (rain: RealTimeRainDetails) => rain.id;
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
@@ -235,6 +217,7 @@ class RainDetails extends React.PureComponent<Props> {
         detailRequest.do({ dataDateRange, isDaily });
     }
 
+
     private latestWaterLevelHeader: Header<WaterLevelAverage>[];
 
     private rainHeader: Header<RealTimeRainDetails>[];
@@ -312,6 +295,14 @@ class RainDetails extends React.PureComponent<Props> {
         return rainHours;
     })
 
+    private handlePeriodChange = (periodName: string) => {
+        this.setState(prevState => ({
+            ...prevState,
+            period:
+                { periodCode: periodName.periodCode },
+        }));
+    };
+
     private getHourlyChartData = memoize((rainDetails: RealTimeRainDetails[]) => {
         interface ChartData {
             createdOn: number[];
@@ -357,6 +348,8 @@ class RainDetails extends React.PureComponent<Props> {
     });
 
     public render() {
+        console.log('Initial at render');
+
         const initialFaramValue = {
             dataDateRange: {
                 startDate: '',
@@ -384,7 +377,6 @@ class RainDetails extends React.PureComponent<Props> {
             riverDetails = results;
         }
 
-        console.log('raniDetails', riverDetails);
         const rainDataWithParameter = parseInterval(riverDetails);
         const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
 
@@ -402,7 +394,6 @@ class RainDetails extends React.PureComponent<Props> {
             rainDataWithPeriod.filter(r => r.dateOnly),
             rain => rain.dateOnly,
         );
-
 
         let filterWiseChartData;
         let intervalCode;
@@ -423,9 +414,6 @@ class RainDetails extends React.PureComponent<Props> {
             filterWiseChartData = getChartData(monthlyWiseGroup, 'monthName');
             intervalCode = 'twentyFourHour';
         }
-
-        console.log('periodCode data', riverDetails);
-
 
         if (filterWiseChartData) {
             filterWiseChartData.sort(arraySorter);
@@ -450,6 +438,8 @@ class RainDetails extends React.PureComponent<Props> {
         const hourlyRainDetails = this.getHourlyRainData(todaysRainDetails);
         const hourlyRainChartData = this.getHourlyChartData(hourlyRainDetails);
         const weeklyRainChartData = this.getWeeklyRainDetails(rainDetails);
+
+        console.log('Final at render');
 
         return (
             <Modal
@@ -553,6 +543,9 @@ class RainDetails extends React.PureComponent<Props> {
                                         chartTitle={'Accumulated Rainfall (mm)'}
 
                                     />
+                                </div>
+                                <div className={styles.selectComponent}>
+                                    <PeriodSelector onChange={this.handlePeriodChange} />
                                 </div>
                                 <div className={styles.accumulatedRainfall}>
                                     <TableView

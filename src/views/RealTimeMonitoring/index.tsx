@@ -170,12 +170,13 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
     },
     realTimeRiverRequest: {
-        url: '/river/',
+        url: '/river-stations/',
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'water_level_on'),
+            // ...transformDateRangeFilterParam(filters, 'incident_on'),
+            // // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'water_level_on'),
+            latest: true,
         }),
         onSuccess: ({ response, props: { setRealTimeRiverList } }) => {
             interface Response { results: PageType.RealTimeRiver[] }

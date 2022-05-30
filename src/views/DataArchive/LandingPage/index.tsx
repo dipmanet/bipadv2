@@ -7,6 +7,8 @@ import icons from './icons';
 import Option from '../Option';
 import Loading from '#components/Loading';
 import { checkPermission } from '../utils';
+// added
+import { User } from '../../../store/atom/auth/types';
 
 import {
     userSelector,
@@ -22,6 +24,8 @@ interface View {
 }
 
 interface Props {
+    // added
+    user: User;
     handleOptionClick: Function;
 }
 
@@ -91,20 +95,24 @@ const LandingPage = (props: Props) => {
     //     return permission;
     // };
 
-    const rainPermisssion = checkPermission(user, 'view_rain', 'realtime');
-    const riverPermission = checkPermission(user, 'view_river', 'realtime');
+    // const rainPermisssion = checkPermission(user, 'view_rain', 'realtime');
+    // const riverPermission = checkPermission(user, 'view_river', 'realtime');
 
     const views = [
         { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
         { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
     ];
 
-    if (rainPermisssion) {
-        views.push({ id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon });
+    if (user) {
+        views.push({ id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon }, { id: 'river', title: 'River', alt: 'river', icon: RiverIcon });
     }
-    if (riverPermission) {
-        views.push({ id: 'river', title: 'River', alt: 'river', icon: RiverIcon });
-    }
+
+    // if (rainPermisssion) {
+    //     views.push({ id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon });
+    // }
+    // if (riverPermission) {
+    //     views.push({ id: 'river', title: 'River', alt: 'river', icon: RiverIcon });
+    // }
 
     // const views: View[] = [
     //     { id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon },

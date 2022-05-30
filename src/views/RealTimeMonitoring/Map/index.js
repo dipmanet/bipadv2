@@ -20,6 +20,7 @@ import {
     getMapPaddings,
 } from '#constants';
 import {
+    getRasterTile,
     earthquakeToGeojson,
     riverToGeojson,
     rainToGeojson,
@@ -29,7 +30,10 @@ import {
 
 import { httpGet } from '#utils/common';
 
-import { realTimeDurationSelector, riverStationsSelector, riverFiltersSelector } from '#selectors';
+import {
+    realTimeDurationSelector, riverStationsSelector,
+    riverFiltersSelector, rainStationsSelector,
+} from '#selectors';
 import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
@@ -45,6 +49,20 @@ RealTimeTooltip.propTypes = {
     renderer: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
+const tileUrl = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    '&version=1.1.0',
+    '&service=WMS',
+    '&request=GetMap',
+    '&layers=Bipad:watershed-area',
+    '&tiled=true',
+    '&width=256',
+    '&height=256',
+    '&srs=EPSG:3857',
+    '&bbox={bbox-epsg-3857}',
+    '&transparent=true',
+    '&format=image/png',
+].join('');
 
 const GIS_URL = [
     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
@@ -59,7 +77,35 @@ const mapStateToProps = state => ({
     duration: realTimeDurationSelector(state),
     riverFilters: riverFiltersSelector(state),
     riverStations: riverStationsSelector(state),
+    rainStation: rainStationsSelector(state),
+
 });
+
+const rainStationToGeojson = (rainStation) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: rainStation
+            .filter(station => station.point)
+            .map(station => ({
+                id: station.id,
+                type: 'Feature',
+                geometry: {
+                    ...station.point,
+                },
+                properties: {
+                    ...station,
+                    stationId: station.id,
+                    title: station.title,
+                    description: station.description,
+                    basin: station.basin,
+                    status: station.status,
+                    measuredOn: station.measuredOn,
+                    averages: station.averages,
+                },
+            })),
+    };
+    return geojson;
+};
 
 class RealTimeMap extends React.PureComponent {
     constructor(props) {
@@ -70,6 +116,9 @@ class RealTimeMap extends React.PureComponent {
             riverTitle: undefined,
             streamflowId: undefined,
             gis: undefined,
+            rainId: undefined,
+            riverId: undefined,
+            rasterLayers: [],
         };
     }
 
@@ -82,6 +131,61 @@ class RealTimeMap extends React.PureComponent {
             this.setState({ gis: undefined });
         }
     }
+
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.riverFilters !== this.props.riverFilters) {
+            // eslint-disable-next-line prefer-const
+            let basinCoordinates = [];
+            if (this.props.riverFilters.basin != null) {
+                // eslint-disable-next-line max-len
+                const mydata = this.props.rainStation.filter(item => item.basin === this.props.riverFilters.basin.title);
+
+                console.log('data', mydata);
+
+                if (mydata.length > 0) {
+                    basinCoordinates = mydata[0].point.coordinates;
+                    const tile = [
+                        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                        '&service=WMS',
+                        '&version=1.1.1',
+                        '&request=GetMap',
+                        '&layers=Bipad:watershed-area',
+                        '&tiled=true',
+                        '&width=256',
+                        '&height=256',
+                        '&srs=EPSG:3857',
+                        '&bbox={bbox-epsg-3857}',
+                        '&transparent=true',
+                        '&format=image/png',
+                        // eslint-disable-next-line max-len
+                        `&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
+                    ].join('');
+
+                    const ourAarray = [{
+                        key: `basin-${this.props.riverFilters.basin.title}`,
+                        layername: `layer-basin-${this.props.riverFilters.basin.title}`,
+                        tiles: tile,
+                    }];
+                    // eslint-disable-next-line max-len
+                    if (!(this.props.riverFilters.basin && Object.keys(this.props.riverFilters.basin).length)) {
+                        // eslint-disable-next-line react/no-did-update-set-state
+                        this.setState({ rasterLayers: [] });
+                    } else {
+                        // eslint-disable-next-line react/no-did-update-set-state
+                        this.setState({
+                            rasterLayers: [
+                                ourAarray[0]],
+                        });
+                    }
+                }
+            }
+            // }
+        }
+    }
+
+
+    getRainStationFeatureCollection = memoize(rainStationToGeojson);
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
@@ -112,21 +216,24 @@ class RealTimeMap extends React.PureComponent {
     });
 
     handleRainClick = (feature) => {
-        const { properties: { title } } = feature;
+        const { properties: { title, rainId } } = feature;
         this.setState({
             rainTitle: title,
             riverTitle: undefined,
             streamflowId: undefined,
+            rainId,
+
         });
         return true;
     }
 
     handleRiverClick = (feature) => {
-        const { properties: { title } } = feature;
+        const { properties: { title, riverId } } = feature;
         this.setState({
             riverTitle: title,
             streamflowId: undefined,
             rainTitle: undefined,
+            riverId,
         });
         return true;
     }
@@ -312,7 +419,6 @@ class RealTimeMap extends React.PureComponent {
 
     handleStreamflowClick = (feature) => {
         const { properties: { comid } } = feature;
-        // console.warn('feature', feature);
         this.setState({
             streamflowId: comid,
         });
@@ -686,6 +792,10 @@ class RealTimeMap extends React.PureComponent {
             riverFilters,
         } = this.props;
 
+        const { rasterLayers } = this.state;
+
+        console.log('data raster', this.state.rasterLayers);
+
         /**
          * handling riverdata from filters
          */
@@ -708,6 +818,11 @@ class RealTimeMap extends React.PureComponent {
             realTimeEarthquakeList,
         );
 
+        const rainStationFeatureCollection = this.getRainStationFeatureCollection(
+            this.props.rainStation,
+        );
+
+
         const fireFeatureCollection = this.getFireFeatureCollection(realTimeFireList);
 
         const pollutionFeatureCollection = this.getPollutionFeatureCollection(
@@ -724,7 +839,9 @@ class RealTimeMap extends React.PureComponent {
             riverTitle,
             rainTitle,
             streamflowId,
+            rainId,
             gis,
+            riverId,
         } = this.state;
 
         const tooltipOptions = {
@@ -733,10 +850,11 @@ class RealTimeMap extends React.PureComponent {
             offset: 8,
         };
         const region = {
-            adminLevel: riverFilters.municipality ? 3 : null,
+            adminLevel: riverFilters.municipality ? 3 : undefined,
             geoarea: riverFilters.municipality ? riverFilters.municipality : undefined,
         };
 
+        console.log('riverFilters', riverFilters);
         return (
             <React.Fragment>
                 <CommonMap
@@ -829,13 +947,64 @@ class RealTimeMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'line',
                                 paint: {
-                                    'line-color': '#004d40',
-                                    'line-width': 1,
+                                    'line-color': 'purple',
+                                    'line-width': 1.5,
+                                    'line-dasharray': [1, 2],
                                 },
                             }}
                         />
                     </MapSource>
+
                 )}
+
+                {(rasterLayers.length === 0)
+                    && (
+                        <MapSource
+                            key="basin-rain-key"
+                            sourceKey="basin-rain-key"
+                            sourceOptions={{
+                                type: 'raster',
+                                tiles: [tileUrl],
+                                tileSize: 256,
+                            }}
+                        >
+
+                            {/* <MapLayer
+                                layerKey="raster-rain-layer"
+                                layerOptions={{
+                                    type: 'raster',
+                                    paint: {
+                                        'raster-opacity': 0.9,
+                                    },
+                                }}
+                            /> */}
+                        </MapSource>
+                    )
+                }
+                {rasterLayers && rasterLayers.length > 0 && rasterLayers.map(layer => (
+                    <MapSource
+                        key={`key${layer.key}`}
+                        sourceKey={`source${layer.key}`}
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [layer.tiles],
+                            tileSize: 256,
+                        }}
+                    >
+
+                        <MapLayer
+                            layerKey={`${layer.layername}`}
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': 1,
+
+                                },
+                            }}
+                        />
+                    </MapSource>
+                ))
+                }
                 <MapSource
                     sourceKey="real-time-rain-points"
                     sourceOptions={{ type: 'geojson' }}
@@ -944,7 +1113,7 @@ class RealTimeMap extends React.PureComponent {
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
                             /> */}
-                            {/* the layer below is to render traingles for rain */}
+                            {/* This layer below is to render traingles for rain */}
                             {/* <MapLayer
                                 layerKey="real-time-rain-triangle"
                                 onClick={this.handleRainClick}
@@ -1177,12 +1346,14 @@ class RealTimeMap extends React.PureComponent {
                 {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
+                        id={riverId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
                 {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        id={rainId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}

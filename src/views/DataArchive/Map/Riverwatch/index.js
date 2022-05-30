@@ -7,6 +7,8 @@ import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import { MapChildContext } from '#re-map/context';
+import { httpGet } from '#utils/common';
+
 
 import {
     mapStyles,
@@ -36,6 +38,15 @@ const tileUrl = [
     '&bbox={bbox-epsg-3857}',
     '&transparent=true',
     '&format=image/png',
+].join('');
+
+const GIS_URL = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
 ].join('');
 
 const RiverToolTip = ({ renderer: Renderer, params }) => (
@@ -80,6 +91,7 @@ const riverStationToGeojson = (riverStation) => {
                 },
                 properties: {
                     ...river,
+                    waterLevel: river.waterLevel ? Number(river.waterLevel.toFixed(1)) : 0,
                     station: river.id,
                     title: river.title,
                     description: river.description,
@@ -111,7 +123,18 @@ class RiverMap extends React.PureComponent {
             tooltipParams: null,
             showModal: false,
             rasterLayers: [],
+            gis: undefined,
         };
+    }
+
+    componentDidMount() {
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -240,8 +263,10 @@ class RiverMap extends React.PureComponent {
 
                 <div className={styles.description}>
                     <div className={styles.key}>MEASURED ON:</div>
-                    <div className={styles.value}>{`${getDate(measuredOn)} ${getTime(measuredOn)}`}</div>
+                    <div className={styles.value}>{measuredOn ? `${getDate(measuredOn)} ${getTime(measuredOn)}` : 'N/A'}</div>
                 </div>
+
+
                 <div className={styles.description}>
                     <div className={styles.key}>WATER LEVEL:</div>
                     <div className={styles.value}>{waterLevel ? `${waterLevel.toFixed(2)} m` : 'N/A'}</div>
@@ -279,6 +304,7 @@ class RiverMap extends React.PureComponent {
             tooltipParams,
             coordinates,
             rasterLayers,
+            gis,
         } = this.state;
 
         // sorting to get latest value on map
@@ -289,7 +315,6 @@ class RiverMap extends React.PureComponent {
         const riverFeatureCollection = this.getRiverFeatureCollection(
             data,
         );
-
         const riverStationFeatureCollection = this.getRiverStationFeatureCollection(
             this.props.riverStation,
         );
@@ -326,7 +351,26 @@ class RiverMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
-
+                {gis && (
+                    <MapSource
+                        sourceKey="gis-layer"
+                        sourceOptions={{ type: 'geojson' }}
+                        geoJson={gis}
+                        supportHover
+                    >
+                        <MapLayer
+                            layerKey="gis-outline"
+                            layerOptions={{
+                                type: 'line',
+                                paint: {
+                                    'line-color': 'purple',
+                                    'line-width': 1.5,
+                                    'line-dasharray': [1, 2],
+                                },
+                            }}
+                        />
+                    </MapSource>
+                )}
                 {(rasterLayers.length === 0)
                     && (
                         <MapSource
@@ -339,7 +383,7 @@ class RiverMap extends React.PureComponent {
                             }}
                         >
 
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="raster-river-layer"
                                 layerOptions={{
                                     type: 'raster',
@@ -347,7 +391,7 @@ class RiverMap extends React.PureComponent {
                                         'raster-opacity': 0.9,
                                     },
                                 }}
-                            />
+                            /> */}
                         </MapSource>
                     )
                 }
@@ -390,6 +434,14 @@ class RiverMap extends React.PureComponent {
                                 layout: mapStyles.riverPoint.layout,
                                 // paint: mapStyles.riverPoint.paint,
                                 paint: mapStyles.riverPoint.text,
+                            }}
+                        />
+                        <MapLayer
+                            layerKey="real-time-river-text"
+                            layerOptions={{
+                                type: 'symbol',
+                                layout: mapStyles.riverText.layout,
+                                paint: mapStyles.riverText.paint,
                             }}
                         />
                     </React.Fragment>

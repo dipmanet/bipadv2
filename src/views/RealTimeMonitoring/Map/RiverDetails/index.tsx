@@ -34,7 +34,10 @@ import {
 
 import Graph from '#views/DataArchive/Modals/Riverwatch/Graph';
 import { groupList } from '#utils/common';
-import { parsePeriod, getChartData, arraySorter, isEqualObject } from '#views/DataArchive/Modals/Riverwatch/utils';
+import {
+    parsePeriod, getChartData,
+    arraySorter, isEqualObject,
+} from '#views/DataArchive/Modals/Riverwatch/utils';
 import TableView from '#views/DataArchive/Modals/Riverwatch/TableView';
 import styles from './styles.scss';
 
@@ -50,11 +53,6 @@ interface LegendItem {
     label: string;
     color: string;
 }
-const RiverEmptyComponent = () => (
-    <Message>
-        Data is currently not available
-    </Message>
-);
 
 const riverLegendData: LegendItem[] = [
     { key: 'waterLevel', label: 'Water Level', color: '#4daf4a' },
@@ -62,13 +60,8 @@ const riverLegendData: LegendItem[] = [
     { key: 'dangerLevel', label: 'Danger Level', color: '#e41a1c' },
 ];
 
-const labelSelector = (d: LegendItem) => d.label;
-const keySelector = (d: LegendItem) => d.label;
-const colorSelector = (d: LegendItem) => d.color;
-
 type Props = NewProps<OwnProps, Params>;
 
-const riverKeySelector = (riverDetail: RealTimeRiverDetails) => riverDetail.id;
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
@@ -470,39 +463,12 @@ class RiverDetails extends React.PureComponent<Props> {
 
                                 </div>
                                 <div className={styles.waterLevelChartContainer}>
-                                    {/* <Table
-                                        className={styles.content}
-                                        data={hourlyRiverDetails}
-                                        headers={this.riverHeader}
-                                        keySelector={riverKeySelector}
-                                        emptyComponent={RiverEmptyComponent}
-                                    /> */}
-                                    {/* <Graph
-                                        stationData={riverDetails}
-                                        filterWiseChartData={filterWiseChartData}
-                                        periodCode={periodCode}
-                                        isInitial={isInitial}
-                                        stationName={title}
-                                        filterValues={this.state.filterValues}
-                                    /> */}
                                     <TableView
                                         filterWiseChartData={filterWiseChartData}
                                         filterValues={this.state.filterValues}
                                         isInitial={isInitial}
                                         stationName={title}
                                     />
-                                    {/* <MultiLineChart
-                                        className={styles.riverChart}
-                                        data={hourlyRiverChartData}
-                                    /> */}
-                                    {/* <Legend
-                                        className={styles.riverChartLegend}
-                                        colorSelector={colorSelector}
-                                        data={riverLegendData}
-                                        keySelector={keySelector}
-                                        labelSelector={labelSelector}
-                                        itemClassName={styles.legendItem}
-                                    /> */}
                                 </div>
                             </div>
                         </div>

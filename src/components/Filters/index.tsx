@@ -170,8 +170,6 @@ const getIsFiltered = (key: TabKey | undefined, filters: RiverFiltersElement) =>
     };
 
     const filter = filters[tabKeyToFilterMap[key]];
-    console.log('filter is', filter);
-
 
     if (Array.isArray(filter)) {
         return filter.length !== 0;
@@ -605,10 +603,20 @@ class Filters extends React.PureComponent<Props, State> {
             });
 
             setFilters({ filters: this.state.faramValues });
-            setDataArchiveRiverFilter({
-                dataArchiveRiverFilters: this.state.faramValues,
-            });
         }
+        setDataArchiveRiverFilter({
+            dataArchiveRiverFilters: {
+                station: {},
+                basin: undefined,
+                municipality: undefined,
+                active: undefined,
+                dataDateRange: {
+                    rangeInDays: 7,
+                    startDate: undefined,
+                    endDate: undefined,
+                },
+            },
+        });
     }
 
     private handleCloseCurrentFilterButtonClick = () => {
@@ -620,7 +628,7 @@ class Filters extends React.PureComponent<Props, State> {
        * Handling realtime river filter data
        */
         if (type === 'river') {
-            if (mainVal && Object.keys(mainVal.riverBasin).length > 0) {
+            if (mainVal && mainVal.riverBasin && Object.keys(mainVal.riverBasin).length > 0) {
                 this.setState((prevState: State) => {
                     if (prevState.faramValues.riverBasin !== mainVal.riverBasin) {
                         return {
@@ -651,7 +659,7 @@ class Filters extends React.PureComponent<Props, State> {
     * Handling realtime rain filter data
     */
         if (type === 'rain') {
-            if (mainVal && Object.keys(mainVal.rainBasin).length > 0) {
+            if (mainVal && mainVal.rainBasin && Object.keys(mainVal.rainBasin).length > 0) {
                 this.setState((prevState: State) => {
                     if (prevState.faramValues.rainBasin !== mainVal.rainBasin) {
                         return {
@@ -698,14 +706,14 @@ class Filters extends React.PureComponent<Props, State> {
         /**
      * Setting the current filter value to use it in map section
      */
-        console.log('subitVal', faramValues);
         FilterClickedStatus(true);
         if (!disableSubmitButton) {
             if (activeView === 'riverBasin') {
                 setDataArchiveRiverFilter({
                     dataArchiveRiverFilters: {
-                        point: faramValues.riverStation.point,
-                        municipality: faramValues.riverStation.municipality,
+                        point: faramValues.riverStation && faramValues.riverStation.point,
+                        municipality: faramValues.riverStation
+                            && faramValues.riverStation.municipality,
                         basin: faramValues.riverBasin,
                         active: 'river',
                     },
@@ -715,8 +723,9 @@ class Filters extends React.PureComponent<Props, State> {
             if (activeView === 'rainBasin') {
                 setDataArchiveRiverFilter({
                     dataArchiveRiverFilters: {
-                        point: faramValues.rainStation.point,
-                        municipality: faramValues.rainStation.municipality,
+                        point: faramValues.rainStation && faramValues.rainStation.point,
+                        municipality: faramValues.rainStation
+                            && faramValues.rainStation.municipality,
                         basin: faramValues.rainBasin,
                         active: 'rain',
                     },
@@ -735,8 +744,6 @@ class Filters extends React.PureComponent<Props, State> {
             hideDataRangeFilter,
         ): { [key in TabKey]?: string; } => {
             const { activeRouteDetails } = this.props;
-            console.log('activeRouteDetails', activeRouteDetails);
-
             const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
@@ -793,27 +800,6 @@ class Filters extends React.PureComponent<Props, State> {
             hideDataRangeFilter,
         );
 
-        console.log('disableSubmitButton', disableSubmitButton);
-
-
-        // if (user && Object.keys(user.profile).length > 0) {
-        //     if (user.profile.municipality > 0) {
-        //         const newFaramValues = {
-        //             dataDateRange: {
-        //                 rangeInDays: 7,
-        //                 startDate: undefined,
-        //                 endDate: undefined,
-        //             },
-        //             hazard: [],
-        //             region: { adminLevel: 3,
-        //                 municipality: user.profile.municipality },
-
-        //         };
-
-        //         this.setState({ faramValues: newFaramValues });
-
-        //     }
-        // }
         const { activeView } = this.state;
 
 
