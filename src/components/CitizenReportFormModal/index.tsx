@@ -218,8 +218,6 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
             language: { language },
         } = this.props;
 
-        console.log(hazardList, 'hazard test');
-
         const {
             faramValues,
             faramErrors,
@@ -288,6 +286,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                                                 label={t('Incident on')}
                                                 className={styles.input}
                                                 faramElementName="incidentOnDate"
+                                                language={language}
                                             />
 
 
@@ -310,6 +309,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                                         faramElementName="image"
                                         showStatus
                                         accept="image/*"
+                                        language={language}
                                     >
                                         {t('Upload Image')}
                                     </RawFileInput>

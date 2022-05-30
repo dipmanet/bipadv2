@@ -113,6 +113,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                                     label={t('Incident on')}
                                     className={styles.input}
                                     faramElementName="incidentOnDate"
+                                    language={language}
                                 />
                                 <TimeInput
                                     className={styles.input}
@@ -122,6 +123,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                                     className={styles.input}
                                     label={t('Reported on')}
                                     faramElementName="reportedOnDate"
+                                    language={language}
                                 />
                                 <TimeInput
                                     className={styles.input}

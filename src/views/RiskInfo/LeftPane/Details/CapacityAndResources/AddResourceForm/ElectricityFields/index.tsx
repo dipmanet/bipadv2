@@ -69,6 +69,7 @@ const ElectricityFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

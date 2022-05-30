@@ -51,12 +51,12 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {(faramValues.operatorType === 'Other')
-                        && (
-                            <TextInput
-                                faramElementName="otherOperatorType"
-                                label={t('Please specify (other) operator type ')}
-                            />
-                        )
+                            && (
+                                <TextInput
+                                    faramElementName="otherOperatorType"
+                                    label={t('Please specify (other) operator type ')}
+                                />
+                            )
                         }
                         <h2>{t('SERVICES AVAILABLE')}</h2>
                         <Checkbox
@@ -76,12 +76,12 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('Other')}
                         />
                         {faramValues.hasOtherServices
-                        && (
-                            <TextInput
-                                faramElementName="otherServices"
-                                label={t('Other Services')}
-                            />
-                        )
+                            && (
+                                <TextInput
+                                    faramElementName="otherServices"
+                                    label={t('Other Services')}
+                                />
+                            )
                         }
                         <NumberInput
                             faramElementName="serviceUsers"
@@ -147,12 +147,12 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                        && (
-                            <TextInput
-                                faramElementName="specifyInfrastructure"
-                                label={t('Please specify,Disable friendly infrastructures')}
-                            />
-                        )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify,Disable friendly infrastructures')}
+                                />
+                            )}
 
                         <h2>{t('OPENING HOUR')}</h2>
 
@@ -191,6 +191,7 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

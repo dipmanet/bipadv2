@@ -9,6 +9,8 @@ import Faram, {
     emailCondition,
 } from '@togglecorp/faram';
 
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ModalHeader from '#rscv/Modal/Header';
@@ -50,6 +52,12 @@ import {
 
 import ContactTrainingList from './ContactTrainingList';
 import styles from './styles.scss';
+
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const StepwiseRegionSelectInput = FaramInputElement(FullStepwiseRegionSelectInput);
 
@@ -385,6 +393,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                 municipalityContactAddRequest: { pending: contactAddPending },
             },
             details,
+            language: { language },
         } = this.props;
 
         const {
@@ -468,6 +477,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                                     faramElementName="image"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     Upload Image
                                 </RawFileInput>
@@ -545,4 +555,4 @@ class ContactForm extends React.PureComponent<Props, State> {
     }
 }
 
-export default createRequestClient(requests)(ContactForm);
+export default compose(connect(mapStateToProps), createRequestClient(requests))(ContactForm);

@@ -3,6 +3,7 @@
 import React, { FunctionComponent } from 'react';
 
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import NumberInput from '#rsci/NumberInput';
 import TextInput from '#rsci/TextInput';
 import Checkbox from '#rsci/Checkbox';
@@ -15,17 +16,21 @@ import DateInput from '#rsci/DateInput';
 import styles from '../styles.scss';
 import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
-
+import { languageSelector } from '#selectors';
 
 interface Props {
     resourceEnums: EnumItem[];
 }
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 
 const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
-    optionsClassName, iconName }: Props) => {
+    optionsClassName, iconName, language: { language } }: Props) => {
     // const typeOptions = getAttributeOptions(resourceEnums, 'type');
     // const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
     const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
@@ -157,39 +162,39 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {
-                faramValues.hasSafeMotherhood ? (
-                    <>
-                        <Checkbox
-                            faramElementName="hasAntenatalCare"
-                            label={t('Antenatal Care')}
-                        />
-                        <Checkbox
-                            faramElementName="hasPostnatalCare"
-                            label={t('Postnatal Care')}
-                        />
-                        <Checkbox
-                            faramElementName="birthingCenter"
-                            label={t('Birthing/Delivery Services')}
-                        />
-                        <Checkbox
-                            faramElementName="hasBasicEmergencyObstetricCare"
-                            label={t('Basic Emergency Obstetric Care (BEOC)')}
-                        />
-                        <Checkbox
-                            faramElementName="hasComprehensiveEmergencyObstetricCare"
-                            label={t('Comprehensive Emergency Obstetric Care (CEOC)')}
-                        />
-                        <Checkbox
-                            faramElementName="hasComprehensiveAbortionCare"
-                            label={t('Comprehensive Abortion Care')}
-                        />
-                        <Checkbox
-                            faramElementName="hasPostAbortionCare"
-                            label={t('Post Abortion Care')}
-                        />
-                    </>
-                ) : ''
-            }
+                            faramValues.hasSafeMotherhood ? (
+                                <>
+                                    <Checkbox
+                                        faramElementName="hasAntenatalCare"
+                                        label={t('Antenatal Care')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasPostnatalCare"
+                                        label={t('Postnatal Care')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="birthingCenter"
+                                        label={t('Birthing/Delivery Services')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasBasicEmergencyObstetricCare"
+                                        label={t('Basic Emergency Obstetric Care (BEOC)')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasComprehensiveEmergencyObstetricCare"
+                                        label={t('Comprehensive Emergency Obstetric Care (CEOC)')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasComprehensiveAbortionCare"
+                                        label={t('Comprehensive Abortion Care')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasPostAbortionCare"
+                                        label={t('Post Abortion Care')}
+                                    />
+                                </>
+                            ) : ''
+                        }
 
                         <SelectInput
                             faramElementName="familyPlanning"
@@ -202,32 +207,32 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {faramValues.familyPlanning
-                ? (
-                    <>
-                        <Checkbox
-                            faramElementName="hasCondomPillsDepoprovera"
-                            label={t('Condom/Pills/Depo-Provera')}
-                        />
-                        <Checkbox
-                            faramElementName="hasIucd"
-                            label={t('IUCD')}
-                        />
-                        <Checkbox
-                            faramElementName="hasImplant"
-                            label={t('Implant')}
-                        />
-                        <Checkbox
-                            faramElementName="hasVasectomy"
-                            label={t('Vasectomy')}
-                        />
-                        <Checkbox
-                            faramElementName="hasMinilap"
-                            label={t('Minilap')}
-                        />
+                            ? (
+                                <>
+                                    <Checkbox
+                                        faramElementName="hasCondomPillsDepoprovera"
+                                        label={t('Condom/Pills/Depo-Provera')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasIucd"
+                                        label={t('IUCD')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasImplant"
+                                        label={t('Implant')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasVasectomy"
+                                        label={t('Vasectomy')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasMinilap"
+                                        label={t('Minilap')}
+                                    />
 
 
-                    </>
-                ) : ''}
+                                </>
+                            ) : ''}
 
 
                         <SelectInput
@@ -241,76 +246,76 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {
-                faramValues.hasOpd
-                    ? (
-                        <>
-                            <Checkbox
-                                faramElementName="hasGeneral"
-                                label={t('General')}
-                            />
-                            <Checkbox
-                                faramElementName="hasPediatric"
-                                label={t('Pediatric')}
-                            />
-                            <Checkbox
-                                faramElementName="hasObsAndGynae"
-                                label={t('Obs. and Gynae')}
-                            />
-                            <Checkbox
-                                faramElementName="hasDentalOpd"
-                                label={t('Dental')}
-                            />
-                            <Checkbox
-                                faramElementName="hasSurgery"
-                                label={t('Surgery')}
-                            />
-                            <Checkbox
-                                faramElementName="hasGastrointestinal"
-                                label={t('Gastrointestinal')}
-                            />
-                            <Checkbox
-                                faramElementName="hasCardiac"
-                                label={t('Cardiac')}
-                            />
-                            <Checkbox
-                                faramElementName="hasMental"
-                                label={t('Mental')}
-                            />
-                            <Checkbox
-                                faramElementName="hasRespiratory"
-                                label={t('Respiratory')}
-                            />
-                            <Checkbox
-                                faramElementName="hasNephrology"
-                                label={t('Nephrology')}
-                            />
-                            <Checkbox
-                                faramElementName="hasEnt"
-                                label={t('ENT')}
-                            />
-                            <Checkbox
-                                faramElementName="hasDermatology"
-                                label={t('Dermatology')}
-                            />
-                            <Checkbox
-                                faramElementName="hasEndocrinology"
-                                label={t('Endocrinology')}
-                            />
-                            <Checkbox
-                                faramElementName="hasOncology"
-                                label={t('Oncology')}
-                            />
-                            <Checkbox
-                                faramElementName="hasNeurology"
-                                label={t('Neurology')}
-                            />
-                            <Checkbox
-                                faramElementName="hasOphthalmology"
-                                label={t('Ophthalmology')}
-                            />
-                        </>
-                    ) : ''
-            }
+                            faramValues.hasOpd
+                                ? (
+                                    <>
+                                        <Checkbox
+                                            faramElementName="hasGeneral"
+                                            label={t('General')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasPediatric"
+                                            label={t('Pediatric')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasObsAndGynae"
+                                            label={t('Obs. and Gynae')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasDentalOpd"
+                                            label={t('Dental')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasSurgery"
+                                            label={t('Surgery')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasGastrointestinal"
+                                            label={t('Gastrointestinal')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasCardiac"
+                                            label={t('Cardiac')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasMental"
+                                            label={t('Mental')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasRespiratory"
+                                            label={t('Respiratory')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasNephrology"
+                                            label={t('Nephrology')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasEnt"
+                                            label={t('ENT')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasDermatology"
+                                            label={t('Dermatology')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasEndocrinology"
+                                            label={t('Endocrinology')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasOncology"
+                                            label={t('Oncology')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasNeurology"
+                                            label={t('Neurology')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasOphthalmology"
+                                            label={t('Ophthalmology')}
+                                        />
+                                    </>
+                                ) : ''
+                        }
                         <Checkbox
                             faramElementName="hasTreatementOfTb"
                             label={t('Treatment of Tuberculosis')}
@@ -348,58 +353,58 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {faramValues.hasLaboratoryService
-                ? (
-                    <>
-                        <Checkbox
-                            faramElementName="hasTestHiv"
-                            label={t('HIV test')}
-                        />
-                        <Checkbox
-                            faramElementName="hasTestMalaria"
-                            label={t('Malaria test')}
-                        />
-                        <Checkbox
-                            faramElementName="hasTestTb"
-                            label={t('Tuberculosis test')}
-                        />
-                        <Checkbox
-                            faramElementName="hasTestKalaazar"
-                            label={t('Kala-azar test')}
-                        />
-                        <Checkbox
-                            faramElementName="hasUrineRe"
-                            label={t('Urine RE')}
-                        />
-                        <Checkbox
-                            faramElementName="hasStoolRe"
-                            label={t('Stool RE')}
-                        />
-                        <Checkbox
-                            faramElementName="hasGeneralBloodCbc"
-                            label={t('General Blood CBC')}
-                        />
-                        <Checkbox
-                            faramElementName="hasCulture"
-                            label={t('Culture')}
-                        />
-                        <Checkbox
-                            faramElementName="hasHormones"
-                            label={t('Hormones')}
-                        />
-                        <Checkbox
-                            faramElementName="hasLeprosySmearTest"
-                            label={t('Leprosy Smear test')}
-                        />
-                        <Checkbox
-                            faramElementName="hasTestCovidPcr"
-                            label={t('COVID PCR')}
-                        />
-                        <Checkbox
-                            faramElementName="hasTestCovidAntigen"
-                            label={t('COVID Antigen')}
-                        />
-                    </>
-                ) : ''}
+                            ? (
+                                <>
+                                    <Checkbox
+                                        faramElementName="hasTestHiv"
+                                        label={t('HIV test')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasTestMalaria"
+                                        label={t('Malaria test')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasTestTb"
+                                        label={t('Tuberculosis test')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasTestKalaazar"
+                                        label={t('Kala-azar test')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasUrineRe"
+                                        label={t('Urine RE')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasStoolRe"
+                                        label={t('Stool RE')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasGeneralBloodCbc"
+                                        label={t('General Blood CBC')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasCulture"
+                                        label={t('Culture')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasHormones"
+                                        label={t('Hormones')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasLeprosySmearTest"
+                                        label={t('Leprosy Smear test')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasTestCovidPcr"
+                                        label={t('COVID PCR')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasTestCovidAntigen"
+                                        label={t('COVID Antigen')}
+                                    />
+                                </>
+                            ) : ''}
 
                         <Checkbox
                             faramElementName="hasVolunteerCounselingTest"
@@ -435,52 +440,52 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {
-                faramValues.hasRadiology
-                    ? (
-                        <>
-                            <Checkbox
-                                faramElementName="hasXRay"
-                                label={t('X-ray')}
-                            />
-                            <Checkbox
-                                faramElementName="hasXRayWithContrast"
-                                label={t('X-ray with contrast')}
-                            />
-                            <Checkbox
-                                faramElementName="hasUltrasound"
-                                label={t('Ultrasound')}
-                            />
-                            <Checkbox
-                                faramElementName="hasEchocardiogram"
-                                label={t('Echocardiogram')}
-                            />
-                            <Checkbox
-                                faramElementName="hasEcg"
-                                label={t('ECG')}
-                            />
-                            <Checkbox
-                                faramElementName="hasTrademill"
-                                label={t('Trademill')}
-                            />
-                            <Checkbox
-                                faramElementName="hasCtScan"
-                                label={t('CT Scan')}
-                            />
-                            <Checkbox
-                                faramElementName="hasMri"
-                                label={t('MRI')}
-                            />
-                            <Checkbox
-                                faramElementName="hasEndoscopy"
-                                label={t('Endoscopy')}
-                            />
-                            <Checkbox
-                                faramElementName="hasColonoscopy"
-                                label={t('Colonoscopy')}
-                            />
-                        </>
-                    ) : ''
-            }
+                            faramValues.hasRadiology
+                                ? (
+                                    <>
+                                        <Checkbox
+                                            faramElementName="hasXRay"
+                                            label={t('X-ray')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasXRayWithContrast"
+                                            label={t('X-ray with contrast')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasUltrasound"
+                                            label={t('Ultrasound')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasEchocardiogram"
+                                            label={t('Echocardiogram')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasEcg"
+                                            label={t('ECG')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasTrademill"
+                                            label={t('Trademill')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasCtScan"
+                                            label={t('CT Scan')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasMri"
+                                            label={t('MRI')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasEndoscopy"
+                                            label={t('Endoscopy')}
+                                        />
+                                        <Checkbox
+                                            faramElementName="hasColonoscopy"
+                                            label={t('Colonoscopy')}
+                                        />
+                                    </>
+                                ) : ''
+                        }
 
                         <SelectInput
                             faramElementName="hasSurgicalService"
@@ -493,34 +498,34 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {faramValues.hasSurgicalService
-                ? (
-                    <>
-                        <Checkbox
-                            faramElementName="hasCaesarianSection"
-                            label={t('Caesarian Section')}
-                        />
-                        <Checkbox
-                            faramElementName="hasGastrointestinalSurgery"
-                            label={t('Gastro Intestinal')}
-                        />
-                        <Checkbox
-                            faramElementName="hasTraumaSurgery"
-                            label={t('Trauma Surgery')}
-                        />
-                        <Checkbox
-                            faramElementName="hasCardiacSurgery"
-                            label={t('Cardiac Surgery')}
-                        />
-                        <Checkbox
-                            faramElementName="hasNeuroSurgery"
-                            label={t('Neuro Surgery')}
-                        />
-                        <Checkbox
-                            faramElementName="hasPlasticSurgery"
-                            label={t('Plastic Surgery')}
-                        />
-                    </>
-                ) : ''}
+                            ? (
+                                <>
+                                    <Checkbox
+                                        faramElementName="hasCaesarianSection"
+                                        label={t('Caesarian Section')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasGastrointestinalSurgery"
+                                        label={t('Gastro Intestinal')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasTraumaSurgery"
+                                        label={t('Trauma Surgery')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasCardiacSurgery"
+                                        label={t('Cardiac Surgery')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasNeuroSurgery"
+                                        label={t('Neuro Surgery')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasPlasticSurgery"
+                                        label={t('Plastic Surgery')}
+                                    />
+                                </>
+                            ) : ''}
 
                         <SelectInput
                             faramElementName="hasSpecializedService"
@@ -533,34 +538,34 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             hideClearButton
                         />
                         {faramValues.hasSpecializedService
-                ? (
-                    <>
-                        <Checkbox
-                            faramElementName="hasIcu"
-                            label={t('ICU')}
-                        />
-                        <Checkbox
-                            faramElementName="hasCcu"
-                            label={t('CCU')}
-                        />
-                        <Checkbox
-                            faramElementName="hasNicu"
-                            label={t('NICU')}
-                        />
-                        <Checkbox
-                            faramElementName="hasMicu"
-                            label={t('MICU')}
-                        />
-                        <Checkbox
-                            faramElementName="hasSncu"
-                            label={t('SNCU')}
-                        />
-                        <Checkbox
-                            faramElementName="hasPicu"
-                            label={t('PICU')}
-                        />
-                    </>
-                ) : ''}
+                            ? (
+                                <>
+                                    <Checkbox
+                                        faramElementName="hasIcu"
+                                        label={t('ICU')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasCcu"
+                                        label={t('CCU')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasNicu"
+                                        label={t('NICU')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasMicu"
+                                        label={t('MICU')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasSncu"
+                                        label={t('SNCU')}
+                                    />
+                                    <Checkbox
+                                        faramElementName="hasPicu"
+                                        label={t('PICU')}
+                                    />
+                                </>
+                            ) : ''}
 
                         <Checkbox
                             faramElementName="hasCardiacCatheterization"
@@ -700,16 +705,21 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             faramElementName="registrationEstDate"
                             label="Registration/Est. Date"
                             inputFieldClassName={styles.dateInput}
+                            language={language}
                         />
                         <DateInput
                             faramElementName="lastRenewalDate"
                             label={t('Last Renewal Date')}
                             inputFieldClassName={styles.dateInput}
+                            language={language}
+
                         />
                         <DateInput
                             faramElementName="dateOfValidity"
                             label={t('Date of Validity')}
                             inputFieldClassName={styles.dateInput}
+                            language={language}
+
                         />
                         {/* <Checkbox
                 faramElementName="hasInternetFacility"
@@ -735,12 +745,12 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label={t('Disable Friendly Infrastructures')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Disable Friendly Infrastructures')}
+                                />
+                            )}
 
                         <SelectInput
                             faramElementName="hasHelipad"
@@ -772,18 +782,18 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasFocalPerson
-                && (
-                    <>
-                        <TextInput
-                            faramElementName="focalPersonName"
-                            label={t('Disaster Focal Person Name')}
-                        />
-                        <TextInput
-                            faramElementName="focalPersonPhoneNumber"
-                            label={t('Focal Person Contact Number')}
-                        />
-                    </>
-                )}
+                            && (
+                                <>
+                                    <TextInput
+                                        faramElementName="focalPersonName"
+                                        label={t('Disaster Focal Person Name')}
+                                    />
+                                    <TextInput
+                                        faramElementName="focalPersonPhoneNumber"
+                                        label={t('Focal Person Contact Number')}
+                                    />
+                                </>
+                            )}
 
                         <SelectInput
                             faramElementName="hasOpenSpace"
@@ -795,12 +805,12 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasOpenSpace
-                && (
-                    <TextInput
-                        faramElementName="areaOfOpenSpace"
-                        label={t('Area of Open Space (Sq.Km)')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="areaOfOpenSpace"
+                                    label={t('Area of Open Space (Sq.Km)')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="hasMedicineStorageSpace"
                             label={t('Does the institution has medical storage space?')}
@@ -853,15 +863,16 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('Local Address')}
                         />
                         {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
-                ? (
-                    <RawFileInput
-                        faramElementName="picture"
-                        showStatus
-                        accept="image/*"
-                    >
-                        {t('Upload Image')}
-                    </RawFileInput>
-                ) : ''}
+                            ? (
+                                <RawFileInput
+                                    faramElementName="picture"
+                                    showStatus
+                                    accept="image/*"
+                                    language={language}
+                                >
+                                    {t('Upload Image')}
+                                </RawFileInput>
+                            ) : ''}
 
 
                     </>
@@ -874,4 +885,4 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
     );
 };
 
-export default HeathFields;
+export default connect(mapStateToProps)(HeathFields);

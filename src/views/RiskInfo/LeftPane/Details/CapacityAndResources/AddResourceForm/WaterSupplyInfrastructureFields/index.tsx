@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -33,9 +34,9 @@ const WaterSupplyInfrastructureFields:
         faramValues, optionsClassName, iconName, language: { language } }: Props) => {
         // const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
         const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-            { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
         const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-            { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
         const operatorTypeOptions = [
             {
                 key: 'Private',
@@ -115,6 +116,7 @@ const WaterSupplyInfrastructureFields:
                                 faramElementName="tankBuildDate"
                                 label={t('When system was build?')}
                                 inputFieldClassName={styles.dateInput}
+                                language={language}
                             />
 
 
@@ -128,12 +130,12 @@ const WaterSupplyInfrastructureFields:
                                 iconName={iconName}
                             />
                             {(faramValues.operatorType === 'Other')
-                    && (
-                        <TextInput
-                            faramElementName="otherOperatorType"
-                            label={t('If type is not mentioned above (other), name it here')}
-                        />
-                    )
+                                && (
+                                    <TextInput
+                                        faramElementName="otherOperatorType"
+                                        label={t('If type is not mentioned above (other), name it here')}
+                                    />
+                                )
                             }
 
                             <SelectInput
@@ -146,12 +148,12 @@ const WaterSupplyInfrastructureFields:
                                 iconName={iconName}
                             />
                             {faramValues.hasTechnicalStaff
-                    && (
-                        <TextInput
-                            faramElementName="technicalStaffDetail"
-                            label={t('Name and contact number of technical staff')}
-                        />
-                    )
+                                && (
+                                    <TextInput
+                                        faramElementName="technicalStaffDetail"
+                                        label={t('Name and contact number of technical staff')}
+                                    />
+                                )
 
                             }
                             <h2>{t('NUMBER OF EMPLOYEES')}</h2>
@@ -227,12 +229,12 @@ const WaterSupplyInfrastructureFields:
                                 iconName={iconName}
                             />
                             {faramValues.hasDisableFriendlyInfrastructure
-                    && (
-                        <TextInput
-                            faramElementName="specifyInfrastructure"
-                            label={t('Please specify,Disable friendly infrastructures')}
-                        />
-                    )}
+                                && (
+                                    <TextInput
+                                        faramElementName="specifyInfrastructure"
+                                        label={t('Please specify,Disable friendly infrastructures')}
+                                    />
+                                )}
 
 
                             <h2>{t('OPENING HOUR')}</h2>
@@ -273,6 +275,7 @@ const WaterSupplyInfrastructureFields:
                                         faramElementName="picture"
                                         showStatus
                                         accept="image/*"
+                                        language={language}
                                     >
                                         {t('Upload Image')}
                                     </RawFileInput>

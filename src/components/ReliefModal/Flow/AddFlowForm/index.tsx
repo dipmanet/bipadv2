@@ -323,7 +323,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal>
-                { pending && <LoadingAnimation />}
+                {pending && <LoadingAnimation />}
                 <Translation>
                     {
                         t => (
@@ -428,6 +428,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                                     <DateInput
                                         faramElementName="date"
                                         label={t('Date')}
+                                        language={language}
                                     />
                                 </ModalBody>
                                 <ModalFooter>

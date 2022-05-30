@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { FunctionComponent } from 'react';
 
 import { Translation } from 'react-i18next';
@@ -19,10 +20,8 @@ const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
     optionsClassName, iconName, language: { language } }) => {
-    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
-    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' }, { key: false, label: language === 'en' ? 'No' : 'छैन' }];
 
     return (
         // <DateInput
@@ -87,12 +86,12 @@ const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label={t('Please specify,Disable friendly infrastructures')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify,Disable friendly infrastructures')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
@@ -155,6 +154,7 @@ const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

@@ -22,7 +22,7 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import LocationInput from '#components/LocationInput';
 
-import {} from '#actionCreators';
+import { } from '#actionCreators';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import {
@@ -43,6 +43,7 @@ import {
 import {
     hazardTypeListSelector,
     severityListSelector,
+    languageSelector,
 } from '#selectors';
 import { KeyLabel } from '#types';
 
@@ -103,7 +104,7 @@ const severityKeySelector = (d: KeyLabel) => d.key;
 const severityLabelSelector = (d: KeyLabel) => d.label;
 
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     addEventRequest: {
         url: '/event/',
         method: methods.POST,
@@ -164,6 +165,7 @@ type Props = NewProps<ReduxProps, Params>;
 const mapStateToProps = (state: AppState): PropsFromState => ({
     hazardList: hazardTypeListSelector(state),
     severityList: severityListSelector(state),
+    language: languageSelector(state),
 });
 
 const defaultHazardColor = '#a0a0a0';
@@ -310,7 +312,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
 
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
         const point = location.geoJson.features[0].geometry;
-        const wards = location.wards;
+        const { wards } = location;
         const body = {
             ...others,
             startedOn,
@@ -352,6 +354,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
             onCloseButtonClick,
             severityList,
             hazardList,
+            language: { language },
         } = this.props;
 
         const {
@@ -406,6 +409,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                                         className={styles.startedOnDate}
                                         faramElementName="startedOnDate"
                                         label="Started on"
+                                        language={language}
                                     />
                                     <TimeInput
                                         faramElementName="startedOnTime"

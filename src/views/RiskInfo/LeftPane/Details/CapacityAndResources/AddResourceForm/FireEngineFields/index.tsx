@@ -23,15 +23,15 @@ const labelSelector = (d: KeyLabel) => d.label;
 const FireEngineFields: FunctionComponent = ({ resourceEnums, faramValues,
     optionsClassName, iconName, language: { language } }) => {
     const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    { key: false, label: language === 'en' ? 'No' : 'होइन' }];
     const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    { key: false, label: language === 'en' ? 'No' : 'छैन' }];
 
 
     const fireEngineCondition = [
-    { key: 'Operational', label: language === 'en' ? 'Operational' : 'संचालनमा छ ' },
-    { key: 'Need Repair', label: language === 'en' ? 'Need Repair' : 'मर्मत चाहिन्छ' },
-    { key: 'Not in working condition', label: language === 'en' ? 'Not in working condition' : 'काम गर्ने अवस्थामा छैन' }];
+        { key: 'Operational', label: language === 'en' ? 'Operational' : 'संचालनमा छ ' },
+        { key: 'Need Repair', label: language === 'en' ? 'Need Repair' : 'मर्मत चाहिन्छ' },
+        { key: 'Not in working condition', label: language === 'en' ? 'Not in working condition' : 'काम गर्ने अवस्थामा छैन' }];
     const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
     return (
         // <DateInput
@@ -52,13 +52,13 @@ const FireEngineFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {(faramValues.operatorType === 'Other')
-                && (
-                    <TextInput
-                        faramElementName="otherOperatorType"
-                        label={t('Please specify (other) operator type')}
-                    />
-                )
-            }
+                            && (
+                                <TextInput
+                                    faramElementName="otherOperatorType"
+                                    label={t('Please specify (other) operator type')}
+                                />
+                            )
+                        }
                         <TextInput
                             faramElementName="focalPersonName"
                             label={t('Name of Focal Person')}
@@ -118,15 +118,16 @@ const FireEngineFields: FunctionComponent = ({ resourceEnums, faramValues,
                             label={t('Local Address')}
                         />
                         {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
-                ? (
-                    <RawFileInput
-                        faramElementName="picture"
-                        showStatus
-                        accept="image/*"
-                    >
-                        {t('Upload Image')}
-                    </RawFileInput>
-                ) : ''}
+                            ? (
+                                <RawFileInput
+                                    faramElementName="picture"
+                                    showStatus
+                                    accept="image/*"
+                                    language={language}
+                                >
+                                    {t('Upload Image')}
+                                </RawFileInput>
+                            ) : ''}
 
 
                     </>

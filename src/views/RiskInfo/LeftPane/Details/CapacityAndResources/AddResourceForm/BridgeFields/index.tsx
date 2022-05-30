@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable indent */
 import React, { FunctionComponent } from 'react';
 
 import { Translation } from 'react-i18next';
@@ -35,11 +37,11 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
     // const offGridSiteOptions = getAttributeOptions(resourceEnums, 'off_grid_cell_sites');
     // const internetTypeOptions = getAttributeOptions(resourceEnums, 'internet_type');
     const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    { key: false, label: language === 'en' ? 'No' : 'होइन' }];
     const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    { key: false, label: language === 'en' ? 'No' : 'छैन' }];
     const bridgeCondition = [{ key: 'Good', label: language === 'en' ? 'Good' : 'राम्रो' },
-        { key: 'Bad', label: language === 'en' ? 'Bad' : 'नराम्रो' }];
+    { key: 'Bad', label: language === 'en' ? 'Bad' : 'नराम्रो' }];
 
 
     return (
@@ -51,6 +53,7 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                             faramElementName="dateOfOperation"
                             label={t('From When was the bridge operational?')}
                             inputFieldClassName={styles.dateInput}
+                            language={language}
                         />
                         <SelectInput
                             faramElementName="isMotorable"
@@ -62,12 +65,12 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.isMotorable
-                && (
-                    <NumberInput
-                        faramElementName="noOfLanes"
-                        label={t('How many lane does the bridge have?')}
-                    />
-                )}
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfLanes"
+                                    label={t('How many lane does the bridge have?')}
+                                />
+                            )}
 
                         <TextInput
                             faramElementName="length"
@@ -97,6 +100,7 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

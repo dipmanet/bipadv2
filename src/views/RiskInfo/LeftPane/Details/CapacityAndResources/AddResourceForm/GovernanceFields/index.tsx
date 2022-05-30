@@ -208,12 +208,13 @@ const GovernanceFields: FunctionComponent<Props> = ({
                         label={t('Local Address')}
                     />
                     {faramValues.resourceType !== 'openspace'
-                      || faramValues.resourceType !== 'communityspace'
+                        || faramValues.resourceType !== 'communityspace'
                         ? (
                             <RawFileInput
                                 faramElementName="picture"
                                 showStatus
                                 accept="image/*"
+                                language={language}
                             >
                                 {t('Upload Image')}
                             </RawFileInput>

@@ -20,13 +20,10 @@ const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 const RoadwayFields: FunctionComponent = ({ resourceEnums, faramValues,
     optionsClassName, iconName, language: { language } }) => {
-    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
-    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' }, { key: false, label: language === 'en' ? 'No' : 'छैन' }];
 
-    const type = [{ key: 'Vehicle Center', label: language === 'en' ? 'Vehicle Center' : 'बसपार्क' },
-        { key: 'Vehicle Committee', label: language === 'en' ? 'Vehicle Committee' : 'यातायत समिति' }];
+    const type = [{ key: 'Vehicle Center', label: language === 'en' ? 'Vehicle Center' : 'बसपार्क' }, { key: 'Vehicle Committee', label: language === 'en' ? 'Vehicle Committee' : 'यातायत समिति' }];
 
 
     return (
@@ -87,12 +84,12 @@ const RoadwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyVehicle
-                && (
-                    <NumberInput
-                        faramElementName="nameAndNoOfDisableFriendlyVehicle"
-                        label={t('Disable Friendly Vehicle types and count available?')}
-                    />
-                )
+                            && (
+                                <NumberInput
+                                    faramElementName="nameAndNoOfDisableFriendlyVehicle"
+                                    label={t('Disable Friendly Vehicle types and count available?')}
+                                />
+                            )
                         }
                         {/* {faramValues.hasDisableFriendlyVehicle
                 && (
@@ -149,6 +146,7 @@ const RoadwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

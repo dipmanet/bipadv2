@@ -1,6 +1,7 @@
 import React from 'react';
 import Faram from '@togglecorp/faram';
 
+import { connect } from 'react-redux';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -15,6 +16,7 @@ import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 import { Region } from '#store/atom/page/types';
 import { lossMetrics } from '#utils/domain';
+import { languageSelector } from '#selectors';
 
 import styles from './styles.scss';
 
@@ -24,6 +26,10 @@ interface FaramValues {
 
 interface FaramErrors {
 }
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const filterSchema = {
     fields: {
@@ -40,6 +46,7 @@ const FilterModal = ({
     faramErrors,
     showMetricSelect,
     showDateRange,
+    language: { language },
 }: {
     closeModal?: () => void;
     onFaramChange: (v: FaramValues, e: FaramErrors) => void;
@@ -70,28 +77,31 @@ const FilterModal = ({
                 <StepwiseRegionSelectInput
                     faramElementName="region"
                     wardsHidden
-                    // autoFocus
+                // autoFocus
                 />
-                { showMetricSelect && (
+                {showMetricSelect && (
                     <SelectInput
                         label="Metric"
                         faramElementName="metric"
                         options={lossMetrics}
                         hideClearButton
-                        // disabled={disabledMetricSelect}
+                    // disabled={disabledMetricSelect}
                     />
                 )}
-                { showDateRange && (
+                {showDateRange && (
                     <div className={styles.dateRangeInput}>
                         <DateInput
                             className={styles.startDateInput}
                             label="Start Date"
                             faramElementName="start"
+                            language={language}
                         />
                         <DateInput
                             className={styles.endDateInput}
                             label="End Date"
                             faramElementName="end"
+                            language={language}
+
                         />
                     </div>
                 )}
@@ -113,4 +123,4 @@ const FilterModal = ({
     </Modal>
 );
 
-export default FilterModal;
+export default connect(mapStateToProps)(FilterModal);

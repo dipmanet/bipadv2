@@ -124,7 +124,7 @@ const labelSelector = (d: KeyLabel) => d.label;
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     addAlertRequest: {
         url: '/alert/',
         method: methods.POST,
@@ -436,7 +436,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addAlertFormModal, className)}
                 onClose={onCloseButtonClick}
-                // closeOnEscape
+            // closeOnEscape
             >
                 <Translation>
                     {
@@ -511,6 +511,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                     className={styles.startedOnDate}
                                                     faramElementName="startedOnDate"
                                                     label={t('Started on')}
+                                                    language={language}
                                                 />
                                                 <TimeInput
                                                     className={styles.startedOnTime}
@@ -521,6 +522,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                 <DateInput
                                                     label={t('Expires on')}
                                                     faramElementName="expireOnDate"
+                                                    language={language}
                                                 />
                                                 <TimeInput
                                                     className={styles.startedOnTime}

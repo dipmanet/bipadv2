@@ -116,13 +116,13 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             optionsClassName={optionsClassName}
                         />
                         {faramValues.hasToilet
-                && (
-                    <NumberInput
-                        faramElementName="noOfToilets"
-                        label={t('How many toilets are available?')}
-                    />
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfToilets"
+                                    label={t('How many toilets are available?')}
+                                />
 
-                )}
+                            )}
                         <SelectInput
                             faramElementName="hasHandWashingFacility"
                             label={t('Does the facility have hand washing facility?')}
@@ -132,13 +132,13 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             optionsClassName={optionsClassName}
                         />
                         {faramValues.hasHandWashingFacility
-                && (
-                    <NumberInput
-                        faramElementName="noOfHandWashingFacility"
-                        label={t('How many hand washing facility is available?')}
-                    />
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfHandWashingFacility"
+                                    label={t('How many hand washing facility is available?')}
+                                />
 
-                )}
+                            )}
                         <SelectInput
                             faramElementName="hasFoodPreparationFacility"
                             label={t('Is food preparation facility available?')}
@@ -148,13 +148,13 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             optionsClassName={optionsClassName}
                         />
                         {faramValues.hasFoodPreparationFacility
-                && (
-                    <NumberInput
-                        faramElementName="noOfFoodPreparationFacility"
-                        label={t('How many food preparation facility is available?')}
-                    />
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfFoodPreparationFacility"
+                                    label={t('How many food preparation facility is available?')}
+                                />
 
-                )}
+                            )}
                         <SelectInput
                             faramElementName="hasSleepingFacility"
                             label={t('Is sleeping facility available such as bed/cot/mat?')}
@@ -164,13 +164,13 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             optionsClassName={optionsClassName}
                         />
                         {faramValues.hasSleepingFacility
-                && (
-                    <NumberInput
-                        faramElementName="noOfSleepingFacility"
-                        label={t('How many sleeping facility is available?')}
-                    />
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfSleepingFacility"
+                                    label={t('How many sleeping facility is available?')}
+                                />
 
-                )}
+                            )}
                         <SelectInput
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
@@ -180,13 +180,13 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             optionsClassName={optionsClassName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label={t('Please specify Disable Friendly Infrastructures')}
-                    />
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify Disable Friendly Infrastructures')}
+                                />
 
-                )}
+                            )}
                         <h2>{t('OPENING HOUR')}</h2>
 
                         {/* <TextInput
@@ -228,6 +228,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

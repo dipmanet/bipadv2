@@ -425,6 +425,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         className={'startDateInput'}
                                         value={convertDateAccToLanguage(startDate, language)}
                                         onChange={this.handleStartDateChange}
+                                        language={language}
                                     />
                                     <div className={styles.label}>
                                         <div className={styles.label}>
@@ -441,6 +442,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         className={'endDateInput'}
                                         value={convertDateAccToLanguage(endDate, language)}
                                         onChange={this.handleEndDateChange}
+                                        language={language}
                                     />
                                     <div
                                         className={styles.submitButton}

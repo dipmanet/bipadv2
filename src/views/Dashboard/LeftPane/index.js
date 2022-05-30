@@ -19,7 +19,7 @@ import Button from '#rsca/Button';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { getHazardColor } from '#utils/domain';
-import { groupList } from '#utils/common';
+import { groupList, convertDateAccToLanguage } from '#utils/common';
 import Cloak from '#components/Cloak';
 import DateRangeInfo from '#components/DateRangeInfo';
 
@@ -30,6 +30,7 @@ import AddAlertForm from './AddAlertForm';
 import AddEventForm from './AddEventForm';
 import AlertTable from './AlertTable';
 import { languageSelector } from '#selectors';
+
 
 import {
     pastDaysToDateRange,
@@ -294,8 +295,8 @@ class LeftPane extends React.PureComponent {
             <div className={_cs(className, styles.leftPane)}>
                 <DateRangeInfo
                     className={styles.dateRange}
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={convertDateAccToLanguage(startDate, language)}
+                    endDate={convertDateAccToLanguage(endDate, language)}
                 />
 
 
@@ -346,7 +347,7 @@ class LeftPane extends React.PureComponent {
                             role="presentation"
                         >
                             <div className={styles.value}>
-                                { alertList.length }
+                                {alertList.length}
                             </div>
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.alertIcon)} />
@@ -365,7 +366,7 @@ class LeftPane extends React.PureComponent {
                             role="presentation"
                         >
                             <div className={styles.value}>
-                                { eventList.length }
+                                {eventList.length}
                             </div>
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.eventIcon)} />
@@ -398,7 +399,7 @@ class LeftPane extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.actions}>
-                        { activeView === 'alerts' && (
+                        {activeView === 'alerts' && (
                             <Cloak hiddenIf={p => !p.add_alert}>
                                 <AccentButton
                                     className={styles.addAlertButton}
@@ -415,7 +416,7 @@ class LeftPane extends React.PureComponent {
                                 </AccentButton>
                             </Cloak>
                         )}
-                        { activeView === 'events' && (
+                        {activeView === 'events' && (
                             <Cloak hiddenIf={p => !p.add_event}>
                                 <AccentButton
                                     className={styles.addEventButton}
@@ -446,14 +447,14 @@ class LeftPane extends React.PureComponent {
                     </div>
                 </header>
                 <div className={styles.content}>
-                    { activeView === 'visualizations' && (
+                    {activeView === 'visualizations' && (
                         <Visualizations
                             hazardTypes={hazardTypes}
                             className={styles.alertVisualizations}
                             alertList={alertList}
                         />
                     )}
-                    { activeView === 'alerts' && (
+                    {activeView === 'alerts' && (
                         <div className={styles.alertList}>
                             <VirtualizedListView
                                 className={styles.content}
@@ -465,7 +466,7 @@ class LeftPane extends React.PureComponent {
                             />
                         </div>
                     )}
-                    { activeView === 'events' && (
+                    {activeView === 'events' && (
                         <div className={styles.eventList}>
                             <VirtualizedListView
                                 className={styles.content}
@@ -478,14 +479,14 @@ class LeftPane extends React.PureComponent {
                         </div>
                     )}
                 </div>
-                { showAddAlertModal && (
+                {showAddAlertModal && (
                     <AddAlertForm
                         data={alertToEdit}
                         onCloseButtonClick={this.handleAddAlertModalCloseButtonClick}
                         onRequestSuccess={this.handleAlertFormRequestSuccess}
                     />
                 )}
-                { showAddEventModal && (
+                {showAddEventModal && (
                     <AddEventForm
                         data={eventToEdit}
                         onCloseButtonClick={this.handleAddEventModalCloseButtonClick}

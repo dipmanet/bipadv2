@@ -32,10 +32,8 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
     const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
     // const offGridSiteOptions = getAttributeOptions(resourceEnums, 'off_grid_cell_sites');
     // const internetTypeOptions = getAttributeOptions(resourceEnums, 'internet_type');
-    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
-    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' }, { key: false, label: language === 'en' ? 'No' : 'छैन' }];
 
     return (
         <Translation>
@@ -52,12 +50,12 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {(faramValues.operatorType === 'Other')
-                && (
-                    <TextInput
-                        faramElementName="otherOperatorType"
-                        label={t('Please specify (other) operator type ')}
-                    />
-                )
+                            && (
+                                <TextInput
+                                    faramElementName="otherOperatorType"
+                                    label={t('Please specify (other) operator type ')}
+                                />
+                            )
                         }
                         <TextInput
                             faramElementName="towersName"
@@ -141,12 +139,12 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label={t('Please specify,Disable friendly infrastructures')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify,Disable friendly infrastructures')}
+                                />
+                            )}
 
 
                         <h2>{t('OPENING HOUR')}</h2>
@@ -186,6 +184,7 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

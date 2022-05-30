@@ -89,12 +89,12 @@ const WaterwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                    && (
-                        <TextInput
-                            faramElementName="specifyInfrastructure"
-                            label={t('Please specify,Disable friendly infrastructures')}
-                        />
-                    )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify,Disable friendly infrastructures')}
+                                />
+                            )}
 
 
                         <h2>{t('OPENING HOUR')}</h2>
@@ -134,6 +134,7 @@ const WaterwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

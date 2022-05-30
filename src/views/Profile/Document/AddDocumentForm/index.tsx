@@ -35,6 +35,7 @@ import {
     eventListSelector,
     adminLevelListSelector,
     documentCategoryListSelector,
+    languageSelector,
 } from '#selectors';
 
 
@@ -105,7 +106,7 @@ interface State {
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     eventTypesGetRequest: {
         url: '/event/',
         method: methods.GET,
@@ -176,6 +177,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     regionList: adminLevelListSelector(state),
     eventList: eventListSelector(state),
     categoryList: documentCategoryListSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -352,6 +354,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                 addDocumentPostRequest: { pending },
             },
             value,
+            language: { language },
         } = this.props;
 
         const {
@@ -363,8 +366,8 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addDocumentModal, className)}
-                // onClose={closeModal}
-                // closeOnEscape
+            // onClose={closeModal}
+            // closeOnEscape
             >
                 {pending && <LoadingAnimation />}
                 <Faram
@@ -406,6 +409,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         <DateInput
                             faramElementName="publishedDate"
                             label="Published Date"
+                            language={language}
                         />
                         <SelectInput
                             faramElementName="region"
@@ -430,7 +434,8 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             <RawFileInput
                                 className={styles.fileInput}
                                 faramElementName="file"
-                                // error={faramErrors.file}
+                                language={language}
+                            // error={faramErrors.file}
                             >
                                 <Icon name="upload" />
                                 <span className={styles.load}>

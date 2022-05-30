@@ -19,10 +19,8 @@ const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 const TourismFields: FunctionComponent = ({ faramValues, optionsClassName,
     iconName, language: { language } }) => {
-    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
-    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' }, { key: false, label: language === 'en' ? 'No' : 'छैन' }];
 
     return (
         <Translation>
@@ -88,12 +86,12 @@ const TourismFields: FunctionComponent = ({ faramValues, optionsClassName,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label={t('Please specify,Disable friendly infrastructures')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify,Disable friendly infrastructures')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
@@ -141,6 +139,7 @@ const TourismFields: FunctionComponent = ({ faramValues, optionsClassName,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

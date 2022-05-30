@@ -55,12 +55,12 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {(faramValues.operatorType === 'Other')
-                && (
-                    <TextInput
-                        faramElementName="otherOperatorType"
-                        label={t('Please specify operator type')}
-                    />
-                )
+                            && (
+                                <TextInput
+                                    faramElementName="otherOperatorType"
+                                    label={t('Please specify operator type')}
+                                />
+                            )
                         }
 
                         <NumberInput
@@ -173,12 +173,12 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasOpenSpace
-                && (
-                    <TextInput
-                        faramElementName="areaOfOpenSpace"
-                        label={t('Area of Open Space (Sq.Km) ')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="areaOfOpenSpace"
+                                    label={t('Area of Open Space (Sq.Km) ')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
@@ -189,12 +189,12 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label={t('Disable Friendly Infrastructures')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Disable Friendly Infrastructures')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
@@ -214,12 +214,12 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasDisasterCommittee
-                && (
-                    <TextInput
-                        faramElementName="specifyCommittee"
-                        label={t('Disaster Management committee or related Clubs')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyCommittee"
+                                    label={t('Disaster Management committee or related Clubs')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="hasDisasterAwarenessConducted"
                             label={t('Has disaster related awareness and training programs been conducted within the school?')}
@@ -230,12 +230,12 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasDisasterAwarenessConducted
-                && (
-                    <TextInput
-                        faramElementName="specifyAwarenessProgram"
-                        label={t('Name of Disaster related awareness and training program conducted within the school.')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyAwarenessProgram"
+                                    label={t('Name of Disaster related awareness and training program conducted within the school.')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="providesDisasterEducationToStudent"
                             label={t('Does the school provide disaster related education to students?')}
@@ -247,12 +247,12 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                         />
 
                         {faramValues.providesDisasterEducationToStudent
-                && (
-                    <TextInput
-                        faramElementName="specifyDisasterEducation"
-                        label={t('Disaster related education provided by school')}
-                    />
-                )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyDisasterEducation"
+                                    label={t('Disaster related education provided by school')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="hasHealthCenterPsychoCounseling"
                             label={t('Does the school have health center and/or psycho-counseling?')}
@@ -304,6 +304,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

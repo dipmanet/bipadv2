@@ -28,10 +28,8 @@ const labelSelector = (d: KeyLabel) => d.label;
 const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
     faramValues, optionsClassName, iconName, language: { language } }: Props) => {
     // const religionOptions = getAttributeOptions(resourceEnums, 'religion');
-    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
-    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' }, { key: false, label: language === 'en' ? 'No' : 'छैन' }];
     return (
         <Translation>
             {
@@ -57,18 +55,18 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasOpenSpace
-                        && (
-                            <>
-                                <TextInput
-                                    faramElementName="areaOfOpenSpace"
-                                    label={t('Area of open space (Sq.Km)')}
-                                />
-                                <NumberInput
-                                    faramElementName="capacityOfOpenSpace"
-                                    label={t('Total capacity of the open space.')}
-                                />
-                            </>
-                        )}
+                            && (
+                                <>
+                                    <TextInput
+                                        faramElementName="areaOfOpenSpace"
+                                        label={t('Area of open space (Sq.Km)')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="capacityOfOpenSpace"
+                                        label={t('Total capacity of the open space.')}
+                                    />
+                                </>
+                            )}
                         <SelectInput
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
@@ -79,12 +77,12 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasDisableFriendlyInfrastructure
-                        && (
-                            <TextInput
-                                faramElementName="specifyInfrastructure"
-                                label={t('Please specify,disable friendly infrastructures')}
-                            />
-                        )}
+                            && (
+                                <TextInput
+                                    faramElementName="specifyInfrastructure"
+                                    label={t('Please specify,disable friendly infrastructures')}
+                                />
+                            )}
                         <SelectInput
                             faramElementName="drinkingWater"
                             label={t('Is drinking water available? ')}
@@ -104,12 +102,12 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.toilet
-                        && (
-                            <NumberInput
-                                faramElementName="noOfToilets"
-                                label={t('Number Of Toilets')}
-                            />
-                        )
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfToilets"
+                                    label={t('Number Of Toilets')}
+                                />
+                            )
                         }
 
                         <SelectInput
@@ -122,13 +120,13 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasWashFacility
-                        && (
-                            <TextInput
-                                faramElementName="specifyWashFacility"
-                                label={t('Specify WASH facility available ')}
-                            />
+                            && (
+                                <TextInput
+                                    faramElementName="specifyWashFacility"
+                                    label={t('Specify WASH facility available ')}
+                                />
 
-                        )}
+                            )}
                         <SelectInput
                             faramElementName="hasSleepingFacility"
                             label={t('Has sleeping facility available?')}
@@ -139,12 +137,12 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.hasSleepingFacility
-                        && (
-                            <NumberInput
-                                faramElementName="noOfBeds"
-                                label={t('Number of beds available')}
-                            />
-                        )}
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfBeds"
+                                    label={t('Number of beds available')}
+                                />
+                            )}
                         <NumberInput
                             faramElementName="noOfMats"
                             label={t('Number of mats available')}
@@ -205,6 +203,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>

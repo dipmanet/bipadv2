@@ -28,12 +28,8 @@ const labelSelector = (d: KeyLabel) => d.label;
 const SanitationFields: FunctionComponent<Props> = ({ resourceEnums,
     faramValues, optionsClassName, iconName, language: { language } }: Props) => {
     // const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
-    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
-    const operatorTypeOptions = [{ key: 'Government', label: language === 'en' ? 'Government' : 'सरकारी' },
-        { key: 'Private', label: language === 'en' ? 'Private' : 'निजी' },
-        { key: 'Community', label: language === 'en' ? 'Community' : 'सामुदायिक' },
-        { key: 'Other', label: language === 'en' ? 'Other' : 'अन्य' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const operatorTypeOptions = [{ key: 'Government', label: language === 'en' ? 'Government' : 'सरकारी' }, { key: 'Private', label: language === 'en' ? 'Private' : 'निजी' }, { key: 'Community', label: language === 'en' ? 'Community' : 'सामुदायिक' }, { key: 'Other', label: language === 'en' ? 'Other' : 'अन्य' }];
 
     return (
         <Translation>
@@ -55,30 +51,30 @@ const SanitationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {faramValues.type === 'Public Toilet'
-&& (
-    <>
-        <NumberInput
-            faramElementName="noOfToilets"
-            label={t('If the facility is public toilet, number of toilet available')}
-        />
-        <NumberInput
-            faramElementName="noOfMaleToilets"
-            label={t('If the facility is public toilet, number of male toilet available')}
-        />
-        <NumberInput
-            faramElementName="noOfFemaleToilets"
-            label={t('If the facility is public toilet, number of female toilet available')}
-        />
-        <NumberInput
-            faramElementName="noOfCommonToilets"
-            label={t('If the facility is public toilet, number of common toilet available')}
-        />
-        <NumberInput
-            faramElementName="noOfTaps"
-            label={t('If the facility is public toilet, number of tabs available')}
-        />
-    </>
-)
+                            && (
+                                <>
+                                    <NumberInput
+                                        faramElementName="noOfToilets"
+                                        label={t('If the facility is public toilet, number of toilet available')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="noOfMaleToilets"
+                                        label={t('If the facility is public toilet, number of male toilet available')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="noOfFemaleToilets"
+                                        label={t('If the facility is public toilet, number of female toilet available')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="noOfCommonToilets"
+                                        label={t('If the facility is public toilet, number of common toilet available')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="noOfTaps"
+                                        label={t('If the facility is public toilet, number of tabs available')}
+                                    />
+                                </>
+                            )
 
                         }
                         <SelectInput
@@ -91,12 +87,12 @@ const SanitationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         {(faramValues.operatorType === 'Other')
-                && (
-                    <TextInput
-                        faramElementName="otherOperatorType"
-                        label={t('If type is not mentioned above (other), name it here')}
-                    />
-                )
+                            && (
+                                <TextInput
+                                    faramElementName="otherOperatorType"
+                                    label={t('If type is not mentioned above (other), name it here')}
+                                />
+                            )
                         }
                         <TextInput
                             faramElementName="localAddress"
@@ -108,6 +104,7 @@ const SanitationFields: FunctionComponent<Props> = ({ resourceEnums,
                                     faramElementName="picture"
                                     showStatus
                                     accept="image/*"
+                                    language={language}
                                 >
                                     {t('Upload Image')}
                                 </RawFileInput>
