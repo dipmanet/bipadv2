@@ -77,7 +77,10 @@ const generateFileName = (
     // const interval = getinterval(intervalCode);
     const period = getPeriod(periodCode);
     const name = `DataArchiveRain_${period}_Readings_${stationName}`;
-    return name.replace(/ /g, '_');
+    if (name && name[period]) {
+        return name[period].replace(/ /g, '_');
+    }
+    return '';
 };
 
 const intervalCode = 'anyInterval';

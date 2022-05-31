@@ -125,7 +125,7 @@ class RiverDetails extends React.PureComponent<Props> {
                         .getDate() - 3)).toJSON().slice(0, 10).replace(/-/g, '-'),
                     endDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-'),
                 },
-                period: { periodCode: 'hourly' },
+                period: { periodCode: 'minute' },
             },
             riverDetails: [],
             filterwiseChartData: [],
@@ -294,7 +294,7 @@ class RiverDetails extends React.PureComponent<Props> {
                         .getDate() - 3)).toJSON().slice(0, 10).replace(/-/g, '-'),
                     endDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-'),
                 },
-                period: { periodCode: periodName && periodName.periodCode },
+                period: { periodCode: periodName ? periodName.periodCode : 'minute' },
             },
         }));
     };
