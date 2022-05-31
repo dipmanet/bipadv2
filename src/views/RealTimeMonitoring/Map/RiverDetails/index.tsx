@@ -96,6 +96,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                     'title',
                     'basin',
                     'point',
+                    'image',
                     'water_level',
                     'danger_level',
                     'warning_level',

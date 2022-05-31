@@ -115,6 +115,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                     'created_on',
                     'measured_on',
                     'title',
+                    'image',
                     'basin',
                     'point',
                     'averages',
