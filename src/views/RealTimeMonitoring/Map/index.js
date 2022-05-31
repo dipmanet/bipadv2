@@ -141,8 +141,6 @@ class RealTimeMap extends React.PureComponent {
                 // eslint-disable-next-line max-len
                 const mydata = this.props.rainStation.filter(item => item.basin === this.props.riverFilters.basin.title);
 
-                console.log('data', mydata);
-
                 if (mydata.length > 0) {
                     basinCoordinates = mydata[0].point.coordinates;
                     const tile = [
@@ -794,8 +792,6 @@ class RealTimeMap extends React.PureComponent {
 
         const { rasterLayers } = this.state;
 
-        console.log('data raster', this.state.rasterLayers);
-
         /**
          * handling riverdata from filters
          */
@@ -854,7 +850,6 @@ class RealTimeMap extends React.PureComponent {
             geoarea: riverFilters.municipality ? riverFilters.municipality : undefined,
         };
 
-        console.log('riverFilters', riverFilters);
         return (
             <React.Fragment>
                 <CommonMap

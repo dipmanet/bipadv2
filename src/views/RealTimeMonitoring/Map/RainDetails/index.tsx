@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
@@ -66,6 +67,7 @@ interface LegendItem {
     color: string;
 }
 
+interface Props { }
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
         url: '/rain/',
@@ -132,7 +134,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
 
 const emptyArray: any[] = [];
 
-class RainDetails extends React.PureComponent<Props> {
+class RainDetails extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -147,7 +149,7 @@ class RainDetails extends React.PureComponent<Props> {
             },
             riverDetails: [],
             filterwiseChartData: [],
-            intervalode: '',
+            intervalCode: '',
             isInitial: true,
         };
 
@@ -235,8 +237,6 @@ class RainDetails extends React.PureComponent<Props> {
 
         if (prevState.filterValues !== this.state.filterValues
             || prevState.riverDetails !== this.state.riverDetails) {
-            console.log('inside component didupdate');
-
             const { riverDetails } = this.state;
             const rainDataWithParameter = parseInterval(riverDetails);
             const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
@@ -257,7 +257,6 @@ class RainDetails extends React.PureComponent<Props> {
             );
 
             let filterWiseChartData;
-            let intervalCode;
 
             const {
                 period: { periodCode },
@@ -265,21 +264,18 @@ class RainDetails extends React.PureComponent<Props> {
 
             if (periodCode === 'hourly') {
                 filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
-                intervalCode = 'oneHour';
                 this.setState({ filterWiseChartData });
-                this.setState({ intervalCode });
+                this.setState({ intervalCode: 'oneHour' });
             }
             if (periodCode === 'daily') {
                 filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
-                intervalCode = 'twentyFourHour';
                 this.setState({ filterWiseChartData });
-                this.setState({ intervalCode });
+                this.setState({ intervalCode: 'twentyFourHour' });
             }
             if (periodCode === 'monthly') {
                 filterWiseChartData = getChartData(monthlyWiseGroup, 'monthName');
-                intervalCode = 'twentyFourHour';
                 this.setState({ filterWiseChartData });
-                this.setState({ intervalCode });
+                this.setState({ intervalCode: 'twentyFourHour' });
             }
 
             if (filterWiseChartData) {
@@ -428,13 +424,6 @@ class RainDetails extends React.PureComponent<Props> {
     });
 
     public render() {
-        // const initialFaramValue = {
-        //     dataDateRange: {
-        //         startDate: '',
-        //         endDate: '',
-        //     },
-        //     period: {},
-        // };
         const {
             requests: {
                 detailRequest: {
@@ -446,7 +435,10 @@ class RainDetails extends React.PureComponent<Props> {
             handleModalClose,
         } = this.props;
 
-        const { filterValues, filterWiseChartData, intervalCode, isInitial } = this.state;
+        const { filterValues,
+            filterWiseChartData,
+            intervalCode,
+            isInitial } = this.state;
 
 
         let riverDetails: RealTimeRainDetails[] = [];
@@ -457,49 +449,6 @@ class RainDetails extends React.PureComponent<Props> {
             riverDetails = results;
             this.setState({ riverDetails });
         }
-
-        // const rainDataWithParameter = parseInterval(riverDetails);
-        // const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
-
-        // const hourWiseGroup = groupList(
-        //     rainDataWithPeriod.filter(r => r.dateWithHour),
-        //     rain => rain.dateWithHour,
-        // );
-
-        // const dailyWiseGroup = groupList(
-        //     rainDataWithPeriod.filter(r => r.dateOnly),
-        //     rain => rain.dateOnly,
-        // );
-
-        // const monthlyWiseGroup = groupList(
-        //     rainDataWithPeriod.filter(r => r.dateOnly),
-        //     rain => rain.dateOnly,
-        // );
-
-        // let filterWiseChartData;
-        // let intervalCode;
-
-        // const {
-        //     period: { periodCode },
-        // } = this.state.filterValues;
-
-        // if (periodCode === 'hourly') {
-        //     filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
-        //     intervalCode = 'oneHour';
-        // }
-        // if (periodCode === 'daily') {
-        //     filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
-        //     intervalCode = 'twentyFourHour';
-        // }
-        // if (periodCode === 'monthly') {
-        //     filterWiseChartData = getChartData(monthlyWiseGroup, 'monthName');
-        //     intervalCode = 'twentyFourHour';
-        // }
-
-        // if (filterWiseChartData) {
-        //     filterWiseChartData.sort(arraySorter);
-        // }
-        // const isInitial = isEqualObject(initialFaramValue, this.state.filterValues);
 
         const {
             className,
