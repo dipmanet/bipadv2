@@ -1315,7 +1315,7 @@ export const npTranslation = {
         'Risk Info / Exposure': 'जोखिम जानकारी / सम्मुखता',
         'Risk Info / Vulnerability': 'जोखिम जानकारी / संकटासन्‍नता',
         'Risk Info / Risk': 'जोखिम जानकारी / जोखिम',
-        'Risk Info / Capacity and Resources': 'जोखिम जानकारी / क्षमता र स्रोतहरू',
+        'Risk Info / Capacity and Resources': 'जोखिम जानकारी / श्रोत तथा क्षमता',
         'Risk Info / Climate change': 'जोखिम जानकारी / जलवायु परिवर्तन',
         Population: 'जनसंख्या',
         Literacy: 'साक्षरता',

@@ -46,9 +46,9 @@ export const riverLegendItems = [
 
 // the code below is different due to the requirement of river icon to be triangle
 export const newRiverLegendItems = [
-    { order: 1, color: '#7CB342', labelNe: 'चेतावनी तह र स्थिर', label: 'Below Warning Level and Steady', style: styles.box },
-    { order: 2, color: 'transparent', labelNe: 'चेतावनी स्तरभन्दा तल र बढ्दै', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
-    { order: 3, color: 'transparent', labelNe: 'चेतावनी स्तर तल र झर्दै', label: 'Below Warning Level and Falling', style: styles.triangleFallingBelowWarning },
+    { order: 1, color: '#7CB342', labelNe: 'चेतावनी तह भन्दा तल र स्थीर प्रवाह', label: 'Below Warning Level and Steady', style: styles.box },
+    { order: 2, color: 'transparent', labelNe: 'चेतावनी तह भन्दा तल र बढ्दो प्रवाह', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
+    { order: 3, color: 'transparent', labelNe: 'चेतावनी तह भन्दा तल र घट्दो प्रवाह', label: 'Below Warning Level and Falling', style: styles.triangleFallingBelowWarning },
     { order: 4, color: '#FDD835', labelNe: 'चेतावनी स्तर माथि र स्थिर', label: 'Above Warning Level and Steady', style: styles.box },
     { order: 5, color: 'transparent', labelNe: 'चेतावनी स्तर माथि र बढ्दै', label: 'Above Warning Level and Rising', style: styles.triangleRisingAboveWarning },
     { order: 6, color: 'transparent', labelNe: 'चेतावनीको माथिल्लो तह र गिरावट', label: 'Above Warning Level and Falling', style: styles.triangleFallingAboveWarning },

@@ -58,22 +58,22 @@ export const attributeList: AttributeItem[] = [
     {
         key: 'capacity-and-resources',
         title: 'Capacity and resources',
-        titleNep: 'क्षमता र स्रोतहरु',
+        titleNep: 'श्रोत तथा क्षमता',
         description: 'The combination of all the strengths, attributes and resources available within an organization, community or society to manage and reduce disaster risks and strengthen resilience.',
         descriptionNep: 'संस्था, समुदाय वा समाजमा उपलब्ध सबै शक्ति, विशेषता र स्रोतहरूको संयोजन विपद् जोखिमहरू व्यवस्थापन र कम गर्न र लचिलोपनलाई बलियो बनाउन।',
         color: '#1976d2',
         icon: 'CR',
-        iconNep: 'क्ष',
+        iconNep: 'श्रो',
     },
     {
         key: 'climate-change',
         title: 'Climate change',
-        titleNep: 'मौसम परिवर्तन',
+        titleNep: 'जलवायु परिवर्तन',
         description: 'A change in the state of the climate that can be identified (e.g., by using statistical tests) by changes in the mean and/or the variability of its properties and that persists for an extended period, typically decades or longer. Climate change may be due to natural internal processes or external forcings, or to persistent anthropogenic changes in the composition of the atmosphere or in land use.',
         descriptionNep: 'मौसमको स्थितिमा परिवर्तन जुन पहिचान गर्न सकिन्छ (जस्तै, सांख्यिकीय परीक्षणहरू प्रयोग गरेर) माध्य र/वा यसको गुणहरूको परिवर्तनशीलतामा परिवर्तनहरू र जुन विस्तारित अवधिको लागि, सामान्यतया दशकहरू वा लामो समयसम्म रहन्छ। जलवायु परिवर्तन प्राकृतिक आन्तरिक प्रक्रिया वा बाह्य जबरजस्ती वा वायुमण्डलको संरचना वा भू-उपयोगमा निरन्तर मानववंशीय परिवर्तनका कारण हुन सक्छ।',
         color: '#689f38',
         icon: 'CC',
-        iconNep: 'मौ',
+        iconNep: 'ज',
     },
 ];
 

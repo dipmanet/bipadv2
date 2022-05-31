@@ -1140,7 +1140,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
             language: { language },
             // hazardList,
-        // hazardList,
+            // hazardList,
         } = this.props;
 
 
@@ -1314,7 +1314,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-        const Routes = ['', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
+        const Routes = ['dashboard', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
         const queryStringParamsTranlation = window.location.href.split('/')[3];
 
         if (Routes.includes(queryStringParamsTranlation)) {
@@ -1502,7 +1502,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 </div>
 
                                             )}
-                                            { showLanguageToolbar && <LanguageToggle />}
+                                            {showLanguageToolbar && <LanguageToggle />}
 
                                             {!hideFilter && (
                                                 <Filters
