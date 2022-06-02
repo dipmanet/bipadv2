@@ -137,10 +137,10 @@ class HazardSelectionInput extends React.PureComponent {
 
 
         const dashboardHazadTypeList = hazardTypeList.filter(item => item.title === 'Flood'
-        || item.title === 'Forest Fire'
-        || item.title === 'Heavy Rainfall'
-        || item.title === 'Environmental pollution'
-        || item.title === 'Earthquake');
+            || item.title === 'Forest Fire'
+            || item.title === 'Heavy Rainfall'
+            || item.title === 'Environmental pollution'
+            || item.title === 'Earthquake');
 
         let groupedHazardTypes;
         let groupedValues;

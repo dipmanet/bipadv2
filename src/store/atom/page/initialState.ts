@@ -256,8 +256,8 @@ const state: PageState = {
         otherSourceList: [
             { id: 1, title: 'Earthquake', titleNe: 'भूकम्प' },
             { id: 5, title: 'Air pollution', titleNe: 'वायु प्रदूषण' },
-            { id: 4, title: 'Forest Fire', titleNe: 'वन आगो' },
-            { id: 6, title: 'Streamflow', titleNe: 'स्ट्रिमफ्लो' },
+            { id: 4, title: 'Forest Fire', titleNe: 'वन डढेँलो' },
+            { id: 6, title: 'Streamflow', titleNe: 'नदीको बहाब' },
         ],
         filters: {
             faramValues: {
@@ -469,7 +469,7 @@ const state: PageState = {
                 deaths: 0,
                 incidents: 0,
             },
-            डढेलो: {
+            'वन डढेँलो': {
                 deaths: 0,
                 incidents: 0,
             },

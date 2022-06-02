@@ -15,11 +15,11 @@ const lT = {
     'Above Danger Level and Steady': 'खतराको स्तर माथि र स्थिर',
     'Above Danger Level and Rising': 'खतराको स्तर माथि र बढ्दै',
     'Above Danger Level and Falling': 'खतराको स्तर माथि र झर्दै',
-    'Minor (2.0 - 3.9)': 'माइनर (2.0 - 3.9)',
+    'Minor (2.0 - 3.9)': 'न्यून (2.0 - 3.9)',
     'Light (4.0 - 4.9)': 'लाइट (४.० - ४.९))',
     'Moderate (5.0 - 5.9)': 'मध्यम (५.० - ५.९)',
     'Strong (6.0 - 6.9)': 'बलियो (६.० - ६.९)',
-    'Major (7.0 - 7.9)': 'मेजर (७.० - ७.९)',
+    'Major (7.0 - 7.9)': 'प्रमुख (७.० - ७.९)',
     'Great (>8)': 'महान (>8)',
     'Good (0 - 50)': 'राम्रो (० - ५०)',
     'Moderate (51 - 100)': 'मध्यम (५१ - १००)',
@@ -28,7 +28,7 @@ const lT = {
     'Very Unhealthy (201 - 300)': 'धेरै अस्वस्थ (201 - 300)',
     'Hazardous (301 - 400)': 'खतरनाक (३०१ - ४००)',
     'Very Hazardous (401 - 500)': 'धेरै खतरनाक (४०१ - ५००)',
-    'Forest fire': 'वन आगो',
+    'Forest fire': 'वन डढेँलो',
     'No legends to display': 'प्रदर्शन गर्न कुनै पौराणिक कथाहरू छैनन्',
 };
 
@@ -58,11 +58,11 @@ export const newRiverLegendItems = [
 ];
 
 export const earthquakeLegendItems = [
-    { color: '#fee5d9', labelNe: 'माइनर (2.0 - 3.9)', label: 'Minor (2.0 - 3.9)', radius: 6, style: styles.magnitude },
+    { color: '#fee5d9', labelNe: 'न्यून (2.0 - 3.9)', label: 'Minor (2.0 - 3.9)', radius: 6, style: styles.magnitude },
     { color: '#fcbba1', labelNe: 'लाइट (४.० - ४.९))', label: 'Light (4.0 - 4.9)', radius: 8, style: styles.magnitude },
     { color: '#fc9272', labelNe: 'मध्यम (५.० - ५.९)', label: 'Moderate (5.0 - 5.9)', radius: 12, style: styles.magnitude },
     { color: '#fb6a4a', labelNe: 'बलियो (६.० - ६.९)', label: 'Strong (6.0 - 6.9)', radius: 16, style: styles.magnitude },
-    { color: '#de2d26', labelNe: 'मेजर (७.० - ७.९)', label: 'Major (7.0 - 7.9)', radius: 18, style: styles.magnitude },
+    { color: '#de2d26', labelNe: 'प्रमुख (७.० - ७.९)', label: 'Major (7.0 - 7.9)', radius: 18, style: styles.magnitude },
     { color: '#a50f15', labelNe: 'महान (>8)', label: 'Great (>8)', radius: 22, style: styles.magnitude },
 ];
 
@@ -77,7 +77,7 @@ export const pollutionLegendItems = [
 ];
 
 export const forestFireLegendItems = [
-    { color: '#ff8300', labelNe: 'वन आगो', label: 'Forest fire', style: styles.symbol },
+    { color: '#ff8300', labelNe: 'वन डढेँलो', label: 'Forest fire', style: styles.symbol },
 ];
 
 export const noLegend = [

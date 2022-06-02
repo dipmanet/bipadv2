@@ -429,11 +429,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     />
                                     <div className={styles.label}>
                                         <div className={styles.label}>
-                                            <Translation>
-                                                {
-                                                    t => <span>{t('to')}</span>
-                                                }
-                                            </Translation>
+                                            {language === 'en'
+                                                ? <span>to</span>
+                                                : <span>देखि</span>
+                                            }
                                         </div>
                                     </div>
                                     <DateInput
@@ -444,6 +443,15 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         onChange={this.handleEndDateChange}
                                         language={language}
                                     />
+                                    {language === 'np'
+                                        && (
+                                            <span>
+                                                सम्‍म
+                                                {' '}
+                                                {''}
+                                            </span>
+                                        )
+                                    }
                                     <div
                                         className={styles.submitButton}
                                         onClick={this.handleSubmitClick}

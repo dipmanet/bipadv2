@@ -166,7 +166,7 @@ interface LegendItem {
 }
 
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', labelNe: 'माइनर (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Minor (0)', labelNe: 'न्यून (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
     { label: 'Major (<10)', labelNe: 'प्रमुख (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
     { label: 'Severe (<100)', labelNe: 'गम्भीर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
     { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
