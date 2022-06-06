@@ -30,6 +30,7 @@ import {
 } from '#types';
 
 import {
+    convertDateAccToLanguage,
     encodeDate,
     encodeTime,
 } from '#utils/common';
@@ -61,6 +62,7 @@ interface PropsFromAppState {
     eventList: EventElement[];
     sourceList: SourceElement[];
     hazardList: HazardType[];
+    language: object;
 }
 
 interface FaramValues {
@@ -155,11 +157,17 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
 class CitizenReportFormModal extends React.PureComponent<Props, State> {
     public state = {
         faramValues: {
-            incidentOnDate: encodeDate(new Date()),
+            incidentOnDate:
+                convertDateAccToLanguage(
+                    new Date(new Date().setDate(new Date()
+                        .getDate())).toJSON().slice(0, 10).replace(/-/g, '-'),
+                    this.props.language.language,
+                ),
             incidentOnTime: encodeTime(new Date()),
         },
         faramErrors: {},
     };
+
 
     private handleFaramValidationFailure = (faramErrors: object) => {
         this.setState({ faramErrors });
