@@ -284,7 +284,8 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
 
                                             <DateInput
                                                 label={t('Incident on')}
-                                                className={styles.input}
+                                                className={language === 'en' ? styles.input : 'startDateInput'}
+                                                languageMargin={language !== 'en'}
                                                 faramElementName="incidentOnDate"
                                                 language={language}
                                             />
