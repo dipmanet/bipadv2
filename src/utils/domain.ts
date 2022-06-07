@@ -156,7 +156,7 @@ export const lossMetrics = [
     { key: 'peopleDeathCount', label: 'People death', labelNe: 'मानविय क्षति' },
     { key: 'estimatedLoss', label: 'Estimated loss (NPR)', labelNe: 'अनुमानित क्षति (रु)' },
     { key: 'infrastructureDestroyedCount', label: 'Infrastructure destroyed', labelNe: 'पूर्वाधार को क्षेती' },
-    { key: 'livestockDestroyedCount', label: 'Livestock destroyed', labelNe: 'पशुधन को क्षेती' },
+    { key: 'livestockDestroyedCount', label: 'Livestock destroyed', labelNe: 'पशुचौपायाको क्षति' },
 ];
 
 // CONVERSION TO GEOJSON

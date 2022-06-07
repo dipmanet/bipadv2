@@ -1,5 +1,8 @@
 export const enTranslation = {
     translation: {
+        'Download Map': 'Download Map',
+        'Download with default settings': 'Download with default settings',
+        'Download with custom settings': 'Download with custom settings',
         Streamflow: 'Streamflow',
         Pollution: 'Pollution',
         'No legends to display': 'No legends to display',
@@ -762,6 +765,9 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Download Map': 'डाउनलोड गर्नुहोस्',
+        'Download with default settings': 'पूर्वनिर्धारित सेटिङहरूसँग डाउनलोड गर्नुहोस् ',
+        'Download with custom settings': 'अनुकूलन सेटिङहरूसँग डाउनलोड गर्नुहोस्',
         Streamflow: 'नदीको बहाब',
         'No legends to display': 'प्रदर्शन गर्न कुनै पौराणिक कथाहरू छैनन्',
         'Below Warning Level': 'चेतावनी तहभन्दा तल',
@@ -1280,7 +1286,7 @@ export const npTranslation = {
         Total: 'जम्मा',
         Relocated: 'स्थानान्तरण गरिएको',
         Evacuated: 'खाली गरिएको',
-        'Livestock Loss': ' पशुधन को क्षेती',
+        'Livestock Loss': 'पशुचौपायाको क्षति',
         Destroyed: 'नष्ट भएको',
         'Infrastructure Loss': 'पूर्वाधार को क्षेती',
         House: 'घर',
@@ -1416,7 +1422,7 @@ export const npTranslation = {
         Fire: 'आगलागी',
         Drowning: 'डुबेर मर्नु',
         'Others (Non-Natural)': 'अन्य गैरप्राकृतिक विपद्',
-        'Heavy Rainfall': 'अतिवृष्टि',
+        'Heavy Rainfall': 'भारीवर्षा',
         'Wind Storm': 'हुरी बतास',
         'Cold Wave': 'शीतलहर',
         Earthquake: 'भूकम्प',
@@ -1466,10 +1472,10 @@ export const npTranslation = {
         Location: 'स्थान',
         'Reset filters': 'फिल्टर रिसेट गर्नुहोस्',
         Hazard: 'प्रकोप',
-        'Data range': 'डाटा दायरा',
+        'Data range': 'तथ्यांकको समय',
         Others: 'अरु',
         Natural: 'प्राकृतिक',
-        'Non-natural': 'अप्राकृतिक',
+        'Non-natural': 'गैर प्राकृतिक',
         'Start Date': 'सुरू मिति',
         'End Date': 'अन्त्य मिति',
         'Earthquake at': 'भूकम्प केन्द्र बिन्दु',

@@ -20,6 +20,7 @@ import {
     showDistrictSelector,
     showMunicipalitySelector,
     showWardSelector,
+    languageSelector,
 } from '#selectors';
 
 import LayerButton from './LayerButton';
@@ -53,6 +54,7 @@ const mapAppStateToComponentProps = (state, props) => ({
     showDistrict: showDistrictSelector(state, props),
     showMunicipality: showMunicipalitySelector(state, props),
     showWard: showWardSelector(state, props),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -75,6 +77,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             showDistrict,
             showMunicipality,
             showWard,
+            language: { language },
         } = this.props;
 
         return (
@@ -83,7 +86,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 iconName="gridView"
                 hideDropdownIcon
                 dropdownClassName={styles.container}
-                tooltip="Select administrative boundary"
+                tooltip={language === 'en' ? 'Select administrative boundary' : 'प्रशासनिक सीमा चयन गर्नुहोस्'}
             >
                 <Switch
                     className={styles.switch}
@@ -94,7 +97,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                         setShowProvince({ value });
                     }}
                 />
-                Show Province
+                {language === 'en' ? 'Show Province' : 'प्रदेश देखाउनुहोस्'}
                 <br />
 
                 <Switch
@@ -106,7 +109,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                         setShowDistrict({ value });
                     }}
                 />
-                Show District
+                {language === 'en' ? 'Show District' : 'जिल्‍ला देखाउनुहोस'}
                 <br />
 
                 <Switch
@@ -118,7 +121,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                         setShowMunicipality({ value });
                     }}
                 />
-                Show Municipality
+                {language === 'en' ? 'Show Municipality' : 'नगरपालिका देखाउनुहोस'}
                 <br />
 
                 <Switch
@@ -130,37 +133,37 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                         setShowWard({ value });
                     }}
                 />
-                Show Ward
+                {language === 'en' ? 'Show Ward' : 'वडा देखाउनुहोस'}
                 <br />
                 {/* incase we need checkbox back again */}
                 {/* <Checkbox
-                    label="Show Province"
-                    onChange={(value) => {
-                        setShowProvince({ value });
-                    }}
-                    value={showProvince}
-                /> */}
+                            label="Show Province"
+                            onChange={(value) => {
+                                setShowProvince({ value });
+                            }}
+                            value={showProvince}
+                        /> */}
                 {/* <Checkbox
-                    label="Show District"
-                    onChange={(value) => {
-                        setShowDistrict({ value });
-                    }}
-                    value={showDistrict}
-                /> */}
+                            label="Show District"
+                            onChange={(value) => {
+                                setShowDistrict({ value });
+                            }}
+                            value={showDistrict}
+                        /> */}
                 {/* <Checkbox
-                    label="Show Municipality"
-                    onChange={(value) => {
-                        setShowMunicipality({ value });
-                    }}
-                    value={showMunicipality}
-                /> */}
+                            label="Show Municipality"
+                            onChange={(value) => {
+                                setShowMunicipality({ value });
+                            }}
+                            value={showMunicipality}
+                        /> */}
                 {/* <Checkbox
-                    label="Show Ward"
-                    onChange={(value) => {
-                        setShowWard({ value });
-                    }}
-                    value={showWard}
-                /> */}
+                            label="Show Ward"
+                            onChange={(value) => {
+                                setShowWard({ value });
+                            }}
+                            value={showWard}
+                        /> */}
             </DropdownMenu>
         );
     }

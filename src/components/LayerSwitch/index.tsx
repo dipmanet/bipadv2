@@ -3,6 +3,7 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import ReduxContext from '#components/ReduxContext';
 
 import osmLibertyStyle from '#mapStyles/style';
@@ -12,7 +13,7 @@ import DropdownMenu from '#rsca/DropdownMenu';
 import ListView from '#rscv/List/ListView';
 
 import { setMapStyleAction } from '#actionCreators';
-import { mapStyleSelector } from '#selectors';
+import { languageSelector, mapStyleSelector } from '#selectors';
 
 import LayerButton from './LayerButton';
 
@@ -109,6 +110,7 @@ type Props = OwnProps & PropsFromAppState & PropsFromDispatch;
 
 const mapAppStateToComponentProps = state => ({
     currentMapStyle: mapStyleSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -146,14 +148,14 @@ class LayerSwitch extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const { className } = this.props;
+        const { className, language: { language } } = this.props;
 
         return (
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}
                 iconName="layers"
                 hideDropdownIcon
-                tooltip="Select layer"
+                tooltip={language === 'en' ? 'Select layers' : 'तह चयन गर्नुहोस्'}
             >
                 <ListView
                     data={mapStyles}
