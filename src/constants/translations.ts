@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Home Page': 'Home Page',
         'Download Map': 'Download Map',
         'Download with default settings': 'Download with default settings',
         'Download with custom settings': 'Download with custom settings',
@@ -765,6 +766,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Home Page': 'गृह पृष्ठ',
         'Download Map': 'डाउनलोड गर्नुहोस्',
         'Download with default settings': 'पूर्वनिर्धारित सेटिङहरूसँग डाउनलोड गर्नुहोस् ',
         'Download with custom settings': 'अनुकूलन सेटिङहरूसँग डाउनलोड गर्नुहोस्',
