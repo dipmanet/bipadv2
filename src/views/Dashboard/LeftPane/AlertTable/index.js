@@ -82,7 +82,7 @@ class AlertTable extends React.PureComponent {
             },
             {
                 key: 'source',
-                value: { title: language === 'en' ? 'Source' : 'श्रोत' },
+                value: { title: language === 'en' ? 'Source' : 'स्रोत' },
                 comparator: (a, b, d) => compareString(a.source, b.source, d),
             },
             {

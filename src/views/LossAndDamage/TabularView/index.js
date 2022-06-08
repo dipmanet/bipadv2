@@ -97,7 +97,7 @@ class TabularView extends React.PureComponent {
             },
             {
                 key: 'source',
-                value: { title: language === 'en' ? 'Source' : 'श्रोत' },
+                value: { title: language === 'en' ? 'Source' : 'स्रोत' },
                 comparator: createComparator(compareString, 'source'),
             },
             {
@@ -148,7 +148,7 @@ class TabularView extends React.PureComponent {
             },
             {
                 key: 'loss.agricultureEconomicLoss',
-                value: { title: language === 'en' ? 'Agriculture economic loss (NPR)' : 'कृषि आर्थिक नोक्सान (रु)' },
+                value: { title: language === 'en' ? 'Agriculture economic loss (NPR)' : 'कृषि क्षेत्र को कुल आर्थिक क्षेति' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.agricultureEconomicLoss'),
             },
@@ -160,7 +160,7 @@ class TabularView extends React.PureComponent {
             },
             {
                 key: 'loss.infrastructureDestroyedCount',
-                value: { title: language === 'en' ? 'Total infrastructure destroyed' : 'कुल पूर्वाधार हानि' },
+                value: { title: language === 'en' ? 'Total infrastructure destroyed' : 'कुल पूर्वाधार क्षेति' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedCount'),
             },

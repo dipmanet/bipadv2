@@ -212,9 +212,9 @@ class Visualization extends React.PureComponent {
                                 iconSize={0}
                                 formatter={() => {
                                     if (language === 'en') {
-                                        return ('  No. of Events  ');
+                                        return ('No. of Events');
                                     }
-                                    return ('घटनाहरुको संख्या');
+                                    return ('घटना संख्या');
                                 }}
                             />
                             <Bar
