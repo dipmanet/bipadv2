@@ -582,7 +582,6 @@ class Filters extends React.PureComponent<Props, State> {
             hideDataRangeFilter,
             language,
         ): { [key in TabKey]?: string; } => {
-            console.log(language, 'test');
             const tabs = {
                 location: language === 'en' ? 'Location' : 'स्थान',
                 hazard: language === 'en' ? 'Hazard' : 'विपद्',
