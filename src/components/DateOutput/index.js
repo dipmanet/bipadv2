@@ -30,6 +30,7 @@ export default class DateOutput extends React.PureComponent {
             value,
             alwaysVisible,
             hideIcon,
+            language,
             ...otherProps
         } = this.props;
 
@@ -54,6 +55,7 @@ export default class DateOutput extends React.PureComponent {
                         valueClassName,
                     )}
                     value={value}
+                    language={language}
                     mode="yyyy-MM-dd"
                     {...otherProps}
                 />

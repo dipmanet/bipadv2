@@ -24,7 +24,7 @@ import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
 import { getYesterday } from '#utils/common';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
-import { sourcesSelector } from '#selectors';
+import { languageSelector, sourcesSelector } from '#selectors';
 
 import {
     patchIncidentActionIP,
@@ -60,6 +60,7 @@ const propTypes = {
 
 const mapStateToProps = state => ({
     sources: sourcesSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -199,6 +200,7 @@ class IncidentItem extends React.PureComponent {
                     pending: incidentDeletePending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -252,6 +254,7 @@ class IncidentItem extends React.PureComponent {
                         <DateOutput
                             className={styles.date}
                             value={incidentOn}
+                            language={language}
                         />
                     </header>
                     <div className={styles.adminActions}>
