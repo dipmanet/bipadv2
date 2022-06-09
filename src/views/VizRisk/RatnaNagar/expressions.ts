@@ -15,7 +15,7 @@ export const rangeData = [
     {
         name: 'medium',
         status: 'Medium(3.5 - 4.9)',
-        color: '#2af5ac',
+        color: 'yellow',
         range: [3.5, 4.9],
 
     },
