@@ -77,21 +77,21 @@ import {
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
-import errorBound from '../errorBound';
-import helmetify from '../helmetify';
 import { getFeatureInfo } from '#utils/domain';
-import styles from './styles.scss';
 import LanguageToggle from '#components/LanguageToggle';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
     ClientAttributes,
     methods,
 } from '#request';
+import ZoomToolBar from '#components/ZoomToolBar';
+import errorBound from '../errorBound';
+import helmetify from '../helmetify';
+import styles from './styles.scss';
+
 import DownloadButtonOption from './DownloadButtonOption';
 
-import ZoomToolBar from '#components/ZoomToolBar';
 
 function reloadPage() {
     window.location.reload(false);

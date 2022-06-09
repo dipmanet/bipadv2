@@ -103,7 +103,7 @@ class AlertItem extends React.PureComponent {
         }
     }
 
-    parseTitle = (title, referenceData) => {
+    parseTitle = (title, referenceData, titleNe) => {
         const {
             fields:
             { title: referenceDataTitle },
@@ -170,7 +170,12 @@ class AlertItem extends React.PureComponent {
         if (title.toUpperCase().trim() === 'ENVIRONMENTAL POLLUTION') {
             return `Environmental pollution at ${referenceDataTitle}`;
         }
-        return title;
+
+
+        // eslint-disable-next-line no-nested-ternary
+        return language === 'en' ? title
+            : titleNe === undefined || null
+                ? title : titleNe;
     }
 
     render() {
@@ -185,17 +190,15 @@ class AlertItem extends React.PureComponent {
 
         const {
             title,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            title_ne,
+            titleNe,
             hazard,
             startedOn,
             // createdOn,
             referenceData,
         } = alert;
-        console.log(title_ne, 'test');
         const alertReferenceData = referenceData ? JSON.parse(referenceData) : emptyReferenceData;
 
-        const parsedTitle = this.parseTitle(title, alertReferenceData);
+        const parsedTitle = this.parseTitle(title, alertReferenceData, titleNe);
         const time = startedOn ? startedOn.split('T')[1] : 'NA';
         const hour = time.split(':')[0];
         const minutes = time.split(':')[1];
