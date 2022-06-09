@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 import React from 'react';
@@ -11,7 +13,7 @@ import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import alertIcon from '#resources/icons/Alert.svg';
 
-import { getYesterday } from '#utils/common';
+import { convertDateAccToLanguage, convertTimeAccToLanguage, getYesterday } from '#utils/common';
 // import DateOutput from '#components/DateOutput';
 import Cloak from '#components/Cloak';
 import Icon from '#rscg/Icon';
@@ -101,7 +103,7 @@ class AlertItem extends React.PureComponent {
         }
     }
 
-    parseTitle= (title, referenceData) => {
+    parseTitle = (title, referenceData) => {
         const {
             fields:
             { title: referenceDataTitle },
@@ -114,8 +116,7 @@ class AlertItem extends React.PureComponent {
         if (title.toUpperCase().trim() === 'FLOOD') {
             return (
                 `
-            ${
-                <div>
+            ${<div>
                     <Translation>
                         {
                             t => <p>{t('Flood at')}</p>
@@ -146,23 +147,22 @@ class AlertItem extends React.PureComponent {
         if (title.toUpperCase().trim() === 'EARTHQUAKE') {
             const {
                 fields:
-                    { address: epicenter },
+                { address: epicenter },
             } = referenceData;
             return `
-            ${
-    <div>
-        <Translation>
-            {
-                t => <p>{t('Earthquake at')}</p>
-            }
-        </Translation>
-        <Translation>
-            {
-                t => <p>{t('Ma')}</p>
-            }
-        </Translation>
-    </div>
-}
+            ${<div>
+                    <Translation>
+                        {
+                            t => <p>{t('Earthquake at')}</p>
+                        }
+                    </Translation>
+                    <Translation>
+                        {
+                            t => <p>{t('Ma')}</p>
+                        }
+                    </Translation>
+                </div>
+                }
             ${epicenter}
             
             `;
@@ -185,11 +185,14 @@ class AlertItem extends React.PureComponent {
 
         const {
             title,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            title_ne,
             hazard,
             startedOn,
             // createdOn,
             referenceData,
         } = alert;
+        console.log(title_ne, 'test');
         const alertReferenceData = referenceData ? JSON.parse(referenceData) : emptyReferenceData;
 
         const parsedTitle = this.parseTitle(title, alertReferenceData);
@@ -197,17 +200,19 @@ class AlertItem extends React.PureComponent {
         const hour = time.split(':')[0];
         const minutes = time.split(':')[1];
         let timeIndicator;
+
+
         if (hour + minutes <= 1200) {
             if (language === 'en') {
                 timeIndicator = 'AM';
             } else {
-                timeIndicator = 'बिहान';
+                timeIndicator = 'बजे';
             }
         } else if ((hour + minutes) > 1200 && (hour + minutes) <= 2359) {
             if (language === 'en') {
                 timeIndicator = 'PM';
             } else {
-                timeIndicator = 'बेलुका';
+                timeIndicator = 'बजे';
             }
         } else {
             timeIndicator = '';
@@ -288,7 +293,7 @@ class AlertItem extends React.PureComponent {
                                 </div>
 
                                 <div className={styles.dateValue}>
-                                    {startedOn.split('T')[0]}
+                                    {convertDateAccToLanguage(startedOn.split('T')[0], language)}
                                 </div>
                             </div>
 

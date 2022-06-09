@@ -80,24 +80,24 @@ const LocationOutput = ({
     streetAddress,
 }) => (
     <div className={styles.locationOutput}>
-        { provinceTitle && (
+        {provinceTitle && (
             <div className={styles.provinceName}>
-                { provinceTitle }
+                {provinceTitle}
             </div>
         )}
-        { districtTitle && (
+        {districtTitle && (
             <div className={styles.districtName}>
-                { districtTitle }
+                {districtTitle}
             </div>
         )}
-        { municipalityTitle && (
+        {municipalityTitle && (
             <div className={styles.municipalityName}>
-                { municipalityTitle }
+                {municipalityTitle}
             </div>
         )}
-        { streetAddress && (
+        {streetAddress && (
             <div className={styles.streetAddress}>
-                { streetAddress }
+                {streetAddress}
             </div>
         )}
     </div>
@@ -247,7 +247,7 @@ class IncidentItem extends React.PureComponent {
                             title={title}
                             className={styles.heading}
                         >
-                            { title }
+                            {title}
                         </h3>
                         <DateOutput
                             className={styles.date}

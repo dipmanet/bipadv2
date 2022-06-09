@@ -1507,7 +1507,7 @@ export const npTranslation = {
         'Estimated loss (NPR)': 'अनुमानित क्षति (रु)',
         'Infrastructure destroyed': 'पूर्वाधारको क्षति',
         'Livestock destroyed': 'पशुचौपाया क्षति',
-        'LEAVE FEEDBACK': 'सुझाब दिनुहोस छोड्नुहोस्',
+        'LEAVE FEEDBACK': 'सुझाब दिनुहोस',
         'Number of Incidents': 'घटनाको संख्या',
         'Hazard Severity (Fatality due to Hazard)': 'प्रकोप गम्भीरता (प्रकोपको कारण मृत्यु)',
         DateMismatchWarning: 'चेतावनी! सुरु मिति अन्त्य मिति भन्दा ठूलो हुन सक्दैन',
