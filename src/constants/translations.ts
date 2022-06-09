@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        mm: 'mm',
+        Confidence: 'Confidence',
         'Home Page': 'Home Page',
         'Download Map': 'Download Map',
         'Download with default settings': 'Download with default settings',
@@ -766,6 +768,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        mm: 'मिमि',
+        Confidence: 'निर्धक्क',
         'Home Page': 'गृह पृष्ठ',
         'Download Map': 'डाउनलोड गर्नुहोस्',
         'Download with default settings': 'पूर्वनिर्धारित सेटिङहरूसँग डाउनलोड गर्नुहोस् ',

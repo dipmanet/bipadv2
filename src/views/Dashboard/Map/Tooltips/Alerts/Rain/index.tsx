@@ -60,186 +60,128 @@ const RainTooltip = (
     const time = createdDate.split('T')[1].split('+')[0];
     const timeOnly = time.split(':').slice(0, 2).join(':');
     return (
-        <div className={styles.rainfallTooltip}>
-            <div className={styles.header}>
-                <div className={styles.title}>{renderedTitle}</div>
-                <div className={styles.date}>
-                    { createdDate
-                        ? (
-                            <>
-                                <span>
-                                    {date}
-                                    {' '}
-                                |
-                                    {' '}
-                                    {timeOnly}
-                                </span>
-                                <span>
-                                    {' '}
-                                    <Translation>
-                                        {
-                                            t => <span>{t('(NPT)')}</span>
-                                        }
-                                    </Translation>
-                                </span>
-                            </>
-                        )
-                        : (
-                            <Translation>
-                                {
-                                    t => <span>{t('N/A')}</span>
+        <Translation>
+            {
+                t => (
+                    <div className={styles.rainfallTooltip}>
+                        <div className={styles.header}>
+                            <div className={styles.title}>{renderedTitle}</div>
+                            <div className={styles.date}>
+                                {createdDate
+                                    ? (
+                                        <>
+                                            <span>
+                                                {date}
+                                                {' '}
+                                                |
+                                                {' '}
+                                                {timeOnly}
+                                            </span>
+                                            <span>
+                                                {' '}
+                                                <span>{t('(NPT)')}</span>
+                                            </span>
+                                        </>
+                                    )
+                                    : (
+                                        <span>{t('N/A')}</span>
+                                    )
                                 }
-                            </Translation>
-                        )
-                    }
-                </div>
-            </div>
-            <div className={styles.content}>
-                <div className={styles.basin}>
-                    <div className={styles.title}>
-                        <Translation>
-                            {
-                                t => <span>{t('Basin')}</span>
-                            }
-                        </Translation>
-                        :
-
-                    </div>
-                    <div className={styles.value}>
-                        {basin
-                     || (
-                         <Translation>
-                             {
-                                 t => <span>{t('N/A')}</span>
-                             }
-                         </Translation>
-                     )
-
-                        }
-
-                    </div>
-                </div>
-                <div className={styles.station}>
-                    <div className={styles.title}>
-                        <Translation>
-                            {
-                                t => <span>{t('Station Name')}</span>
-                            }
-                        </Translation>
-
-                        :
-
-                    </div>
-                    <div className={styles.value}>
-                        {referenceDataTitle
-                  || (
-                      <Translation>
-                          {
-                              t => <span>{t('N/A')}</span>
-                          }
-                      </Translation>
-                  )
-                        }
-
-                    </div>
-                </div>
-                <div className={styles.rainfall}>
-                    <div className={styles.title}>
-                        Accumulated Rainfall:
-                    </div>
-                    <div className={styles.rainfallList}>
-                        <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>
-                                    1
-                                <Translation>
-                                    {
-                                        t => <span>{t('Hour')}</span>
-                                    }
-                                </Translation>
-
-
                             </div>
-                            <div className={styles.value}>{`${oneHourInterval} mm`}</div>
                         </div>
-                        <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>
-                                    3
-                                <Translation>
-                                    {
-                                        t => <span>{t('Hour')}</span>
+                        <div className={styles.content}>
+                            <div className={styles.basin}>
+                                <div className={styles.title}>
+                                    <span>{t('Basin')}</span>
+                                    :
+                                </div>
+                                <div className={styles.value}>
+                                    {basin
+                                        || (
+                                            <span>{t('N/A')}</span>
+                                        )
                                     }
-                                </Translation>
 
-
+                                </div>
                             </div>
-                            <div className={styles.value}>{`${threeHourInterval} mm`}</div>
-                        </div>
-                        <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>
-                                    6
-                                <Translation>
-                                    {
-                                        t => <span>{t('Hour')}</span>
+                            <div className={styles.station}>
+                                <div className={styles.title}>
+                                    <span>{t('Station Name')}</span>
+                                    :
+                                </div>
+                                <div className={styles.value}>
+                                    {referenceDataTitle
+                                        || (
+                                            <span>{t('N/A')}</span>
+                                        )
                                     }
-                                </Translation>
 
-
+                                </div>
                             </div>
-                            <div className={styles.value}>{`${sixHourInterval} mm`}</div>
-                        </div>
-                        <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>
-                                    12
-                                <Translation>
-                                    {
-                                        t => <span>{t('Hour')}</span>
-                                    }
-                                </Translation>
-
-
+                            <div className={styles.rainfall}>
+                                <div className={styles.title}>
+                                    {t('Accumulated Rainfall')}
+                                    :
+                                </div>
+                                <div className={styles.rainfallList}>
+                                    <div className={styles.rainfallItem}>
+                                        <div className={styles.hour}>
+                                            1
+                                            <span>{t('Hour')}</span>
+                                        </div>
+                                        <div className={styles.value}>{`${oneHourInterval} ${t('mm')}`}</div>
+                                    </div>
+                                    <div className={styles.rainfallItem}>
+                                        <div className={styles.hour}>
+                                            3
+                                            <span>{t('Hour')}</span>
+                                        </div>
+                                        <div className={styles.value}>{`${threeHourInterval} ${t('mm')}`}</div>
+                                    </div>
+                                    <div className={styles.rainfallItem}>
+                                        <div className={styles.hour}>
+                                            6
+                                            <span>{t('Hour')}</span>
+                                        </div>
+                                        <div className={styles.value}>{`${sixHourInterval} ${t('mm')}`}</div>
+                                    </div>
+                                    <div className={styles.rainfallItem}>
+                                        <div className={styles.hour}>
+                                            12
+                                            <span>{t('Hour')}</span>
+                                        </div>
+                                        <div className={styles.value}>{`${twelveHourInterval} ${t('mm')}`}</div>
+                                    </div>
+                                    <div className={styles.rainfallItem}>
+                                        <div className={styles.hour}>
+                                            24
+                                            <span>{t('Hour')}</span>
+                                        </div>
+                                        <div className={styles.value}>{`${twentyFourHourInterval} ${t('mm')}`}</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className={styles.value}>{`${twelveHourInterval} mm`}</div>
-                        </div>
-                        <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>
-                                    24
-                                <Translation>
-                                    {
-                                        t => <span>{t('Hour')}</span>
-                                    }
-                                </Translation>
+                            <div className={styles.source}>
+                                <div className={styles.title}>
+                                    <span>{t('Source')}</span>
+                                    :
 
-
+                                </div>
+                                <a
+                                    href="http://hydrology.gov.np/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.value}
+                                >
+                                    <span>{t('Department of Hydrology and Meteorology')}</span>
+                                </a>
                             </div>
-                            <div className={styles.value}>{`${twentyFourHourInterval} mm`}</div>
                         </div>
                     </div>
-                </div>
-                <div className={styles.source}>
-                    <div className={styles.title}>
-                        <Translation>
-                            {
-                                t => <span>{t('Source')}</span>
-                            }
-                        </Translation>
-                    :
+                )
+            }
+        </Translation>
 
-                    </div>
-                    <a
-                        href="http://hydrology.gov.np/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.value}
-                    >
-                        <Translation>
-                            {
-                                t => <span>{t('Department of Hydrology and Meteorology')}</span>
-                            }
-                        </Translation>
-                    </a>
-                </div>
-            </div>
-        </div>
     );
 };
 
