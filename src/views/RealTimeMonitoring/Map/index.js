@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
@@ -6,6 +7,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
@@ -14,6 +16,7 @@ import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
 import CommonMap from '#components/CommonMap';
+
 
 import {
     mapStyles,
@@ -38,6 +41,14 @@ import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+import { checkStreamRiskValue } from '../utils';
 
 const noop = () => { };
 
@@ -107,6 +118,17 @@ const rainStationToGeojson = (rainStation) => {
     return geojson;
 };
 
+const requestOptions = {
+    streamFlowDataGetRequest: {
+        url: process.env.REACT_APP_STREAMFLOW_URL,
+        method: methods.GET,
+        onSuccess: ({ response, params }) => {
+            params.setStreamData(response);
+        },
+        onMount: true,
+    },
+};
+
 class RealTimeMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -119,17 +141,28 @@ class RealTimeMap extends React.PureComponent {
             rainId: undefined,
             riverId: undefined,
             rasterLayers: [],
+            filteredGis: undefined,
+            streamFlowGeoJsonData: undefined,
         };
     }
 
+
     componentDidMount() {
+        const setStreamData = (data) => {
+            this.setState({ streamFlowGeoJsonData: data });
+        };
+
         let result = '';
+        const { requests: {
+            streamFlowDataGetRequest,
+        } } = this.props;
         try {
             result = JSON.parse(httpGet(GIS_URL));
             this.setState({ gis: result });
         } catch (error) {
             this.setState({ gis: undefined });
         }
+        streamFlowDataGetRequest.setDefaultParams({ setStreamData });
     }
 
 
@@ -143,42 +176,25 @@ class RealTimeMap extends React.PureComponent {
 
                 if (mydata.length > 0) {
                     basinCoordinates = mydata[0].point.coordinates;
-                    const tile = [
-                        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-                        '&service=WMS',
-                        '&version=1.1.1',
-                        '&request=GetMap',
-                        '&layers=Bipad:watershed-area',
-                        '&tiled=true',
-                        '&width=256',
-                        '&height=256',
-                        '&srs=EPSG:3857',
-                        '&bbox={bbox-epsg-3857}',
-                        '&transparent=true',
-                        '&format=image/png',
-                        // eslint-disable-next-line max-len
+                    const tileData = [
+                        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+                        'service=WFS',
+                        '&version=1.0.0',
+                        '&request=GetFeature',
+                        '&typeName=Bipad:watershed-area',
+                        '&outputFormat=application/json',
                         `&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
                     ].join('');
 
-                    const ourAarray = [{
-                        key: `basin-${this.props.riverFilters.basin.title}`,
-                        layername: `layer-basin-${this.props.riverFilters.basin.title}`,
-                        tiles: tile,
-                    }];
-                    // eslint-disable-next-line max-len
-                    if (!(this.props.riverFilters.basin && Object.keys(this.props.riverFilters.basin).length)) {
-                        // eslint-disable-next-line react/no-did-update-set-state
-                        this.setState({ rasterLayers: [] });
-                    } else {
-                        // eslint-disable-next-line react/no-did-update-set-state
-                        this.setState({
-                            rasterLayers: [
-                                ourAarray[0]],
-                        });
+                    let result;
+                    try {
+                        result = JSON.parse(httpGet(tileData));
+                        this.setState({ filteredGis: result });
+                    } catch (error) {
+                        this.setState({ filteredGis: undefined });
                     }
                 }
             }
-            // }
         }
     }
 
@@ -838,6 +854,8 @@ class RealTimeMap extends React.PureComponent {
             rainId,
             gis,
             riverId,
+            filteredGis,
+            streamFlowGeoJsonData,
         } = this.state;
 
         const tooltipOptions = {
@@ -848,6 +866,24 @@ class RealTimeMap extends React.PureComponent {
         const region = {
             adminLevel: riverFilters.municipality ? 3 : undefined,
             geoarea: riverFilters.municipality ? riverFilters.municipality : undefined,
+        };
+
+        const customizedStreamData = streamFlowGeoJsonData
+            && Object.keys(streamFlowGeoJsonData).length > 0
+            && streamFlowGeoJsonData.features && streamFlowGeoJsonData.features.length > 0
+            && {
+            type: 'FeatureCollection',
+            features: streamFlowGeoJsonData.features.map(data => ({
+                id: data.id,
+                type: 'Feature',
+                geometry: data.geometry,
+                properties: {
+                    risk: data.properties.risk,
+                    comid: data.properties.comid,
+                    color: checkStreamRiskValue(data.properties.risk && data.properties.risk),
+                },
+
+            })),
         };
 
         return (
@@ -890,7 +926,7 @@ class RealTimeMap extends React.PureComponent {
                         sourceOptions={{
                             type: 'geojson',
                         }}
-                        geoJson={`${process.env.REACT_APP_STREAMFLOW_URL}`}
+                        geoJson={customizedStreamData}
                     >
                         <MapLayer
                             layerKey="streamflow-layer"
@@ -900,18 +936,18 @@ class RealTimeMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'line',
                                 paint: {
-                                    'line-color': '#7cb5ec',
+                                    'line-color': ['get', 'color'],
                                     'line-width': [
                                         'case',
                                         ['==', ['feature-state', 'hovered'], true],
                                         7,
-                                        5,
+                                        3,
                                     ],
                                     'line-opacity': [
                                         'case',
                                         ['==', ['feature-state', 'hovered'], true],
                                         1,
-                                        0.5,
+                                        0.9,
                                     ],
                                 },
                             }}
@@ -930,29 +966,56 @@ class RealTimeMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
-                {gis && (showRain || showRiver) && (
-                    <MapSource
-                        sourceKey="gis-layer"
-                        sourceOptions={{ type: 'geojson' }}
-                        geoJson={gis}
-                        supportHover
-                    >
-                        <MapLayer
-                            layerKey="gis-outline"
-                            layerOptions={{
-                                type: 'line',
-                                paint: {
-                                    'line-color': 'purple',
-                                    'line-width': 1.5,
-                                    'line-dasharray': [1, 2],
-                                },
-                            }}
-                        />
-                    </MapSource>
+                {filteredGis && (showRain || showRiver) && riverFilters.basin
+                    && riverFilters.basin.title && (
+                        <MapSource
+                            sourceKey="gis-layer-filtered"
+                            sourceOptions={{ type: 'geojson' }}
+                            geoJson={filteredGis}
+                            supportHover
+                        >
+                            <MapLayer
+                                layerKey="gis-outline"
+                                layerOptions={{
+                                    type: 'line',
+                                    paint: {
+                                        'line-color': 'purple',
+                                        'line-width': 1.5,
+                                        'line-dasharray': [1, 2],
+                                    },
+                                }}
+                            />
+                        </MapSource>
 
-                )}
+                    )}
+                {gis && (showRain || showRiver)
+                    && (!riverFilters.basin || !riverFilters.basin.title)
+                    && (
+                        <MapSource
+                            sourceKey="gis-layer-whole"
+                            sourceOptions={{ type: 'geojson' }}
+                            geoJson={gis}
+                            supportHover
+                        >
+                            <MapLayer
+                                layerKey="gis-outline"
+                                layerOptions={{
+                                    type: 'line',
+                                    paint: {
+                                        'line-color': 'purple',
+                                        'line-width': 1.5,
+                                        'line-dasharray': [1, 2],
+                                    },
+                                }}
+                            />
+                        </MapSource>
 
-                {(rasterLayers.length === 0)
+                    )}
+                {/**
+                 * can be removed: geosjson layer is alreadey added above
+                 */}
+
+                {/* {(rasterLayers.length === 0)
                     && (
                         <MapSource
                             key="basin-rain-key"
@@ -964,7 +1027,7 @@ class RealTimeMap extends React.PureComponent {
                             }}
                         >
 
-                            {/* <MapLayer
+                            <MapLayer
                                 layerKey="raster-rain-layer"
                                 layerOptions={{
                                     type: 'raster',
@@ -972,11 +1035,11 @@ class RealTimeMap extends React.PureComponent {
                                         'raster-opacity': 0.9,
                                     },
                                 }}
-                            /> */}
+                            />
                         </MapSource>
                     )
-                }
-                {rasterLayers && rasterLayers.length > 0 && rasterLayers.map(layer => (
+                } */}
+                {/* {rasterLayers && rasterLayers.length > 0 && rasterLayers.map(layer => (
                     <MapSource
                         key={`key${layer.key}`}
                         sourceKey={`source${layer.key}`}
@@ -999,7 +1062,7 @@ class RealTimeMap extends React.PureComponent {
                         />
                     </MapSource>
                 ))
-                }
+                } */}
                 <MapSource
                     sourceKey="real-time-rain-points"
                     sourceOptions={{ type: 'geojson' }}
@@ -1363,5 +1426,8 @@ class RealTimeMap extends React.PureComponent {
     }
 }
 
-export default
-    connect(mapStateToProps)(RealTimeMap);
+export default compose(
+    connect(mapStateToProps),
+    createConnectedRequestCoordinator(),
+    createRequestClient(requestOptions),
+)(RealTimeMap);

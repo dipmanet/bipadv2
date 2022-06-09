@@ -39,8 +39,8 @@ interface OwnProps {
     handleModalClose: () => void;
     id: number;
 }
-interface Params {}
-interface State {}
+interface Params { }
+interface State { }
 
 interface Value {
     maxValue: number;
@@ -135,6 +135,8 @@ class StreamflowDetails extends React.PureComponent<Props> {
             (streamflowData[0] || {}).returnPeriod,
         );
         const pending = isAnyRequestPending(requests);
+        console.log('returnPeriod', returnPeriod);
+
         return (
             <Modal
                 // closeOnEscape
@@ -153,8 +155,8 @@ class StreamflowDetails extends React.PureComponent<Props> {
                     )}
                 />
                 <ModalBody className={styles.body}>
-                    { pending && <LoadingAnimation /> }
-                    { !pending && (
+                    {pending && <LoadingAnimation />}
+                    {!pending && (
                         <div className={styles.streamflow}>
                             <header className={styles.header}>
                                 <h3 className={styles.heading}>
@@ -202,7 +204,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
                                         labelFormatter={value => `Date: ${new Date(value)}`}
                                     />
                                     <Legend verticalAlign="top" />
-                                    <Area
+                                    {/* <Area
                                         type="monotone"
                                         dataKey="flow"
                                         stroke="none"
@@ -215,7 +217,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
                                         stroke="none"
                                         fill="#33a02c"
                                         legendType="square"
-                                    />
+                                    /> */}
                                     <Line
                                         strokeWidth={2}
                                         type="monotone"
