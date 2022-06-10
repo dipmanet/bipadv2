@@ -165,10 +165,10 @@ const getDatesInLocaleTime = (startDate: string, endDate: string) => ({
     endDate: endDate ? `${endDate}T23:59:59+05:45` : undefined,
 });
 
-const timeTickFormatter = (timestamp: number) => {
+const timeTickFormatter = (timestamp: number, language: string) => {
     const date = new Date();
     date.setTime(timestamp);
-    return `${date.getFullYear()}-${date.getMonth() + 1}`;
+    return convertDateAccToLanguage(`${date.getFullYear()}-${date.getMonth() + 1}`, language);
 };
 
 const incidentMetricChartParams = {
@@ -618,7 +618,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                                     <Tooltip
                                                                         labelFormatter={() => null}
                                                                         formatter={(value, name, p) => [value, `${t(`${metric.title}`)} ${t('in')}
-                                                                        ${timeTickFormatter(p.payload.incidentMonthTimestamp)}`]}
+                                                                        ${timeTickFormatter(p.payload.incidentMonthTimestamp, language)}`]}
                                                                     />
 
                                                                 </AreaChart>

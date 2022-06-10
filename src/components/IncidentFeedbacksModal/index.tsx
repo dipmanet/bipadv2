@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
 import DangerButton from '#rsca/Button/DangerButton';
@@ -54,7 +55,7 @@ const DetailItem = ({
             name={iconName}
         />
         <div className={styles.value}>
-            { value }
+            {value}
         </div>
     </div>
 );
@@ -162,7 +163,7 @@ interface Params {
 
 type Props = NewProps<OwnProps, Params>;
 
-const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     incidentFeedbacksGet: {
         url: '/incident-feedback/',
         query: ({ props }) => ({
@@ -231,29 +232,36 @@ class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={_cs(styles.incidentFeebacksModal, className)}>
-                <ModalHeader
-                    title="Incident Feedbacks"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody}>
-                    <ListView
-                        className={styles.incidentFeedbackList}
-                        data={incidentFeedbacks}
-                        keySelector={keySelector}
-                        renderer={IncidentFeedbackItem}
-                        rendererParams={this.rendererParams}
-                        pending={pending}
-                    />
-                </ModalBody>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={_cs(styles.incidentFeebacksModal, className)}>
+                            <ModalHeader
+                                title={t('Incident Feedbacks')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.modalBody}>
+                                <ListView
+                                    className={styles.incidentFeedbackList}
+                                    data={incidentFeedbacks}
+                                    keySelector={keySelector}
+                                    renderer={IncidentFeedbackItem}
+                                    rendererParams={this.rendererParams}
+                                    pending={pending}
+                                />
+                            </ModalBody>
+                        </Modal>
+
+                    )
+                }
+            </Translation>
         );
     }
 }

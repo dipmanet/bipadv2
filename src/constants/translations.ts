@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Incident Feedbacks': 'Incident Feedbacks',
         'Not provided': 'Not provided',
         'Access Points': 'Access Points',
         'Basic Health Care Center': 'Basic Health Care Center',
@@ -786,6 +787,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Incident Feedbacks': 'घटना प्रतिक्रियाहरू',
         'Not provided': 'प्रदान गरिएको छैन',
         'Access Points': 'पहुँच बिन्दुहरू',
         'Basic Health Care Center': 'आधारभूत स्वास्थ्य सेवा केन्द्र',
