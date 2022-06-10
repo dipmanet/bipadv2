@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Access Points': 'Access Points',
         'Basic Health Care Center': 'Basic Health Care Center',
         'Community Health Unit': 'Community Health Unit',
         'Ayurveda Hospital': 'Ayurveda Hospital',
@@ -213,6 +214,7 @@ export const enTranslation = {
 
         'Number of rooms': 'Number of rooms',
         'Number of beds': 'Number of beds',
+        'Number of Beds': 'Number of Beds',
         'Number of Service Users': 'Number of Service Users',
         'Facility Type': 'Facility Type',
         'Does the facility have disaster management unit available?': 'Does the facility have disaster management unit available?',
@@ -782,6 +784,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Access Points': 'पहुँच बिन्दुहरू',
         'Basic Health Care Center': 'आधारभूत स्वास्थ्य सेवा केन्द्र',
         'Community Health Unit': 'सामुदायिक स्वास्थ्य इकाई',
         'Ayurveda Hospital': 'आयुर्वेद अस्पताल',
@@ -1001,6 +1004,7 @@ export const npTranslation = {
 
         'Number of rooms': 'कोठाको संख्या',
         'Number of beds': 'बेडको संख्या',
+        'Number of Beds': 'बेडको संख्या',
         'Number of Service Users': 'सेवा प्रयोगकर्ताहरू',
         'SERVICES AVAILABLE': 'सेवा प्रकार',
         'Facility Type': 'सुविधा प्रकार',

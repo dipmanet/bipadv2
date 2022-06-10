@@ -123,7 +123,7 @@ export default class ResourceGroup extends React.PureComponent {
                                 Object.keys(aggregatedAttributes).sort().map(label => (
                                     <TextOutput
                                         key={label}
-                                        label={label}
+                                        label={t(label)}
                                         value={aggregatedAttributes[label]}
                                         isNumericValue
                                     />
