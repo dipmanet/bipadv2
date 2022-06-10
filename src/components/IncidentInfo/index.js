@@ -8,6 +8,7 @@ import {
 import { Link } from '@reach/router';
 
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 
@@ -18,6 +19,7 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loss from '#components/Loss';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 const emptyObject = {};
 const emptyList = [];
@@ -46,7 +48,11 @@ const defaultProps = {
     showDeleteIncident: false,
 };
 
-export default class IncidentInfo extends React.PureComponent {
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+class IncidentInfo extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -70,8 +76,8 @@ export default class IncidentInfo extends React.PureComponent {
 
             incidentDeletePending,
             showActions,
+            language: { language },
         } = this.props;
-
         const {
             title,
             inducer,
@@ -112,11 +118,12 @@ export default class IncidentInfo extends React.PureComponent {
                                 <DateOutput
                                     className={styles.incidentDate}
                                     value={incidentOn}
+                                    language={language}
                                 />
                             </header>
                             <div className={styles.actions}>
                                 <div className={styles.left}>
-                                    { !hideLink && (
+                                    {!hideLink && (
                                         <Link
                                             className={styles.gotoResponseLink}
                                             to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
@@ -126,7 +133,7 @@ export default class IncidentInfo extends React.PureComponent {
                                     )}
                                 </div>
                                 <div className={styles.right}>
-                                    { showEditIncident && onEditIncident && (
+                                    {showEditIncident && onEditIncident && (
                                         <AccentButton
                                             className={styles.button}
                                             transparent
@@ -135,7 +142,7 @@ export default class IncidentInfo extends React.PureComponent {
                                             {t('Edit')}
                                         </AccentButton>
                                     )}
-                                    { showDeleteIncident && onDeleteIncident && (
+                                    {showDeleteIncident && onDeleteIncident && (
                                         <DangerConfirmButton
                                             className={styles.button}
                                             confirmationMessage={t('Are you sure you want to delete this incident?')}
@@ -205,13 +212,13 @@ export default class IncidentInfo extends React.PureComponent {
                                         )}
                                     />
                                 </div>
-                                { wardNames.length > 0 && (
+                                {wardNames.length > 0 && (
                                     <div className={styles.wards}>
                                         <h4 className={styles.heading}>
                                             {t('Wards')}
                                         </h4>
                                         <div className={styles.wardList}>
-                                            { wardNames.map(wardName => (
+                                            {wardNames.map(wardName => (
                                                 <div
                                                     className={styles.ward}
                                                     key={wardName}
@@ -247,3 +254,5 @@ export default class IncidentInfo extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(IncidentInfo);
