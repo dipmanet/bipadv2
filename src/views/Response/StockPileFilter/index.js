@@ -170,6 +170,7 @@ class StockPileFilter extends React.PureComponent {
                                 options={inventoryItemList}
                                 showHintAndError={false}
                                 className={styles.input}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             // autoFocus
                             />
                             <NumberInput
@@ -191,6 +192,7 @@ class StockPileFilter extends React.PureComponent {
                                 options={operatorOptions}
                                 showHintAndError={false}
                                 className={styles.input}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             />
                             <div className={styles.actions}>
                                 <PrimaryButton
