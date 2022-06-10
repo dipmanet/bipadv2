@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Not provided': 'Not provided',
         'Access Points': 'Access Points',
         'Basic Health Care Center': 'Basic Health Care Center',
         'Community Health Unit': 'Community Health Unit',
@@ -785,6 +786,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Not provided': 'प्रदान गरिएको छैन',
         'Access Points': 'पहुँच बिन्दुहरू',
         'Basic Health Care Center': 'आधारभूत स्वास्थ्य सेवा केन्द्र',
         'Community Health Unit': 'सामुदायिक स्वास्थ्य इकाई',

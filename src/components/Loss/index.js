@@ -61,7 +61,7 @@ export default class Loss extends React.PureComponent {
                     t => (
                         <div className={_cs(className, styles.loss)}>
                             <h3 className={_cs(titleClassName, styles.title)}>
-                                { title }
+                                {title}
                             </h3>
                             <div className={contentClassName}>
                                 <TextOutput
@@ -101,7 +101,7 @@ export default class Loss extends React.PureComponent {
                                     labelClassName={labelClassName}
                                     valueClassName={valueClassName}
                                     label={t('Description')}
-                                    value={description}
+                                    value={t(description)}
                                 />
                             </div>
                         </div>
