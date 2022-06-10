@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -80,6 +81,7 @@ class IncidentInfo extends React.PureComponent {
         } = this.props;
         const {
             title,
+            titleNe,
             inducer,
             cause,
             source,
@@ -103,7 +105,11 @@ class IncidentInfo extends React.PureComponent {
             const municipality = municipalitiesMap[ward.municipality];
             const district = districtsMap[municipality.district];
             const province = provincesMap[district.province];
-            return `${municipality.title} - ${ward.title}, ${district.title}, ${province.title}`;
+            return (
+                language === 'en'
+                    ? `${municipality.title} - ${ward.title}, ${district.title}, ${province.title}`
+                    : `${municipality.title_ne} - ${ward.title}, ${district.title_ne}, ${province.title_ne}`
+            );
         });
 
         return (
@@ -113,7 +119,7 @@ class IncidentInfo extends React.PureComponent {
                         <div className={_cs(styles.incidentInfo, className)}>
                             <header className={styles.header}>
                                 <h3 className={styles.heading}>
-                                    {title}
+                                    {language === 'en' ? title : titleNe === undefined ? title : titleNe}
                                 </h3>
                                 <DateOutput
                                     className={styles.incidentDate}
@@ -167,7 +173,7 @@ class IncidentInfo extends React.PureComponent {
                                     <TextOutput
                                         className={styles.source}
                                         label={t('Source')}
-                                        value={source}
+                                        value={t(source)}
                                         labelClassName={styles.label}
                                         valueClassName={styles.value}
                                     />
