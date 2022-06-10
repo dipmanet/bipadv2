@@ -208,6 +208,7 @@ class IncidentInfo extends React.PureComponent {
                                             <FormattedDate
                                                 mode="yyyy-MM-dd hh:mm"
                                                 value={reportedOn}
+                                                language={language}
                                             />
                                         )}
                                     />
