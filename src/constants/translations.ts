@@ -1,5 +1,19 @@
 export const enTranslation = {
     translation: {
+        'Basic Health Care Center': 'Basic Health Care Center',
+        'Community Health Unit': 'Community Health Unit',
+        'Ayurveda Hospital': 'Ayurveda Hospital',
+        'Poly Clinic': 'Poly Clinic',
+        'General Hospital': 'General Hospital',
+        Clinic: 'Clinic',
+        'Urban Health Center': 'Urban Health Center',
+        Cooperative: 'Cooperative',
+        'Micro Credit Development': 'Micro Credit Development',
+        'Basic Education': 'Basic Education',
+        'Pre Primary': 'Pre Primary',
+        College: 'College',
+        Government: 'Government',
+
         mm: 'mm',
         Confidence: 'Confidence',
         'Home Page': 'Home Page',
@@ -768,6 +782,20 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Basic Health Care Center': 'आधारभूत स्वास्थ्य सेवा केन्द्र',
+        'Community Health Unit': 'सामुदायिक स्वास्थ्य इकाई',
+        'Ayurveda Hospital': 'आयुर्वेद अस्पताल',
+        'Poly Clinic': 'पोली क्लिनिक',
+        'General Hospital': 'सामान्य अस्पताल',
+        Clinic: 'क्लिनिक',
+        'Urban Health Center': 'शहरी स्वास्थ्य केन्द्र',
+        Cooperative: 'सहकारी',
+        'Micro Credit Development': 'माइक्रो क्रेडिट विकास',
+        'Basic Education': 'आधारभूत शिक्षा',
+        'Pre Primary': 'पूर्व प्राथमिक',
+        College: 'कलेज',
+        Government: 'सरकार',
+
         mm: 'मिमि',
         Confidence: 'निर्धक्क',
         'Home Page': 'गृह पृष्ठ',
@@ -1089,7 +1117,7 @@ export const npTranslation = {
         'Ambulance services': 'Ambulance services',
         'Extended Health Service': 'Extended Health Service',
         'Geriatric Ward': 'Geriatric Ward',
-        Pharmacy: 'Pharmacy',
+        Pharmacy: 'फार्मेसी',
         OCMC: 'OCMC',
         'Health Insurance': 'Health Insurance',
         SSU: 'SSU',

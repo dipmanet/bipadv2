@@ -180,17 +180,17 @@ export default class ResourceGroup extends React.PureComponent {
                     />
                     <h3 className={styles.heading}>
                         <div className={styles.resourceName}>
-                            { heading }
+                            {heading}
                         </div>
                         <div className={styles.countDetails}>
                             <div className={styles.numItems}>
-                                { itemsCount }
+                                {itemsCount}
                             </div>
                             <div className={styles.separator}>
                                 /
                             </div>
                             <div className={styles.total}>
-                                { totalSize }
+                                {totalSize}
                             </div>
                         </div>
                     </h3>

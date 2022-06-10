@@ -90,6 +90,7 @@ const getFilterInputElement = (filterParam, show, elementProps = {}, language) =
                 keySelector={getKey}
                 labelSelector={x => getLabel(x, language)}
                 options={filter.options}
+                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
             />
         );
     }
@@ -315,7 +316,7 @@ class LeftPane extends React.Component {
                                     onChange={this.handleFaramChange}
                                     schema={this.schema}
                                     value={filter}
-                        // error={faramErrors}
+                                // error={faramErrors}
                                 >
                                     {this.renderFilter()}
                                 </Faram>
