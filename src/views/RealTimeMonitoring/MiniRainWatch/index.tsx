@@ -24,6 +24,7 @@ import { TitleContext } from '#components/TitleContext';
 import { AppState } from '#store/types';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const mapStateToProps = (state: AppState) => ({
     language: languageSelector(state),
@@ -177,7 +178,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                 return (modifiedOn) ? (
                     <div style={{ width: '60px' }}>
                         {/* parsing date to appropiate format */}
-                        {modifiedOn.substring(0, modifiedOn.indexOf('T'))}
+                        {convertDateAccToLanguage(modifiedOn.substring(0, modifiedOn.indexOf('T')), language)}
                     </div>
                 ) : undefined;
             },
