@@ -1332,7 +1332,7 @@ export const npTranslation = {
         Evacuated: 'खाली गरिएको',
         'Livestock Loss': 'पशुचौपायाको क्षति',
         Destroyed: 'नष्ट भएको',
-        'Infrastructure Loss': 'पूर्वाधार को क्षेती',
+        'Infrastructure Loss': 'पूर्वाधारको क्षेति',
         House: 'घर',
         Bridges: 'पुलहरू',
         Bridge: 'पुल',
