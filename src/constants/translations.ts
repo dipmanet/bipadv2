@@ -1564,7 +1564,7 @@ export const npTranslation = {
         SelectMessage: 'कृपया तुलना सुरु गर्न स्थानहरू चयन गर्नुहोस्',
         'Estimated Monetary Loss': 'अनुमानित आर्थिक क्षेति (रु )',
         'Death toll by disaster': 'प्रकोपबाट मृत्यु हुनेको संख्या',
-        'Estimated economic loss by disaster': 'विपद्बाट अनुमानित आर्थिक क्षति',
+        'Estimated economic loss by disaster': 'विपद बाट अनुमानित आर्थिक क्षेति',
         'Realtime layers': 'वास्तविक समय तहहरू',
         'Others layers': 'अन्य तहहरू',
         Rain: 'वर्षा',

@@ -34,7 +34,7 @@ interface Props {
     realTimeRain: RealTimeRain[];
     className?: string;
     onHazardHover: Function;
-    language: { language: 'en' | 'np'};
+    language: { language: 'en' | 'np' };
 }
 interface State {
     duration: number;
