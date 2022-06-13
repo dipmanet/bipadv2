@@ -258,10 +258,10 @@ class Visualization extends React.PureComponent {
                                 <div className={styles.label}>
                                     <Translation>
                                         {
-                                            t => <span>{t(`hazardSummary.${idx}.label`, { returnObjects: true })}</span>
+                                            t => <span>{t(s.label)}</span>
                                         }
                                     </Translation>
-                                    {/* {s.label} */}
+
                                 </div>
                                 <div className={styles.value}>
                                     {s.value}

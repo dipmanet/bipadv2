@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Env. Pollution': 'Env. Pollution',
         'Incident Feedbacks': 'Incident Feedbacks',
         'Not provided': 'Not provided',
         'Access Points': 'Access Points',
@@ -787,6 +788,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Env. Pollution': 'वातावरणीय प्रदूषण',
         'Incident Feedbacks': 'घटना प्रतिक्रियाहरू',
         'Not provided': 'प्रदान गरिएको छैन',
         'Access Points': 'पहुँच बिन्दुहरू',
