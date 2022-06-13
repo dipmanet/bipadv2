@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -110,7 +111,10 @@ class ResourceItem extends React.PureComponent {
                     t => (
                         <div className={_cs(styles.resource, className)}>
                             <h4 className={styles.heading}>
-                                {language === 'en' ? title : titleNe}
+                                {language === 'en'
+                                    ? title
+                                    : titleNe === undefined
+                                        ? title : titleNe}
                             </h4>
                             <div className={styles.basicInformation}>
                                 <DistanceOutput
