@@ -131,7 +131,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                     </div>
                     */}
                     <div className={styles.scale}>
-                        { color.map((c, i) => {
+                        {color.map((c, i) => {
                             if (i % 2 === 0) {
                                 return null;
                             }
@@ -147,7 +147,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                                         }}
                                     />
                                     <div className={styles.value}>
-                                        { Math.round(color[i - 1]) }
+                                        {Math.round(color[i - 1])}
                                     </div>
                                 </div>
                             );
