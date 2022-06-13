@@ -1457,7 +1457,7 @@ export const npTranslation = {
         'People death count': 'मृत्यु संख्या',
         'Hazards Legend': 'प्रकोप अनुसूची',
         'New incident': 'नया घटना थप्न',
-        Feedbacks: 'प्रतिक्रियाहरु',
+        Feedbacks: 'प्रतिक्रियाहरु ',
         Source: 'स्रोत',
         Status: 'स्थिति',
         Verified: 'प्रमाणित',
