@@ -584,7 +584,7 @@ class Filters extends React.PureComponent<Props, State> {
         ): { [key in TabKey]?: string; } => {
             const tabs = {
                 location: language === 'en' ? 'Location' : 'स्थान',
-                hazard: language === 'en' ? 'Hazard' : 'विपद्',
+                hazard: language === 'en' ? 'Hazard' : 'प्रकोप',
                 dataRange: language === 'en' ? 'Data range' : 'तथ्यांकको समय',
                 others: language === 'en' ? 'Project' : 'परियोजना',
             };
