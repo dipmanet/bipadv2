@@ -1,9 +1,12 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { connect } from 'react-redux';
 import {
     compareString,
     compareNumber,
     _cs,
+    Maybe,
 } from '@togglecorp/fujs';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -21,6 +24,7 @@ import Pollution from '../Pollution';
 
 import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const mapStateToProps = (state: AppState) => ({
     language: languageSelector(state),
@@ -53,180 +57,106 @@ const defaultSort = {
 class MiniPollution extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
-        this.pollutionHeader = [
-            {
-                key: 'name',
-                label: 'Location',
-                order: 1,
-                sortable: true,
-                comparator: (a, b) => compareString(a.name, b.name),
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { name } = row;
+        this.pollutionHeader = (language: string) => (
+            [
+                {
+                    key: 'name',
+                    label: language === 'en' ? 'Location' : 'स्‍थान',
+                    order: 1,
+                    sortable: true,
+                    comparator: (a: { name: Maybe<string> },
+                        b: { name: Maybe<string> }) => compareString(a.name, b.name),
+                    modifier: (row: RealTimePollutionExtended) => {
+                        const { name } = row;
 
-                    return (name) ? (
-                        <div>{name}</div>) : undefined;
+                        return (name) ? (
+                            <div>{name}</div>) : undefined;
+                    },
                 },
-            },
-            {
-                key: 'modifiedOn',
-                label: 'Date',
-                order: 2,
-                sortable: true,
-                comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { dateTime } = row;
+                {
+                    key: 'modifiedOn',
+                    label: language === 'en' ? 'Date' : 'मिति',
+                    order: 2,
+                    sortable: true,
+                    comparator: (a:
+                        { modifiedOn: Maybe<string> },
+                        b:
+                            { modifiedOn: Maybe<string> }) => compareString(
+                                a.modifiedOn,
+                                b.modifiedOn,
+                            ),
+                    modifier: (row: RealTimePollutionExtended) => {
+                        const { dateTime } = row;
 
-                    return (dateTime) ? (
-                        <div>
-                            {/* parsing date to appropiate format */}
-                            {dateTime.substring(0, dateTime.indexOf('T'))}
-                        </div>
-                    ) : undefined;
-                },
-            },
-            {
-                key: 'time',
-                label: 'Time',
-                order: 3,
-                sortable: false,
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { dateTime } = row;
-                    // const { modifiedOn, observation: observationItem } = row;
-                    // const { data: { datetime } } = observationItem[0];
-                    if (dateTime) {
-                        // const date = new Date(modifiedOn);
-                        return (
+                        return (dateTime) ? (
                             <div>
-                                {/* parsing date to time format */}
-                                {/* {date.toISOString().split('T')[1].split('.')[0]} */}
-                                {dateTime.split('T')[1].split('.')[0].split('+')[0]}
+                                {/* parsing date to appropiate format */}
+                                {convertDateAccToLanguage(dateTime.substring(0, dateTime.indexOf('T')), language)}
                             </div>
-                        );
-                    } return undefined;
+                        ) : undefined;
+                    },
                 },
-            },
-            {
-                key: 'aqi',
-                label: 'AQI',
-                order: 4,
-                sortable: true,
-                comparator: (a, b) => compareNumber(a.aqi, b.aqi),
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { aqi } = row;
+                {
+                    key: 'time',
+                    label: language === 'en' ? 'Time' : 'समय',
+                    order: 3,
+                    sortable: false,
+                    modifier: (row: RealTimePollutionExtended) => {
+                        const { dateTime } = row;
+                        // const { modifiedOn, observation: observationItem } = row;
+                        // const { data: { datetime } } = observationItem[0];
+                        if (dateTime) {
+                            // const date = new Date(modifiedOn);
+                            return (
+                                <div>
+                                    {/* parsing date to time format */}
+                                    {/* {date.toISOString().split('T')[1].split('.')[0]} */}
+                                    {dateTime.split('T')[1].split('.')[0].split('+')[0]}
+                                </div>
+                            );
+                        } return undefined;
+                    },
+                },
+                {
+                    key: 'aqi',
+                    label: 'AQI',
+                    order: 4,
+                    sortable: true,
+                    comparator: (a:
+                        { aqi: Maybe<number> },
+                        b:
+                            { aqi: Maybe<number> }) => compareNumber(a.aqi, b.aqi),
+                    modifier: (row: RealTimePollutionExtended) => {
+                        const { aqi } = row;
 
-                    return (aqi) ? (
-                        // <div>{`${aqi.toFixed(2)} µg/m³`}</div>
-                        <div>{aqi.toFixed(2)}</div>
-                    ) : undefined;
+                        return (aqi) ? (
+                            // <div>{`${aqi.toFixed(2)} µg/m³`}</div>
+                            <div>{aqi.toFixed(2)}</div>
+                        ) : undefined;
+                    },
                 },
-            },
-            {
-                key: 'aqiColor',
-                label: 'Indicator',
-                order: 5,
-                sortable: false,
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { aqi } = row;
+                {
+                    key: 'aqiColor',
+                    label: language === 'en' ? 'Indicator' : 'सूचक',
+                    order: 5,
+                    sortable: false,
+                    modifier: (row: RealTimePollutionExtended) => {
+                        const { aqi } = row;
 
-                    return (aqi) ? (
-                        <div style={{ backgroundColor: `${this.renderAqiIndicator(aqi)}`,
-                            width: '10px',
-                            height: '10px',
-                            borderRadius: '50%',
-                            border: '1px solid black',
-                            margin: 'auto' }}
-                        />
-                    ) : undefined;
+                        return (aqi) ? (
+                            <div style={{
+                                backgroundColor: `${this.renderAqiIndicator(aqi)}`,
+                                width: '10px',
+                                height: '10px',
+                                borderRadius: '50%',
+                                border: '1px solid black',
+                                margin: 'auto',
+                            }}
+                            />
+                        ) : undefined;
+                    },
                 },
-            },
-        ];
-        this.pollutionHeaderNe = [
-            {
-                key: 'name',
-                label: 'स्थान',
-                order: 1,
-                sortable: true,
-                comparator: (a, b) => compareString(a.name, b.name),
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { name } = row;
-
-                    return (name) ? (
-                        <div>{name}</div>) : undefined;
-                },
-            },
-            {
-                key: 'modifiedOn',
-                label: 'मिति',
-                order: 2,
-                sortable: true,
-                comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { dateTime } = row;
-
-                    return (dateTime) ? (
-                        <div>
-                            {/* parsing date to appropiate format */}
-                            {dateTime.substring(0, dateTime.indexOf('T'))}
-                        </div>
-                    ) : undefined;
-                },
-            },
-            {
-                key: 'time',
-                label: 'समय',
-                order: 3,
-                sortable: false,
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { dateTime } = row;
-                    // const { modifiedOn, observation: observationItem } = row;
-                    // const { data: { datetime } } = observationItem[0];
-                    if (dateTime) {
-                        // const date = new Date(modifiedOn);
-                        return (
-                            <div>
-                                {/* parsing date to time format */}
-                                {/* {date.toISOString().split('T')[1].split('.')[0]} */}
-                                {dateTime.split('T')[1].split('.')[0].split('+')[0]}
-                            </div>
-                        );
-                    } return undefined;
-                },
-            },
-            {
-                key: 'aqi',
-                label: 'AQI',
-                order: 4,
-                sortable: true,
-                comparator: (a, b) => compareNumber(a.aqi, b.aqi),
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { aqi } = row;
-
-                    return (aqi) ? (
-                        // <div>{`${aqi.toFixed(2)} µg/m³`}</div>
-                        <div>{aqi.toFixed(2)}</div>
-                    ) : undefined;
-                },
-            },
-            {
-                key: 'aqiColor',
-                label: 'सूचक',
-                order: 5,
-                sortable: false,
-                modifier: (row: RealTimePollutionExtended) => {
-                    const { aqi } = row;
-
-                    return (aqi) ? (
-                        <div style={{ backgroundColor: `${this.renderAqiIndicator(aqi)}`,
-                            width: '10px',
-                            height: '10px',
-                            borderRadius: '50%',
-                            border: '1px solid black',
-                            margin: 'auto' }}
-                        />
-                    ) : undefined;
-                },
-            },
-        ];
+            ]);
     }
 
     private pollutionHeader: Header<RealTimePollutionExtended>[];
@@ -261,6 +191,7 @@ class MiniPollution extends React.PureComponent<Props> {
             language: { language },
         } = this.props;
 
+        const pollutionHeader = this.pollutionHeader(language);
         return (
             <div className={_cs(className, styles.pollution)}>
                 <header className={styles.header}>
@@ -281,7 +212,7 @@ class MiniPollution extends React.PureComponent<Props> {
                     <Table
                         className={styles.pollutionTable}
                         data={realTimePollution}
-                        headers={language === 'en' ? this.pollutionHeader : this.pollutionHeaderNe}
+                        headers={pollutionHeader}
                         keySelector={pollutionKeySelector}
                         onBodyHover={(id: number) => onHazardHover(id)}
                         onBodyHoverOut={() => onHazardHover()}

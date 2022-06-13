@@ -22,6 +22,7 @@ import Fire from '../Fire';
 import styles from './styles.scss';
 
 import { languageSelector } from '#selectors';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const mapStateToProps = (state: AppState) => ({
     language: languageSelector(state),
@@ -45,11 +46,12 @@ const defaultSort = {
 class Minifire extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
-        this.fireHeaderNe = [
+
+        this.fireHeader = language => ([
 
             {
                 key: 'eventOn',
-                label: 'मिति',
+                label: language === 'en' ? 'Date' : 'मिति',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.eventOn, b.eventOn),
@@ -59,14 +61,14 @@ class Minifire extends React.PureComponent<Props> {
                     return (eventOn) ? (
                         <div>
                             {/* parsing date to appropiate format */}
-                            {eventOn.substring(0, eventOn.indexOf('T'))}
+                            {convertDateAccToLanguage(eventOn.substring(0, eventOn.indexOf('T')), language)}
                         </div>
                     ) : undefined;
                 },
             },
             {
                 key: 'time',
-                label: 'समय',
+                label: language === 'en' ? 'Time' : 'समय',
                 order: 2,
                 sortable: false,
                 modifier: (row: RealTimeFire) => {
@@ -83,68 +85,18 @@ class Minifire extends React.PureComponent<Props> {
             },
             {
                 key: 'landCover',
-                label: 'भूउपयोग',
+                label: language === 'en' ? 'Land Cover' : 'भूउपयोग',
                 order: 3,
                 sortable: false,
             },
             {
                 key: 'brightness',
-                label: 'चमक',
+                label: language === 'en' ? 'Brightness' : 'चमक',
                 order: 4,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.brightness, b.brightness),
             },
-        ];
-        this.fireHeader = [
-
-            {
-                key: 'eventOn',
-                label: 'Date',
-                order: 1,
-                sortable: true,
-                comparator: (a, b) => compareString(a.eventOn, b.eventOn),
-                modifier: (row: RealTimeFire) => {
-                    const { eventOn } = row;
-
-                    return (eventOn) ? (
-                        <div>
-                            {/* parsing date to appropiate format */}
-                            {eventOn.substring(0, eventOn.indexOf('T'))}
-                        </div>
-                    ) : undefined;
-                },
-            },
-            {
-                key: 'time',
-                label: 'Time',
-                order: 2,
-                sortable: false,
-                modifier: (row: RealTimeFire) => {
-                    const { eventOn } = row;
-                    if (eventOn) {
-                        return (
-                            <div>
-                                {/* parsing date to time format */}
-                                {eventOn.split('T')[1].split('.')[0].split('+')[0]}
-                            </div>
-                        );
-                    } return undefined;
-                },
-            },
-            {
-                key: 'landCover',
-                label: 'Land Cover',
-                order: 3,
-                sortable: false,
-            },
-            {
-                key: 'brightness',
-                label: 'Brightness',
-                order: 4,
-                sortable: true,
-                comparator: (a, b) => compareNumber(a.brightness, b.brightness),
-            },
-        ];
+        ]);
     }
 
     private fireHeader: Header<RealTimeFire>[];
@@ -157,6 +109,7 @@ class Minifire extends React.PureComponent<Props> {
             language: { language },
         } = this.props;
 
+        const fireHeader = this.fireHeader(language);
         return (
             <div className={_cs(className, styles.fire)}>
                 <header className={styles.header}>
@@ -177,7 +130,7 @@ class Minifire extends React.PureComponent<Props> {
                     <Table
                         className={styles.fireTable}
                         data={realTimeFire}
-                        headers={language === 'en' ? this.fireHeader : this.fireHeaderNe}
+                        headers={fireHeader}
                         keySelector={fireKeySelector}
                         onBodyHover={(id: number) => onHazardHover(id)}
                         onBodyHoverOut={() => onHazardHover()}
