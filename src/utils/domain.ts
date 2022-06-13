@@ -154,7 +154,7 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
 export const lossMetrics = [
     { key: 'count', label: 'Incidents', labelNe: 'घटना संख्या' },
     { key: 'peopleDeathCount', label: 'People death', labelNe: 'मृत्यु संख्या' },
-    { key: 'estimatedLoss', label: 'Estimated loss (NPR)', labelNe: 'अनुमानित क्षति (रु)' },
+    { key: 'estimatedLoss', label: 'Estimated loss (NPR)', labelNe: 'अनुमानित आर्थिक क्षेति (रु )' },
     { key: 'infrastructureDestroyedCount', label: 'Infrastructure destroyed', labelNe: 'पूर्वाधार को क्षेती' },
     { key: 'livestockDestroyedCount', label: 'Livestock destroyed', labelNe: 'पशुचौपाया क्षति' },
 ];

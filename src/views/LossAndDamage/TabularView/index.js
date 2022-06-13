@@ -142,7 +142,7 @@ class TabularView extends React.PureComponent {
 
             {
                 key: 'loss.estimatedLoss',
-                value: { title: language === 'en' ? 'Total estimated loss (NPR)' : 'कुल अनुमानित क्षति (रु)' },
+                value: { title: language === 'en' ? 'Total estimated loss (NPR)' : 'कुल अनुमानित आर्थिक क्षेति (रु )' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.estimatedLoss'),
             },
