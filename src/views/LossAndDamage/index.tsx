@@ -638,7 +638,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 syncId="lndChart"
                                             >
                                                 <XAxis
-                                                    tickFormatter={timeTickFormatter}
+                                                    tickFormatter={date => timeTickFormatter(
+                                                        date,
+                                                        language,
+                                                    )}
                                                     scale="time"
                                                     dataKey="incidentMonthTimestamp"
                                                     domain={['dataMin', 'dataMax']}
@@ -648,7 +651,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 />
                                                 <Brush
                                                     dataKey="incidentMonthTimestamp"
-                                                    tickFormatter={timeTickFormatter}
+                                                    tickFormatter={date => timeTickFormatter(
+                                                        date,
+                                                        language,
+                                                    )}
                                                 />
                                             </AreaChart>
                                         </ResponsiveContainer>
