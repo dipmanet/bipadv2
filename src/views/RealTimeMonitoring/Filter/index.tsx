@@ -94,6 +94,10 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
             otherSourceList,
         } = this.props;
 
+
+        console.log('faramValues', faramValues);
+
+
         return (
             <Faram
                 className={_cs(className, styles.filter)}
@@ -111,7 +115,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                     keySelector={sourceKeySelector}
                     labelSelector={sourceLabelSelector}
                     showHintAndError={false}
-                    // autoFocus
+                // autoFocus
                 />
                 <ListSelection
                     label="Other layers"

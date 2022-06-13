@@ -743,7 +743,7 @@ class Filters extends React.PureComponent<Props, State> {
             hideHazardFilter,
             hideDataRangeFilter,
         ): { [key in TabKey]?: string; } => {
-            const { activeRouteDetails } = this.props;
+            const { activeRouteDetails, filters } = this.props;
             const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
@@ -752,6 +752,7 @@ class Filters extends React.PureComponent<Props, State> {
                 riverBasin: 'River Basin',
                 others: 'Project',
             };
+            console.log('filters', filters);
 
             if (!extraContent) {
                 delete tabs.others;
@@ -768,7 +769,8 @@ class Filters extends React.PureComponent<Props, State> {
             if (hideDataRangeFilter) {
                 delete tabs.dataRange;
             }
-            if (activeRouteDetails && activeRouteDetails.path !== '/realtime/') {
+            if ((activeRouteDetails && activeRouteDetails.path !== '/realtime/')
+                || (filters.realtimeSources)) {
                 delete tabs.rainBasin;
             }
             if (activeRouteDetails && activeRouteDetails.path !== '/realtime/') {

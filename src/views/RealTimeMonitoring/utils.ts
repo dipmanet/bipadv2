@@ -9,6 +9,13 @@ interface LegendItem {
     order: number;
 }
 
+interface StreamFlowDataValues {
+    key: string;
+    value: number;
+}
+
+type StreamFlowData = StreamFlowDataValues[]
+
 // river
 export const getAutoRealTimeRiverLegends = (
     dataList: PageType.RealTimeRiver[],
@@ -107,4 +114,17 @@ export const checkStreamRiskValue = (riskScore: number) => {
         default:
             return 'white';
     }
+};
+
+
+export const filterDataByReturnPeriod = (data: StreamFlowData, filterKey: string) => {
+    if (data.length > 0) {
+        const filteredData = data.filter(
+            (individualData: StreamFlowDataValues) => individualData.key === filterKey,
+        );
+        if (filteredData.length > 0) {
+            return filteredData[0].value;
+        }
+    }
+    return '';
 };
