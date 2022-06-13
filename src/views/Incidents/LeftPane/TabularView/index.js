@@ -28,6 +28,7 @@ import {
 
 import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import { convertDateAccToLanguage } from '#utils/common';
 
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
@@ -112,7 +113,7 @@ class TabularView extends React.PureComponent {
                 // cellRenderer: TableDateCell,
                 // comparator: createComparator(compareDate, 'incidentOn'),
                 comparator: createComparator(compareNumber, 'incidentOn'),
-                transformer: value => (value ? getDateFromMilliseconds(value.incidentOn) : ''),
+                transformer: value => (value ? convertDateAccToLanguage(getDateFromMilliseconds(value.incidentOn), language) : ''),
             },
             // {
             //     key: 'createdOn',
