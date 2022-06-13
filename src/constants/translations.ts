@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        Preprimary: 'Preprimary',
+        Hospital: 'Hospital',
         'Env. Pollution': 'Env. Pollution',
         'Incident Feedbacks': 'Incident Feedbacks',
         'Not provided': 'Not provided',
@@ -788,6 +790,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Preprimary: 'प्राथमिक',
+        Hospital: 'अस्पताल',
         'Env. Pollution': 'वातावरणीय प्रदूषण',
         'Incident Feedbacks': 'घटना प्रतिक्रियाहरू',
         'Not provided': 'प्रदान गरिएको छैन',
