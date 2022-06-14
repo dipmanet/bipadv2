@@ -38,6 +38,7 @@ import {
     riverStationsSelector,
     rainFiltersSelector,
     rainStationsSelector,
+    realTimeFiltersSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement, RiverFiltersElement } from '#types';
@@ -94,6 +95,7 @@ const mapStateToProps = (state: AppState) => ({
     riverStations: riverStationsSelector(state),
     rainFilters: rainFiltersSelector(state),
     rainStations: rainStationsSelector(state),
+    realTimeFilters: realTimeFiltersSelector(state),
 
 });
 
@@ -351,6 +353,7 @@ class Filters extends React.PureComponent<Props, State> {
         const { faramValues } = this.state;
         if (prevProps.filters !== filters) {
             this.setState({ faramValues: filters });
+            delete this.getTabs();
         }
         if (rainStations.length > 120) {
             // eslint-disable-next-line react/no-did-update-set-state
@@ -360,6 +363,9 @@ class Filters extends React.PureComponent<Props, State> {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ allStationsRiver: riverStations });
         }
+        // if (filters.realtimeSources && filters.realtimeSources.length > 0) {
+        //     delete this.getTabs();
+        // }
     }
 
     public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
@@ -736,14 +742,28 @@ class Filters extends React.PureComponent<Props, State> {
         }
     }
 
-    private getTabs = memoize(
+
+    private checkRealTimeFilter = (filterValue: number) => {
+        const { realTimeFilters } = this.props;
+        if (realTimeFilters.faramValues && realTimeFilters.faramValues.realtimeSources
+            && realTimeFilters.faramValues.realtimeSources.length > 0) {
+            const data = realTimeFilters.faramValues.realtimeSources;
+
+            if (data.includes(filterValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private getTabs =
         (
             extraContent: React.ReactNode,
             hideLocationFilter,
             hideHazardFilter,
             hideDataRangeFilter,
         ): { [key in TabKey]?: string; } => {
-            const { activeRouteDetails, filters } = this.props;
+            const { activeRouteDetails } = this.props;
             const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
@@ -752,7 +772,6 @@ class Filters extends React.PureComponent<Props, State> {
                 riverBasin: 'River Basin',
                 others: 'Project',
             };
-            console.log('filters', filters);
 
             if (!extraContent) {
                 delete tabs.others;
@@ -770,16 +789,17 @@ class Filters extends React.PureComponent<Props, State> {
                 delete tabs.dataRange;
             }
             if ((activeRouteDetails && activeRouteDetails.path !== '/realtime/')
-                || (filters.realtimeSources)) {
+                || !this.checkRealTimeFilter(3)) {
                 delete tabs.rainBasin;
             }
-            if (activeRouteDetails && activeRouteDetails.path !== '/realtime/') {
+            if ((activeRouteDetails && activeRouteDetails.path !== '/realtime/')
+                || !this.checkRealTimeFilter(2)) {
                 delete tabs.riverBasin;
             }
 
             return tabs;
-        },
-    )
+        }
+
 
     public render() {
         const {
