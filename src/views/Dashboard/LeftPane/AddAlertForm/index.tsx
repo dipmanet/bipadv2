@@ -434,7 +434,8 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         return (
 
             <Modal
-                className={_cs(styles.addAlertFormModal, className)}
+                className={_cs(styles.addAlertFormModal, className,
+                    language === 'np' && styles.languageFont)}
                 onClose={onCloseButtonClick}
             // closeOnEscape
             >
@@ -508,7 +509,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                         <div className={styles.dateTimeInputs}>
                                             <div className={styles.startedOnInputs}>
                                                 <DateInput
-                                                    className={styles.startedOnDate}
+                                                    className={'startDateInput'}
                                                     faramElementName="startedOnDate"
                                                     label={t('Started on')}
                                                     language={language}
@@ -523,6 +524,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                     label={t('Expires on')}
                                                     faramElementName="expireOnDate"
                                                     language={language}
+                                                    className={'endDateInput'}
                                                 />
                                                 <TimeInput
                                                     className={styles.startedOnTime}
