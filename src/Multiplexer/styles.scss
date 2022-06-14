@@ -367,4 +367,44 @@ button {
         display: none !important;
     }
 
+    .rainIcon{
+        background-image: url('../../src/resources/images/rainstation.svg');
+        height: 45px;
+        width: 25px;
+        background-repeat: no-repeat no-repeat;
+        background-position: center center;
+        background-size: contain;     
+    }
+
+    .rainIconActive{
+        background-image: url('../../src/resources/images/rainstationActive.svg');
+        height: 45px;
+        width: 25px;
+        background-repeat: no-repeat no-repeat;
+        background-position: center center;
+        background-size: contain;     
+
+    }
+
+    .riverIcon{
+        background-image: url('../../src/resources/images/riverstation.svg');
+        height: 45px;
+        width: 25px;
+        background-repeat: no-repeat no-repeat;
+        background-position: center center;
+        background-size: contain;     
+    }
+
+    .riverIconActive{
+        background-image: url('../../src/resources/images/riverstationActive.svg');
+        height: 45px;
+        width: 25px;
+        background-repeat: no-repeat no-repeat;
+        background-position: center center;
+        background-size: contain;    
+        // padding: 2px 5px; 
+    }
+
+
 }
+  

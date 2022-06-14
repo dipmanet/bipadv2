@@ -75,7 +75,7 @@
 .filter-icon {
     border-bottom: var(--width-separator-medium) solid var(--color-separator);
     cursor: pointer;
-    padding: var(--spacing-small) var(--spacing-medium-alt);
+    padding: var(--spacing-small) 12px;
     font-size: var(--font-size-extra-large);
 
     &.active {

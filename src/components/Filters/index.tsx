@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable @typescript-eslint/indent */
@@ -110,16 +111,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 type TabKey = 'location' | 'hazard' | 'dataRange' | 'rainBasin' | 'riverBasin' | 'others';
 
-const iconNames: {
-    [key in TabKey]: string;
-} = {
-    location: 'distance',
-    rainBasin: 'rainicon',
-    riverBasin: 'rivericon',
-    hazard: 'warning',
-    dataRange: 'dataRange',
-    others: 'filter',
-};
 
 const FilterIcon = ({
     isActive,
@@ -499,13 +490,33 @@ class Filters extends React.PureComponent<Props, State> {
         this.setState({ activeView });
     }
 
-    private getFilterTabRendererParams = (key: TabKey, title: string) => ({
-        name: iconNames[key],
-        title,
-        className: styles.icon,
-        // isFiltered: getIsFiltered(key, this.props.filters),
-        isFiltered: getIsFiltered(key, this.state.faramValues),
-    })
+    // private iconNames = {
+    //     location: 'distance',
+    //     rainBasin: this.state.activeView === 'rainBasin' ? 'rainiconactive' : 'rainicon',
+    //     riverBasin: 'rivericon',
+    //     hazard: 'warning',
+    //     dataRange: 'dataRange',
+    //     others: 'filter',
+    // };
+
+
+    private getFilterTabRendererParams = (key: TabKey, title: string) => {
+        const iconNames = {
+            location: 'distance',
+            rainBasin: this.state.activeView === 'rainBasin' ? 'rainiconactive' : 'rainicon',
+            riverBasin: this.state.activeView === 'riverBasin' ? 'rivericonactive' : 'rivericon',
+            hazard: 'warning',
+            dataRange: 'dataRange',
+            others: 'filter',
+        };
+        return ({
+            name: iconNames[key],
+            title,
+            className: styles.icon,
+            // isFiltered: getIsFiltered(key, this.props.filters),
+            isFiltered: getIsFiltered(key, this.state.faramValues),
+        });
+    }
 
     // private hasSubdomain  = (subDomain: string) => {
 
@@ -828,6 +839,7 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
+        console.log('activeView', activeView);
 
 
         return (
