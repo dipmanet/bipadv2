@@ -2,13 +2,16 @@
 
 @font-face {
     font-family: "Kalimati Regular";
-    src:url('../../../../resources/fonts/Kalimati\ Regular.ttf') format("truetype");
+    src: url('../../../../resources/fonts/Kalimati\ Regular.ttf') format("truetype");
     unicode-range: U+30-39;
-    }
-    
-  .languageFont{
-    font-family: "Kalimati Regular","Fira Sans", sans-serif !important;
-   }
+    size-adjust: 85%;
+
+
+}
+
+.languageFont {
+    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
 
 .tabular-view {
     display: flex;
@@ -44,4 +47,3 @@
         padding: $spacing-medium;
     }
 }
-
