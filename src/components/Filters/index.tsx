@@ -848,6 +848,7 @@ class Filters extends React.PureComponent<Props, State> {
 
                 </header>
                 <div className={styles.content}>
+
                     <ScrollTabs
                         tabs={tabs}
                         active={validActiveView}
@@ -856,6 +857,7 @@ class Filters extends React.PureComponent<Props, State> {
                         rendererParams={this.getFilterTabRendererParams}
                         className={styles.tabs}
                     />
+
                     <Faram
                         schema={filterSchema}
                         onChange={this.handleFaramChange}
