@@ -27,6 +27,7 @@ import LocationInput from '#components/LocationInput';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import {
+    convertDateAccToLanguage,
     encodeDate,
     encodeTime,
 } from '#utils/common';
@@ -428,7 +429,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             faramValues,
             faramErrors,
         } = this.state;
-
+        const { startedOnDate, expireOnDate } = faramValues;
         const pending = addAlertRequestPending || editAlertRequestPending;
 
         return (
@@ -513,6 +514,10 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                     faramElementName="startedOnDate"
                                                     label={t('Started on')}
                                                     language={language}
+                                                    value={convertDateAccToLanguage(
+                                                        startedOnDate,
+                                                        language,
+                                                    )}
                                                 />
                                                 <TimeInput
                                                     className={styles.startedOnTime}
@@ -525,6 +530,10 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                     faramElementName="expireOnDate"
                                                     language={language}
                                                     className={'endDateInput'}
+                                                    value={convertDateAccToLanguage(
+                                                        expireOnDate,
+                                                        language,
+                                                    )}
                                                 />
                                                 <TimeInput
                                                     className={styles.startedOnTime}
