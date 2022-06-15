@@ -9,7 +9,6 @@ import {
 import { Link } from '@reach/router';
 
 import { Translation } from 'react-i18next';
-import { connect } from 'react-redux';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 
@@ -20,7 +19,6 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loss from '#components/Loss';
 
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
 
 const emptyObject = {};
 const emptyList = [];
@@ -49,10 +47,6 @@ const defaultProps = {
     showDeleteIncident: false,
 };
 
-const mapStateToProps = state => ({
-    language: languageSelector(state),
-});
-
 class IncidentInfo extends React.PureComponent {
     static propTypes = propTypes;
 
@@ -77,7 +71,7 @@ class IncidentInfo extends React.PureComponent {
 
             incidentDeletePending,
             showActions,
-            language: { language },
+            language,
         } = this.props;
         const {
             title,
@@ -262,4 +256,4 @@ class IncidentInfo extends React.PureComponent {
     }
 }
 
-export default connect(mapStateToProps)(IncidentInfo);
+export default IncidentInfo;

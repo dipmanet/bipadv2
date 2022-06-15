@@ -276,6 +276,7 @@ class LeftPane extends React.Component {
             provincesMap,
             districtsMap,
             municipalitiesMap,
+            language: { language },
         } = this.props;
 
         const {
@@ -298,6 +299,7 @@ class LeftPane extends React.Component {
                                     districtsMap={districtsMap}
                                     municipalitiesMap={municipalitiesMap}
                                     hideLink
+                                    language={language}
                                 />
                                 <header className={styles.header}>
                                     <h3 className={styles.heading}>
