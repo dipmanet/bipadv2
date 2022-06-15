@@ -2,6 +2,7 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import SortableListView from '#rscv/SortableListView';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
@@ -31,7 +32,7 @@ const ActiveLayer = ({
     <div className={styles.activeLayer}>
         <header className={styles.header}>
             <h4 className={styles.heading}>
-                { layer.fullName || layer.title }
+                {layer.fullName || layer.title}
             </h4>
             <Button
                 transparent
@@ -41,14 +42,14 @@ const ActiveLayer = ({
             />
         </header>
         <div className={styles.content}>
-            { showOpacityInput && (
+            {showOpacityInput && (
                 <OpacityInput
                     className={styles.opacityInput}
                     value={layer.opacity}
                     onChange={(key, value) => onOpacityChange(layer, value)}
                 />
             )}
-            { showLegend && (
+            {showLegend && (
                 <LayerLegend
                     layer={layer}
                 />
@@ -123,45 +124,52 @@ class ActiveLayers extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div className={_cs(styles.activeLayers, className)}>
-                <header className={styles.header}>
-                    <h3 className={styles.heading}>
-                        Active layers
-                    </h3>
-                    <div className={styles.actions}>
-                        <Button
-                            title="Toggle opacity input visibility"
-                            transparent
-                            onClick={this.handleToggleOpacityInputVisibilityButtonClick}
-                            className={_cs(
-                                styles.toggleOpacityInputVisibilityButton,
-                                showOpacityInput && styles.active,
-                            )}
-                            iconName="contrast"
-                        />
-                        <Button
-                            title="Toggle legend visiblity"
-                            transparent
-                            onClick={this.handleToggleLegendVisibilityButtonClick}
-                            className={_cs(
-                                styles.toggleLegendVisibilityButton,
-                                showLegend && styles.active,
-                            )}
-                            iconName="list"
-                        />
-                    </div>
-                </header>
-                <SortableListView
-                    dragHandleClassName={styles.dragHandle}
-                    className={styles.content}
-                    itemClassName={styles.activeLayerContainer}
-                    data={data}
-                    renderer={ActiveLayer}
-                    rendererParams={this.getRendererParams}
-                    keySelector={d => String(d.id)}
-                    onChange={this.handleChange}
-                />
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(styles.activeLayers, className)}>
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    {t('Active layers')}
+                                </h3>
+                                <div className={styles.actions}>
+                                    <Button
+                                        title={t('Toggle opacity input visibility')}
+                                        transparent
+                                        onClick={this.handleToggleOpacityInputVisibilityButtonClick}
+                                        className={_cs(
+                                            styles.toggleOpacityInputVisibilityButton,
+                                            showOpacityInput && styles.active,
+                                        )}
+                                        iconName="contrast"
+                                    />
+                                    <Button
+                                        title={t('Toggle legend visiblity')}
+                                        transparent
+                                        onClick={this.handleToggleLegendVisibilityButtonClick}
+                                        className={_cs(
+                                            styles.toggleLegendVisibilityButton,
+                                            showLegend && styles.active,
+                                        )}
+                                        iconName="list"
+                                    />
+                                </div>
+                            </header>
+                            <SortableListView
+                                dragHandleClassName={styles.dragHandle}
+                                className={styles.content}
+                                itemClassName={styles.activeLayerContainer}
+                                data={data}
+                                renderer={ActiveLayer}
+                                rendererParams={this.getRendererParams}
+                                keySelector={d => String(d.id)}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

@@ -1,5 +1,8 @@
 export const enTranslation = {
     translation: {
+        'Toggle opacity input visibility': 'Toggle opacity input visibility',
+        'Toggle legend visiblity': 'Toggle legend visiblity',
+        'Active layers': 'Active layers',
         Preprimary: 'Preprimary',
         Hospital: 'Hospital',
         'Env. Pollution': 'Env. Pollution',
@@ -790,6 +793,9 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Toggle opacity input visibility': 'अस्पष्टता इनपुट दृश्यता टगल गर्नुहोस्',
+        'Toggle legend visiblity': 'लेजेन्ड दृश्यता टगल गर्नुहोस्',
+        'Active layers': 'सक्रिय तहहरू',
         Preprimary: 'प्राथमिक',
         Hospital: 'अस्पताल',
         'Env. Pollution': 'वातावरणीय प्रदूषण',
