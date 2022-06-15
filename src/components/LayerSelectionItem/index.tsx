@@ -1,7 +1,9 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
 
+import { connect } from 'react-redux';
 import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
@@ -9,12 +11,17 @@ import { LayerHierarchy } from '#types';
 
 import styles from './styles.scss';
 
+import { languageSelector } from '#selectors';
+
 interface Props {
     className?: string;
     data: LayerHierarchy;
     disabled?: boolean;
 }
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 class LayerSelectionItem extends React.PureComponent<Props> {
     private handleChange = (value: boolean) => {
         const { closeTooltip } = this.context;
@@ -51,6 +58,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
             className,
             data,
             disabled,
+            language: { language },
         } = this.props;
 
         const { activeLayers, closeTooltip } = this.context;
@@ -69,11 +77,17 @@ class LayerSelectionItem extends React.PureComponent<Props> {
 
                     />
                     <div className={styles.title}>
-                        { data.title }
+                        {language === 'en'
+                            ? data.title
+                            : data.titleNe === undefined
+                                ? data.title
+                                : data.titleNe
+
+                        }
                     </div>
                     <div className={styles.actions}>
-                        { data.actions }
-                        { (data.longDescription || data.metadata) && (
+                        {data.actions}
+                        {(data.longDescription || data.metadata) && (
                             <LayerDetailModalButton
                                 layer={data}
                                 className={styles.infoButton}
@@ -81,9 +95,9 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                         )}
                     </div>
                 </div>
-                { data.shortDescription && (
+                {data.shortDescription && (
                     <div className={_cs('layer-selection-item-short-description', styles.shortDescription)}>
-                        { data.shortDescription }
+                        {data.shortDescription}
                     </div>
                 )}
             </div>
@@ -92,4 +106,4 @@ class LayerSelectionItem extends React.PureComponent<Props> {
 }
 
 LayerSelectionItem.contextType = RiskInfoLayerContext;
-export default LayerSelectionItem;
+export default connect(mapStateToProps)(LayerSelectionItem);

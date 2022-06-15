@@ -392,6 +392,7 @@ export interface Layer extends Field {
 export interface LayerGroup extends Field {
     category: string;
     shortDescription: string;
+    shortDescriptionNe: string;
     longDescription: string;
     parent: number | null;
 }
