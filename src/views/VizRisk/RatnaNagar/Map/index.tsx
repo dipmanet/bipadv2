@@ -34,9 +34,12 @@ const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
-const mapStateToProps = (state: AppState) => ({
-    wards: wardsSelector(state),
-});
+const mapStateToProps = (state: AppState) => {
+    console.log('mapStateToProps-stateValue', state);
+    return ({
+        wards: wardsSelector(state),
+    });
+};
 
 let hoveredWardId: number | string | undefined;
 
