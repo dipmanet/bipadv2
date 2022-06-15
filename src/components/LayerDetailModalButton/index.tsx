@@ -6,6 +6,7 @@ import {
 } from '@togglecorp/fujs';
 
 import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -304,31 +305,38 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
 
 
         return (
-            <Modal className={_cs(styles.layerDetailModal, className)}>
-                <ModalHeader
-                    title="Layer details"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    <ScrollTabs
-                        className={styles.tabs}
-                        tabs={this.tabs}
-                        active={activeView}
-                        onClick={this.handleTabClick}
-                    />
-                    <MultiViewContainer
-                        views={this.views}
-                        active={activeView}
-                    />
-                </ModalBody>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={_cs(styles.layerDetailModal, className)}>
+                            <ModalHeader
+                                title={t('Layer details')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                <ScrollTabs
+                                    className={styles.tabs}
+                                    tabs={this.tabs}
+                                    active={activeView}
+                                    onClick={this.handleTabClick}
+                                />
+                                <MultiViewContainer
+                                    views={this.views}
+                                    active={activeView}
+                                />
+                            </ModalBody>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

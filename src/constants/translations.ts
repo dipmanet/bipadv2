@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'Layer details': 'Layer details',
         'Toggle opacity input visibility': 'Toggle opacity input visibility',
         'Toggle legend visiblity': 'Toggle legend visiblity',
         'Active layers': 'Active layers',
@@ -793,6 +794,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Layer details': 'तह विवरण',
         'Toggle opacity input visibility': 'अस्पष्टता इनपुट दृश्यता टगल गर्नुहोस्',
         'Toggle legend visiblity': 'लेजेन्ड दृश्यता टगल गर्नुहोस्',
         'Active layers': 'सक्रिय तहहरू',
