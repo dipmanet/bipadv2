@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -8,7 +9,7 @@ import Mapboxlight from '../../resources/mapbox-light.png';
 import Mapboxroads from '../../resources/mapbox-roads.png';
 import Outline from '../../resources/outline.png';
 
-interface Props{
+interface Props {
     centriodsForMap: {
         provinceCentriodForMap: mapboxgl.LngLatLike;
         districtCentriodForMap: mapboxgl.LngLatLike;
@@ -18,7 +19,7 @@ interface Props{
         districtId: number;
         municipalityId: number;
         wardId: number;
-        setLattitude: Dispatch<SetStateAction<string | number >>;
+        setLattitude: Dispatch<SetStateAction<string | number>>;
         setLongitude: Dispatch<SetStateAction<string | number>>;
         lattitude?: number;
         longitude?: number;
@@ -45,7 +46,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
     if (TOKEN) {
         mapboxgl.accessToken = TOKEN;
     }
-    const noop = () => {};
+    const noop = () => { };
     const mapStyles = [
         {
             name: 'none',
@@ -119,22 +120,31 @@ const Mappointpicker = (props: Props): JSX.Element => {
             }),
         );
         const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
+        console.log('edited coordinates', editedCoordinates);
         if (editedCoordinates) {
             if (Object.keys(editedCoordinates).length > 0) {
-                const coordinates = { lat: editedCoordinates.point.coordinates[1],
-                    lng: editedCoordinates.point.coordinates[0] };
+                const coordinates = {
+                    lat: editedCoordinates.point.coordinates[1],
+                    lng: editedCoordinates.point.coordinates[0],
+                };
+
                 const popup1 = new mapboxgl.Popup({ anchor: 'top' })
                     .setLngLat(coordinates)
                     .setHTML(` Lattitude : ${coordinates.lat}  Longitude : ${coordinates.lng}`)
                     .addTo(Map);
                 marker.setLngLat(coordinates).addTo(Map);
+                Map.fitBounds(editedCoordinates.wards[0].bbox);
             }
         }
         if (!props.disabled) {
             Map.on('click', (event) => {
                 const coordinates = event.lngLat;
-                centriodsForMap.setLattitude(coordinates.lat);
-                centriodsForMap.setLongitude(coordinates.lng);
+                console.log('type', coordinates.lat);
+                console.log('type1', coordinates.lat.toFixed(8));
+                const latitude = Number(coordinates.lat.toFixed(8));
+                const longitude = Number(coordinates.lng.toFixed(8));
+                centriodsForMap.setLattitude(latitude);
+                centriodsForMap.setLongitude(longitude);
                 marker.setLngLat(coordinates).addTo(Map);
                 while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -264,13 +274,22 @@ const Mappointpicker = (props: Props): JSX.Element => {
                     'text-color': 'black',
                 },
             });
+            if (editedCoordinates && Object.keys(editedCoordinates).length > 0) {
+                Map.setLayoutProperty('province-name', 'visibility', 'none');
+                Map.setLayoutProperty('district-line', 'visibility', 'none');
+                Map.setLayoutProperty('district-name', 'visibility', 'none');
+                Map.setLayoutProperty('municipality-name', 'visibility', 'none');
+                Map.setLayoutProperty('ward-line', 'visibility', 'visible');
+                Map.setLayoutProperty('ward-name', 'visibility', 'visible');
+            }
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     useEffect(() => {
+        console.log('This map', map);
         if (map.current.isStyleLoaded()) {
+            console.log('what 1');
             if (map.current) {
                 if (centriodsForMap.provinceCentriodForMap) {
                     map.current.flyTo({
@@ -299,12 +318,13 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-line', 'visibility', 'none');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [centriodsForMap.provinceCentriodForMap]);
 
 
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
+            console.log('what 2');
             if (map.current) {
                 if (centriodsForMap.districtCentriodForMap) {
                     map.current.flyTo({
@@ -332,12 +352,13 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-name', 'visibility', 'none');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [centriodsForMap.districtCentriodForMap]);
 
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
             if (map.current) {
+                console.log('what 3');
                 if (centriodsForMap.municipalityCentriodForMap) {
                     map.current.flyTo({
                         center: centriodsForMap.municipalityCentriodForMap,
@@ -362,12 +383,13 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-name', 'visibility', 'visible');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [centriodsForMap.municipalityCentriodForMap]);
-
+    console.log('This is centriodsForMap', centriodsForMap);
 
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
+            console.log('what 4');
             if (map.current) {
                 if (centriodsForMap.wardCentriodForMap) {
                     map.current.flyTo({
@@ -390,7 +412,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-name', 'visibility', 'visible');
             }
         }
-    }, [centriodsForMap.wardCentriodForMap]);
+    }, [centriodsForMap.wardCentriodForMap, editedCoordinates]);
 
     // useEffect(() => {
     //     if (map.current.isStyleLoaded()) {

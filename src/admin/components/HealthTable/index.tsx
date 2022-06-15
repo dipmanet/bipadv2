@@ -149,7 +149,7 @@ interface HeadCell {
     numeric: boolean;
 }
 
-interface InventoryData{
+interface InventoryData {
     id: number;
     item: InventoryItem;
     itemId: number;
@@ -247,8 +247,8 @@ interface EnhancedTableToolbarProps {
     // dispatch: Dispatch;
     // deleteHealthTable: ActionCreator;
     // formDataForEdit: ActionCreator;
-    userDataMain: Record<string|undefined>;
-    healthFormEditData: Record<string|undefined>;
+    userDataMain: Record<string | undefined>;
+    healthFormEditData: Record<string | undefined>;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
@@ -353,7 +353,7 @@ const HealthTable = (props) => {
     useEffect(() => {
         setLoader(true);
         props.requests.resource.do({ setLoader });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -646,7 +646,7 @@ const HealthTable = (props) => {
     useEffect(() => {
         setLoader(true);
         props.requests.resource.do({ offset, setLoader });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -748,7 +748,7 @@ const HealthTable = (props) => {
                                             onSelectAllClick={handleSelectAllClick}
                                             // onRequestSort={handleRequestSort}
                                             rowCount={filteredRowDatas.length}
-                                            // inventoryItem={inventoryItem}
+                                        // inventoryItem={inventoryItem}
                                         />
 
                                         <TableBody>

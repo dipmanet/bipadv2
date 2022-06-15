@@ -23,57 +23,57 @@ import Page from '#components/Page';
 
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
 import {
-	healthInfrastructurePageSelector,
-	userSelector,
+    healthInfrastructurePageSelector,
+    userSelector,
 } from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-	healthInfrastructurePage: healthInfrastructurePageSelector(state),
-	userDataMain: userSelector(state),
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+    userDataMain: userSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-	setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
 });
 
-const HealthDataTable = props => (
-	<>
-		<Page hideFilter hideMap />
-		<Navbar />
-		<MenuCommon layout="common" currentPage={'Incident'} uri={props.uri} />
-		<div className={styles.dataContainer}>
-			{
-				(
-					<>
-						<h2 className={styles.mainHeading}>Incident Data Table</h2>
-						<div className={styles.rowTitle2}>
-							<FontAwesomeIcon
-								icon={faInfoCircle}
-								className={styles.infoIcon}
-							/>
-							<p>
-								The table below gives the list of incidents. The table is downloadable
-								and the data can be edited as well.
-							</p>
-						</div>
-						<div className={styles.tableMenuContainer}>
-							<div className={styles.mainContent}>
+const IncidentDatatable = props => (
+    <>
+        <Page hideFilter hideMap />
+        <Navbar />
+        <MenuCommon layout="common" currentPage={'Incident'} uri={props.uri} />
+        <div className={styles.dataContainer}>
+            {
+                (
+                    <>
+                        <h2 className={styles.mainHeading}>Incident Data Table</h2>
+                        <div className={styles.rowTitle2}>
+                            <FontAwesomeIcon
+                                icon={faInfoCircle}
+                                className={styles.infoIcon}
+                            />
+                            <p>
+                                The table below gives the list of incidents. The table is downloadable
+                                and the data can be edited as well.
+                            </p>
+                        </div>
+                        <div className={styles.tableMenuContainer}>
+                            <div className={styles.mainContent}>
 
-								<div className={styles.formDataContainer}>
-									<IncidentTable />
-								</div>
+                                <div className={styles.formDataContainer}>
+                                    <IncidentTable />
+                                </div>
 
-							</div>
-						</div>
-					</>
-				)}
+                            </div>
+                        </div>
+                    </>
+                )}
 
-		</div>
-		<Footer />
-	</>
+        </div>
+        <Footer />
+    </>
 );
 
-// export default HealthDataTable;
+// export default IncidentDatatable;
 export default connect(mapStateToProps, mapDispatchToProps)(
-	HealthDataTable,
+    IncidentDatatable,
 );

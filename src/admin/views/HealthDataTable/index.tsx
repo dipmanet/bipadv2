@@ -46,10 +46,10 @@ const HealthDataTable = props => (
                                 className={styles.infoIcon}
                             />
                             <p>
-										The table below gives the list of health institutions
-										including their institution details, information on disaster
-										management, and contact information. The table is downloadable
-										and the data can be edited as well.
+                                The table below gives the list of health institutions
+                                including their institution details, information on disaster
+                                management, and contact information. The table is downloadable
+                                and the data can be edited as well.
                             </p>
                         </div>
                         <div className={styles.tableMenuContainer}>

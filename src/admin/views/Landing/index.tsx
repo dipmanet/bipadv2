@@ -10,26 +10,25 @@ import Footer from '../../components/Footer';
 import Page from '#components/Page';
 
 const Landing = (props) => {
-	const { uri, title } = props;
-
-	return (
-		<>
-			<Page hideMap hideFilter />
-			<Navbar />
-			<div className={styles.container}>
-				<div className={styles.title}>
-					Welcome to Government of Nepal&apos;s Integrated Disaster
-					Information Management System.
-				</div>
-				<div className={styles.subtitle}>
-					Select your prefered sector to input, monitor, and analyze information
-					from all three tiers of the Government.
-				</div>
-			</div>
-			<MenuCommon currentPage={title} layout="landing" uri={uri} />
-			<Footer />
-		</>
-	);
+    const { uri, title } = props;
+    return (
+        <>
+            <Page hideMap hideFilter />
+            <Navbar />
+            <div className={styles.container}>
+                <div className={styles.title}>
+                    Welcome to Government of Nepal&apos;s Integrated Disaster
+                    Information Management System.
+                </div>
+                <div className={styles.subtitle}>
+                    Select your prefered sector to input, monitor, and analyze information
+                    from all three tiers of the Government.
+                </div>
+            </div>
+            <MenuCommon currentPage={title} layout="landing" uri={uri} />
+            <Footer />
+        </>
+    );
 };
 
 export default Landing;
