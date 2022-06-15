@@ -1,9 +1,11 @@
+/* eslint-disable react/no-danger */
 import React from 'react';
 import {
     _cs,
     camelToNormal,
 } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -17,10 +19,12 @@ import Message from '#rscv/Message';
 import { Layer } from '#types';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 interface Props {
     className?: string;
     layer: Layer;
+    language: { language: string };
 }
 
 const ModalButton = modalize(Button);
@@ -28,8 +32,13 @@ const ModalButton = modalize(Button);
 interface ModalProps {
     className?: string;
     layer: Layer;
+    language: string;
     closeModal?: () => void;
 }
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 // const orderedKeys = {
 //     general: {
@@ -178,20 +187,20 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
     }
 
     private tabs = {
-        details: 'Details',
-        metadata: 'Metadata',
+        details: this.props.language === 'en' ? 'Details' : 'विवरण',
+        metadata: this.props.language === 'en' ? 'Metadata' : 'मेटाडेटा',
     }
 
     private views = {
         details: {
             component: () => {
-                const { layer } = this.props;
+                const { layer, language } = this.props;
 
                 if (!layer.longDescription) {
                     return (
                         <div className={styles.details}>
                             <Message>
-                                Not available
+                                {language === 'en' ? 'Not available' : 'उपलब्ध छैन'}
                             </Message>
                         </div>
                     );
@@ -202,7 +211,9 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                         <div
                             className={styles.content}
                             dangerouslySetInnerHTML={{
-                                __html: layer.longDescription,
+                                __html: language === 'en'
+                                    ? layer.longDescription
+                                    : layer.longDescriptionNe,
                             }}
                         />
                     </div>
@@ -213,12 +224,13 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
             component: () => {
                 const {
                     layer,
+                    language,
                 } = this.props;
                 if (!layer.metadata) {
                     return (
                         <div className={styles.metadata}>
                             <Message>
-                                Not available
+                                {language === 'en' ? 'Not available' : 'उपलब्ध छैन'}
                             </Message>
                         </div>
                     );
@@ -229,7 +241,7 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
 
                 return (
                     <div className={styles.metadata}>
-                        { orderedKeyList.map((groupKey) => {
+                        {orderedKeyList.map((groupKey) => {
                             const group = groups[groupKey];
                             if (!group) {
                                 return null;
@@ -243,10 +255,10 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                                     className={styles.group}
                                 >
                                     <div className={styles.groupTitle}>
-                                        { camelToNormal(groupKey) }
+                                        {camelToNormal(groupKey)}
                                     </div>
                                     <div className={styles.rows}>
-                                        { Object.keys(orderGroup).map((mk) => {
+                                        {Object.keys(orderGroup).map((mk) => {
                                             const metadata = group[mk];
 
                                             if (!metadata) {
@@ -290,6 +302,7 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
 
         const { activeView } = this.state;
 
+
         return (
             <Modal className={_cs(styles.layerDetailModal, className)}>
                 <ModalHeader
@@ -326,6 +339,7 @@ class LayerDetailModalButton extends React.PureComponent<Props> {
             className,
             layer,
             disabled,
+            language: { language },
         } = this.props;
 
         return (
@@ -338,6 +352,7 @@ class LayerDetailModalButton extends React.PureComponent<Props> {
                 modal={(
                     <LayerDetailModal
                         layer={layer}
+                        language={language}
                     />
                 )}
             />
@@ -345,4 +360,4 @@ class LayerDetailModalButton extends React.PureComponent<Props> {
     }
 }
 
-export default LayerDetailModalButton;
+export default connect(mapStateToProps)(LayerDetailModalButton);

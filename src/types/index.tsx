@@ -61,6 +61,9 @@ export interface SourceElement extends Source { }
 export type LayerType = 'raster' | 'choropleth';
 export interface Layer {
     id: number;
+    longDescription: string;
+    longDescriptionNe: string;
+    description: string;
     minValue?: number;
     title: string;
     type: LayerType;
