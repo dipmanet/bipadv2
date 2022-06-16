@@ -60,6 +60,7 @@ import {
     wardsSelector,
     enumOptionsSelector,
     regionSelector,
+    languageSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -461,6 +462,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     user: userSelector(state),
     wards: wardsSelector(state),
     region: regionSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -2321,6 +2323,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             user,
             carKeys,
             palikaRedirect,
+            language: { language },
         } = this.props;
 
 
@@ -2437,7 +2440,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                     />
                 ) : ''}
-                <div className={_cs(styles.capacityAndResources, className)} id="capacityAndResources">
+                <div
+                    className={_cs(styles.capacityAndResources, className,
+                        language === 'np' && styles.languageFont)}
+                    id="capacityAndResources"
+                >
                     {addResource ? (
                         <div className={styles.addResourceForm} style={{ margin: '10px' }}>
                             <AddResourceForm
@@ -2480,7 +2487,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                     transparent
                                                                     onClick={this.resourceAdd}
 
-                                                        // modal={(
+                                                                // modal={(
                                                                 //     <AddResourceForm
                                                                 //         onAddSuccess={this.handleResourceAdd}
                                                                 //         onEditSuccess={this.handleResourceEdit}
@@ -2495,7 +2502,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     <DangerButton
                                                         // disabled={!activeLayerKey}
                                                         disabled={!Object.values(activeLayersIndication).some(Boolean)
-                                                    && !activeLayerKey}
+                                                            && !activeLayerKey}
                                                         onClick={this.handleLayerUnselect}
                                                         className={styles.clearButton}
                                                         transparent
@@ -2576,7 +2583,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                         src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
                                                     />
-                                                    <h3 style={{ fontSize: '16px' }}>{item.name}</h3>
+                                                    <h3 style={{ fontSize: '16px' }}>
+                                                        {language === 'en' ? item.name : item.nameNe}
+                                                    </h3>
                                                 </div>
 
 
@@ -2675,7 +2684,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                 <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
                                                                 <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
                                                                     {' '}
-                                                                    <h4>{data.name}</h4>
+                                                                    <h4>{language === 'en' ? data.name : data.nameNe}</h4>
                                                                 </label>
 
                                                             </div>

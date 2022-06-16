@@ -11,6 +11,8 @@ import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Too
 import html2canvas from 'html2canvas';
 import JsPDF from 'jspdf';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 
 import ModalHeader from '#rscv/Modal/Header';
@@ -21,7 +23,7 @@ import ModalBody from '#rscv/Modal/Body';
 import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
-import { districtsSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
+import { districtsSelector, languageSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
 
 import {
     createRequestClient,
@@ -1104,6 +1106,7 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
+    language: languageSelector(state),
 
 
 });
@@ -1296,7 +1299,8 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
     public render() {
         const { closeVisualization, checkedCategory,
-            resourceType, level, lvl2catName, typeName, resourceCollection, selectedCategoryName, wards, provinces, districts, municipalities, pendingAPICall } = this.props;
+            resourceType, level, lvl2catName, typeName, resourceCollection, selectedCategoryName, wards, provinces, districts, municipalities, pendingAPICall,
+            language: { language } } = this.props;
         const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
 
 
@@ -1338,6 +1342,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
             }
             >
+
                 {/* <ModalHeader
                     // title={'Add Contact'}
                     rightComponent={(
@@ -1349,170 +1354,178 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                         />
                     )}
                 /> */}
-                <ModalBody className={styles.modalBody}>
+                <Translation>
                     {
-                        isValueCalculated
-                            ? (
-                                <div>
-                                    <div className={styles.header}>
-                                        <div className={styles.headingCategories}>
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                onKeyDown={undefined}
-                                                className={!isDataSetClicked ? styles.visualization : ''}
-                                                onClick={() => this.setState({ isDataSetClicked: false })}
-                                            >
-                                                <h2>VISUALIZATION</h2>
-                                            </div>
-                                            <div
-                                                style={{ marginLeft: '30px' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                className={isDataSetClicked ? styles.visualization : ''}
-                                                onKeyDown={undefined}
-                                                onClick={() => this.setState({ isDataSetClicked: true })}
-                                            >
-                                                <h2>DATASET</h2>
-                                            </div>
+                        t => (
+                            <ModalBody className={_cs(styles.modalBody, language === 'np' && styles.languageFont)}>
+                                {
+                                    isValueCalculated
+                                        ? (
+                                            <div>
+                                                <div className={styles.header}>
+                                                    <div className={styles.headingCategories}>
+                                                        <div
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onKeyDown={undefined}
+                                                            className={!isDataSetClicked ? styles.visualization : ''}
+                                                            onClick={() => this.setState({ isDataSetClicked: false })}
+                                                        >
+                                                            <h2>{t('VISUALIZATION')}</h2>
+                                                        </div>
+                                                        <div
+                                                            style={{ marginLeft: '30px' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            className={isDataSetClicked ? styles.visualization : ''}
+                                                            onKeyDown={undefined}
+                                                            onClick={() => this.setState({ isDataSetClicked: true })}
+                                                        >
+                                                            <h2>{t('DATASET')}</h2>
+                                                        </div>
 
-                                        </div>
+                                                    </div>
 
-                                        <DangerButton
-                                            transparent
-                                            iconName="close"
-                                            onClick={() => {
-                                                this.setState({ allDataNullConditionCheck: false });
-                                                closeVisualization(false,
-                                                    checkedCategory, resourceType, level, lvl2catName, typeName);
-                                            }
-                                            }
-                                            title="Close Modal"
-                                            className={styles.closeButton}
-                                        />
-                                        {' '}
+                                                    <DangerButton
+                                                        transparent
+                                                        iconName="close"
+                                                        onClick={() => {
+                                                            this.setState({ allDataNullConditionCheck: false });
+                                                            closeVisualization(false,
+                                                                checkedCategory, resourceType, level, lvl2catName, typeName);
+                                                        }
+                                                        }
+                                                        title="Close Modal"
+                                                        className={styles.closeButton}
+                                                    />
+                                                    {' '}
 
-                                    </div>
-                                    <div className={styles.categoryName}>
-                                        <div className={styles.categoryLogo}>
-                                            <ScalableVectorGraphics
-                                                className={styles.categoryLogoIcon}
+                                                </div>
+                                                <div className={styles.categoryName}>
+                                                    <div className={styles.categoryLogo}>
+                                                        <ScalableVectorGraphics
+                                                            className={styles.categoryLogoIcon}
 
-                                                src={selectedImage}
-                                            />
-                                            <h3>{visualizationHeading}</h3>
-                                        </div>
-                                        {/* <div
-                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                    role="button"
-                    tabIndex={0}
-                // eslint-disable-next-line max-len
-                    onClick={() => this.handleSaveClick('overallDownload')}
-                    onKeyDown={undefined}
-
-
-                >
-                    <h4>DOWNLOAD</h4>
-                    {' '}
-                    <Button
-                        title="Download Chart"
-                        className={styles.chartDownload}
-                        transparent
-                        // onClick={() => this.handleSaveClick('overallDownload')}
-                        iconName="download"
-                    />
-
-                </div> */}
-                                    </div>
-                                    {isDataSetClicked
-                                        ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
-                                        : (
-                                            <div id="overallDownload">
-                                                {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
-                                                    HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
-                                                        : (
-                                                            <div key={item.label}>
-                                                                <div className={styles.barChartSection}>
-
-                                                                    <div className={styles.percentageValue}>
-                                                                        {/* <h1>Education Institution</h1> */}
-                                                                        <h1>
-                                                                            {HighValuePercentageCalculation[i].highValuePercentage}
-                                                                            %
-                                                                        </h1>
-
-                                                                        {HighValuePercentageCalculation[i].category !== HighValuePercentageCalculation[i].subCategoryName ? (
-                                                                            <>
-                                                                                <span>
-                                                                                    {HighValuePercentageCalculation[i].category}
-                                                                                    {' '}
-                                                                                    are
-                                                                                    {' '}
-                                                                                    {HighValuePercentageCalculation[i].subCategoryName}
-                                                                                    {' '}
-                                                                                </span>
-
-                                                                            </>
-                                                                        ) : (
-                                                                            <span>
-                                                                                {' '}
-                                                                                {HighValuePercentageCalculation[i].category}
-                                                                                {''}
-                                                                                are available
-
-                                                                            </span>
-
-                                                                        )}
-
-                                                                    </div>
+                                                            src={selectedImage}
+                                                        />
+                                                        <h3>{visualizationHeading}</h3>
+                                                    </div>
+                                                    {/* <div
+                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+            // eslint-disable-next-line max-len
+                onClick={() => this.handleSaveClick('overallDownload')}
+                onKeyDown={undefined}
 
 
-                                                                    <div style={{ flex: '4' }} key={item.label}>
+            >
+                <h4>DOWNLOAD</h4>
+                {' '}
+                <Button
+                    title="Download Chart"
+                    className={styles.chartDownload}
+                    transparent
+                    // onClick={() => this.handleSaveClick('overallDownload')}
+                    iconName="download"
+                />
 
-                                                                        <div className={styles.graphicalVisualization}>
+            </div> */}
+                                                </div>
+                                                {isDataSetClicked
+                                                    ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
+                                                    : (
+                                                        <div id="overallDownload">
+                                                            {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
+                                                                HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
+                                                                    : (
+                                                                        <div key={item.label}>
+                                                                            <div className={styles.barChartSection}>
 
-                                                                            {/* <div style={{ display: 'flex',
-                                                                            justifyContent: 'flex-end',
-                                                                    fontSize: '25px' }}
-                                                                /> */}
-                                                                            <div id={labelName[i].label}>
-                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>{labelName[i].label}</h3>
-                                                                                    <Button
-                                                                                        title="Download Chart"
-                                                                                        className={styles.chartDownload}
-                                                                                        transparent
-                                                                                        onClick={() => this.handleSaveClick(labelName[i].label)}
-                                                                                        iconName="download"
-                                                                                    />
+                                                                                <div className={styles.percentageValue}>
+                                                                                    {/* <h1>Education Institution</h1> */}
+                                                                                    <h1>
+                                                                                        {HighValuePercentageCalculation[i].highValuePercentage}
+                                                                                        %
+                                                                                    </h1>
+
+                                                                                    {HighValuePercentageCalculation[i].category !== HighValuePercentageCalculation[i].subCategoryName ? (
+                                                                                        <>
+                                                                                            <span>
+                                                                                                {HighValuePercentageCalculation[i].category}
+                                                                                                {' '}
+                                                                                                are
+                                                                                                {' '}
+                                                                                                {HighValuePercentageCalculation[i].subCategoryName}
+                                                                                                {' '}
+                                                                                            </span>
+
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        <span>
+                                                                                            {' '}
+                                                                                            {HighValuePercentageCalculation[i].category}
+                                                                                            {''}
+                                                                                            are available
+
+                                                                                        </span>
+
+                                                                                    )}
+
                                                                                 </div>
-                                                                                <BarChartVisualization item={item} />
+
+
+                                                                                <div style={{ flex: '4' }} key={item.label}>
+
+                                                                                    <div className={styles.graphicalVisualization}>
+
+                                                                                        {/* <div style={{ display: 'flex',
+                                                                        justifyContent: 'flex-end',
+                                                                fontSize: '25px' }}
+                                                            /> */}
+                                                                                        <div id={labelName[i].label}>
+                                                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                                <h3>{labelName[i].label}</h3>
+                                                                                                <Button
+                                                                                                    title="Download Chart"
+                                                                                                    className={styles.chartDownload}
+                                                                                                    transparent
+                                                                                                    onClick={() => this.handleSaveClick(labelName[i].label)}
+                                                                                                    iconName="download"
+                                                                                                />
+                                                                                            </div>
+                                                                                            <BarChartVisualization item={item} />
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+
                                                                             </div>
-
                                                                         </div>
+                                                                    )
 
-                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-                                                        )
-
-                                                ))}
-                                                {!pendingAPICall && (resourceCollection[resourceType]).length === 0
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                    : ''}
-                                                {allDataNullConditionCheck
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                    : ''}
+                                                            ))}
+                                                            {!pendingAPICall && (resourceCollection[resourceType]).length === 0
+                                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                                : ''}
+                                                            {allDataNullConditionCheck
+                                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                                : ''}
+                                                        </div>
+                                                    )}
                                             </div>
-                                        )}
-                                </div>
-                            ) : <LoadingAnimation className={styles.loader} />
+                                        ) : <LoadingAnimation className={styles.loader} />
 
+                                }
+
+                            </ModalBody>
+                        )
                     }
+                </Translation>
 
-                </ModalBody>
+
             </Modal>
         );
     }

@@ -1915,6 +1915,7 @@ export const capacityResource = [
     {
         id: 1,
         name: 'Education',
+        nameNe: 'शिक्षा',
         resourceType: 'education',
         attribute: 'type',
         level: 1,
@@ -1922,41 +1923,49 @@ export const capacityResource = [
             {
                 id: 1,
                 name: 'Preprimary',
+                nameNe: 'पूर्वप्राथमिक',
                 type: 'Preprimary',
             },
             {
                 id: 2,
                 name: 'Basic Education',
+                nameNe: 'आधारभूत शिक्षा',
                 type: 'Basic Education',
             },
             {
                 id: 3,
                 name: 'High School',
+                nameNe: 'उच्च विद्यालय',
                 type: 'High School',
             },
             {
                 id: 4,
                 name: 'College',
+                nameNe: 'कलेज',
                 type: 'College',
             },
             {
                 id: 5,
                 name: 'University',
+                nameNe: 'विश्वविद्यालय',
                 type: 'University',
             },
             {
                 id: 6,
                 name: 'Traditional Education',
+                nameNe: 'परम्परागत शिक्षा',
                 type: 'Traditional Education',
             },
             {
                 id: 7,
                 name: 'Library',
+                nameNe: 'पुस्तकालय',
                 type: 'Library',
             },
             {
                 id: 8,
                 name: 'Other',
+                nameNe: 'अन्य',
                 type: 'Other',
             },
         ],
@@ -1964,6 +1973,7 @@ export const capacityResource = [
     {
         id: 2,
         name: 'Health',
+        nameNe: 'स्वास्थ्य',
         resourceType: 'health',
         attribute: 'type',
         level: 1,
@@ -1971,199 +1981,234 @@ export const capacityResource = [
             {
                 id: 9,
                 name: 'Specialized Hospital',
+                nameNe: 'विशेष अस्पताल',
                 type: 'Specialized Hospital',
             },
             {
                 id: 10,
                 name: 'Center Hospital',
+                nameNe: 'केन्द्र अस्पताल',
                 type: 'Center Hospital',
             },
             {
                 id: 11,
                 name: 'Teaching Hospital',
+                nameNe: 'शिक्षण अस्पताल',
                 type: 'Teaching Hospital',
             },
             {
                 id: 12,
                 name: 'Regional Hospital',
+                nameNe: 'क्षेत्रीय अस्पताल',
                 type: 'Regional Hospital',
             },
             {
                 id: 13,
                 name: 'Sub Regional Hospital',
+                nameNe: 'उपक्षेत्रीय अस्पताल',
                 type: 'Sub Regional Hospital',
             },
             {
                 id: 14,
                 name: 'Zonal Hospital',
+                nameNe: 'अञ्चल अस्पताल',
                 type: 'Zonal Hospital',
             },
             {
                 id: 15,
                 name: 'District Hospital',
+                nameNe: 'जिल्ला अस्पताल',
                 type: 'District Hospital',
             },
             {
                 id: 16,
                 name: 'Basic Hospital',
+                nameNe: 'आधारभूत अस्पताल',
                 type: 'Basic Hospital',
             },
             {
                 id: 17,
                 name: 'General Hospital',
+                nameNe: 'सामान्य अस्पताल',
                 type: 'General Hospital',
             },
             {
                 id: 18,
                 name: 'Primary Health Care Center',
+                nameNe: 'प्राथमिक स्वास्थ्य सेवा केन्द्र',
                 type: 'Primary Health Care Center',
             },
             {
                 id: 19,
                 name: 'Health Post',
+                nameNe: 'स्वास्थ्य पोस्ट',
                 type: 'Health Post',
             },
             {
                 id: 20,
                 name: 'District Clinic (Including Institutional)',
+                nameNe: 'जिल्ला क्लिनिक (संस्थागत सहित)',
                 type: 'District Clinic (Including Institutional)',
 
             },
             {
                 id: 21,
                 name: 'Urban Health Center',
+                nameNe: 'शहरी स्वास्थ्य केन्द्र',
                 type: 'Urban Health Center',
 
             },
             {
                 id: 22,
                 name: 'Community Health Unit',
+                nameNe: 'सामुदायिक स्वास्थ्य इकाई',
                 type: 'Community Health Unit',
 
             },
             {
                 id: 23,
                 name: 'Poly Clinic',
+                nameNe: 'पोली क्लिनिक',
                 type: 'Poly Clinic',
 
             },
             {
                 id: 24,
                 name: 'Clinic',
+                nameNe: 'क्लिनिक',
                 type: 'Clinic',
 
             },
             {
                 id: 25,
                 name: 'Dental Clinic',
+                nameNe: 'दन्त चिकित्सा क्लिनिक',
                 type: 'Dental Clinic',
 
             },
             {
                 id: 26,
                 name: 'Diagnostic Center',
+                nameNe: 'निदान केन्द्र',
                 type: 'Diagnostic Center',
 
             },
             {
                 id: 27,
                 name: 'Nursing Home',
+                nameNe: 'नर्सिंग होम',
                 type: 'Nursing Home',
 
             },
             {
                 id: 28,
                 name: 'Rehabilitation',
+                nameNe: 'पुनर्स्थापना',
                 type: 'Rehabilitation',
 
             },
             {
                 id: 29,
                 name: 'Ayurveda Hospital',
+                nameNe: 'आयुर्वेदिक अस्पताल',
                 type: 'Ayurveda Hospital',
 
             },
             {
                 id: 30,
                 name: 'Zonal Ayurveda Aushadhalaya',
+                nameNe: 'अञ्चल आयुर्वेद औषधालय',
                 type: 'Zonal Ayurveda Aushadhalaya',
 
             },
             {
                 id: 31,
                 name: 'District Ayurveda Health Center',
+                nameNe: 'जिल्ला आयुर्वेद स्वास्थ्य केन्द्र',
                 type: 'District Ayurveda Health Center',
 
             },
             {
                 id: 32,
                 name: 'Ayurveda Aushadhalaya',
+                nameNe: 'आयुर्वेद औषधालय',
                 type: 'Ayurveda Aushadhalaya',
 
             },
             {
                 id: 33,
                 name: 'Homeopathy Hospital',
+                nameNe: 'होमियोप्याथी अस्पताल',
                 type: 'Homeopathy Hospital',
 
             },
             {
                 id: 34,
                 name: 'Unani Hospital',
+                nameNe: 'युनानी अस्पताल',
                 type: 'Unani Hospital',
 
             },
             {
                 id: 35,
                 name: 'Primary Hospital',
+                nameNe: 'प्राथमिक अस्पताल',
                 type: 'Primary Hospital',
 
             },
             {
                 id: 36,
                 name: 'Secondary A Hospital',
+                nameNe: 'माध्यमिक क अस्पताल',
                 type: 'Secondary A Hospital',
 
             },
             {
                 id: 37,
                 name: 'Secondary B Hospital',
+                nameNe: 'माध्यमिक ख अस्पताल',
                 type: 'Secondary B Hospital',
 
             },
             {
                 id: 38,
                 name: 'Tertiary Hospital',
+                nameNe: 'तेस्रो अस्पताल',
                 type: 'Tertiary Hospital',
 
             },
             {
                 id: 39,
                 name: 'Super Specialized Hospital',
+                nameNe: 'सुपर स्पेशलाइज्ड अस्पताल',
                 type: 'Super Specialized Hospital',
 
             },
             {
                 id: 40,
                 name: 'Basic Health Care Center',
+                nameNe: 'आधारभूत स्वास्थ्य सेवा केन्द्र',
                 type: 'Basic Health Care Center',
 
             },
             {
                 id: 41,
                 name: 'Veterinary',
+                nameNe: 'पशु चिकित्सा',
                 type: 'Veterinary',
 
             },
             {
                 id: 42,
                 name: 'Pathology',
+                nameNe: 'रोगविज्ञान',
                 type: 'Pathology',
 
             },
             {
                 id: 43,
                 name: 'Pharmacy',
+                nameNe: 'फार्मेसी',
                 type: 'Pharmacy',
 
             },
@@ -2172,6 +2217,7 @@ export const capacityResource = [
     {
         id: 3,
         name: 'Banking & Finance',
+        nameNe: 'बैंकिङ र वित्त',
         resourceType: 'finance',
         attribute: 'type',
         level: 1,
@@ -2179,36 +2225,43 @@ export const capacityResource = [
             {
                 id: 44,
                 name: 'Commercial',
+                nameNe: 'व्यापारिक',
                 type: 'Commercial',
             },
             {
                 id: 45,
                 name: 'Micro Credit Development',
+                nameNe: 'माइक्रो क्रेडिट विकास',
                 type: 'Micro Credit Development',
             },
             {
                 id: 46,
                 name: 'Finance',
+                nameNe: 'वित्त',
                 type: 'Finance',
             },
             {
                 id: 47,
                 name: 'Development Bank',
+                nameNe: 'विकास बैंक',
                 type: 'Development Bank',
             },
             {
                 id: 48,
                 name: 'Cooperative',
+                nameNe: 'सहकारी',
                 type: 'Cooperative',
             },
             {
                 id: 49,
                 name: 'Money Exchange',
+                nameNe: 'मनी एक्सचेन्ज',
                 type: 'Money Exchange',
             },
             {
                 id: 50,
                 name: 'ATM',
+                nameNe: 'एटीएम',
                 type: 'ATM',
             },
 
@@ -2217,6 +2270,7 @@ export const capacityResource = [
     {
         id: 4,
         name: 'Communication',
+        nameNe: 'सञ्चार',
         resourceType: 'communication',
         attribute: 'type',
         level: 1,
@@ -2224,36 +2278,43 @@ export const capacityResource = [
             {
                 id: 51,
                 name: 'FM Radio',
+                nameNe: 'एफएम रेडियो',
                 type: 'FM Radio',
             },
             {
                 id: 52,
                 name: 'TV Station',
+                nameNe: 'टिभी स्टेशन',
                 type: 'TV Station',
             },
             {
                 id: 53,
                 name: 'Newspapers',
+                nameNe: 'पत्रपत्रिकाहरू',
                 type: 'Newspapers',
             },
             {
                 id: 54,
                 name: 'Phone Service',
+                nameNe: 'फोन सेवा',
                 type: 'Phone Service',
             },
             {
                 id: 55,
                 name: 'Cable',
+                nameNe: 'केबल',
                 type: 'Cable',
             },
             {
                 id: 56,
                 name: 'Online Media',
+                nameNe: 'अनलाइन मिडिया',
                 type: 'Online Media',
             },
             {
                 id: 57,
                 name: 'Internet Service Provider',
+                nameNe: 'इन्टरनेट सेवा प्रदायक',
                 type: 'Internet Service Provider',
             },
 
@@ -2262,6 +2323,7 @@ export const capacityResource = [
     {
         id: 5,
         name: 'Governance',
+        nameNe: 'शासन',
         resourceType: 'governance',
         attribute: 'type',
         level: 1,
@@ -2269,26 +2331,31 @@ export const capacityResource = [
             {
                 id: 58,
                 name: 'Government',
+                nameNe: 'सरकार',
                 type: 'Government',
             },
             {
                 id: 59,
                 name: 'INGO',
+                nameNe: 'अन्तर्राष्ट्रिय गैर सरकारी संस्था',
                 type: 'INGO',
             },
             {
                 id: 60,
                 name: 'NGO',
+                nameNe: 'गैर सरकारी संस्था',
                 type: 'NGO',
             },
             {
                 id: 61,
                 name: 'CSO',
+                nameNe: 'सिएसवो',
                 type: 'CSO',
             },
             {
                 id: 62,
                 name: 'Other',
+                nameNe: 'अन्‍य',
                 type: 'Other',
             },
 
@@ -2297,6 +2364,7 @@ export const capacityResource = [
     {
         id: 6,
         name: 'Hotel & Restaurant',
+        nameNe: 'होटल र रेस्टुरेन्ट',
         resourceType: 'hotelandrestaurant',
         level: 1,
         attribute: 'type',
@@ -2304,26 +2372,31 @@ export const capacityResource = [
             {
                 id: 63,
                 name: 'Hotel',
+                nameNe: 'होटल',
                 type: 'Hotel',
             },
             {
                 id: 64,
                 name: 'Restaurant',
+                nameNe: 'रेष्‍टुरेन्‍ट',
                 type: 'Restaurant',
             },
             {
                 id: 65,
                 name: 'Lodge',
+                nameNe: 'लज',
                 type: 'Lodge',
             },
             {
                 id: 66,
                 name: 'Resort',
+                nameNe: 'रिसोर्ट',
                 type: 'Resort',
             },
             {
                 id: 67,
                 name: 'Homestay',
+                nameNe: 'होमस्टे',
                 type: 'Homestay',
             },
 
@@ -2333,6 +2406,7 @@ export const capacityResource = [
     {
         id: 7,
         name: 'Culture',
+        nameNe: 'संस्कृति',
         resourceType: 'cultural',
         attribute: 'religion',
         level: 1,
@@ -2340,41 +2414,49 @@ export const capacityResource = [
             {
                 id: 68,
                 name: 'Hindu',
+                nameNe: 'हिन्दू',
                 type: 'Hindu',
             },
             {
                 id: 69,
                 name: 'Islam',
+                nameNe: 'इस्लाम',
                 type: 'Islam',
             },
             {
                 id: 70,
                 name: 'Christian',
+                nameNe: 'क्रिस्चियन',
                 type: 'Christian',
             },
             {
                 id: 71,
                 name: 'Buddhist',
+                nameNe: 'बौद्ध',
                 type: 'Buddhist',
             },
             {
                 id: 72,
                 name: 'Kirat',
+                nameNe: 'किरात',
                 type: 'Kirat',
             },
             {
                 id: 73,
                 name: 'Sikhism',
+                nameNe: 'सिख',
                 type: 'Sikhism',
             },
             {
                 id: 74,
                 name: 'Judaism',
+                nameNe: 'यहूदी',
                 type: 'Judaism',
             },
             {
                 id: 75,
                 name: 'Other',
+                nameNe: 'अन्य',
                 type: 'Other',
             },
 
@@ -2383,6 +2465,7 @@ export const capacityResource = [
     {
         id: 8,
         name: 'Industry',
+        nameNe: 'उद्योग',
         resourceType: 'industry',
         attribute: 'subtype',
         level: 1,
@@ -2390,31 +2473,37 @@ export const capacityResource = [
             {
                 id: 76,
                 name: 'Cottage Industry',
+                nameNe: 'घरेलु उद्योग',
                 type: 'Cottage Industry',
             },
             {
                 id: 77,
                 name: 'Micro Industry',
+                nameNe: 'सूक्ष्म उद्योग',
                 type: 'Micro Industry',
             },
             {
                 id: 78,
                 name: 'Small Industry',
+                nameNe: 'साना उद्योग',
                 type: 'Small Industry',
             },
             {
                 id: 79,
                 name: 'Medium Industry',
+                nameNe: 'मध्यम उद्योग',
                 type: 'Medium Industry',
             },
             {
                 id: 80,
                 name: 'Large Industry',
+                nameNe: 'ठूला उद्योग',
                 type: 'Large Industry',
             },
             {
                 id: 999,
                 name: 'Other',
+                nameNe: 'अन्‍य',
                 type: 'Other',
             },
         ],
@@ -2422,6 +2511,7 @@ export const capacityResource = [
     {
         id: 9,
         name: 'Bridge',
+        nameNe: 'पुल',
         resourceType: 'bridge',
         level: 1,
         attribute: 'type',
@@ -2429,51 +2519,61 @@ export const capacityResource = [
             {
                 id: 81,
                 name: 'Arch',
+                nameNe: 'आर्क',
                 type: 'Arch',
             },
             {
                 id: 82,
                 name: 'Beam',
+                nameNe: 'बिम',
                 type: 'Beam',
             },
             {
                 id: 83,
                 name: 'Cantilever',
+                nameNe: 'क्यान्टिलिभर',
                 type: 'Cantilever',
             },
             {
                 id: 84,
                 name: 'Wooden',
+                nameNe: 'काठको',
                 type: 'Wooden',
             },
             {
                 id: 85,
                 name: 'Suspension',
+                nameNe: 'भ्कुण्डीएको',
                 type: 'Suspension',
             },
             {
                 id: 86,
                 name: 'Cable-stayed',
+                nameNe: 'केबल रहेको',
                 type: 'Cable-stayed',
             },
             {
                 id: 87,
                 name: 'Culvert',
+                nameNe: 'कल्भर्ट',
                 type: 'Culvert',
             },
             {
                 id: 88,
                 name: 'Bailey',
+                nameNe: 'बेली',
                 type: 'Bailey',
             },
             {
                 id: 89,
                 name: 'Truss',
+                nameNe: 'ट्रस',
                 type: 'Truss',
             },
             {
                 id: 90,
                 name: 'Other',
+                nameNe: 'अन्‍य',
                 type: 'Other',
 
             },
@@ -2577,6 +2677,7 @@ export const capacityResource = [
     {
         id: 14,
         name: 'Electricity',
+        nameNe: 'बिजुली',
         resourceType: 'electricity',
         attribute: 'components',
         level: 1,
@@ -2584,26 +2685,31 @@ export const capacityResource = [
             {
                 id: 100,
                 name: 'Hydropower',
+                nameNe: 'जलविद्युत',
                 type: 'Hydropower',
             },
             {
                 id: 101,
                 name: 'Substation',
+                nameNe: 'सबस्टेशन',
                 type: 'Substation',
             },
             {
                 id: 102,
                 name: 'Dam',
+                nameNe: 'बाँध',
                 type: 'Dam',
             },
             {
                 id: 103,
                 name: 'Transmission Pole',
+                nameNe: 'प्रसारण पोल',
                 type: 'Transmission Pole',
             },
             {
                 id: 104,
                 name: 'Other',
+                nameNe: 'अन्‍य',
                 type: 'Other',
 
             },
@@ -2663,6 +2769,7 @@ export const capacityResource = [
     {
         id: 16,
         name: 'Sanitation Service',
+        nameNe: 'सरसफाई सेवा',
         resourceType: 'sanitation',
         attribute: 'type',
         level: 1,
@@ -2670,16 +2777,19 @@ export const capacityResource = [
             {
                 id: 105,
                 name: 'Landfill',
+                nameNe: 'ल्यान्डफिल',
                 type: 'Landfill',
             },
             {
                 id: 106,
                 name: 'Dumping Site',
+                nameNe: 'डम्पिङ साइट',
                 type: 'Dumping Site',
             },
             {
                 id: 107,
                 name: 'Public Toilet',
+                nameNe: 'सार्वजनिक शौचालय',
                 type: 'Public Toilet',
             },
 
@@ -2689,6 +2799,7 @@ export const capacityResource = [
     {
         id: 17,
         name: 'Water Supply Infrastructure',
+        nameNe: 'पानी आपूर्ति पूर्वाधार',
         resourceType: 'watersupply',
         attribute: 'scale',
         level: 1,
@@ -2696,16 +2807,19 @@ export const capacityResource = [
             {
                 id: 108,
                 name: 'Small',
+                nameNe: 'सानो',
                 type: 'Small',
             },
             {
                 id: 109,
                 name: 'Medium',
+                nameNe: 'मध्यम',
                 type: 'Medium',
             },
             {
                 id: 110,
                 name: 'Large',
+                nameNe: 'ठूलो',
                 type: 'Large',
             },
 
@@ -2715,6 +2829,7 @@ export const capacityResource = [
     {
         id: 24,
         name: 'Roadway',
+        nameNe: 'बाटो',
         resourceType: 'roadway',
         level: 1,
         attribute: 'kindOfVehicle',
@@ -2722,21 +2837,25 @@ export const capacityResource = [
             {
                 id: 91,
                 name: 'Bus',
+                nameNe: 'बस',
                 type: 'Bus',
             },
             {
                 id: 92,
                 name: 'Micro',
+                nameNe: 'माइक्रो',
                 type: 'Micro',
             },
             {
                 id: 93,
                 name: 'Van',
+                nameNe: 'भ्यान',
                 type: 'Van',
             },
             {
                 id: 94,
                 name: 'Other',
+                nameNe: 'अन्‍य',
                 type: 'Other',
             },
 
@@ -2745,6 +2864,7 @@ export const capacityResource = [
     {
         id: 25,
         name: 'Waterway',
+        nameNe: 'जलमार्ग',
         resourceType: 'waterway',
         level: 1,
         attribute: 'type',
@@ -2752,16 +2872,19 @@ export const capacityResource = [
             {
                 id: 95,
                 name: 'General Boat',
+                nameNe: 'सामान्य डुङ्गा',
                 type: 'General Boat',
             },
             {
                 id: 96,
                 name: 'Electrical Boat',
+                nameNe: 'विद्युतीय डुङ्गा',
                 type: 'Electrical Boat',
             },
             {
                 id: 97,
                 name: 'Other',
+                nameNe: 'अन्‍य',
                 type: 'Other',
             },
 
@@ -2770,6 +2893,7 @@ export const capacityResource = [
     {
         id: 26,
         name: 'Airway',
+        nameNe: 'वायुमार्ग',
         resourceType: 'airway',
         level: 1,
         attribute: 'type',
@@ -2777,11 +2901,13 @@ export const capacityResource = [
             {
                 id: 98,
                 name: 'National',
+                nameNe: 'राष्ट्रिय',
                 type: 'National',
             },
             {
                 id: 99,
                 name: 'International',
+                nameNe: 'अन्तर्राष्ट्रिय',
                 type: 'International',
             },
 
@@ -2791,6 +2917,7 @@ export const capacityResource = [
     {
         id: 28,
         name: 'Fire Fighting Apparatus',
+        nameNe: 'आगो नियनत्रण उपकरण',
         resourceType: 'firefightingapparatus',
         attribute: 'typeOfApparatus',
         level: 1,
@@ -2798,16 +2925,19 @@ export const capacityResource = [
             {
                 id: 86,
                 name: 'Fire Engine',
+                nameNe: 'दमकल',
                 type: 'Fire Engine',
             },
             {
                 id: 87,
                 name: 'Fire Bike',
+                nameNe: 'फायर बाइक',
                 type: 'Fire Bike',
             },
             {
                 id: 88,
                 name: 'Other',
+                nameNe: 'अन्य',
                 type: 'Other',
             },
 
@@ -2817,6 +2947,7 @@ export const capacityResource = [
     {
         id: 27,
         name: 'Helipad',
+        nameNe: 'हेलिप्याड',
         resourceType: 'helipad',
         attribute: '',
         level: 1,
@@ -2877,6 +3008,7 @@ export const capacityResource = [
     {
         id: 20,
         name: 'Humanitarian Open Space',
+        nameNe: 'मानवीय खुला ठाउँ',
         resourceType: 'openspace',
         attribute: '',
         level: 1,
@@ -2885,6 +3017,7 @@ export const capacityResource = [
     {
         id: 21,
         name: 'Community Space',
+        nameNe: 'सामुदायिक ठाउँ',
         resourceType: 'communityspace',
         attribute: '',
         level: 1,
@@ -2893,6 +3026,7 @@ export const capacityResource = [
     {
         id: 22,
         name: 'Evacuation Centre',
+        nameNe: 'निकासी केन्द्र',
         resourceType: 'evacuationcentre',
         attribute: '',
         level: 1,

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-danger */
 import React from 'react';
 import {
@@ -214,7 +215,9 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                             dangerouslySetInnerHTML={{
                                 __html: language === 'en'
                                     ? layer.longDescription
-                                    : layer.longDescriptionNe,
+                                    : layer.longDescriptionNe === undefined
+                                        ? layer.longDescription
+                                        : layer.longDescriptionNe,
                             }}
                         />
                     </div>

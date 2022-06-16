@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        DATASET: 'DATASET',
+        VISUALIZATION: 'VISUALIZATION',
         'Layer details': 'Layer details',
         'Toggle opacity input visibility': 'Toggle opacity input visibility',
         'Toggle legend visiblity': 'Toggle legend visiblity',
@@ -794,6 +796,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        DATASET: 'डाटासेट',
+        VISUALIZATION: 'भिजुअलाइजेशन',
         'Layer details': 'तह विवरण',
         'Toggle opacity input visibility': 'अस्पष्टता इनपुट दृश्यता टगल गर्नुहोस्',
         'Toggle legend visiblity': 'लेजेन्ड दृश्यता टगल गर्नुहोस्',
