@@ -1,3 +1,7 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-bracket-spacing */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { alpha } from '@mui/material/styles';
@@ -27,8 +31,9 @@ import {
 
 import { Paper } from '@mui/material';
 import Loader from 'react-loader';
+import { object } from 'prop-types';
 import { SetEpidemicsPageAction, SetIncidentPageAction } from '#actionCreators';
-import { epidemicsPageSelector, incidentPageSelector } from '#selectors';
+import { epidemicsPageSelector, hazardFilterSelector, hazardTypesSelector, incidentPageSelector } from '#selectors';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';
 import { tableTitleRef } from './utils';
@@ -37,11 +42,13 @@ import styles from './styles.module.scss';
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     epidemmicsPage: epidemicsPageSelector(state),
     incidentPage: incidentPageSelector(state),
+    hazardList: hazardTypesSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
     setIncidentPage: params => dispatch(SetIncidentPageAction(params)),
+
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -74,7 +81,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             format: 'json',
         }),
         onSuccess: ({ response, props, params }) => {
-            console.log('This is response', response);
             props.setEpidemicsPage({
                 incidentEditData: response,
             });
@@ -260,7 +266,7 @@ const IncidentTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData } } = props;
+    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -273,6 +279,12 @@ const IncidentTable = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const array = [];
+    for (const obj in hazardList) {
+        const objective = hazardList[obj];
+        array.push(objective);
+    }
+    const hazardNameSelected = id => (array.length && (array.find(i => i.id === id)).title);
 
     useEffect(() => {
         if (incidentData) {
@@ -286,6 +298,7 @@ const IncidentTable = (props) => {
                     latitude: row.point.coordinates[1],
                     // incident_on: row.incidentOn && (row.incidentOn).split('T')[0],
                     reportedOn: row.reportedOn && (row.reportedOn).split('T')[0],
+                    hazard: hazardNameSelected(row.hazard),
                     cause: row.cause, // hazard inducer
                     totalInjuredMale: row.loss && row.loss.peopleInjuredMaleCount,
                     totalInjuredFemale: row.loss && row.loss.peopleInjuredFemaleCount,
@@ -301,11 +314,12 @@ const IncidentTable = (props) => {
                     verificationMessage: row.verificationMessage,
                     approved: row.approved,
                 };
+
                 return epidemicObj;
             });
             setFilteredRowData(tableRows);
         }
-    }, [incidentData]);
+    }, [incidentData, hazardList]);
 
     useEffect(() => {
         props.requests.incidents.do({ offset, loadingCondition });
@@ -343,7 +357,6 @@ const IncidentTable = (props) => {
         return checkboxCondition;
     };
 
-
     const Dataforcsv = () => {
         const csvData = filteredRowData && filteredRowData
             .map((item) => {
@@ -376,6 +389,7 @@ const IncidentTable = (props) => {
                     item.wards[0].title,
                     item.streetAddress,
                     date,
+                    hazardNameSelected(item.hazard),
                     item.cause,
                     item.totalInjuredMale,
                     item.totalInjuredFemale,
@@ -403,6 +417,7 @@ const IncidentTable = (props) => {
                 'Ward',
                 'Local Address',
                 'Reported Date (A.D.)(eg. 2021/07/31)',
+                'Hazard',
                 'Hazard Inducer',
                 'Total Male Affected',
                 'Total Female Affected',
@@ -438,6 +453,7 @@ const IncidentTable = (props) => {
         }
         setSelected(newSelected);
     };
+
     return (
         <>
             {loader ? (

@@ -29,15 +29,15 @@ interface Props {
     getActiveMenu: (e: number) => void;
     activeMenu: number;
 }
-interface OurState{
+interface OurState {
     resourceID: number;
     loadingInv: boolean;
     inventoryErr: Record<string, unknown>;
-    inventoryData: {unit: string | number};
+    inventoryData: { unit: string | number };
     inventoryItem: Record<string, unknown>;
     invItemSuccess: boolean;
     invItemError: Record<string, unknown>;
-    health: {resourceID: number;inventoryData: []};
+    health: { resourceID: number; inventoryData: [] };
 }
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -79,11 +79,9 @@ const validatorMenu = [
 
 ];
 
-
 const getMenu = () => {
     const location = window.location.href;
     const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1].split('/admin')[1];
-    console.log('menuslug', menuSlug);
     if (menuSlug.includes('health')) {
         return (Menu.healthProgressMenu);
     }

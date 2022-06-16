@@ -104,7 +104,6 @@ const Bulletin = (props: Props) => {
     // const [dateAlt, setDate] = useState('');
 
     useEffect(() => {
-        console.log('uri here', uri);
         if (uri && uri.includes('nepali')) {
             setLanguage({ language: 'np' });
         } if (uri && uri.includes('english')) {
@@ -435,7 +434,7 @@ const Bulletin = (props: Props) => {
                                 <h3>
                                     {
                                         field
-                                && addedHazardFields[field].hazard}
+                                        && addedHazardFields[field].hazard}
 
                                 </h3>
                                 {field && Object.keys(addedHazardFields[field]).map((subField) => {

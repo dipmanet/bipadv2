@@ -3,6 +3,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import LayersIcon from '@mui/icons-material/Layers';
 import mapboxgl from 'mapbox-gl';
+import Loader from 'react-loader';
 import styles from './styles.module.scss';
 import Satelliteimg from '../../resources/mapbox-satellite.png';
 import Mapboxlight from '../../resources/mapbox-light.png';
@@ -30,7 +31,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
     const { centriodsForMap, resetMap, editedCoordinates,
         initialProvinceCenter,
         initialDistrictCenter,
-        initialMunCenter } = props;
+        initialMunCenter, disableMapFilterLofic, disableMapFilter } = props;
 
     const mapContainerRef = useRef(null);
     const map = useRef<mapboxgl.Map | null>(null);
@@ -120,7 +121,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
             }),
         );
         const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
-        console.log('edited coordinates', editedCoordinates);
         if (editedCoordinates) {
             if (Object.keys(editedCoordinates).length > 0) {
                 const coordinates = {
@@ -139,8 +139,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
         if (!props.disabled) {
             Map.on('click', (event) => {
                 const coordinates = event.lngLat;
-                console.log('type', coordinates.lat);
-                console.log('type1', coordinates.lat.toFixed(8));
                 const latitude = Number(coordinates.lat.toFixed(8));
                 const longitude = Number(coordinates.lng.toFixed(8));
                 centriodsForMap.setLattitude(latitude);
@@ -155,6 +153,9 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 }
             });
         }
+
+
+        Map.on('idle', () => { disableMapFilterLofic(false); });
 
         Map.on('style.load', () => {
             Map.addSource('nepal', {
@@ -275,21 +276,25 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 },
             });
             if (editedCoordinates && Object.keys(editedCoordinates).length > 0) {
+                Map.setFilter('municipality-line', ['all', ['==', ['get', 'id'], `${editedCoordinates.wards[0].municipality.id}`]]);
+                Map.setFilter('ward-line', ['all', ['==', ['get', 'municipality'], editedCoordinates.wards[0].municipality.id]]);
+                Map.setFilter('ward-name', ['all', ['==', ['get', 'municipality'], editedCoordinates.wards[0].municipality.id]]);
                 Map.setLayoutProperty('province-name', 'visibility', 'none');
                 Map.setLayoutProperty('district-line', 'visibility', 'none');
                 Map.setLayoutProperty('district-name', 'visibility', 'none');
                 Map.setLayoutProperty('municipality-name', 'visibility', 'none');
                 Map.setLayoutProperty('ward-line', 'visibility', 'visible');
                 Map.setLayoutProperty('ward-name', 'visibility', 'visible');
+            } else {
+                Map.setLayoutProperty('province-line', 'visibility', 'visible');
+                Map.setLayoutProperty('province-name', 'visibility', 'visible');
             }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [editedCoordinates]);
 
     useEffect(() => {
-        console.log('This map', map);
         if (map.current.isStyleLoaded()) {
-            console.log('what 1');
             if (map.current) {
                 if (centriodsForMap.provinceCentriodForMap) {
                     map.current.flyTo({
@@ -324,7 +329,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
 
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
-            console.log('what 2');
             if (map.current) {
                 if (centriodsForMap.districtCentriodForMap) {
                     map.current.flyTo({
@@ -358,7 +362,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
             if (map.current) {
-                console.log('what 3');
                 if (centriodsForMap.municipalityCentriodForMap) {
                     map.current.flyTo({
                         center: centriodsForMap.municipalityCentriodForMap,
@@ -385,11 +388,10 @@ const Mappointpicker = (props: Props): JSX.Element => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [centriodsForMap.municipalityCentriodForMap]);
-    console.log('This is centriodsForMap', centriodsForMap);
+
 
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
-            console.log('what 4');
             if (map.current) {
                 if (centriodsForMap.wardCentriodForMap) {
                     map.current.flyTo({
@@ -451,7 +453,21 @@ const Mappointpicker = (props: Props): JSX.Element => {
 
     return (
         <>
+
             <div className={styles.mapCSS} ref={mapContainerRef}>
+                {disableMapFilter
+                    ? (
+                        <Loader options={{
+                            position: 'absolute',
+                            top: '45%',
+                            right: 0,
+                            bottom: 0,
+                            left: '48%',
+                            background: 'gray',
+                            zIndex: 9999,
+                        }}
+                        />
+                    ) : ''}
                 <div className={styles.adminLvlTogglerMain}>
                     <LayersIcon className={styles.layerIcon} onClick={handleClose} />
                     <div className={showToggler

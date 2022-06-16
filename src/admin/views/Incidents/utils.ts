@@ -13,7 +13,7 @@ export const incidentFormDataInitial = {
     incidentOn: Date,
     reportedOn: Date,
     verificationMessage: '',
-    hazard: 9, // Default 9 is for Epidemmic
+    hazard: null, // Default 9 is for Epidemmic
     streetAddress: '', // use local address field
     point: {
         type: 'Point',

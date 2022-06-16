@@ -36,6 +36,7 @@ export const tableTitleRef = {
     longitude: 'Longitude',
     latitude: 'Latitude',
     reportedOn: 'Reported on',
+    hazard: 'Hazard',
     cause: 'Hazard Inducer',
     totalInjuredMale: 'Total Male Affected',
     totalInjuredFemale: 'Total Female Affected',

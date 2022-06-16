@@ -24,12 +24,14 @@ import Map from '../Mappointpicker/index';
 // import { RootState } from '../../Redux/store';
 // import { covidDataPutIndividualId, covidDataPutGroupId, covidDataGetClearIndividualId, covidDataGetClearGroupId } from '../../Redux/covidActions/covidActions';
 import { SetCovidPageAction } from '#actionCreators';
-import { covidPageSelector,
+import {
+    covidPageSelector,
     userSelector,
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    wardsSelector } from '#selectors';
+    wardsSelector
+} from '#selectors';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';
 import { propTypes } from '#rsci/MultiSelectInput';
@@ -281,7 +283,7 @@ const Covid = (props) => {
         if (provinceName) {
             setprovinceId(province);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceName]);
 
     useEffect(() => {
@@ -291,7 +293,7 @@ const Covid = (props) => {
         if (districtName) {
             setdistrictId(district);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [districtName]);
 
     useEffect(() => {
@@ -301,7 +303,7 @@ const Covid = (props) => {
         if (municipalityName) {
             setmunicipalityId(municipality);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [municipalityName]);
 
     useEffect(() => {
@@ -310,7 +312,7 @@ const Covid = (props) => {
                 .map(item => item.centroid.coordinates)[0];
             setprovinceCentriodForMap(temp);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceId]);
 
     useEffect(() => {
@@ -327,7 +329,6 @@ const Covid = (props) => {
             const municipalityCentriodForMaps = municipalities.filter(item => item.id === municipalityId)
                 .map(item => item.centroid.coordinates)[0];
             setmunicipalityCentriodForMap(municipalityCentriodForMaps);
-            console.log('test munici centroid', municipalityCentriodForMaps);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [municipalityId]);
@@ -348,7 +349,7 @@ const Covid = (props) => {
             setwardId(id);
             // setEditWardId(id);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
 
     useEffect(() => {
@@ -378,7 +379,7 @@ const Covid = (props) => {
             setverificationMessage(covid19IndividualEditData.verificationMessage);
             props.setCovidPage({ covid19IndividualEditData: {} });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [covid19IndividualEditData]);
 
     useEffect(() => {
@@ -406,7 +407,7 @@ const Covid = (props) => {
             props.setCovidPage({ covid19GroupEditData: {} });
             // dispatch(covidDataGetClearGroupId());
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [covid19GroupEditData]);
 
 
@@ -516,7 +517,7 @@ const Covid = (props) => {
                 setDisableFields(allFields);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [covid19IndividualEditData]);
 
     const handleVerifiedChange = () => {
@@ -827,7 +828,7 @@ const Covid = (props) => {
                             </div>
                             <div className={styles.infoBar}>
                                 <p className={styles.instInfo}>
-													Reported Date, Patient Status, and Location are required fields
+                                    Reported Date, Patient Status, and Location are required fields
                                 </p>
                             </div>
 
@@ -869,7 +870,7 @@ const Covid = (props) => {
                                 <div className={styles.infoBar}>
                                     <p className={styles.instInfo}>
                                         <span style={{ color: '#003572' }} />
-                                                        Geographical Information on the area
+                                        Geographical Information on the area
 
                                     </p>
                                     <div role="presentation" className={styles.plusMinus} onKeyDown={handleShowhideGeo} onClick={handleShowhideGeo}>
@@ -908,7 +909,7 @@ const Covid = (props) => {
                                         <InputLabel id="demo-simple-select-label">Select District</InputLabel>
                                         <Select
                                             error={districtError}
-                                                            // className={provinceName === '' && loadingDistrict ? styles.adminLvlSelectionDisabled
+                                            // className={provinceName === '' && loadingDistrict ? styles.adminLvlSelectionDisabled
                                             //     : styles.adminLvlSelection}
                                             disabled={provinceName === '' || getDisabled('districtName') || (userDataMain.profile && userDataMain.profile.district)}
                                             labelId="demo-simple-select-label"
@@ -927,7 +928,7 @@ const Covid = (props) => {
                                         <InputLabel id="demo-simple-select-label">Select Municipality</InputLabel>
                                         <Select
                                             error={munError}
-                                                            // className={districtName === '' || loadingMunicipality ? styles.adminLvlSelectionDisabled
+                                            // className={districtName === '' || loadingMunicipality ? styles.adminLvlSelectionDisabled
                                             //     : styles.adminLvlSelection}
                                             disabled={districtName === '' || getDisabled('municipalityName') || (userDataMain.profile && userDataMain.profile.municipality)}
                                             labelId="demo-simple-select-label"
@@ -1040,7 +1041,7 @@ const Covid = (props) => {
                                             <span style={{ color: '#003572' }} />
                                             {' '}
                                             {' '}
-															Casuality Statistics of the area
+                                            Casuality Statistics of the area
 
                                         </p>
                                     </div>
@@ -1124,7 +1125,7 @@ const Covid = (props) => {
                                             <span style={{ color: '#003572' }} />
                                             {' '}
                                             {' '}
-															Casuality Statistics of the area
+                                            Casuality Statistics of the area
 
                                         </p>
                                     </div>
@@ -1278,7 +1279,7 @@ const Covid = (props) => {
                                         <span style={{ color: '#003572' }} />
                                         {' '}
                                         {'  '}
-														Verification of the data
+                                        Verification of the data
 
                                     </p>
                                 </div>
@@ -1354,7 +1355,7 @@ const Covid = (props) => {
                                 </div>
                                 <div className={styles.saveOrAddButtons}>
 
-                                    <button className={styles.submitButtons} onClick={handleCovid19DataEntry} type="submit">{uniqueId ? 'Update' : 'Add New' }</button>
+                                    <button className={styles.submitButtons} onClick={handleCovid19DataEntry} type="submit">{uniqueId ? 'Update' : 'Add New'}</button>
                                 </div>
                             </div>
                         </div>
