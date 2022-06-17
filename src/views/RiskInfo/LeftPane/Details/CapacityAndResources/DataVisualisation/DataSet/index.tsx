@@ -18,26 +18,33 @@ import { connect } from 'react-redux';
 import DataTable from 'react-data-table-component';
 import styled, { keyframes } from 'styled-components';
 import { CsvBuilder } from 'filefy';
-import { districtsSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
+import { districtsSelector, languageSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { resourceHeader } from './TableHeader';
 
 const mapStateToProps = (state, props) => ({
-  provinces: provincesSelector(state),
-  districts: districtsSelector(state),
-  municipalities: municipalitiesSelector(state),
-  wards: wardsSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    language: languageSelector(state),
 
 
 });
 
 
-const CustomLoader = () => (
-  <div style={{ padding: '24px' }}>
-    <Spinner />
-    <div>Loading Data,Please Wait...</div>
-  </div>
+const CustomLoader = language => (
+    <div style={{ padding: '24px' }}>
+        <Spinner />
+        <div>
+            {
+                language === 'en'
+                    ? 'Loading Data,Please Wait...'
+                    : 'डाटा लोड गर्दै, कृपया पर्खनुहोस्...'
+            }
+        </div>
+    </div>
 );
 const rotate360 = keyframes`
       from {
@@ -105,195 +112,203 @@ const DownloadButton = styled(Button)`
       `;
 
 
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <>
-    <TextField
-      id="search"
-      type="text"
-      placeholder="Search By Title"
-      aria-label="Search Input"
-      value={filterText}
-      onChange={onFilter}
-    />
-    <ClearButton type="button" onClick={onClear}>
-      Clear
-    </ClearButton>
-  </>
+const FilterComponent = ({ filterText, onFilter, onClear, language }) => (
+    <>
+        <TextField
+            id="search"
+            type="text"
+            placeholder={language === 'en' ? 'Search By Title' : 'शीर्षक द्वारा खोज'}
+            aria-label="Search Input"
+            value={filterText}
+            onChange={onFilter}
+        />
+        <ClearButton type="button" onClick={onClear}>
+            {
+                language === 'en'
+                    ? 'Clear'
+                    : 'खाली गर्नुहोस्'
+            }
+        </ClearButton>
+    </>
 );
 
 
-const TableData = ({ selectedResourceData, resourceType }) => {
-  const [pending, setPending] = React.useState(true);
-  const [rows, setRows] = React.useState([]);
-  const [filterText, setFilterText] = React.useState('');
-  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const filteredItems = selectedResourceData.filter(
-    item => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()),
-  );
-  const tableHeader = resourceHeader.find(data => data.resourceType === resourceType).data;
-  const columns = tableHeader.map(item => ({
-    name: item.value,
-    id: item.value === 'Title' ? 'title' : '',
-    selector: item.key === 'title' ? row => row[item.key] : row => ((item.key === 'point1') ? row.point ? row.point.coordinates[1] : '' : (item.key === 'point2') ? row.point ? row.point.coordinates[0] : '' : row[item.key] ? typeof (row[item.key]) === 'boolean' ? row[item.key] === true ? 'Yes' : 'No' : row[item.key] : row[item.key] === false ? 'No' : row[item.key]),
-    sortable: true,
-    minWidth: '100px',
-    wrap: true,
-    // allowOverflow: true,
+const TableData = ({ selectedResourceData, resourceType, language: { language } }) => {
+    const [pending, setPending] = React.useState(true);
+    const [rows, setRows] = React.useState([]);
+    const [filterText, setFilterText] = React.useState('');
+    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+    const filteredItems = selectedResourceData.filter(
+        item => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()),
+    );
+    const tableHeader = resourceHeader.find(data => data.resourceType === resourceType).data;
+    const columns = tableHeader.map(item => ({
+        name: item.value,
+        id: item.value === 'Title' ? 'title' : '',
+        selector: item.key === 'title' ? row => row[item.key] : row => ((item.key === 'point1') ? row.point ? row.point.coordinates[1] : '' : (item.key === 'point2') ? row.point ? row.point.coordinates[0] : '' : row[item.key] ? typeof (row[item.key]) === 'boolean' ? row[item.key] === true ? 'Yes' : 'No' : row[item.key] : row[item.key] === false ? 'No' : row[item.key]),
+        sortable: true,
+        minWidth: '100px',
+        wrap: true,
+        // allowOverflow: true,
 
-    conditionalCellStyles: item.key === 'title' ? [
-      {
-        when: (row, index) => row.title,
-        style: {
-          position: 'sticky',
-          left: '0',
-          zIndex: '9',
-          backgroundColor: 'white',
+        conditionalCellStyles: item.key === 'title' ? [
+            {
+                when: (row, index) => row.title,
+                style: {
+                    position: 'sticky',
+                    left: '0',
+                    zIndex: '9',
+                    backgroundColor: 'white',
 
+                },
+            },
+
+
+        ] : '',
+
+    }));
+
+
+    const subHeaderComponentMemo = React.useMemo(() => {
+        const handleClear = () => {
+            if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
+                setFilterText('');
+            }
+        };
+
+        return (
+            <FilterComponent
+                onFilter={e => setFilterText(e.target.value)}
+                onClear={handleClear}
+                filterText={filterText}
+                language={language} />
+        );
+    }, [filterText, language, resetPaginationToggle]);
+
+
+    const handleDownload = useCallback((datas) => {
+        const column = tableHeader.map(item => item.value);
+
+        const csvData = datas.map(itm => (
+            tableHeader.map(data => (
+                data.key === 'point1' ? itm.point ? itm.point.coordinates[1] : '' : data.key === 'point2' ? itm.point ? itm.point.coordinates[0] : '' : itm[data.key] ? typeof (itm[data.key]) === 'boolean' ? itm[data.key] === true ? 'Yes' : '' : itm[data.key] : itm[data.key] === false ? 'No' : itm[data.key]
+            ))
+        ));
+
+        const csvBuilder = new CsvBuilder(`${resourceType}.csv`)
+            .setColumns(column)
+            .addRows(csvData)
+            .exportFile();
+    });
+
+    const Export = ({ onExport }) => <button className={styles.downloadButton} type="button" onClick={e => onExport(e.target.value)}>Download</button>;
+    // const Export = ({ onExport }) => <DownloadButton onClick={e => onExport(e.target.value)}>Download</DownloadButton>;
+
+
+    const actionsMemo = React.useMemo(() => <Export onExport={() => handleDownload(selectedResourceData)} />, [handleDownload, selectedResourceData]);
+    const actionsMemo1 = React.useMemo(() => <Export onExport={() => handleDownload(selectedResourceData)} />, [handleDownload, selectedResourceData]);
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            setRows(selectedResourceData);
+            setPending(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, [selectedResourceData]);
+    const customStyles = {
+        header: {
+            style: {
+                width: '50%',
+                float: 'right',
+                border: '2px solid white',
+                marginBottom: '50px',
+
+
+            },
         },
-      },
+        headCells: {
+            style: {
+                // fontSize: '20px',
+                // fontWeight: '500',
+                textTransform: 'uppercase',
+                fontFamily: 'inherit',
+                fontWeight: 'bold',
 
+                // maxWidth: '100px',
+                // width: '100px',
+                // paddingLeft: '0 8px',
+            },
+        },
+        pagination: {
+            style: {
+                // color: theme.text.secondary,
+                fontSize: '13px',
+                minHeight: '56px',
+                // backgroundColor: theme.background.default,
+                borderTopStyle: 'solid',
+                borderTopWidth: '1px',
+                // borderTopColor: theme.divider.default,
+            },
+            pageButtonsStyle: {
+                borderRadius: '50%',
+                height: '40px',
+                width: '40px',
+                padding: '8px',
+                margin: 'px',
+                cursor: 'pointer',
+                transition: '0.4s',
+                // color: theme.button.default,
+                // fill: theme.button.default,
+                backgroundColor: 'transparent',
+                '&:disabled': {
+                    cursor: 'unset',
+                    // color: theme.button.disabled,
+                    // fill: theme.button.disabled,
+                },
+                '&:hover:not(:disabled)': {
+                    backgroundColor: '#1A70AC',
 
-    ] : '',
-
-  }));
-
-
-  const subHeaderComponentMemo = React.useMemo(() => {
-    const handleClear = () => {
-      if (filterText) {
-        setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText('');
-      }
+                },
+                '&:focus': {
+                    outline: 'none',
+                    backgroundColor: '#1A70AC',
+                },
+            },
+        },
+        rows: {
+            style: {
+                zIndex: 0,
+            },
+        },
     };
 
     return (
-      <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+        <div className={styles.dataTable}>
+
+            <DataTable
+
+                // title="Movie List"
+                pagination
+                paginationPerPage={100}
+                paginationRowsPerPageOptions={[50, 100, 200, 500]}
+                columns={columns}
+                data={filteredItems}
+                fixedHeader
+                fixedHeaderScrollHeight={'500px'}
+                striped
+                // highlightOnHover
+                // pointerOnHover
+                actions={actionsMemo}
+                progressPending={pending}
+                progressComponent={<CustomLoader language={language} />}
+                subHeader
+                subHeaderWrap
+
+                subHeaderComponent={subHeaderComponentMemo}
+                customStyles={customStyles}
+
+            />
+        </div>
     );
-  }, [filterText, resetPaginationToggle]);
-
-
-  const handleDownload = useCallback((datas) => {
-    const column = tableHeader.map(item => item.value);
-
-    const csvData = datas.map(itm => (
-      tableHeader.map(data => (
-        data.key === 'point1' ? itm.point ? itm.point.coordinates[1] : '' : data.key === 'point2' ? itm.point ? itm.point.coordinates[0] : '' : itm[data.key] ? typeof (itm[data.key]) === 'boolean' ? itm[data.key] === true ? 'Yes' : '' : itm[data.key] : itm[data.key] === false ? 'No' : itm[data.key]
-      ))
-    ));
-
-    const csvBuilder = new CsvBuilder(`${resourceType}.csv`)
-      .setColumns(column)
-      .addRows(csvData)
-      .exportFile();
-  });
-
-  const Export = ({ onExport }) => <button className={styles.downloadButton} type="button" onClick={e => onExport(e.target.value)}>Download</button>;
-  // const Export = ({ onExport }) => <DownloadButton onClick={e => onExport(e.target.value)}>Download</DownloadButton>;
-
-
-  const actionsMemo = React.useMemo(() => <Export onExport={() => handleDownload(selectedResourceData)} />, [handleDownload, selectedResourceData]);
-  const actionsMemo1 = React.useMemo(() => <Export onExport={() => handleDownload(selectedResourceData)} />, [handleDownload, selectedResourceData]);
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      setRows(selectedResourceData);
-      setPending(false);
-    }, 2000);
-    return () => clearTimeout(timeout);
-  }, [selectedResourceData]);
-  const customStyles = {
-    header: {
-      style: {
-        width: '50%',
-        float: 'right',
-        border: '2px solid white',
-        marginBottom: '50px',
-
-
-      },
-    },
-    headCells: {
-      style: {
-        // fontSize: '20px',
-        // fontWeight: '500',
-        textTransform: 'uppercase',
-        fontFamily: 'inherit',
-        fontWeight: 'bold',
-
-        // maxWidth: '100px',
-        // width: '100px',
-        // paddingLeft: '0 8px',
-      },
-    },
-    pagination: {
-      style: {
-        // color: theme.text.secondary,
-        fontSize: '13px',
-        minHeight: '56px',
-        // backgroundColor: theme.background.default,
-        borderTopStyle: 'solid',
-        borderTopWidth: '1px',
-        // borderTopColor: theme.divider.default,
-      },
-      pageButtonsStyle: {
-        borderRadius: '50%',
-        height: '40px',
-        width: '40px',
-        padding: '8px',
-        margin: 'px',
-        cursor: 'pointer',
-        transition: '0.4s',
-        // color: theme.button.default,
-        // fill: theme.button.default,
-        backgroundColor: 'transparent',
-        '&:disabled': {
-          cursor: 'unset',
-          // color: theme.button.disabled,
-          // fill: theme.button.disabled,
-        },
-        '&:hover:not(:disabled)': {
-          backgroundColor: '#1A70AC',
-
-        },
-        '&:focus': {
-          outline: 'none',
-          backgroundColor: '#1A70AC',
-        },
-      },
-    },
-    rows: {
-      style: {
-        zIndex: 0,
-      },
-    },
-  };
-
-  return (
-    <div className={styles.dataTable}>
-
-      <DataTable
-
-        // title="Movie List"
-        pagination
-        paginationPerPage={100}
-        paginationRowsPerPageOptions={[50, 100, 200, 500]}
-        columns={columns}
-        data={filteredItems}
-        fixedHeader
-        fixedHeaderScrollHeight={'500px'}
-        striped
-        // highlightOnHover
-        // pointerOnHover
-        actions={actionsMemo}
-        progressPending={pending}
-        progressComponent={<CustomLoader />}
-        subHeader
-        subHeaderWrap
-
-        subHeaderComponent={subHeaderComponentMemo}
-        customStyles={customStyles}
-
-      />
-    </div>
-  );
 };
 export default connect(mapStateToProps)(TableData);
