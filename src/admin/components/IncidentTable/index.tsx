@@ -65,6 +65,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             ordering: '-id',
         }),
         onSuccess: ({ response, props, params }) => {
+            console.log('This results', response.results);
             props.setEpidemicsPage({
                 incidentData: response.results,
                 incidentCount: response.count,
@@ -286,6 +287,12 @@ const IncidentTable = (props) => {
     }
 
     const hazardNameSelected = id => (array.length && (array.find(i => i.id === id)).title);
+    const numberFormatter = (n) => {
+        const numberFormat = Intl.NumberFormat('en-US');
+        const formatted = n ? numberFormat.format(n) : '-';
+        // const formatted = n.toLocaleString('en-US');
+        return formatted;
+    };
 
     useEffect(() => {
         if (incidentData) {
@@ -301,16 +308,25 @@ const IncidentTable = (props) => {
                     reportedOn: row.reportedOn && (row.reportedOn).split('T')[0],
                     hazard: hazardNameSelected(row.hazard),
                     cause: row.cause, // hazard inducer
+                    estimatedLoss: row.loss && numberFormatter(row.loss.estimatedLoss),
+                    agricultureEconomicLoss: row && numberFormatter(row.agricultureEconomicLoss),
+                    infrastructureEconomicLoss: row && numberFormatter(row.infrastructureEconomicLoss),
+                    infrastructureDestroyedCount: row && row.infrastructureDestroyedCount,
+                    infrastructureDestroyedHouseCount: row && row.infrastructureDestroyedHouseCount,
+                    infrastructureAffectedHouseCount: row && row.infrastructureAffectedHouseCount,
+                    livestockDestroyedCount: row && row.livestockDestroyedCount,
                     totalInjuredMale: row.loss && row.loss.peopleInjuredMaleCount,
                     totalInjuredFemale: row.loss && row.loss.peopleInjuredFemaleCount,
                     totalInjuredOther: row.loss && row.loss.peopleInjuredOtherCount,
                     totalInjuredDisabled: row.loss && row.loss.peopleInjuredDisabledCount,
-
+                    peopleMissingMaleCount: row.loss && row.loss.peopleMissingMaleCount,
+                    peopleMissingFemaleCount: row.loss && row.loss.peopleMissingFemaleCount,
+                    peopleMissingOtherCount: row.loss && row.loss.peopleMissingOtherCount,
+                    peopleMissingDisabledCount: row.loss && row.loss.peopleMissingDisabledCount,
                     totalDeadMale: row.loss && row.loss.peopleDeathMaleCount,
                     totalDeadFemale: row.loss && row.loss.peopleDeathFemaleCount,
                     totalDeadOther: row.loss && row.loss.peopleDeathOtherCount,
                     totalDeadDisabled: row.loss && row.loss.peopleDeathDisabledCount,
-
                     verified: row.verified,
                     verificationMessage: row.verificationMessage,
                     approved: row.approved,
@@ -357,6 +373,8 @@ const IncidentTable = (props) => {
         const checkboxCondition = !!selected.find(i => i === id);
         return checkboxCondition;
     };
+
+
     const Dataforcsv = () => {
         const csvData = filteredRowData && filteredRowData
             .map((item) => {
@@ -391,10 +409,24 @@ const IncidentTable = (props) => {
                     date,
                     item.hazard,
                     item.cause,
+                    item.estimatedLoss,
+                    item.agricultureEconomicLoss,
+                    item.infrastructureEconomicLoss,
+                    item.infrastructureDestroyedCount,
+                    item.infrastructureDestroyedHouseCount,
+                    item.infrastructureAffectedHouseCount,
+                    item.livestockDestroyedCount,
+
                     item.totalInjuredMale,
                     item.totalInjuredFemale,
                     item.totalInjuredOther,
                     item.totalInjuredDisabled,
+                    item.peopleMissingMaleCount,
+                    item.peopleMissingFemaleCount,
+                    item.peopleMissingOtherCount,
+                    item.peopleMissingDisabledCount,
+
+
                     item.totalDeadMale,
                     item.totalDeadFemale,
                     item.totalDeadOther,
@@ -419,10 +451,21 @@ const IncidentTable = (props) => {
                 'Reported Date (A.D.)(eg. 2021/07/31)',
                 'Hazard',
                 'Hazard Inducer',
-                'Total Male Affected',
-                'Total Female Affected',
-                'Total Other Affected',
-                'Total Disabled Affected',
+                'Total Estimated Loss(NPR)',
+                'Agriculture Economic Loss(NPR)',
+                'Infrastructure Economic Loss(NPR)',
+                'Total Infrastructure Destroyed',
+                'House Destroyed',
+                'House Affected',
+                'Total Livestock Destroyed',
+                'Total Injured Male',
+                'Total Injured Female',
+                'Total Injured Others',
+                'Total Injured Disabled',
+                'Total Missing Male',
+                'Total Missing Female',
+                'Total Missing Other',
+                'Total Missing Disabled',
                 'Total Male Death',
                 'Total Female Death',
                 'Total Other Death',
