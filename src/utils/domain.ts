@@ -2159,14 +2159,14 @@ export const capacityResource = [
             {
                 id: 36,
                 name: 'Secondary A Hospital',
-                nameNe: 'माध्यमिक क अस्पताल',
+                nameNe: 'माध्यमिक ए अस्पताल',
                 type: 'Secondary A Hospital',
 
             },
             {
                 id: 37,
                 name: 'Secondary B Hospital',
-                nameNe: 'माध्यमिक ख अस्पताल',
+                nameNe: 'माध्यमिक बी अस्पताल',
                 type: 'Secondary B Hospital',
 
             },

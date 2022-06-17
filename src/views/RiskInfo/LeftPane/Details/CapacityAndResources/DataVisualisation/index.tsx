@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-spread */
 /* eslint-disable max-len */
 /* eslint-disable indent */
@@ -362,53 +363,66 @@ const visualizationKeyValues = [
     {
         resourceType: 'education',
         visualizationHeading: 'Education Institution',
+        visualizationHeadingNe: 'शिक्षा संस्था',
         chartDataType: [
             {
                 label: 'Education Institutions',
+                labelNe: 'शिक्षा संस्था',
                 key: 'type',
                 values: ['Pre Primary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
+                valuesNe: ['पूर्वप्राथमिक', 'आधारभूत शिक्षा', 'उच्च विद्यालय', 'कलेज', 'विश्वविद्यालय', 'परम्परागत शिक्षा', 'पुस्तकालय', 'अन्य'],
                 isBoolean: false,
-
-
             },
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
             },
             {
-                label: 'Open Space ',
+                label: 'Open Space',
+                labelNe: 'खुल्‍ला ठाउँ',
                 key: 'hasOpenSpace',
-                values: ['Open Space '],
+                values: ['Open Space'],
+                valuesNe: ['खुल्‍ला ठाउँ'],
                 isBoolean: true,
 
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
             {
                 label: 'Number of Students',
+                labelNe: 'विद्यार्थी संख्या',
                 key: ['noOfMaleStudent', 'noOfFemaleStudent', 'noOfOtherStudent'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
             {
                 label: 'Students with Disability',
+                labelNe: 'अपाङ्गता भएका विद्यार्थीहरू',
                 key: ['noOfDifferentlyAbledMaleStudents', 'noOfDifferentlyAbledFemaleStudents', 'noOfDifferentlyAbledOtherStudents'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -418,42 +432,53 @@ const visualizationKeyValues = [
     {
         resourceType: 'finance',
         visualizationHeading: 'Banking and Finance Institution',
+        visualizationHeadingNe: 'बैंकिङ र वित्त संस्था',
         chartDataType: [
             {
                 label: 'Banking & Financial Institutions',
+                labelNe: 'बैंकिङ र वित्तीय संस्थाहरू',
                 key: 'type',
                 values: ['Commercial', 'Micro Credit Development', 'Finance', 'Development Bank', 'Cooperative', 'Money Exchange', 'ATM'],
+                valuesNe: [],
                 isBoolean: false,
 
 
             },
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
 
 
             },
             {
                 label: 'Services Available',
+                labelNe: 'उपलब्ध सेवाहरू',
                 key: ['bank', 'moneyExchange', 'atm', 'hasOtherServices'],
                 values: ['Bank', 'Money Exchange', 'ATM', 'Other Services'],
+                valuesNe: ['बैंक', 'मनी एक्सचेन्ज', 'एटीएम', 'अन्य सेवाहरू'],
                 isBoolean: true,
 
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -464,19 +489,24 @@ const visualizationKeyValues = [
     {
         resourceType: 'communication',
         visualizationHeading: 'Communication Institution',
+        visualizationHeadingNe: 'सञ्चार संस्था',
         chartDataType: [
             {
                 label: 'communication Institutions Types',
+                labelNe: 'सञ्चार संस्थाका प्रकारहरू',
                 key: 'type',
                 values: ['FM Radio', 'TV Station', 'Newspapers', 'Phone Service', 'Cable', 'Online Media', 'Internet Service Provider'],
+                valuesNe: ['एफएम रेडियो', 'टिभी स्टेशन', 'न्युजपेपर', 'फोन सेवा', 'केबल', 'अनलाइन मिडिया', 'इन्टरनेट सेवा प्रदायक'],
                 isBoolean: false,
 
 
             },
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
 
 
@@ -484,16 +514,20 @@ const visualizationKeyValues = [
 
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -504,48 +538,61 @@ const visualizationKeyValues = [
     {
         resourceType: 'governance',
         visualizationHeading: 'Government Institution',
+        visualizationHeadingNe: 'सरकारी संस्था',
         chartDataType: [
             {
                 label: 'Government Institution Types',
+                labelNe: 'सरकारी संस्थाका प्रकारहरू',
                 key: 'type',
                 values: ['Government', 'INGO', 'NGO', 'CSO', 'Other'],
+                valuesNe: ['सरकार', 'अन्तर्राष्ट्रिय गैर सरकारी संस्था', 'गैर सरकारी संस्था', 'सिएसवो', 'अन्य'],
                 isBoolean: false,
 
 
             },
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
             },
             {
                 label: 'Helipad ',
+                labelNe: 'हेलिप्याड',
                 key: 'hasHelipad',
-                values: ['Helipad '],
+                values: ['Helipad'],
+                valuesNe: ['हेलिप्याड'],
                 isBoolean: true,
 
             },
             {
-                label: 'Open Space ',
+                label: 'Open Space',
+                labelNe: 'खुल्‍ला ठाउँ',
                 key: 'hasOpenSpace',
-                values: ['Open Space '],
+                values: ['Open Space'],
+                valuesNe: ['खुल्‍ला ठाउँ'],
                 isBoolean: true,
 
             },
 
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -556,32 +603,41 @@ const visualizationKeyValues = [
     {
         resourceType: 'hotelandrestaurant',
         visualizationHeading: 'Hotel & Restaurant',
+        visualizationHeadingNe: 'होटल र रेस्टुरेन्ट',
         chartDataType: [
             {
                 label: 'Hotel & Restaurant Types',
+                labelNe: 'होटल र रेस्टुरेन्ट प्रकार',
                 key: 'type',
                 values: ['Hotel', 'Restaurant', 'Lodge', 'Resort', 'Homestay'],
+                valuesNe: ['होटेल', 'रेष्टुरेन्ट', 'लज', 'रिसोर्ट', 'होमस्टे'],
                 isBoolean: false,
             },
             {
-                label: 'Bed Capacity ',
+                label: 'Bed Capacity',
+                labelNe: 'बेड क्षमता',
                 key: ['bedCount'],
-                values: ['Bed Capacity '],
+                values: ['Bed Capacity'],
+                valuesNe: ['बेड क्षमता'],
                 isBoolean: false,
 
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारीहरूको संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -592,52 +648,67 @@ const visualizationKeyValues = [
     {
         resourceType: 'cultural',
         visualizationHeading: 'Cultural Sites',
+        visualizationHeadingNe: 'सांस्कृतिक साइटहरू',
         chartDataType: [
             {
                 label: 'Religions',
+                labelNe: 'धर्महरू',
                 key: 'religion',
                 values: ['Hindu', 'Islam', 'Christian', 'Buddhist', 'Kirat', 'Sikhism', 'Judaism', 'Other'],
+                valuesNe: ['हिन्दू', 'इस्लाम', 'क्रिस्चियन', 'बौद्ध', 'किरात', 'सिख', 'यहूदी', 'अन्य'],
                 isBoolean: false,
             },
             {
                 label: 'Open Space ',
+                labelNe: 'खुल्‍ला ठाउँ',
                 key: 'hasOpenSpace',
                 values: ['Open Space '],
+                valuesNe: ['खुल्‍ला ठाउँ'],
                 isBoolean: true,
 
             },
             {
                 label: 'Drinking Water Available ',
+                labelNe: 'उपलब्ध पिउने पानी',
                 key: 'drinkingWater',
-                values: ['Drinking Water '],
+                values: ['Drinking Water'],
+                valuesNe: ['पिउने पानी'],
                 isBoolean: true,
 
             },
             {
-                label: 'Toilet Available ',
+                label: 'Toilet Available',
+                labelNe: 'उपलब्ध शौचालय',
                 key: 'toilet',
                 values: ['Toilet '],
+                valuesNe: ['शौचालय'],
                 isBoolean: true,
 
             },
             {
                 label: 'Wash Facility Available ',
+                labelNe: 'उपलब्ध धुने सुविधा ',
                 key: 'hasWashFacility',
                 values: ['Wash Facility '],
+                valuesNe: ['धुने सुविधा'],
                 isBoolean: true,
 
             },
             {
                 label: 'Sleeping Facility Available ',
+                labelNe: 'उपलब्ध सुत्ने सुविधा',
                 key: 'hasSleepingFacility',
                 values: ['Sleeping Facility '],
+                valuesNe: ['सुत्ने सुविधा'],
                 isBoolean: true,
 
             },
             {
                 label: 'Electricity Facility Available ',
+                labelNe: 'उपलब्ध बिजुली सुविधा',
                 key: 'hasElectricity',
                 values: ['Electricity Facility '],
+                valuesNe: ['बिजुली सुविधा'],
                 isBoolean: true,
 
             },
@@ -648,31 +719,40 @@ const visualizationKeyValues = [
     {
         resourceType: 'industry',
         visualizationHeading: 'Industries',
+        visualizationHeadingNe: 'उद्योगहरू',
         chartDataType: [
             {
                 label: 'Industry Types',
+                labelNe: 'उद्योगका प्रकारहरू',
                 key: 'subtype',
                 values: ['Cottage Industry', 'Micro Industry', 'Small Industry', 'Medium Industry', 'Large Industry', 'Other'],
+                valuesNe: ['घरेलु उद्योग', 'सूक्ष्म उद्योग', 'साना उद्योग', 'मध्यम उद्योग', 'ठूला उद्योग', 'अन्य'],
                 isBoolean: false,
             },
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -683,31 +763,40 @@ const visualizationKeyValues = [
     {
         resourceType: 'bridge',
         visualizationHeading: 'Bridges',
+        visualizationHeadingNe: 'पुलहरू',
         chartDataType: [
             {
                 label: 'Bridge Types',
+                labelNe: 'पुलका प्रकार',
                 key: 'type',
                 values: ['Arch', 'Beam', 'Cantilever', 'Wooden', 'Suspension', 'Cable-stayed', 'Culvert', 'Bailey', 'Truss', 'Other'],
+                valuesNe: ['आर्क', 'बीम', 'केन्टिलिभर', 'काठ', 'सस्पेन्सन', 'केबल-स्टेड', 'कलभर्ट', 'बेली', 'ट्रस', 'अन्य'],
                 isBoolean: false,
             },
 
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
             },
             {
-                label: 'Motorable Bridge ',
+                label: 'Motorable Bridge',
+                labelNe: ['मोटरेबल ब्रिज'],
                 key: ['isMotorable'],
-                values: ['Motorable Bridge '],
+                values: ['Motorable Bridge'],
+                valuesNe: ['मोटरेबल ब्रिज'],
                 isBoolean: true,
 
             },
             {
-                label: 'Condition ',
+                label: 'Condition',
+                labelNe: 'अवस्था',
                 key: 'condition',
                 values: ['Good ', 'Bad'],
+                valuesNe: ['राम्रो', 'नराम्रो'],
                 isBoolean: false,
 
             },
@@ -718,11 +807,14 @@ const visualizationKeyValues = [
     {
         resourceType: 'electricity',
         visualizationHeading: 'Electricity',
+        visualizationHeadingNe: 'बिजुली',
         chartDataType: [
             {
                 label: 'Electricity Components',
+                labelNe: 'बिजुली घटक',
                 key: 'components',
                 values: ['Hydropower', 'Substation', 'Dam', 'Transmission Pole', 'Other'],
+                valuesNe: ['जलविद्युत', 'सबस्टेशन', 'बाँध', 'ट्रान्समिशन पोल', 'अन्य'],
                 isBoolean: false,
             },
         ],
@@ -730,17 +822,22 @@ const visualizationKeyValues = [
     {
         resourceType: 'sanitation',
         visualizationHeading: 'Sanitation Service',
+        visualizationHeadingNe: 'सरसफाई सेवा',
         chartDataType: [
             {
                 label: 'Sanitation Service Types',
+                labelNe: 'सरसफाई सेवा प्रकार',
                 key: 'type',
                 values: ['Landfill', 'Dumping Site', 'Public Toilet'],
+                valuesNe: ['ल्याण्डफिल', 'डम्पिङ साइट', 'सार्वजनिक शौचालय'],
                 isBoolean: false,
             },
             {
                 label: 'Permanent Landfill',
+                labelNe: ['स्थायी ल्यान्डफिल'],
                 key: ['isPermanent'],
                 values: ['Permanent Landfill '],
+                valuesNe: ['स्थायी ल्यान्डफिल'],
                 isBoolean: true,
 
             },
@@ -750,12 +847,15 @@ const visualizationKeyValues = [
     {
         resourceType: 'openspace',
         visualizationHeading: 'Open Space',
+        visualizationHeadingNe: 'खुल्‍ला ठाउँ',
         chartDataType: [
 
             {
                 label: 'Open Space Area Details(Sq Km)',
+                labelNe: 'खुला क्षेत्र विवरण (वर्ग किलोमिटर)',
                 key: ['totalArea', 'usableArea', 'usableAreaSecond'],
                 values: ['Total Area', 'Usable Area', 'Alternate Usable Area'],
+                valuesNe: ['कुल क्षेत्र', 'प्रयोगयोग्य क्षेत्र', 'वैकल्पिक प्रयोगयोग्य क्षेत्र'],
                 isBoolean: false,
 
             },
@@ -766,12 +866,15 @@ const visualizationKeyValues = [
     {
         resourceType: 'communityspace',
         visualizationHeading: 'Community Space',
+        visualizationHeadingNe: 'सामुदायिक ठाउँ',
         chartDataType: [
 
             {
                 label: 'Community Space Area Details(Sq Km)',
+                labelNe: 'सामुदायिक क्षेत्र विवरण (वर्ग किलोमिटर)',
                 key: ['capacity'],
                 values: ['Capacity of Community Space'],
+                valuesNe: ['सामुदायिक ठाउँको क्षमता'],
                 isBoolean: false,
 
             },
@@ -783,45 +886,58 @@ const visualizationKeyValues = [
     {
         resourceType: 'watersupply',
         visualizationHeading: 'Water Supply Infrastructure',
+        visualizationHeadingNe: 'पानी आपूर्ति पूर्वाधार',
         chartDataType: [
             {
                 label: 'Water Supply Infrastructure Scales',
+                labelNe: 'पानी आपूर्ति पूर्वाधार स्केल',
                 key: 'scale',
                 values: ['Small', 'Medium', 'Large'],
+                valuesNe: ['सानो', 'मध्यम', 'ठूलो'],
                 isBoolean: false,
             },
             {
                 label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
             {
                 label: 'Technical Staff',
+                labelNe: 'प्राविधिक कर्मचारी',
                 key: ['hasTechnicalStaff'],
                 values: ['Technical Staff '],
+                valuesNe: ['प्राविधिक कर्मचारी'],
                 isBoolean: true,
 
             },
             {
                 label: 'Operational Water Supply Infrastructure',
+                labelNe: 'परिचालित पानी आपूर्ति पूर्वाधार',
                 key: ['isWaterSupplyOperational'],
                 values: ['Operational Water Supply Infrastructure '],
+                valuesNe: ['कार्यात्मक पानी आपूर्ति पूर्वाधार'],
                 isBoolean: true,
 
             },
@@ -832,11 +948,14 @@ const visualizationKeyValues = [
     {
         resourceType: 'roadway',
         visualizationHeading: 'Roadways',
+        visualizationHeadingNe: 'सडक मार्गहरू',
         chartDataType: [
             {
                 label: 'Types of Vehicles',
+                labelNe: 'गाडीका प्रकार',
                 key: 'kindOfVehicle',
                 values: ['Bus', 'Micro', 'Van', 'Other'],
+                valuesNe: ['बस', 'माइक्रो', 'भ्यान', 'अन्य'],
                 isBoolean: false,
             },
         ],
@@ -844,51 +963,66 @@ const visualizationKeyValues = [
     {
         resourceType: 'helipad',
         visualizationHeading: 'Helipad',
+        visualizationHeadingNe: 'हेलिप्याड',
         chartDataType: [
             {
                 label: 'Surface Type of Helipad',
+                labelNe: 'हेलिप्याडको सतह प्रकार',
                 key: 'surfaceType',
                 values: ['Concrete', 'Grass land', 'Dirt surface', 'Other'],
+                valuesNe: ['कंक्रिट', 'घाँस जग्गा', 'माटो सतह', 'अन्य'],
                 isBoolean: false,
             },
             {
                 label: 'Condition of Helipad',
+                labelNe: 'हेलिप्याडको अवस्था',
                 key: 'helipadCondition',
                 values: ['Operational', 'Need Repair', 'Not in working condition'],
+                valuesNe: ['अपरेशनल', 'रिपेयर आवश्यक छ', 'काम गर्ने अवस्थामा छैन'],
                 isBoolean: false,
             },
             {
                 label: 'Wind Direction Indicator Available',
+                labelNe: 'उपलब्ध पवन दिशा सूचक',
                 key: 'windDirectionIndicatorAvailable',
                 values: ['Wind Direction Indicator Available'],
+                valuesNe: ['उपलब्ध पवन दिशा सूचक'],
                 isBoolean: true,
             },
             {
-                label: 'Heli Marker Available ',
+                label: 'Heli Marker Available',
+                labelNe: 'उपलब्ध हेली मार्कर',
                 key: 'heliMarkerAvailable',
-                values: ['Heli Marker Available '],
+                values: ['Heli Marker Available'],
+                valuesNe: ['उपलब्ध हेली मार्कर'],
                 isBoolean: true,
 
             },
             {
                 label: 'Night Lighting Available',
+                labelNe: 'उपलब्ध रात प्रकाश',
                 key: 'nightLightingAvailable',
                 values: ['Night Lighting Available'],
+                valuesNe: ['उपलब्ध रात प्रकाश'],
                 isBoolean: true,
 
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'Number of Employees',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -898,11 +1032,14 @@ const visualizationKeyValues = [
     {
         resourceType: 'waterway',
         visualizationHeading: 'Waterway',
+        visualizationHeadingNe: 'जलमार्ग',
         chartDataType: [
             {
                 label: 'Types of waterways',
+                labelNe: 'जलमार्गका प्रकार',
                 key: 'type',
                 values: ['General Boat', 'Electrical Boat', 'Other'],
+                valuesNe: ['सामान्य डुङ्गा', 'विद्युतीय डुङ्गा', 'अन्य'],
                 isBoolean: false,
             },
 
@@ -912,11 +1049,14 @@ const visualizationKeyValues = [
     {
         resourceType: 'airway',
         visualizationHeading: 'Airway',
+        visualizationHeadingNe: 'वायुमार्ग',
         chartDataType: [
             {
                 label: 'Types of airways',
+                labelNe: 'वायुमार्गका प्रकारहरू',
                 key: 'type',
                 values: ['National', 'International'],
+                valuesNe: ['राष्ट्रिय', 'अन्तर्राष्ट्रिय'],
                 isBoolean: false,
             },
 
@@ -926,11 +1066,14 @@ const visualizationKeyValues = [
     {
         resourceType: 'fireengine',
         visualizationHeading: 'Fire Engine',
+        visualizationHeadingNe: 'दमकल',
         chartDataType: [
             {
                 label: 'Condition of fire engine',
+                labelNe: 'दमकलको अवस्था',
                 key: 'condition',
                 values: ['Operational', 'Need Repair', 'Not in working condition'],
+                valuesNe: ['सञ्चालन', 'मरम्मत आवश्यक', 'काम गर्ने अवस्थामा छैन'],
                 isBoolean: false,
             },
 
@@ -940,11 +1083,14 @@ const visualizationKeyValues = [
     {
         resourceType: 'firefightingapparatus',
         visualizationHeading: 'Fire Fighting Apparatus',
+        visualizationHeadingNe: 'आगो नियनत्रण उपकरण',
         chartDataType: [
             {
                 label: 'Operator Type of fire fighting apparatus',
+                labelNe: 'आगो नियनत्रण उपकरणको अपरेटर को प्रकार',
                 key: 'operatorType',
                 values: ['Private', 'Government', 'Community'],
+                valuesNe: ['निजी', 'सरकारी', 'समुदाय'],
                 isBoolean: false,
             },
             // {
@@ -960,40 +1106,51 @@ const visualizationKeyValues = [
     {
         resourceType: 'evacuationcentre',
         visualizationHeading: 'Evacuation Center',
+        visualizationHeadingNe: 'निकासी केन्द्र',
         chartDataType: [
             {
                 label: 'Government Institution Types',
+                labelNe: 'सरकारी संस्थाका प्रकारहरू',
                 key: 'operatedBy',
                 values: ['Government', 'INGO', 'NGO', 'CSO'],
+                valuesNe: ['सरकार', 'अन्तर्राष्ट्रिय गैर सरकारी संस्था', 'गैर सरकारी संस्था', 'सिएसवो'],
                 isBoolean: false,
 
 
             },
             {
-                label: 'Drinking Water Available ',
+                label: 'Drinking Water Available',
+                labelNe: 'उपलब्ध पिउने पानी',
                 key: 'hasDrinkingWater',
-                values: ['Drinking Water '],
+                values: ['Drinking Water'],
+                valuesNe: ['पिउने पानी'],
                 isBoolean: true,
 
             },
             {
-                label: 'Toilet Available ',
+                label: 'Toilet Available',
+                labelNe: 'उपलब्ध शौचालय',
                 key: 'hasToilet',
-                values: ['Toilet '],
+                values: ['Toilet'],
+                valuesNe: ['शौचालय'],
                 isBoolean: true,
 
             },
             {
-                label: 'Wash Facility Available ',
+                label: 'Wash Facility Available',
+                labelNe: 'उपलब्ध धुने सुविधा',
                 key: 'hasHandWashingFacility',
-                values: ['Wash Facility '],
+                values: ['Wash Facility'],
+                valuesNe: ['धुने सुविधा'],
                 isBoolean: true,
 
             },
             {
-                label: 'Sleeping Facility Available ',
+                label: 'Sleeping Facility Available',
+                labelNe: 'उपलब्ध सुत्ने सुविधा',
                 key: 'hasSleepingFacility',
-                values: ['Sleeping Facility '],
+                values: ['Sleeping Facility'],
+                valuesNe: ['सुत्ने सुविधा'],
                 isBoolean: true,
 
             },
@@ -1004,10 +1161,12 @@ const visualizationKeyValues = [
     {
         resourceType: 'health',
         visualizationHeading: 'Health Institution Category',
+        visualizationHeadingNe: 'स्वास्थ्य संस्था कोटि',
         chartDataType: [
 
             {
                 label: 'Health Institutions Types',
+                labelNe: 'स्वास्थ्य संस्थाका प्रकारहरू',
                 key: 'type',
                 values: ['Specialized Hospital', 'Center Hospital', 'Teaching Hospital',
                     'Regional Hospital', 'Sub Regional Hospital', 'Zonal Hospital',
@@ -1018,11 +1177,21 @@ const visualizationKeyValues = [
                     'Ayurveda Aushadhalaya', 'Homeopathy Hospital', 'Unani Hospital', 'Primary Hospital',
                     'Secondary A Hospital', 'Secondary B Hospital', 'Tertiary Hospital', 'Super Specialized Hospital',
                     'Basic Health Care Center', 'Veterinary', 'Pathology', 'Pharmacy', 'Other'],
+                valuesNe: ['विशेष अस्पताल', 'केन्द्र अस्पताल', 'शिक्षण अस्पताल',
+                    'क्षेत्रीय अस्पताल', 'उपक्षेत्रीय अस्पताल', 'अञ्चल अस्पताल',
+                    'जिल्ला अस्पताल', 'आधारभूत अस्पताल', 'सामान्य अस्पताल', 'प्राथमिक स्वास्थ्य सेवा केन्द्र',
+                    'स्वास्थ्य पोस्ट', 'जिल्ला क्लिनिक (संस्थागत सहित)', 'शहरी स्वास्थ्य केन्द्र', 'सामुदायिक स्वास्थ्य इकाई',
+                    'पोली क्लिनिक', 'क्लिनिक', 'डेन्टल क्लिनिक', 'डायग्नोस्टिक सेन्टर', 'नर्सिङ होम', 'पुनर्वास', 'आयुर्वेद अस्पताल',
+                    'क्षेत्रीय आयुर्वेद औषधालय', 'जिला आयुर्वेद स्वास्थ्य केन्द्र',
+                    'आयुर्वेद औषधालय', 'होमियोप्याथी अस्पताल', 'युनानी अस्पताल', 'प्राथमिक अस्पताल',
+                    'सेकेन्डरी ए अस्पताल', 'सेकेन्डरी बी अस्पताल', 'टर्टियरी अस्पताल', 'सुपर स्पेशलाइज्ड अस्पताल',
+                    'आधारभूत स्वास्थ्य सेवा केन्द्र', 'भेटेनरी', 'प्याथोलोजी', 'फार्मेसी', 'अन्य'],
                 isBoolean: false,
             },
 
             {
                 label: 'Services Available',
+                labelNe: 'उपलब्ध सेवाहरू',
                 key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
                     'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
                     'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
@@ -1034,57 +1203,77 @@ const visualizationKeyValues = [
                     'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
                     'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
                     'Dental', 'Inpatient', 'Radiology'],
+                valuesNe: ['बाल खोप', 'TD खोप', 'IMNCI',
+                    'वृद्धि अनुगमन', 'सुरक्षित मातृत्व', 'परिवार योजना', 'ओपीडी', 'क्षयरोगको उपचार',
+                    'एमडीआर क्षयरोगको उपचार', 'कुष्ठरोगको उपचार',
+                    'औलोको उपचार', 'कालाजारको उपचार', 'जापानीज इन्सेफलाइटिसको उपचार', 'प्रयोगशाला सेवा',
+                    'एचआईभी/एड्सका लागि VCT', 'PMTCT', 'एन्टि-रेट्रो भाइरल उपचार',
+                    'दन्त', 'इनपेन्टल', 'रेडियोलोजी'],
                 isBoolean: false,
 
             },
             {
                 label: 'Surgical Service',
+                labelNe: 'सर्जिकल सेवा',
                 key: ['hasCaesarianSection', 'hasGastrointestinal', 'hasTraumaSurgery', 'hasCardiacSurgery',
                     'hasNeuroSurgery', 'hasPlasticSurgery'],
                 values: ['Caesarian Section', 'Gastro Intestinal', 'Trauma Surgery', 'Cardiac Surgery', 'Neuro Surgery', 'Plastic Surgery'],
+                valuesNe: ['सिजेरियन सेक्शन', 'ग्यास्ट्रो इन्टेस्टाइनल', 'ट्रमा सर्जरी', 'कार्डियाक सर्जरी', 'न्यूरो सर्जरी', 'प्लास्टिक सर्जरी'],
                 isBoolean: false,
 
             },
             {
                 label: 'Specialized Service',
+                labelNe: 'विशेष सेवा',
                 key: ['hasIcu', 'hasCcu', 'hasNicu', 'hasMicu', 'hasSncu', 'hasPicu'],
                 values: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
+                valuesNe: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
                 isBoolean: false,
 
             },
             {
                 label: 'Bed Capacity',
+                labelNe: 'बेड क्षमता',
                 key: ['hospitalBedCount', 'icuBedCount', 'ventilatorBedCount'],
                 values: ['Hospital Bed', 'ICU Bed', 'Ventilator Bed'],
+                valuesNe: ['हस्पिटल बेड', 'आईसीयू बेड', 'भेन्टिलेटर बेड'],
                 isBoolean: false,
 
             },
             {
                 label: 'Helipad Available',
+                labelNe: 'उपलब्ध हेलिप्याड',
                 key: ['hasHelipad'],
                 values: ['Helipad Available'],
+                valuesNe: ['उपलब्ध हेलिप्याड'],
                 isBoolean: false,
 
             },
             {
                 label: 'Open Space Available',
+                labelNe: 'उपलब्ध खुला ठाउँ',
                 key: ['hasOpenSpace'],
                 values: ['Open Space Available'],
+                valuesNe: ['उपलब्ध खुला ठाउँ'],
                 isBoolean: false,
 
             },
             {
                 label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
                 key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
 
             {
                 label: 'Employees with Disability',
+                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
 
             },
@@ -1094,6 +1283,8 @@ const visualizationKeyValues = [
     },
 
 ];
+
+
 const CustomizedLabel = (props) => {
     const { x, y, stroke, value } = props;
 
@@ -1139,7 +1330,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             .filter(item => item.resourceType === resourceType)[0].chartDataType
             .map((datakey) => {
                 const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-                    datakey.isBoolean, datakey.values);
+                    datakey.isBoolean, datakey.values, datakey.valuesNe);
                 return datam;
             });
         const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
@@ -1171,7 +1362,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             .filter(item => item.resourceType === resourceType)[0].chartDataType
             .map((datakey) => {
                 const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-                    datakey.isBoolean, datakey.values);
+                    datakey.isBoolean, datakey.values, datakey.valuesNe);
                 return datam;
             });
         let nullDataCheck = null;
@@ -1195,17 +1386,47 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         }
     }
 
-    private getResourceDataForVisualization = (resourceType, key, isBoolean, label) => {
+    private getResourceDataForVisualization = (resourceType, key, isBoolean, label, labelNe) => {
         const { selectedResourceData } = this.state;
+
+
+        const { language: { language } } = this.props;
         let filteredResourceChartDataType;
         let calculatedValueData;
         let filterDataForCalculation;
+
+        const filterLabelAccToLang = (data, keyMain) => {
+            if (data.length > 0) {
+                const actData = data.filter(item => item.resourceType === resourceType)[0].chartDataType;
+                const chartData = actData.filter(dat => dat.key === key)[0];
+                return chartData[keyMain];
+            }
+            return [];
+        };
+
+        let nepaliKeyVal = {};
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < visualizationKeyValues.length; index++) {
+            const chartData = visualizationKeyValues[index].chartDataType;
+            // eslint-disable-next-line no-plusplus
+            for (let jindex = 0; jindex < chartData.length; jindex++) {
+                const engVal = chartData[jindex].values;
+                const nepaliVal = chartData[jindex].valuesNe;
+                // eslint-disable-next-line no-plusplus
+                for (let k = 0; k < engVal.length; k++) {
+                    const indiVidualData = engVal[k];
+                    const indiVidualDataNep = nepaliVal[k];
+                    nepaliKeyVal[indiVidualDataNep] = indiVidualData;
+                }
+            }
+        }
+
         if (typeof key === 'string') {
-            filteredResourceChartDataType = visualizationKeyValues
-                .filter(item => item.resourceType === resourceType)[0].chartDataType
-                .filter(dat => dat.key === key)[0].values;
+            const keyMain = language === 'en' ? 'values' : 'valuesNe';
+            filteredResourceChartDataType = filterLabelAccToLang(visualizationKeyValues, keyMain);
+
             calculatedValueData = filteredResourceChartDataType.map((item, i) => {
-                filterDataForCalculation = selectedResourceData.filter(d => d[key] === item);
+                filterDataForCalculation = selectedResourceData.filter(d => d[key] === (language === 'en' ? item : nepaliKeyVal[item]));
 
                 if (isBoolean) {
                     filterDataForCalculation = selectedResourceData.filter(d => d[key] === true);
@@ -1215,6 +1436,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 obj.label = item;
                 obj.value = filterDataForCalculation.length;
                 obj.color = '#1A70AC';
+
                 // obj[`${item}`] = filterDataForCalculation.length;
                 return obj;
             });
@@ -1235,7 +1457,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 filterDataForCalculation = selectedResourceData
                     .reduce((acc, curValue) => acc + curValue[item] || 0, 0);
                 const obj = {};
-                obj.label = label[i];
+                obj.label = language === 'en' ? label[i] : labelNe[i];
                 obj.value = filterDataForCalculation;
                 obj.color = '#1A70AC';
                 // obj[`${label[i]}`] = filterDataForCalculation;
@@ -1248,17 +1470,22 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     }
 
     private HighValuePercentageCalculation = (value) => {
-        const { resourceType } = this.props;
+        const { resourceType, language: { language } } = this.props;
         const labelName = visualizationKeyValues
             .filter(item => item.resourceType === resourceType)[0].chartDataType;
         const HighestValue = value.map((item, i) => {
             const highValueObject = item.reduce((a, b) => (a.value > b.value ? a : b));
 
+            // console.log(value, 'obj');
+
             const totalSum = item.reduce((a, b) => a + b.value || 0, 0);
 
 
             const highValuePercentage = totalSum === 0 ? 0 : ((highValueObject.value / totalSum) * 100).toFixed(2);
-            const subCategoryName = labelName[i].label;
+            const subCategoryName = language === 'en' ? labelName[i].label : labelName[i].labelNe;
+
+            // console.log(highValueObject, 'sub cat');
+
             return ({
                 category: subCategoryName,
                 subCategoryName: highValueObject.label,
@@ -1303,12 +1530,11 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             language: { language } } = this.props;
         const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
 
-
         const labelName = visualizationKeyValues
             .filter(item => item.resourceType === resourceType)[0].chartDataType;
 
         const HighValuePercentageCalculation = this.HighValuePercentageCalculation(GraphVisualizationData);
-        const { visualizationHeading } = visualizationKeyValues
+        const { visualizationHeading, visualizationHeadingNe } = visualizationKeyValues
             .filter(item => item.resourceType === resourceType)[0];
 
         const selectedImage = sidepanelLogo.filter(data => data.name === selectedCategoryName)[0].image;
@@ -1408,7 +1634,13 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                                                             src={selectedImage}
                                                         />
-                                                        <h3>{visualizationHeading}</h3>
+                                                        <h3>
+                                                            {language === 'en'
+                                                                ? visualizationHeading
+                                                                : visualizationHeadingNe
+                                                            }
+
+                                                        </h3>
                                                     </div>
                                                     {/* <div
                 style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
@@ -1451,24 +1683,53 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                                                                                     {HighValuePercentageCalculation[i].category !== HighValuePercentageCalculation[i].subCategoryName ? (
                                                                                         <>
-                                                                                            <span>
-                                                                                                {HighValuePercentageCalculation[i].category}
-                                                                                                {' '}
-                                                                                                are
-                                                                                                {' '}
-                                                                                                {HighValuePercentageCalculation[i].subCategoryName}
-                                                                                                {' '}
-                                                                                            </span>
+
+                                                                                            {
+                                                                                                language === 'en'
+                                                                                                    ? (
+                                                                                                        <span>
+                                                                                                            {HighValuePercentageCalculation[i].category}
+                                                                                                            {' '}
+                                                                                                            are
+                                                                                                            {' '}
+                                                                                                            {HighValuePercentageCalculation[i].subCategoryName}
+                                                                                                            {' '}
+                                                                                                        </span>
+                                                                                                    )
+                                                                                                    : (
+                                                                                                        <span>
+                                                                                                            {HighValuePercentageCalculation[i].category}
+                                                                                                            {' '}
+                                                                                                            {HighValuePercentageCalculation[i].subCategoryName}
+                                                                                                            {' '}
+                                                                                                            छन
+                                                                                                        </span>
+                                                                                                    )
+
+                                                                                            }
+
 
                                                                                         </>
                                                                                     ) : (
-                                                                                        <span>
-                                                                                            {' '}
-                                                                                            {HighValuePercentageCalculation[i].category}
-                                                                                            {''}
-                                                                                            are available
 
-                                                                                        </span>
+                                                                                        language === 'en'
+                                                                                            ? (
+                                                                                                <span>
+                                                                                                    {' '}
+                                                                                                    {HighValuePercentageCalculation[i].category}
+                                                                                                    {''}
+                                                                                                    are available
+
+                                                                                                </span>
+                                                                                            )
+                                                                                            : (
+                                                                                                <span>
+                                                                                                    {' '}
+                                                                                                    {HighValuePercentageCalculation[i].category}
+                                                                                                    {''}
+                                                                                                    उपलब्ध छन
+                                                                                                </span>
+                                                                                            )
 
                                                                                     )}
 
@@ -1485,7 +1746,13 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                                             /> */}
                                                                                         <div id={labelName[i].label}>
                                                                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                                <h3>{labelName[i].label}</h3>
+                                                                                                <h3>
+                                                                                                    {
+                                                                                                        language === 'en'
+                                                                                                            ? labelName[i].label
+                                                                                                            : labelName[i].labelNe}
+
+                                                                                                </h3>
                                                                                                 <Button
                                                                                                     title="Download Chart"
                                                                                                     className={styles.chartDownload}
@@ -1508,10 +1775,28 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                                                             ))}
                                                             {!pendingAPICall && (resourceCollection[resourceType]).length === 0
-                                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                                ? (
+                                                                    <h2 style={{ textAlign: 'center' }}>
+                                                                        {
+                                                                            language === 'en'
+                                                                                ? 'No Data Available for Visualization'
+                                                                                : 'भिजुअलाइजेसनको लागि कुनै डाटा उपलब्ध छैन'
+
+                                                                        }
+                                                                    </h2>
+                                                                )
                                                                 : ''}
                                                             {allDataNullConditionCheck
-                                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                                ? (
+                                                                    <h2 style={{ textAlign: 'center' }}>
+                                                                        {
+                                                                            language === 'en'
+                                                                                ? 'No Data Available for Visualization'
+                                                                                : 'भिजुअलाइजेसनको लागि कुनै डाटा उपलब्ध छैन'
+
+                                                                        }
+                                                                    </h2>
+                                                                )
                                                                 : ''}
                                                         </div>
                                                     )}
