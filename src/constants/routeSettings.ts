@@ -131,6 +131,14 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
     },
     {
+        name: 'incident-upload',
+        title: 'Incident Bulk Upload',
+        path: '/admin/incident/incident-bulk-upload',
+        load: () => import('../admin/views/IncidentBulkUpload'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
         name: 'epidemics-data-table',
         title: 'Epidemics Data Table',
         path: '/admin/epidemics/epidemics-data-table',

@@ -1464,39 +1464,38 @@ const Epidemics = (props) => {
                                 </LocalizationProvider>
 
                             </div>
-                            { }
-                            <FormControl fullWidth>
-                                <InputLabel id="district-label">Hazard</InputLabel>
-                                <Select
-                                    labelId="hazard"
-                                    id="hazard-select"
-                                    value={hazardList.length ? selectedHazardName : ''}
-                                    label="Hazard"
-                                    onChange={handleSelectedHazard}
+                            <div className={styles.twoInputSections}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="hazard-label">Hazard</InputLabel>
+                                    <Select
+                                        labelId="hazard"
+                                        id="hazard-select"
+                                        value={hazardList.length ? selectedHazardName : ''}
+                                        label="Hazard"
+                                        onChange={handleSelectedHazard}
+                                    >
+                                        {hazardList.length && hazardList.map(
+                                            item => (
+                                                <MenuItem
+                                                    key={item.id}
+                                                    value={item.title}
+                                                >
+                                                    {item.title}
+                                                </MenuItem>
+                                            ),
+                                        )}
+                                    </Select>
+                                </FormControl>
+                                <TextField
+                                    required
+                                    id="outlined-basic"
+                                    label="Hazard Inducer"
+                                    variant="outlined"
 
-                                >
-                                    {hazardList.length && hazardList.map(
-                                        item => (
-                                            <MenuItem
-                                                key={item.id}
-                                                value={item.title}
-                                            >
-                                                {item.title}
-                                            </MenuItem>
-                                        ),
-                                    )}
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                required
-                                id="outlined-basic"
-                                label="Hazard Inducer"
-                                variant="outlined"
-                                className={styles.hazardInducer}
-                                value={cause}
-                                onChange={e => setCause(e.target.value)}
-                            />
-
+                                    value={cause}
+                                    onChange={e => setCause(e.target.value)}
+                                />
+                            </div>
                             <div className={styles.infoBar}>
                                 <p className={styles.instInfo}>
                                     <span style={{ color: '#003572' }} />

@@ -30,7 +30,7 @@ import {
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    wardsSelector
+    wardsSelector,
 } from '#selectors';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';

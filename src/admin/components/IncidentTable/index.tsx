@@ -284,6 +284,7 @@ const IncidentTable = (props) => {
         const objective = hazardList[obj];
         array.push(objective);
     }
+
     const hazardNameSelected = id => (array.length && (array.find(i => i.id === id)).title);
 
     useEffect(() => {
@@ -356,7 +357,6 @@ const IncidentTable = (props) => {
         const checkboxCondition = !!selected.find(i => i === id);
         return checkboxCondition;
     };
-
     const Dataforcsv = () => {
         const csvData = filteredRowData && filteredRowData
             .map((item) => {
@@ -389,7 +389,7 @@ const IncidentTable = (props) => {
                     item.wards[0].title,
                     item.streetAddress,
                     date,
-                    hazardNameSelected(item.hazard),
+                    item.hazard,
                     item.cause,
                     item.totalInjuredMale,
                     item.totalInjuredFemale,
