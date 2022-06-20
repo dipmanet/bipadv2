@@ -159,7 +159,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 
 const labelSelector = (d: PageType.Field) => d.title;
 const typeSelector = (d: PageType.Field) => d.type;
-const selectLabel = (d: PageType.Field) => d.label;
+const selectLabel = (d: PageType.Field, language: string) => (language === 'en' ? d.label : d.labelNe);
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     addResourcePostRequest: {
@@ -980,13 +980,14 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     faramElementName="resourceType"
                                     options={resourceTypeList}
                                     keySelector={labelSelector}
-                                    labelSelector={selectLabel}
+                                    labelSelector={d => selectLabel(d, language)}
                                     label={t('Resource Type')}
                                     autoFocus
                                     disabled={isDefined(resourceId)}
                                     className={styles.resourceType}
                                     optionsClassName={styles.optionsClassName}
                                     iconName={'capResAddFormDropdown'}
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
 
 
                                 />
@@ -997,19 +998,19 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     label={t('Name')}
                                 />
                                 {faramValues.resourceType === 'industry'
-                            && (
-                                <SelectInput
-                                    addResourceDropdown={'capResAddFormDropdown'}
-                                    faramElementName="type"
-                                    options={industryTypeField}
-                                    keySelector={typeSelector}
-                                    labelSelector={typeSelector}
-                                    label={t('Type')}
-                                    autoFocus
-                                    optionsClassName={styles.optionsClassName}
-                                    iconName={'capResAddFormDropdown'}
-                                />
-                            )
+                                    && (
+                                        <SelectInput
+                                            addResourceDropdown={'capResAddFormDropdown'}
+                                            faramElementName="type"
+                                            options={industryTypeField}
+                                            keySelector={typeSelector}
+                                            labelSelector={typeSelector}
+                                            label={t('Type')}
+                                            autoFocus
+                                            optionsClassName={styles.optionsClassName}
+                                            iconName={'capResAddFormDropdown'}
+                                        />
+                                    )
 
                                 }
 
@@ -1021,9 +1022,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                         keySelector={typeSelector}
                                         labelSelector={typeSelector}
                                         label={(faramValues.resourceType
-                                    === 'health') ? t('Facility Type') : faramValues.resourceType
-                                        === 'electricity' ? (language === 'en' ? 'Component' : 'प्रकार') : faramValues.resourceType
-                                            === 'watersupply' ? 'Scale' : t('Type')}
+                                            === 'health') ? t('Facility Type') : faramValues.resourceType
+                                                === 'electricity' ? (language === 'en' ? 'Component' : 'प्रकार') : faramValues.resourceType
+                                                    === 'watersupply' ? 'Scale' : t('Type')}
                                         autoFocus
                                         optionsClassName={styles.optionsClassName}
                                         iconName={'capResAddFormDropdown'}
@@ -1032,22 +1033,22 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                 }
 
                                 {faramValues.type === 'Other'
-                            && (
-                                <TextInput
-                                    faramElementName="otherType"
-                                    label="If type is not mentioned above (other), name it here"
-                                />
+                                    && (
+                                        <TextInput
+                                            faramElementName="otherType"
+                                            label="If type is not mentioned above (other), name it here"
+                                        />
 
-                            )
+                                    )
                                 }
                                 {faramValues.components === 'Other'
-                            && (
-                                <TextInput
-                                    faramElementName="otherComponents"
-                                    label="If component is not mentioned above (other), name it here"
-                                />
+                                    && (
+                                        <TextInput
+                                            faramElementName="otherComponents"
+                                            label="If component is not mentioned above (other), name it here"
+                                        />
 
-                            )
+                                    )
                                 }
                                 {faramValues.type === 'Fire Engine'
                                     ? (
@@ -1075,45 +1076,45 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                 }
                                 {
                                     resourceType && (
-                                    <>
-                                        <ExtraFields
-                                            title={resourceType}
-                                            resourceEnums={resourceEnums}
-                                            resourceId={resourceId}
-                                            faramValues={faramValues}
-                                            closeModal={closeModal}
-                                            addResourcePostRequest={addResourcePostRequest}
-                                            iconName={'capResAddFormDropdown'}
-                                            LoadingSuccessHalt={this.LoadingSuccessHalt}
-                                            addResourcePending={addResourcePending}
-                                            faramValueSetNull={this.faramValueSetNull}
-                                            optionsClassName={styles.optionsClassName}
-                                            handleFaramValidationFailure={this.handleFaramValidationFailure}
-                                            handleClearDataAfterAddition={handleClearDataAfterAddition}
-                                        />
-                                        {((faramValues.resourceType === 'communityspace') || (faramValues.resourceType === 'openspace'))
+                                        <>
+                                            <ExtraFields
+                                                title={resourceType}
+                                                resourceEnums={resourceEnums}
+                                                resourceId={resourceId}
+                                                faramValues={faramValues}
+                                                closeModal={closeModal}
+                                                addResourcePostRequest={addResourcePostRequest}
+                                                iconName={'capResAddFormDropdown'}
+                                                LoadingSuccessHalt={this.LoadingSuccessHalt}
+                                                addResourcePending={addResourcePending}
+                                                faramValueSetNull={this.faramValueSetNull}
+                                                optionsClassName={styles.optionsClassName}
+                                                handleFaramValidationFailure={this.handleFaramValidationFailure}
+                                                handleClearDataAfterAddition={handleClearDataAfterAddition}
+                                            />
+                                            {((faramValues.resourceType === 'communityspace') || (faramValues.resourceType === 'openspace'))
 
-                                            ? (
-                                                ''
-                                            ) : (
-                                                <LocationInput
-                                                    // className={styles.locationInput}
-                                                    faramElementName="location"
-                                                    classCategory={styles.locationInput}
-                                                    category={'capacityResource'}
-                                                />
-                                            )}
-                                    </>
+                                                ? (
+                                                    ''
+                                                ) : (
+                                                    <LocationInput
+                                                        // className={styles.locationInput}
+                                                        faramElementName="location"
+                                                        classCategory={styles.locationInput}
+                                                        category={'capacityResource'}
+                                                    />
+                                                )}
+                                        </>
                                     )
                                 }
 
                                 {/* </ModalBody> */}
                                 {
                                     !hideButtons && (
-                                    // <ModalFooter className={styles.footer}>
-                                    //     <DangerButton onClick={closeModal}>
-                                    // Close
-                                    //     </DangerButton>
+                                        // <ModalFooter className={styles.footer}>
+                                        //     <DangerButton onClick={closeModal}>
+                                        // Close
+                                        //     </DangerButton>
                                         <div className={pristine
                                             ? styles.submitButnDisabled : styles.submitButn}
                                         >
@@ -1125,7 +1126,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                                 {t('Submit Changes')}
                                             </PrimaryButton>
                                         </div>
-                                    // </ModalFooter>
+                                        // </ModalFooter>
                                     )}
                             </Faram>
                         </>
