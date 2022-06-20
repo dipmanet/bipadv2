@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { extent } from 'd3-array';
 import memoize from 'memoize-one';
@@ -15,6 +17,9 @@ import {
     Legend,
 } from 'recharts';
 
+import { Translation } from 'react-i18next';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
@@ -50,6 +55,7 @@ import Loading from '#components/Loading';
 import ClimateChangeTable from './ClimateChangeTable';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 const DataTableModalButton = modalize(Button);
 
@@ -120,6 +126,7 @@ interface State {
 interface TimePeriod {
     key: string;
     label: string;
+    labelNe: string;
     startYear: number;
     endYear: number;
 }
@@ -129,41 +136,71 @@ interface MapState {
     value: number;
 }
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+const labelSelector = (d, language) => (language === 'en' ? d.label : d.labelNe);
+
 const measurementOptions: {
     key: MeasurementType;
     label: 'Temperature' | 'Precipitation';
     legendTitle: string;
     axisLabel: string;
     chartTitle: string;
+    chartTitleNe: string;
+    labelNe: string;
 }[] = [
-    {
-        key: 'temperature',
-        label: 'Temperature',
-        axisLabel: 'Temperature (°C)',
-        legendTitle: 'Temperature (°C)',
-        chartTitle: 'Ensemble Mean of Annual Temperature of',
-    },
-    {
-        key: 'precipitation',
-        label: 'Precipitation',
-        axisLabel: 'Precipitation (mm/year)',
-        legendTitle: 'Precipitation (mm/year)',
-        chartTitle: 'Ensemble Mean of Annual Temperature of',
-    },
-];
+        {
+            key: 'temperature',
+            label: 'Temperature',
+            labelNe: 'तापमान',
+            axisLabel: 'Temperature (°C)',
+            legendTitle: 'Temperature (°C)',
+            chartTitle: 'Ensemble Mean of Annual Temperature of',
+            chartTitleNe: 'वार्षिक तापमान को एन्सेम्बल मीन',
+        },
+        {
+            key: 'precipitation',
+            label: 'Precipitation',
+            labelNe: 'वर्षा',
+            axisLabel: 'Precipitation (mm/year)',
+            legendTitle: 'Precipitation (mm/year)',
+            chartTitle: 'Ensemble Mean of Annual Temperature of',
+            chartTitleNe: 'वार्षिक तापमान को एन्सेम्बल मीन',
+        },
+    ];
 
 const timePeriodOptions: TimePeriod[] = [
-    { key: 'reference-period', label: 'Reference period (1981-2010)', startYear: 1981, endYear: 2010 },
-    { key: 'medium-term', label: 'Medium term (2016-2045)', startYear: 2016, endYear: 2045 },
-    { key: 'long-term', label: 'Long Term (2036-2065)', startYear: 2036, endYear: 2065 },
+    {
+        key: 'reference-period',
+        label: 'Reference period (1981-2010)',
+        labelNe: 'सन्दर्भ अवधि (१९८१-२०१०)',
+        startYear: 1981,
+        endYear: 2010,
+    },
+    {
+        key: 'medium-term',
+        label: 'Medium term (2016-2045)',
+        labelNe: 'मध्यम अवधि (२०१६-२०४५)',
+        startYear: 2016,
+        endYear: 2045,
+    },
+    {
+        key: 'long-term',
+        label: 'Long Term (2036-2065)',
+        labelNe: 'दीर्घकालीन (२०३६-२०६५)',
+        startYear: 2036,
+        endYear: 2065,
+    },
 ];
 
 const scenarioOptions: Scenario[] = [
-    { key: 'rcp45', label: 'RCP 4.5' },
-    { key: 'rcp85', label: 'RCP 8.5' },
+    { key: 'rcp45', label: 'RCP 4.5', labelNe: 'RCP ४.५' },
+    { key: 'rcp85', label: 'RCP 8.5', labelNe: 'RCP ८.५' },
 ];
 
-const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     napTemperatureGetRequest: {
         url: '/nap-temperature/?region=district',
         method: methods.GET,
@@ -226,7 +263,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         }
     }
 
-    private handleSetScenario =(scenario: string) => {
+    private handleSetScenario = (scenario: string) => {
         this.setState({
             scenario,
         });
@@ -341,13 +378,13 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const napData = (measurementType === 'temperature') ? temperature : precipitation;
 
         const timePeriod = timePeriodOptions.find(option => option.key === timePeriodKey)
-                        || timePeriodOptions[0];
+            || timePeriodOptions[0];
         const { startYear, endYear } = timePeriod;
         const {
             startYear: referenceStart,
             endYear: referenceEnd,
         } = timePeriodOptions.find(option => option.key === 'reference-period')
-         || timePeriodOptions[0];
+            || timePeriodOptions[0];
 
         const filter = ({ year }: NapValue) => (year >= startYear && year <= endYear);
         const referenceFilter = ({ year }: NapValue) => (
@@ -530,7 +567,10 @@ class ClimateChange extends React.PureComponent<Props, State> {
             className,
             requests,
             layerGroupList,
+            language: { language },
         } = this.props;
+
+        console.log(layerGroupList, 'test');
 
         const {
             timePeriodKey,
@@ -542,6 +582,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
         } = this.state;
         const { climateChangeSelectedDistrict } = this.context;
 
+        console.log(climateChangeSelectedDistrict, 'district');
+
 
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
@@ -550,235 +592,249 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
         const chartName = climateChangeSelectedDistrict.title || 'Nepal';
-        const chartTitle = selectedOption && `${selectedOption.chartTitle} ${chartName}`;
+        const chartTitle = selectedOption
+            && language === 'en' ? `${selectedOption.chartTitle} ${chartName}`
+            : `नेपालको ${selectedOption.chartTitleNe} `;
         const chartData = this.getChartData(measurementType, climateChangeSelectedDistrict.id);
 
         const rawData = measurementType === 'temperature' ? temperature : precipitation;
         const flatData = this.getFlatData(rawData);
         const layer = this.getLayer(layerGroupList, measurementType);
 
-
         return (
             <>
                 <Loading pending={pending} />
-                <div className={_cs(styles.climateChange, className)}>
-                    <div className={styles.header}>
-                        <Switch
-                            disabled={pending}
-                            className={styles.switch}
-                            on
-                            off={false}
-                            value={isActive}
-                            onChange={this.handleChange}
-                        />
-                        <div className={styles.title}>
-                            Climate change
-                        </div>
-                        {!pending && (
-                            <>
-                                <DataTableModalButton
-                                    className={styles.showDataTableButton}
-                                    modal={(
-                                        <ClimateChangeTable
-                                            data={flatData}
-                                            title={measurementType}
-                                        />
-                                    )}
-                                    initialShowModal={false}
-                                    iconName="table"
-                                    transparent
-                                    disabled={pending}
-                                />
-                                <LayerDetailModalButton
-                                    className={styles.showLayerDetailsButton}
-                                    layer={layer}
-                                />
-                            </>
-                        )}
-                    </div>
-                    <div className={styles.shortDescription}>
-                        { layer.shortDescription }
-                    </div>
-                    <div className={styles.top}>
-                        <SegmentInput
-                            className={styles.measurementTypeInput}
-                            label="Measurement"
-                            disabled={pending || !isActive}
-                            options={measurementOptions}
-                            value={measurementType}
-                            onChange={this.handleSetMeasurementType}
-                        />
-                        <SelectInput
-                            className={styles.timePeriodInput}
-                            label="Time period"
-                            disabled={pending || !isActive}
-                            options={timePeriodOptions}
-                            value={timePeriodKey}
-                            onChange={this.handleSetTimePeriod}
-                            hideClearButton
-                        />
-                        <SegmentInput
-                            className={styles.scenarioInput}
-                            label="Scenario"
-                            disabled={pending || !isActive}
-                            options={scenarioOptions}
-                            value={scenario}
-                            onChange={this.handleSetScenario}
-                        />
-                    </div>
-                    <div className={styles.externalLinks}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Links from Climate Scenarios from Nepal (NAP)
-                            </h4>
-                        </header>
-                        <div className={styles.content}>
-                            <a
-                                className={styles.externalLink}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                href="http://rds.icimod.org/Home/DataDetail?metadataId=36003"
-                            >
-                                <Icon
-                                    className={styles.icon}
-                                    name="externalLink"
-                                />
-                                <div className={styles.text}>
-                                    Temperature data
-                                </div>
-                            </a>
-                            <a
-                                className={styles.externalLink}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                href="http://rds.icimod.org/Home/DataDetail?metadataId=36002"
-                            >
-                                <Icon
-                                    className={styles.icon}
-                                    name="externalLink"
-                                />
-                                <div className={styles.text}>
-                                    Precipitation data
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    { !pending && isActive && (
-                        <div
-                            className={styles.bottom}
-                            id="climateChange"
-                        >
-                            <div className={styles.heading}>
+
+                <Translation>
+                    {
+                        t => (
+                            <div className={_cs(styles.climateChange, className)}>
                                 <div className={styles.header}>
-                                    {chartTitle}
+                                    <Switch
+                                        disabled={pending}
+                                        className={styles.switch}
+                                        on
+                                        off={false}
+                                        value={isActive}
+                                        onChange={this.handleChange}
+                                    />
+                                    <div className={styles.title}>
+                                        {t('Climate change')}
+                                    </div>
+                                    {!pending && (
+                                        <>
+                                            <DataTableModalButton
+                                                className={styles.showDataTableButton}
+                                                modal={(
+                                                    <ClimateChangeTable
+                                                        data={flatData}
+                                                        title={measurementType}
+                                                    />
+                                                )}
+                                                initialShowModal={false}
+                                                iconName="table"
+                                                transparent
+                                                disabled={pending}
+                                            />
+                                            <LayerDetailModalButton
+                                                className={styles.showLayerDetailsButton}
+                                                layer={layer}
+                                            />
+                                        </>
+                                    )}
                                 </div>
-                                { climateChangeSelectedDistrict.id && (
-                                    <Button
-                                        className={styles.button}
-                                        onClick={this.handleDistrictUnselect}
-                                        transparent
+                                <div className={styles.shortDescription}>
+                                    {layer.shortDescription}
+                                </div>
+                                <div className={styles.top}>
+                                    <SegmentInput
+                                        className={styles.measurementTypeInput}
+                                        label={t('Measurement')}
+                                        disabled={pending || !isActive}
+                                        options={measurementOptions}
+                                        labelSelector={d => labelSelector(d, language)}
+                                        value={measurementType}
+                                        onChange={this.handleSetMeasurementType}
+                                    />
+                                    <SelectInput
+                                        className={styles.timePeriodInput}
+                                        label={t('Time period')}
+                                        disabled={pending || !isActive}
+                                        options={timePeriodOptions}
+                                        labelSelector={d => labelSelector(d, language)}
+                                        value={timePeriodKey}
+                                        onChange={this.handleSetTimePeriod}
+                                        hideClearButton
+                                    />
+                                    <SegmentInput
+                                        className={styles.scenarioInput}
+                                        label={t('Scenario')}
+                                        disabled={pending || !isActive}
+                                        options={scenarioOptions}
+                                        value={scenario}
+                                        onChange={this.handleSetScenario}
+                                    />
+                                </div>
+                                <div className={styles.externalLinks}>
+                                    <header className={styles.header}>
+                                        <h4 className={styles.heading}>
+                                            {t('Links from Climate Scenarios from Nepal (NAP)')}
+                                        </h4>
+                                    </header>
+                                    <div className={styles.content}>
+                                        <a
+                                            className={styles.externalLink}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                            href="http://rds.icimod.org/Home/DataDetail?metadataId=36003"
+                                        >
+                                            <Icon
+                                                className={styles.icon}
+                                                name="externalLink"
+                                            />
+                                            <div className={styles.text}>
+                                                {t('Temperature data')}
+                                            </div>
+                                        </a>
+                                        <a
+                                            className={styles.externalLink}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                            href="http://rds.icimod.org/Home/DataDetail?metadataId=36002"
+                                        >
+                                            <Icon
+                                                className={styles.icon}
+                                                name="externalLink"
+                                            />
+                                            <div className={styles.text}>
+                                                {t('Precipitation data')}
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                {!pending && isActive && (
+                                    <div
+                                        className={styles.bottom}
+                                        id="climateChange"
                                     >
-                                        Show National Data
-                                    </Button>
+                                        <div className={styles.heading}>
+                                            <div className={styles.header}>
+                                                {chartTitle}
+                                            </div>
+                                            {climateChangeSelectedDistrict.id && (
+                                                <Button
+                                                    className={styles.button}
+                                                    onClick={this.handleDistrictUnselect}
+                                                    transparent
+                                                >
+                                                    {t('Show National Data')}
+                                                </Button>
+                                            )}
+                                            <Button
+                                                title="Download Chart"
+                                                transparent
+                                                onClick={this.handleSaveClick}
+                                                iconName="download"
+                                            />
+                                        </div>
+                                        <ResponsiveContainer className={styles.chart}>
+                                            <ComposedChart
+                                                data={chartData}
+                                                margin={{
+                                                    top: 15,
+                                                    right: 5,
+                                                    left: 5,
+                                                    bottom: 15,
+                                                }}
+                                            >
+                                                <XAxis
+                                                    dataKey="year"
+                                                    type="number"
+                                                    scale="time"
+                                                    domain={['dataMin', 'dataMax']}
+                                                    angle={-30}
+                                                >
+                                                    <Label
+                                                        value="Year"
+                                                        offset={-5}
+                                                        position="insideBottom"
+                                                    />
+                                                </XAxis>
+                                                <YAxis
+                                                    type="number"
+                                                    domain={['auto', 'auto']}
+                                                    padding={{ top: 5, bottom: 0 }}
+                                                >
+                                                    <Label
+                                                        value={yAxisLabel}
+                                                        angle={270}
+                                                        offset={-10}
+                                                        position="left"
+                                                        style={{ textAnchor: 'middle' }}
+                                                    />
+                                                </YAxis>
+                                                <Tooltip
+                                                    labelFormatter={value => `Year: ${value}`}
+                                                />
+                                                <Legend
+                                                    verticalAlign="top"
+                                                    wrapperStyle={{
+                                                        marginTop: '-16px',
+                                                    }}
+                                                />
+                                                <Area
+                                                    type="monotone"
+                                                    dataKey="SD RCP 8.5"
+                                                    fill="#f45b5b"
+                                                    fillOpacity={0.3}
+                                                    stroke="none"
+                                                    legendType="square"
+                                                />
+                                                <Area
+                                                    type="monotone"
+                                                    dataKey="SD RCP 4.5"
+                                                    fill="#7cb5ec"
+                                                    fillOpacity={0.3}
+                                                    stroke="none"
+                                                    legendType="square"
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="Reference Period"
+                                                    stroke="#434348"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="RCP 8.5"
+                                                    stroke="#e41a1c"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="RCP 4.5"
+                                                    stroke="#1f78b4"
+                                                    dot={false}
+                                                />
+                                            </ComposedChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 )}
-                                <Button
-                                    title="Download Chart"
-                                    transparent
-                                    onClick={this.handleSaveClick}
-                                    iconName="download"
-                                />
                             </div>
-                            <ResponsiveContainer className={styles.chart}>
-                                <ComposedChart
-                                    data={chartData}
-                                    margin={{
-                                        top: 15,
-                                        right: 5,
-                                        left: 5,
-                                        bottom: 15,
-                                    }}
-                                >
-                                    <XAxis
-                                        dataKey="year"
-                                        type="number"
-                                        scale="time"
-                                        domain={['dataMin', 'dataMax']}
-                                        angle={-30}
-                                    >
-                                        <Label
-                                            value="Year"
-                                            offset={-5}
-                                            position="insideBottom"
-                                        />
-                                    </XAxis>
-                                    <YAxis
-                                        type="number"
-                                        domain={['auto', 'auto']}
-                                        padding={{ top: 5, bottom: 0 }}
-                                    >
-                                        <Label
-                                            value={yAxisLabel}
-                                            angle={270}
-                                            offset={-10}
-                                            position="left"
-                                            style={{ textAnchor: 'middle' }}
-                                        />
-                                    </YAxis>
-                                    <Tooltip
-                                        labelFormatter={value => `Year: ${value}`}
-                                    />
-                                    <Legend
-                                        verticalAlign="top"
-                                        wrapperStyle={{
-                                            marginTop: '-16px',
-                                        }}
-                                    />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="SD RCP 8.5"
-                                        fill="#f45b5b"
-                                        fillOpacity={0.3}
-                                        stroke="none"
-                                        legendType="square"
-                                    />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="SD RCP 4.5"
-                                        fill="#7cb5ec"
-                                        fillOpacity={0.3}
-                                        stroke="none"
-                                        legendType="square"
-                                    />
-                                    <Line
-                                        strokeWidth={2}
-                                        type="monotone"
-                                        dataKey="Reference Period"
-                                        stroke="#434348"
-                                        dot={false}
-                                    />
-                                    <Line
-                                        strokeWidth={2}
-                                        type="monotone"
-                                        dataKey="RCP 8.5"
-                                        stroke="#e41a1c"
-                                        dot={false}
-                                    />
-                                    <Line
-                                        strokeWidth={2}
-                                        type="monotone"
-                                        dataKey="RCP 4.5"
-                                        stroke="#1f78b4"
-                                        dot={false}
-                                    />
-                                </ComposedChart>
-                            </ResponsiveContainer>
-                        </div>
-                    )}
-                </div>
+                        )
+                    }
+                </Translation>
+
             </>
         );
     }
 }
 
 ClimateChange.contextType = RiskInfoLayerContext;
-export default createRequestClient(requestOptions)(ClimateChange);
+export default compose(
+    connect(mapStateToProps),
+    createRequestClient(requestOptions),
+)(ClimateChange);

@@ -205,6 +205,7 @@ export interface LegendItem {
 export interface Scenario {
     key: string;
     label: string;
+    labelNe: string;
 }
 
 export interface RiskData {

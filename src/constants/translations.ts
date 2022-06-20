@@ -1,5 +1,16 @@
 export const enTranslation = {
     translation: {
+        Measurement: 'Measurement',
+        'Time period': 'Time period',
+        Scenario: 'Scenario',
+        'Precipitation data': 'Precipitation data',
+        'Temperature data': 'Temperature data',
+        'Show National Data': 'Show National Data',
+        'Links from Climate Scenarios from Nepal (NAP)': 'Links from Climate Scenarios from Nepal (NAP)',
+
+        'Climate change': 'Climate change',
+        Layers: 'Layers',
+        'Show visualizations': 'Show visualizations',
         DATASET: 'DATASET',
         VISUALIZATION: 'VISUALIZATION',
         'Layer details': 'Layer details',
@@ -796,6 +807,17 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Measurement: 'मापन',
+        'Time period': 'समय अवधि',
+        Scenario: 'परिदृश्य',
+        'Precipitation data': 'वर्षा डेटा',
+        'Temperature data': 'तापक्रम डेटा',
+        'Show National Data': 'राष्ट्रिय डाटा देखाउनुहोस्',
+        'Links from Climate Scenarios from Nepal (NAP)': 'नेपालबाट जलवायु परिदृश्य (NAP) को लिङ्कहरू',
+
+        'Climate change': 'जलवायु परिवर्तन',
+        Layers: 'तहहरू',
+        'Show visualizations': 'भिजुअलाइजेशन हेर्नुहोस',
         DATASET: 'डाटासेट',
         VISUALIZATION: 'भिजुअलाइजेशन',
         'Layer details': 'तह विवरण',
