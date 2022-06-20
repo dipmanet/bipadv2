@@ -202,7 +202,15 @@ const TableData = ({ selectedResourceData, resourceType, language: { language } 
             .exportFile();
     });
 
-    const Export = ({ onExport }) => <button className={styles.downloadButton} type="button" onClick={e => onExport(e.target.value)}>Download</button>;
+    const Export = ({ onExport }) => (
+        <button className={styles.downloadButton} type="button" onClick={e => onExport(e.target.value)}>
+            {
+                language === 'en'
+                    ? 'Download'
+                    : 'डाउनलोड गर्नुहोस्'
+            }
+        </button>
+    );
     // const Export = ({ onExport }) => <DownloadButton onClick={e => onExport(e.target.value)}>Download</DownloadButton>;
 
 
