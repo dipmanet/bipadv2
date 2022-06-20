@@ -1,0 +1,49 @@
+.containerToggle {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 40px;
+    left: 5%;
+
+    .toggleDiv {
+        display: flex;
+        justify-content: center;
+        height: 35px;
+        width: 15px;
+        background-color: black;
+        border-radius: 10px;
+        cursor: pointer;
+        outline: none;
+        border: none;
+
+        .circle {
+            position: relative;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 2px 0px;
+            transition: all 0.15s ease-in
+        }
+
+        .circleMove {
+            @extend .circle;
+            top: 21px;
+            margin: 1px 0px;
+            transition: all 0.15s ease-in;
+        }
+    }
+
+    .textSection {
+        .textLabel {
+            margin: 0 5px;
+
+            &:first-child {
+                padding-bottom: 4px;
+            }
+        }
+
+
+    }
+}

@@ -1,0 +1,156 @@
+export const vzRiskProvinceData = [
+    {
+        type: 'provincial-visrisk',
+        name: 'province2',
+        visriskType: 'Multihazard',
+        id: 2,
+        color: 'red',
+        bbox: [],
+        center: [],
+        value: true,
+    },
+    {
+        type: 'provincial-visrisk',
+        name: 'Karnali',
+        visriskType: 'Multihazard',
+        id: 6,
+        color: 'red',
+        bbox: [],
+        center: [],
+        value: true,
+    },
+    {
+        type: 'provincial-visrisk',
+        name: 'Karnali',
+        visriskType: 'Multihazard',
+        id: 5,
+        color: 'red',
+        bbox: [],
+        center: [],
+        value: false,
+    },
+];
+
+
+export const vzRiskMunicipalData = [{
+    type: 'municipality-visrisk',
+    name: 'Ratnanagar',
+    visriskType: 'Flood',
+    federalId: 35007,
+    color: 'blue',
+    bbox: [],
+    center: [],
+    indicator: 6,
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Janakpur',
+    visriskType: 'Multihazard',
+    federalId: 17010,
+    color: 'red',
+    bbox: [],
+    center: [],
+    indicator: 14,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Panchpokhari',
+    visriskType: 'MultiHazard',
+    federalId: 23010,
+    color: 'red',
+    bbox: [],
+    center: [],
+    indicator: 14,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Jugal',
+    visriskType: 'MultiHazard',
+    federalId: 23007,
+    color: 'red',
+    bbox: [],
+    center: [],
+    indicator: 14,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Bhotekoshi',
+    visriskType: 'Landslide',
+    federalId: 23003,
+    color: 'brown',
+    bbox: [],
+    center: [],
+    indicator: 12,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Barhabise',
+    visriskType: 'Landslide',
+    federalId: 23002,
+    color: 'brown',
+    bbox: [],
+    center: [],
+    indicator: 12,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Dhangadhi',
+    visriskType: 'Flood',
+    federalId: 71004,
+    color: 'blue',
+    bbox: [],
+    center: [],
+    indicator: 6,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Gulariya',
+    visriskType: 'Flood',
+    federalId: 58005,
+    color: 'blue',
+    bbox: [],
+    center: [],
+    indicator: 6,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Tikapur',
+    visriskType: 'Flood',
+    federalId: 71013,
+    color: 'blue',
+    bbox: [],
+    center: [],
+    indicator: 6,
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Rajapur',
+    visriskType: 'Flood',
+    federalId: 58007,
+    color: 'blue',
+    bbox: [],
+    center: [],
+    indicator: 6,
+
+
+},
+{
+    type: 'municipality-visrisk',
+    name: 'Butwal',
+    visriskType: 'Multihazard',
+    federalId: 49001,
+    color: 'red',
+    bbox: [],
+    center: [],
+    indicator: 14,
+
+},
+];

@@ -1,0 +1,27 @@
+.theme {
+    position: absolute;
+    top: 2rem;
+    left: 15rem;
+    height: 2.5rem;
+    width: 14rem;
+
+    .mainSelect {
+        width: 100%;
+        height: 2.5rem;
+        background-color: #143044;
+        color: white;
+        outline: none;
+        padding: 10px;
+        border: 1px solid #a8fffb;
+        border-radius: 2px;
+        cursor: pointer;
+        border-radius: 0.5rem;
+
+
+        .mainOptions {
+            cursor: pointer;
+            width: 100%;
+            height: 3rem;
+        }
+    }
+}
