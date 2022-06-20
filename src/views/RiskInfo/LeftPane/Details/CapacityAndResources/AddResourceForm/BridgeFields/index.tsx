@@ -56,6 +56,7 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                             language={language}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isMotorable"
                             label={t('Is the bridge motorable?')}
                             options={booleanConditionNe}
@@ -82,6 +83,7 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                         />
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="condition"
                             label={t('Condition of Bridge?')}
                             options={bridgeCondition}

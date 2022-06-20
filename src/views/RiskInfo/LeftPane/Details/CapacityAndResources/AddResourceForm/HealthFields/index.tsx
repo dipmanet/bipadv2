@@ -67,6 +67,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('Please specify HF Code')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="authority"
                             label={t('Authority')}
                             options={authority}
@@ -76,6 +77,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="authorityLevel"
                             label={t('Authority Level')}
                             options={authorityLevel}
@@ -85,6 +87,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="ownership"
                             label={t('OwnerShip')}
                             options={ownership}
@@ -94,6 +97,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="serviceType"
                             label={t('Service Type')}
                             options={serviceType}
@@ -103,6 +107,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operationalStatus"
                             label={t('Operational Status')}
                             options={operationalStatus}
@@ -152,6 +157,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
 
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasSafeMotherhood"
                             label={t('Safe Motherhood')}
                             options={booleanCondition}
@@ -197,6 +203,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         }
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="familyPlanning"
                             label={t('Family planning')}
                             options={booleanCondition}
@@ -236,6 +243,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
 
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasOpd"
                             label={t('OPD')}
                             options={booleanCondition}
@@ -343,6 +351,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         />
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasLaboratoryService"
                             label={t('Laboratory Service')}
                             options={booleanCondition}
@@ -430,6 +439,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
 
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasRadiology"
                             label={t('Radiology')}
                             options={booleanCondition}
@@ -488,6 +498,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         }
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasSurgicalService"
                             label={t('Surgical Service')}
                             options={booleanCondition}
@@ -528,6 +539,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             ) : ''}
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasSpecializedService"
                             label={t('Specialized Service')}
                             options={booleanCondition}
@@ -727,6 +739,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
             /> */}
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
                             options={booleanCondition}
@@ -736,6 +749,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanCondition}
@@ -753,6 +767,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             )}
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasHelipad"
                             label={t('Does the institution have helipad facility?')}
                             options={booleanCondition}
@@ -764,6 +779,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
 
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the institution have evacuation route?')}
                             options={booleanCondition}
@@ -773,6 +789,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasFocalPerson"
                             label={t('Does the institution have disaster focal point person?')}
                             options={booleanCondition}
@@ -796,6 +813,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             )}
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasOpenSpace"
                             label={t('Does the institution has open space?')}
                             options={booleanCondition}
@@ -812,6 +830,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasMedicineStorageSpace"
                             label={t('Does the institution has medical storage space?')}
                             options={booleanCondition}
@@ -821,6 +840,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasBackupElectricity"
                             label={t('Does the institution have electricity backup?')}
                             options={booleanCondition}

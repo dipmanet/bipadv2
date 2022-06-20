@@ -68,6 +68,7 @@ const TourismFields: FunctionComponent = ({ faramValues, optionsClassName,
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
                             options={booleanConditionNe}
@@ -77,6 +78,7 @@ const TourismFields: FunctionComponent = ({ faramValues, optionsClassName,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}
@@ -93,6 +95,7 @@ const TourismFields: FunctionComponent = ({ faramValues, optionsClassName,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
                             options={booleanCondition}

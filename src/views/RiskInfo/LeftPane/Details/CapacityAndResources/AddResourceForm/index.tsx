@@ -976,6 +976,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                 <NonFieldErrors faramElement />
 
                                 <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                     addResourceDropdown={'capResAddFormDropdown'}
                                     faramElementName="resourceType"
                                     options={resourceTypeList}
@@ -987,7 +988,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     className={styles.resourceType}
                                     optionsClassName={styles.optionsClassName}
                                     iconName={'capResAddFormDropdown'}
-                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
 
 
                                 />
@@ -1000,6 +1000,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                 {faramValues.resourceType === 'industry'
                                     && (
                                         <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                             addResourceDropdown={'capResAddFormDropdown'}
                                             faramElementName="type"
                                             options={industryTypeField}
@@ -1016,6 +1017,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
 
                                 {selectedAttribute.length && selectedType && selectedType.length ? (
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         addResourceDropdown={'capResAddFormDropdown'}
                                         faramElementName={selectedAttribute[0]}
                                         options={selectedType}
@@ -1028,6 +1030,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                         autoFocus
                                         optionsClassName={styles.optionsClassName}
                                         iconName={'capResAddFormDropdown'}
+
                                     />
                                 ) : ''
                                 }

@@ -68,6 +68,7 @@ const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                         />
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
                             options={booleanConditionNe}
@@ -77,6 +78,7 @@ const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}
@@ -93,6 +95,7 @@ const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
                             options={booleanCondition}
@@ -102,6 +105,7 @@ const AirwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasHumanitarianStagingArea"
                             label={t('Does the facility have humanitarian staging area?')}
                             options={booleanConditionNe}

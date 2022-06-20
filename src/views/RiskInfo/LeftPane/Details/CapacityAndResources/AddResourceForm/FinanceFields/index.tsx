@@ -42,6 +42,7 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                     <>
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operatorType"
                             label={t('Operator Type')}
                             options={operatorTypeOptions}
@@ -119,6 +120,7 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         />
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
                             options={booleanCondition}
@@ -128,6 +130,7 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
                             options={booleanConditionNe}
@@ -138,6 +141,7 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         />
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}

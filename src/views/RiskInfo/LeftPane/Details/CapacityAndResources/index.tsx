@@ -2441,8 +2441,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                 ) : ''}
                 <div
-                    className={_cs(styles.capacityAndResources, className,
-                        language === 'np' && styles.languageFont)}
+                    className={_cs(styles.capacityAndResources, className)}
                     id="capacityAndResources"
                 >
                     {addResource ? (

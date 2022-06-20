@@ -85,6 +85,7 @@ const WaterSupplyInfrastructureFields:
                     t => (
                         <>
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="placementOfWaterTank"
                                 label={t('Placement of Tank')}
                                 options={placementofTank}
@@ -94,6 +95,7 @@ const WaterSupplyInfrastructureFields:
                                 iconName={iconName}
                             />
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="sourceOfWater"
                                 label={t('Source of Water')}
                                 options={sourceOfWater}
@@ -104,6 +106,7 @@ const WaterSupplyInfrastructureFields:
                             />
 
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="isElectricityNeededToPumpWater"
                                 label={t('Is electricity needed to pump water?')}
                                 options={booleanCondition}
@@ -121,6 +124,7 @@ const WaterSupplyInfrastructureFields:
 
 
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="operatorType"
                                 label={t('Operator Type')}
                                 options={operatorTypeOptions}
@@ -139,6 +143,7 @@ const WaterSupplyInfrastructureFields:
                             }
 
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="hasTechnicalStaff"
                                 label={t('Does the facility have technical staff?')}
                                 options={booleanConditionNe}
@@ -191,6 +196,7 @@ const WaterSupplyInfrastructureFields:
                                 label={t('Number of Service Users')}
                             />
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="isWaterSupplyOperational"
                                 label={t('Is the water supply infrastructure operational?')}
                                 options={booleanConditionNe}
@@ -201,6 +207,7 @@ const WaterSupplyInfrastructureFields:
                             />
                             <h1>{t('DISASTER MANAGEMENT')}</h1>
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="isDesignedFollowingBuildingCode"
                                 label={t('Is the facility designed following building codes?')}
                                 options={booleanCondition}
@@ -210,6 +217,7 @@ const WaterSupplyInfrastructureFields:
                                 iconName={iconName}
                             />
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="hasEvacuationRoute"
                                 label={t('Does the facility have evacuation route?')}
                                 options={booleanConditionNe}
@@ -220,6 +228,7 @@ const WaterSupplyInfrastructureFields:
                             />
 
                             <SelectInput
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                 faramElementName="hasDisableFriendlyInfrastructure"
                                 label={t('Does the facility have disabled friendly infrastructure?')}
                                 options={booleanConditionNe}

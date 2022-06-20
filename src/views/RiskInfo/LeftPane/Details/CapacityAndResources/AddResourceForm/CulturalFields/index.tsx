@@ -37,6 +37,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                     <>
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
                             options={booleanCondition}
@@ -46,6 +47,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasOpenSpace"
                             label={t('Does the facility have open space?')}
                             options={booleanConditionNe}
@@ -68,6 +70,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                                 </>
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}
@@ -84,6 +87,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="drinkingWater"
                             label={t('Is drinking water available? ')}
                             options={booleanConditionNe}
@@ -93,6 +97,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="toilet"
                             label={t('Is toilet available? ')}
                             options={booleanConditionNe}
@@ -111,6 +116,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                         }
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasWashFacility"
                             label={t('Does the facility have WASH facility?')}
                             options={booleanConditionNe}
@@ -128,6 +134,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
 
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasSleepingFacility"
                             label={t('Has sleeping facility available?')}
                             options={booleanConditionNe}
@@ -156,6 +163,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                             label={t('If other facilities are available, please specify.')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasElectricity"
                             label={t('Does the facility have electricity facility?')}
                             options={booleanConditionNe}

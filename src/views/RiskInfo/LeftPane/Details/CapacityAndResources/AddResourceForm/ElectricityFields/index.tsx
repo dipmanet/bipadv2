@@ -37,6 +37,7 @@ const ElectricityFields: FunctionComponent<Props> = ({ resourceEnums,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="status"
                             label={t('Status?')}
                             options={electricityStatus}

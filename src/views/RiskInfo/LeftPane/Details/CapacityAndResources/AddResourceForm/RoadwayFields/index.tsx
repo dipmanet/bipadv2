@@ -32,6 +32,7 @@ const RoadwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="type"
                             label={t('Select either you are entering the details of vehicle center such as bus parks and stops or vehicle committee.')}
                             options={type}
@@ -75,6 +76,7 @@ const RoadwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                             label={t('Number of Differently-abled Other Employees')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyVehicle"
                             label={t('Are disable friendly vehicle available?')}
                             options={booleanConditionNe}
@@ -100,6 +102,7 @@ const RoadwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                 )
             } */}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="designedWithBuildingCode"
                             label={t('Is the building designed following building code?')}
                             options={booleanCondition}

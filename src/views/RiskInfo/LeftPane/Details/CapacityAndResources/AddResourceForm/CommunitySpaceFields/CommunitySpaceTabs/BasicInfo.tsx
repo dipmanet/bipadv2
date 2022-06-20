@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translation } from 'react-i18next';
@@ -39,9 +41,9 @@ const labelSelector = (d: KeyLabel) => d.label;
 function BasicInfo({ postBasicInfo, openspacePostError,
     setAdministrativeParameters, faramValues, optionsClassName, language: { language } }: Props) {
     const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
-        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    { key: false, label: language === 'en' ? 'No' : 'होइन' }];
     const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
-        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    { key: false, label: language === 'en' ? 'No' : 'छैन' }];
     return (
         <Translation>
             {
@@ -71,6 +73,7 @@ function BasicInfo({ postBasicInfo, openspacePostError,
                             />
                         </div>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="usedAsHelipad"
                             label={t('Used for emergency landing as helipad?')}
                             options={booleanConditionNe}
@@ -81,6 +84,7 @@ function BasicInfo({ postBasicInfo, openspacePostError,
 
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDrinkingWaterAvailable"
                             label={t('Is drinking water facility available?')}
                             options={booleanConditionNe}
@@ -89,6 +93,7 @@ function BasicInfo({ postBasicInfo, openspacePostError,
                             optionsClassName={optionsClassName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isToiletAvailable"
                             label={t('Is toilet available?')}
                             options={booleanConditionNe}
@@ -97,13 +102,13 @@ function BasicInfo({ postBasicInfo, openspacePostError,
                             optionsClassName={optionsClassName}
                         />
                         {faramValues.isToiletAvailable
-                        && (
-                            <NumberInput
-                                faramElementName="noOfToilets"
-                                label={t('How Many Toilets Are Available?')}
-                            />
+                            && (
+                                <NumberInput
+                                    faramElementName="noOfToilets"
+                                    label={t('How Many Toilets Are Available?')}
+                                />
 
-                        )}
+                            )}
                         <TextInput
                             faramElementName="otherFacilities"
                             label={t('What other facilities are available? Please specify.')}
@@ -119,7 +124,7 @@ function BasicInfo({ postBasicInfo, openspacePostError,
                     {authState.authenticated
                          && ( */}
                         <LocationInput
-                        // className={styles.locationInput}
+                            // className={styles.locationInput}
                             faramElementName="location"
                             classCategory={styles.locationInput}
                             category={'capacityResource'}

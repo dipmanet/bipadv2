@@ -46,6 +46,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operatorType"
                             label={t('Operator Type')}
                             options={operatorTypeOptions}
@@ -150,6 +151,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                         />
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the school designed following building codes?')}
                             options={booleanCondition}
@@ -164,6 +166,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             label={t('Remarks on Building Code')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasOpenSpace"
                             label={t('Does the facility have open space?')}
                             options={booleanConditionNe}
@@ -180,6 +183,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}
@@ -196,6 +200,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
                             options={booleanConditionNe}
@@ -205,6 +210,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisasterCommittee"
                             label={t('Does the school have disaster committee or/and other related clubs?')}
                             options={booleanConditionNe}
@@ -221,6 +227,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisasterAwarenessConducted"
                             label={t('Has disaster related awareness and training programs been conducted within the school?')}
                             options={booleanConditionNe}
@@ -237,6 +244,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="providesDisasterEducationToStudent"
                             label={t('Does the school provide disaster related education to students?')}
                             options={booleanConditionNe}
@@ -254,6 +262,7 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                                 />
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasHealthCenterPsychoCounseling"
                             label={t('Does the school have health center and/or psycho-counseling?')}
                             options={booleanConditionNe}

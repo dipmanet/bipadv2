@@ -37,6 +37,7 @@ const WaterwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="condition"
                             label={t('Select the condition of boats')}
                             options={boatCondition}
@@ -80,6 +81,7 @@ const WaterwayFields: FunctionComponent = ({ resourceEnums, faramValues,
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}

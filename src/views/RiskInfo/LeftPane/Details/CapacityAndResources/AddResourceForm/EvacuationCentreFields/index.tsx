@@ -52,6 +52,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operatedBy"
                             label={t('Operated By')}
                             options={operatorTypeOptions}
@@ -62,6 +63,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                         />
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="structure"
                             label={t('Is the facility single story or multi story?')}
                             options={structureOption}
@@ -81,6 +83,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
 
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="designedWithBuildingCode"
                             label={t('Is the building designed following building code?')}
                             options={booleanCondition}
@@ -90,6 +93,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
                             options={booleanConditionNe}
@@ -99,6 +103,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDrinkingWater"
                             label={t('Is drinking water available?')}
                             options={booleanConditionNe}
@@ -108,6 +113,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasToilet"
                             label={t('Is toilet available?')}
                             options={booleanConditionNe}
@@ -124,6 +130,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
 
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasHandWashingFacility"
                             label={t('Does the facility have hand washing facility?')}
                             options={booleanConditionNe}
@@ -140,6 +147,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
 
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasFoodPreparationFacility"
                             label={t('Is food preparation facility available?')}
                             options={booleanConditionNe}
@@ -156,6 +164,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
 
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasSleepingFacility"
                             label={t('Is sleeping facility available such as bed/cot/mat?')}
                             options={booleanConditionNe}
@@ -172,6 +181,7 @@ const EvacuationCentreFields: FunctionComponent<Props> = ({ resourceEnums,
 
                             )}
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}

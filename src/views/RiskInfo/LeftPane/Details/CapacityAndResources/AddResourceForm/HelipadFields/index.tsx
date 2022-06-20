@@ -60,6 +60,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             language={language}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="ownership"
                             label={t('Ownership')}
                             options={ownerShipCondition}
@@ -77,6 +78,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             )
                         }
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="followsGuidelines"
                             label={t('Is the helipad build following the standard operational guidelines, 2075 of Civil Aviation Authority of Nepal?')}
                             options={booleanCondition}
@@ -95,6 +97,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                         />
                         <h1>{t('HELIPAD DETAILS')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="surfaceLevel"
                             label={t('Surface Level')}
                             options={surfaceLevel}
@@ -104,6 +107,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="surfaceType"
                             label={t('Surface Type')}
                             options={surfaceType}
@@ -121,6 +125,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             )
                         }
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasRoadAccess"
                             label={t('Has Road Access?')}
                             options={booleanConditionNe}
@@ -130,6 +135,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="storageFacilityAvailable"
                             label={t('Has Storage Facility Available?')}
                             options={booleanConditionNe}
@@ -139,6 +145,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="internetFacilityAvailable"
                             label={t('Has Internet Facility Available?')}
                             options={booleanConditionNe}
@@ -148,6 +155,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="windDirectionIndicatorAvailable"
                             label={t('Has Wind Direction Indicator Available?')}
                             options={booleanConditionNe}
@@ -157,6 +165,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="heliMarkerAvailable"
                             label={t('Has Heli Marker Available?')}
                             options={booleanConditionNe}
@@ -166,6 +175,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="nightLightingAvailable"
                             label={t('Has Night lighting Available?')}
                             options={booleanConditionNe}
@@ -175,6 +185,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="helipadCondition"
                             label={t('Condition Of Helipad?')}
                             options={helipadCondition}

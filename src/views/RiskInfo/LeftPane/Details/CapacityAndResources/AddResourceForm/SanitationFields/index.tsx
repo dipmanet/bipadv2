@@ -42,6 +42,7 @@ const SanitationFields: FunctionComponent<Props> = ({ resourceEnums,
                             label={t('Area')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isPermanent"
                             label={t('Is it Permanent?')}
                             options={booleanCondition}
@@ -78,6 +79,7 @@ const SanitationFields: FunctionComponent<Props> = ({ resourceEnums,
 
                         }
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operatorType"
                             label={t('Operator Type')}
                             options={operatorTypeOptions}

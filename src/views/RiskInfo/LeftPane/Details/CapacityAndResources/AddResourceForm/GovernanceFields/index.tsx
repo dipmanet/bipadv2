@@ -53,6 +53,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
             {t => (
                 <>
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="operatorType"
                         label={t('Operator Type')}
                         options={operatorTypeOptions}
@@ -99,6 +100,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                     />
                     <h1>{t('DISASTER MANAGEMENT')}</h1>
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="isDesignedFollowingBuildingCode"
                         label={t('Is the facility designed following building codes?')}
                         options={booleanCondition}
@@ -108,6 +110,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                         iconName={iconName}
                     />
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="hasEvacuationRoute"
                         label={t('Does the facility have evacuation route?')}
                         options={booleanConditionNe}
@@ -117,6 +120,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                         iconName={iconName}
                     />
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="hasOpenSpace"
                         label={t('Does the facility have open space?')}
                         options={booleanConditionNe}
@@ -132,6 +136,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                         />
                     )}
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="hasDisableFriendlyInfrastructure"
                         label={t(
                             'Does the facility have disabled friendly infrastructure?',
@@ -150,6 +155,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                     )}
 
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="hasDisasterMgmtUnit"
                         label={t(
                             'Does the facility have disaster management unit available?',
@@ -161,6 +167,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                         iconName={iconName}
                     />
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="hasEmployeeDrrTrained"
                         label={t('Has employee trained in disaster management?')}
                         options={booleanConditionNe}
@@ -179,6 +186,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                     )}
 
                     <SelectInput
+                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                         faramElementName="hasHelipad"
                         label={t('Does the institution has helipad?')}
                         options={booleanConditionNe}

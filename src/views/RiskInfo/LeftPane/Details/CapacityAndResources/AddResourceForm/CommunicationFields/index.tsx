@@ -41,6 +41,7 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operatorType"
                             label={t('Operator Type')}
                             options={operatorTypeOptions}
@@ -70,6 +71,7 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                             label={t('Frequency in megahertz')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasInternetService"
                             label={t('Does the facility have internet service available?')}
                             options={booleanConditionNe}
@@ -112,6 +114,7 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
 
                         <h1>{t('DISASTER MANAGEMENT')}</h1>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="isDesignedFollowingBuildingCode"
                             label={t('Is the facility designed following building codes?')}
                             options={booleanCondition}
@@ -121,6 +124,7 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasEvacuationRoute"
                             label={t('Does the facility have evacuation route?')}
                             options={booleanConditionNe}
@@ -130,6 +134,7 @@ const CommunicationFields: FunctionComponent<Props> = ({ resourceEnums,
                             iconName={iconName}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
                             label={t('Does the facility have disabled friendly infrastructure?')}
                             options={booleanConditionNe}

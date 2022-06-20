@@ -43,6 +43,7 @@ const FireEngineFields: FunctionComponent = ({ resourceEnums, faramValues,
                 t => (
                     <>
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="operatorType"
                             label={t('Operator Type')}
                             options={operatorTypeOptions}
@@ -72,6 +73,7 @@ const FireEngineFields: FunctionComponent = ({ resourceEnums, faramValues,
                             label={t('Number of trained employee')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasSafetyEquipmentEnabled"
                             label={t('Is safety equipment available?')}
                             options={booleanConditionNe}
@@ -105,6 +107,7 @@ const FireEngineFields: FunctionComponent = ({ resourceEnums, faramValues,
                             label={t('Driver’s Alternative Number')}
                         />
                         <SelectInput
+                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="condition"
                             label={t('Condition of Fire fighting apparatus')}
                             options={fireEngineCondition}
