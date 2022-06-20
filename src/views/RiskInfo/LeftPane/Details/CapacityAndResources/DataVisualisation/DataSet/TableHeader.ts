@@ -6,180 +6,223 @@ export const resourceHeader = [
             {
                 key: 'title',
                 value: 'Title',
+                valueNe: 'शीर्षक',
             },
             {
                 key: 'type',
                 value: 'Type',
+                valueNe: 'प्रकार',
             },
             {
                 key: 'province',
                 value: 'Province',
+                valueNe: 'प्रदेश',
             },
             {
                 key: 'district',
                 value: 'District',
+                valueNe: 'जिल्‍ला',
             },
             {
                 key: 'municipality',
                 value: 'Municipality',
+                valueNe: 'नगरपालिका',
             },
             {
                 key: 'wardNumber',
                 value: 'Ward Number',
+                valueNe: 'वार्ड नम्बर',
             },
             {
                 key: 'localAddress',
                 value: 'Local Address',
+                valueNe: 'स्थानीय ठेगाना',
             },
             {
                 key: 'point1',
                 value: 'Latitude',
+                valueNe: 'अक्षांश',
             },
             {
                 key: 'point2',
                 value: 'Longitude',
+                valueNe: 'देशान्तर',
             },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
+                valueNe: 'स्रोत प्रकार',
             },
 
             {
                 key: 'operatorType',
                 value: 'Operator Type',
+                valueNe: 'अपरेटर प्रकार',
             },
             {
                 key: 'startTime',
                 value: 'Opening Time',
+                valueNe: 'खुल्ने समय',
             },
             {
                 key: 'endTime',
                 value: 'Closing Time',
+                valueNe: 'बन्द हुने समय',
             },
             {
                 key: 'area',
                 value: 'Area of School',
+                valueNe: 'विद्यालयको क्षेत्र',
             },
             {
                 key: 'classroomCount',
                 value: 'Number of Classroom',
+                valueNe: 'कक्षा कोठाको संख्या',
             },
 
             {
                 key: 'hasDisableFriendlyInfrastructure',
                 value: 'Disabled friendly infrastructure',
+                valueNe: 'अपाङ्ग मैत्री पूर्वाधार',
             },
             {
                 key: 'hasDisasterAwarenessConducted',
                 value: 'Disaster Awareness Conducted',
+                valueNe: 'विपद् सचेतना कार्यक्रम सम्पन्‍न',
             },
             {
                 key: 'hasDisasterCommittee',
                 value: 'Has Disaster Committee',
+                valueNe: 'विपद् व्यवस्थापन समिति छ ?',
             },
             {
                 key: 'hasEvacuationRoute',
                 value: 'Has Evacuation Route',
+                valueNe: 'निकासी मार्ग छ ?',
             },
             {
                 key: 'hasHealthCenterPsychoCounseling',
                 value: 'Has HealthCenter Psycho Counseling',
+                valueNe: 'स्वास्थ्य केन्द्र साइको काउन्सिलिङ छ ?',
             },
             {
                 key: 'hasOpenSpace',
                 value: 'Has OpenSpace',
+                valueNe: 'खुल्‍ला ठाउँ छ ?',
             },
             {
                 key: 'isDesignedFollowingBuildingCode',
                 value: 'Is Designed Following Building Code',
+                valueNe: 'बिल्डिंग कोड पछ्याएर डिजाइन गरिएको छ ?',
             },
             {
                 key: 'noOfDifferentlyAbledFemaleEmployees',
                 value: 'No Of DifferentlyAbled Female Employees',
+                valueNe: 'भिन्न रूपमा सक्षम महिला कर्मचारीहरूको संख्या',
             },
             {
                 key: 'noOfDifferentlyAbledFemaleStudents',
                 value: 'No Of DifferentlyAbled Female Students',
+                valueNe: 'भिन्‍न रूपमा सक्षम महिला विद्यार्थीहरूको संख्या',
             },
             {
                 key: 'noOfDifferentlyAbledMaleEmployees',
                 value: 'No Of DifferentlyAbled Male Employees',
+                valueNe: 'भिन्‍न रूपमा सक्षम पुरुष कर्मचारीहरूको संख्या',
             },
             {
                 key: 'noOfDifferentlyAbledMaleStudents',
                 value: 'No Of DifferentlyAbled Male Students',
+                valueNe: 'भिन्‍न रूपमा सक्षम पुरुष विद्यार्थीहरूको सङ्ख्या',
             },
             {
                 key: 'noOfDifferentlyAbledOtherEmployees',
                 value: 'No Of DifferentlyAbled Other Employees',
+                valueNe: 'भिन्‍न रूपमा सक्षम अन्य कर्मचारीहरूको संख्या',
             },
             {
                 key: 'noOfDifferentlyAbledOtherStudents',
                 value: 'No Of DifferentlyAbled Other Students',
+                valueNe: 'भिन्‍न रूपमा सक्षम अन्य विद्यार्थीहरूको संख्या',
             },
             {
                 key: 'noOfEmployee',
                 value: 'No Of Employee',
+                valueNe: 'कर्मचारी संख्या',
             },
 
             {
                 key: 'noOfMaleEmployee',
                 value: 'No Of Male Employee',
+                valueNe: 'पुरुष कर्मचारी संख्या',
             },
             {
                 key: 'noOfFemaleEmployee',
                 value: 'No Of Female Employee',
+                valueNe: 'महिला कर्मचारी संख्या',
             },
             {
                 key: 'noOfOtherEmployee',
                 value: 'No Of Other Employee',
+                valueNe: 'अन्य कर्मचारीको संख्या',
             },
             {
                 key: 'noOfMaleStudent',
                 value: 'No Of Male Student',
+                valueNe: 'पुरुष विद्यार्थी संख्या',
             },
             {
                 key: 'noOfFemaleStudent',
                 value: 'No Of Female Student',
+                valueNe: 'महिला विद्यार्थी संख्या',
             },
 
             {
                 key: 'noOfOtherStudent',
                 value: 'No Of Other Student',
+                valueNe: 'अन्य विद्यार्थीको संख्या',
             },
             {
                 key: 'noOfStudentsFifteenToTwenty',
                 value: 'No Of Students Age 15-20',
+                valueNe: '१५-२० उमेरका विद्यार्थीहरूको संख्या',
             },
             {
                 key: 'noOfStudentsLessThanTen',
                 value: 'No Of Students Age Less than 10',
+                valueNe: '१० वर्षभन्दा कम उमेरका विद्यार्थीहरूको सङ्ख्या',
             },
             {
                 key: 'noOfStudentsMoreThanTwenty',
                 value: 'No Of Students Age More than 20',
+                valueNe: '२० वर्षभन्दा बढी उमेरका विद्यार्थीहरूको सङ्ख्या',
             },
             {
                 key: 'noOfStudentsTenToFifteen',
                 value: 'No Of Students Age 10-15',
+                valueNe: '१०-१५ उमेरका विद्यार्थीहरूको संख्या',
             },
 
             {
                 key: 'phoneNumber',
                 value: 'Phone Number',
+                valueNe: 'फोन नम्बर',
             },
             {
                 key: 'providesDisasterEducationToStudent',
                 value: 'Provides Disaster Education To Student',
+                valueNe: 'विद्यार्थीलाई आपदा शिक्षा प्रदान गर्दछ ?',
             },
 
             {
                 key: 'specifyAwarenessProgram',
                 value: 'Awareness Program',
+                valueNe: 'सचेतना कार्यक्रम',
             },
             {
                 key: 'specifyDisasterEducation',
                 value: 'Specify Disaster Education',
+                valueNe: 'प्रकोप शिक्षा निर्दिष्ट गर्नुहोस्',
             },
         ],
 
@@ -190,59 +233,73 @@ export const resourceHeader = [
             {
                 key: 'title',
                 value: 'Title',
+                valueNe: 'शीर्षक',
             },
             {
                 key: 'type',
                 value: 'Type',
+                valueNe: 'प्रकार',
             },
             {
                 key: 'province',
                 value: 'Province',
+                valueNe: 'प्रदेश',
             },
             {
                 key: 'district',
                 value: 'District',
+                valueNe: 'जिल्‍ला',
             },
             {
                 key: 'municipality',
                 value: 'Municipality',
+                valueNe: 'नगरपालिका',
             },
             {
                 key: 'wardNumber',
                 value: 'Ward Number',
+                valueNe: 'वार्ड नम्बर',
             },
             {
                 key: 'localAddress',
                 value: 'Local Address',
+                valueNe: 'स्थानीय ठेगाना',
             },
             {
                 key: 'point1',
                 value: 'Latitude',
+                valueNe: 'अक्षांश',
             },
             {
                 key: 'point2',
                 value: 'Longitude',
+                valueNe: 'देशान्तर',
             },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
+                valueNe: 'स्रोत प्रकार',
             },
 
             {
                 key: 'operatorType',
                 value: 'Operator Type',
+                valueNe: 'अपरेटर प्रकार',
             },
             {
                 key: 'startTime',
                 value: 'Opening Time',
+                valueNe: 'खुल्ने समय',
             },
             {
                 key: 'endTime',
                 value: 'Closing Time',
+                valueNe: 'बन्द हुने समय',
             },
             {
                 key: 'areaOfOpenSpace',
                 value: 'Area Of OpenSpace',
+                valueNe: 'खुल्‍ला ठाउँ को क्षेत्र',
             },
             {
                 key: 'authority',

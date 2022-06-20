@@ -117,7 +117,7 @@ const FilterComponent = ({ filterText, onFilter, onClear, language }) => (
         <TextField
             id="search"
             type="text"
-            placeholder={language === 'en' ? 'Search By Title' : 'शीर्षक द्वारा खोज'}
+            placeholder={language === 'en' ? 'Search By Title' : 'शीर्षक द्वारा खोज्‍नुहोस'}
             aria-label="Search Input"
             value={filterText}
             onChange={onFilter}
@@ -141,9 +141,10 @@ const TableData = ({ selectedResourceData, resourceType, language: { language } 
     const filteredItems = selectedResourceData.filter(
         item => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()),
     );
+
     const tableHeader = resourceHeader.find(data => data.resourceType === resourceType).data;
     const columns = tableHeader.map(item => ({
-        name: item.value,
+        name: language === 'en' ? item.value : item.valueNe,
         id: item.value === 'Title' ? 'title' : '',
         selector: item.key === 'title' ? row => row[item.key] : row => ((item.key === 'point1') ? row.point ? row.point.coordinates[1] : '' : (item.key === 'point2') ? row.point ? row.point.coordinates[0] : '' : row[item.key] ? typeof (row[item.key]) === 'boolean' ? row[item.key] === true ? 'Yes' : 'No' : row[item.key] : row[item.key] === false ? 'No' : row[item.key]),
         sortable: true,
@@ -167,7 +168,6 @@ const TableData = ({ selectedResourceData, resourceType, language: { language } 
         ] : '',
 
     }));
-
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
