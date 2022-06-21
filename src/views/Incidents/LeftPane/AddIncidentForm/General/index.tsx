@@ -56,11 +56,24 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             className,
             pending,
         } = this.props;
+        console.log('This is source list', hazardList);
 
+        const sourceListData = [
+            {
+                id: 'nepal_police',
+                title: 'nepal_police',
+            },
+        ];
         return (
             <div className={_cs(styles.general, className)}>
                 {pending && <LoadingAnimation />}
                 <NonFieldErrors faramElement />
+                <TextArea
+                    className={styles.input}
+                    faramElementName="title"
+                    label="Title"
+                    autoFocus
+                />
                 <TextArea
                     className={styles.input}
                     faramElementName="description"
@@ -84,7 +97,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                     <SelectInput
                         className={styles.input}
                         faramElementName="source"
-                        options={sourceList}
+                        options={sourceListData}
                         keySelector={keySelector}
                         labelSelector={labelSelector}
                         label="Source"

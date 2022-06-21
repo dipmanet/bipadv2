@@ -556,6 +556,7 @@ const state: PageState = {
         lossPeopleError: '',
         successMessage: '',
         incidentData: [],
+        peopleLossData: [],
         incidentEditData: {},
         incidentUpdateError: '',
         epidemicChartHourlyLoading: false,

@@ -75,3 +75,31 @@ export const injuredDisabledInitial = {
     count: '', // get total numner of disabled dead from form
     loss: '', // get loss id from loss api call
 };
+
+export const agricultureEconomicLoss = {
+    status: 'injured',
+    gender: 'others',
+    count: '', // get total numner of other dead from form
+    loss: '', // get loss id from loss api call
+};
+
+export const infrastructureEconomicLoss = {
+    status: 'injured',
+    gender: 'others',
+    count: '', // get total numner of other dead from form
+    loss: '', // get loss id from loss api call
+};
+
+export const familyLoss = {
+    status: 'injured',
+    gender: 'others',
+    count: '', // get total numner of other dead from form
+    loss: '', // get loss id from loss api call
+};
+
+export const livestockDestroyed = {
+    status: 'injured',
+    gender: 'others',
+    count: '', // get total numner of other dead from form
+    loss: '', // get loss id from loss api call
+};

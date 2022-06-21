@@ -49,6 +49,8 @@ import {
 import { SetEpidemicsPageAction } from '#actionCreators';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import General from './General';
+import PeopleLoss from './PeopleLoss';
 
 
 const mapStateToProps = (state, props) => ({
@@ -619,6 +621,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
+
 interface EpidemicState {
     epidemic: {
         lossID: number;
@@ -768,6 +771,9 @@ const Epidemics = (props) => {
     const [hazardList, setHazardList] = useState([]);
     const [selectedHazardName, setSelectedHazardName] = useState('');
     const [selectedHazardId, setSelectedHazardId] = useState('');
+
+
+    const [modulePage, setmodulePage] = useState(2);
     const { epidemmicsPage:
         {
             lossID,
@@ -784,6 +790,17 @@ const Epidemics = (props) => {
         wards,
         uri,
         epidemmicsPage, requests: { hazardListFetch } } = props;
+
+    const progressBar = (moduleNo, div) => {
+        console.log('Module no', moduleNo);
+        console.log('This is div', div);
+
+        if (div <= moduleNo) {
+            return true;
+        }
+        return false;
+    };
+
 
     useEffect(() => {
         hazardListFetch.do({ setHazardList });
@@ -1282,13 +1299,18 @@ const Epidemics = (props) => {
         } else {
             // dispatch(lossData(lossFormDataInitial));
             const lossFormData = {
-                estimatedLoss: totalEstimatedLoss,
+                estimatedLoss: Number(totalEstimatedLoss),
             };
-
-            await props.requests.loss.do(lossFormData);
+            await props.requests.loss.do({ body: lossFormData });
         }
     };
 
+    const handleNext = (pageNo) => {
+        setmodulePage(pageNo);
+    };
+    const handlePreview = (pageNo) => {
+        setmodulePage(pageNo);
+    };
     useEffect(() => {
         if (lossID) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
@@ -1311,54 +1333,54 @@ const Epidemics = (props) => {
                 wards: [wardId],
             };
             props.requests.incident.do({ body: data });
-            const deadMale = {
-                ...deadMaleInitial,
-                loss: lossID,
-                count: deadFormMale,
-            };
-            props.requests.lossDeadMale.do({ body: deadMale });
-            const deadFemale = {
-                ...deadFemaleInitial,
-                loss: lossID,
-                count: deadFormFemale,
-            };
-            props.requests.lossDeadFemale.do({ body: deadFemale });
-            const deadOther = {
-                ...deadOtherInitial,
-                loss: lossID,
-                count: deadFormOther,
-            };
-            props.requests.lossDeadOther.do({ body: deadOther });
-            const deadDisabled = {
-                ...deadDisabledInitial,
-                loss: lossID,
-                count: deadFormDisabled,
-            };
-            props.requests.lossDeadDisabled.do({ body: deadDisabled });
-            const injuredMale = {
-                ...injuredMaleInitial,
-                loss: lossID,
-                count: injuredFormMale,
-            };
-            props.requests.lossInjuredMale.do({ body: injuredMale });
-            const injuredFemale = {
-                ...injuredFemaleInitial,
-                loss: lossID,
-                count: injuredFormFemale,
-            };
-            props.requests.lossInjuredFemale.do({ body: injuredFemale });
-            const injuredOther = {
-                ...injuredOtherInitial,
-                loss: lossID,
-                count: injuredFormOther,
-            };
-            props.requests.lossInjuredOther.do({ body: injuredOther });
-            const injuredDisabled = {
-                ...injuredDisabledInitial,
-                loss: lossID,
-                count: injuredFormDisabled,
-            };
-            props.requests.lossInjuredDisabled.do({ body: injuredDisabled });
+            // const deadMale = {
+            //     ...deadMaleInitial,
+            //     loss: lossID,
+            //     count: deadFormMale,
+            // };
+            // props.requests.lossDeadMale.do({ body: deadMale });
+            // const deadFemale = {
+            //     ...deadFemaleInitial,
+            //     loss: lossID,
+            //     count: deadFormFemale,
+            // };
+            // props.requests.lossDeadFemale.do({ body: deadFemale });
+            // const deadOther = {
+            //     ...deadOtherInitial,
+            //     loss: lossID,
+            //     count: deadFormOther,
+            // };
+            // props.requests.lossDeadOther.do({ body: deadOther });
+            // const deadDisabled = {
+            //     ...deadDisabledInitial,
+            //     loss: lossID,
+            //     count: deadFormDisabled,
+            // };
+            // props.requests.lossDeadDisabled.do({ body: deadDisabled });
+            // const injuredMale = {
+            //     ...injuredMaleInitial,
+            //     loss: lossID,
+            //     count: injuredFormMale,
+            // };
+            // props.requests.lossInjuredMale.do({ body: injuredMale });
+            // const injuredFemale = {
+            //     ...injuredFemaleInitial,
+            //     loss: lossID,
+            //     count: injuredFormFemale,
+            // };
+            // props.requests.lossInjuredFemale.do({ body: injuredFemale });
+            // const injuredOther = {
+            //     ...injuredOtherInitial,
+            //     loss: lossID,
+            //     count: injuredFormOther,
+            // };
+            // props.requests.lossInjuredOther.do({ body: injuredOther });
+            // const injuredDisabled = {
+            //     ...injuredDisabledInitial,
+            //     loss: lossID,
+            //     count: injuredFormDisabled,
+            // };
+            // props.requests.lossInjuredDisabled.do({ body: injuredDisabled });
             setAdded(true);
         }
         if (lossPeopleError || incidentError || lossError) {
@@ -1366,7 +1388,7 @@ const Epidemics = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossID]);
-
+    console.log('This is loss id', lossID);
     const disableMapFilterLofic = (boolean) => {
         setDisableMapFilter(boolean);
     };
@@ -1409,7 +1431,7 @@ const Epidemics = (props) => {
                     />
                 ) : ''}
             <div className={styles.container}>
-                <Modal
+                {/* <Modal
                     open={added || updated}
                     title={'Thank you!'}
                     description={
@@ -1423,7 +1445,7 @@ const Epidemics = (props) => {
                     handleClose={updated && !errorOccured ? handleUpdateSuccess
                         : added ? handleAddedSuccess
                             : handleErrorClose}
-                />
+                /> */}
 
                 <h1 className={styles.header}>Incident Data Structure</h1>
                 <p className={styles.dataReporting}>Data Reporting</p>
@@ -1431,548 +1453,99 @@ const Epidemics = (props) => {
                     <div className={styles.reportingStatus}>
                         <div className={styles.reporting}>
                             <img className={styles.listSvg} src={ListSvg} alt="" />
-                            <p className={styles.reportingText}>Incident Reporting</p>
-                            <p className={styles.greenCircle} />
+                            <p className={styles.reportingText}>General Information</p>
+                            <p className={progressBar(modulePage, 1) ? styles.greenCircle : styles.grayCircle} />
+                        </div>
+                        <div className={styles.reporting}>
+                            <img className={styles.listSvg} src={ListSvg} alt="" />
+                            <p className={styles.reportingText}>People Loss</p>
+                            <p className={progressBar(modulePage, 2) ? styles.greenCircle : styles.grayCircle} />
+                        </div>
+                        <div className={styles.reporting}>
+                            <img className={styles.listSvg} src={ListSvg} alt="" />
+                            <p className={styles.reportingText}>Family Loss</p>
+                            <p className={progressBar(modulePage, 3) ? styles.greenCircle : styles.grayCircle} />
+                        </div>
+                        <div className={styles.reporting}>
+                            <img className={styles.listSvg} src={ListSvg} alt="" />
+                            <p className={styles.reportingText}>Infrastructure Loss</p>
+                            <p className={progressBar(modulePage, 4) ? styles.greenCircle : styles.grayCircle} />
+                        </div>
+                        <div className={styles.reporting}>
+                            <img className={styles.listSvg} src={ListSvg} alt="" />
+                            <p className={styles.reportingText}>Agriculture Loss</p>
+                            <p className={progressBar(modulePage, 5) ? styles.greenCircle : styles.grayCircle} />
+                        </div>
+                        <div className={styles.reporting}>
+                            <img className={styles.listSvg} src={ListSvg} alt="" />
+                            <p className={styles.reportingText}>Livestock Loss</p>
+                            <p className={progressBar(modulePage, 6) ? styles.greenCircle : styles.grayCircle} />
                         </div>
                     </div>
-                    <div className={styles.mainForm}>
-                        <div className={styles.generalInfoAndTableButton}>
-                            <h1 className={styles.generalInfo}>General Information</h1>
-                            <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>View Data Table</button>
-                        </div>
-                        <div className={styles.shortGeneralInfo}>
-                            <img className={styles.ideaIcon} src={Ideaicon} alt="" />
-                            <p className={styles.ideaPara}>
-                                The epidemics form consists of the details of the epidemics,
-                                geographical information of the affected area, and the
-                                casualty details disaggregated by gender and disability.
-
-                            </p>
-                        </div>
-                        <div className={styles.infoBar}>
-                            <p className={styles.instInfo}>
-                                Reported Date and Location are required information
-                            </p>
-                        </div>
-                        <div className={styles.mainDataEntrySection}>
-                            <h3 className={styles.formGeneralInfo}>General Information</h3>
-                            <span className={styles.ValidationErrors}>{validationError}</span>
-                            <div className={styles.twoInputSections}>
-                                <TextField
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={uniqueId}
-                                    onChange={e => setuniqueId(e.target.value)}
-                                    id="outlined-basic"
-                                    label="Unique Id"
-                                    disabled
-                                />
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DatePicker
-                                        label="Reported Date"
-                                        value={reportedDate}
-                                        onChange={(newValue) => {
-                                            setReportedDate(newValue);
-                                        }}
-                                        renderInput={params => (
-                                            <TextField
-                                                variant="outlined"
-                                                error={dateError}
-                                                helperText={dateError ? 'This field is required' : null}
-                                                className={styles.materialUiInput}
-                                                {...params}
-                                                required
-                                            />
-                                        )}
-                                    />
-                                </LocalizationProvider>
-
-                            </div>
-                            <div className={styles.twoInputSections}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="hazard-label">Hazard</InputLabel>
-                                    <Select
-                                        labelId="hazard"
-                                        id="hazard-select"
-                                        value={hazardList.length ? selectedHazardName : ''}
-                                        label="Hazard"
-                                        onChange={handleSelectedHazard}
-                                    >
-                                        {hazardList.length && hazardList.map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.id}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-                                </FormControl>
-                                <TextField
-                                    required
-                                    id="outlined-basic"
-                                    label="Hazard Inducer"
-                                    variant="outlined"
-
-                                    value={cause}
-                                    onChange={e => setCause(e.target.value)}
-                                />
-                            </div>
-                            <div className={styles.infoBar}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    {' '}
-                                    {' '}
-                                    Geographical Information on the area
-                                </p>
-                            </div>
-                            <div className={styles.fourInputSections}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="province-label">Province</InputLabel>
-                                    <Select
-                                        labelId="province"
-                                        id="province-select"
-                                        value={provinceName}
-                                        label="Provinvce"
-                                        onChange={handleProvince}
-                                        disabled={disableMapFilter}
-
-                                    >
-                                        {provinces && provinces.map(item => (
-                                            <MenuItem
-                                                key={item.title}
-                                                value={item.title}
-                                            >
-                                                {item.title}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl fullWidth>
-                                    <InputLabel id="district-label">District</InputLabel>
-                                    <Select
-                                        labelId="district"
-                                        id="district-select"
-                                        value={districtName}
-                                        label="District"
-                                        onChange={handleDistrict}
-                                        disabled={disableMapFilter}
-
-                                    >
-                                        {districts && districts.filter(
-                                            item => item.province === provinceId,
-                                        ).map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.title}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-                                </FormControl>
-                                <FormControl fullWidth>
-                                    <InputLabel id="municipality-label">Municipality</InputLabel>
-                                    <Select
-                                        labelId="municipality"
-                                        id="munnicipality-select"
-                                        value={municipalityName}
-                                        label="Municipality"
-                                        onChange={handleMunicipality}
-                                        disabled={disableMapFilter}
-
-                                    >
-                                        {municipalities && municipalities.filter(
-                                            item => item.district === districtId,
-                                        ).map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.title}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-                                </FormControl>
-                                <FormControl fullWidth>
-                                    <InputLabel id="ward-label">Ward</InputLabel>
-                                    <Select
-                                        labelId="ward"
-                                        id="ward-select"
-                                        value={wardName}
-                                        label="Ward"
-                                        onChange={handleWard}
-                                        disabled={disableMapFilter}
-
-                                    >
-                                        {wards && wards.filter(item => item.municipality === municipalityId)
-                                            .map(item => Number(item.title)).sort((a, b) => a - b)
-                                            .map(item => (
-                                                <MenuItem key={item} value={item}>
-                                                    {item}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </div>
-                            <TextField
-
-                                className={styles.hazardInducer}
-                                id="outlined-basic"
-                                label="Local Address(Kindly Specify)"
-                                variant="outlined"
-                                value={streetAddress}
-                                onChange={e => setStreetAddress(e.target.value)}
-                            />
-                            <div className={styles.twoInputSections}>
-                                <TextField
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={lattitude}
-                                    onChange={e => setLattitude(e.target.value)}
-                                    error={latError}
-                                    helperText={latError ? 'This field is required' : null}
-                                    id="outlined-basic"
-                                    label="Lattitude"
-                                />
-
-                                <TextField
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={longitude}
-                                    onChange={e => setLongitude(e.target.value)}
-                                    error={longError}
-                                    helperText={longError ? 'This field is required' : null}
-                                    id="outlined-basic"
-                                    label="Longitude"
-                                />
-
-                            </div>
-
-                            <Map
+                    {modulePage === 1
+                        ? (
+                            <General
+                                validationError={validationError}
+                                uniqueId={uniqueId}
+                                setuniqueId={setuniqueId}
+                                reportedDate={reportedDate}
+                                setReportedDate={setReportedDate}
+                                dateError={dateError}
+                                hazardList={hazardList}
+                                selectedHazardName={selectedHazardName}
+                                handleSelectedHazard={handleSelectedHazard}
+                                cause={cause}
+                                setCause={setCause}
+                                provinceName={provinceName}
+                                handleProvince={handleProvince}
+                                provinces={provinces}
+                                districtName={districtName}
+                                handleDistrict={handleDistrict}
+                                districts={districts}
+                                provinceId={provinceId}
+                                municipalityName={municipalityName}
+                                handleMunicipality={handleMunicipality}
+                                municipalities={municipalities}
+                                districtId={districtId}
+                                wardName={wardName}
+                                handleWard={handleWard}
+                                wards={wards}
+                                municipalityId={municipalityId}
+                                streetAddress={streetAddress}
+                                setStreetAddress={setStreetAddress}
+                                lattitude={lattitude}
+                                setLattitude={setLattitude}
+                                latError={latError}
+                                longitude={longitude}
+                                setLongitude={setLongitude}
+                                longError={longError}
                                 centriodsForMap={centriodsForMap}
                                 initialProvinceCenter={initialProvinceCenter}
                                 initialDistrictCenter={initialDistrictCenter}
                                 initialMunCenter={initialMunCenter}
-                                editedCoordinates={incidentEditData}
+                                incidentEditData={incidentEditData}
                                 disableMapFilterLofic={disableMapFilterLofic}
                                 disableMapFilter={disableMapFilter}
+                                teError={teError}
+                                totalEstimatedLoss={totalEstimatedLoss}
+                                setTotalEstimatedLoss={setTotalEstimatedLoss}
+                                verified={verified}
+                                handleVerifiedChange={handleVerifiedChange}
+                                notVerified={notVerified}
+                                handleNotVerifiedChange={handleNotVerifiedChange}
+                                verificationMessage={verificationMessage}
+                                setVerificationMessage={setVerificationMessage}
+                                approved={approved}
+                                handleApprovedChange={handleApprovedChange}
+                                notApproved={notApproved}
+                                handleNotApprovedChange={handleNotApprovedChange}
+                                handleEpidemicFormSubmit={handleEpidemicFormSubmit}
+                                handleTableButton={handleTableButton}
+                                handleNext={handleNext}
                             />
-                            <div className={styles.infoBarCasuality}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    Casualty Statistics of the area
-                                </p>
-                            </div>
+                        ) : ''}
+                    {modulePage === 2 ? <PeopleLoss /> : ''}
 
-
-                            <div className={styles.mycontainer}>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Dead</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={dmError}
-                                        helperText={dmError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={deadFormMale}
-
-                                        onChange={e => setDeadMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={dfError}
-                                        helperText={dfError ? 'This field is required' : null}
-                                        value={deadFormFemale}
-                                        onChange={e => setDeadFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={deadFormOther}
-                                        error={doError}
-                                        helperText={doError ? 'This field is required' : null}
-                                        onChange={e => setDeadOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={deadFormDisabled}
-                                        error={ddError}
-                                        helperText={ddError ? 'This field is required' : null}
-                                        onChange={e => setDeadDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Injured</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormMale}
-                                        error={amError}
-                                        helperText={amError ? 'This field is required' : null}
-                                        onChange={e => setInjuredMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormFemale}
-                                        error={afError}
-                                        helperText={afError ? 'This field is required' : null}
-                                        onChange={e => setInjuredFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormOther}
-                                        error={aoError}
-                                        helperText={aoError ? 'This field is required' : null}
-                                        onChange={e => setInjuredOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormDisabled}
-                                        error={adError}
-                                        helperText={adError ? 'This field is required' : null}
-                                        onChange={e => setInjuredDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Missing</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingMale}
-                                        error={amError}
-                                        helperText={amError ? 'This field is required' : null}
-                                        onChange={e => setMissingMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingFemale}
-                                        error={afError}
-                                        helperText={afError ? 'This field is required' : null}
-                                        onChange={e => setMissingFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingOther}
-                                        error={aoError}
-                                        helperText={aoError ? 'This field is required' : null}
-                                        onChange={e => setMissingOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingDisabled}
-                                        error={adError}
-                                        helperText={adError ? 'This field is required' : null}
-                                        onChange={e => setMissingDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.infoBarCasuality}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    Loss and Damage by Incidents
-                                </p>
-                            </div>
-                            <div className={styles.mycontainer}>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Loss</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={teError}
-                                        helperText={teError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={totalEstimatedLoss}
-
-                                        onChange={e => setTotalEstimatedLoss(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total Estimated Loss (NPR)"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={aeError}
-                                        helperText={aeError ? 'This field is required' : null}
-                                        value={agricultureEconomicLoss}
-                                        onChange={e => setAgricultureEconomicLoss(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Agriculture Economic Loss (NPR)"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={infrastructureEconomicLoss}
-                                        error={ieError}
-                                        helperText={ieError ? 'This field is required' : null}
-                                        onChange={e => setInfrastructureEconomicLoss(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Infrastructure Economic Loss (NPR)"
-                                        variant="outlined"
-
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Damage</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={idError}
-                                        helperText={idError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={infrastructureDestroyed}
-
-                                        onChange={e => setInfrastructureDestroyed(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total Infrastructure Destroyed"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={hdError}
-                                        helperText={hdError ? 'This field is required' : null}
-                                        value={houseDestroyed}
-                                        onChange={e => setHouseDestroyed(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total House Destroyed"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={houseAffected}
-                                        error={haError}
-                                        helperText={haError ? 'This field is required' : null}
-                                        onChange={e => setHouseAffected(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total House Affected"
-                                        variant="outlined"
-
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={livestockDestroyed}
-                                        error={ldError}
-                                        helperText={ldError ? 'This field is required' : null}
-                                        onChange={e => setLivestockDestroyed(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total livestock Destroyed"
-                                        variant="outlined"
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.infoBarCasuality}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    Verification of the data
-                                </p>
-                            </div>
-                            <div className={styles.checkBoxArea}>
-                                <p className={styles.verifiedOrApproved}>01.Verified</p>
-                                <div className={styles.verified}>
-
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="verified"
-                                        checked={verified}
-                                        onChange={e => handleVerifiedChange()}
-
-                                    />
-
-                                    <InputLabel htmlFor="verified">Yes</InputLabel>
-
-
-                                </div>
-                                <div className={styles.notVerified}>
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="notVerified"
-                                        checked={notVerified}
-                                        onChange={e => handleNotVerifiedChange()}
-
-
-                                    />
-                                    <InputLabel htmlFor="notVerified">No</InputLabel>
-                                </div>
-                            </div>
-                            <div className={styles.checkBoxArea}>
-
-                                <TextField
-                                    className={styles.hazardInducer}
-                                    id="outlined-basic"
-                                    label="Verification Message"
-                                    value={verificationMessage}
-                                    onChange={e => setVerificationMessage(e.target.value)}
-
-                                    variant="outlined"
-                                />
-                                <p className={styles.verifiedOrApproved}>02.Approved</p>
-
-                                <div className={styles.verified}>
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="verified"
-                                        checked={approved}
-                                        onChange={handleApprovedChange}
-
-                                    />
-
-                                    <InputLabel htmlFor="verified">Yes</InputLabel>
-                                </div>
-                                <div className={styles.notVerified}>
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="notVerified"
-                                        checked={notApproved}
-                                        onChange={handleNotApprovedChange}
-
-                                    />
-                                    <InputLabel htmlFor="notVerified">No</InputLabel>
-                                </div>
-                            </div>
-                            <div className={styles.saveOrAddButtons}>
-                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <Footer />

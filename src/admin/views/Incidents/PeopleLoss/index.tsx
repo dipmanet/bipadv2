@@ -1,0 +1,178 @@
+/* eslint-disable max-len */
+/* eslint-disable react/jsx-indent */
+import React, { useState } from 'react';
+import TextField from '@material-ui/core/TextField';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { DatePicker } from '@mui/lab';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import Map from 'src/admin/components/Mappointpicker';
+import { connect } from 'react-redux';
+import { createRequestClient, methods } from '@togglecorp/react-rest-request';
+import Loader from 'react-loader';
+import styles from '../styles.module.scss';
+import Ideaicon from '../../../resources/ideaicon.svg';
+import { createConnectedRequestCoordinator } from '#request';
+import { SetEpidemicsPageAction } from '#actionCreators';
+import PeopleLossTable from './Table';
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
+});
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    loss: {
+        url: '/loss/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            props.setEpidemicsPage({ lossID: response.id });
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            if (params && params.handleNext) {
+                params.handleNext(2);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+
+};
+
+
+const PeopleLoss = ({ validationError,
+    uniqueId, setuniqueId, reportedDate, setReportedDate, dateError, hazardList,
+    selectedHazardName, handleSelectedHazard,
+    cause, setCause, provinceName, handleProvince, provinces,
+    districtName, handleDistrict,
+    districts, provinceId, municipalityName, handleMunicipality,
+    municipalities, districtId,
+    wardName, handleWard, wards, municipalityId,
+    streetAddress, setStreetAddress,
+    lattitude, setLattitude, latError, longitude, setLongitude, longError,
+    centriodsForMap, initialProvinceCenter,
+    initialDistrictCenter, initialMunCenter, incidentEditData, disableMapFilterLofic,
+    disableMapFilter, teError,
+    totalEstimatedLoss, setTotalEstimatedLoss,
+    verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
+    verificationMessage, setVerificationMessage,
+    approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
+    handleNext, requests: { loss } }) => {
+    const [loader, setLoader] = useState(false);
+
+
+    const handleSave = async () => {
+        const lossFormData = {
+            estimatedLoss: Number(totalEstimatedLoss),
+        };
+        setLoader(true);
+        await loss.do({ body: lossFormData, setLoader, handleNext });
+    };
+
+
+    return (
+
+        <div className={styles.mainForm}>
+            {
+                loader
+                    ? (
+                        <Loader options={{
+                            position: 'fixed',
+                            top: '48%',
+                            right: 0,
+                            bottom: 0,
+                            left: '48%',
+                            background: 'gray',
+                            zIndex: 9999,
+                        }}
+                        />
+                    ) : ''
+            }
+            <div className={styles.generalInfoAndTableButton}>
+                <h1 className={styles.generalInfo}>General Information</h1>
+                <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>View Data Table</button>
+            </div>
+            <div className={styles.shortGeneralInfo}>
+                <img className={styles.ideaIcon} src={Ideaicon} alt="" />
+                <p className={styles.ideaPara}>
+                    The epidemics form consists of the details of the epidemics,
+                    geographical information of the affected area, and the
+                    casualty details disaggregated by gender and disability.
+
+                </p>
+            </div>
+            <div className={styles.infoBar}>
+                <p className={styles.instInfo}>
+                    Reported Date and Location are required information
+                </p>
+            </div>
+            <div className={styles.mainDataEntrySection}>
+
+                <div>
+                    <h3 className={styles.formGeneralInfo}>People Loss Information</h3>
+                    <span className={styles.ValidationErrors}>{validationError}</span>
+                    <PeopleLossTable />
+                    <div className={styles.twoInputSections}>
+                        <TextField
+                            variant="outlined"
+                            className={styles.materialUiInput}
+                            // value={uniqueId}
+                            // onChange={e => setuniqueId(e.target.value)}
+                            id="outlined-basic"
+                            label="Unique Id"
+                            disabled
+                        />
+                        <TextField
+                            variant="outlined"
+                            className={styles.materialUiInput}
+                            // value={uniqueId}
+                            // onChange={e => setuniqueId(e.target.value)}
+                            id="outlined-basic"
+                            label="Unique Id"
+                            disabled
+                        />
+
+                    </div>
+
+                    <div className={styles.checkBoxArea}>
+
+
+                        {/* <div className={styles.saveOrAddButtons}>
+                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
+                            </div> */}
+                        <div className={styles.saveOrAddButtons}>
+                            <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    );
+};
+
+
+export default connect(null, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            PeopleLoss,
+        ),
+    ),
+);

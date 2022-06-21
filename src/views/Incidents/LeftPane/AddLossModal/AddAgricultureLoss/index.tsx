@@ -89,7 +89,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 const keySelector = (d: Field) => d.id;
 const labelSelector = (d: Field) => d.title;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     // TODO: change this when actual api is available
     agricultureLossTypeGet: {
         url: '/agriculture-type/',
