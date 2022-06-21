@@ -53,8 +53,8 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     peopleLoss: {
-        // url: ({ props }) => `/loss-people/?loss=${props.epidemmicsPage.lossID}`,
-        url: ({ props }) => '/loss-people/?loss=153156',
+        url: ({ props }) => `/loss-people/?loss=${props.epidemmicsPage.lossID}`,
+        // url: ({ props }) => '/loss-people/?loss=24180',
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {

@@ -46,7 +46,7 @@ import {
     epidemicsPageSelector,
     userSelector,
 } from '#selectors';
-import { SetEpidemicsPageAction } from '#actionCreators';
+import { setCountryListAction, SetEpidemicsPageAction } from '#actionCreators';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import General from './General';
@@ -67,6 +67,17 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    countryListFetch: {
+        url: '/country/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props, params }) => {
+            if (params && params.setCountryList) {
+                console.log('this is final list', response);
+                params.setCountryList(response.results);
+            }
+        },
+    },
     hazardListFetch: {
         url: '/hazard/',
         method: methods.GET,
@@ -771,9 +782,9 @@ const Epidemics = (props) => {
     const [hazardList, setHazardList] = useState([]);
     const [selectedHazardName, setSelectedHazardName] = useState('');
     const [selectedHazardId, setSelectedHazardId] = useState('');
+    const [countryList, setCountryList] = useState([]);
 
-
-    const [modulePage, setmodulePage] = useState(2);
+    const [modulePage, setmodulePage] = useState(1);
     const { epidemmicsPage:
         {
             lossID,
@@ -789,7 +800,7 @@ const Epidemics = (props) => {
         municipalities,
         wards,
         uri,
-        epidemmicsPage, requests: { hazardListFetch } } = props;
+        epidemmicsPage, requests: { hazardListFetch, countryListFetch } } = props;
 
     const progressBar = (moduleNo, div) => {
         console.log('Module no', moduleNo);
@@ -804,6 +815,7 @@ const Epidemics = (props) => {
 
     useEffect(() => {
         hazardListFetch.do({ setHazardList });
+        countryListFetch.do({ setCountryList });
     }, []);
 
     const handleSelectedHazard = (e) => {
@@ -1412,6 +1424,7 @@ const Epidemics = (props) => {
         setwardName(e.target.value);
         setIsEditedIncident(true);
     };
+    console.log('This is country list', countryList);
     return (
         <>
             <Page hideFilter hideMap />
@@ -1544,7 +1557,7 @@ const Epidemics = (props) => {
                                 handleNext={handleNext}
                             />
                         ) : ''}
-                    {modulePage === 2 ? <PeopleLoss /> : ''}
+                    {modulePage === 2 ? <PeopleLoss countryList={countryList} /> : ''}
 
                 </div>
             </div>

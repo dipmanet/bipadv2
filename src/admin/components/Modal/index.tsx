@@ -21,6 +21,7 @@ const BasicModal = (props: Props): JSX.Element => {
         description,
         handleClose,
         renderer,
+        children,
     } = props;
 
     return (
@@ -33,20 +34,20 @@ const BasicModal = (props: Props): JSX.Element => {
 
             >
                 <Box className={styles.box}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    {/* <Typography id="modal-modal-title" variant="h6" component="h2">
                         {title}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         {description}
-                    </Typography>
-
+                    </Typography> */}
+                    {children}
                     {renderer || ''}
                     <button
                         onClick={handleClose}
                         type="button"
                         className={styles.nextBtn}
                     >
-                            Ok
+                        Ok
                     </button>
                 </Box>
             </Modal>

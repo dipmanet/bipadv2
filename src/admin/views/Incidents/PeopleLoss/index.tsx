@@ -10,51 +10,18 @@ import Map from 'src/admin/components/Mappointpicker';
 import { connect } from 'react-redux';
 import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import Loader from 'react-loader';
+import Modal from 'src/admin/components/Modal';
+import Box from '@mui/material/Box';
 import styles from '../styles.module.scss';
 import Ideaicon from '../../../resources/ideaicon.svg';
 import { createConnectedRequestCoordinator } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import PeopleLossTable from './Table';
+import DataEntryForm from './DataEntryForm';
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    loss: {
-        url: '/loss/',
-        method: methods.POST,
-        body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props, params }) => {
-            props.setEpidemicsPage({ lossID: response.id });
-            if (params && params.setLoader) {
-                params.setLoader(false);
-            }
-            if (params && params.handleNext) {
-                params.handleNext(2);
-            }
-        },
-        onFailure: ({ error, params }) => {
-            if (params && params.setEpidemicsPage) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setEpidemicsPage({
-                    lossError: 'Some problem occurred',
-                });
-                if (params && params.setLoader) {
-                    params.setLoader(false);
-                }
-            }
-        },
-        onFatal: ({ params }) => {
-            if (params && params.setEpidemicsPage) {
-                params.setEpidemicsPage({
-                    lossError: 'Some problem occurred',
-                });
-            }
-        },
-    },
-
-};
 
 
 const PeopleLoss = ({ validationError,
@@ -74,10 +41,14 @@ const PeopleLoss = ({ validationError,
     verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
     verificationMessage, setVerificationMessage,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
-    handleNext, requests: { loss } }) => {
+    handleNext, requests: { loss }, countryList }) => {
     const [loader, setLoader] = useState(false);
+    const [open, setOpen] = useState(false);
 
 
+    const handleCloseModal = () => {
+        setOpen(false);
+    };
     const handleSave = async () => {
         const lossFormData = {
             estimatedLoss: Number(totalEstimatedLoss),
@@ -86,7 +57,7 @@ const PeopleLoss = ({ validationError,
         await loss.do({ body: lossFormData, setLoader, handleNext });
     };
 
-
+    console.log('This is countryList', countryList);
     return (
 
         <div className={styles.mainForm}>
@@ -105,6 +76,8 @@ const PeopleLoss = ({ validationError,
                         />
                     ) : ''
             }
+            <DataEntryForm open={open} handleCloseModal={handleCloseModal} countryList={countryList} />
+
             <div className={styles.generalInfoAndTableButton}>
                 <h1 className={styles.generalInfo}>General Information</h1>
                 <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>View Data Table</button>
@@ -129,27 +102,7 @@ const PeopleLoss = ({ validationError,
                     <h3 className={styles.formGeneralInfo}>People Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
                     <PeopleLossTable />
-                    <div className={styles.twoInputSections}>
-                        <TextField
-                            variant="outlined"
-                            className={styles.materialUiInput}
-                            // value={uniqueId}
-                            // onChange={e => setuniqueId(e.target.value)}
-                            id="outlined-basic"
-                            label="Unique Id"
-                            disabled
-                        />
-                        <TextField
-                            variant="outlined"
-                            className={styles.materialUiInput}
-                            // value={uniqueId}
-                            // onChange={e => setuniqueId(e.target.value)}
-                            id="outlined-basic"
-                            label="Unique Id"
-                            disabled
-                        />
 
-                    </div>
 
                     <div className={styles.checkBoxArea}>
 
@@ -158,6 +111,7 @@ const PeopleLoss = ({ validationError,
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
+                            <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
                             <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">Next</button>
                         </div>
                     </div>
@@ -171,7 +125,7 @@ const PeopleLoss = ({ validationError,
 
 export default connect(null, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
-        createRequestClient(requests)(
+        createRequestClient()(
             PeopleLoss,
         ),
     ),
