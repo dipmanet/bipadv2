@@ -9,6 +9,7 @@ const SelectComponent = (props) => {
             <select
                 className={styles.mainSelect}
                 value={selctFieldCurrentValue}
+                defaultValue={'Select VisRisk Theme'}
                 onChange={e => setSelctFieldCurrentValue(e.target.value)}
             >
                 {

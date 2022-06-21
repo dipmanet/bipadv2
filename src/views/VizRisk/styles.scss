@@ -1,9 +1,43 @@
 .mainVzContainer {
-    position: relative;
+    position: absolute;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
     width: 100vw;
     height: 100%;
+    overflow-x: hidden;
+
+    .hamburgerBtnContainer {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 100%;
+        z-index: 9999;
+
+        .hamburgerBtn {
+            color: white;
+            display: flex;
+            align-items: center;
+            //    border: 1px solid red;
+            padding: 0;
+
+            filter: saturate(100%);
+
+            .hamburgerBtnIcon {
+                font-size: 30px;
+                color: rgb(175, 220, 241);
+            }
+
+            .strong {
+                color: rgb(175, 220, 241);
+                // opacity: 0.87;
+                display: none;
+            }
+
+        }
+
+
+    }
+
 }

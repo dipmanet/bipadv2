@@ -2,19 +2,19 @@
     display: flex;
     align-items: center;
     position: absolute;
-    top: 40px;
-    left: 5%;
+    top: 35px;
+    left: 4%;
 
     .toggleDiv {
         display: flex;
         justify-content: center;
         height: 35px;
         width: 15px;
-        background-color: black;
+        background-color: #03212e;
         border-radius: 10px;
         cursor: pointer;
         outline: none;
-        border: none;
+        border: 1px solid white;
 
         .circle {
             position: relative;
@@ -38,6 +38,7 @@
     .textSection {
         .textLabel {
             margin: 0 5px;
+            color: white;
 
             &:first-child {
                 padding-bottom: 4px;

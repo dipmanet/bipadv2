@@ -4,11 +4,12 @@ import mapboxgl from 'mapbox-gl';
 
 import { AppState } from '#types';
 import { mapSources, mapStyles } from '#constants';
-import { vzRiskMunicipalData, vzRiskProvinceData } from '../VzRiskData';
+import { hideMapLayers, showMapLayers } from '#views/VizRisk/RatnaNagar/utils';
 import { provincesSelector, municipalitiesSelector } from '#selectors';
+import { vzRiskMunicipalData, vzRiskProvinceData } from '../VzRiskData';
 
 import styles from './styles.scss';
-import { checkIndicator, checkType } from '../utils';
+import { checkIndicator, checkType, filterDataWithIndicator, vizRiskType } from '../utils';
 
 const mapStateToProps = (state: AppState) => ({
     provinces: provincesSelector(state),
@@ -23,13 +24,24 @@ if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 interface Props {
+    vzLabel: string;
+    provinces: any;
+    municipalities: any;
+    selctFieldCurrentValue: string;
 }
 
 const Map = (props: Props) => {
-    const mapContainerRef = useRef();
-    const updateMap = useRef<mapboxgl.Map>();
+    const mapContainerRef = useRef<React.MutableRefObject<HTMLElement | undefined>>();
+    const updateMap = useRef<mapboxgl.Map>(null);
 
-    const { vzLabel, provinces, municipalities } = props;
+    const { vzLabel,
+        provinces,
+        municipalities,
+        selctFieldCurrentValue,
+        clickedVizrisk,
+        setClickedVizrisk,
+        setShowMenu,
+        searchBbox } = props;
 
     function noop() { }
 
@@ -39,46 +51,54 @@ const Map = (props: Props) => {
             console.error('No container found.');
             return noop;
         }
-        const provinceWithId = [2, 6];
+        const provinceIdarray = vzRiskProvinceData.map(item => item.id);
 
-        const allData = provinces.map(data => ({
+        const allData = provinces.map((data: any) => ({
             ...data,
-            value: !!provinceWithId.includes(data.id),
+            value: !!provinceIdarray.includes(data.id),
+            indicator: checkIndicator(vzRiskProvinceData, data),
         }));
-        const array = vzRiskMunicipalData.map(item => item.federalId);
+        const array = vzRiskMunicipalData.map(item => item.id);
 
-        const allDataMunipal = municipalities.map(data => ({
+        const allDataMunipal = municipalities.map((data: any) => ({
             ...data,
             value: !!array.includes(data.id),
             indicator: checkIndicator(vzRiskMunicipalData, data),
         }));
 
+        const allAvialableVizrisks = [...vzRiskMunicipalData, ...vzRiskProvinceData]
+            .map(item => item.id);
 
-        console.log('allData', allDataMunipal);
 
         const landingPageMap = new mapboxgl.Map({
             container: mapContainer,
-            style: 'mapbox://styles/yilab/ckb7jq0gk08gx1io0xanwesfp',
+            style: 'mapbox://styles/yilab/cl4npfhi4002x14l5jf8bn4d3',
             logoPosition: 'top-left',
             minZoom: 5,
             // makes initial map center to Nepal
-            center: {
-                lng: 85.300140,
-                lat: 27.700769,
-            },
-            zoom: 6,
+            // center: {
+            //     lng: 84.394226,
+            //     lat: 28.384151,
+            // },
+            zoom: 7,
         });
 
         if (updateMap) {
             updateMap.current = landingPageMap;
         }
-
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'popup',
+        });
         landingPageMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
         landingPageMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         landingPageMap.on('style.load', () => {
             landingPageMap.resize();
+            landingPageMap.fitBounds([[79.161987, 25.923467], [89.626465, 30.789037]],
+                { duration: 0 });
             landingPageMap.addSource('base-outline', {
                 type: 'vector',
                 url: mapSources.nepal.url,
@@ -94,14 +114,14 @@ const Map = (props: Props) => {
                     'fill-color': [
                         'case',
                         ['boolean', ['feature-state', 'value'], 'true'],
-                        'red', 'white',
+                        'red', 'black',
                     ],
                 },
                 layout: {
                     visibility: 'none',
                 },
             });
-            allDataMunipal.forEach((attribute) => {
+            allDataMunipal.forEach((attribute: any) => {
                 landingPageMap.setFeatureState({
                     id: attribute.id,
                     source: 'base-outline',
@@ -121,21 +141,79 @@ const Map = (props: Props) => {
                     'fill-opacity': 1,
                     'fill-color': ['feature-state', 'color'],
                 },
-                layout: {
-                    visibility: 'visible',
-                },
-                // filter: ['==', ['feature-state', 'color'], 'red'],
+
             });
 
             landingPageMap.on('click', 'municipality-vizrisk', (e) => {
-                console.log('features', e.features);
+                if (e && e.features && e.features[0]) {
+                    const name = e.features[0].properties.title;
+                    console.log('feawtures', e.features[0]);
+
+                    if (allAvialableVizrisks.includes(e.features[0].id)) {
+                        setClickedVizrisk(name);
+                        setShowMenu(false);
+                    }
+                }
             });
-            allData.forEach((attribute) => {
+            landingPageMap.on('mousemove', 'municipality-vizrisk', (e) => {
+                landingPageMap.getCanvas().style.cursor = 'pointer';
+                if (e && e.features && e.features[0] && e.features[0].properties) {
+                    const { lngLat } = e;
+                    const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                    const name = e.features[0].properties.title;
+                    const type = e.features[0].state.indicator;
+
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="display : flex; flex-direction:column ;
+                        align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
+                        <p style="margin:0px;padding:5px;color:cyan;text-transform: uppercase;font-weight:bold;">${name}</p>
+                        <p style="margin:0px;padding:5px;color:white;font-weight:bold;">${vizRiskType(type)}</p>
+                         </div>
+        `,
+                    ).addTo(landingPageMap);
+                }
+            });
+            landingPageMap.on('mouseleave', 'municipality-vizrisk', (e) => {
+                landingPageMap.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+            landingPageMap.on('click', 'province-vizrisk', (e) => {
+                if (e && e.features && e.features[0]) {
+                    const name = e.features[0].properties.title;
+                    if (allAvialableVizrisks.includes(e.features[0].id)) {
+                        setClickedVizrisk(name);
+                        setShowMenu(false);
+                    }
+                }
+            });
+            landingPageMap.on('mousemove', 'province-vizrisk', (e) => {
+                landingPageMap.getCanvas().style.cursor = 'pointer';
+                if (e && e.features && e.features[0] && e.features[0].properties) {
+                    const { lngLat } = e;
+                    const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                    const name = e.features[0].properties.title;
+                    const type = e.features[0].state.indicator;
+
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="display : flex; flex-direction:column ;
+                        align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
+                        <p style="margin:0px;padding:5px;color:cyan;text-transform: uppercase;font-weight:bold;">${name}</p>
+                        <p style="margin:0px;padding:5px;color:white;font-weight:bold;">${vizRiskType(type)}</p>
+                         </div>
+        `,
+                    ).addTo(landingPageMap);
+                }
+            });
+            landingPageMap.on('mouseleave', 'province-vizrisk', (e) => {
+                landingPageMap.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+            allData.forEach((attribute: any) => {
                 landingPageMap.setFeatureState({
                     id: attribute.id,
                     source: 'base-outline',
                     sourceLayer: mapSources.nepal.layers.province,
-                }, { value: attribute.value });
+                }, { value: attribute.value, indicator: attribute.indicator });
             });
 
 
@@ -166,34 +244,70 @@ const Map = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (searchBbox.length > 0) {
+            if (updateMap.current) {
+                updateMap.current.fitBounds(searchBbox, { padding: 20 });
+            }
+        }
+    }, [searchBbox]);
+
 
     useEffect(() => {
+        const array = vzRiskMunicipalData.map(item => item.id);
+
+        const allDataMunipal = municipalities.map((data: any) => ({
+            ...data,
+            value: !!array.includes(data.id),
+            indicator: checkIndicator(vzRiskMunicipalData, data),
+        }));
+
+        const floodId = filterDataWithIndicator(allDataMunipal, 6);
+        const landSlideId = filterDataWithIndicator(allDataMunipal, 12);
+        const multiHazardId = filterDataWithIndicator(allDataMunipal, 14);
+
         if (updateMap.current && updateMap.current.isStyleLoaded()) {
             if (vzLabel === 'province') {
-                if (updateMap.current) {
-                    updateMap.current.setLayoutProperty('province-outline', 'visibility', 'visible');
-                    updateMap.current.setLayoutProperty('province-vizrisk', 'visibility', 'visible');
-                }
+                showMapLayers('province-outline', updateMap);
+                showMapLayers('province-vizrisk', updateMap);
             } else {
-                updateMap.current.setLayoutProperty('province-outline', 'visibility', 'none');
-                updateMap.current.setLayoutProperty('province-vizrisk', 'visibility', 'none');
+                hideMapLayers('province-outline', updateMap);
+                hideMapLayers('province-vizrisk', updateMap);
             }
 
             if (vzLabel === 'municipality') {
-                if (updateMap.current) {
-                    updateMap.current.setLayoutProperty('municipality-outline', 'visibility', 'visible');
-                    updateMap.current.setLayoutProperty('municipality-vizrisk', 'visibility', 'visible');
-                    // updateMap.current.setFilter('municipality-vizrisk',
-                    // ['==', ['feature-state', 'color'], 'red']);
+                showMapLayers('municipality-outline', updateMap);
+                showMapLayers('municipality-vizrisk', updateMap);
+                switch (selctFieldCurrentValue) {
+                    case 'Flood Exposure':
+                        updateMap.current.setFilter('municipality-vizrisk',
+                            ['match', ['id'], floodId, true, false]);
+                        break;
+                    case 'Landslide Exposure':
+                        updateMap.current.setFilter('municipality-vizrisk',
+                            ['match', ['id'], landSlideId, true, false]);
+                        break;
+                    case 'Multi-hazard Exposure':
+                        updateMap.current.setFilter('municipality-vizrisk',
+                            ['match', ['id'], multiHazardId, true, false]);
+                        break;
+
+                    default:
+                        break;
                 }
             } else {
-                updateMap.current.setLayoutProperty('municipality-outline', 'visibility', 'none');
-                updateMap.current.setLayoutProperty('municipality-vizrisk', 'visibility', 'none');
+                hideMapLayers('municipality-outline', updateMap);
+                hideMapLayers('municipality-vizrisk', updateMap);
             }
         }
-    }, [vzLabel]);
+    }, [municipalities, selctFieldCurrentValue, vzLabel]);
+
     return (
-        <div ref={mapContainerRef} className={styles.landingPageMap} />
+        <div
+            style={{ zIndex: clickedVizrisk && -1 }}
+            ref={mapContainerRef}
+            className={styles.landingPageMap}
+        />
     );
 };
 

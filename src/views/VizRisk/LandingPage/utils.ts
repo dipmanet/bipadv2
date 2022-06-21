@@ -10,11 +10,26 @@ export const checkType = (indicator: number) => {
             return 'red';
 
         default:
-            return 'white';
+            return '';
+    }
+};
+export const vizRiskType = (indicator: number) => {
+    switch (indicator) {
+        case 6:
+            return 'Flood Exposure';
+
+        case 12:
+            return 'Landslide Exposure';
+
+        case 14:
+            return 'Muti-Hazard Exposure';
+
+        default:
+            return '';
     }
 };
 
-export const checkIndicator = (vzRiskMunicipalData, data) => {
+export const checkIndicator = (vzRiskMunicipalData: any[], data: {}) => {
     // eslint-disable-next-line no-plusplus
     for (let index = 0; index < vzRiskMunicipalData.length; index++) {
         if (data.title === vzRiskMunicipalData[index].name) {
@@ -22,4 +37,14 @@ export const checkIndicator = (vzRiskMunicipalData, data) => {
         }
     }
     return 0;
+};
+
+export const filterDataWithIndicator = (data: [], indicator: number) => {
+    if (data.length > 0) {
+        const filterdData = data.filter(
+            (item: { indicator: number }) => item.indicator === indicator,
+        );
+        return filterdData.map(filData => filData.id);
+    }
+    return [];
 };
