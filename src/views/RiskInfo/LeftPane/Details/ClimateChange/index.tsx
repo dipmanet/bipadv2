@@ -570,8 +570,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
             language: { language },
         } = this.props;
 
-        console.log(layerGroupList, 'test');
-
         const {
             timePeriodKey,
             measurementType,
@@ -581,9 +579,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
             isActive,
         } = this.state;
         const { climateChangeSelectedDistrict } = this.context;
-
-        console.log(climateChangeSelectedDistrict, 'district');
-
 
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
