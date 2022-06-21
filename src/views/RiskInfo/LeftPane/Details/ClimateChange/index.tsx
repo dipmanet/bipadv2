@@ -146,7 +146,9 @@ const measurementOptions: {
     key: MeasurementType;
     label: 'Temperature' | 'Precipitation';
     legendTitle: string;
+    legendTitleNe: string;
     axisLabel: string;
+    axisLabelNe: string;
     chartTitle: string;
     chartTitleNe: string;
     labelNe: string;
@@ -154,9 +156,11 @@ const measurementOptions: {
         {
             key: 'temperature',
             label: 'Temperature',
-            labelNe: 'तापमान',
+            labelNe: 'तापक्रम',
             axisLabel: 'Temperature (°C)',
+            axisLabelNe: 'तापक्रम (°C)',
             legendTitle: 'Temperature (°C)',
+            legendTitleNe: 'तापक्रम (°C)',
             chartTitle: 'Ensemble Mean of Annual Temperature of',
             chartTitleNe: 'वार्षिक तापमान को एन्सेम्बल मीन',
         },
@@ -165,7 +169,9 @@ const measurementOptions: {
             label: 'Precipitation',
             labelNe: 'वर्षा',
             axisLabel: 'Precipitation (mm/year)',
+            axisLabelNe: 'वर्षा (मिमी/वर्ष)',
             legendTitle: 'Precipitation (mm/year)',
+            legendTitleNe: 'वर्षा (मिमी/वर्ष)',
             chartTitle: 'Ensemble Mean of Annual Temperature of',
             chartTitleNe: 'वार्षिक तापमान को एन्सेम्बल मीन',
         },
@@ -585,7 +591,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const pending = isAnyRequestPending(requests);
 
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
-        const yAxisLabel = selectedOption && selectedOption.axisLabel;
+        const yAxisLabel = selectedOption && language === 'en' ? selectedOption.axisLabel : selectedOption.axisLabelNe;
         const chartName = climateChangeSelectedDistrict.title || 'Nepal';
         const chartTitle = selectedOption
             && language === 'en' ? `${selectedOption.chartTitle} ${chartName}`
@@ -623,7 +629,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                                 modal={(
                                                     <ClimateChangeTable
                                                         data={flatData}
-                                                        title={measurementType}
+                                                        title={t(measurementType)}
                                                     />
                                                 )}
                                                 initialShowModal={false}
@@ -750,7 +756,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                                     angle={-30}
                                                 >
                                                     <Label
-                                                        value="Year"
+                                                        value={t('Year')}
                                                         offset={-5}
                                                         position="insideBottom"
                                                     />

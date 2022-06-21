@@ -1,5 +1,8 @@
 export const enTranslation = {
     translation: {
+        Year: 'Year',
+        temperature: 'temperature',
+        precipitation: 'precipitation',
         Measurement: 'Measurement',
         'Time period': 'Time period',
         Scenario: 'Scenario',
@@ -807,6 +810,9 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Year: 'वर्ष',
+        temperature: 'तापक्रम',
+        precipitation: 'वर्षा',
         Measurement: 'मापन',
         'Time period': 'समय अवधि',
         Scenario: 'परिदृश्य',
