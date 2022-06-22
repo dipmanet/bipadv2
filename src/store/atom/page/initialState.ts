@@ -557,6 +557,8 @@ const state: PageState = {
         successMessage: '',
         incidentData: [],
         peopleLossData: [],
+        familyLossData: [],
+        infrastructureLossData: [],
         incidentEditData: {},
         incidentUpdateError: '',
         epidemicChartHourlyLoading: false,

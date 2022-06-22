@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
@@ -51,6 +52,8 @@ import { setCountryListAction, SetEpidemicsPageAction } from '#actionCreators';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import General from './General';
 import PeopleLoss from './PeopleLoss';
+import FamilyLoss from './FamilyLoss';
+import InfrastructureLoss from './InfrastructureLoss';
 
 
 const mapStateToProps = (state, props) => ({
@@ -75,6 +78,39 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             if (params && params.setCountryList) {
                 console.log('this is final list', response);
                 params.setCountryList(response.results);
+            }
+        },
+    },
+    infrastructureTypeListFetch: {
+        url: '/infrastructure-type/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props, params }) => {
+            if (params && params.setCountryList) {
+                console.log('this is final list', response);
+                params.setCountryList(response.results);
+            }
+        },
+    },
+    infrastructureUnitListFetch: {
+        url: '/infrastructure-unit/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props, params }) => {
+            if (params && params.setCountryList) {
+                console.log('this is final list', response);
+                params.setCountryList(response.results);
+            }
+        },
+    },
+    resourceListFetch: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props, params }) => {
+            if (params && params.setResource) {
+                console.log('this is final list', response);
+                params.setResource(response.results);
             }
         },
     },
@@ -783,8 +819,13 @@ const Epidemics = (props) => {
     const [selectedHazardName, setSelectedHazardName] = useState('');
     const [selectedHazardId, setSelectedHazardId] = useState('');
     const [countryList, setCountryList] = useState([]);
+    const [infrastructureType, setInfrastructureType] = useState([]);
+    const [infrastructureUnit, setInfrastructureUnit] = useState([]);
+    const [resource, setResource] = useState([]);
 
     const [modulePage, setmodulePage] = useState(1);
+    { /** backup ward id is used to filter resource in infrastructure loss module */ }
+    const [backupWardId, setBackupWardId] = useState(null);
     const { epidemmicsPage:
         {
             lossID,
@@ -800,7 +841,8 @@ const Epidemics = (props) => {
         municipalities,
         wards,
         uri,
-        epidemmicsPage, requests: { hazardListFetch, countryListFetch } } = props;
+        epidemmicsPage, requests: { hazardListFetch, countryListFetch, infrastructureTypeListFetch,
+            infrastructureUnitListFetch, resourceListFetch } } = props;
 
     const progressBar = (moduleNo, div) => {
         console.log('Module no', moduleNo);
@@ -816,6 +858,9 @@ const Epidemics = (props) => {
     useEffect(() => {
         hazardListFetch.do({ setHazardList });
         countryListFetch.do({ setCountryList });
+        infrastructureTypeListFetch.do({ setInfrastructureType });
+        infrastructureUnitListFetch.do({ setInfrastructureUnit });
+        resourceListFetch.do({ setResource });
     }, []);
 
     const handleSelectedHazard = (e) => {
@@ -1003,6 +1048,7 @@ const Epidemics = (props) => {
 
         if (wardName) {
             setwardId(id);
+            setBackupWardId(id);
             setEditWardId(id);
             setDisableMapFilter(true);
         }
@@ -1196,7 +1242,7 @@ const Epidemics = (props) => {
             // }
         } else if (uniqueId) {
             setLoader(true);
-            const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
+            const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
             const data = {
                 ...incidentFormDataInitial,
                 title,
@@ -1325,7 +1371,7 @@ const Epidemics = (props) => {
     };
     useEffect(() => {
         if (lossID) {
-            const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
+            const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
             const data = {
                 ...incidentFormDataInitial,
                 loss: lossID,
@@ -1425,6 +1471,8 @@ const Epidemics = (props) => {
         setIsEditedIncident(true);
     };
     console.log('This is country list', countryList);
+    console.log('this is This is backup ward', backupWardId);
+    console.log('This resource', resource);
     return (
         <>
             <Page hideFilter hideMap />
@@ -1557,7 +1605,28 @@ const Epidemics = (props) => {
                                 handleNext={handleNext}
                             />
                         ) : ''}
-                    {modulePage === 2 ? <PeopleLoss countryList={countryList} /> : ''}
+                    {modulePage === 2 ? (
+                        <PeopleLoss
+                            countryList={countryList}
+                            handleNext={handleNext}
+                        />
+                    ) : ''}
+                    {modulePage === 3 ? (
+                        <FamilyLoss
+                            handleNext={handleNext}
+                            countryList={countryList}
+                        />
+                    ) : ''}
+                    {modulePage === 4 ? (
+                        <InfrastructureLoss
+                            countryList={countryList}
+                            infrastructureType={infrastructureType}
+                            infrastructureUnit={infrastructureUnit}
+                            resource={resource}
+                            backupWardId={backupWardId}
+                            handleNext={handleNext}
+                        />
+                    ) : ''}
 
                 </div>
             </div>

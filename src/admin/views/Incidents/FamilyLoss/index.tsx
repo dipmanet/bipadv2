@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 
-const PeopleLoss = ({ validationError,
+const FamilyLoss = ({ validationError,
     uniqueId, setuniqueId, reportedDate, setReportedDate, dateError, hazardList,
     selectedHazardName, handleSelectedHazard,
     cause, setCause, provinceName, handleProvince, provinces,
@@ -44,11 +44,11 @@ const PeopleLoss = ({ validationError,
     handleNext, requests: { loss }, countryList }) => {
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
-    const [peopleLossResponseId, setPeopleLossResponseId] = useState(null);
+    const [familyLossResponseId, setFamilyLossResponseId] = useState(null);
 
     const handleCloseModal = (id) => {
         setOpen(false);
-        setPeopleLossResponseId(id);
+        setFamilyLossResponseId(id);
     };
     const handleSave = async () => {
         const lossFormData = {
@@ -104,9 +104,9 @@ const PeopleLoss = ({ validationError,
             <div className={styles.mainDataEntrySection}>
 
                 <div>
-                    <h3 className={styles.formGeneralInfo}>People Loss Information</h3>
+                    <h3 className={styles.formGeneralInfo}>Family Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable peopleLossResponseId={peopleLossResponseId} />
+                    <PeopleLossTable familyLossResponseId={familyLossResponseId} />
 
 
                     <div className={styles.checkBoxArea}>
@@ -117,7 +117,7 @@ const PeopleLoss = ({ validationError,
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Next</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(4)} type="submit">Next</button>
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,7 @@ const PeopleLoss = ({ validationError,
 export default connect(null, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient()(
-            PeopleLoss,
+            FamilyLoss,
         ),
     ),
 );

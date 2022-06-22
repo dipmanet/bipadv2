@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -14,7 +14,7 @@ import Loader from 'react-loader';
 import { FormHelperText } from '@material-ui/core';
 import styles from './styles.module.scss';
 import { createConnectedRequestCoordinator } from '#request';
-import { countryListSelector, epidemicsPageSelector } from '#selectors';
+import { countryListSelector, epidemicsPageSelector, resourceTypeListSelector } from '#selectors';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -22,14 +22,15 @@ const mapStateToProps = (state, props) => ({
     // municipalities: municipalitiesSelector(state),
     // wards: wardsSelector(state),
     epidemmicsPage: epidemicsPageSelector(state),
+    resourceTypeList: resourceTypeListSelector(state),
 
     // user: userSelector(state),
 });
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    lossPeople: {
-        url: '/loss-people/',
+    lossInfrastructure: {
+        url: '/loss-infrastructure/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
@@ -72,30 +73,51 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const DataEntryForm = ({ requests: { lossPeople }, open,
-    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss }) => {
+const DataEntryForm = ({ requests: { lossInfrastructure }, open,
+    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss,
+    infrastructureType, infrastructureUnit,
+    resource,
+    backupWardId, resourceTypeList }) => {
     console.log('Data Entry');
     const [loader, setLoader] = useState(false);
-    const [name, setName] = useState('');
-    const [age, setAge] = useState(null);
-    const [gender, setGender] = useState('');
-    const [genderId, setGenderId] = useState(null);
-    const [isBelowPoverty, setIsBelowPoverty] = useState(false);
-    const [count, setCount] = useState(1);
-    const [nationality, setNationality] = useState('');
-    const [nationalityId, setNationalityId] = useState(null);
-    const [disability, setDisability] = useState(false);
+    const [title, setTitle] = useState('');
     const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
-    const [peopleLossRespId, setPeopleLossRespId] = useState(null);
-    const [nameErr, setNameErr] = useState(false);
-    const [ageErr, setAgeErr] = useState(false);
-    const [genderErr, setGenderErr] = useState(false);
+    const [count, setCount] = useState(1);
+    const [equipmentValue, setEquipmentValue] = useState(null);
+    const [infrastructureValue, setInfrastructureValue] = useState(null);
+    const [beneficiaryOwner, setBeneficiaryOwner] = useState('');
+    const [beneficiaryCount, setBeneficiaryCount] = useState(null);
+    const [serviceDisrupted, setServiceDisrupted] = useState(false);
+    const [economicLoss, setEconomicLoss] = useState(null);
+    const [type, setType] = useState('');
+    const [typeId, setTypeId] = useState(null);
+    const [selectedresource, setSelectedResource] = useState('');
+    const [selectedResourceId,
+        setSelectedResourceId] = useState(null);// resource id to be sent to backend
+    const [unit, setUnit] = useState('');
+    const [unitId, setunitId] = useState(null);
+    const [infrastructureLossRespId, setInfrastructureLossRespId] = useState(null);
+
+
+    const [titleErr, setTitleErr] = useState(false);
     const [statusErr, setStatusErr] = useState(false);
-    const [disabilityId, setDisabilityId] = useState(null);
+    const [economicLossErr, setEconomicLossErr] = useState(false);
+    const [resourceType, setResourceType] = useState('');
+    const [resourceMainList, setResourceMainList] = useState([]);
 
 
     console.log('This is loss id', countryList);
+    console.log('infrastructureType', infrastructureType);
+    console.log('infrastructureUnit', infrastructureUnit);
+    console.log('resource', resource);
+    console.log('backupWardId', backupWardId);
+    console.log('resource type', resourceType);
+    // useEffect(() => {
+    //     const filteredResource = resource.filter(i => i.ward === backupWardId);
+    //     setResourceMainList(filteredResource);
+    // }, [backupWardId, resource]);
+
     const genderData = [
         {
             value: 'male',
@@ -113,36 +135,16 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
 
     const statusData = [
         {
-            value: 'dead',
-            displayName: 'Dead',
-        },
-        {
-            value: 'missing',
-            displayName: 'Missing',
-        },
-        {
-            value: 'injured',
-            displayName: 'Injured',
+            value: 'destroyed',
+            displayName: 'Destroyed',
         },
         {
             value: 'affected',
             displayName: 'Affected',
         },
     ];
-    console.log('Country list', countryList);
-    const handleCountryList = (e) => {
-        const selectedCountry = countryList.find(i => i.id === Number(e.target.value));
-        const { id, titleEn } = selectedCountry;
-        setNationalityId(id);
-        setNationality(titleEn);
-    };
-    const handleSelectedGender = (e) => {
-        const selectedGender = genderData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedGender;
-        setGenderErr(false);
-        setGender(displayName);
-        setGenderId(value);
-    };
+
+
     const handleSelectedStatus = (e) => {
         const selectedStatus = statusData.find(i => i.displayName === e.target.value);
         const { displayName, value } = selectedStatus;
@@ -151,85 +153,81 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
         setStatusId(value);
     };
     const clearFormData = () => {
-        setName('');
-        setAge('');
-        setGender('');
-        setGenderId(null);
+        setTitle('');
         setStatus('');
         setStatusId(null);
-        setIsBelowPoverty(false);
-        setNationality('');
-        setDisability(false);
-        setNationality('');
-        setNationalityId(null);
-        setDisabilityId(null);
+        setEquipmentValue(null);
+        setInfrastructureValue(null);
+        setBeneficiaryOwner('');
+        setBeneficiaryCount(null);
+        setServiceDisrupted(false);
+        setEconomicLoss(null);
+        setType('');
+        setTypeId(null);
+        setSelectedResource(null);
+        setSelectedResourceId(null);
+        setUnit(null);
+        setunitId(null);
     };
-
-
-    console.log('This is gender name', gender);
-    console.log('This is gender id', genderId);
-    const handleVerifiedChange = () => {
-        setIsBelowPoverty(!isBelowPoverty);
-    };
-
-    const handleVerifiedDisability = () => {
-        setDisability(!disability);
-        if (disability) {
-            setDisabilityId(null);
-        } else {
-            setDisabilityId(1);
-        }
-    };
-
-    console.log('Nationality', nationality);
-    console.log('Nationality id', nationalityId);
 
     const handleSubmit = () => {
-        if (!name) {
-            setNameErr(true);
+        if (!title) {
+            setTitleErr(true);
         } else {
-            setNameErr(false);
-        } if (!age) {
-            setAgeErr(true);
+            setTitleErr(false);
+        } if (!economicLoss) {
+            setEconomicLossErr(true);
         } else {
-            setAgeErr(false);
-        }
-        if (!gender) {
-            setGenderErr(true);
-        } else {
-            setGenderErr(false);
+            setEconomicLossErr(false);
         }
         if (!status) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (name && age && gender && status) {
+        if (title && economicLoss && status) {
             setLoader(true);
             const finalSubmissionData = {
-                name,
-                age: Number(age),
-                gender: genderId,
+                title,
                 count,
-                belowPoverty: isBelowPoverty,
-                nationality: nationalityId,
-                loss: lossID,
-                status: statusId,
-                disability: disabilityId,
-
-
+                equipmentValue,
+                infrastructureValue,
+                beneficiaryOwner,
+                beneficiaryCount,
+                serviceDisrupted,
+                economicLoss,
+                type: typeId,
+                resource: selectedResourceId,
+                unit: unitId,
             };
-            lossPeople.do({
+            lossInfrastructure.do({
                 body: finalSubmissionData,
                 setLoader,
                 clearFormData,
-                setPeopleLossRespId,
+                setInfrastructureLossRespId,
             });
         }
     };
+    const handleResourceType = (e) => {
+        const filteredResourceName = resourceTypeList.find(i => i.title === e.target.value).label;
+        setResourceType(e.target.value);
+        console.log('this is filteredResourceName', filteredResourceName);
+        console.log('This is resource', resource);
+        const filteredResourceList = resource
+            .filter(i => i.ward === backupWardId)
+            .filter(d => d.resourceType === e.target.value);
+        console.log('This is ward', backupWardId);
+        console.log('This is data', filteredResourceList);
+        setResourceMainList(filteredResourceList);
+        console.log('This is resource type', e);
+    };
 
-    console.log('nationality', nationality);
-    console.log('This is age', age);
+    const handleResource = (e) => {
+        console.log('This value', e.target.value);
+    };
+
+
+    console.log('This is main list for filtering resource', resourceMainList);
     return (
         <div>
             <Modal
@@ -255,39 +253,79 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                     <div className={styles.mainDataEntrySection}>
 
                         <div>
-                            <h3 className={styles.formGeneralInfo}>People Loss Information</h3>
+                            <h3 className={styles.formGeneralInfo}>
+                                Infrastructure Loss Information
+
+                            </h3>
 
                             <div className={styles.twoInputSections}>
                                 <TextField
                                     variant="outlined"
                                     className={styles.materialUiInput}
-                                    value={name}
+                                    value={title}
                                     onChange={(e) => {
-                                        setNameErr(false);
-                                        setName(e.target.value);
+                                        setTitleErr(false);
+                                        setTitle(e.target.value);
                                     }}
                                     id="outlined-basic"
-                                    label="Name"
-                                    error={nameErr}
-                                    helperText={nameErr ? 'This field is required' : null}
+                                    label="Title"
+                                    error={titleErr}
+                                    helperText={titleErr ? 'This field is required' : null}
                                 />
-                                <TextField
-                                    type="number"
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={age}
-                                    onChange={(e) => {
-                                        setAgeErr(false);
-                                        setAge(e.target.value);
-                                    }}
-                                    id="outlined-basic"
-                                    label="Age"
-                                    error={ageErr}
-                                    helperText={ageErr ? 'This field is required' : null}
-                                />
+                                <FormControl fullWidth>
+                                    <InputLabel id="hazard-label">Resource </InputLabel>
+                                    <Select
+                                        labelId="gender"
+                                        id="gender-select"
+                                        value={selectedresource}
+                                        label="Resource"
+                                        onChange={handleResource}
+                                    >
+                                        {resourceMainList.length && resourceMainList.map(
+                                            item => (
+                                                <MenuItem
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.title}
+                                                </MenuItem>
+                                            ),
+                                        )}
+                                    </Select>
+
+                                </FormControl>
+
+
+                            </div>
+                            <div className={styles.twoInputSections}>
+
+                                <FormControl fullWidth>
+                                    <InputLabel id="hazard-label">Resource Type</InputLabel>
+                                    <Select
+                                        labelId="gender"
+                                        id="gender-select"
+                                        value={resourceType}
+                                        label="Resource Type"
+                                        onChange={handleResourceType}
+                                    >
+                                        {resourceTypeList.length && resourceTypeList.map(
+                                            item => (
+                                                <MenuItem
+                                                    key={item.id}
+                                                    value={item.title}
+                                                >
+                                                    {item.label}
+                                                </MenuItem>
+                                            ),
+                                        )}
+                                    </Select>
+
+                                </FormControl>
+
+
                             </div>
 
-                            <div className={styles.twoInputSections}>
+                            {/* <div className={styles.twoInputSections}>
                                 <FormControl fullWidth>
                                     <InputLabel id="hazard-label">Gender</InputLabel>
                                     <Select
@@ -309,7 +347,11 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                             ),
                                         )}
                                     </Select>
-                                    {genderErr ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Gender is Required</FormHelperText> : ''}
+                                    {genderErr
+                                        ? <FormHelperText
+                                        style={{ color: '#f44336', marginLeft: '14px' }}>
+                                        Gender is Required</FormHelperText>
+                                         : ''}
                                 </FormControl>
                                 <FormControl fullWidth>
                                     <InputLabel id="hazard-label">Status</InputLabel>
@@ -332,10 +374,12 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                             ),
                                         )}
                                     </Select>
-                                    {statusErr ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Status is Required</FormHelperText> : ''}
+                                    {statusErr ? <FormHelperText
+                                        style={{ color: '#f44336', marginLeft: '14px' }}>
+                                        Status is Required</FormHelperText> : ''}
                                 </FormControl>
-                            </div>
-                            <div>
+                            </div> */}
+                            {/* <div>
                                 <FormControl fullWidth>
                                     <InputLabel id="hazard-label">Nationality</InputLabel>
                                     <Select
@@ -358,8 +402,8 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                     </Select>
 
                                 </FormControl>
-                            </div>
-                            <div className={styles.checkBoxArea}>
+                            </div> */}
+                            {/* <div className={styles.checkBoxArea}>
                                 <div className={styles.verified}>
                                     <p className={styles.verifiedOrApproved}>
                                         Is Victim Below Poverty Line?
@@ -375,8 +419,8 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                     />
                                 </div>
 
-                            </div>
-                            <div className={styles.checkBoxArea}>
+                            </div> */}
+                            {/* <div className={styles.checkBoxArea}>
                                 <div className={styles.verified}>
                                     <p className={styles.verifiedOrApproved}>
                                         Is Victim Disable Person?
@@ -394,12 +438,12 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
 
                                 </div>
 
-                            </div>
+                            </div> */}
                             <div className={styles.checkBoxArea}>
 
 
                                 <div className={styles.saveOrAddButtons}>
-                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(peopleLossRespId)} type="submit">Close</button>
+                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(infrastructureLossRespId)} type="submit">Close</button>
                                     <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
                                 </div>
                             </div>

@@ -52,15 +52,15 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    peopleLoss: {
-        url: ({ props }) => `/loss-people/?loss=${props.epidemmicsPage.lossID}`,
+    familyLoss: {
+        url: ({ props }) => `/loss-family/?loss=${props.epidemmicsPage.lossID}`,
         // url: ({ props }) => '/loss-people/?loss=24180',
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {
             console.log('This results', response.results);
             props.setEpidemicsPage({
-                peopleLossData: response.results,
+                familyLossData: response.results,
             });
             params.loadingCondition(false);
         },
@@ -249,7 +249,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 
-const PeopleLossTable = (props) => {
+const FamilyLossTable = (props) => {
     const [filteredRowData, setFilteredRowData] = useState();
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('calories');
@@ -259,7 +259,7 @@ const PeopleLossTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { peopleLossData, incidentData, incidentCount, incidentEditData }, hazardList, peopleLossResponseId } = props;
+    const { epidemmicsPage: { familyLossData, incidentData, incidentCount, incidentEditData }, hazardList, familyLossResponseId } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -268,7 +268,7 @@ const PeopleLossTable = (props) => {
 
     useEffect(() => {
         setLoader(true);
-        props.requests.peopleLoss.do({ offset, loadingCondition });
+        props.requests.familyLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -287,21 +287,17 @@ const PeopleLossTable = (props) => {
     };
 
     useEffect(() => {
-        if (peopleLossData.length) {
-            const tableRows = peopleLossData.map((row) => {
+        if (familyLossData.length) {
+            const tableRows = familyLossData.map((row) => {
                 const epidemicObj = {
                     id: row.id,
-                    name: row.name,
-                    age: row.age,
-                    gender: row.gender,
+                    title: row.title,
                     status: row.status,
-                    nationality: row.nationality,
                     ward: row.ward,
                     belowPoverty: row.belowPoverty,
-                    disability: row.disability,
                     verified: row.verified,
                     verificationMessage: row.verificationMessage,
-
+                    phoneNumber: row.phoneNumber,
 
                 };
 
@@ -309,13 +305,13 @@ const PeopleLossTable = (props) => {
             });
             setFilteredRowData(tableRows);
         }
-    }, [peopleLossData, hazardList]);
+    }, [familyLossData, hazardList]);
 
     useEffect(() => {
-        console.log('this is people response', peopleLossResponseId);
-        props.requests.peopleLoss.do({ offset, loadingCondition });
+        console.log('this is people response', familyLossResponseId);
+        props.requests.familyLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset, peopleLossResponseId]);
+    }, [offset, familyLossResponseId]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -707,7 +703,7 @@ const PeopleLossTable = (props) => {
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
-            PeopleLossTable,
+            FamilyLossTable,
         ),
     ),
 );

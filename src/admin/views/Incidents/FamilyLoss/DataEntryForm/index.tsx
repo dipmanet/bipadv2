@@ -28,15 +28,15 @@ const mapStateToProps = (state, props) => ({
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    lossPeople: {
-        url: '/loss-people/',
+    lossFamily: {
+        url: '/loss-family/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
             console.log('This is params ', response);
-            if (params && params.setPeopleLossRespId) {
-                params.setPeopleLossRespId(response.id);
+            if (params && params.setFamilyLossRespId) {
+                params.setFamilyLossRespId(response.id);
             }
             if (params && params.setLoader) {
                 params.setLoader(false);
@@ -72,77 +72,42 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const DataEntryForm = ({ requests: { lossPeople }, open,
+const DataEntryForm = ({ requests: { lossFamily }, open,
     handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss }) => {
     console.log('Data Entry');
     const [loader, setLoader] = useState(false);
-    const [name, setName] = useState('');
-    const [age, setAge] = useState(null);
-    const [gender, setGender] = useState('');
-    const [genderId, setGenderId] = useState(null);
+    const [title, setTitle] = useState('');
     const [isBelowPoverty, setIsBelowPoverty] = useState(false);
     const [count, setCount] = useState(1);
-    const [nationality, setNationality] = useState('');
-    const [nationalityId, setNationalityId] = useState(null);
-    const [disability, setDisability] = useState(false);
     const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
-    const [peopleLossRespId, setPeopleLossRespId] = useState(null);
-    const [nameErr, setNameErr] = useState(false);
-    const [ageErr, setAgeErr] = useState(false);
-    const [genderErr, setGenderErr] = useState(false);
+    const [phoneNumber, setphoneNumber] = useState('');
+
+    const [familyLossRespId, setFamilyLossRespId] = useState(null);
+    const [titleErr, setTitleErr] = useState(false);
     const [statusErr, setStatusErr] = useState(false);
-    const [disabilityId, setDisabilityId] = useState(null);
 
 
     console.log('This is loss id', countryList);
-    const genderData = [
-        {
-            value: 'male',
-            displayName: 'Male',
-        },
-        {
-            value: 'female',
-            displayName: 'Female',
-        },
-        {
-            value: 'others',
-            displayName: 'Others',
 
-        }];
 
     const statusData = [
-        {
-            value: 'dead',
-            displayName: 'Dead',
-        },
-        {
-            value: 'missing',
-            displayName: 'Missing',
-        },
-        {
-            value: 'injured',
-            displayName: 'Injured',
-        },
         {
             value: 'affected',
             displayName: 'Affected',
         },
+        {
+            value: 'relocated',
+            displayName: 'Relocated',
+        },
+        {
+            value: 'evacuated',
+            displayName: 'Evacuated',
+        },
     ];
     console.log('Country list', countryList);
-    const handleCountryList = (e) => {
-        const selectedCountry = countryList.find(i => i.id === Number(e.target.value));
-        const { id, titleEn } = selectedCountry;
-        setNationalityId(id);
-        setNationality(titleEn);
-    };
-    const handleSelectedGender = (e) => {
-        const selectedGender = genderData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedGender;
-        setGenderErr(false);
-        setGender(displayName);
-        setGenderId(value);
-    };
+
+
     const handleSelectedStatus = (e) => {
         const selectedStatus = statusData.find(i => i.displayName === e.target.value);
         const { displayName, value } = selectedStatus;
@@ -151,85 +116,52 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
         setStatusId(value);
     };
     const clearFormData = () => {
-        setName('');
-        setAge('');
-        setGender('');
-        setGenderId(null);
+        setTitle('');
         setStatus('');
         setStatusId(null);
         setIsBelowPoverty(false);
-        setNationality('');
-        setDisability(false);
-        setNationality('');
-        setNationalityId(null);
-        setDisabilityId(null);
+        setphoneNumber('');
     };
 
 
-    console.log('This is gender name', gender);
-    console.log('This is gender id', genderId);
     const handleVerifiedChange = () => {
         setIsBelowPoverty(!isBelowPoverty);
     };
 
-    const handleVerifiedDisability = () => {
-        setDisability(!disability);
-        if (disability) {
-            setDisabilityId(null);
-        } else {
-            setDisabilityId(1);
-        }
-    };
-
-    console.log('Nationality', nationality);
-    console.log('Nationality id', nationalityId);
 
     const handleSubmit = () => {
-        if (!name) {
-            setNameErr(true);
+        if (!title) {
+            setTitleErr(true);
         } else {
-            setNameErr(false);
-        } if (!age) {
-            setAgeErr(true);
-        } else {
-            setAgeErr(false);
-        }
-        if (!gender) {
-            setGenderErr(true);
-        } else {
-            setGenderErr(false);
+            setTitleErr(false);
         }
         if (!status) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (name && age && gender && status) {
+        if (title && status) {
             setLoader(true);
             const finalSubmissionData = {
-                name,
-                age: Number(age),
-                gender: genderId,
+                title,
                 count,
                 belowPoverty: isBelowPoverty,
-                nationality: nationalityId,
                 loss: lossID,
                 status: statusId,
-                disability: disabilityId,
+                phoneNumber,
 
 
             };
-            lossPeople.do({
+            lossFamily.do({
                 body: finalSubmissionData,
                 setLoader,
                 clearFormData,
-                setPeopleLossRespId,
+                setFamilyLossRespId,
             });
         }
     };
 
-    console.log('nationality', nationality);
-    console.log('This is age', age);
+
     return (
         <div>
             <Modal
@@ -261,56 +193,29 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                 <TextField
                                     variant="outlined"
                                     className={styles.materialUiInput}
-                                    value={name}
+                                    value={title}
                                     onChange={(e) => {
-                                        setNameErr(false);
-                                        setName(e.target.value);
+                                        setTitleErr(false);
+                                        setTitle(e.target.value);
                                     }}
                                     id="outlined-basic"
-                                    label="Name"
-                                    error={nameErr}
-                                    helperText={nameErr ? 'This field is required' : null}
+                                    label="Title"
+                                    error={titleErr}
+                                    helperText={titleErr ? 'This field is required' : null}
                                 />
                                 <TextField
                                     type="number"
                                     variant="outlined"
                                     className={styles.materialUiInput}
-                                    value={age}
+                                    value={phoneNumber}
                                     onChange={(e) => {
-                                        setAgeErr(false);
-                                        setAge(e.target.value);
+                                        setphoneNumber(e.target.value);
                                     }}
                                     id="outlined-basic"
-                                    label="Age"
-                                    error={ageErr}
-                                    helperText={ageErr ? 'This field is required' : null}
+                                    label="Contact"
                                 />
                             </div>
-
-                            <div className={styles.twoInputSections}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="hazard-label">Gender</InputLabel>
-                                    <Select
-                                        labelId="gender"
-                                        id="gender-select"
-                                        value={gender}
-                                        label="Gender"
-                                        error={genderErr}
-                                        onChange={handleSelectedGender}
-                                    >
-                                        {genderData.length && genderData.map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.displayName}
-                                                    value={item.displayName}
-                                                >
-                                                    {item.displayName}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-                                    {genderErr ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Gender is Required</FormHelperText> : ''}
-                                </FormControl>
+                            <div>
                                 <FormControl fullWidth>
                                     <InputLabel id="hazard-label">Status</InputLabel>
                                     <Select
@@ -335,37 +240,11 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                     {statusErr ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Status is Required</FormHelperText> : ''}
                                 </FormControl>
                             </div>
-                            <div>
-                                <FormControl fullWidth>
-                                    <InputLabel id="hazard-label">Nationality</InputLabel>
-                                    <Select
-                                        labelId="status"
-                                        id="status-select"
-                                        value={nationalityId}
-                                        label="Nationality"
-                                        onChange={handleCountryList}
-                                    >
-                                        {countryList.length && countryList.map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.id}
-                                                    value={item.id}
-                                                >
-                                                    {item.titleEn}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-
-                                </FormControl>
-                            </div>
                             <div className={styles.checkBoxArea}>
                                 <div className={styles.verified}>
                                     <p className={styles.verifiedOrApproved}>
                                         Is Victim Below Poverty Line?
-
                                     </p>
-
                                     <input
                                         type="checkbox"
                                         name="verifiedCheck"
@@ -374,32 +253,10 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                         onChange={e => handleVerifiedChange()}
                                     />
                                 </div>
-
                             </div>
                             <div className={styles.checkBoxArea}>
-                                <div className={styles.verified}>
-                                    <p className={styles.verifiedOrApproved}>
-                                        Is Victim Disable Person?
-
-                                    </p>
-
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="verified"
-                                        checked={disability}
-                                        onChange={e => handleVerifiedDisability()}
-                                    />
-
-
-                                </div>
-
-                            </div>
-                            <div className={styles.checkBoxArea}>
-
-
                                 <div className={styles.saveOrAddButtons}>
-                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(peopleLossRespId)} type="submit">Close</button>
+                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(familyLossRespId)} type="submit">Close</button>
                                     <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
                                 </div>
                             </div>

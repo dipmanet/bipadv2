@@ -720,6 +720,9 @@ export interface EpidemicPage {
     lossPeopleError: string;
     successMessage: string;
     incidentData: [];
+    peopleLossData: [];
+    familyLossData: [];
+    infrastructureLossData: [];
     incidentEditData: object;
     incidentUpdateError: string;
     epidemicChartHourlyLoading: boolean;

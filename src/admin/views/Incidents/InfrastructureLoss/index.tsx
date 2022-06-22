@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 
-const PeopleLoss = ({ validationError,
+const InfrastructureLoss = ({ validationError,
     uniqueId, setuniqueId, reportedDate, setReportedDate, dateError, hazardList,
     selectedHazardName, handleSelectedHazard,
     cause, setCause, provinceName, handleProvince, provinces,
@@ -41,14 +41,17 @@ const PeopleLoss = ({ validationError,
     verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
     verificationMessage, setVerificationMessage,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
-    handleNext, requests: { loss }, countryList }) => {
+    handleNext, requests: { loss }, countryList,
+    infrastructureType,
+    infrastructureUnit,
+    resource, backupWardId }) => {
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
-    const [peopleLossResponseId, setPeopleLossResponseId] = useState(null);
+    const [infrastructureLossResponseId, setInfrastructureLossResponseId] = useState(null);
 
     const handleCloseModal = (id) => {
         setOpen(false);
-        setPeopleLossResponseId(id);
+        setInfrastructureLossResponseId(id);
     };
     const handleSave = async () => {
         const lossFormData = {
@@ -59,6 +62,7 @@ const PeopleLoss = ({ validationError,
     };
 
     console.log('This is countryList', countryList);
+    console.log('This is backup ward', backupWardId);
     return (
 
         <div className={styles.mainForm}>
@@ -81,6 +85,10 @@ const PeopleLoss = ({ validationError,
                 open={open}
                 handleCloseModal={handleCloseModal}
                 countryList={countryList}
+                infrastructureType={infrastructureType}
+                infrastructureUnit={infrastructureUnit}
+                resource={resource}
+                backupWardId={backupWardId}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -104,20 +112,16 @@ const PeopleLoss = ({ validationError,
             <div className={styles.mainDataEntrySection}>
 
                 <div>
-                    <h3 className={styles.formGeneralInfo}>People Loss Information</h3>
+                    <h3 className={styles.formGeneralInfo}>Infrastructure Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable peopleLossResponseId={peopleLossResponseId} />
-
-
+                    <PeopleLossTable infrastructureLossResponseId={infrastructureLossResponseId} />
                     <div className={styles.checkBoxArea}>
-
-
                         {/* <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Next</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(4)} type="submit">Next</button>
                         </div>
                     </div>
                 </div>
@@ -131,7 +135,7 @@ const PeopleLoss = ({ validationError,
 export default connect(null, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient()(
-            PeopleLoss,
+            InfrastructureLoss,
         ),
     ),
 );
