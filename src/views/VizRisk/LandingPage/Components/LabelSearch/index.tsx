@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Return from '#resources/icons/Return.svg';
 import { vzRiskMunicipalData, vzRiskProvinceData } from '../../VzRiskData';
+import searchVizRisk from '../../../../../resources/icons/SearchVizRisk.svg';
 import styles from './styles.scss';
 
 const placeholder = 'Search by Province, Municipality';
@@ -34,11 +35,11 @@ const LabelSearch = (props) => {
                     value={inputValue}
                     onChange={e => handleChange(e)}
                 />
-                {/* <img
+                <img
                     className={styles.search}
-                    src="/src/resources/icons/Search.svg"
+                    src={searchVizRisk}
                     alt="Search"
-                /> */}
+                />
                 {filteredData.length > 0 && inputValue !== ''
                     && (
                         <div className={styles.searchData}>
