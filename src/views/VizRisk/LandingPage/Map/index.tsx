@@ -30,6 +30,8 @@ interface Props {
     selctFieldCurrentValue: string;
 }
 
+let hoverId: number | undefined;
+
 const Map = (props: Props) => {
     const mapContainerRef = useRef<React.MutableRefObject<HTMLElement | undefined>>();
     const updateMap = useRef<mapboxgl.Map>(null);
@@ -138,8 +140,41 @@ const Map = (props: Props) => {
                 'source-layer': mapSources.nepal.layers.municipality,
                 type: 'fill',
                 paint: {
-                    'fill-opacity': 1,
+                    'fill-opacity':
+                        [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            0.8,
+                            1,
+                        ],
                     'fill-color': ['feature-state', 'color'],
+                },
+
+            });
+            landingPageMap.addLayer({
+                id: 'municipality-vizrisk-extrusion',
+                source: 'base-outline',
+                'source-layer': mapSources.nepal.layers.municipality,
+                type: 'fill-extrusion',
+                paint: {
+                    'fill-extrusion-color': ['feature-state', 'color'],
+
+                    // Get `fill-extrusion-height` from the source `height` property.
+                    'fill-extrusion-height': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        1500,
+                        0,
+                    ],
+
+                    // Get `fill-extrusion-base` from the source `base_height` property.
+                    'fill-extrusion-base': 0,
+
+                    // Make extrusions slightly opaque to see through indoor walls.
+                    'fill-extrusion-opacity': 0.9,
+                },
+                layout: {
+                    visibility: 'visible',
                 },
 
             });
@@ -163,6 +198,7 @@ const Map = (props: Props) => {
                     const name = e.features[0].properties.title;
                     const type = e.features[0].state.indicator;
 
+
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="display : flex; flex-direction:column ;
                         align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
@@ -171,10 +207,42 @@ const Map = (props: Props) => {
                          </div>
         `,
                     ).addTo(landingPageMap);
+                    if (hoverId) {
+                        landingPageMap.setFeatureState(
+                            {
+                                id: hoverId,
+                                source: 'base-outline',
+                                sourceLayer: mapSources.nepal.layers.municipality,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoverId = e.features[0].id;
+                    landingPageMap.setFeatureState(
+                        {
+                            id: hoverId,
+                            source: 'base-outline',
+                            sourceLayer: mapSources.nepal.layers.municipality,
+
+                        },
+                        { hover: true },
+                    );
                 }
             });
             landingPageMap.on('mouseleave', 'municipality-vizrisk', (e) => {
                 landingPageMap.getCanvas().style.cursor = '';
+                if (hoverId) {
+                    landingPageMap.setFeatureState(
+                        {
+                            source: 'base-outline',
+                            id: hoverId,
+                            sourceLayer: mapSources.nepal.layers.municipality,
+                        },
+                        { hover: false },
+
+                    );
+                }
+                hoverId = undefined;
                 popup.remove();
             });
             landingPageMap.on('click', 'province-vizrisk', (e) => {
@@ -232,7 +300,16 @@ const Map = (props: Props) => {
                 source: 'base-outline',
                 'source-layer': mapSources.nepal.layers.municipality,
                 type: 'line',
-                paint: mapStyles.municipality.outline,
+                paint: {
+                    // 'line-color': '#72b6ac',
+                    'line-color': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        '#C1292E',
+                        '#C1292E',
+                    ],
+                    'line-width': 1,
+                },
                 layout: {
                     visibility: 'visible',
                 },
@@ -278,17 +355,24 @@ const Map = (props: Props) => {
             if (vzLabel === 'municipality') {
                 showMapLayers('municipality-outline', updateMap);
                 showMapLayers('municipality-vizrisk', updateMap);
+                showMapLayers('municipality-vizrisk-extrusion', updateMap);
                 switch (selctFieldCurrentValue) {
                     case 'Flood Exposure':
                         updateMap.current.setFilter('municipality-vizrisk',
+                            ['match', ['id'], floodId, true, false]);
+                        updateMap.current.setFilter('municipality-vizrisk-extrusion',
                             ['match', ['id'], floodId, true, false]);
                         break;
                     case 'Landslide Exposure':
                         updateMap.current.setFilter('municipality-vizrisk',
                             ['match', ['id'], landSlideId, true, false]);
+                        updateMap.current.setFilter('municipality-vizrisk-extrusion',
+                            ['match', ['id'], landSlideId, true, false]);
                         break;
                     case 'Multi-hazard Exposure':
                         updateMap.current.setFilter('municipality-vizrisk',
+                            ['match', ['id'], multiHazardId, true, false]);
+                        updateMap.current.setFilter('municipality-vizrisk-extrusion',
                             ['match', ['id'], multiHazardId, true, false]);
                         break;
 
@@ -298,6 +382,7 @@ const Map = (props: Props) => {
             } else {
                 hideMapLayers('municipality-outline', updateMap);
                 hideMapLayers('municipality-vizrisk', updateMap);
+                hideMapLayers('municipality-vizrisk-extrusion', updateMap);
             }
         }
     }, [municipalities, selctFieldCurrentValue, vzLabel]);

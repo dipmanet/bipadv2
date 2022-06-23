@@ -28,17 +28,17 @@ const LabelSearch = (props) => {
         <div className={styles.inputContainer}>
             <div>
                 <input
-                    type="text"
+                    type="search"
                     className={styles.textInput}
                     placeholder={placeholder}
                     value={inputValue}
                     onChange={e => handleChange(e)}
                 />
-                <img
+                {/* <img
                     className={styles.search}
                     src="/src/resources/icons/Search.svg"
                     alt="Search"
-                />
+                /> */}
                 {filteredData.length > 0 && inputValue !== ''
                     && (
                         <div className={styles.searchData}>

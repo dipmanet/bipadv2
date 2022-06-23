@@ -10,7 +10,7 @@ export const checkType = (indicator: number) => {
             return 'red';
 
         default:
-            return '';
+            return 'black';
     }
 };
 export const vizRiskType = (indicator: number) => {
