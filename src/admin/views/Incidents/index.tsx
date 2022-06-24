@@ -869,6 +869,7 @@ const Epidemics = (props) => {
         epidemmicsPage, requests: { hazardListFetch, countryListFetch, infrastructureTypeListFetch,
             infrastructureUnitListFetch, resourceListFetch, agricultureTypeListFetch, liveStockTypeListFetch } } = props;
 
+
     const progressBar = (moduleNo, div) => {
         console.log('Module no', moduleNo);
         console.log('This is div', div);
@@ -970,7 +971,7 @@ const Epidemics = (props) => {
         setLattitude,
         setLongitude,
     };
-
+    console.log('this is centroid for map', centriodsForMap);
     useEffect(() => {
         const province = provinces.filter(
             item => item.title === provinceName,
@@ -990,6 +991,9 @@ const Epidemics = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceName]);
+
+    console.log('this is province name', provinceName);
+
 
     useEffect(() => {
         const district = districts.filter(
@@ -1570,6 +1574,7 @@ const Epidemics = (props) => {
                     {modulePage === 1
                         ? (
                             <General
+                                user={user}
                                 validationError={validationError}
                                 uniqueId={uniqueId}
                                 setuniqueId={setuniqueId}
@@ -1627,6 +1632,7 @@ const Epidemics = (props) => {
                                 handleEpidemicFormSubmit={handleEpidemicFormSubmit}
                                 handleTableButton={handleTableButton}
                                 handleNext={handleNext}
+                                clearData={clearData}
                             />
                         ) : ''}
                     {modulePage === 2 ? (

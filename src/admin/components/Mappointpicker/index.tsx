@@ -31,7 +31,10 @@ const Mappointpicker = (props: Props): JSX.Element => {
     const { centriodsForMap, resetMap, editedCoordinates,
         initialProvinceCenter,
         initialDistrictCenter,
-        initialMunCenter, disableMapFilterLofic, disableMapFilter } = props;
+        initialMunCenter, disableMapFilterLofic, disableMapFilter,
+        userProvince,
+        userDistrict,
+        userMunicipality } = props;
 
     const mapContainerRef = useRef(null);
     const map = useRef<mapboxgl.Map | null>(null);
@@ -82,7 +85,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
             icon: Satelliteimg,
         },
     ];
-
+    console.log('This map centroid', centriodsForMap);
     // eslint-disable-next-line consistent-return
     useEffect(() => {
         if (UNSUPPORTED_BROWSER) {
@@ -104,7 +107,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
             maxZoom: 22,
         });
         map.current = Map;
-
         Map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
         Map.addControl(new mapboxgl.NavigationControl(), 'top-right');
         Map.addControl(
@@ -120,6 +122,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 showUserHeading: true,
             }),
         );
+
         const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
         if (editedCoordinates) {
             if (Object.keys(editedCoordinates).length > 0) {
@@ -285,18 +288,90 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 Map.setLayoutProperty('municipality-name', 'visibility', 'none');
                 Map.setLayoutProperty('ward-line', 'visibility', 'visible');
                 Map.setLayoutProperty('ward-name', 'visibility', 'visible');
+            } else if (userProvince && userDistrict && userMunicipality) {
+                console.log('Entered', centriodsForMap);
+                Map.flyTo({
+                    center: centriodsForMap.municipalityCentriodForMap,
+                    zoom: 11,
+                    bearing: 0,
+                    speed: 3,
+                    curve: 1,
+                    easing(t) {
+                        return t;
+                    },
+                    essential: true,
+                });
+                Map.setFilter('municipality-line', ['all', ['==', ['get', 'id'], `${userDistrict}`]]);
+                Map.setFilter('ward-line', ['all', ['==', ['get', 'municipality'], userMunicipality]]);
+                Map.setFilter('ward-name', ['all', ['==', ['get', 'municipality'], userMunicipality]]);
+                Map.setLayoutProperty('ward-line', 'visibility', 'visible');
+                Map.setLayoutProperty('province-name', 'visibility', 'none');
+                Map.setLayoutProperty('district-line', 'visibility', 'none');
+                Map.setLayoutProperty('district-name', 'visibility', 'none');
+                Map.setLayoutProperty('municipality-name', 'visibility', 'none');
+                Map.setLayoutProperty('ward-name', 'visibility', 'visible');
+            } else if (userProvince && userDistrict && !userMunicipality) {
+                Map.flyTo({
+                    center: centriodsForMap.districtCentriodForMap,
+                    zoom: 8.5,
+                    bearing: 0,
+                    speed: 3,
+                    curve: 1,
+                    easing(t) {
+                        return t;
+                    },
+                    essential: true,
+                });
+
+                map.current.setFilter('district-line', ['all', ['==', ['get', 'id'], `${userProvince}`]]);
+                map.current.setFilter('municipality-line', ['all', ['==', ['get', 'district'], userDistrict]]);
+                map.current.setLayoutProperty('municipality-line', 'visibility', 'visible');
+                map.current.setFilter('municipality-name', ['all', ['==', ['get', 'district'], userDistrict]]);
+                map.current.setLayoutProperty('province-line', 'visibility', 'none');
+                map.current.setLayoutProperty('province-name', 'visibility', 'none');
+                map.current.setLayoutProperty('district-name', 'visibility', 'none');
+                map.current.setLayoutProperty('municipality-name', 'visibility', 'visible');
+                map.current.setLayoutProperty('ward-line', 'visibility', 'none');
+                map.current.setLayoutProperty('ward-name', 'visibility', 'none');
+            } else if (userProvince && !userDistrict && !userMunicipality) {
+                Map.flyTo({
+                    center: centriodsForMap.provinceCentriodForMap,
+                    zoom: 7.5,
+                    bearing: 0,
+                    speed: 3,
+                    curve: 1,
+                    easing(t) {
+                        return t;
+                    },
+                    essential: true,
+                });
+                map.current.setFilter('province-line', ['all', ['==', ['get', 'id'], `${userProvince}`]]);
+                map.current.setFilter('district-line', ['all', ['==', ['get', 'province'], userProvince]]);
+                map.current.setFilter('district-name', ['all', ['==', ['get', 'province'], userProvince]]);
+                map.current.setLayoutProperty('district-line', 'visibility', 'visible');
+                map.current.setLayoutProperty('province-line', 'visibility', 'visible');
+                map.current.setLayoutProperty('province-name', 'visibility', 'none');
+                map.current.setLayoutProperty('district-name', 'visibility', 'visible');
+                map.current.setLayoutProperty('municipality-name', 'visibility', 'none');
+                map.current.setLayoutProperty('municipality-line', 'visibility', 'none');
+                map.current.setLayoutProperty('ward-name', 'visibility', 'none');
+                map.current.setLayoutProperty('ward-line', 'visibility', 'none');
             } else {
+                console.log('Entered 2');
                 Map.setLayoutProperty('province-line', 'visibility', 'visible');
                 Map.setLayoutProperty('province-name', 'visibility', 'visible');
             }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editedCoordinates]);
-
+    console.log('This is centroid', centriodsForMap);
     useEffect(() => {
+        console.log('It entered here');
         if (map.current.isStyleLoaded()) {
+            console.log('It entered here');
             if (map.current) {
                 if (centriodsForMap.provinceCentriodForMap) {
+                    console.log('It entered here');
                     map.current.flyTo({
                         center: centriodsForMap.provinceCentriodForMap,
                         zoom: 7.5,
@@ -309,7 +384,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
                         essential: true,
                     });
                 }
-
                 map.current.setFilter('province-line', ['all', ['==', ['get', 'id'], `${centriodsForMap.provinceId}`]]);
                 map.current.setFilter('district-line', ['all', ['==', ['get', 'province'], centriodsForMap.provinceId]]);
                 map.current.setFilter('district-name', ['all', ['==', ['get', 'province'], centriodsForMap.provinceId]]);
@@ -325,8 +399,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [centriodsForMap.provinceCentriodForMap]);
-
-
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
             if (map.current) {
@@ -406,6 +478,8 @@ const Mappointpicker = (props: Props): JSX.Element => {
                         essential: true,
                     });
                 }
+
+
                 map.current.setLayoutProperty('province-name', 'visibility', 'none');
                 map.current.setLayoutProperty('district-line', 'visibility', 'none');
                 map.current.setLayoutProperty('district-name', 'visibility', 'none');

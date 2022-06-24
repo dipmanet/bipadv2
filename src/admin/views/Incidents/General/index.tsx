@@ -25,6 +25,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ lossID: response.id });
+            if (params && params.clearData) {
+                params.clearData();
+            }
             if (params && params.setLoader) {
                 params.setLoader(false);
             }
@@ -73,7 +76,7 @@ const General = ({ validationError,
     verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
     verificationMessage, setVerificationMessage,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
-    handleNext, requests: { loss } }) => {
+    handleNext, clearData, user: { profile: { province: userProvince, district: userDistrict, municipality: userMunicipality } }, requests: { loss } }) => {
     const [loader, setLoader] = useState(false);
 
 
@@ -82,8 +85,9 @@ const General = ({ validationError,
             estimatedLoss: Number(totalEstimatedLoss),
         };
         setLoader(true);
-        await loss.do({ body: lossFormData, setLoader, handleNext });
+        await loss.do({ body: lossFormData, setLoader, handleNext, clearData });
     };
+    console.log('This is userProvince', userProvince);
 
 
     return (
@@ -207,7 +211,7 @@ const General = ({ validationError,
                                 value={provinceName}
                                 label="Provinvce"
                                 onChange={handleProvince}
-                                disabled={disableMapFilter}
+                                disabled={userProvince}
                             >
                                 {provinces && provinces.map(item => (
                                     <MenuItem
@@ -228,7 +232,7 @@ const General = ({ validationError,
                                 value={districtName}
                                 label="District"
                                 onChange={handleDistrict}
-                                disabled={disableMapFilter}
+                                disabled={userDistrict}
                             >
                                 {districts && districts.filter(
                                     item => item.province === provinceId,
@@ -252,7 +256,7 @@ const General = ({ validationError,
                                 value={municipalityName}
                                 label="Municipality"
                                 onChange={handleMunicipality}
-                                disabled={disableMapFilter}
+                                disabled={userMunicipality}
                             >
                                 {municipalities && municipalities.filter(
                                     item => item.district === districtId,
@@ -330,6 +334,9 @@ const General = ({ validationError,
                         editedCoordinates={incidentEditData}
                         disableMapFilterLofic={disableMapFilterLofic}
                         disableMapFilter={disableMapFilter}
+                        userProvince={userProvince}
+                        userDistrict={userDistrict}
+                        userMunicipality={userMunicipality}
                     />
                     <div className={styles.infoBarCasuality}>
                         <p className={styles.instInfo}>

@@ -120,7 +120,7 @@ const InfrastructureLoss = ({ validationError,
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
                             <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Previous</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Submit</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Next</button>
                         </div>
                     </div>
                 </div>

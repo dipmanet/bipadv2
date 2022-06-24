@@ -120,6 +120,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         setTitle('');
         setEconomicLoss('');
         setTypeId('');
+        setCount('');
     };
 
     const handleSubmit = () => {
@@ -145,6 +146,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                 economicLoss,
                 type: typeId,
                 loss: lossID,
+                count,
                 status: statusId,
             };
             lossInfrastructure.do({

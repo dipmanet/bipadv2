@@ -122,7 +122,7 @@ const LivestockLoss = ({ validationError,
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
                             <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Previous</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(1)} type="submit">Next</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(1)} type="submit">Submit</button>
                         </div>
                     </div>
                 </div>
