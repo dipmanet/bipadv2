@@ -117,6 +117,7 @@ const PeopleLoss = ({ validationError,
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(1)} type="submit">Previous</button>
                             <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Next</button>
                         </div>
                     </div>

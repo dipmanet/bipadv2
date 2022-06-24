@@ -117,6 +117,7 @@ const FamilyLoss = ({ validationError,
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(2)} type="submit">Previous</button>
                             <button className={styles.submitButtons} onClick={() => handleNext(4)} type="submit">Next</button>
                         </div>
                     </div>

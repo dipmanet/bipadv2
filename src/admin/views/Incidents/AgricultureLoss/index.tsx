@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 
-const InfrastructureLoss = ({ validationError,
+const AgricultureLoss = ({ validationError,
     uniqueId, setuniqueId, reportedDate, setReportedDate, dateError, hazardList,
     selectedHazardName, handleSelectedHazard,
     cause, setCause, provinceName, handleProvince, provinces,
@@ -44,14 +44,14 @@ const InfrastructureLoss = ({ validationError,
     handleNext, requests: { loss }, countryList,
     infrastructureType,
     infrastructureUnit,
-    resource }) => {
+    resource, agricultureType }) => {
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
-    const [infrastructureLossResponseId, setInfrastructureLossResponseId] = useState(null);
+    const [agricultureLossResponseId, setAgricultureLossResponseId] = useState(null);
 
     const handleCloseModal = (id) => {
         setOpen(false);
-        setInfrastructureLossResponseId(id);
+        setAgricultureLossResponseId(id);
     };
     const handleSave = async () => {
         const lossFormData = {
@@ -86,6 +86,7 @@ const InfrastructureLoss = ({ validationError,
                 countryList={countryList}
                 infrastructureType={infrastructureType}
                 infrastructureUnit={infrastructureUnit}
+                agricultureType={agricultureType}
                 resource={resource}
             />
 
@@ -112,15 +113,15 @@ const InfrastructureLoss = ({ validationError,
                 <div>
                     <h3 className={styles.formGeneralInfo}>Infrastructure Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable infrastructureLossResponseId={infrastructureLossResponseId} />
+                    <PeopleLossTable agricultureLossResponseId={agricultureLossResponseId} />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Previous</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Submit</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(4)} type="submit">Previous</button>
+                            <button className={styles.submitButtons} onClick={() => handleNext(6)} type="submit">Next</button>
                         </div>
                     </div>
                 </div>
@@ -134,7 +135,7 @@ const InfrastructureLoss = ({ validationError,
 export default connect(null, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient()(
-            InfrastructureLoss,
+            AgricultureLoss,
         ),
     ),
 );

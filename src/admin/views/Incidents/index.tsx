@@ -54,6 +54,8 @@ import General from './General';
 import PeopleLoss from './PeopleLoss';
 import FamilyLoss from './FamilyLoss';
 import InfrastructureLoss from './InfrastructureLoss';
+import AgricultureLoss from './AgricultureLoss';
+import LivestockLoss from './LivestockLoss';
 
 
 const mapStateToProps = (state, props) => ({
@@ -86,9 +88,31 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {
-            if (params && params.setCountryList) {
+            if (params && params.setInfrastructureType) {
                 console.log('this is final list', response);
-                params.setCountryList(response.results);
+                params.setInfrastructureType(response.results);
+            }
+        },
+    },
+    agricultureTypeListFetch: {
+        url: '/agriculture-type/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props, params }) => {
+            if (params && params.setAgricultureType) {
+                console.log('this is final list', response);
+                params.setAgricultureType(response.results);
+            }
+        },
+    },
+    liveStockTypeListFetch: {
+        url: '/livestock-type/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props, params }) => {
+            if (params && params.setLiveStockType) {
+                console.log('this is final list', response);
+                params.setLiveStockType(response.results);
             }
         },
     },
@@ -97,16 +121,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {
-            if (params && params.setCountryList) {
+            if (params && params.setInfrastructureUnit) {
                 console.log('this is final list', response);
-                params.setCountryList(response.results);
+                params.setInfrastructureUnit(response.results);
             }
         },
     },
     resourceListFetch: {
-        url: '/resource/',
+        // url: '/resource/',
+        url: ({ params }) => `/resource/?ward=${params.wardId}`,
         method: methods.GET,
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setResource) {
                 console.log('this is final list', response);
@@ -822,10 +847,10 @@ const Epidemics = (props) => {
     const [infrastructureType, setInfrastructureType] = useState([]);
     const [infrastructureUnit, setInfrastructureUnit] = useState([]);
     const [resource, setResource] = useState([]);
-
+    const [agricultureType, setAgricultureType] = useState([]);
+    const [liveStockType, setLiveStockType] = useState([]);
     const [modulePage, setmodulePage] = useState(1);
     { /** backup ward id is used to filter resource in infrastructure loss module */ }
-    const [backupWardId, setBackupWardId] = useState(null);
     const { epidemmicsPage:
         {
             lossID,
@@ -842,7 +867,7 @@ const Epidemics = (props) => {
         wards,
         uri,
         epidemmicsPage, requests: { hazardListFetch, countryListFetch, infrastructureTypeListFetch,
-            infrastructureUnitListFetch, resourceListFetch } } = props;
+            infrastructureUnitListFetch, resourceListFetch, agricultureTypeListFetch, liveStockTypeListFetch } } = props;
 
     const progressBar = (moduleNo, div) => {
         console.log('Module no', moduleNo);
@@ -860,9 +885,10 @@ const Epidemics = (props) => {
         countryListFetch.do({ setCountryList });
         infrastructureTypeListFetch.do({ setInfrastructureType });
         infrastructureUnitListFetch.do({ setInfrastructureUnit });
-        resourceListFetch.do({ setResource });
+        agricultureTypeListFetch.do({ setAgricultureType });
+        liveStockTypeListFetch.do({ setLiveStockType });
     }, []);
-
+    console.log('This is unit', infrastructureType);
     const handleSelectedHazard = (e) => {
         setSelectedHazardName(e.target.value);
         const hazardId = hazardList.find(i => i.title === e.target.value).id;
@@ -1048,7 +1074,6 @@ const Epidemics = (props) => {
 
         if (wardName) {
             setwardId(id);
-            setBackupWardId(id);
             setEditWardId(id);
             setDisableMapFilter(true);
         }
@@ -1391,6 +1416,7 @@ const Epidemics = (props) => {
                 wards: [wardId],
             };
             props.requests.incident.do({ body: data });
+            props.requests.resourceListFetch.do({ setResource, wardId });
             // const deadMale = {
             //     ...deadMaleInitial,
             //     loss: lossID,
@@ -1470,9 +1496,7 @@ const Epidemics = (props) => {
         setwardName(e.target.value);
         setIsEditedIncident(true);
     };
-    console.log('This is country list', countryList);
-    console.log('this is This is backup ward', backupWardId);
-    console.log('This resource', resource);
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -1623,9 +1647,32 @@ const Epidemics = (props) => {
                             infrastructureType={infrastructureType}
                             infrastructureUnit={infrastructureUnit}
                             resource={resource}
-                            backupWardId={backupWardId}
                             handleNext={handleNext}
                         />
+                    ) : ''}
+                    {modulePage === 5 ? (
+                        <AgricultureLoss
+                            countryList={countryList}
+                            infrastructureType={infrastructureType}
+                            infrastructureUnit={infrastructureUnit}
+                            resource={resource}
+                            handleNext={handleNext}
+                            agricultureType={agricultureType}
+
+                        />
+
+                    ) : ''}
+                    {modulePage === 6 ? (
+                        <LivestockLoss
+                            countryList={countryList}
+                            infrastructureType={infrastructureType}
+                            infrastructureUnit={infrastructureUnit}
+                            resource={resource}
+                            handleNext={handleNext}
+                            agricultureType={agricultureType}
+                            liveStockType={liveStockType}
+                        />
+
                     ) : ''}
 
                 </div>

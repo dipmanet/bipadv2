@@ -559,6 +559,8 @@ const state: PageState = {
         peopleLossData: [],
         familyLossData: [],
         infrastructureLossData: [],
+        agricultureLossData: [],
+        livestockLossData: [],
         incidentEditData: {},
         incidentUpdateError: '',
         epidemicChartHourlyLoading: false,

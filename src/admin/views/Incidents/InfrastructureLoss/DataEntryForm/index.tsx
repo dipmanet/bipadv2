@@ -36,8 +36,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
             console.log('This is params ', response);
-            if (params && params.setPeopleLossRespId) {
-                params.setPeopleLossRespId(response.id);
+            if (params && params.setInfrastructureLossRespId) {
+                params.setInfrastructureLossRespId(response.id);
             }
             if (params && params.setLoader) {
                 params.setLoader(false);
@@ -77,27 +77,27 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
     resource,
-    backupWardId, resourceTypeList }) => {
+    resourceTypeList }) => {
     console.log('Data Entry');
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
     const [count, setCount] = useState(1);
-    const [equipmentValue, setEquipmentValue] = useState(null);
-    const [infrastructureValue, setInfrastructureValue] = useState(null);
+    const [equipmentValue, setEquipmentValue] = useState('');
+    const [infrastructureValue, setInfrastructureValue] = useState('');
     const [beneficiaryOwner, setBeneficiaryOwner] = useState('');
-    const [beneficiaryCount, setBeneficiaryCount] = useState(null);
+    const [beneficiaryCount, setBeneficiaryCount] = useState('');
     const [serviceDisrupted, setServiceDisrupted] = useState(false);
-    const [economicLoss, setEconomicLoss] = useState(null);
+    const [economicLoss, setEconomicLoss] = useState('');
     const [type, setType] = useState('');
-    const [typeId, setTypeId] = useState(null);
+    const [typeId, setTypeId] = useState('');
     const [selectedresource, setSelectedResource] = useState('');
     const [selectedResourceId,
-        setSelectedResourceId] = useState(null);// resource id to be sent to backend
+        setSelectedResourceId] = useState('');// resource id to be sent to backend
     const [unit, setUnit] = useState('');
-    const [unitId, setunitId] = useState(null);
-    const [infrastructureLossRespId, setInfrastructureLossRespId] = useState(null);
+    const [unitId, setunitId] = useState('');
+    const [infrastructureLossRespId, setInfrastructureLossRespId] = useState('');
 
 
     const [titleErr, setTitleErr] = useState(false);
@@ -106,17 +106,6 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     const [resourceType, setResourceType] = useState('');
     const [resourceMainList, setResourceMainList] = useState([]);
 
-
-    console.log('This is loss id', countryList);
-    console.log('infrastructureType', infrastructureType);
-    console.log('infrastructureUnit', infrastructureUnit);
-    console.log('resource', resource);
-    console.log('backupWardId', backupWardId);
-    console.log('resource type', resourceType);
-    // useEffect(() => {
-    //     const filteredResource = resource.filter(i => i.ward === backupWardId);
-    //     setResourceMainList(filteredResource);
-    // }, [backupWardId, resource]);
 
     const genderData = [
         {
@@ -153,21 +142,22 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         setStatusId(value);
     };
     const clearFormData = () => {
+        setResourceType('');
         setTitle('');
         setStatus('');
-        setStatusId(null);
-        setEquipmentValue(null);
-        setInfrastructureValue(null);
+        setStatusId('');
+        setEquipmentValue('');
+        setInfrastructureValue('');
         setBeneficiaryOwner('');
-        setBeneficiaryCount(null);
+        setBeneficiaryCount('');
         setServiceDisrupted(false);
-        setEconomicLoss(null);
+        setEconomicLoss('');
         setType('');
-        setTypeId(null);
-        setSelectedResource(null);
-        setSelectedResourceId(null);
-        setUnit(null);
-        setunitId(null);
+        setTypeId('');
+        setSelectedResource('');
+        setSelectedResourceId('');
+        setUnit('');
+        setunitId('');
     };
 
     const handleSubmit = () => {
@@ -199,6 +189,8 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                 type: typeId,
                 resource: selectedResourceId,
                 unit: unitId,
+                loss: lossID,
+                status: statusId,
             };
             lossInfrastructure.do({
                 body: finalSubmissionData,
@@ -214,9 +206,8 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         console.log('this is filteredResourceName', filteredResourceName);
         console.log('This is resource', resource);
         const filteredResourceList = resource
-            .filter(i => i.ward === backupWardId)
             .filter(d => d.resourceType === e.target.value);
-        console.log('This is ward', backupWardId);
+
         console.log('This is data', filteredResourceList);
         setResourceMainList(filteredResourceList);
         console.log('This is resource type', e);
@@ -224,10 +215,23 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
 
     const handleResource = (e) => {
         console.log('This value', e.target.value);
+        setSelectedResource(e.target.value);
     };
 
-
+    const handleInfrastructureType = (e) => {
+        console.log('This is event', e.target.value);
+        setTypeId(e.target.value);
+    };
+    const handleInfrastructureUnit = (e) => {
+        setunitId(e.target.value);
+    };
+    const handleVerifiedChange = () => {
+        setServiceDisrupted(!serviceDisrupted);
+    };
     console.log('This is main list for filtering resource', resourceMainList);
+    console.log('This is infrastructure type', infrastructureType);
+    console.log('infrastructureUnit', infrastructureUnit);
+
     return (
         <div>
             <Modal
@@ -273,26 +277,33 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                     helperText={titleErr ? 'This field is required' : null}
                                 />
                                 <FormControl fullWidth>
-                                    <InputLabel id="hazard-label">Resource </InputLabel>
+                                    <InputLabel id="hazard-label">Status</InputLabel>
                                     <Select
-                                        labelId="gender"
-                                        id="gender-select"
-                                        value={selectedresource}
-                                        label="Resource"
-                                        onChange={handleResource}
+                                        labelId="status"
+                                        id="status-select"
+                                        value={status}
+                                        label="Status"
+                                        error={statusErr}
+                                        onChange={handleSelectedStatus}
                                     >
-                                        {resourceMainList.length && resourceMainList.map(
+                                        {statusData.length && statusData.map(
                                             item => (
                                                 <MenuItem
-                                                    key={item.id}
-                                                    value={item.id}
+                                                    key={item.displayName}
+                                                    value={item.displayName}
                                                 >
-                                                    {item.title}
+                                                    {item.displayName}
                                                 </MenuItem>
                                             ),
                                         )}
                                     </Select>
-
+                                    {statusErr ? (
+                                        <FormHelperText
+                                            style={{ color: '#f44336', marginLeft: '14px' }}
+                                        >
+                                            Status is Required
+                                        </FormHelperText>
+                                    ) : ''}
                                 </FormControl>
 
 
@@ -322,9 +333,165 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
 
                                 </FormControl>
 
+                                <FormControl fullWidth>
+                                    <InputLabel id="hazard-label">Resource </InputLabel>
+                                    <Select
+                                        labelId="gender"
+                                        id="gender-select"
+                                        value={selectedresource}
+                                        label="Resource"
+                                        onChange={handleResource}
+                                    >
+                                        {resourceMainList.length && resourceMainList.map(
+                                            item => (
+                                                <MenuItem
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.title}
+                                                </MenuItem>
+                                            ),
+                                        )}
+                                    </Select>
+
+                                </FormControl>
+
 
                             </div>
+                            <div className={styles.twoInputSections}>
 
+                                <TextField
+                                    type="number"
+                                    variant="outlined"
+                                    className={styles.materialUiInput}
+                                    value={equipmentValue}
+                                    onChange={(e) => {
+                                        setEquipmentValue(e.target.value);
+                                    }}
+                                    id="outlined-basic"
+                                    label="Equipment Value"
+                                />
+                                <TextField
+                                    type="number"
+                                    variant="outlined"
+                                    className={styles.materialUiInput}
+                                    value={infrastructureValue}
+                                    onChange={(e) => {
+                                        setInfrastructureValue(e.target.value);
+                                    }}
+                                    id="outlined-basic"
+                                    label="Infrastructure Value"
+
+                                />
+                            </div>
+                            <div className={styles.twoInputSections}>
+
+                                <TextField
+                                    variant="outlined"
+                                    className={styles.materialUiInput}
+                                    value={beneficiaryOwner}
+                                    onChange={(e) => {
+                                        setBeneficiaryOwner(e.target.value);
+                                    }}
+                                    id="outlined-basic"
+                                    label="Beneficiary Owner"
+                                />
+                                <TextField
+                                    type="number"
+                                    variant="outlined"
+                                    className={styles.materialUiInput}
+                                    value={beneficiaryCount}
+                                    onChange={(e) => {
+                                        setBeneficiaryCount(e.target.value);
+                                    }}
+                                    id="outlined-basic"
+                                    label="Beneficiary Count"
+
+                                />
+                            </div>
+                            <div className={styles.twoInputSections}>
+
+
+                                <FormControl fullWidth>
+                                    <InputLabel id="hazard-label">Infrastructure Type </InputLabel>
+                                    <Select
+                                        labelId="gender"
+                                        id="gender-select"
+                                        value={typeId}
+                                        label="Infrastructure Type"
+                                        onChange={handleInfrastructureType}
+                                    >
+                                        {infrastructureType.length && infrastructureType.map(
+                                            item => (
+                                                <MenuItem
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.title}
+                                                </MenuItem>
+                                            ),
+                                        )}
+                                    </Select>
+
+                                </FormControl>
+                                <FormControl fullWidth>
+                                    <InputLabel id="hazard-label">Infrastructure Unit </InputLabel>
+                                    <Select
+                                        labelId="gender"
+                                        id="gender-select"
+                                        value={unitId}
+                                        label="Infrastructure Type"
+                                        onChange={handleInfrastructureUnit}
+                                    >
+                                        {infrastructureUnit.length && infrastructureUnit.map(
+                                            item => (
+                                                <MenuItem
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.title}
+                                                </MenuItem>
+                                            ),
+                                        )}
+                                    </Select>
+
+                                </FormControl>
+
+                            </div>
+                            <div>
+                                <TextField
+                                    type="number"
+                                    variant="outlined"
+                                    className={styles.materialUiInput}
+                                    value={economicLoss}
+                                    onChange={(e) => {
+                                        setEconomicLoss(e.target.value);
+                                    }}
+                                    id="outlined-basic"
+                                    label="Economic Loss"
+                                    error={economicLossErr}
+                                    helperText={economicLossErr ? 'This field is required' : null}
+                                />
+                            </div>
+                            <div>
+                                <div className={styles.checkBoxArea}>
+                                    <div className={styles.verified}>
+                                        <p className={styles.verifiedOrApproved}>
+                                            Is Service Disrupted?
+
+                                        </p>
+
+                                        <input
+                                            type="checkbox"
+                                            name="verifiedCheck"
+                                            id="verified"
+                                            checked={serviceDisrupted}
+                                            onChange={e => handleVerifiedChange()}
+                                        />
+                                    </div>
+
+                                </div>
+                            </div>
                             {/* <div className={styles.twoInputSections}>
                                 <FormControl fullWidth>
                                     <InputLabel id="hazard-label">Gender</InputLabel>

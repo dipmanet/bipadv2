@@ -1943,6 +1943,8 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         peopleLossData,
         familyLossData,
         infrastructureLossData,
+        agricultureLossData,
+        livestockLossData,
         incidentEditData,
         incidentUpdateError,
         epidemicChartHourlyLoading,
@@ -2000,6 +2002,12 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         }
         if (infrastructureLossData) {
             deferedState.epidemicsPage.infrastructureLossData = infrastructureLossData;
+        }
+        if (agricultureLossData) {
+            deferedState.epidemicsPage.agricultureLossData = agricultureLossData;
+        }
+        if (livestockLossData) {
+            deferedState.epidemicsPage.livestockLossData = livestockLossData;
         }
         if (incidentEditData) {
             deferedState.epidemicsPage.incidentEditData = incidentEditData;
