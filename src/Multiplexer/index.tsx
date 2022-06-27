@@ -770,7 +770,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
             // hazardList,
         } = this.props;
-
         const {
             leftContent,
             leftContentContainerClassName,

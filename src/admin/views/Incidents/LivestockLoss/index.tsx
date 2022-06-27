@@ -43,7 +43,7 @@ const LivestockLoss = ({ validationError,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
     handleNext, requests: { loss }, countryList,
     infrastructureType,
-    infrastructureUnit,
+    infrastructureUnit, clearData,
     resource, agricultureType, liveStockType }) => {
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
@@ -122,7 +122,17 @@ const LivestockLoss = ({ validationError,
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
                             <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Previous</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(1)} type="submit">Submit</button>
+                            <button
+                                className={styles.submitButtons}
+                                onClick={() => {
+                                    handleNext(1);
+                                    clearData();
+                                }}
+                                type="submit"
+                            >
+                                Submit
+
+                            </button>
                         </div>
                     </div>
                 </div>

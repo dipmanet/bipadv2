@@ -1,102 +1,114 @@
-$Fira: 'Fira Sans', sans-serif;
+$Fira: 'Fira Sans',
+sans-serif;
 $inputBackground : #F7F7F7;
 $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 
 
-.mapCSS{
-	position: relative;
-	margin-top: 50px;
-	height: 600px;
-	width: 100%;
-	.adminLvlTogglerMain{
-		position: absolute;
-		z-index: 1000;
-		height: 42%;
-		min-width: 30%;
-		max-width: 25%;
-		.layerIcon{
-			background-color: white;
-			cursor: pointer;
-			fill: rgb(129, 128, 128);
-			margin:20px 20px 0px 20px;
-			padding: 5px;
-			font-size: 25px;
-			border-radius: 6px;
-		}
-		.adminLvlToggler{
-			position: relative;
-			top: -30px;
-			left: 50px;
-			margin: 0px 10px;
-			background-color: white;
-			border-radius: 5px;
-			padding: 15px;
-			.mapStyles{
-				display: flex;
-				align-items: center;
-				font-size: 16px;
-				cursor: pointer;
-				padding: 3px;
-				line-height: 1;
-				text-align: start;
-				.titleDescription{
-					margin: 0px 0px 5px 10px;
-					.title{
-						font-family: $Fira;
-						font-size: 11px;
-						color: rgb(37, 37, 37);
-						font-weight: 600;
-						margin: 0;
-					}
-					.description{
-						font-family: $Fira;
-						margin: 0;
-						font-size: 10px;
-				
-					}
-				}
-			
-			}
-		}
-		.adminLvlTogglerHide{
-			display: none;
-			margin: 10px;
-			height: 42%;
-			width: 25%;
-			background-color: white;
-			position: absolute;
-			z-index: 1000;
-			border-radius: 5px;
-			padding: 15px;
-			.mapStyles{
-				display: flex;
-				align-items: center;
-				font-size: 16px;
-				cursor: pointer;
-				padding: 3px;
-				.titleDescription{
-					margin: 5px 0px 5px 10px;
-					
-					.title{
-						font-family: $Fira;
-					
-						font-size: 14px;
-						color: rgb(37, 37, 37);
-						font-weight: 500;
-						margin: 0;
-					}
-					.description{
-						font-family: $Fira;
-						margin: 0;
-						font-size: 14px;
-						font-size: 10px;
-						line-height: 13px;
-					}
-				}
-			
-			}
-		}
-	}
+.mapCSS {
+    position: relative;
+    margin-top: 50px;
+    height: 600px;
+    width: 100%;
+
+    .adminLvlTogglerMain {
+        position: absolute;
+        z-index: 1000;
+        height: 42%;
+        min-width: 30%;
+        max-width: 25%;
+
+        .layerIcon {
+            background-color: white;
+            cursor: pointer;
+            fill: rgb(129, 128, 128);
+            margin: 20px 20px 0px 20px;
+            padding: 5px;
+            font-size: 25px;
+            border-radius: 6px;
+        }
+
+        .adminLvlToggler {
+            position: relative;
+            top: -30px;
+            left: 50px;
+            margin: 0px 10px;
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+
+            .mapStyles {
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 3px;
+                line-height: 1;
+                text-align: start;
+
+                .titleDescription {
+                    margin: 0px 0px 5px 10px;
+
+                    .title {
+                        font-family: $Fira;
+                        font-size: 11px;
+                        color: rgb(37, 37, 37);
+                        font-weight: 600;
+                        margin: 0;
+                    }
+
+                    .description {
+                        font-family: $Fira;
+                        margin: 0;
+                        font-size: 10px;
+
+                    }
+                }
+
+            }
+        }
+
+        .adminLvlTogglerHide {
+            display: none;
+            margin: 10px;
+            height: 42%;
+            width: 25%;
+            background-color: white;
+            position: absolute;
+            z-index: 1000;
+            border-radius: 5px;
+            padding: 15px;
+
+            .mapStyles {
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 3px;
+
+                .titleDescription {
+                    margin: 5px 0px 5px 10px;
+
+                    .title {
+                        font-family: $Fira;
+
+                        font-size: 14px;
+                        color: rgb(37, 37, 37);
+                        font-weight: 500;
+                        margin: 0;
+                    }
+
+                    .description {
+                        font-family: $Fira;
+                        margin: 0;
+                        font-size: 14px;
+                        font-size: 10px;
+                        line-height: 13px;
+                    }
+                }
+
+            }
+        }
+    }
 
 
 }

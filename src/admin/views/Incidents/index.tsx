@@ -178,8 +178,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/incident/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ successMessage: 'Incident added' });
+            if (params && params.handleNext) {
+                params.handleNext(2);
+            }
         },
         onFailure: ({ error, props, params }) => {
             if (props && props.setEpidemicsPage) {
@@ -202,8 +205,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ params }) => `/incident/${params.id}/`,
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ successMessage: 'Incident Updated' });
+            if (params && params.update) {
+                params.update(true);
+                params.handleLoader();
+            }
+            if (params && params.handleNext) {
+                params.handleNext(2);
+            }
         },
         onFailure: ({ error, props, params }) => {
             if (params && params.errorOccur) {
@@ -228,8 +238,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ params }) => `/incident/${params.id}/`,
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ successMessage: 'Incident verified' });
+            if (params && params.update) {
+                params.update(true);
+                params.handleLoader();
+            }
+            if (params && params.handleNext) {
+                params.handleNext(2);
+            }
         },
         onFailure: ({ error, props, params }) => {
             if (params && params.errorOccur) {
@@ -815,6 +832,7 @@ const Epidemics = (props) => {
     const [wardError, setWardError] = useState(false);
     const [latError, setLatError] = useState(false);
     const [longError, setLongError] = useState(false);
+    const [hazardError, setHazardError] = useState(false);
     const [dmError, setdmError] = useState(false);
     const [dfError, setdfError] = useState(false);
     const [doError, setdoError] = useState(false);
@@ -850,7 +868,7 @@ const Epidemics = (props) => {
     const [agricultureType, setAgricultureType] = useState([]);
     const [liveStockType, setLiveStockType] = useState([]);
     const [modulePage, setmodulePage] = useState(1);
-    { /** backup ward id is used to filter resource in infrastructure loss module */ }
+    const [isLossDataUpdated, setIsLossDataUpdated] = useState(false);
     const { epidemmicsPage:
         {
             lossID,
@@ -949,6 +967,7 @@ const Epidemics = (props) => {
         setVerificationMessage('');
         setSelectedHazardName('');
         setSelectedHazardId('');
+        setTotalEstimatedLoss(0);
     };
 
     const centriodsForMap = {
@@ -1126,7 +1145,7 @@ const Epidemics = (props) => {
         setSelectedHazardName(hazardList.length && id ? hazardList.find(i => i.id === id).title : '');
     };
 
-
+    console.log('This is estimated loss', incidentEditData);
     useEffect(() => {
         if (incidentEditData && Object.keys(incidentEditData).length > 0) {
             setuniqueId(incidentEditData.id);
@@ -1146,6 +1165,7 @@ const Epidemics = (props) => {
             setwardId(incidentEditData.wards[0].id);
             setEditWardId(incidentEditData.wards[0].id);
             // setEditWardName(incidentEditData.wards[0].title);
+            setTotalEstimatedLoss(incidentEditData.loss.estimatedLoss);
             setDeadMale(incidentEditData.loss.peopleDeathMaleCount);
             setDeadFemale(incidentEditData.loss.peopleDeathFemaleCount);
             setDeadOther(incidentEditData.loss.peopleDeathOtherCount);
@@ -1399,7 +1419,57 @@ const Epidemics = (props) => {
         setmodulePage(pageNo);
     };
     useEffect(() => {
-        if (lossID) {
+        console.log('Entered');
+
+        if (lossID && uniqueId) {
+            setLoader(true);
+            const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
+            const data = {
+                ...incidentFormDataInitial,
+                title,
+                incidentOn: reportedDate,
+                cause,
+                verified,
+                approved,
+                hazard: selectedHazardId,
+                reportedOn: reportedDate,
+                verificationMessage,
+                loss: editLossId,
+                streetAddress,
+                point: {
+                    type: 'Point',
+                    coordinates: [Number(longitude), Number(lattitude)],
+                },
+                wards: [editWardId],
+            };
+            if (user
+                && user.profile
+                && user.profile.role === 'validator'
+            ) {
+                const verify = {
+                    verified,
+                    approved,
+                    verification_message: verificationMessage,
+                };
+                props.requests.incidentPatch.do({
+                    id: uniqueId,
+                    body: verify,
+                    errorOccur: handleError,
+                    handleNext,
+                    update: setUpdated,
+                    handleLoader,
+                });
+            } else {
+                props.requests.incidentUpdate.do({
+                    id: uniqueId,
+                    body: data,
+                    errorOccur: handleError,
+                    handleNext,
+                    update: setUpdated,
+                    handleLoader,
+                });
+            }
+        } else {
             const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
             const data = {
                 ...incidentFormDataInitial,
@@ -1419,7 +1489,7 @@ const Epidemics = (props) => {
                 },
                 wards: [wardId],
             };
-            props.requests.incident.do({ body: data });
+            props.requests.incident.do({ body: data, handleNext });
             props.requests.resourceListFetch.do({ setResource, wardId });
             // const deadMale = {
             //     ...deadMaleInitial,
@@ -1475,7 +1545,7 @@ const Epidemics = (props) => {
             setError(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lossID]);
+    }, [lossID, isLossDataUpdated]);
     console.log('This is loss id', lossID);
     const disableMapFilterLofic = (boolean) => {
         setDisableMapFilter(boolean);
@@ -1500,7 +1570,10 @@ const Epidemics = (props) => {
         setwardName(e.target.value);
         setIsEditedIncident(true);
     };
-
+    console.log('This is user', user);
+    const handleLossDataSwitchListener = () => {
+        setIsLossDataUpdated(!isLossDataUpdated);
+    };
     return (
         <>
             <Page hideFilter hideMap />
@@ -1574,6 +1647,9 @@ const Epidemics = (props) => {
                     {modulePage === 1
                         ? (
                             <General
+                                setteError={setteError}
+                                handleLossDataSwitchListener={handleLossDataSwitchListener}
+                                lossID={editLossId}
                                 user={user}
                                 validationError={validationError}
                                 uniqueId={uniqueId}
@@ -1633,6 +1709,22 @@ const Epidemics = (props) => {
                                 handleTableButton={handleTableButton}
                                 handleNext={handleNext}
                                 clearData={clearData}
+                                setDateError={setDateError}
+                                setProvinceError={setProvinceError}
+                                setDistrictError={setDistrictError}
+                                setMunnicipalityError={setMunnicipalityError}
+                                setWardError={setWardError}
+                                setLatError={setLatError}
+                                setLongError={setLongError}
+                                provinceError={provinceError}
+                                districtError={districtError}
+                                municipalityError={municipalityError}
+                                wardError={wardError}
+                                hazardError={hazardError}
+                                setHazardError={setHazardError}
+                                selectedHazardId={selectedHazardId}
+
+
                             />
                         ) : ''}
                     {modulePage === 2 ? (
@@ -1677,6 +1769,7 @@ const Epidemics = (props) => {
                             handleNext={handleNext}
                             agricultureType={agricultureType}
                             liveStockType={liveStockType}
+                            clearData={clearData}
                         />
 
                     ) : ''}

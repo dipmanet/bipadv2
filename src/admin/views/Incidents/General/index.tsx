@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent */
 import React, { useState } from 'react';
@@ -10,13 +12,19 @@ import Map from 'src/admin/components/Mappointpicker';
 import { connect } from 'react-redux';
 import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import Loader from 'react-loader';
+import { FormHelperText } from '@material-ui/core';
 import styles from '../styles.module.scss';
 import Ideaicon from '../../../resources/ideaicon.svg';
 import { createConnectedRequestCoordinator } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
+import { boundsSelector, epidemicsPageSelector } from '#selectors';
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
+});
+const mapStateToProps = (state, props) => ({
+    bounds: boundsSelector(state, props),
+
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     loss: {
@@ -25,15 +33,52 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ lossID: response.id });
-            if (params && params.clearData) {
-                params.clearData();
-            }
+            // if (params && params.clearData) {
+            //     params.clearData();
+            // }
             if (params && params.setLoader) {
                 params.setLoader(false);
             }
-            if (params && params.handleNext) {
-                params.handleNext(2);
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
             }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossUpdate: {
+        url: ({ props }) => `/loss/${props.lossID}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            params.handleLossDataSwitchListener();
+            props.setEpidemicsPage({ lossID: response.id });
+            // if (params && params.clearData) {
+            //     params.clearData();
+            // }
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
         },
         onFailure: ({ error, params }) => {
             if (params && params.setEpidemicsPage) {
@@ -59,10 +104,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 
-const General = ({ validationError,
+const General = ({ validationError, lossID,
     uniqueId, setuniqueId, reportedDate, setReportedDate, dateError, hazardList,
     selectedHazardName, handleSelectedHazard,
-    cause, setCause, provinceName, handleProvince, provinces,
+    cause, setCause, provinceName, handleProvince, provinces, handleLossDataSwitchListener,
     districtName, handleDistrict,
     districts, provinceId, municipalityName, handleMunicipality,
     municipalities, districtId,
@@ -76,18 +121,77 @@ const General = ({ validationError,
     verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
     verificationMessage, setVerificationMessage,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
-    handleNext, clearData, user: { profile: { province: userProvince, district: userDistrict, municipality: userMunicipality } }, requests: { loss } }) => {
+    handleNext, clearData, bounds, setteError, selectedHazardId,
+    setDateError, setProvinceError, setDistrictError, setMunnicipalityError, setWardError, setLatError, setLongError,
+    provinceError, districtError, municipalityError, wardError, hazardError, setHazardError,
+    user: { profile: { province: userProvince, district: userDistrict, municipality: userMunicipality } },
+    requests: { loss, lossUpdate } }) => {
     const [loader, setLoader] = useState(false);
-
-
+    console.log('This is unique id', uniqueId);
+    console.log('This is loss id', lossID);
     const handleSave = async () => {
         const lossFormData = {
             estimatedLoss: Number(totalEstimatedLoss),
         };
-        setLoader(true);
-        await loss.do({ body: lossFormData, setLoader, handleNext, clearData });
+        if (!reportedDate || !provinceName || !districtName || !municipalityName || !wardName
+            || !lattitude || !longitude || !totalEstimatedLoss || !selectedHazardId
+        ) {
+            if (!reportedDate) {
+                setDateError(true);
+            } else {
+                setDateError(false);
+            }
+            if (!selectedHazardId) {
+                setHazardError(true);
+            } else {
+                setHazardError(false);
+            }
+            if (!provinceName) {
+                setProvinceError(true);
+            } else {
+                setProvinceError(false);
+            }
+            if (!districtName) {
+                setDistrictError(true);
+            } else {
+                setDistrictError(false);
+            }
+            if (!municipalityName) {
+                setMunnicipalityError(true);
+            } else {
+                setMunnicipalityError(false);
+            }
+            if (!wardName) {
+                setWardError(true);
+            } else {
+                setWardError(false);
+            }
+            if (!lattitude) {
+                setLatError(true);
+            } else {
+                setLatError(false);
+            }
+            if (!longitude) {
+                setLongError(true);
+            } else {
+                setLongError(false);
+            }
+            if (!totalEstimatedLoss) {
+                setteError(true);
+            } else {
+                setteError(false);
+            }
+        } else {
+            setLoader(true);
+            if (uniqueId) {
+                await lossUpdate.do({ body: lossFormData, setLoader, handleNext, clearData, handleLossDataSwitchListener });
+            } else {
+                await loss.do({ body: lossFormData, setLoader, handleNext, clearData });
+            }
+        }
     };
     console.log('This is userProvince', userProvince);
+    console.log('This is boundary', bounds);
 
 
     return (
@@ -147,6 +251,7 @@ const General = ({ validationError,
                                 value={reportedDate}
                                 onChange={(newValue) => {
                                     setReportedDate(newValue);
+                                    setDateError(false);
                                 }}
                                 renderInput={params => (
                                     <TextField
@@ -170,7 +275,11 @@ const General = ({ validationError,
                                 id="hazard-select"
                                 value={hazardList.length ? selectedHazardName : ''}
                                 label="Hazard"
-                                onChange={handleSelectedHazard}
+                                onChange={(e) => {
+                                    handleSelectedHazard(e);
+                                    setHazardError(false);
+                                }}
+                                error={hazardError}
                             >
                                 {hazardList.length && hazardList.map(
                                     item => (
@@ -183,6 +292,7 @@ const General = ({ validationError,
                                     ),
                                 )}
                             </Select>
+                            {hazardError ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Hazard is Required</FormHelperText> : ''}
                         </FormControl>
                         <TextField
                             required
@@ -210,8 +320,12 @@ const General = ({ validationError,
                                 id="province-select"
                                 value={provinceName}
                                 label="Provinvce"
-                                onChange={handleProvince}
+                                onChange={(e) => {
+                                    handleProvince(e);
+                                    setProvinceError(false);
+                                }}
                                 disabled={userProvince}
+                                error={provinceError}
                             >
                                 {provinces && provinces.map(item => (
                                     <MenuItem
@@ -222,6 +336,7 @@ const General = ({ validationError,
                                     </MenuItem>
                                 ))}
                             </Select>
+                            {provinceError ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Province is Required</FormHelperText> : ''}
                         </FormControl>
 
                         <FormControl fullWidth>
@@ -231,8 +346,12 @@ const General = ({ validationError,
                                 id="district-select"
                                 value={districtName}
                                 label="District"
-                                onChange={handleDistrict}
+                                onChange={(e) => {
+                                    handleDistrict(e);
+                                    setDistrictError(false);
+                                }}
                                 disabled={userDistrict}
+                                error={districtError}
                             >
                                 {districts && districts.filter(
                                     item => item.province === provinceId,
@@ -247,6 +366,7 @@ const General = ({ validationError,
                                     ),
                                 )}
                             </Select>
+                            {districtError ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>District is Required</FormHelperText> : ''}
                         </FormControl>
                         <FormControl fullWidth>
                             <InputLabel id="municipality-label">Municipality</InputLabel>
@@ -255,8 +375,12 @@ const General = ({ validationError,
                                 id="munnicipality-select"
                                 value={municipalityName}
                                 label="Municipality"
-                                onChange={handleMunicipality}
+                                onChange={(e) => {
+                                    handleMunicipality(e);
+                                    setMunnicipalityError(false);
+                                }}
                                 disabled={userMunicipality}
+                                error={municipalityError}
                             >
                                 {municipalities && municipalities.filter(
                                     item => item.district === districtId,
@@ -271,6 +395,7 @@ const General = ({ validationError,
                                     ),
                                 )}
                             </Select>
+                            {municipalityError ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Municipality is Required</FormHelperText> : ''}
                         </FormControl>
                         <FormControl fullWidth>
                             <InputLabel id="ward-label">Ward</InputLabel>
@@ -279,8 +404,12 @@ const General = ({ validationError,
                                 id="ward-select"
                                 value={wardName}
                                 label="Ward"
-                                onChange={handleWard}
+                                onChange={(e) => {
+                                    handleWard(e);
+                                    setWardError(false);
+                                }}
                                 disabled={disableMapFilter}
+                                error={wardError}
                             >
                                 {wards && wards.filter(item => item.municipality === municipalityId)
                                     .map(item => Number(item.title)).sort((a, b) => a - b)
@@ -290,6 +419,7 @@ const General = ({ validationError,
                                         </MenuItem>
                                     ))}
                             </Select>
+                            {wardError ? <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>Ward is Required</FormHelperText> : ''}
                         </FormControl>
                     </div>
                     <TextField
@@ -306,7 +436,10 @@ const General = ({ validationError,
                             variant="outlined"
                             className={styles.materialUiInput}
                             value={lattitude}
-                            onChange={e => setLattitude(e.target.value)}
+                            onChange={(e) => {
+                                setLattitude(e.target.value);
+                                setLatError(false);
+                            }}
                             error={latError}
                             helperText={latError ? 'This field is required' : null}
                             id="outlined-basic"
@@ -317,7 +450,10 @@ const General = ({ validationError,
                             variant="outlined"
                             className={styles.materialUiInput}
                             value={longitude}
-                            onChange={e => setLongitude(e.target.value)}
+                            onChange={(e) => {
+                                setLongitude(e.target.value);
+                                setLongError(false);
+                            }}
                             error={longError}
                             helperText={longError ? 'This field is required' : null}
                             id="outlined-basic"
@@ -337,6 +473,11 @@ const General = ({ validationError,
                         userProvince={userProvince}
                         userDistrict={userDistrict}
                         userMunicipality={userMunicipality}
+                        bounds={bounds}
+                        setLatError={setLatError}
+                        setLongError={setLongError}
+
+
                     />
                     <div className={styles.infoBarCasuality}>
                         <p className={styles.instInfo}>
@@ -355,7 +496,10 @@ const General = ({ validationError,
                             variant="outlined"
                             value={totalEstimatedLoss}
 
-                            onChange={e => setTotalEstimatedLoss(e.target.value)}
+                            onChange={(e) => {
+                                setTotalEstimatedLoss(e.target.value);
+                                setteError(false);
+                            }}
                             id="outlined-basic"
                             label="Total Estimated Loss (NPR)"
                         />
@@ -668,7 +812,7 @@ const General = ({ validationError,
 };
 
 
-export default connect(null, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             General,
