@@ -5,6 +5,7 @@ import rangeInputDefaultClassNames from 'react-input-range/src/js/input-range/de
 
 import 'react-input-range/lib/css/index.css';
 
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 
 interface Props {
@@ -36,26 +37,35 @@ class OpacityInput extends React.PureComponent<Props, State> {
         } = this.props;
 
         return (
-            <div className={_cs(styles.opacityInput, className)}>
-                <div className={styles.label}>
-                    Opacity:
-                </div>
-                <RangeInput
-                    classNames={{
-                        ...rangeInputDefaultClassNames,
-                        inputRange: _cs(rangeInputDefaultClassNames.inputRange, styles.rangeInput),
-                        valueLabel: styles.valueLabel,
-                    }}
-                    minValue={0}
-                    maxValue={1}
-                    step={0.1}
-                    value={value}
-                    onChange={this.handleRangeInputChange}
-                />
-                <div className={styles.value}>
-                    { value }
-                </div>
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(styles.opacityInput, className)}>
+                            <div className={styles.label}>
+                                {t('Opacity')}
+                                :
+                            </div>
+                            <RangeInput
+                                classNames={{
+                                    ...rangeInputDefaultClassNames,
+                                    inputRange: _cs(rangeInputDefaultClassNames.inputRange,
+                                        styles.rangeInput),
+                                    valueLabel: styles.valueLabel,
+                                }}
+                                minValue={0}
+                                maxValue={1}
+                                step={0.1}
+                                value={value}
+                                onChange={this.handleRangeInputChange}
+                            />
+                            <div className={styles.value}>
+                                {value}
+                            </div>
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

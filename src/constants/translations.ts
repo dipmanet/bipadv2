@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        Opacity: 'Opacity',
         Year: 'Year',
         temperature: 'temperature',
         precipitation: 'precipitation',
@@ -810,6 +811,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Opacity: 'अस्पष्टता',
         Year: 'वर्ष',
         temperature: 'तापक्रम',
         precipitation: 'वर्षा',
