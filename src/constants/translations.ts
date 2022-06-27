@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'loading legend...': 'loading legend...',
         Opacity: 'Opacity',
         Year: 'Year',
         temperature: 'temperature',
@@ -811,6 +812,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'loading legend...': 'लेजेन्‍ड लोड गर्दै...',
         Opacity: 'अस्पष्टता',
         Year: 'वर्ष',
         temperature: 'तापक्रम',

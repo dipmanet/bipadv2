@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { _cs, isDefined } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
 
 import { Layer } from '#types';
@@ -19,7 +20,7 @@ const RasterLegend = (props: RasterLegendProps) => {
         layerName,
     } = props;
     const [loadingLegend, setLoadingLegend] = useState(true);
-    const [rasterLegendDataUrl, setRasterLegendDataUrl] = useState<string|undefined>();
+    const [rasterLegendDataUrl, setRasterLegendDataUrl] = useState<string | undefined>();
 
     useEffect(
         () => {
@@ -36,22 +37,30 @@ const RasterLegend = (props: RasterLegendProps) => {
     );
 
     return (
-        <>
-            { loadingLegend && (
-                <div className={styles.loadingMessage}>
-                    loading legend...
-                </div>
-            )}
-            { rasterLegendDataUrl && (
-                <div className={styles.rasterLegend}>
-                    <img
-                        className={styles.rasterLegendImage}
-                        src={rasterLegendDataUrl}
-                        alt={layerName}
-                    />
-                </div>
-            )}
-        </>
+        <Translation>
+            {
+                t => (
+                    <>
+                        {loadingLegend && (
+                            <div className={styles.loadingMessage}>
+                                {t('loading legend...')}
+                            </div>
+                        )}
+                        {rasterLegendDataUrl && (
+                            <div className={styles.rasterLegend}>
+                                <img
+                                    className={styles.rasterLegendImage}
+                                    src={rasterLegendDataUrl}
+                                    alt={layerName}
+                                />
+                            </div>
+                        )}
+                    </>
+                )
+            }
+
+        </Translation>
+
     );
 };
 
@@ -88,7 +97,7 @@ const ChoroplethLegend = ({ minValue, legend, maxValueCapped }: ChoroplethLegend
 
     return (
         <div className={styles.choroplethLegend}>
-            { isDefined(minValue) && (
+            {isDefined(minValue) && (
                 <Numeral
                     className={styles.min}
                     normal
@@ -96,7 +105,7 @@ const ChoroplethLegend = ({ minValue, legend, maxValueCapped }: ChoroplethLegend
                     precision={getPrecision(minValue)}
                 />
             )}
-            { legendKeys.map((color) => {
+            {legendKeys.map((color) => {
                 const value = legend[color];
                 return (
                     <div
@@ -131,7 +140,7 @@ const ChoroplethLegend = ({ minValue, legend, maxValueCapped }: ChoroplethLegend
                         value={lastElementValue}
                         precision={getPrecision(lastElementValue)}
                     />
-                    { maxValueCapped && '+' }
+                    {maxValueCapped && '+'}
                 </div>
             </div>
         </div>
@@ -166,7 +175,7 @@ const LayerLegend = (props: Props) => {
         <div className={_cs(className, styles.legend, 'map-legend-container')}>
             <header className={styles.header}>
                 <h5 className={styles.heading}>
-                    { layer.legendTitle || 'Legend' }
+                    {layer.legendTitle || 'Legend'}
                 </h5>
             </header>
             {layer.type === 'raster' && (
@@ -174,7 +183,7 @@ const LayerLegend = (props: Props) => {
                     layerName={layer.layername}
                 />
             )}
-            { layer.type === 'choropleth' && (
+            {layer.type === 'choropleth' && (
                 <ChoroplethLegend
                     minValue={layer.minValue}
                     legend={layer.legend}
