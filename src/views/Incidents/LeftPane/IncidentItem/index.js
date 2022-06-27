@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -206,6 +207,7 @@ class IncidentItem extends React.PureComponent {
         const {
             id: incidentServerId,
             title,
+            titleNe,
             incidentOn,
             streetAddress,
             source,
@@ -246,10 +248,23 @@ class IncidentItem extends React.PureComponent {
                 <div className={styles.right}>
                     <header className={styles.header}>
                         <h3
-                            title={title}
+                            title={
+                                language === 'en'
+                                    ? title
+                                    : titleNe === undefined
+                                        ? title
+                                        : titleNe
+                            }
                             className={styles.heading}
                         >
-                            {title}
+                            {
+                                language === 'en'
+                                    ? title
+                                    : titleNe === undefined
+                                        ? title
+                                        : titleNe
+
+                            }
                         </h3>
                         <DateOutput
                             className={styles.date}
