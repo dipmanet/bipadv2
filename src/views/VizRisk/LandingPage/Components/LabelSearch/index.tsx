@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Return from '#resources/icons/Return.svg';
 import { vzRiskMunicipalData, vzRiskProvinceData } from '../../VzRiskData';
 import searchVizRisk from '../../../../../resources/icons/SearchVizRisk.svg';
 import styles from './styles.scss';
@@ -7,7 +6,7 @@ import styles from './styles.scss';
 const placeholder = 'Search by Province, Municipality';
 
 const LabelSearch = (props) => {
-    const { setSearchBbox } = props;
+    const { setSearchBbox, setSelctFieldCurrentValue } = props;
     const availableData = [...vzRiskProvinceData, ...vzRiskMunicipalData];
     const [inputValue, setInputValue] = useState('');
     const [filteredData, setFilteredData] = useState([]);
@@ -21,9 +20,6 @@ const LabelSearch = (props) => {
 
         setFilteredData(filterDataOnChange);
     };
-
-    console.log('filteredData', inputValue);
-
 
     return (
         <div className={styles.inputContainer}>
@@ -65,7 +61,11 @@ const LabelSearch = (props) => {
             <button
                 className={styles.resetBtn}
                 type="submit"
-                onClick={() => setSearchBbox([[79.161987, 25.923467], [89.626465, 30.789037]])}
+                onClick={() => {
+                    setSelctFieldCurrentValue('');
+                    setInputValue('');
+                    setSearchBbox([[79.161987, 25.923467], [89.626465, 30.789037]]);
+                }}
             >
                 Reset map
             </button>

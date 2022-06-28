@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import styles from './styles.scss';
 
-const LayerToggle = ({ setVzLabel, vzLabel }) => {
+interface Props {
+    vzLabel: string;
+    setVzLabel: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const LayerToggle = (props: Props) => {
     const [clickedState, setclickedState] = useState(false);
+    const { setVzLabel, vzLabel } = props;
     const handleLayerChange = () => {
         if (vzLabel === 'municipality') {
             setVzLabel('province');
-            console.log('layerToggle-vzLabel', vzLabel);
         } else {
             (
                 setVzLabel('municipality')

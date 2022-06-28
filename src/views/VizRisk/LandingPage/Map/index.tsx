@@ -28,6 +28,10 @@ interface Props {
     provinces: any;
     municipalities: any;
     selctFieldCurrentValue: string;
+    clickedVizrisk: string;
+    setClickedVizrisk: React.Dispatch<React.SetStateAction<string>>;
+    setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+    searchBbox: any;
 }
 
 let hoverId: number | undefined;
@@ -50,7 +54,6 @@ const Map = (props: Props) => {
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
-            console.error('No container found.');
             return noop;
         }
         const provinceIdarray = vzRiskProvinceData.map(item => item.id);
@@ -105,6 +108,16 @@ const Map = (props: Props) => {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
+            allData.forEach((attribute: any) => {
+                landingPageMap.setFeatureState({
+                    id: attribute.id,
+                    source: 'base-outline',
+                    sourceLayer: mapSources.nepal.layers.province,
+                }, {
+                    indicator: attribute.indicator,
+                    color: checkType(attribute.indicator),
+                });
+            });
 
             landingPageMap.addLayer({
                 id: 'province-vizrisk',
@@ -112,7 +125,12 @@ const Map = (props: Props) => {
                 'source-layer': mapSources.nepal.layers.province,
                 type: 'fill',
                 paint: {
-                    'fill-opacity': 1,
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0.8,
+                        1,
+                    ],
                     'fill-color': [
                         'case',
                         ['boolean', ['feature-state', 'value'], 'true'],
@@ -123,14 +141,47 @@ const Map = (props: Props) => {
                     visibility: 'none',
                 },
             });
+
+            landingPageMap.addLayer({
+                id: 'province-vizrisk-extrusion',
+                source: 'base-outline',
+                'source-layer': mapSources.nepal.layers.province,
+                type: 'fill-extrusion',
+                paint: {
+                    'fill-extrusion-color': ['feature-state', 'color'],
+
+                    // Get `fill-extrusion-height` from the source `height` property.
+                    'fill-extrusion-height': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        10000,
+                        0,
+                    ],
+                    // Get `fill-extrusion-base` from the source `base_height` property.
+                    'fill-extrusion-base': 15,
+
+                    // Make extrusions slightly opaque to see through indoor walls.
+                    // 'fill-extrusion-opacity': [
+                    //     'case',
+                    //     ['boolean', ['feature-state', 'hover'], false],
+                    //     0.8,
+                    //     1,
+                    // ],
+                },
+                layout: {
+                    visibility: 'visible',
+                },
+
+            });
+
             allDataMunipal.forEach((attribute: any) => {
                 landingPageMap.setFeatureState({
                     id: attribute.id,
                     source: 'base-outline',
                     sourceLayer: mapSources.nepal.layers.municipality,
                 }, {
-                    color: checkType(attribute.indicator),
                     indicator: attribute.indicator,
+                    color: checkType(attribute.indicator),
                 });
             });
 
@@ -163,7 +214,7 @@ const Map = (props: Props) => {
                     'fill-extrusion-height': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
-                        1500,
+                        10000,
                         0,
                     ],
 
@@ -171,7 +222,12 @@ const Map = (props: Props) => {
                     'fill-extrusion-base': 0,
 
                     // Make extrusions slightly opaque to see through indoor walls.
-                    'fill-extrusion-opacity': 0.9,
+                    // 'fill-extrusion-opacity': [
+                    //     'case',
+                    //     ['boolean', ['feature-state', 'hover'], false],
+                    //     0.8,
+                    //     1,
+                    // ],
                 },
                 layout: {
                     visibility: 'visible',
@@ -182,7 +238,6 @@ const Map = (props: Props) => {
             landingPageMap.on('click', 'municipality-vizrisk', (e) => {
                 if (e && e.features && e.features[0]) {
                     const name = e.features[0].properties.title;
-                    console.log('feawtures', e.features[0]);
 
                     if (allAvialableVizrisks.includes(e.features[0].id)) {
                         setClickedVizrisk(name);
@@ -270,10 +325,42 @@ const Map = (props: Props) => {
                          </div>
         `,
                     ).addTo(landingPageMap);
+                    if (hoverId) {
+                        landingPageMap.setFeatureState(
+                            {
+                                id: hoverId,
+                                source: 'base-outline',
+                                sourceLayer: mapSources.nepal.layers.province,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoverId = e.features[0].id;
+                    landingPageMap.setFeatureState(
+                        {
+                            id: hoverId,
+                            source: 'base-outline',
+                            sourceLayer: mapSources.nepal.layers.province,
+
+                        },
+                        { hover: true },
+                    );
                 }
             });
             landingPageMap.on('mouseleave', 'province-vizrisk', (e) => {
                 landingPageMap.getCanvas().style.cursor = '';
+                if (hoverId) {
+                    landingPageMap.setFeatureState(
+                        {
+                            source: 'base-outline',
+                            id: hoverId,
+                            sourceLayer: mapSources.nepal.layers.province,
+                        },
+                        { hover: false },
+
+                    );
+                }
+                hoverId = undefined;
                 popup.remove();
             });
             allData.forEach((attribute: any) => {
@@ -342,14 +429,19 @@ const Map = (props: Props) => {
         const floodId = filterDataWithIndicator(allDataMunipal, 6);
         const landSlideId = filterDataWithIndicator(allDataMunipal, 12);
         const multiHazardId = filterDataWithIndicator(allDataMunipal, 14);
+        const provinceIdarray = vzRiskProvinceData.map(item => item.id);
 
         if (updateMap.current && updateMap.current.isStyleLoaded()) {
             if (vzLabel === 'province') {
                 showMapLayers('province-outline', updateMap);
                 showMapLayers('province-vizrisk', updateMap);
+                showMapLayers('province-vizrisk-extrusion', updateMap);
+                updateMap.current.setFilter('province-vizrisk-extrusion',
+                    ['match', ['id'], provinceIdarray, true, false]);
             } else {
                 hideMapLayers('province-outline', updateMap);
                 hideMapLayers('province-vizrisk', updateMap);
+                hideMapLayers('province-vizrisk-extrusion', updateMap);
             }
 
             if (vzLabel === 'municipality') {
@@ -377,6 +469,8 @@ const Map = (props: Props) => {
                         break;
 
                     default:
+                        updateMap.current.setFilter('municipality-vizrisk',
+                            ['match', ['id'], [...floodId, ...landSlideId, ...multiHazardId], true, false]);
                         break;
                 }
             } else {

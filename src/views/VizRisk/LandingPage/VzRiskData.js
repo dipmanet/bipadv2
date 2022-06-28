@@ -1,7 +1,7 @@
 export const vzRiskProvinceData = [
     {
         type: 'provincial-visrisk',
-        name: 'Province2',
+        name: 'Madhesh',
         visriskType: 'Multihazard',
         id: 2,
         color: 'red',

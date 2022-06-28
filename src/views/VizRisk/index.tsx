@@ -1,15 +1,12 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
-// import Loader from 'react-loader';
 import {
     ClientAttributes,
     createConnectedRequestCoordinator,
     createRequestClient, methods,
 } from '#request';
 import Page from '#components/Page';
-import Loading from '#components/Loading';
 import Icon from '#rscg/Icon';
 import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
@@ -37,14 +34,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onSuccess: ({ params, response }) => {
             const { results: vizRiskId = [] } = response as Response;
-            console.log('vizrisk-results', vizRiskId);
         },
         onMount: true,
     },
 };
 
 interface Props { }
-const themes = ['Select VisRisk Theme', 'Flood Exposure', 'Landslide Exposure', 'Multi-hazard Exposure'];
+const themes = ['Select By Themes', 'All', 'Flood Exposure', 'Landslide Exposure', 'Multi-hazard Exposure'];
 
 const VizRiskMainPage = (props: Props) => {
     const [vizRiskId, setvizRiskId] = useState([]);
@@ -58,8 +54,6 @@ const VizRiskMainPage = (props: Props) => {
         setShowMenu(true);
         setClickedVizrisk('');
     };
-
-    console.log('clickedVizrisk', clickedVizrisk);
 
     const renderVizRisk = () => {
         switch (clickedVizrisk) {
@@ -121,11 +115,8 @@ const VizRiskMainPage = (props: Props) => {
 
     vizRiskThemeIdRequest.setDefaultParams({ setvizRiskId });
 
-    console.log('clickedVizrisk', clickedVizrisk);
-
-
     return (
-        <div className={styles.mainVzContainer}>
+        <div className={clickedVizrisk ? styles.mainVzContainerClicked : styles.mainVzContainer}>
             <Page
                 hideFilter
                 hideMap
@@ -162,17 +153,25 @@ const VizRiskMainPage = (props: Props) => {
                 setClickedVizrisk={setClickedVizrisk}
                 setShowMenu={setShowMenu}
                 searchBbox={searchBbox}
+                showMenu={showMenu}
             />
+            {
+                !clickedVizrisk && (
+                    <>
+                        <LayerToggle setVzLabel={setVzLabel} vzLabel={vzLabel} />
+                        <ThemeSelector
+                            selectFieldValue={themes}
+                            selctFieldCurrentValue={selctFieldCurrentValue}
+                            setSelctFieldCurrentValue={setselctFieldCurrentValue}
+                        />
+                        <LabelSearch
+                            setSearchBbox={setSearchBbox}
+                            setSelctFieldCurrentValue={setselctFieldCurrentValue}
+                        />
+                    </>
+                )
+            }
 
-            <LayerToggle setVzLabel={setVzLabel} vzLabel={vzLabel} />
-            <ThemeSelector
-                selectFieldValues={themes}
-                selctFieldCurrentValue={selctFieldCurrentValue}
-                setSelctFieldCurrentValue={setselctFieldCurrentValue}
-            />
-            <LabelSearch
-                setSearchBbox={setSearchBbox}
-            />
             {!showMenu && renderVizRisk()}
         </div>
     );

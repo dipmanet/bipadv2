@@ -8,6 +8,15 @@
     height: 100%;
     overflow-x: hidden;
 
+    .backdrop {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: aqua;
+    }
+
     .hamburgerBtnContainer {
         position: absolute;
         left: 5px;
@@ -19,7 +28,6 @@
             color: white;
             display: flex;
             align-items: center;
-            //    border: 1px solid red;
             padding: 0;
 
             filter: saturate(100%);
@@ -31,7 +39,6 @@
 
             .strong {
                 color: rgb(175, 220, 241);
-                // opacity: 0.87;
                 display: none;
             }
 
@@ -40,4 +47,9 @@
 
     }
 
+}
+
+.mainVzContainerClicked {
+    @extend .mainVzContainer;
+    background-color: #0c2432;
 }

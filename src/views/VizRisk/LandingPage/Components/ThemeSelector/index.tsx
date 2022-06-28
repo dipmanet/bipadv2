@@ -1,19 +1,25 @@
 import React from 'react';
 import styles from './styles.scss';
 
-const SelectComponent = (props) => {
-    const { selectFieldValues, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
+interface Props {
+    selectFieldValue: any[];
+    selctFieldCurrentValue: string;
+    setSelctFieldCurrentValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SelectComponent = (props: Props) => {
+    const { selectFieldValue, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
 
     return (
         <div className={styles.theme}>
             <select
                 className={styles.mainSelect}
                 value={selctFieldCurrentValue}
-                defaultValue={'Select VisRisk Theme'}
+                defaultValue={'Select By Themes'}
                 onChange={e => setSelctFieldCurrentValue(e.target.value)}
             >
                 {
-                    selectFieldValues.map(item => (
+                    selectFieldValue.map(item => (
                         <option
                             className={styles.mainOptions}
                             key={`select-${item}`}
