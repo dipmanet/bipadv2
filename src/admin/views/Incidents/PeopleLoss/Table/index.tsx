@@ -269,7 +269,17 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 
                         <div className={styles.saveOrAddButtons}>
-                            <button className={styles.cancelButtons} onClick={() => setOpen(false)} type="submit">Cancel</button>
+                            <button
+                                className={styles.cancelButtons}
+                                onClick={() => {
+                                    setSelected([]);
+                                    setOpen(false);
+                                }}
+                                type="submit"
+                            >
+                                Cancel
+
+                            </button>
                             <button
                                 className={styles.submitButtons}
                                 type="submit"
@@ -376,6 +386,7 @@ const PeopleLossTable = (props) => {
             setFilteredRowData([]);
         }
     }, [peopleLossData, hazardList]);
+
     useEffect(() => {
         props.requests.peopleLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps

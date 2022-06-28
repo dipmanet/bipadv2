@@ -294,7 +294,7 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
         <div>
             <Modal
                 open={open}
-                onClose={handleCloseModal}
+                // onClose={handleCloseModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >

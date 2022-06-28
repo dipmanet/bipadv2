@@ -563,6 +563,7 @@ const state: PageState = {
         livestockLossData: [],
         incidentEditData: {},
         peopleLossEditData: {},
+        familyLossEditData: {},
         incidentUpdateError: '',
         epidemicChartHourlyLoading: false,
         epidemicChartHourlyData: [],

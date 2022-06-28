@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -68,23 +68,76 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossFamilyEdit: {
+        url: ({ params }) => `/loss-family/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            // props.setEpidemicsPage({ lossID: response.id });
+
+            if (params && params.setFamilyLossRespId) {
+                params.setFamilyLossRespId(response.id);
+            }
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            if (params && params.clearFormData) {
+                params.clearFormData();
+            }
+            if (params && params.openDataForm) {
+                params.openDataForm();
+            }
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
 
 };
 
-const DataEntryForm = ({ requests: { lossFamily }, open,
-    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss }) => {
+const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open,
+    handleCloseModal, epidemmicsPage: { lossID, familyLossEditData },
+    countryList, handlePeopleLoss, openDataForm }) => {
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
     const [isBelowPoverty, setIsBelowPoverty] = useState(false);
     const [count, setCount] = useState(1);
-    const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
     const [phoneNumber, setphoneNumber] = useState('');
-
+    const [uniqueId, setUniqueId] = useState('');
     const [familyLossRespId, setFamilyLossRespId] = useState(null);
     const [titleErr, setTitleErr] = useState(false);
     const [statusErr, setStatusErr] = useState(false);
-
+    const [editedData, setEditedData] = useState(false);
+    useEffect(() => {
+        if (Object.keys(familyLossEditData).length > 0) {
+            setTitle(familyLossEditData.title);
+            setphoneNumber(familyLossEditData.phoneNumber);
+            setStatusId(familyLossEditData.status);
+            setIsBelowPoverty(familyLossEditData.belowPoverty);
+            setUniqueId(familyLossEditData.id);
+            setEditedData(true);
+        }
+    }, [familyLossEditData]);
 
     const statusData = [
         {
@@ -103,16 +156,11 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
 
 
     const handleSelectedStatus = (e) => {
-        const selectedStatus = statusData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedStatus;
-        setStatusErr(false);
-        setStatus(displayName);
-        setStatusId(value);
+        setStatusId(e.target.value);
     };
     const clearFormData = () => {
         setTitle('');
-        setStatus('');
-        setStatusId(null);
+        setStatusId('');
         setIsBelowPoverty(false);
         setphoneNumber('');
     };
@@ -129,12 +177,12 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
         } else {
             setTitleErr(false);
         }
-        if (!status) {
+        if (!statusId) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (title && status) {
+        if (title && statusId) {
             setLoader(true);
             const finalSubmissionData = {
                 title,
@@ -154,13 +202,33 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
             });
         }
     };
+    const handleEditedData = () => {
+        setLoader(true);
+        const finalSubmissionData = {
+            title,
+            count,
+            belowPoverty: isBelowPoverty,
+            loss: lossID,
+            status: statusId,
+            phoneNumber,
 
+
+        };
+        lossFamilyEdit.do({
+            body: finalSubmissionData,
+            setLoader,
+            clearFormData,
+            setFamilyLossRespId,
+            id: uniqueId,
+            openDataForm: openDataForm(false),
+        });
+    };
 
     return (
         <div>
             <Modal
                 open={open}
-                onClose={handleCloseModal}
+                // onClose={handleCloseModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -215,7 +283,7 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
                                     <Select
                                         labelId="status"
                                         id="status-select"
-                                        value={status}
+                                        value={statusId}
                                         label="Status"
                                         error={statusErr}
                                         onChange={handleSelectedStatus}
@@ -223,8 +291,8 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
                                         {statusData.length && statusData.map(
                                             item => (
                                                 <MenuItem
-                                                    key={item.displayName}
-                                                    value={item.displayName}
+                                                    key={item.value}
+                                                    value={item.value}
                                                 >
                                                     {item.displayName}
                                                 </MenuItem>
@@ -251,7 +319,13 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
                             <div className={styles.checkBoxArea}>
                                 <div className={styles.saveOrAddButtons}>
                                     <button className={styles.cancelButtons} onClick={() => handleCloseModal(familyLossRespId)} type="submit">Close</button>
-                                    <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
+                                    <button
+                                        className={styles.submitButtons}
+                                        type="submit"
+                                        onClick={editedData ? handleEditedData : handleSubmit}
+                                    >
+                                        {editedData ? 'Save' : 'Add'}
+                                    </button>
                                 </div>
                             </div>
                         </div>

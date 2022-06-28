@@ -23,7 +23,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
+import Modal from '@mui/material/Modal';
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import {
     CsvBuilder,
@@ -64,17 +66,28 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.loadingCondition(false);
         },
     },
-    incidentEditData: {
-        url: ({ params }) => `/incident/${params.id}`,
+    familyLossEditData: {
+        url: ({ params }) => `/loss-family/${params.id}`,
         method: methods.GET,
         onMount: false,
-        query: ({
-            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
-            format: 'json',
-        }),
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({
-                incidentEditData: response,
+                familyLossEditData: response,
+            });
+            params.loadingCondition(false);
+        },
+    },
+    familyLossDeleteData: {
+        url: ({ params }) => `/loss-family/${params.id}`,
+        method: methods.DELETE,
+        onMount: false,
+        onSuccess: ({ response, props, params }) => {
+            console.log('this response', response);
+            params.fetchDataAfterDelete();
+            params.setLoader(false);
+            params.setOpen(false);
+            props.setEpidemicsPage({
+                familyLossEditData: response,
             });
             params.loadingCondition(false);
         },
@@ -202,21 +215,29 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData, loadingCondition } = props;
+    const { numSelected, selected, dispatch, epidemicFormEdit, familyLossEditData,
+        loadingCondition, openDataForm, fetchDataAfterDelete, setSelected, familyLossFormEdit, familyLossFormDelete, setLoader } = props;
+    const [open, setOpen] = useState(false);
 
-    // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
 
+    const handleFinalDelete = () => {
+        setLoader(true);
+        familyLossFormDelete.do({ id: selected, loadingCondition, setLoader, setOpen, fetchDataAfterDelete });
+        setSelected([]);
+    };
     const handleDelete = () => {
-        console.log('...delete');
+        setOpen(true);
+        // peopleLossFormEdit.do({ id: selected, loadingCondition });
     };
     const handleEdit = () => {
-        epidemicFormEdit.do({ id: selected, loadingCondition });
+        familyLossFormEdit.do({ id: selected, loadingCondition });
     };
     useEffect(() => {
-        if (Object.keys(incidentEditData).length > 0) {
-            navigate('/admin/incident/add-new-incident');
+        if (Object.keys(familyLossEditData).length > 0) {
+            // navigate('/admin/incident/add-new-incident');
+            openDataForm(true);
         }
-    }, [incidentEditData]);
+    }, [familyLossEditData]);
 
 
     return (
@@ -231,8 +252,51 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 }),
             }}
         >
+            <Modal
+                open={open}
+                // onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className={styles.box}>
+                    <h3>Are You sure to delete this data?</h3>
+                    <div className={styles.checkBoxArea}>
+
+
+                        <div className={styles.saveOrAddButtons}>
+                            <button
+                                className={styles.cancelButtons}
+                                onClick={() => {
+                                    setSelected([]);
+                                    setOpen(false);
+                                }}
+                                type="submit"
+                            >
+                                Cancel
+
+                            </button>
+                            <button
+                                className={styles.submitButtons}
+                                type="submit"
+                                onClick={handleFinalDelete}
+                            >
+                                Yes
+
+                            </button>
+                        </div>
+                    </div>
+                </Box>
+            </Modal>
             {numSelected > 0 && (
                 <>
+                    <Tooltip title="Delete">
+
+                        <IconButton
+                            onClick={handleDelete}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title="Edit">
 
                         <IconButton
@@ -258,7 +322,8 @@ const FamilyLossTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { familyLossData, incidentData, incidentCount, incidentEditData }, hazardList, familyLossResponseId } = props;
+    const { epidemmicsPage: { familyLossData, incidentData, incidentCount, familyLossEditData },
+        openDataForm, hazardList, familyLossResponseId } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -284,7 +349,10 @@ const FamilyLossTable = (props) => {
         // const formatted = n.toLocaleString('en-US');
         return formatted;
     };
-
+    const fetchDataAfterDelete = () => {
+        setLoader(true);
+        props.requests.familyLoss.do({ offset, loadingCondition });
+    };
     useEffect(() => {
         if (familyLossData.length) {
             const tableRows = familyLossData.map((row) => {
@@ -292,17 +360,18 @@ const FamilyLossTable = (props) => {
                     id: row.id,
                     title: row.title,
                     status: row.status,
-                    ward: row.ward,
                     belowPoverty: row.belowPoverty,
+                    phoneNumber: row.phoneNumber,
                     verified: row.verified,
                     verificationMessage: row.verificationMessage,
-                    phoneNumber: row.phoneNumber,
 
                 };
 
                 return epidemicObj;
             });
             setFilteredRowData(tableRows);
+        } else {
+            setFilteredRowData([]);
         }
     }, [familyLossData, hazardList]);
 
@@ -507,9 +576,16 @@ const FamilyLossTable = (props) => {
                                 numSelected={selected.length}
                                 // dispatch={dispatch}
                                 // deleteEpidemmicTable={deleteEpidemicTable}
-                                epidemicFormEdit={props.requests.incidentEditData}
-                                incidentEditData={incidentEditData}
                                 loadingCondition={loadingCondition}
+                                familyLossFormEdit={props.requests.familyLossEditData}
+                                familyLossFormDelete={props.requests.familyLossDeleteData}
+                                familyLossEditData={familyLossEditData}
+                                familyLossDataFetch={props.requests.familyLoss}
+                                openDataForm={openDataForm}
+                                loader={loader}
+                                setLoader={setLoader}
+                                fetchDataAfterDelete={fetchDataAfterDelete}
+                                setSelected={setSelected}
 
                             />
                             <TableContainer
