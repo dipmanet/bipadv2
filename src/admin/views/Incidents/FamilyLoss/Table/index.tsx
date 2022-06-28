@@ -58,7 +58,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {
-            console.log('This results', response.results);
             props.setEpidemicsPage({
                 familyLossData: response.results,
             });
@@ -308,7 +307,6 @@ const FamilyLossTable = (props) => {
     }, [familyLossData, hazardList]);
 
     useEffect(() => {
-        console.log('this is people response', familyLossResponseId);
         props.requests.familyLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset, familyLossResponseId]);

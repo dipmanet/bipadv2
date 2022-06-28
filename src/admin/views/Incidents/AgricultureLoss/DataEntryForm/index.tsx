@@ -35,7 +35,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
-            console.log('This is params ', response);
+
             if (params && params.setAgricultureLossRespId) {
                 params.setAgricultureLossRespId(response.id);
             }
@@ -43,7 +43,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 params.setLoader(false);
             }
             if (params && params.clearFormData) {
-                console.log('This is params ', params);
                 params.clearFormData();
             }
             // if (params && params.handleNext) {

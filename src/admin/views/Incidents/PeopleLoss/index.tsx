@@ -58,7 +58,7 @@ const PeopleLoss = ({ validationError,
         await loss.do({ body: lossFormData, setLoader, handleNext });
     };
 
-    console.log('This is countryList', countryList);
+
     return (
 
         <div className={styles.mainForm}>
@@ -81,6 +81,7 @@ const PeopleLoss = ({ validationError,
                 open={open}
                 handleCloseModal={handleCloseModal}
                 countryList={countryList}
+                openDataForm={setOpen}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -106,7 +107,10 @@ const PeopleLoss = ({ validationError,
                 <div>
                     <h3 className={styles.formGeneralInfo}>People Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable peopleLossResponseId={peopleLossResponseId} />
+                    <PeopleLossTable
+                        peopleLossResponseId={peopleLossResponseId}
+                        openDataForm={setOpen}
+                    />
 
 
                     <div className={styles.checkBoxArea}>

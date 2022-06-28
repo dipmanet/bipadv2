@@ -127,8 +127,7 @@ const General = ({ validationError, lossID,
     user: { profile: { province: userProvince, district: userDistrict, municipality: userMunicipality } },
     requests: { loss, lossUpdate } }) => {
     const [loader, setLoader] = useState(false);
-    console.log('This is unique id', uniqueId);
-    console.log('This is loss id', lossID);
+
     const handleSave = async () => {
         const lossFormData = {
             estimatedLoss: Number(totalEstimatedLoss),
@@ -190,8 +189,6 @@ const General = ({ validationError, lossID,
             }
         }
     };
-    console.log('This is userProvince', userProvince);
-    console.log('This is boundary', bounds);
 
 
     return (

@@ -78,7 +78,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setCountryList) {
-                console.log('this is final list', response);
                 params.setCountryList(response.results);
             }
         },
@@ -89,7 +88,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setInfrastructureType) {
-                console.log('this is final list', response);
                 params.setInfrastructureType(response.results);
             }
         },
@@ -100,7 +98,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setAgricultureType) {
-                console.log('this is final list', response);
                 params.setAgricultureType(response.results);
             }
         },
@@ -111,7 +108,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setLiveStockType) {
-                console.log('this is final list', response);
                 params.setLiveStockType(response.results);
             }
         },
@@ -122,7 +118,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setInfrastructureUnit) {
-                console.log('this is final list', response);
                 params.setInfrastructureUnit(response.results);
             }
         },
@@ -134,7 +129,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: false,
         onSuccess: ({ response, props, params }) => {
             if (params && params.setResource) {
-                console.log('this is final list', response);
                 params.setResource(response.results);
             }
         },
@@ -889,9 +883,6 @@ const Epidemics = (props) => {
 
 
     const progressBar = (moduleNo, div) => {
-        console.log('Module no', moduleNo);
-        console.log('This is div', div);
-
         if (div <= moduleNo) {
             return true;
         }
@@ -907,7 +898,7 @@ const Epidemics = (props) => {
         agricultureTypeListFetch.do({ setAgricultureType });
         liveStockTypeListFetch.do({ setLiveStockType });
     }, []);
-    console.log('This is unit', infrastructureType);
+
     const handleSelectedHazard = (e) => {
         setSelectedHazardName(e.target.value);
         const hazardId = hazardList.find(i => i.title === e.target.value).id;
@@ -990,7 +981,7 @@ const Epidemics = (props) => {
         setLattitude,
         setLongitude,
     };
-    console.log('this is centroid for map', centriodsForMap);
+
     useEffect(() => {
         const province = provinces.filter(
             item => item.title === provinceName,
@@ -1010,8 +1001,6 @@ const Epidemics = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceName]);
-
-    console.log('this is province name', provinceName);
 
 
     useEffect(() => {
@@ -1145,7 +1134,7 @@ const Epidemics = (props) => {
         setSelectedHazardName(hazardList.length && id ? hazardList.find(i => i.id === id).title : '');
     };
 
-    console.log('This is estimated loss', incidentEditData);
+
     useEffect(() => {
         if (incidentEditData && Object.keys(incidentEditData).length > 0) {
             setuniqueId(incidentEditData.id);
@@ -1324,7 +1313,6 @@ const Epidemics = (props) => {
                 props.requests.incidentUpdate.do({ id: uniqueId, body: data, errorOccur: handleError });
             }
 
-            console.log('This is edit loss', editLossPeople);
 
             const obj = {
                 injuredMale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'male' && !item.disability)[0].id,
@@ -1418,9 +1406,8 @@ const Epidemics = (props) => {
     const handlePreview = (pageNo) => {
         setmodulePage(pageNo);
     };
-    useEffect(() => {
-        console.log('Entered');
 
+    useEffect(() => {
         if (lossID && uniqueId) {
             setLoader(true);
             const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
@@ -1491,54 +1478,7 @@ const Epidemics = (props) => {
             };
             props.requests.incident.do({ body: data, handleNext });
             props.requests.resourceListFetch.do({ setResource, wardId });
-            // const deadMale = {
-            //     ...deadMaleInitial,
-            //     loss: lossID,
-            //     count: deadFormMale,
-            // };
-            // props.requests.lossDeadMale.do({ body: deadMale });
-            // const deadFemale = {
-            //     ...deadFemaleInitial,
-            //     loss: lossID,
-            //     count: deadFormFemale,
-            // };
-            // props.requests.lossDeadFemale.do({ body: deadFemale });
-            // const deadOther = {
-            //     ...deadOtherInitial,
-            //     loss: lossID,
-            //     count: deadFormOther,
-            // };
-            // props.requests.lossDeadOther.do({ body: deadOther });
-            // const deadDisabled = {
-            //     ...deadDisabledInitial,
-            //     loss: lossID,
-            //     count: deadFormDisabled,
-            // };
-            // props.requests.lossDeadDisabled.do({ body: deadDisabled });
-            // const injuredMale = {
-            //     ...injuredMaleInitial,
-            //     loss: lossID,
-            //     count: injuredFormMale,
-            // };
-            // props.requests.lossInjuredMale.do({ body: injuredMale });
-            // const injuredFemale = {
-            //     ...injuredFemaleInitial,
-            //     loss: lossID,
-            //     count: injuredFormFemale,
-            // };
-            // props.requests.lossInjuredFemale.do({ body: injuredFemale });
-            // const injuredOther = {
-            //     ...injuredOtherInitial,
-            //     loss: lossID,
-            //     count: injuredFormOther,
-            // };
-            // props.requests.lossInjuredOther.do({ body: injuredOther });
-            // const injuredDisabled = {
-            //     ...injuredDisabledInitial,
-            //     loss: lossID,
-            //     count: injuredFormDisabled,
-            // };
-            // props.requests.lossInjuredDisabled.do({ body: injuredDisabled });
+
             setAdded(true);
         }
         if (lossPeopleError || incidentError || lossError) {
@@ -1546,7 +1486,7 @@ const Epidemics = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossID, isLossDataUpdated]);
-    console.log('This is loss id', lossID);
+
     const disableMapFilterLofic = (boolean) => {
         setDisableMapFilter(boolean);
     };
@@ -1570,7 +1510,7 @@ const Epidemics = (props) => {
         setwardName(e.target.value);
         setIsEditedIncident(true);
     };
-    console.log('This is user', user);
+
     const handleLossDataSwitchListener = () => {
         setIsLossDataUpdated(!isLossDataUpdated);
     };

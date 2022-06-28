@@ -35,7 +35,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
-            console.log('This is params ', response);
+
             if (params && params.setInfrastructureLossRespId) {
                 params.setInfrastructureLossRespId(response.id);
             }
@@ -43,7 +43,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 params.setLoader(false);
             }
             if (params && params.clearFormData) {
-                console.log('This is params ', params);
                 params.clearFormData();
             }
             // if (params && params.handleNext) {
@@ -78,7 +77,6 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     infrastructureType, infrastructureUnit,
     resource,
     resourceTypeList }) => {
-    console.log('Data Entry');
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState('');
@@ -203,23 +201,19 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     const handleResourceType = (e) => {
         const filteredResourceName = resourceTypeList.find(i => i.title === e.target.value).label;
         setResourceType(e.target.value);
-        console.log('this is filteredResourceName', filteredResourceName);
-        console.log('This is resource', resource);
+
         const filteredResourceList = resource
             .filter(d => d.resourceType === e.target.value);
 
-        console.log('This is data', filteredResourceList);
+
         setResourceMainList(filteredResourceList);
-        console.log('This is resource type', e);
     };
 
     const handleResource = (e) => {
-        console.log('This value', e.target.value);
         setSelectedResource(e.target.value);
     };
 
     const handleInfrastructureType = (e) => {
-        console.log('This is event', e.target.value);
         setTypeId(e.target.value);
     };
     const handleInfrastructureUnit = (e) => {
@@ -228,9 +222,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     const handleVerifiedChange = () => {
         setServiceDisrupted(!serviceDisrupted);
     };
-    console.log('This is main list for filtering resource', resourceMainList);
-    console.log('This is infrastructure type', infrastructureType);
-    console.log('infrastructureUnit', infrastructureUnit);
+
 
     return (
         <div>

@@ -58,7 +58,7 @@ const FamilyLoss = ({ validationError,
         await loss.do({ body: lossFormData, setLoader, handleNext });
     };
 
-    console.log('This is countryList', countryList);
+
     return (
 
         <div className={styles.mainForm}>

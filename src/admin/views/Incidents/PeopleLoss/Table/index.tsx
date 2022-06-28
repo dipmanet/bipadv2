@@ -19,11 +19,12 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
-
+import Modal from '@mui/material/Modal';
 import { visuallyHidden } from '@mui/utils';
 import {
     CsvBuilder,
@@ -58,24 +59,34 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {
-            console.log('This results', response.results);
             props.setEpidemicsPage({
                 peopleLossData: response.results,
             });
             params.loadingCondition(false);
         },
     },
-    incidentEditData: {
-        url: ({ params }) => `/incident/${params.id}`,
+    peopleLossEditData: {
+        url: ({ params }) => `/loss-people/${params.id}`,
         method: methods.GET,
         onMount: false,
-        query: ({
-            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
-            format: 'json',
-        }),
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({
-                incidentEditData: response,
+                peopleLossEditData: response,
+            });
+            params.loadingCondition(false);
+        },
+    },
+    peopleLossDeleteData: {
+        url: ({ params }) => `/loss-people/${params.id}`,
+        method: methods.DELETE,
+        onMount: false,
+        onSuccess: ({ response, props, params }) => {
+            console.log('this response', response);
+            params.fetchDataAfterDelete();
+            params.setLoader(false);
+            params.setOpen(false);
+            props.setEpidemicsPage({
+                peopleLossEditData: response,
             });
             params.loadingCondition(false);
         },
@@ -199,25 +210,39 @@ interface EnhancedTableToolbarProps {
     selected: [];
     dispatch: Dispatch;
     deleteEpidemicTable: ActionCreator;
-    epidemicFormEdit: ActionCreator;
+    peopleLossFormEdit: ActionCreator;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData, loadingCondition } = props;
+    const { numSelected, selected, dispatch, peopleLossFormEdit, peopleLossFormDelete,
+        setLoader, loader,
+        peopleLossEditData, loadingCondition, openDataForm, offset, peopleLossDataFetch, setSelected, fetchDataAfterDelete } = props;
+    const [open, setOpen] = useState(false);
+    // const { peopleLossEditData } = useSelector((state: RootState) => state.epidemic);
 
-    // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
+    // const handleDelete = () => {
+    //     console.log('...delete');
+    // };
 
+
+    const handleFinalDelete = () => {
+        setLoader(true);
+        peopleLossFormDelete.do({ id: selected, loadingCondition, setLoader, setOpen, fetchDataAfterDelete });
+        setSelected([]);
+    };
     const handleDelete = () => {
-        console.log('...delete');
+        setOpen(true);
+        // peopleLossFormEdit.do({ id: selected, loadingCondition });
     };
     const handleEdit = () => {
-        epidemicFormEdit.do({ id: selected, loadingCondition });
+        peopleLossFormEdit.do({ id: selected, loadingCondition });
     };
     useEffect(() => {
-        if (Object.keys(incidentEditData).length > 0) {
-            navigate('/admin/incident/add-new-incident');
+        if (Object.keys(peopleLossEditData).length > 0) {
+            // navigate('/admin/incident/add-new-incident');
+            openDataForm(true);
         }
-    }, [incidentEditData]);
+    }, [peopleLossEditData]);
 
 
     return (
@@ -232,8 +257,43 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 }),
             }}
         >
+            <Modal
+                open={open}
+                // onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className={styles.box}>
+                    <h3>Are You sure to delete this data?</h3>
+                    <div className={styles.checkBoxArea}>
+
+
+                        <div className={styles.saveOrAddButtons}>
+                            <button className={styles.cancelButtons} onClick={() => setOpen(false)} type="submit">Cancel</button>
+                            <button
+                                className={styles.submitButtons}
+                                type="submit"
+                                onClick={handleFinalDelete}
+
+                            // onClick={editedData ? handleEditedData : handleSubmit}
+                            >
+                                Yes
+
+                            </button>
+                        </div>
+                    </div>
+                </Box>
+            </Modal>
             {numSelected > 0 && (
                 <>
+                    <Tooltip title="Delete">
+
+                        <IconButton
+                            onClick={handleDelete}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title="Edit">
 
                         <IconButton
@@ -259,7 +319,8 @@ const PeopleLossTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { peopleLossData, incidentData, incidentCount, incidentEditData }, hazardList, peopleLossResponseId } = props;
+    const { epidemmicsPage: { peopleLossData, incidentData, incidentCount, peopleLossEditData },
+        hazardList, peopleLossResponseId, openDataForm } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -285,7 +346,10 @@ const PeopleLossTable = (props) => {
         // const formatted = n.toLocaleString('en-US');
         return formatted;
     };
-
+    const fetchDataAfterDelete = () => {
+        setLoader(true);
+        props.requests.peopleLoss.do({ offset, loadingCondition });
+    };
     useEffect(() => {
         if (peopleLossData.length) {
             const tableRows = peopleLossData.map((row) => {
@@ -308,11 +372,11 @@ const PeopleLossTable = (props) => {
                 return epidemicObj;
             });
             setFilteredRowData(tableRows);
+        } else {
+            setFilteredRowData([]);
         }
     }, [peopleLossData, hazardList]);
-
     useEffect(() => {
-        console.log('this is people response', peopleLossResponseId);
         props.requests.peopleLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset, peopleLossResponseId]);
@@ -513,9 +577,16 @@ const PeopleLossTable = (props) => {
                                 numSelected={selected.length}
                                 // dispatch={dispatch}
                                 // deleteEpidemmicTable={deleteEpidemicTable}
-                                epidemicFormEdit={props.requests.incidentEditData}
-                                incidentEditData={incidentEditData}
+                                peopleLossFormEdit={props.requests.peopleLossEditData}
+                                peopleLossFormDelete={props.requests.peopleLossDeleteData}
+                                peopleLossEditData={peopleLossEditData}
+                                peopleLossDataFetch={props.requests.peopleLoss}
                                 loadingCondition={loadingCondition}
+                                openDataForm={openDataForm}
+                                loader={loader}
+                                setLoader={setLoader}
+                                fetchDataAfterDelete={fetchDataAfterDelete}
+                                setSelected={setSelected}
 
                             />
                             <TableContainer

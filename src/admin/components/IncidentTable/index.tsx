@@ -82,8 +82,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             format: 'json',
         }),
         onSuccess: ({ response, props, params }) => {
+            console.log('This is incident data', response);
             props.setEpidemicsPage({
                 incidentEditData: response,
+                lossID: response.loss.id,
             });
             params.loadingCondition(false);
         },

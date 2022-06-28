@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -34,7 +34,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
-            console.log('This is params ', response);
+
             if (params && params.setPeopleLossRespId) {
                 params.setPeopleLossRespId(response.id);
             }
@@ -42,8 +42,50 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 params.setLoader(false);
             }
             if (params && params.clearFormData) {
-                console.log('This is params ', params);
                 params.clearFormData();
+            }
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossPeopleEdit: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            // props.setEpidemicsPage({ lossID: response.id });
+
+            if (params && params.setPeopleLossRespId) {
+                params.setPeopleLossRespId(response.id);
+            }
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            if (params && params.clearFormData) {
+                params.clearFormData();
+            }
+            if (params && params.openDataForm) {
+                params.openDataForm();
             }
             // if (params && params.handleNext) {
             //     params.handleNext(2);
@@ -72,20 +114,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const DataEntryForm = ({ requests: { lossPeople }, open,
-    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss }) => {
-    console.log('Data Entry');
+const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
+    handleCloseModal, epidemmicsPage: { lossID, peopleLossEditData },
+    countryList, handlePeopleLoss, openDataForm }) => {
     const [loader, setLoader] = useState(false);
     const [name, setName] = useState('');
     const [age, setAge] = useState(null);
-    const [gender, setGender] = useState('');
     const [genderId, setGenderId] = useState(null);
     const [isBelowPoverty, setIsBelowPoverty] = useState(false);
     const [count, setCount] = useState(1);
     const [nationality, setNationality] = useState('');
     const [nationalityId, setNationalityId] = useState(null);
     const [disability, setDisability] = useState(false);
-    const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
     const [peopleLossRespId, setPeopleLossRespId] = useState(null);
     const [nameErr, setNameErr] = useState(false);
@@ -93,9 +133,21 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
     const [genderErr, setGenderErr] = useState(false);
     const [statusErr, setStatusErr] = useState(false);
     const [disabilityId, setDisabilityId] = useState(null);
-
-
-    console.log('This is loss id', countryList);
+    const [editedData, setEditedData] = useState(false);
+    const [uniqueId, setUniqueId] = useState('');
+    useEffect(() => {
+        if (Object.keys(peopleLossEditData).length > 0) {
+            setName(peopleLossEditData.name);
+            setAge(peopleLossEditData.age);
+            setGenderId(peopleLossEditData.gender);
+            setStatusId(peopleLossEditData.status);
+            setNationalityId(peopleLossEditData.nationality);
+            setIsBelowPoverty(peopleLossEditData.belowPoverty);
+            setDisabilityId(peopleLossEditData.disability);
+            setEditedData(true);
+            setUniqueId(peopleLossEditData.id);
+        }
+    }, [peopleLossEditData]);
     const genderData = [
         {
             value: 'male',
@@ -129,7 +181,8 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
             displayName: 'Affected',
         },
     ];
-    console.log('Country list', countryList);
+
+
     const handleCountryList = (e) => {
         const selectedCountry = countryList.find(i => i.id === Number(e.target.value));
         const { id, titleEn } = selectedCountry;
@@ -137,37 +190,25 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
         setNationality(titleEn);
     };
     const handleSelectedGender = (e) => {
-        const selectedGender = genderData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedGender;
-        setGenderErr(false);
-        setGender(displayName);
-        setGenderId(value);
+        setGenderId(e.target.value);
     };
     const handleSelectedStatus = (e) => {
-        const selectedStatus = statusData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedStatus;
-        setStatusErr(false);
-        setStatus(displayName);
-        setStatusId(value);
+        setStatusId(e.target.value);
     };
     const clearFormData = () => {
         setName('');
         setAge('');
-        setGender('');
-        setGenderId(null);
-        setStatus('');
-        setStatusId(null);
+        setGenderId('');
+        setStatusId('');
         setIsBelowPoverty(false);
         setNationality('');
         setDisability(false);
         setNationality('');
-        setNationalityId(null);
+        setNationalityId('');
         setDisabilityId(null);
     };
 
 
-    console.log('This is gender name', gender);
-    console.log('This is gender id', genderId);
     const handleVerifiedChange = () => {
         setIsBelowPoverty(!isBelowPoverty);
     };
@@ -181,8 +222,6 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
         }
     };
 
-    console.log('Nationality', nationality);
-    console.log('Nationality id', nationalityId);
 
     const handleSubmit = () => {
         if (!name) {
@@ -194,17 +233,17 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
         } else {
             setAgeErr(false);
         }
-        if (!gender) {
+        if (!genderId) {
             setGenderErr(true);
         } else {
             setGenderErr(false);
         }
-        if (!status) {
+        if (!statusId) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (name && age && gender && status) {
+        if (name && age && genderId && statusId) {
             setLoader(true);
             const finalSubmissionData = {
                 name,
@@ -227,9 +266,30 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
             });
         }
     };
+    const handleEditedData = () => {
+        setLoader(true);
+        const finalSubmissionData = {
+            name,
+            age: Number(age),
+            gender: genderId,
+            count,
+            belowPoverty: isBelowPoverty,
+            nationality: nationalityId,
+            loss: lossID,
+            status: statusId,
+            disability: disabilityId,
 
-    console.log('nationality', nationality);
-    console.log('This is age', age);
+
+        };
+        lossPeopleEdit.do({
+            body: finalSubmissionData,
+            setLoader,
+            clearFormData,
+            setPeopleLossRespId,
+            id: uniqueId,
+            openDataForm: openDataForm(false),
+        });
+    };
     return (
         <div>
             <Modal
@@ -293,7 +353,7 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                     <Select
                                         labelId="gender"
                                         id="gender-select"
-                                        value={gender}
+                                        value={genderId}
                                         label="Gender"
                                         error={genderErr}
                                         onChange={handleSelectedGender}
@@ -301,8 +361,8 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                         {genderData.length && genderData.map(
                                             item => (
                                                 <MenuItem
-                                                    key={item.displayName}
-                                                    value={item.displayName}
+                                                    key={item.value}
+                                                    value={item.value}
                                                 >
                                                     {item.displayName}
                                                 </MenuItem>
@@ -316,7 +376,7 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                     <Select
                                         labelId="status"
                                         id="status-select"
-                                        value={status}
+                                        value={statusId}
                                         label="Status"
                                         error={statusErr}
                                         onChange={handleSelectedStatus}
@@ -324,8 +384,8 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
                                         {statusData.length && statusData.map(
                                             item => (
                                                 <MenuItem
-                                                    key={item.displayName}
-                                                    value={item.displayName}
+                                                    key={item.value}
+                                                    value={item.value}
                                                 >
                                                     {item.displayName}
                                                 </MenuItem>
@@ -400,7 +460,14 @@ const DataEntryForm = ({ requests: { lossPeople }, open,
 
                                 <div className={styles.saveOrAddButtons}>
                                     <button className={styles.cancelButtons} onClick={() => handleCloseModal(peopleLossRespId)} type="submit">Close</button>
-                                    <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
+                                    <button
+                                        className={styles.submitButtons}
+                                        type="submit"
+                                        onClick={editedData ? handleEditedData : handleSubmit}
+                                    >
+                                        {editedData ? 'Save' : 'Add'}
+
+                                    </button>
                                 </div>
                             </div>
                         </div>

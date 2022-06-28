@@ -34,7 +34,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
-            console.log('This is params ', response);
+
             if (params && params.setFamilyLossRespId) {
                 params.setFamilyLossRespId(response.id);
             }
@@ -42,7 +42,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 params.setLoader(false);
             }
             if (params && params.clearFormData) {
-                console.log('This is params ', params);
                 params.clearFormData();
             }
             // if (params && params.handleNext) {
@@ -74,7 +73,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 const DataEntryForm = ({ requests: { lossFamily }, open,
     handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss }) => {
-    console.log('Data Entry');
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
     const [isBelowPoverty, setIsBelowPoverty] = useState(false);
@@ -86,9 +84,6 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
     const [familyLossRespId, setFamilyLossRespId] = useState(null);
     const [titleErr, setTitleErr] = useState(false);
     const [statusErr, setStatusErr] = useState(false);
-
-
-    console.log('This is loss id', countryList);
 
 
     const statusData = [
@@ -105,7 +100,6 @@ const DataEntryForm = ({ requests: { lossFamily }, open,
             displayName: 'Evacuated',
         },
     ];
-    console.log('Country list', countryList);
 
 
     const handleSelectedStatus = (e) => {

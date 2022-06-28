@@ -58,7 +58,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props, params }) => {
-            console.log('This results', response.results);
             props.setEpidemicsPage({
                 infrastructureLossData: response.results,
             });
@@ -313,7 +312,6 @@ const InfrastructureLossTable = (props) => {
     }, [infrastructureLossData, hazardList]);
 
     useEffect(() => {
-        console.log('this is people response', infrastructureLossResponseId);
         props.requests.infrastructureLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset, infrastructureLossResponseId]);
