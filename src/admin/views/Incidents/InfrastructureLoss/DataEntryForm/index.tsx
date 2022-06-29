@@ -69,17 +69,60 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossInfrastructureEdit: {
+        url: ({ params }) => `/loss-infrastructure/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            props.setEpidemicsPage({ infrastructureLossEditData: {} });
+
+            if (params && params.setInfrastructureLossRespId) {
+                params.setInfrastructureLossRespId(response.id);
+            }
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            if (params && params.clearFormData) {
+                params.clearFormData();
+            }
+            if (params && params.openDataForm) {
+                params.openDataForm();
+            }
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
 
 };
 
-const DataEntryForm = ({ requests: { lossInfrastructure }, open,
-    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss,
+const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit }, open,
+    handleCloseModal, epidemmicsPage: { lossID, infrastructureLossEditData },
+    countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
     resource,
-    resourceTypeList }) => {
+    resourceTypeList, openDataForm }) => {
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
-    const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
     const [count, setCount] = useState(1);
     const [equipmentValue, setEquipmentValue] = useState('');
@@ -88,37 +131,40 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     const [beneficiaryCount, setBeneficiaryCount] = useState('');
     const [serviceDisrupted, setServiceDisrupted] = useState(false);
     const [economicLoss, setEconomicLoss] = useState('');
-    const [type, setType] = useState('');
     const [typeId, setTypeId] = useState('');
     const [selectedresource, setSelectedResource] = useState('');
     const [selectedResourceId,
         setSelectedResourceId] = useState('');// resource id to be sent to backend
-    const [unit, setUnit] = useState('');
     const [unitId, setunitId] = useState('');
     const [infrastructureLossRespId, setInfrastructureLossRespId] = useState('');
-
+    const [editedData, setEditedData] = useState(false);
 
     const [titleErr, setTitleErr] = useState(false);
     const [statusErr, setStatusErr] = useState(false);
     const [economicLossErr, setEconomicLossErr] = useState(false);
     const [resourceType, setResourceType] = useState('');
     const [resourceMainList, setResourceMainList] = useState([]);
+    const [uniqueId, setUniqueId] = useState('');
 
-
-    const genderData = [
-        {
-            value: 'male',
-            displayName: 'Male',
-        },
-        {
-            value: 'female',
-            displayName: 'Female',
-        },
-        {
-            value: 'others',
-            displayName: 'Others',
-
-        }];
+    useEffect(() => {
+        console.log('This is data', infrastructureLossEditData);
+        if (Object.keys(infrastructureLossEditData).length > 0) {
+            console.log('Entered here');
+            setTitle(infrastructureLossEditData.title);
+            setStatusId(infrastructureLossEditData.status);
+            setEquipmentValue(infrastructureLossEditData.equipmentValue);
+            setInfrastructureValue(infrastructureLossEditData.infrastructureValue);
+            setBeneficiaryOwner(infrastructureLossEditData.beneficiaryOwner);
+            setBeneficiaryCount(infrastructureLossEditData.beneficiaryCount);
+            setServiceDisrupted(infrastructureLossEditData.serviceDisrupted);
+            setEconomicLoss(infrastructureLossEditData.economicLoss);
+            setTypeId(infrastructureLossEditData.type);
+            setunitId(infrastructureLossEditData.unit);
+            setSelectedResourceId(infrastructureLossEditData.resource);
+            setUniqueId(infrastructureLossEditData.id);
+            setEditedData(true);
+        }
+    }, [infrastructureLossEditData]);
 
     const statusData = [
         {
@@ -133,16 +179,11 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
 
 
     const handleSelectedStatus = (e) => {
-        const selectedStatus = statusData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedStatus;
-        setStatusErr(false);
-        setStatus(displayName);
-        setStatusId(value);
+        setStatusId(e.target.value);
     };
     const clearFormData = () => {
         setResourceType('');
         setTitle('');
-        setStatus('');
         setStatusId('');
         setEquipmentValue('');
         setInfrastructureValue('');
@@ -150,11 +191,9 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         setBeneficiaryCount('');
         setServiceDisrupted(false);
         setEconomicLoss('');
-        setType('');
         setTypeId('');
         setSelectedResource('');
         setSelectedResourceId('');
-        setUnit('');
         setunitId('');
     };
 
@@ -168,12 +207,12 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         } else {
             setEconomicLossErr(false);
         }
-        if (!status) {
+        if (!statusId) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (title && economicLoss && status) {
+        if (title && economicLoss && statusId) {
             setLoader(true);
             const finalSubmissionData = {
                 title,
@@ -195,6 +234,48 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                 setLoader,
                 clearFormData,
                 setInfrastructureLossRespId,
+            });
+        }
+    };
+    const handleEditedData = () => {
+        if (!title) {
+            setTitleErr(true);
+        } else {
+            setTitleErr(false);
+        } if (!economicLoss) {
+            setEconomicLossErr(true);
+        } else {
+            setEconomicLossErr(false);
+        }
+        if (!statusId) {
+            setStatusErr(true);
+        } else {
+            setStatusErr(false);
+        }
+        if (title && economicLoss && statusId) {
+            setLoader(true);
+            const finalSubmissionData = {
+                title,
+                count,
+                equipmentValue,
+                infrastructureValue,
+                beneficiaryOwner,
+                beneficiaryCount,
+                serviceDisrupted,
+                economicLoss,
+                type: typeId,
+                resource: selectedResourceId,
+                unit: unitId,
+                loss: lossID,
+                status: statusId,
+            };
+            lossInfrastructureEdit.do({
+                body: finalSubmissionData,
+                setLoader,
+                clearFormData,
+                setInfrastructureLossRespId,
+                id: uniqueId,
+                openDataForm: openDataForm(false),
             });
         }
     };
@@ -223,12 +304,12 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         setServiceDisrupted(!serviceDisrupted);
     };
 
-
+    console.log('open modal', open);
     return (
         <div>
             <Modal
                 open={open}
-                onClose={handleCloseModal}
+                // onClose={handleCloseModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -273,7 +354,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                     <Select
                                         labelId="status"
                                         id="status-select"
-                                        value={status}
+                                        value={statusId}
                                         label="Status"
                                         error={statusErr}
                                         onChange={handleSelectedStatus}
@@ -281,8 +362,8 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                         {statusData.length && statusData.map(
                                             item => (
                                                 <MenuItem
-                                                    key={item.displayName}
-                                                    value={item.displayName}
+                                                    key={item.value}
+                                                    value={item.value}
                                                 >
                                                     {item.displayName}
                                                 </MenuItem>
@@ -603,7 +684,15 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
 
                                 <div className={styles.saveOrAddButtons}>
                                     <button className={styles.cancelButtons} onClick={() => handleCloseModal(infrastructureLossRespId)} type="submit">Close</button>
-                                    <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
+                                    <button
+                                        className={styles.submitButtons}
+                                        type="submit"
+                                        onClick={editedData ? handleEditedData : handleSubmit}
+                                    >
+                                        {' '}
+                                        {editedData ? 'Save' : 'Add'}
+
+                                    </button>
                                 </div>
                             </div>
                         </div>

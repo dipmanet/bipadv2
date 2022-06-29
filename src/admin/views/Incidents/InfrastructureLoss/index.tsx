@@ -87,6 +87,7 @@ const InfrastructureLoss = ({ validationError,
                 infrastructureType={infrastructureType}
                 infrastructureUnit={infrastructureUnit}
                 resource={resource}
+                openDataForm={setOpen}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -112,7 +113,10 @@ const InfrastructureLoss = ({ validationError,
                 <div>
                     <h3 className={styles.formGeneralInfo}>Infrastructure Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable infrastructureLossResponseId={infrastructureLossResponseId} />
+                    <PeopleLossTable
+                        infrastructureLossResponseId={infrastructureLossResponseId}
+                        openDataForm={setOpen}
+                    />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>

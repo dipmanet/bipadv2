@@ -218,11 +218,6 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         setLoader, loader,
         peopleLossEditData, loadingCondition, openDataForm, offset, peopleLossDataFetch, setSelected, fetchDataAfterDelete } = props;
     const [open, setOpen] = useState(false);
-    // const { peopleLossEditData } = useSelector((state: RootState) => state.epidemic);
-
-    // const handleDelete = () => {
-    //     console.log('...delete');
-    // };
 
 
     const handleFinalDelete = () => {

@@ -19,10 +19,12 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
+import Modal from '@mui/material/Modal';
 
 import { visuallyHidden } from '@mui/utils';
 import {
@@ -64,17 +66,28 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.loadingCondition(false);
         },
     },
-    incidentEditData: {
-        url: ({ params }) => `/incident/${params.id}`,
+    infrastructureLossEditData: {
+        url: ({ params }) => `/loss-infrastructure/${params.id}`,
         method: methods.GET,
         onMount: false,
-        query: ({
-            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
-            format: 'json',
-        }),
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({
-                incidentEditData: response,
+                infrastructureLossEditData: response,
+            });
+            params.loadingCondition(false);
+        },
+    },
+    infrastructureLossDeleteData: {
+        url: ({ params }) => `/loss-infrastructure/${params.id}`,
+        method: methods.DELETE,
+        onMount: false,
+        onSuccess: ({ response, props, params }) => {
+            console.log('this response', response);
+            params.fetchDataAfterDelete();
+            params.setLoader(false);
+            params.setOpen(false);
+            props.setEpidemicsPage({
+                infrastructureLossEditData: response,
             });
             params.loadingCondition(false);
         },
@@ -202,21 +215,29 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData, loadingCondition } = props;
+    const { numSelected, selected, dispatch, infrastructureLossFormEdit,
+        setLoader, openDataForm,
+        infrastructureLossFormDelete, infrastructureLossEditData, setSelected, fetchDataAfterDelete, loadingCondition } = props;
+    const [open, setOpen] = useState(false);
 
-    // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
-
+    const handleFinalDelete = () => {
+        setLoader(true);
+        infrastructureLossFormDelete.do({ id: selected, loadingCondition, setLoader, setOpen, fetchDataAfterDelete });
+        setSelected([]);
+    };
     const handleDelete = () => {
-        console.log('...delete');
+        setOpen(true);
+        // peopleLossFormEdit.do({ id: selected, loadingCondition });
     };
     const handleEdit = () => {
-        epidemicFormEdit.do({ id: selected, loadingCondition });
+        infrastructureLossFormEdit.do({ id: selected, loadingCondition });
     };
     useEffect(() => {
-        if (Object.keys(incidentEditData).length > 0) {
-            navigate('/admin/incident/add-new-incident');
+        if (Object.keys(infrastructureLossEditData).length > 0) {
+            // navigate('/admin/incident/add-new-incident');
+            openDataForm(true);
         }
-    }, [incidentEditData]);
+    }, [infrastructureLossEditData]);
 
 
     return (
@@ -231,8 +252,51 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 }),
             }}
         >
+            <Modal
+                open={open}
+                // onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className={styles.box}>
+                    <h3>Are You sure to delete this data?</h3>
+                    <div className={styles.checkBoxArea}>
+
+
+                        <div className={styles.saveOrAddButtons}>
+                            <button
+                                className={styles.cancelButtons}
+                                onClick={() => {
+                                    setSelected([]);
+                                    setOpen(false);
+                                }}
+                                type="submit"
+                            >
+                                Cancel
+
+                            </button>
+                            <button
+                                className={styles.submitButtons}
+                                type="submit"
+                                onClick={handleFinalDelete}
+                            >
+                                Yes
+
+                            </button>
+                        </div>
+                    </div>
+                </Box>
+            </Modal>
             {numSelected > 0 && (
                 <>
+                    <Tooltip title="Delete">
+
+                        <IconButton
+                            onClick={handleDelete}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title="Edit">
 
                         <IconButton
@@ -258,8 +322,8 @@ const InfrastructureLossTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { infrastructureLossData, incidentData, incidentCount, incidentEditData },
-        hazardList, infrastructureLossResponseId } = props;
+    const { epidemmicsPage: { infrastructureLossData, incidentData, incidentCount, infrastructureLossEditData },
+        hazardList, infrastructureLossResponseId, openDataForm } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -285,7 +349,10 @@ const InfrastructureLossTable = (props) => {
         // const formatted = n.toLocaleString('en-US');
         return formatted;
     };
-
+    const fetchDataAfterDelete = () => {
+        setLoader(true);
+        props.requests.infrastructureLoss.do({ offset, loadingCondition });
+    };
     useEffect(() => {
         if (infrastructureLossData.length) {
             const tableRows = infrastructureLossData.map((row) => {
@@ -308,6 +375,8 @@ const InfrastructureLossTable = (props) => {
                 return epidemicObj;
             });
             setFilteredRowData(tableRows);
+        } else {
+            setFilteredRowData([]);
         }
     }, [infrastructureLossData, hazardList]);
 
@@ -348,109 +417,6 @@ const InfrastructureLossTable = (props) => {
     };
 
 
-    const Dataforcsv = () => {
-        const csvData = filteredRowData && filteredRowData
-            .map((item) => {
-                let date;
-                let verified;
-                let approved;
-
-                if (item.reportedOn) {
-                    const a = item.reportedOn;
-                    date = `${a.split('-')[0]}/${a.split('-')[1]}/${a.split('-')[2]}`;
-                } else {
-                    date = '';
-                }
-                if (item.verified) {
-                    verified = 'Yes';
-                } else {
-                    verified = '';
-                }
-                if (item.approved) {
-                    approved = 'Yes';
-                } else {
-                    approved = '';
-                }
-
-                return ([
-                    item.id,
-                    item.wards[0].municipality.district.province.title,
-                    item.wards[0].municipality.district.title,
-                    item.wards[0].municipality.title,
-                    item.wards[0].title,
-                    item.streetAddress,
-                    date,
-                    item.hazard,
-                    item.cause,
-                    item.estimatedLoss,
-                    item.agricultureEconomicLoss,
-                    item.infrastructureEconomicLoss,
-                    item.infrastructureDestroyedCount,
-                    item.infrastructureDestroyedHouseCount,
-                    item.infrastructureAffectedHouseCount,
-                    item.livestockDestroyedCount,
-
-                    item.totalInjuredMale,
-                    item.totalInjuredFemale,
-                    item.totalInjuredOther,
-                    item.totalInjuredDisabled,
-                    item.peopleMissingMaleCount,
-                    item.peopleMissingFemaleCount,
-                    item.peopleMissingOtherCount,
-                    item.peopleMissingDisabledCount,
-
-
-                    item.totalDeadMale,
-                    item.totalDeadFemale,
-                    item.totalDeadOther,
-                    item.totalDeadDisabled,
-                    verified,
-                    item.verificationMessage,
-                    approved,
-                ]);
-            });
-        return csvData;
-    };
-
-    const handleDownload = () => {
-        const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
-            .setColumns([
-                'id',
-                'Province',
-                'District',
-                'Municipality',
-                'Ward',
-                'Local Address',
-                'Reported Date (A.D.)(eg. 2021/07/31)',
-                'Hazard',
-                'Hazard Inducer',
-                'Total Estimated Loss(NPR)',
-                'Agriculture Economic Loss(NPR)',
-                'Infrastructure Economic Loss(NPR)',
-                'Total Infrastructure Destroyed',
-                'House Destroyed',
-                'House Affected',
-                'Total Livestock Destroyed',
-                'Total Injured Male',
-                'Total Injured Female',
-                'Total Injured Others',
-                'Total Injured Disabled',
-                'Total Missing Male',
-                'Total Missing Female',
-                'Total Missing Other',
-                'Total Missing Disabled',
-                'Total Male Death',
-                'Total Female Death',
-                'Total Other Death',
-                'Total Disabled Death',
-                'Verified (eg. Yes)',
-                'Verification message',
-                'Approved (eg. Yes)',
-            ])
-            .addRows(Dataforcsv())
-            .exportFile();
-    };
-
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
         const selectedIndex = selected.indexOf(name);
         let newSelected: readonly string[] = [];
@@ -488,18 +454,12 @@ const InfrastructureLossTable = (props) => {
                     <Box sx={{ boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
                         <div className={styles.credentialSearch}>
                             <div className={styles.rightOptions}>
-                                <IconButton
-                                    onClick={handleDownload}
-                                    style={{ cursor: 'pointer' }}
-                                >
 
-                                    <DownloadIcon />
-                                </IconButton>
                                 <TablePagination
                                     className={styles.tablePagination}
                                     rowsPerPageOptions={[100]}
                                     component="div"
-                                    count={incidentCount}
+                                    count={infrastructureLossData.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     onPageChange={handleChangePage}
@@ -512,8 +472,15 @@ const InfrastructureLossTable = (props) => {
                                 numSelected={selected.length}
                                 // dispatch={dispatch}
                                 // deleteEpidemmicTable={deleteEpidemicTable}
-                                epidemicFormEdit={props.requests.incidentEditData}
-                                incidentEditData={incidentEditData}
+                                infrastructureLossFormEdit={props.requests.infrastructureLossEditData}
+                                infrastructureLossEditData={infrastructureLossEditData}
+                                infrastructureLossFormDelete={props.requests.infrastructureLossDeleteData}
+                                infrastructureLossDataFetch={props.requests.infrastructureLoss}
+                                openDataForm={openDataForm}
+                                loader={loader}
+                                setLoader={setLoader}
+                                fetchDataAfterDelete={fetchDataAfterDelete}
+                                setSelected={setSelected}
                                 loadingCondition={loadingCondition}
 
                             />
