@@ -150,15 +150,25 @@ const Map = (props: Props) => {
                 paint: {
                     'fill-extrusion-color': ['feature-state', 'color'],
 
-                    // Get `fill-extrusion-height` from the source `height` property.
-                    'fill-extrusion-height': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        10000,
-                        0,
-                    ],
-                    // Get `fill-extrusion-base` from the source `base_height` property.
-                    'fill-extrusion-base': 15,
+                    'fill-extrusion-height':
+                        [
+                            'interpolate', ['linear'], ['zoom'],
+                            7, [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                4000,
+                                0,
+                            ],
+
+                            10, [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                400,
+                                0,
+                            ],
+                        ],
+
+                    'fill-extrusion-base': 0,
 
                     // Make extrusions slightly opaque to see through indoor walls.
                     // 'fill-extrusion-opacity': [
@@ -210,15 +220,24 @@ const Map = (props: Props) => {
                 paint: {
                     'fill-extrusion-color': ['feature-state', 'color'],
 
-                    // Get `fill-extrusion-height` from the source `height` property.
-                    'fill-extrusion-height': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        10000,
-                        0,
-                    ],
+                    'fill-extrusion-height':
+                        [
+                            'interpolate', ['linear'], ['zoom'],
+                            7, [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                8000,
+                                0,
+                            ],
 
-                    // Get `fill-extrusion-base` from the source `base_height` property.
+                            11, [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                400,
+                                0,
+                            ],
+                        ],
+
                     'fill-extrusion-base': 0,
 
                     // Make extrusions slightly opaque to see through indoor walls.
@@ -480,6 +499,12 @@ const Map = (props: Props) => {
             }
         }
     }, [municipalities, selctFieldCurrentValue, vzLabel]);
+
+    useEffect(() => {
+        if (updateMap.current) {
+            updateMap.current.fitBounds([[79.161987, 25.923467], [89.626465, 30.789037]]);
+        }
+    }, [vzLabel]);
 
     return (
         <div

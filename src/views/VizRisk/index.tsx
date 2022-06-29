@@ -167,6 +167,7 @@ const VizRiskMainPage = (props: Props) => {
                         <LabelSearch
                             setSearchBbox={setSearchBbox}
                             setSelctFieldCurrentValue={setselctFieldCurrentValue}
+                            vzLabel={vzLabel}
                         />
                     </>
                 )
