@@ -443,9 +443,7 @@ const Map = (props: Props) => {
         const proMultiHazardId = proMultiHazardDataId.length > 0 ? proMultiHazardDataId : [8];
 
         const allExposureId = [...proFloodId, ...proLandSlideId, ...proMultiHazardId];
-        console.log('allExposureId', allExposureId);
         const allFilteredExposureId = allExposureId.filter(id => id !== 8);
-        console.log('allFilteredExposureId', allFilteredExposureId);
 
         if (updateMap.current && updateMap.current.isStyleLoaded()) {
             if (vzLabel === 'province') {
@@ -456,21 +454,18 @@ const Map = (props: Props) => {
                 //     ['match', ['id'], provinceIdarray, true, false]);
                 switch (selctFieldCurrentValue) {
                     case 'Flood Exposure':
-                        console.log('Flood Exposure');
                         updateMap.current.setFilter('province-vizrisk',
                             ['match', ['id'], proFloodId, true, false]);
                         updateMap.current.setFilter('province-vizrisk-extrusion',
                             ['match', ['id'], proFloodId, true, false]);
                         break;
                     case 'Landslide Exposure':
-                        console.log('Landslide Exposure');
                         updateMap.current.setFilter('province-vizrisk',
                             ['match', ['id'], proLandSlideId, true, false]);
                         updateMap.current.setFilter('province-vizrisk-extrusion',
                             ['match', ['id'], proLandSlideId, true, false]);
                         break;
                     case 'Multi-hazard Exposure':
-                        console.log('MultiHazard Exposure');
                         updateMap.current.setFilter('province-vizrisk',
                             ['match', ['id'], proMultiHazardId, true, false]);
                         updateMap.current.setFilter('province-vizrisk-extrusion',

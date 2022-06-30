@@ -50,6 +50,7 @@ const VizRiskMainPage = (props: Props) => {
     const [clickedVizrisk, setClickedVizrisk] = useState('');
     const [showMenu, setShowMenu] = useState(true);
     const [searchBbox, setSearchBbox] = useState([]);
+    const [disabled, setDisabled] = useState(false);
     const handleMenuIconClick = () => {
         setShowMenu(true);
         setClickedVizrisk('');
@@ -104,6 +105,10 @@ const VizRiskMainPage = (props: Props) => {
             vizRiskThemeIdRequest,
 
         } } = props;
+
+    const forDisable = (bool) => {
+        setDisabled(bool);
+    };
 
     useEffect(() => {
         if (pendingMainPage) {
@@ -163,11 +168,13 @@ const VizRiskMainPage = (props: Props) => {
                             selectFieldValue={themes}
                             selctFieldCurrentValue={selctFieldCurrentValue}
                             setSelctFieldCurrentValue={setselctFieldCurrentValue}
+                            disabled={disabled}
                         />
                         <LabelSearch
                             setSearchBbox={setSearchBbox}
                             setSelctFieldCurrentValue={setselctFieldCurrentValue}
                             vzLabel={vzLabel}
+                            forDisable={forDisable}
                         />
                     </>
                 )

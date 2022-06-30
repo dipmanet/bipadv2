@@ -11,7 +11,7 @@ const LabelSearch = (props) => {
     const [filteredData, setFilteredData] = useState([]);
     const [cursor, setCursor] = useState(0);
 
-    const { setSearchBbox, setSelctFieldCurrentValue, vzLabel } = props;
+    const { setSearchBbox, setSelctFieldCurrentValue, vzLabel, forDisable } = props;
     const availableData = vzLabel === 'municipality' ? [...vzRiskMunicipalData] : [...vzRiskProvinceData];
 
     const handleChange = (e: any) => {
@@ -84,6 +84,7 @@ const LabelSearch = (props) => {
                     setSelctFieldCurrentValue('');
                     setInputValue('');
                     setSearchBbox([[79.161987, 25.923467], [89.626465, 30.789037]]);
+                    forDisable(false);
                 }}
             >
                 Reset map

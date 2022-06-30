@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles.scss';
 
 interface Props {
     selectFieldValue: any[];
     selctFieldCurrentValue: string;
     setSelctFieldCurrentValue: React.Dispatch<React.SetStateAction<string>>;
+    disabled: boolean;
 }
 
 const SelectComponent = (props: Props) => {
     const [disable, setDisable] = React.useState(false);
-    const { selectFieldValue, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
+    const { selectFieldValue, selctFieldCurrentValue, setSelctFieldCurrentValue, disabled } = props;
     const title = 'Select By Themes';
+    // eslint-disable-next-line consistent-return
+    const checkDisable = () => {
+        if (disabled) {
+            return null;
+        } if (disable) {
+            return true;
+        }
+    };
 
     return (
         <div className={styles.theme}>
@@ -23,7 +32,7 @@ const SelectComponent = (props: Props) => {
             >
                 <option
                     className={styles.mainOptions}
-                    disabled={disable ? true : null}
+                    disabled={checkDisable}
                 >
                     {title}
                 </option>
