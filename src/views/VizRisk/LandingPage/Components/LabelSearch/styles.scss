@@ -49,9 +49,13 @@
                 padding: 10px;
                 cursor: pointer;
 
-                &:hover {
-                    background-color: #00000060;
-                }
+                // &:hover {
+                //     background-color: red;
+                // }
+            }
+
+            &:hover {
+                background-color: #00000060;
             }
 
         }

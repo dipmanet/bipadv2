@@ -33,9 +33,11 @@ const LabelSearch = (props) => {
             setSearchBbox(filteredData[cursor].bbox);
         }
     };
+
     useEffect(() => {
         setInputValue('');
     }, [vzLabel]);
+
 
     return (
         <div className={styles.inputContainer}>

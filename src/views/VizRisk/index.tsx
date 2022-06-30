@@ -40,7 +40,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 interface Props { }
-const themes = ['Select By Themes', 'All', 'Flood Exposure', 'Landslide Exposure', 'Multi-hazard Exposure'];
+const themes = ['All Exposure', 'Flood Exposure', 'Landslide Exposure', 'Multi-hazard Exposure'];
 
 const VizRiskMainPage = (props: Props) => {
     const [vizRiskId, setvizRiskId] = useState([]);
@@ -91,7 +91,7 @@ const VizRiskMainPage = (props: Props) => {
                 return <Barabise />;
             case 'Karnali':
                 return <Karnali />;
-            case 'Province 2':
+            case 'Madhesh':
                 return <ProvinceTwo />;
             default:
                 break;

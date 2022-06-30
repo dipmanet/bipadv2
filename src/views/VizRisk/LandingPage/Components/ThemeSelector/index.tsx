@@ -8,16 +8,25 @@ interface Props {
 }
 
 const SelectComponent = (props: Props) => {
+    const [disable, setDisable] = React.useState(false);
     const { selectFieldValue, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
+    const title = 'Select By Themes';
 
     return (
         <div className={styles.theme}>
             <select
                 className={styles.mainSelect}
                 value={selctFieldCurrentValue}
-                defaultValue={'Select By Themes'}
+                // defaultValue={'Select By Themes'}
                 onChange={e => setSelctFieldCurrentValue(e.target.value)}
+                onClick={() => setDisable(true)}
             >
+                <option
+                    className={styles.mainOptions}
+                    disabled={disable ? true : null}
+                >
+                    {title}
+                </option>
                 {
                     selectFieldValue.map(item => (
                         <option
