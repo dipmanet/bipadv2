@@ -150,9 +150,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
     const [uniqueId, setUniqueId] = useState('');
 
     useEffect(() => {
-        console.log('This is data', infrastructureLossEditData);
         if (Object.keys(infrastructureLossEditData).length > 0) {
-            console.log('Entered here');
             setTitle(infrastructureLossEditData.title);
             setStatusId(infrastructureLossEditData.status);
             setEquipmentValue(infrastructureLossEditData.equipmentValue);
@@ -169,8 +167,6 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
             setResourceMainList(resource);
         }
     }, [infrastructureLossEditData, resource]);
-    console.log('selected resource id', selectedResourceId);
-    console.log('resourceMainList', resourceMainList);
 
     const statusData = [
         {
@@ -293,14 +289,11 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
         setResourceType(e.target.value);
         const filteredResourceList = resource
             .filter(d => d.resourceType === e.target.value);
-
-        console.log('This is final filtered resource', filteredResourceList);
         setResourceMainList(filteredResourceList);
     };
 
     const handleResource = (e) => {
         setSelectedResourceId(e.target.value);
-        console.log('This is resource', e.target.value);
     };
 
     const handleInfrastructureType = (e) => {

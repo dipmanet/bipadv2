@@ -81,7 +81,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.DELETE,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
-            console.log('this response', response);
             params.fetchDataAfterDelete();
             params.setLoader(false);
             params.setOpen(false);
@@ -432,7 +431,6 @@ const AgricultureLossTable = (props) => {
         }
         setSelected(newSelected);
     };
-    console.log('agricultureLossData', agricultureLossData);
     return (
         <>
             {loader ? (

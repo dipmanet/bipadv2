@@ -566,6 +566,7 @@ const state: PageState = {
         familyLossEditData: {},
         infrastructureLossEditData: {},
         agricultureLossEditData: {},
+        livestockLossEditData: {},
         incidentUpdateError: '',
         epidemicChartHourlyLoading: false,
         epidemicChartHourlyData: [],

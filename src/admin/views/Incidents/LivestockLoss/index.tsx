@@ -1,6 +1,9 @@
+/* eslint-disable no-lone-blocks */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent */
 import React, { useState } from 'react';
+import { navigate } from '@reach/router';
 import TextField from '@material-ui/core/TextField';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { DatePicker } from '@mui/lab';
@@ -44,7 +47,7 @@ const LivestockLoss = ({ validationError,
     handleNext, requests: { loss }, countryList,
     infrastructureType,
     infrastructureUnit, clearData,
-    resource, agricultureType, liveStockType }) => {
+    resource, agricultureType, liveStockType, lossID }) => {
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
     const [liveStockLossResponseId, setLiveStockLossResponseId] = useState(null);
@@ -89,6 +92,7 @@ const LivestockLoss = ({ validationError,
                 agricultureType={agricultureType}
                 resource={resource}
                 liveStockType={liveStockType}
+                openDataForm={setOpen}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -117,6 +121,7 @@ const LivestockLoss = ({ validationError,
                     <PeopleLossTable
                         liveStockLossResponseId={liveStockLossResponseId}
                         liveStockType={liveStockType}
+                        openDataForm={setOpen}
                     />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
@@ -128,7 +133,11 @@ const LivestockLoss = ({ validationError,
                             <button
                                 className={styles.submitButtons}
                                 onClick={() => {
-                                    handleNext(1);
+                                    {
+                                        lossID
+                                            ? navigate('/admin/incident/incident-data-table')
+                                            : handleNext(1);
+                                    }
                                     clearData();
                                 }}
                                 type="submit"

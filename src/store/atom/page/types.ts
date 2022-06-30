@@ -730,6 +730,7 @@ export interface EpidemicPage {
     familyLossEditData: object;
     infrastructureLossEditData: object;
     agricultureLossEditData: object;
+    livestockLossEditData: object;
     incidentUpdateError: string;
     epidemicChartHourlyLoading: boolean;
     epidemicChartHourlyData: [];

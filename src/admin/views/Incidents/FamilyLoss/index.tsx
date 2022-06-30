@@ -57,8 +57,6 @@ const FamilyLoss = ({ validationError,
         setLoader(true);
         await loss.do({ body: lossFormData, setLoader, handleNext });
     };
-
-    console.log('this open', open);
     return (
 
         <div className={styles.mainForm}>

@@ -57,8 +57,6 @@ const PeopleLoss = ({ validationError,
         setLoader(true);
         await loss.do({ body: lossFormData, setLoader, handleNext });
     };
-
-    console.log('What is open condition', open);
     return (
 
         <div className={styles.mainForm}>

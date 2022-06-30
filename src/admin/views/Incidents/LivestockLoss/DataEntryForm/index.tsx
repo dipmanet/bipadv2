@@ -15,6 +15,7 @@ import { FormHelperText } from '@material-ui/core';
 import styles from './styles.module.scss';
 import { createConnectedRequestCoordinator } from '#request';
 import { countryListSelector, epidemicsPageSelector, resourceTypeListSelector } from '#selectors';
+import { SetEpidemicsPageAction } from '#actionCreators';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -26,10 +27,14 @@ const mapStateToProps = (state, props) => ({
 
     // user: userSelector(state),
 });
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
 
+
+});
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    lossInfrastructure: {
+    lossLivestock: {
         url: '/loss-livestock/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
@@ -69,17 +74,60 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossLivestockEdit: {
+        url: ({ params }) => `/loss-livestock/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            // props.setEpidemicsPage({ lossID: response.id });
+            props.setEpidemicsPage({ livestockLossEditData: {} });
+
+            if (params && params.setLivestockLossRespId) {
+                params.setLivestockLossRespId(response.id);
+            }
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            if (params && params.clearFormData) {
+                params.clearFormData();
+            }
+            if (params && params.openDataForm) {
+                params.openDataForm();
+            }
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
 
 };
 
-const DataEntryForm = ({ requests: { lossInfrastructure }, open,
-    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss,
+const DataEntryForm = ({ requests: { lossLivestock, lossLivestockEdit }, open,
+    handleCloseModal, epidemmicsPage: { lossID, livestockLossEditData },
+    countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
     resource,
-    resourceTypeList, agricultureType, liveStockType }) => {
+    resourceTypeList, agricultureType, liveStockType, openDataForm, setEpidemicsPage }) => {
     const [loader, setLoader] = useState(false);
-
-    const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
     const [title, setTitle] = useState('');
     const [economicLoss, setEconomicLoss] = useState('');
@@ -89,7 +137,8 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     const [economicLossErr, setEconomicLossErr] = useState(false);
     const [titleErr, setTitleErr] = useState(false);
     const [count, setCount] = useState('');
-
+    const [uniqueId, setUniqueId] = useState('');
+    const [editedData, setEditedData] = useState(false);
     const statusData = [
         {
             value: 'destroyed',
@@ -100,21 +149,26 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
             displayName: 'Affected',
         },
     ];
-
+    useEffect(() => {
+        if (Object.keys(livestockLossEditData).length > 0) {
+            setTitle(livestockLossEditData.title);
+            setEconomicLoss(livestockLossEditData.economicLoss);
+            setStatusId(livestockLossEditData.status);
+            setCount(livestockLossEditData.count);
+            setTypeId(livestockLossEditData.type);
+            setEditedData(true);
+            setUniqueId(livestockLossEditData.id);
+        }
+    }, [livestockLossEditData]);
 
     const handleSelectedStatus = (e) => {
-        const selectedStatus = statusData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedStatus;
-        setStatusErr(false);
-        setStatus(displayName);
-        setStatusId(value);
+        setStatusId(e.target.value);
     };
 
     const handleSelectedType = (e) => {
         setTypeId(e.target.value);
     };
     const clearFormData = () => {
-        setStatus('');
         setStatusId('');
         setTitle('');
         setEconomicLoss('');
@@ -133,12 +187,12 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         } else {
             setEconomicLossErr(false);
         }
-        if (!status) {
+        if (!statusId) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (title && economicLoss && status) {
+        if (title && economicLoss && statusId) {
             setLoader(true);
             const finalSubmissionData = {
                 title,
@@ -148,7 +202,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                 count,
                 status: statusId,
             };
-            lossInfrastructure.do({
+            lossLivestock.do({
                 body: finalSubmissionData,
                 setLoader,
                 clearFormData,
@@ -156,11 +210,52 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
             });
         }
     };
+
+    const handleEditedData = () => {
+        setLoader(true);
+
+        if (!title) {
+            setTitleErr(true);
+        } else {
+            setTitleErr(false);
+        }
+        if (!economicLoss) {
+            setEconomicLossErr(true);
+        } else {
+            setEconomicLossErr(false);
+        }
+        if (!statusId) {
+            setStatusErr(true);
+        } else {
+            setStatusErr(false);
+        }
+        if (title && economicLoss && statusId) {
+            setLoader(true);
+            const finalSubmissionData = {
+                title,
+                economicLoss,
+                type: typeId,
+                loss: lossID,
+                count,
+                status: statusId,
+            };
+            lossLivestockEdit.do({
+                body: finalSubmissionData,
+                setLoader,
+                clearFormData,
+                setLivestockLossRespId,
+                id: uniqueId,
+                openDataForm: openDataForm(false),
+            });
+        }
+    };
+
+
     return (
         <div>
             <Modal
                 open={open}
-                onClose={handleCloseModal}
+                // onClose={handleCloseModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -212,7 +307,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                         {liveStockType.length && liveStockType.map(
                                             item => (
                                                 <MenuItem
-                                                    key={item.displayName}
+                                                    key={item.id}
                                                     value={item.id}
                                                 >
                                                     {item.title}
@@ -264,7 +359,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                     <Select
                                         labelId="status"
                                         id="status-select"
-                                        value={status}
+                                        value={statusId}
                                         label="Status"
                                         error={statusErr}
                                         onChange={handleSelectedStatus}
@@ -273,7 +368,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                             item => (
                                                 <MenuItem
                                                     key={item.displayName}
-                                                    value={item.displayName}
+                                                    value={item.value}
                                                 >
                                                     {item.displayName}
                                                 </MenuItem>
@@ -294,8 +389,25 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
 
 
                                 <div className={styles.saveOrAddButtons}>
-                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(livestockLossRespId)} type="submit">Close</button>
-                                    <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
+                                    <button
+                                        className={styles.cancelButtons}
+                                        onClick={() => {
+                                            setEpidemicsPage({ livestockLossEditData: {} });
+                                            handleCloseModal(livestockLossRespId);
+                                        }}
+                                        type="submit"
+                                    >
+                                        Close
+
+                                    </button>
+                                    <button
+                                        className={styles.submitButtons}
+                                        type="submit"
+                                        onClick={editedData ? handleEditedData : handleSubmit}
+                                    >
+                                        {editedData ? 'Save' : 'Add'}
+
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -307,7 +419,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             DataEntryForm,

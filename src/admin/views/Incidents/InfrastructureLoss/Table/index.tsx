@@ -83,7 +83,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.DELETE,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
-            console.log('this response', response);
             params.fetchDataAfterDelete();
             params.setLoader(false);
             params.setOpen(false);
@@ -334,14 +333,9 @@ const InfrastructureLossTable = (props) => {
         const typeName = infrastructureType.find(i => i.id === id);
         return typeName ? typeName.titleEn : null;
     };
-    console.log('This infra type', infrastructureType);
     // const data=infrastructureType.find(i => i.id === filteredRowData)
     const resourceTypeNameGenerator = (id) => {
         const resourceTypeName = resource.find(i => i.id === id);
-        console.log('This is final filtered id', id);
-        console.log('This is resource', resource);
-        console.log('This is resourceTypeName', resourceTypeName);
-
         return resourceTypeName ? resourceTypeName.title : null;
     };
 
@@ -452,7 +446,6 @@ const InfrastructureLossTable = (props) => {
         }
         setSelected(newSelected);
     };
-    console.log('This is filteredRowData', filteredRowData);
     return (
         <>
             {loader ? (
