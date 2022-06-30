@@ -259,7 +259,7 @@ const AgricultureLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { livestockLossData, incidentData, incidentCount, incidentEditData },
-        hazardList, liveStockLossResponseId } = props;
+        hazardList, liveStockLossResponseId, liveStockType } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -277,7 +277,11 @@ const AgricultureLossTable = (props) => {
         const objective = hazardList[obj];
         array.push(objective);
     }
-
+    const livestockTypeName = (id) => {
+        const livestockName = liveStockType.find(i => i.id === id);
+        const { titleEn } = livestockName;
+        return titleEn;
+    };
     const hazardNameSelected = id => (array.length && (array.find(i => i.id === id)).title);
     const numberFormatter = (n) => {
         const numberFormat = Intl.NumberFormat('en-US');
@@ -295,7 +299,7 @@ const AgricultureLossTable = (props) => {
                     status: row.status,
                     count: row.count,
                     economicLoss: row.economicLoss,
-                    type: row.type,
+                    type: livestockTypeName(row.type),
                 };
 
                 return epidemicObj;
@@ -483,18 +487,12 @@ const AgricultureLossTable = (props) => {
                     <Box sx={{ boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
                         <div className={styles.credentialSearch}>
                             <div className={styles.rightOptions}>
-                                <IconButton
-                                    onClick={handleDownload}
-                                    style={{ cursor: 'pointer' }}
-                                >
 
-                                    <DownloadIcon />
-                                </IconButton>
                                 <TablePagination
                                     className={styles.tablePagination}
                                     rowsPerPageOptions={[100]}
                                     component="div"
-                                    count={incidentCount}
+                                    count={livestockLossData.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     onPageChange={handleChangePage}

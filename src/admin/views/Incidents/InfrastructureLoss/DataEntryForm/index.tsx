@@ -166,8 +166,11 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
             setSelectedResourceId(infrastructureLossEditData.resource);
             setUniqueId(infrastructureLossEditData.id);
             setEditedData(true);
+            setResourceMainList(resource);
         }
-    }, [infrastructureLossEditData]);
+    }, [infrastructureLossEditData, resource]);
+    console.log('selected resource id', selectedResourceId);
+    console.log('resourceMainList', resourceMainList);
 
     const statusData = [
         {
@@ -286,17 +289,18 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
     };
     const handleResourceType = (e) => {
         const filteredResourceName = resourceTypeList.find(i => i.title === e.target.value).label;
+        setSelectedResourceId('');
         setResourceType(e.target.value);
-
         const filteredResourceList = resource
             .filter(d => d.resourceType === e.target.value);
 
-
+        console.log('This is final filtered resource', filteredResourceList);
         setResourceMainList(filteredResourceList);
     };
 
     const handleResource = (e) => {
-        setSelectedResource(e.target.value);
+        setSelectedResourceId(e.target.value);
+        console.log('This is resource', e.target.value);
     };
 
     const handleInfrastructureType = (e) => {
@@ -309,7 +313,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
         setServiceDisrupted(!serviceDisrupted);
     };
 
-    console.log('open modal', open);
+
     return (
         <div>
             <Modal
@@ -416,7 +420,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
                                     <Select
                                         labelId="gender"
                                         id="gender-select"
-                                        value={selectedresource}
+                                        value={selectedResourceId}
                                         label="Resource"
                                         onChange={handleResource}
                                     >

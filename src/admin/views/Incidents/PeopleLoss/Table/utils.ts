@@ -19,7 +19,6 @@ export const tableTitleRef = {
     gender: 'Gender',
     status: 'Status',
     nationality: 'Nationality',
-    ward: 'Ward',
     belowPoverty: 'Poverty Status',
     disability: 'Disability',
     verified: 'Verified',

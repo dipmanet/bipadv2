@@ -552,18 +552,12 @@ const FamilyLossTable = (props) => {
                     <Box sx={{ boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
                         <div className={styles.credentialSearch}>
                             <div className={styles.rightOptions}>
-                                <IconButton
-                                    onClick={handleDownload}
-                                    style={{ cursor: 'pointer' }}
-                                >
 
-                                    <DownloadIcon />
-                                </IconButton>
                                 <TablePagination
                                     className={styles.tablePagination}
                                     rowsPerPageOptions={[100]}
                                     component="div"
-                                    count={incidentCount}
+                                    count={familyLossData.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     onPageChange={handleChangePage}
@@ -696,6 +690,21 @@ const FamilyLossTable = (props) => {
                                                                                     key={val}
                                                                                 >
                                                                                     {row[val] === 'drr_api' ? 'Nepal Police' : 'Admin'}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
+                                                                        if (val === 'belowPoverty') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {row[val] === true ? 'Yes' : 'No'}
                                                                                 </TableCell>
                                                                             );
                                                                         }

@@ -325,9 +325,13 @@ const PeopleLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { peopleLossData, incidentData, incidentCount, peopleLossEditData },
-        hazardList, peopleLossResponseId, openDataForm } = props;
+        hazardList, peopleLossResponseId, openDataForm, countryList } = props;
 
-
+    const handleCountryList = (id) => {
+        const selectedCountry = countryList.find(i => i.id === id);
+        const { titleEn } = selectedCountry;
+        return titleEn;
+    };
     const loadingCondition = (boolean) => {
         setLoader(boolean);
     };
@@ -365,7 +369,6 @@ const PeopleLossTable = (props) => {
                     gender: row.gender,
                     status: row.status,
                     nationality: row.nationality,
-                    ward: row.ward,
                     belowPoverty: row.belowPoverty,
                     disability: row.disability,
                     verified: row.verified,
@@ -419,109 +422,6 @@ const PeopleLossTable = (props) => {
     };
 
 
-    const Dataforcsv = () => {
-        const csvData = filteredRowData && filteredRowData
-            .map((item) => {
-                let date;
-                let verified;
-                let approved;
-
-                if (item.reportedOn) {
-                    const a = item.reportedOn;
-                    date = `${a.split('-')[0]}/${a.split('-')[1]}/${a.split('-')[2]}`;
-                } else {
-                    date = '';
-                }
-                if (item.verified) {
-                    verified = 'Yes';
-                } else {
-                    verified = '';
-                }
-                if (item.approved) {
-                    approved = 'Yes';
-                } else {
-                    approved = '';
-                }
-
-                return ([
-                    item.id,
-                    item.wards[0].municipality.district.province.title,
-                    item.wards[0].municipality.district.title,
-                    item.wards[0].municipality.title,
-                    item.wards[0].title,
-                    item.streetAddress,
-                    date,
-                    item.hazard,
-                    item.cause,
-                    item.estimatedLoss,
-                    item.agricultureEconomicLoss,
-                    item.infrastructureEconomicLoss,
-                    item.infrastructureDestroyedCount,
-                    item.infrastructureDestroyedHouseCount,
-                    item.infrastructureAffectedHouseCount,
-                    item.livestockDestroyedCount,
-
-                    item.totalInjuredMale,
-                    item.totalInjuredFemale,
-                    item.totalInjuredOther,
-                    item.totalInjuredDisabled,
-                    item.peopleMissingMaleCount,
-                    item.peopleMissingFemaleCount,
-                    item.peopleMissingOtherCount,
-                    item.peopleMissingDisabledCount,
-
-
-                    item.totalDeadMale,
-                    item.totalDeadFemale,
-                    item.totalDeadOther,
-                    item.totalDeadDisabled,
-                    verified,
-                    item.verificationMessage,
-                    approved,
-                ]);
-            });
-        return csvData;
-    };
-
-    const handleDownload = () => {
-        const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
-            .setColumns([
-                'id',
-                'Province',
-                'District',
-                'Municipality',
-                'Ward',
-                'Local Address',
-                'Reported Date (A.D.)(eg. 2021/07/31)',
-                'Hazard',
-                'Hazard Inducer',
-                'Total Estimated Loss(NPR)',
-                'Agriculture Economic Loss(NPR)',
-                'Infrastructure Economic Loss(NPR)',
-                'Total Infrastructure Destroyed',
-                'House Destroyed',
-                'House Affected',
-                'Total Livestock Destroyed',
-                'Total Injured Male',
-                'Total Injured Female',
-                'Total Injured Others',
-                'Total Injured Disabled',
-                'Total Missing Male',
-                'Total Missing Female',
-                'Total Missing Other',
-                'Total Missing Disabled',
-                'Total Male Death',
-                'Total Female Death',
-                'Total Other Death',
-                'Total Disabled Death',
-                'Verified (eg. Yes)',
-                'Verification message',
-                'Approved (eg. Yes)',
-            ])
-            .addRows(Dataforcsv())
-            .exportFile();
-    };
-
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
         const selectedIndex = selected.indexOf(name);
         let newSelected: readonly string[] = [];
@@ -564,7 +464,7 @@ const PeopleLossTable = (props) => {
                                     className={styles.tablePagination}
                                     rowsPerPageOptions={[100]}
                                     component="div"
-                                    count={incidentCount}
+                                    count={peopleLossData.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     onPageChange={handleChangePage}
@@ -657,6 +557,21 @@ const PeopleLossTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
+                                                                        if (val === 'nationality') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {handleCountryList(row[val])}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
                                                                         if (val === 'wards') {
                                                                             return (
                                                                                 <>
@@ -700,6 +615,36 @@ const PeopleLossTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
+                                                                        if (val === 'belowPoverty') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {row[val] === true ? 'Yes' : 'No'}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
+                                                                        if (val === 'disability') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {row[val] === 1 ? 'Yes' : 'No'}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
                                                                         if (val === 'approved') {
                                                                             return (
                                                                                 <TableCell
@@ -711,7 +656,7 @@ const PeopleLossTable = (props) => {
                                                                                     padding="none"
                                                                                     key={val}
                                                                                 >
-                                                                                    {row[val] === true ? 'YES' : 'No'}
+                                                                                    {row[val] === true ? 'Yes' : 'No'}
                                                                                 </TableCell>
                                                                             );
                                                                         }

@@ -117,6 +117,7 @@ const AgricultureLoss = ({ validationError,
                     <PeopleLossTable
                         agricultureLossResponseId={agricultureLossResponseId}
                         openDataForm={setOpen}
+                        agricultureType={agricultureType}
                     />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>

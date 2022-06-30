@@ -141,6 +141,14 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
     const [disabilityId, setDisabilityId] = useState(null);
     const [editedData, setEditedData] = useState(false);
     const [uniqueId, setUniqueId] = useState('');
+
+
+    const checkDisability = (id) => {
+        if (id) {
+            return true;
+        }
+        return false;
+    };
     useEffect(() => {
         if (Object.keys(peopleLossEditData).length > 0) {
             setName(peopleLossEditData.name);
@@ -150,6 +158,7 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
             setNationalityId(peopleLossEditData.nationality);
             setIsBelowPoverty(peopleLossEditData.belowPoverty);
             setDisabilityId(peopleLossEditData.disability);
+            setDisability(checkDisability(peopleLossEditData.disability));
             setEditedData(true);
             setUniqueId(peopleLossEditData.id);
         }
@@ -211,7 +220,7 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
         setDisability(false);
         setNationality('');
         setNationalityId('');
-        setDisabilityId(null);
+        setDisabilityId('');
     };
 
 

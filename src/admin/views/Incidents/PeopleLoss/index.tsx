@@ -110,6 +110,7 @@ const PeopleLoss = ({ validationError,
                     <PeopleLossTable
                         peopleLossResponseId={peopleLossResponseId}
                         openDataForm={setOpen}
+                        countryList={countryList}
                     />
 
 

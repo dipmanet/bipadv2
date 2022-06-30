@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -323,12 +324,27 @@ const InfrastructureLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { infrastructureLossData, incidentData, incidentCount, infrastructureLossEditData },
-        hazardList, infrastructureLossResponseId, openDataForm } = props;
+        hazardList, infrastructureLossResponseId, openDataForm, infrastructureType, resource } = props;
 
 
     const loadingCondition = (boolean) => {
         setLoader(boolean);
     };
+    const infrastructureTypeName = (id) => {
+        const typeName = infrastructureType.find(i => i.id === id);
+        return typeName ? typeName.titleEn : null;
+    };
+    console.log('This infra type', infrastructureType);
+    // const data=infrastructureType.find(i => i.id === filteredRowData)
+    const resourceTypeNameGenerator = (id) => {
+        const resourceTypeName = resource.find(i => i.id === id);
+        console.log('This is final filtered id', id);
+        console.log('This is resource', resource);
+        console.log('This is resourceTypeName', resourceTypeName);
+
+        return resourceTypeName ? resourceTypeName.titleEn : null;
+    };
+
 
     useEffect(() => {
         setLoader(true);
@@ -358,18 +374,19 @@ const InfrastructureLossTable = (props) => {
             const tableRows = infrastructureLossData.map((row) => {
                 const epidemicObj = {
                     id: row.id,
-                    name: row.name,
-                    age: row.age,
-                    gender: row.gender,
+                    title: row.title,
                     status: row.status,
-                    nationality: row.nationality,
-                    ward: row.ward,
-                    belowPoverty: row.belowPoverty,
-                    disability: row.disability,
+                    equipmentValue: row.equipmentValue,
+                    infrastructureValue: row.infrastructureValue,
+                    beneficiaryOwner: row.beneficiaryOwner,
+                    beneficiaryCount: row.beneficiaryCount,
+                    serviceDisrupted: row.serviceDisrupted,
+                    economicLoss: row.economicLoss,
+                    type: infrastructureTypeName(row.type),
+                    resource: resourceTypeNameGenerator(row.resource),
+                    unit: row.unit,
                     verified: row.verified,
                     verificationMessage: row.verificationMessage,
-
-
                 };
 
                 return epidemicObj;
@@ -435,7 +452,7 @@ const InfrastructureLossTable = (props) => {
         }
         setSelected(newSelected);
     };
-
+    console.log('This is filteredRowData', filteredRowData);
     return (
         <>
             {loader ? (
@@ -609,6 +626,21 @@ const InfrastructureLossTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
+                                                                        if (val === 'serviceDisrupted') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {row[val] === true ? 'YES' : 'No'}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
                                                                         if (val === 'point') {
                                                                             return (
                                                                                 <TableCell
@@ -639,6 +671,7 @@ const InfrastructureLossTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
+
                                                                         return (
                                                                             <TableCell
                                                                                 align={typeof row[val] === 'string' ? 'left' : 'center'}

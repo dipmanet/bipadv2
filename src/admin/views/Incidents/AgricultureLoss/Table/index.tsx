@@ -322,7 +322,7 @@ const AgricultureLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { agricultureLossData, incidentData, incidentCount, agricultureLossEditData },
-        hazardList, agricultureLossResponseId, openDataForm } = props;
+        hazardList, agricultureLossResponseId, openDataForm, agricultureType } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -340,7 +340,11 @@ const AgricultureLossTable = (props) => {
         const objective = hazardList[obj];
         array.push(objective);
     }
-
+    const agricultureTypeName = (id) => {
+        const typeName = agricultureType.find(i => i.id === id);
+        const { title } = typeName;
+        return title;
+    };
     const hazardNameSelected = id => (array.length && (array.find(i => i.id === id)).title);
     const numberFormatter = (n) => {
         const numberFormat = Intl.NumberFormat('en-US');
@@ -361,7 +365,7 @@ const AgricultureLossTable = (props) => {
                     beneficiaryCount: row.beneficiaryCount,
                     quantity: row.quantity,
                     economicLoss: row.economicLoss,
-                    type: row.type,
+                    type: agricultureTypeName(row.type),
                     status: row.status,
                 };
 

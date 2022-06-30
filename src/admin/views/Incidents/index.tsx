@@ -1134,7 +1134,7 @@ const Epidemics = (props) => {
         setSelectedHazardName(hazardList.length && id ? hazardList.find(i => i.id === id).title : '');
     };
 
-
+    console.log('This is incident edit data', incidentEditData);
     useEffect(() => {
         if (incidentEditData && Object.keys(incidentEditData).length > 0) {
             setuniqueId(incidentEditData.id);
@@ -1183,7 +1183,8 @@ const Epidemics = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [incidentEditData]);
 
-
+    console.log('This is ward id', wardId);
+    console.log('This is ward edit data', editWardId);
     useEffect(() => {
         hazardNameSelected(selectedHazardId);
     }, [selectedHazardId, hazardList]);
@@ -1409,6 +1410,8 @@ const Epidemics = (props) => {
 
     useEffect(() => {
         if (lossID && uniqueId) {
+            console.log('This is ward id for final', editWardId);
+            console.log('This is ward id for final', wardId);
             setLoader(true);
             const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
             const data = {
@@ -1457,6 +1460,7 @@ const Epidemics = (props) => {
                 });
             }
         } else {
+            console.log('This is ward id for final', wardId);
             const title = `${selectedHazardName} at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
             const data = {
                 ...incidentFormDataInitial,
@@ -1477,7 +1481,7 @@ const Epidemics = (props) => {
                 wards: [wardId],
             };
             props.requests.incident.do({ body: data, handleNext });
-            props.requests.resourceListFetch.do({ setResource, wardId });
+
 
             setAdded(true);
         }
@@ -1486,6 +1490,13 @@ const Epidemics = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossID, isLossDataUpdated]);
+
+    useEffect(() => {
+        if (wardId) {
+            props.requests.resourceListFetch.do({ setResource, wardId });
+        }
+    }, [wardId]);
+
 
     const disableMapFilterLofic = (boolean) => {
         setDisableMapFilter(boolean);

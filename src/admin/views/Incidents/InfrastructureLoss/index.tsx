@@ -115,7 +115,9 @@ const InfrastructureLoss = ({ validationError,
                     <span className={styles.ValidationErrors}>{validationError}</span>
                     <PeopleLossTable
                         infrastructureLossResponseId={infrastructureLossResponseId}
+                        infrastructureType={infrastructureType}
                         openDataForm={setOpen}
+                        resource={resource}
                     />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>

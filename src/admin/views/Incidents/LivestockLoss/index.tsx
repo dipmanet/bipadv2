@@ -114,7 +114,10 @@ const LivestockLoss = ({ validationError,
                 <div>
                     <h3 className={styles.formGeneralInfo}>Livestock Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable liveStockLossResponseId={liveStockLossResponseId} />
+                    <PeopleLossTable
+                        liveStockLossResponseId={liveStockLossResponseId}
+                        liveStockType={liveStockType}
+                    />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
