@@ -342,7 +342,7 @@ const InfrastructureLossTable = (props) => {
         console.log('This is resource', resource);
         console.log('This is resourceTypeName', resourceTypeName);
 
-        return resourceTypeName ? resourceTypeName.titleEn : null;
+        return resourceTypeName ? resourceTypeName.title : null;
     };
 
 
