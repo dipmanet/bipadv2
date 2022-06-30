@@ -764,6 +764,7 @@ const FamilyLossTable = (props) => {
                                                 })}
                                     </TableBody>
                                 </Table>
+                                {filteredRowData && filteredRowData.length === 0 && <div><h2 style={{ textAlign: 'center' }}>No Data Available</h2></div>}
                             </TableContainer>
                         </Paper>
                     </Box>

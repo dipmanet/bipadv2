@@ -15,6 +15,7 @@ import { FormHelperText } from '@material-ui/core';
 import styles from './styles.module.scss';
 import { createConnectedRequestCoordinator } from '#request';
 import { countryListSelector, epidemicsPageSelector, resourceTypeListSelector } from '#selectors';
+import { SetEpidemicsPageAction } from '#actionCreators';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -26,10 +27,12 @@ const mapStateToProps = (state, props) => ({
 
     // user: userSelector(state),
 });
-
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
+});
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    lossInfrastructure: {
+    lossAgriculture: {
         url: '/loss-agriculture/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
@@ -69,18 +72,61 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossAgricultureEdit: {
+        url: ({ params }) => `/loss-agriculture/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            props.setEpidemicsPage({ agricultureLossEditData: {} });
+
+            if (params && params.setInfrastructureLossRespId) {
+                params.setAgricultureLossRespId(response.id);
+            }
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+            if (params && params.clearFormData) {
+                params.clearFormData();
+            }
+            if (params && params.openDataForm) {
+                params.openDataForm();
+            }
+            // if (params && params.handleNext) {
+            //     params.handleNext(2);
+            // }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+                if (params && params.setLoader) {
+                    params.setLoader(false);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
 
 };
 
-const DataEntryForm = ({ requests: { lossInfrastructure }, open,
-    handleCloseModal, epidemmicsPage: { lossID }, countryList, handlePeopleLoss,
+const DataEntryForm = ({ requests: { lossAgriculture, lossAgricultureEdit }, open,
+    handleCloseModal, setEpidemicsPage, epidemmicsPage: { lossID, agricultureLossEditData },
+    countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
-    resource,
+    resource, openDataForm,
     resourceTypeList, agricultureType }) => {
     const [loader, setLoader] = useState(false);
     const [beneficiaryOwner, setBeneficiaryOwner] = useState('');
     const [beneficiaryCount, setBeneficiaryCount] = useState('');
-    const [status, setStatus] = useState('');
     const [statusId, setStatusId] = useState('');
     const [quantity, setQuantity] = useState('');
     const [economicLoss, setEconomicLoss] = useState('');
@@ -88,7 +134,8 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     const [agricultureLossRespId, setAgricultureLossRespId] = useState('');
     const [statusErr, setStatusErr] = useState(false);
     const [economicLossErr, setEconomicLossErr] = useState(false);
-
+    const [editedData, setEditedData] = useState(false);
+    const [uniqueId, setUniqueId] = useState('');
     const statusData = [
         {
             value: 'destroyed',
@@ -100,26 +147,31 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         },
     ];
 
-
+    useEffect(() => {
+        if (Object.keys(agricultureLossEditData).length > 0) {
+            setBeneficiaryOwner(agricultureLossEditData.beneficiaryOwner);
+            setBeneficiaryCount(agricultureLossEditData.beneficiaryCount);
+            setQuantity(agricultureLossEditData.quantity);
+            setEconomicLoss(agricultureLossEditData.economicLoss);
+            setStatusId(agricultureLossEditData.status);
+            setTypeId(agricultureLossEditData.type);
+            setUniqueId(agricultureLossEditData.id);
+            setEditedData(true);
+        }
+    }, [agricultureLossEditData]);
     const handleSelectedStatus = (e) => {
-        const selectedStatus = statusData.find(i => i.displayName === e.target.value);
-        const { displayName, value } = selectedStatus;
-        setStatusErr(false);
-        setStatus(displayName);
-        setStatusId(value);
+        setStatusId(e.target.value);
     };
 
     const handleSelectedType = (e) => {
         setTypeId(e.target.value);
     };
     const clearFormData = () => {
-        setStatus('');
         setStatusId('');
         setQuantity('');
         setBeneficiaryOwner('');
         setBeneficiaryCount('');
         setEconomicLoss('');
-        setTypeId('');
         setTypeId('');
     };
 
@@ -129,12 +181,12 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
         } else {
             setEconomicLossErr(false);
         }
-        if (!status) {
+        if (!statusId) {
             setStatusErr(true);
         } else {
             setStatusErr(false);
         }
-        if (economicLoss && status) {
+        if (economicLoss && statusId) {
             setLoader(true);
             const finalSubmissionData = {
                 quantity,
@@ -145,7 +197,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                 loss: lossID,
                 status: statusId,
             };
-            lossInfrastructure.do({
+            lossAgriculture.do({
                 body: finalSubmissionData,
                 setLoader,
                 clearFormData,
@@ -153,6 +205,40 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
             });
         }
     };
+    const handleEditedData = () => {
+        if (!economicLoss) {
+            setEconomicLossErr(true);
+        } else {
+            setEconomicLossErr(false);
+        }
+        if (!statusId) {
+            setStatusErr(true);
+        } else {
+            setStatusErr(false);
+        }
+        if (economicLoss && statusId) {
+            setLoader(true);
+            const finalSubmissionData = {
+                quantity,
+                beneficiaryOwner,
+                beneficiaryCount,
+                economicLoss,
+                type: typeId,
+                loss: lossID,
+                status: statusId,
+            };
+            lossAgricultureEdit.do({
+                body: finalSubmissionData,
+                setLoader,
+                clearFormData,
+                setAgricultureLossRespId,
+                id: uniqueId,
+                openDataForm: openDataForm(false),
+            });
+        }
+    };
+
+
     return (
         <div>
             <Modal
@@ -243,7 +329,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                     <Select
                                         labelId="status"
                                         id="status-select"
-                                        value={status}
+                                        value={statusId}
                                         label="Status"
                                         error={statusErr}
                                         onChange={handleSelectedStatus}
@@ -252,7 +338,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
                                             item => (
                                                 <MenuItem
                                                     key={item.displayName}
-                                                    value={item.displayName}
+                                                    value={item.value}
                                                 >
                                                     {item.displayName}
                                                 </MenuItem>
@@ -302,8 +388,24 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
 
 
                                 <div className={styles.saveOrAddButtons}>
-                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(agricultureLossRespId)} type="submit">Close</button>
-                                    <button className={styles.submitButtons} type="submit" onClick={handleSubmit}>Add</button>
+                                    <button
+                                        className={styles.cancelButtons}
+                                        onClick={() => {
+                                            setEpidemicsPage({ agricultureLossEditData: {} });
+                                            handleCloseModal(agricultureLossRespId);
+                                        }}
+                                        type="submit"
+                                    >
+                                        Close
+
+                                    </button>
+                                    <button
+                                        className={styles.submitButtons}
+                                        type="submit"
+                                        onClick={editedData ? handleEditedData : handleSubmit}
+                                    >
+                                        {editedData ? 'Save' : 'Add'}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -315,7 +417,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure }, open,
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             DataEntryForm,

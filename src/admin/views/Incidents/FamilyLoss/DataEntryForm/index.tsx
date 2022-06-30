@@ -15,6 +15,7 @@ import { FormHelperText } from '@material-ui/core';
 import styles from './styles.module.scss';
 import { createConnectedRequestCoordinator } from '#request';
 import { countryListSelector, epidemicsPageSelector } from '#selectors';
+import { SetEpidemicsPageAction } from '#actionCreators';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -25,7 +26,11 @@ const mapStateToProps = (state, props) => ({
 
     // user: userSelector(state),
 });
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
 
+
+});
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     lossFamily: {
@@ -74,7 +79,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
-
+            props.setEpidemicsPage({ familyLossEditData: {} });
             if (params && params.setFamilyLossRespId) {
                 params.setFamilyLossRespId(response.id);
             }
@@ -115,7 +120,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open,
-    handleCloseModal, epidemmicsPage: { lossID, familyLossEditData },
+    handleCloseModal, setEpidemicsPage, epidemmicsPage: { lossID, familyLossEditData },
     countryList, handlePeopleLoss, openDataForm }) => {
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
@@ -318,7 +323,17 @@ const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open,
                             </div>
                             <div className={styles.checkBoxArea}>
                                 <div className={styles.saveOrAddButtons}>
-                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(familyLossRespId)} type="submit">Close</button>
+                                    <button
+                                        className={styles.cancelButtons}
+                                        onClick={() => {
+                                            setEpidemicsPage({ familyLossEditData: {} });
+                                            handleCloseModal(familyLossRespId);
+                                        }}
+                                        type="submit"
+                                    >
+                                        Close
+
+                                    </button>
                                     <button
                                         className={styles.submitButtons}
                                         type="submit"
@@ -337,7 +352,7 @@ const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open,
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             DataEntryForm,

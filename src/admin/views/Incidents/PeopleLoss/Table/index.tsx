@@ -559,13 +559,7 @@ const PeopleLossTable = (props) => {
                     <Box sx={{ boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
                         <div className={styles.credentialSearch}>
                             <div className={styles.rightOptions}>
-                                <IconButton
-                                    onClick={handleDownload}
-                                    style={{ cursor: 'pointer' }}
-                                >
 
-                                    <DownloadIcon />
-                                </IconButton>
                                 <TablePagination
                                     className={styles.tablePagination}
                                     rowsPerPageOptions={[100]}
@@ -771,6 +765,7 @@ const PeopleLossTable = (props) => {
                                                 })}
                                     </TableBody>
                                 </Table>
+                                {filteredRowData && filteredRowData.length === 0 && <div><h2 style={{ textAlign: 'center' }}>No Data Available</h2></div>}
                             </TableContainer>
                         </Paper>
                     </Box>

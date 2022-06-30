@@ -470,8 +470,8 @@ const InfrastructureLossTable = (props) => {
                             <EnhancedTableToolbar
                                 selected={selected}
                                 numSelected={selected.length}
-                                // dispatch={dispatch}
-                                // deleteEpidemmicTable={deleteEpidemicTable}
+                                loadingCondition={loadingCondition}
+
                                 infrastructureLossFormEdit={props.requests.infrastructureLossEditData}
                                 infrastructureLossEditData={infrastructureLossEditData}
                                 infrastructureLossFormDelete={props.requests.infrastructureLossDeleteData}
@@ -481,7 +481,6 @@ const InfrastructureLossTable = (props) => {
                                 setLoader={setLoader}
                                 fetchDataAfterDelete={fetchDataAfterDelete}
                                 setSelected={setSelected}
-                                loadingCondition={loadingCondition}
 
                             />
                             <TableContainer
@@ -660,6 +659,7 @@ const InfrastructureLossTable = (props) => {
                                                 })}
                                     </TableBody>
                                 </Table>
+                                {filteredRowData && filteredRowData.length === 0 && <div><h2 style={{ textAlign: 'center' }}>No Data Available</h2></div>}
                             </TableContainer>
                         </Paper>
                     </Box>

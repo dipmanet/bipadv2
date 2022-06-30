@@ -15,6 +15,7 @@ import { FormHelperText } from '@material-ui/core';
 import styles from './styles.module.scss';
 import { createConnectedRequestCoordinator } from '#request';
 import { countryListSelector, epidemicsPageSelector, resourceTypeListSelector } from '#selectors';
+import { SetEpidemicsPageAction } from '#actionCreators';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -26,7 +27,9 @@ const mapStateToProps = (state, props) => ({
 
     // user: userSelector(state),
 });
-
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
+});
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     lossInfrastructure: {
@@ -119,7 +122,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
     handleCloseModal, epidemmicsPage: { lossID, infrastructureLossEditData },
     countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
-    resource,
+    resource, setEpidemicsPage,
     resourceTypeList, openDataForm }) => {
     const [loader, setLoader] = useState(false);
     const [title, setTitle] = useState('');
@@ -237,6 +240,8 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
             });
         }
     };
+
+
     const handleEditedData = () => {
         if (!title) {
             setTitleErr(true);
@@ -683,7 +688,17 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
 
 
                                 <div className={styles.saveOrAddButtons}>
-                                    <button className={styles.cancelButtons} onClick={() => handleCloseModal(infrastructureLossRespId)} type="submit">Close</button>
+                                    <button
+                                        className={styles.cancelButtons}
+                                        onClick={() => {
+                                            setEpidemicsPage({ infrastructureLossEditData: {} });
+                                            handleCloseModal(infrastructureLossRespId);
+                                        }}
+                                        type="submit"
+                                    >
+                                        Close
+
+                                    </button>
                                     <button
                                         className={styles.submitButtons}
                                         type="submit"
@@ -704,7 +719,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             DataEntryForm,

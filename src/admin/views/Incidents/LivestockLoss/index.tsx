@@ -112,7 +112,7 @@ const LivestockLoss = ({ validationError,
             <div className={styles.mainDataEntrySection}>
 
                 <div>
-                    <h3 className={styles.formGeneralInfo}>Infrastructure Loss Information</h3>
+                    <h3 className={styles.formGeneralInfo}>Livestock Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
                     <PeopleLossTable liveStockLossResponseId={liveStockLossResponseId} />
                     <div className={styles.checkBoxArea}>

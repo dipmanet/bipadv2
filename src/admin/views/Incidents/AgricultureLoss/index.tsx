@@ -88,6 +88,7 @@ const AgricultureLoss = ({ validationError,
                 infrastructureUnit={infrastructureUnit}
                 agricultureType={agricultureType}
                 resource={resource}
+                openDataForm={setOpen}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -111,9 +112,12 @@ const AgricultureLoss = ({ validationError,
             <div className={styles.mainDataEntrySection}>
 
                 <div>
-                    <h3 className={styles.formGeneralInfo}>Infrastructure Loss Information</h3>
+                    <h3 className={styles.formGeneralInfo}>Agriculture Loss Information</h3>
                     <span className={styles.ValidationErrors}>{validationError}</span>
-                    <PeopleLossTable agricultureLossResponseId={agricultureLossResponseId} />
+                    <PeopleLossTable
+                        agricultureLossResponseId={agricultureLossResponseId}
+                        openDataForm={setOpen}
+                    />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
