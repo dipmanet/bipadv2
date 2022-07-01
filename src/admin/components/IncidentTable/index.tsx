@@ -224,10 +224,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         console.log('...delete');
     };
     const handleEdit = () => {
+        loadingCondition(true);
         epidemicFormEdit.do({ id: selected, loadingCondition });
     };
     useEffect(() => {
         if (Object.keys(incidentEditData).length > 0) {
+            loadingCondition(false);
             navigate('/admin/incident/add-new-incident');
         }
     }, [incidentEditData]);
@@ -528,198 +530,121 @@ const IncidentTable = (props) => {
                 }}
                 />
             )
-                : (
-                    <Box sx={{ width: '80vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
-                        <div className={styles.credentialSearch}>
-                            <div className={styles.rightOptions}>
-                                <IconButton
-                                    onClick={handleDownload}
-                                    style={{ cursor: 'pointer' }}
-                                >
+                : ''}
+            <Box sx={{ width: '80vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
+                <div className={styles.credentialSearch}>
+                    <div className={styles.rightOptions}>
+                        <IconButton
+                            onClick={handleDownload}
+                            style={{ cursor: 'pointer' }}
+                        >
 
-                                    <DownloadIcon />
-                                </IconButton>
-                                <TablePagination
-                                    className={styles.tablePagination}
-                                    rowsPerPageOptions={[100]}
-                                    component="div"
-                                    count={incidentCount}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                />
-                            </div>
-                        </div>
-                        <Paper sx={{ width: '100%', mb: 2 }}>
-                            <EnhancedTableToolbar
-                                selected={selected}
+                            <DownloadIcon />
+                        </IconButton>
+                        <TablePagination
+                            className={styles.tablePagination}
+                            rowsPerPageOptions={[100]}
+                            component="div"
+                            count={incidentCount}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                        />
+                    </div>
+                </div>
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <EnhancedTableToolbar
+                        selected={selected}
+                        numSelected={selected.length}
+                        // dispatch={dispatch}
+                        // deleteEpidemmicTable={deleteEpidemicTable}
+                        epidemicFormEdit={props.requests.incidentEditData}
+                        incidentEditData={incidentEditData}
+                        loadingCondition={loadingCondition}
+
+                    />
+                    <TableContainer
+                        sx={{ maxHeight: 800 }}
+                        style={{ width: '100%', overflowX: 'scroll' }}
+                    >
+
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            stickyHeader
+                            aria-label="sticky table"
+                            padding="normal"
+                        >
+
+                            <EnhancedTableHead
                                 numSelected={selected.length}
-                                // dispatch={dispatch}
-                                // deleteEpidemmicTable={deleteEpidemicTable}
-                                epidemicFormEdit={props.requests.incidentEditData}
-                                incidentEditData={incidentEditData}
-                                loadingCondition={loadingCondition}
-
+                                order={order}
+                                orderBy={orderBy}
+                                // onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={filteredRowData && filteredRowData.length}
                             />
-                            <TableContainer
-                                sx={{ maxHeight: 800 }}
-                                style={{ width: '100%', overflowX: 'scroll' }}
-                            >
+                            <TableBody>
+                                {filteredRowData
+                                    && stableSort(filteredRowData, getComparator(order, orderBy))
+                                        .map((row, index) => {
+                                            // const isItemSelected = isSelected(row.id);
+                                            const labelId = `enhanced-table-checkbox-${index}`;
 
-                                <Table
-                                    sx={{ minWidth: 750 }}
-                                    stickyHeader
-                                    aria-label="sticky table"
-                                    padding="normal"
-                                >
-
-                                    <EnhancedTableHead
-                                        numSelected={selected.length}
-                                        order={order}
-                                        orderBy={orderBy}
-                                        // onSelectAllClick={handleSelectAllClick}
-                                        onRequestSort={handleRequestSort}
-                                        rowCount={filteredRowData && filteredRowData.length}
-                                    />
-                                    <TableBody>
-                                        {filteredRowData
-                                            && stableSort(filteredRowData, getComparator(order, orderBy))
-                                                .map((row, index) => {
-                                                    // const isItemSelected = isSelected(row.id);
-                                                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                                                    return (
-                                                        <TableRow
-                                                            hover
-                                                            role="checkbox"
-                                                            // aria-checked={isItemSelected}
-                                                            tabIndex={-1}
-                                                            key={row.id}
-                                                        // selected={isItemSelected}
-                                                        >
-                                                            <TableCell
-                                                                align="center"
-                                                                padding="normal"
-                                                            >
-                                                                <Checkbox
-                                                                    color="primary"
-                                                                    onChange={e => handleCheck(e, row.id)}
-                                                                    checked={testCheckboxCondition(row.id)}
-                                                                    inputProps={{
-                                                                        'aria-labelledby': labelId,
-                                                                    }}
-                                                                    disabled={row.dataSource === 'drr_api'}
-                                                                />
-                                                            </TableCell>
-                                                            {
-                                                                Object.keys(row)
-                                                                    .map((val) => {
-                                                                        if (val === 'verified') {
-                                                                            return (
-                                                                                <TableCell
-                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                    className={styles.setStyleForTableCell}
-                                                                                    component="th"
-                                                                                    id={labelId}
-                                                                                    scope="row"
-                                                                                    padding="none"
-                                                                                    key={val}
-                                                                                >
-                                                                                    {row[val] === true ? 'YES' : 'No'}
-                                                                                </TableCell>
-                                                                            );
-                                                                        }
-                                                                        if (val === 'wards') {
-                                                                            return (
-                                                                                <>
-                                                                                    <TableCell>
-                                                                                        {row[val][0].municipality.district.province.title}
-                                                                                    </TableCell>
-                                                                                    <TableCell>
-                                                                                        {row[val][0].municipality.district.title}
-                                                                                    </TableCell>
-                                                                                    <TableCell>
-                                                                                        {row[val][0].municipality.title}
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                        className={styles.setStyleForTableCell}
-                                                                                        component="th"
-                                                                                        id={labelId}
-                                                                                        scope="row"
-                                                                                        padding="none"
-                                                                                        key={val}
-                                                                                    >
-                                                                                        {row[val][0].title}
-                                                                                    </TableCell>
-
-
-                                                                                </>
-                                                                            );
-                                                                        }
-                                                                        if (val === 'dataSource') {
-                                                                            return (
-                                                                                <TableCell
-                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                    className={styles.setStyleForTableCell}
-                                                                                    component="th"
-                                                                                    id={labelId}
-                                                                                    scope="row"
-                                                                                    padding="none"
-                                                                                    key={val}
-                                                                                >
-                                                                                    {row[val] === 'drr_api' ? 'Nepal Police' : 'Admin'}
-                                                                                </TableCell>
-                                                                            );
-                                                                        }
-                                                                        if (val === 'approved') {
-                                                                            return (
-                                                                                <TableCell
-                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                    className={styles.setStyleForTableCell}
-                                                                                    component="th"
-                                                                                    id={labelId}
-                                                                                    scope="row"
-                                                                                    padding="none"
-                                                                                    key={val}
-                                                                                >
-                                                                                    {row[val] === true ? 'YES' : 'No'}
-                                                                                </TableCell>
-                                                                            );
-                                                                        }
-                                                                        if (val === 'point') {
-                                                                            return (
-                                                                                <TableCell
-                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                    className={styles.setStyleForTableCell}
-                                                                                    component="th"
-                                                                                    id={labelId}
-                                                                                    scope="row"
-                                                                                    padding="none"
-                                                                                    key={val}
-                                                                                >
-                                                                                    {`${row[val].coordinates[0].toFixed(4)}, ${row[val].coordinates[1].toFixed(4)}`}
-                                                                                </TableCell>
-                                                                            );
-                                                                        }
-                                                                        if (val === 'lastModifiedDate') {
-                                                                            return (
-                                                                                <TableCell
-                                                                                    align="center"
-                                                                                    className={styles.setStyleForTableCell}
-                                                                                    component="th"
-                                                                                    id={labelId}
-                                                                                    scope="row"
-                                                                                    padding="none"
-                                                                                    key={val}
-                                                                                >
-                                                                                    {`${row[val].split('T')[0]}`}
-                                                                                </TableCell>
-                                                                            );
-                                                                        }
-                                                                        return (
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    role="checkbox"
+                                                    // aria-checked={isItemSelected}
+                                                    tabIndex={-1}
+                                                    key={row.id}
+                                                // selected={isItemSelected}
+                                                >
+                                                    <TableCell
+                                                        align="center"
+                                                        padding="normal"
+                                                    >
+                                                        <Checkbox
+                                                            color="primary"
+                                                            onChange={e => handleCheck(e, row.id)}
+                                                            checked={testCheckboxCondition(row.id)}
+                                                            inputProps={{
+                                                                'aria-labelledby': labelId,
+                                                            }}
+                                                            disabled={row.dataSource === 'drr_api'}
+                                                        />
+                                                    </TableCell>
+                                                    {
+                                                        Object.keys(row)
+                                                            .map((val) => {
+                                                                if (val === 'verified') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align={typeof val === 'string' ? 'left' : 'center'}
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {row[val] === true ? 'YES' : 'No'}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'wards') {
+                                                                    return (
+                                                                        <>
+                                                                            <TableCell>
+                                                                                {row[val][0].municipality.district.province.title}
+                                                                            </TableCell>
+                                                                            <TableCell>
+                                                                                {row[val][0].municipality.district.title}
+                                                                            </TableCell>
+                                                                            <TableCell>
+                                                                                {row[val][0].municipality.title}
+                                                                            </TableCell>
                                                                             <TableCell
-                                                                                align={typeof row[val] === 'string' ? 'left' : 'center'}
+                                                                                align={typeof val === 'string' ? 'left' : 'center'}
                                                                                 className={styles.setStyleForTableCell}
                                                                                 component="th"
                                                                                 id={labelId}
@@ -727,20 +652,99 @@ const IncidentTable = (props) => {
                                                                                 padding="none"
                                                                                 key={val}
                                                                             >
-                                                                                {row[val] || '-'}
+                                                                                {row[val][0].title}
                                                                             </TableCell>
-                                                                        );
-                                                                    })
-                                                            }
-                                                        </TableRow>
-                                                    );
-                                                })}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Paper>
-                    </Box>
-                )}
+
+
+                                                                        </>
+                                                                    );
+                                                                }
+                                                                if (val === 'dataSource') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align={typeof val === 'string' ? 'left' : 'center'}
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {row[val] === 'drr_api' ? 'Nepal Police' : 'Admin'}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'approved') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align={typeof val === 'string' ? 'left' : 'center'}
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {row[val] === true ? 'YES' : 'No'}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'point') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align={typeof val === 'string' ? 'left' : 'center'}
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${row[val].coordinates[0].toFixed(4)}, ${row[val].coordinates[1].toFixed(4)}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'lastModifiedDate') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${row[val].split('T')[0]}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                return (
+                                                                    <TableCell
+                                                                        align={typeof row[val] === 'string' ? 'left' : 'center'}
+                                                                        className={styles.setStyleForTableCell}
+                                                                        component="th"
+                                                                        id={labelId}
+                                                                        scope="row"
+                                                                        padding="none"
+                                                                        key={val}
+                                                                    >
+                                                                        {row[val] || '-'}
+                                                                    </TableCell>
+                                                                );
+                                                            })
+                                                    }
+                                                </TableRow>
+                                            );
+                                        })}
+                            </TableBody>
+                        </Table>
+                        {filteredRowData && !filteredRowData.length && loader
+                            ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>Loading Data Please Wait...</h3></div>
+                            : ''}
+                    </TableContainer>
+                </Paper>
+            </Box>
 
 
         </>

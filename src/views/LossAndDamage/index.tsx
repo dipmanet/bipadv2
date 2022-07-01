@@ -130,6 +130,7 @@ const requestQuery = ({
     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
     ordering: '-incident_on',
+    data_source: 'drr_api',
     // lnd: true,
 });
 
@@ -419,12 +420,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         Submit
                                     </div>
                                 </div>
-                                { startDate > endDate
-                                        && (
-                                            <div className={styles.warningText}>
-                                                WARNING! Start date cannot be greater than End Date
-                                            </div>
-                                        )
+                                {startDate > endDate
+                                    && (
+                                        <div className={styles.warningText}>
+                                            WARNING! Start date cannot be greater than End Date
+                                        </div>
+                                    )
                                 }
                                 <div className={styles.sourceDetails}>
                                     <div className={styles.infoIconContainer}>
@@ -496,13 +497,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.chartList}
                                     id="chartList"
                                 >
-                                    { Object.values(incidentMetricChartParams).map(metric => (
+                                    {Object.values(incidentMetricChartParams).map(metric => (
                                         <div
                                             key={metric.dataKey}
                                             className={styles.chartContainer}
                                         >
                                             <h4 className={styles.heading}>
-                                                { metric.title }
+                                                {metric.title}
                                             </h4>
                                             <div className={styles.content}>
                                                 <ResponsiveContainer>

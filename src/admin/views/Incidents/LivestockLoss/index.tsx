@@ -52,7 +52,12 @@ const LivestockLoss = ({ validationError,
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
     const [liveStockLossResponseId, setLiveStockLossResponseId] = useState(null);
+    const [updatedTable, setUpdatedTable] = useState(false);
 
+
+    const testUpdateCondition = () => {
+        setUpdatedTable(!updatedTable);
+    };
     const handleCloseModal = (id) => {
         setOpen(false);
         setLiveStockLossResponseId(id);
@@ -94,6 +99,7 @@ const LivestockLoss = ({ validationError,
                 resource={resource}
                 liveStockType={liveStockType}
                 openDataForm={setOpen}
+                testUpdateCondition={testUpdateCondition}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -123,6 +129,7 @@ const LivestockLoss = ({ validationError,
                         liveStockLossResponseId={liveStockLossResponseId}
                         liveStockType={liveStockType}
                         openDataForm={setOpen}
+                        updatedTable={updatedTable}
                     />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
@@ -130,23 +137,25 @@ const LivestockLoss = ({ validationError,
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Previous</button>
-                            <button
-                                className={styles.submitButtons}
-                                onClick={() => {
-                                    setIsNewIncident(false);
-                                    {
-                                        !isNewIncident
-                                            ? navigate('/admin/incident/incident-data-table')
-                                            : handleNext(1);
-                                    }
-                                    clearData();
-                                }}
-                                type="submit"
-                            >
-                                Submit
+                            <div>
+                                <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Previous</button>
+                                <button
+                                    className={styles.submitButtons}
+                                    onClick={() => {
+                                        setIsNewIncident(false);
+                                        {
+                                            !isNewIncident
+                                                ? navigate('/admin/incident/incident-data-table')
+                                                : handleNext(1);
+                                        }
+                                        clearData();
+                                    }}
+                                    type="submit"
+                                >
+                                    Submit
 
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

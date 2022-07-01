@@ -48,7 +48,12 @@ const InfrastructureLoss = ({ validationError,
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
     const [infrastructureLossResponseId, setInfrastructureLossResponseId] = useState(null);
+    const [updatedTable, setUpdatedTable] = useState(false);
 
+
+    const testUpdateCondition = () => {
+        setUpdatedTable(!updatedTable);
+    };
     const handleCloseModal = (id) => {
         setOpen(false);
         setInfrastructureLossResponseId(id);
@@ -88,6 +93,7 @@ const InfrastructureLoss = ({ validationError,
                 infrastructureUnit={infrastructureUnit}
                 resource={resource}
                 openDataForm={setOpen}
+                testUpdateCondition={testUpdateCondition}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -118,6 +124,7 @@ const InfrastructureLoss = ({ validationError,
                         infrastructureType={infrastructureType}
                         openDataForm={setOpen}
                         resource={resource}
+                        updatedTable={updatedTable}
                     />
                     <div className={styles.checkBoxArea}>
                         {/* <div className={styles.saveOrAddButtons}>
@@ -125,8 +132,10 @@ const InfrastructureLoss = ({ validationError,
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Previous</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Next</button>
+                            <div>
+                                <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Previous</button>
+                                <button className={styles.submitButtons} onClick={() => handleNext(5)} type="submit">Next</button>
+                            </div>
                         </div>
                     </div>
                 </div>

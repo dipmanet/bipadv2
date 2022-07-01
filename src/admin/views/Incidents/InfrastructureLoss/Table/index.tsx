@@ -323,7 +323,7 @@ const InfrastructureLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { infrastructureLossData, incidentData, incidentCount, infrastructureLossEditData },
-        hazardList, infrastructureLossResponseId, openDataForm, infrastructureType, resource } = props;
+        hazardList, infrastructureLossResponseId, openDataForm, infrastructureType, resource, updatedTable } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -344,7 +344,7 @@ const InfrastructureLossTable = (props) => {
         setLoader(true);
         props.requests.infrastructureLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [updatedTable]);
 
     const array = [];
     for (const obj in hazardList) {
@@ -685,7 +685,7 @@ const InfrastructureLossTable = (props) => {
                                                 })}
                                     </TableBody>
                                 </Table>
-                                {filteredRowData && filteredRowData.length === 0 && <div><h2 style={{ textAlign: 'center' }}>No Data Available</h2></div>}
+                                {filteredRowData && filteredRowData.length === 0 && <div><h3 style={{ textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>No Data Available</h3></div>}
                             </TableContainer>
                         </Paper>
                     </Box>

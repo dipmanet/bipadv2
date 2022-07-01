@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable no-tabs */
@@ -123,6 +124,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
             limit: -1,
+            data_source: 'drr_api',
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }

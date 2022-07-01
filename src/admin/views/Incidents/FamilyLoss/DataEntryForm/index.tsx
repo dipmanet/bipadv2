@@ -80,6 +80,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
             props.setEpidemicsPage({ familyLossEditData: {} });
+            if (params && params.testUpdateCondition) {
+                params.testUpdateCondition();
+            }
             if (params && params.setFamilyLossRespId) {
                 params.setFamilyLossRespId(response.id);
             }
@@ -119,7 +122,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open,
+const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open, testUpdateCondition,
     handleCloseModal, setEpidemicsPage, epidemmicsPage: { lossID, familyLossEditData },
     countryList, handlePeopleLoss, openDataForm }) => {
     const [loader, setLoader] = useState(false);
@@ -223,6 +226,7 @@ const DataEntryForm = ({ requests: { lossFamily, lossFamilyEdit }, open,
             body: finalSubmissionData,
             setLoader,
             clearFormData,
+            testUpdateCondition,
             setFamilyLossRespId,
             id: uniqueId,
             openDataForm: openDataForm(false),

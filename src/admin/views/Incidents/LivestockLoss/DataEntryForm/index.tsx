@@ -81,7 +81,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
             props.setEpidemicsPage({ livestockLossEditData: {} });
-
+            if (params && params.testUpdateCondition) {
+                params.testUpdateCondition();
+            }
             if (params && params.setLivestockLossRespId) {
                 params.setLivestockLossRespId(response.id);
             }
@@ -121,7 +123,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const DataEntryForm = ({ requests: { lossLivestock, lossLivestockEdit }, open,
+const DataEntryForm = ({ requests: { lossLivestock, lossLivestockEdit }, open, testUpdateCondition,
     handleCloseModal, epidemmicsPage: { lossID, livestockLossEditData },
     countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
@@ -243,6 +245,7 @@ const DataEntryForm = ({ requests: { lossLivestock, lossLivestockEdit }, open,
                 body: finalSubmissionData,
                 setLoader,
                 clearFormData,
+                testUpdateCondition,
                 setLivestockLossRespId,
                 id: uniqueId,
                 openDataForm: openDataForm(false),

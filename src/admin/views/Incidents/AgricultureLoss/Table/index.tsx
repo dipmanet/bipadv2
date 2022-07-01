@@ -321,7 +321,7 @@ const AgricultureLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { agricultureLossData, incidentData, incidentCount, agricultureLossEditData },
-        hazardList, agricultureLossResponseId, openDataForm, agricultureType } = props;
+        hazardList, agricultureLossResponseId, openDataForm, agricultureType, updatedTable } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -332,7 +332,7 @@ const AgricultureLossTable = (props) => {
         setLoader(true);
         props.requests.agricultureLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [updatedTable]);
 
     const array = [];
     for (const obj in hazardList) {
@@ -655,7 +655,7 @@ const AgricultureLossTable = (props) => {
                                                 })}
                                     </TableBody>
                                 </Table>
-                                {filteredRowData && filteredRowData.length === 0 && <div><h2 style={{ textAlign: 'center' }}>No Data Available</h2></div>}
+                                {filteredRowData && filteredRowData.length === 0 && <div><h3 style={{ textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>No Data Available</h3></div>}
                             </TableContainer>
                         </Paper>
                     </Box>

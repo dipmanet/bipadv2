@@ -80,7 +80,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props, params }) => {
             // props.setEpidemicsPage({ lossID: response.id });
             props.setEpidemicsPage({ peopleLossEditData: {} });
-
+            if (params && params.testUpdateCondition) {
+                params.testUpdateCondition();
+            }
             if (params && params.setPeopleLossRespId) {
                 params.setPeopleLossRespId(response.id);
             }
@@ -120,7 +122,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
+const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open, testUpdateCondition,
     handleCloseModal, setEpidemicsPage, epidemmicsPage: { lossID, peopleLossEditData },
     countryList, handlePeopleLoss, openDataForm }) => {
     const [loader, setLoader] = useState(false);
@@ -130,7 +132,7 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
     const [isBelowPoverty, setIsBelowPoverty] = useState(false);
     const [count, setCount] = useState(1);
     const [nationality, setNationality] = useState('');
-    const [nationalityId, setNationalityId] = useState(null);
+    const [nationalityId, setNationalityId] = useState(2);
     const [disability, setDisability] = useState(false);
     const [statusId, setStatusId] = useState('');
     const [peopleLossRespId, setPeopleLossRespId] = useState(null);
@@ -199,10 +201,10 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
 
 
     const handleCountryList = (e) => {
-        const selectedCountry = countryList.find(i => i.id === Number(e.target.value));
-        const { id, titleEn } = selectedCountry;
-        setNationalityId(id);
-        setNationality(titleEn);
+        // const selectedCountry = countryList.find(i => i.id === Number(e.target.value));
+        // const { id, titleEn } = selectedCountry;
+        setNationalityId(e.target.value);
+        // setNationality(titleEn);
     };
     const handleSelectedGender = (e) => {
         setGenderId(e.target.value);
@@ -216,10 +218,8 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
         setGenderId('');
         setStatusId('');
         setIsBelowPoverty(false);
-        setNationality('');
         setDisability(false);
-        setNationality('');
-        setNationalityId('');
+        setNationalityId(2);
         setDisabilityId('');
     };
 
@@ -301,6 +301,7 @@ const DataEntryForm = ({ requests: { lossPeople, lossPeopleEdit }, open,
             setLoader,
             clearFormData,
             setPeopleLossRespId,
+            testUpdateCondition,
             id: uniqueId,
             openDataForm: openDataForm(false),
         });

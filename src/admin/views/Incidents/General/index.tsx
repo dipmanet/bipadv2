@@ -268,9 +268,8 @@ const General = ({ validationError, lossID,
             <div className={styles.shortGeneralInfo}>
                 <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                 <p className={styles.ideaPara}>
-                    The epidemics form consists of the details of the epidemics,
-                    geographical information of the affected area, and the
-                    casualty details disaggregated by gender and disability.
+                    The incident form consists of the details of the incident,
+                    geographical information of the affected area,hazard details and estimated loss.
 
                 </p>
             </div>
@@ -488,7 +487,7 @@ const General = ({ validationError, lossID,
                         value={streetAddress}
                         onChange={e => setStreetAddress(e.target.value)}
                     />
-                    <div className={styles.twoInputSections}>
+                    <div className={styles.threeInputSections}>
                         <TextField
                             variant="outlined"
                             className={styles.materialUiInput}
@@ -516,7 +515,17 @@ const General = ({ validationError, lossID,
                             id="outlined-basic"
                             label="Longitude"
                         />
-                        <button type="button" onClick={setCoordinateonClick}>Set</button>
+                        <div className={styles.saveOrAddButtons}>
+                            <button
+                                type="button"
+                                onClick={setCoordinateonClick}
+                                className={styles.submitButtons}
+                                disabled={!longitude || !lattitude}
+                            >
+                                Set Location
+
+                            </button>
+                        </div>
                     </div>
 
                     <Map
@@ -564,231 +573,7 @@ const General = ({ validationError, lossID,
                         />
                     </div>
 
-                    {/* <div className={styles.mycontainer}>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Dead</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={dmError}
-                                        helperText={dmError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={deadFormMale}
 
-                                        onChange={e => setDeadMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={dfError}
-                                        helperText={dfError ? 'This field is required' : null}
-                                        value={deadFormFemale}
-                                        onChange={e => setDeadFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={deadFormOther}
-                                        error={doError}
-                                        helperText={doError ? 'This field is required' : null}
-                                        onChange={e => setDeadOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={deadFormDisabled}
-                                        error={ddError}
-                                        helperText={ddError ? 'This field is required' : null}
-                                        onChange={e => setDeadDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Injured</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormMale}
-                                        error={amError}
-                                        helperText={amError ? 'This field is required' : null}
-                                        onChange={e => setInjuredMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormFemale}
-                                        error={afError}
-                                        helperText={afError ? 'This field is required' : null}
-                                        onChange={e => setInjuredFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormOther}
-                                        error={aoError}
-                                        helperText={aoError ? 'This field is required' : null}
-                                        onChange={e => setInjuredOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormDisabled}
-                                        error={adError}
-                                        helperText={adError ? 'This field is required' : null}
-                                        onChange={e => setInjuredDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Missing</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingMale}
-                                        error={amError}
-                                        helperText={amError ? 'This field is required' : null}
-                                        onChange={e => setMissingMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingFemale}
-                                        error={afError}
-                                        helperText={afError ? 'This field is required' : null}
-                                        onChange={e => setMissingFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingOther}
-                                        error={aoError}
-                                        helperText={aoError ? 'This field is required' : null}
-                                        onChange={e => setMissingOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={missingDisabled}
-                                        error={adError}
-                                        helperText={adError ? 'This field is required' : null}
-                                        onChange={e => setMissingDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.infoBarCasuality}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    Loss and Damage by Incidents
-                                </p>
-                            </div>
-                            <div className={styles.mycontainer}>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Loss</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={teError}
-                                        helperText={teError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={totalEstimatedLoss}
-
-                                        onChange={e => setTotalEstimatedLoss(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total Estimated Loss (NPR)"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={aeError}
-                                        helperText={aeError ? 'This field is required' : null}
-                                        value={agricultureEconomicLoss}
-                                        onChange={e => setAgricultureEconomicLoss(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Agriculture Economic Loss (NPR)"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={infrastructureEconomicLoss}
-                                        error={ieError}
-                                        helperText={ieError ? 'This field is required' : null}
-                                        // eslint-disable-next-line max-len
-                                        // eslint-disable-next-line max-len
-                                        onChange={e => setInfrastructureEconomicLoss(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Infrastructure Economic Loss (NPR)"
-                                        variant="outlined"
-
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Damage</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={idError}
-                                        helperText={idError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={infrastructureDestroyed}
-
-                                        onChange={e => setInfrastructureDestroyed(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total Infrastructure Destroyed"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={hdError}
-                                        helperText={hdError ? 'This field is required' : null}
-                                        value={houseDestroyed}
-                                        onChange={e => setHouseDestroyed(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total House Destroyed"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={houseAffected}
-                                        error={haError}
-                                        helperText={haError ? 'This field is required' : null}
-                                        onChange={e => setHouseAffected(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total House Affected"
-                                        variant="outlined"
-
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={livestockDestroyed}
-                                        error={ldError}
-                                        helperText={ldError ? 'This field is required' : null}
-                                        onChange={e => setLivestockDestroyed(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total livestock Destroyed"
-                                        variant="outlined"
-                                    />
-                                </div>
-                            </div>
-                            */}
                     <div className={styles.infoBarCasuality}>
                         <p className={styles.instInfo}>
                             <span style={{ color: '#003572' }} />
@@ -859,7 +644,7 @@ const General = ({ validationError, lossID,
                         {/* <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
                             </div> */}
-                        <div className={styles.saveOrAddButtons}>
+                        <div className={styles.saveOrAddButtons} style={{ justifyContent: 'flex-end' }}>
                             <button className={styles.submitButtons} type="submit" onClick={handleSave}>Next</button>
                         </div>
                     </div>

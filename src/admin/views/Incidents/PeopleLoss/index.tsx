@@ -45,7 +45,12 @@ const PeopleLoss = ({ validationError,
     const [loader, setLoader] = useState(false);
     const [open, setOpen] = useState(false);
     const [peopleLossResponseId, setPeopleLossResponseId] = useState(null);
+    const [updatedTable, setUpdatedTable] = useState(false);
 
+
+    const testUpdateCondition = () => {
+        setUpdatedTable(!updatedTable);
+    };
     const handleCloseModal = (id) => {
         setOpen(false);
         setPeopleLossResponseId(id);
@@ -80,6 +85,7 @@ const PeopleLoss = ({ validationError,
                 handleCloseModal={handleCloseModal}
                 countryList={countryList}
                 openDataForm={setOpen}
+                testUpdateCondition={testUpdateCondition}
             />
 
             <div className={styles.generalInfoAndTableButton}>
@@ -109,6 +115,7 @@ const PeopleLoss = ({ validationError,
                         peopleLossResponseId={peopleLossResponseId}
                         openDataForm={setOpen}
                         countryList={countryList}
+                        updatedTable={updatedTable}
                     />
 
 
@@ -120,8 +127,10 @@ const PeopleLoss = ({ validationError,
                             </div> */}
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.addButtons} onClick={() => setOpen(true)} type="submit">Add Data</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(1)} type="submit">Previous</button>
-                            <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Next</button>
+                            <div>
+                                <button className={styles.submitButtons} onClick={() => handleNext(1)} type="submit">Previous</button>
+                                <button className={styles.submitButtons} onClick={() => handleNext(3)} type="submit">Next</button>
+                            </div>
                         </div>
                     </div>
                 </div>

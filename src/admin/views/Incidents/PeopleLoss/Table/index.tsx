@@ -324,12 +324,11 @@ const PeopleLossTable = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { peopleLossData, incidentData, incidentCount, peopleLossEditData },
-        hazardList, peopleLossResponseId, openDataForm, countryList } = props;
+        hazardList, peopleLossResponseId, openDataForm, countryList, updatedTable } = props;
 
     const handleCountryList = (id) => {
         const selectedCountry = countryList.find(i => i.id === id);
-        const { titleEn } = selectedCountry;
-        return titleEn;
+        return selectedCountry ? selectedCountry.titleEn : null;
     };
     const loadingCondition = (boolean) => {
         setLoader(boolean);
@@ -339,7 +338,7 @@ const PeopleLossTable = (props) => {
         setLoader(true);
         props.requests.peopleLoss.do({ offset, loadingCondition });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [updatedTable]);
 
     const array = [];
     for (const obj in hazardList) {
@@ -367,7 +366,7 @@ const PeopleLossTable = (props) => {
                     age: row.age,
                     gender: row.gender,
                     status: row.status,
-                    nationality: row.nationality,
+                    nationality: handleCountryList(row.nationality),
                     belowPoverty: row.belowPoverty,
                     disability: row.disability,
                     verified: row.verified,
@@ -556,21 +555,21 @@ const PeopleLossTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
-                                                                        if (val === 'nationality') {
-                                                                            return (
-                                                                                <TableCell
-                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                    className={styles.setStyleForTableCell}
-                                                                                    component="th"
-                                                                                    id={labelId}
-                                                                                    scope="row"
-                                                                                    padding="none"
-                                                                                    key={val}
-                                                                                >
-                                                                                    {handleCountryList(row[val])}
-                                                                                </TableCell>
-                                                                            );
-                                                                        }
+                                                                        // if (val === 'nationality') {
+                                                                        //     return (
+                                                                        //         <TableCell
+                                                                        //             align={typeof val === 'string' ? 'left' : 'center'}
+                                                                        //             className={styles.setStyleForTableCell}
+                                                                        //             component="th"
+                                                                        //             id={labelId}
+                                                                        //             scope="row"
+                                                                        //             padding="none"
+                                                                        //             key={val}
+                                                                        //         >
+                                                                        //             {handleCountryList(row[val])}
+                                                                        //         </TableCell>
+                                                                        //     );
+                                                                        // }
                                                                         if (val === 'wards') {
                                                                             return (
                                                                                 <>
@@ -709,7 +708,7 @@ const PeopleLossTable = (props) => {
                                                 })}
                                     </TableBody>
                                 </Table>
-                                {filteredRowData && filteredRowData.length === 0 && <div><h2 style={{ textAlign: 'center' }}>No Data Available</h2></div>}
+                                {filteredRowData && filteredRowData.length === 0 && <div><h3 style={{ textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>No Data Available</h3></div>}
                             </TableContainer>
                         </Paper>
                     </Box>

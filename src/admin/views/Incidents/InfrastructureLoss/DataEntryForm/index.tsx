@@ -78,7 +78,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ infrastructureLossEditData: {} });
-
+            if (params && params.testUpdateCondition) {
+                params.testUpdateCondition();
+            }
             if (params && params.setInfrastructureLossRespId) {
                 params.setInfrastructureLossRespId(response.id);
             }
@@ -119,6 +121,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit }, open,
+    testUpdateCondition,
     handleCloseModal, epidemmicsPage: { lossID, infrastructureLossEditData },
     countryList, handlePeopleLoss,
     infrastructureType, infrastructureUnit,
@@ -278,6 +281,7 @@ const DataEntryForm = ({ requests: { lossInfrastructure, lossInfrastructureEdit 
                 setLoader,
                 clearFormData,
                 setInfrastructureLossRespId,
+                testUpdateCondition,
                 id: uniqueId,
                 openDataForm: openDataForm(false),
             });
