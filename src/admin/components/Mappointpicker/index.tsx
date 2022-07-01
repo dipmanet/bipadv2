@@ -34,7 +34,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
         userProvince,
         userDistrict,
         userMunicipality, bounds,
-        setLatError, setLongError } = props;
+        setLatError, setLongError, mapRef, markerRef } = props;
 
     const mapContainerRef = useRef(null);
     const map = useRef<mapboxgl.Map | null>(null);
@@ -45,7 +45,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
 
     const [mapStylesChange, setmapStylesChange] = useState('');
     const [loadedStyle, setloadedStyle] = useState(false);
-
+    const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
 
     if (TOKEN) {
         mapboxgl.accessToken = TOKEN;
@@ -107,6 +107,12 @@ const Mappointpicker = (props: Props): JSX.Element => {
             maxZoom: 22,
         });
         map.current = Map;
+        if (mapRef) {
+            mapRef.current = Map;
+        }
+        if (markerRef) {
+            markerRef.current = marker;
+        }
         Map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
         Map.addControl(new mapboxgl.NavigationControl(), 'top-right');
         Map.addControl(
@@ -123,7 +129,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
             }),
         );
 
-        const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
+
         if (!props.disabled) {
             Map.on('click', (event) => {
                 const coordinates = event.lngLat;
@@ -157,6 +163,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
 
             if (editedCoordinates) {
                 if (Object.keys(editedCoordinates).length > 0) {
+                    Map.fitBounds(editedCoordinates.wards[0].bbox);
                     console.log('This edited coordinates', editedCoordinates);
                     const coordinates = {
                         lat: editedCoordinates.point.coordinates[1],
@@ -298,7 +305,9 @@ const Mappointpicker = (props: Props): JSX.Element => {
                     'text-color': 'black',
                 },
             });
+
             if (editedCoordinates && Object.keys(editedCoordinates).length > 0) {
+                console.log('This is edited coordinates', editedCoordinates);
                 Map.setFilter('municipality-line', ['all', ['==', ['get', 'id'], `${editedCoordinates.wards[0].municipality.id}`]]);
                 Map.setFilter('ward-line', ['all', ['==', ['get', 'municipality'], editedCoordinates.wards[0].municipality.id]]);
                 Map.setFilter('ward-name', ['all', ['==', ['get', 'municipality'], editedCoordinates.wards[0].municipality.id]]);
@@ -350,22 +359,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editedCoordinates]);
-    // useEffect(() => {
-    //     console.log('What is this');
-    //     if (centriodsForMap.provinceCentriodForMap && centriodsForMap.districtCentriodForMap && centriodsForMap.municipalityCentriodForMap) {
-    //         map.current.flyTo({
-    //             center: centriodsForMap.municipalityCentriodForMap,
-    //             zoom: 11,
-    //             bearing: 0,
-    //             speed: 3,
-    //             curve: 1,
-    //             easing(t) {
-    //                 return t;
-    //             },
-    //             essential: true,
-    //         });
-    //     }
-    // }, [centriodsForMap.provinceCentriodForMap]);
+
     console.log('This is centroid', centriodsForMap);
     useEffect(() => {
         console.log('It entered here');

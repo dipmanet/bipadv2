@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { DatePicker } from '@mui/lab';
@@ -13,6 +14,7 @@ import { connect } from 'react-redux';
 import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import Loader from 'react-loader';
 import { FormHelperText } from '@material-ui/core';
+import mapboxgl from 'mapbox-gl';
 import styles from '../styles.module.scss';
 import Ideaicon from '../../../resources/ideaicon.svg';
 import { createConnectedRequestCoordinator } from '#request';
@@ -100,6 +102,25 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    incidentFetchData: {
+        url: ({ params }) => `/incident/${params.id}`,
+        method: methods.GET,
+        onMount: false,
+        query: ({
+            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
+            format: 'json',
+        }),
+        onSuccess: ({ response, props, params }) => {
+            console.log('This is incident data', response);
+            props.setEpidemicsPage({
+                incidentEditData: response,
+                lossID: response.loss.id,
+            });
+            if (params && params.setLoader) {
+                params.setLoader(false);
+            }
+        },
+    },
 
 };
 
@@ -117,23 +138,44 @@ const General = ({ validationError, lossID,
     centriodsForMap, initialProvinceCenter,
     initialDistrictCenter, initialMunCenter, incidentEditData, disableMapFilterLofic,
     disableMapFilter, teError,
-    totalEstimatedLoss, setTotalEstimatedLoss,
+    totalEstimatedLoss, setTotalEstimatedLoss, setEpidemicsPage,
     verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
-    verificationMessage, setVerificationMessage,
+    verificationMessage, setVerificationMessage, mapDataIncidentEdit,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
-    handleNext, clearData, bounds, setteError, selectedHazardId,
+    handleNext, clearData, bounds, setteError, selectedHazardId, isNewIncident,
+    setIsNewIncident,
     setDateError, setProvinceError, setDistrictError, setMunnicipalityError, setWardError, setLatError, setLongError,
     provinceError, districtError, municipalityError, wardError, hazardError, setHazardError,
     user: { profile: { province: userProvince, district: userDistrict, municipality: userMunicipality } },
-    requests: { loss, lossUpdate } }) => {
+    requests: { loss, lossUpdate, incidentFetchData } }) => {
     const [loader, setLoader] = useState(false);
+    const mapRef = useRef(null);
+    const markerRef = useRef(null);
+    console.log('This is general');
+
+    useEffect(() => {
+        if (uniqueId) {
+            setLoader(true);
+            incidentFetchData.do({
+                id: uniqueId,
+                setLoader,
+            });
+        }
+    }, []);
+
 
     const handleSave = async () => {
+        // if (mapRef.current) {
+        //     mapRef.current.fitBounds(mapDataIncidentEdit.wards[0].bbox);
+        // }
+        console.log('this is ward', mapDataIncidentEdit);
+        console.log('This is total estimated loss', totalEstimatedLoss);
         const lossFormData = {
             estimatedLoss: Number(totalEstimatedLoss),
         };
+        console.log('This is loss data', lossFormData);
         if (!reportedDate || !provinceName || !districtName || !municipalityName || !wardName
-            || !lattitude || !longitude || !totalEstimatedLoss || !selectedHazardId
+            || !lattitude || !longitude || !selectedHazardId
         ) {
             if (!reportedDate) {
                 setDateError(true);
@@ -175,22 +217,34 @@ const General = ({ validationError, lossID,
             } else {
                 setLongError(false);
             }
-            if (!totalEstimatedLoss) {
-                setteError(true);
-            } else {
-                setteError(false);
-            }
+            // if (!totalEstimatedLoss) {
+            //     setteError(true);
+            // } else {
+            //     setteError(false);
+            // }
         } else {
             setLoader(true);
             if (uniqueId) {
                 await lossUpdate.do({ body: lossFormData, setLoader, handleNext, clearData, handleLossDataSwitchListener });
             } else {
+                setIsNewIncident(true);
                 await loss.do({ body: lossFormData, setLoader, handleNext, clearData });
             }
         }
     };
 
-
+    console.log('incidentEditData', incidentEditData);
+    const setCoordinateonClick = () => {
+        if (mapRef.current) {
+            centriodsForMap.setLattitude(Number(lattitude));
+            centriodsForMap.setLongitude(Number(longitude));
+            setLongError(false);
+            setLatError(false);
+            if (markerRef.current) {
+                markerRef.current.setLngLat([Number(longitude), Number(lattitude)]).addTo(mapRef.current);
+            }
+        }
+    };
     return (
 
         <div className={styles.mainForm}>
@@ -320,6 +374,8 @@ const General = ({ validationError, lossID,
                                 onChange={(e) => {
                                     handleProvince(e);
                                     setProvinceError(false);
+                                    setLongitude('');
+                                    setLattitude('');
                                 }}
                                 disabled={userProvince}
                                 error={provinceError}
@@ -346,6 +402,8 @@ const General = ({ validationError, lossID,
                                 onChange={(e) => {
                                     handleDistrict(e);
                                     setDistrictError(false);
+                                    setLongitude('');
+                                    setLattitude('');
                                 }}
                                 disabled={userDistrict}
                                 error={districtError}
@@ -375,6 +433,8 @@ const General = ({ validationError, lossID,
                                 onChange={(e) => {
                                     handleMunicipality(e);
                                     setMunnicipalityError(false);
+                                    setLongitude('');
+                                    setLattitude('');
                                 }}
                                 disabled={userMunicipality}
                                 error={municipalityError}
@@ -404,6 +464,8 @@ const General = ({ validationError, lossID,
                                 onChange={(e) => {
                                     handleWard(e);
                                     setWardError(false);
+                                    setLongitude('');
+                                    setLattitude('');
                                 }}
                                 disabled={disableMapFilter}
                                 error={wardError}
@@ -456,7 +518,7 @@ const General = ({ validationError, lossID,
                             id="outlined-basic"
                             label="Longitude"
                         />
-
+                        <button type="button" onClick={setCoordinateonClick}>Set</button>
                     </div>
 
                     <Map
@@ -464,7 +526,7 @@ const General = ({ validationError, lossID,
                         initialProvinceCenter={initialProvinceCenter}
                         initialDistrictCenter={initialDistrictCenter}
                         initialMunCenter={initialMunCenter}
-                        editedCoordinates={incidentEditData}
+                        editedCoordinates={mapDataIncidentEdit}
                         disableMapFilterLofic={disableMapFilterLofic}
                         disableMapFilter={disableMapFilter}
                         userProvince={userProvince}
@@ -473,9 +535,11 @@ const General = ({ validationError, lossID,
                         bounds={bounds}
                         setLatError={setLatError}
                         setLongError={setLongError}
-
+                        mapRef={mapRef}
+                        markerRef={markerRef}
 
                     />
+
                     <div className={styles.infoBarCasuality}>
                         <p className={styles.instInfo}>
                             <span style={{ color: '#003572' }} />

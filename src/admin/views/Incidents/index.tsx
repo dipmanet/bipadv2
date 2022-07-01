@@ -177,6 +177,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             if (params && params.handleNext) {
                 params.handleNext(2);
             }
+            console.log('This is response', response);
+            if (params && params.setuniqueId) {
+                params.setuniqueId(response.id);
+            }
         },
         onFailure: ({ error, props, params }) => {
             if (props && props.setEpidemicsPage) {
@@ -197,7 +201,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
     incidentUpdate: {
         url: ({ params }) => `/incident/${params.id}/`,
-        method: methods.PATCH,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             props.setEpidemicsPage({ successMessage: 'Incident Updated' });
@@ -863,6 +867,8 @@ const Epidemics = (props) => {
     const [liveStockType, setLiveStockType] = useState([]);
     const [modulePage, setmodulePage] = useState(1);
     const [isLossDataUpdated, setIsLossDataUpdated] = useState(false);
+    const [mapDataIncidentEdit, setMapDataIncidentEdit] = useState({});
+    const [isNewIncident, setIsNewIncident] = useState(false);
     const { epidemmicsPage:
         {
             lossID,
@@ -1136,6 +1142,7 @@ const Epidemics = (props) => {
 
     useEffect(() => {
         if (incidentEditData && Object.keys(incidentEditData).length > 0) {
+            setMapDataIncidentEdit(incidentEditData);
             setuniqueId(incidentEditData.id);
             setReportedDate(incidentEditData.reportedOn);
             setLattitude(incidentEditData.point.coordinates[1].toFixed(8));
@@ -1474,7 +1481,7 @@ const Epidemics = (props) => {
                 },
                 wards: [wardId],
             };
-            props.requests.incident.do({ body: data, handleNext });
+            props.requests.incident.do({ body: data, setuniqueId, handleNext });
 
 
             setAdded(true);
@@ -1668,8 +1675,9 @@ const Epidemics = (props) => {
                                 hazardError={hazardError}
                                 setHazardError={setHazardError}
                                 selectedHazardId={selectedHazardId}
-
-
+                                mapDataIncidentEdit={mapDataIncidentEdit}
+                                isNewIncident={isNewIncident}
+                                setIsNewIncident={setIsNewIncident}
                             />
                         ) : ''}
                     {modulePage === 2 ? (
@@ -1716,6 +1724,8 @@ const Epidemics = (props) => {
                             liveStockType={liveStockType}
                             clearData={clearData}
                             lossID={lossID}
+                            isNewIncident={isNewIncident}
+                            setIsNewIncident={setIsNewIncident}
                         />
 
                     ) : ''}

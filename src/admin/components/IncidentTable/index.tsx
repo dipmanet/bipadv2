@@ -33,7 +33,7 @@ import { Paper } from '@mui/material';
 import Loader from 'react-loader';
 import { object } from 'prop-types';
 import { SetEpidemicsPageAction, SetIncidentPageAction } from '#actionCreators';
-import { epidemicsPageSelector, hazardFilterSelector, hazardTypesSelector, incidentPageSelector } from '#selectors';
+import { epidemicsPageSelector, hazardFilterSelector, hazardTypesSelector, incidentPageSelector, userSelector } from '#selectors';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';
 import { tableTitleRef } from './utils';
@@ -43,6 +43,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     epidemmicsPage: epidemicsPageSelector(state),
     incidentPage: incidentPageSelector(state),
     hazardList: hazardTypesSelector(state),
+    user: userSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -63,6 +64,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             count: true,
             expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
             ordering: '-id',
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
+
         }),
         onSuccess: ({ response, props, params }) => {
             console.log('This results', response.results);
@@ -269,7 +274,7 @@ const IncidentTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList } = props;
+    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile } } = props;
 
 
     const loadingCondition = (boolean) => {
@@ -278,7 +283,13 @@ const IncidentTable = (props) => {
 
     useEffect(() => {
         setLoader(true);
-        props.requests.incidents.do({ offset, loadingCondition });
+        props.requests.incidents.do({
+            offset,
+            loadingCondition,
+            province: profile.province || '',
+            district: profile.district || '',
+            municipality: profile.municipality || '',
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -341,7 +352,13 @@ const IncidentTable = (props) => {
     }, [incidentData, hazardList]);
 
     useEffect(() => {
-        props.requests.incidents.do({ offset, loadingCondition });
+        props.requests.incidents.do({
+            offset,
+            loadingCondition,
+            province: profile.province || '',
+            district: profile.district || '',
+            municipality: profile.municipality || '',
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 

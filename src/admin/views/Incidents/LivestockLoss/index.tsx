@@ -42,7 +42,8 @@ const LivestockLoss = ({ validationError,
     disableMapFilter, teError,
     totalEstimatedLoss, setTotalEstimatedLoss,
     verified, handleVerifiedChange, notVerified, handleNotVerifiedChange,
-    verificationMessage, setVerificationMessage,
+    verificationMessage, setVerificationMessage, isNewIncident,
+    setIsNewIncident,
     approved, handleApprovedChange, notApproved, handleNotApprovedChange, handleTableButton, handleEpidemicFormSubmit,
     handleNext, requests: { loss }, countryList,
     infrastructureType,
@@ -133,8 +134,9 @@ const LivestockLoss = ({ validationError,
                             <button
                                 className={styles.submitButtons}
                                 onClick={() => {
+                                    setIsNewIncident(false);
                                     {
-                                        lossID
+                                        !isNewIncident
                                             ? navigate('/admin/incident/incident-data-table')
                                             : handleNext(1);
                                     }
