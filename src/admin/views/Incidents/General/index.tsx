@@ -111,7 +111,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             format: 'json',
         }),
         onSuccess: ({ response, props, params }) => {
-            console.log('This is incident data', response);
             props.setEpidemicsPage({
                 incidentEditData: response,
                 lossID: response.loss.id,
@@ -151,7 +150,7 @@ const General = ({ validationError, lossID,
     const [loader, setLoader] = useState(false);
     const mapRef = useRef(null);
     const markerRef = useRef(null);
-    console.log('This is general');
+
 
     useEffect(() => {
         if (uniqueId) {
@@ -168,12 +167,11 @@ const General = ({ validationError, lossID,
         // if (mapRef.current) {
         //     mapRef.current.fitBounds(mapDataIncidentEdit.wards[0].bbox);
         // }
-        console.log('this is ward', mapDataIncidentEdit);
-        console.log('This is total estimated loss', totalEstimatedLoss);
+
         const lossFormData = {
             estimatedLoss: Number(totalEstimatedLoss),
         };
-        console.log('This is loss data', lossFormData);
+
         if (!reportedDate || !provinceName || !districtName || !municipalityName || !wardName
             || !lattitude || !longitude || !selectedHazardId
         ) {
@@ -233,7 +231,7 @@ const General = ({ validationError, lossID,
         }
     };
 
-    console.log('incidentEditData', incidentEditData);
+
     const setCoordinateonClick = () => {
         if (mapRef.current) {
             centriodsForMap.setLattitude(Number(lattitude));

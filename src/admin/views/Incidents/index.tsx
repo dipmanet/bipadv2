@@ -177,7 +177,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             if (params && params.handleNext) {
                 params.handleNext(2);
             }
-            console.log('This is response', response);
+
             if (params && params.setuniqueId) {
                 params.setuniqueId(response.id);
             }

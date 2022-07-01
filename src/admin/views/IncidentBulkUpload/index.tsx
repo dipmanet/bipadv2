@@ -175,7 +175,6 @@ const IncidentBulkUpload = (props) => {
     const downloadFile = () => {
         axios.get(`${baseUrl}/data_template_file/`)
             .then((file) => {
-                console.log('This is file', file);
                 const template = file.data.results.filter(item => item.dataTemplateSlug
                     === 'admin_incident_group_bulk_upload');
                 window.open(template[0].file);

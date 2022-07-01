@@ -85,7 +85,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
             icon: Satelliteimg,
         },
     ];
-    console.log('This map centroid', centriodsForMap);
+
     // eslint-disable-next-line consistent-return
     useEffect(() => {
         if (UNSUPPORTED_BROWSER) {
@@ -139,7 +139,7 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 centriodsForMap.setLongitude(longitude);
                 setLongError(false);
                 setLatError(false);
-                console.log('clicked coordinates', coordinates);
+
                 marker.setLngLat(coordinates).addTo(Map);
                 // while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
                 //     coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -164,17 +164,17 @@ const Mappointpicker = (props: Props): JSX.Element => {
             if (editedCoordinates) {
                 if (Object.keys(editedCoordinates).length > 0) {
                     Map.fitBounds(editedCoordinates.wards[0].bbox);
-                    console.log('This edited coordinates', editedCoordinates);
+
                     const coordinates = {
                         lat: editedCoordinates.point.coordinates[1],
                         lng: editedCoordinates.point.coordinates[0],
                     };
-                    console.log('edited coordinates', coordinates);
+
                     const latitude = Number(coordinates.lat.toFixed(8));
                     const longitude = Number(coordinates.lng.toFixed(8));
                     centriodsForMap.setLattitude(latitude);
                     centriodsForMap.setLongitude(longitude);
-                    console.log('clicked coordinates', coordinates);
+
                     const lngLat = new LngLat(longitude, latitude);
                     marker.setLngLat(lngLat).addTo(Map);
                     // new mapboxgl.Popup({ anchor: 'top' })
@@ -307,7 +307,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
             });
 
             if (editedCoordinates && Object.keys(editedCoordinates).length > 0) {
-                console.log('This is edited coordinates', editedCoordinates);
                 Map.setFilter('municipality-line', ['all', ['==', ['get', 'id'], `${editedCoordinates.wards[0].municipality.id}`]]);
                 Map.setFilter('ward-line', ['all', ['==', ['get', 'municipality'], editedCoordinates.wards[0].municipality.id]]);
                 Map.setFilter('ward-name', ['all', ['==', ['get', 'municipality'], editedCoordinates.wards[0].municipality.id]]);
@@ -318,7 +317,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 Map.setLayoutProperty('ward-line', 'visibility', 'visible');
                 Map.setLayoutProperty('ward-name', 'visibility', 'visible');
             } else if (userProvince && userDistrict && userMunicipality) {
-                console.log('Entered', centriodsForMap);
                 Map.setFilter('municipality-line', ['all', ['==', ['get', 'id'], `${userDistrict}`]]);
                 Map.setFilter('ward-line', ['all', ['==', ['get', 'municipality'], userMunicipality]]);
                 Map.setFilter('ward-name', ['all', ['==', ['get', 'municipality'], userMunicipality]]);
@@ -352,7 +350,6 @@ const Mappointpicker = (props: Props): JSX.Element => {
                 Map.setLayoutProperty('ward-name', 'visibility', 'none');
                 Map.setLayoutProperty('ward-line', 'visibility', 'none');
             } else {
-                console.log('Entered 2');
                 Map.setLayoutProperty('province-line', 'visibility', 'visible');
                 Map.setLayoutProperty('province-name', 'visibility', 'visible');
             }
@@ -360,14 +357,11 @@ const Mappointpicker = (props: Props): JSX.Element => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editedCoordinates]);
 
-    console.log('This is centroid', centriodsForMap);
+
     useEffect(() => {
-        console.log('It entered here');
         if (map.current.isStyleLoaded()) {
-            console.log('It entered here');
             if (map.current) {
                 if (centriodsForMap.provinceCentriodForMap) {
-                    console.log('It entered here');
                     map.current.flyTo({
                         center: centriodsForMap.provinceCentriodForMap,
                         zoom: 7.5,

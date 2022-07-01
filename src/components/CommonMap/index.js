@@ -135,7 +135,7 @@ class CommonMap extends React.PureComponent {
             showMunicipality: showMunicipalityFromProps,
             showWard: showWardFromProps,
         } = this.props;
-        console.log('this bounds', bounds);
+
         const isForced = showProvinceFromProps
             || showDistrictFromProps
             || showMunicipalityFromProps

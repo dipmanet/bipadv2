@@ -56,7 +56,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             className,
             pending,
         } = this.props;
-        console.log('This is source list', hazardList);
+
 
         const sourceListData = [
             {
