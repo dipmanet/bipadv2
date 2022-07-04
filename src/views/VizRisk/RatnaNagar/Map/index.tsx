@@ -208,6 +208,10 @@ const Map = (props: any) => {
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
             style: 'mapbox://styles/yilab/cl02b42zi00b414qm2i7xqqex',
+            // center: [
+            //     84.51393887409917,
+            //     27.619152424687197,
+            // ],
             minZoom: 2,
             maxZoom: 22,
         });
@@ -227,18 +231,13 @@ const Map = (props: any) => {
                 setNavIdleStatus(true);
             });
             multihazardMap.fitBounds(
-                [82.9045981623205,
-                    27.5472027536931,
-                    83.1180839586179,
-                    27.8206868107314],
+                [84.4655766529013,
+                    27.5488495368228,
+                    84.5618032266611,
+                    27.6813334045862,
+                ], { duration: 3000, padding: 20 },
             );
-
-            multihazardMap.easeTo({
-                // pitch: 30,
-                zoom: 12.1,
-                duration: 8000,
-            });
-        }, 4000);
+        }, 2000);
 
         multihazardMap.on('style.load', () => {
             // --------------------------------------SLIDE-3 -> CI layer----------------------------------------
