@@ -10,6 +10,8 @@ import { AppState } from '#types';
 import { getWardFilter } from '#utils/domain';
 import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
 import DemoGraphicsLegends from '#views/VizRisk/Butwal/Legends/DemographicsLegends';
+import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
+import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import { MainPageDataContext, RatnaNagarMapContext } from '../context';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
@@ -22,11 +24,9 @@ import {
     layoutSwitch,
     showMapLayers,
 } from '../utils';
-import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
 import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
 import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
 import InnundationLegend from '../Components/Legends/InnundationLegend';
-import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import mapImages from './MapImages';
 import RadioButton from '../Components/RadioButton';
 

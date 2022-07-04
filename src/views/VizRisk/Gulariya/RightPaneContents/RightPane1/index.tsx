@@ -1,21 +1,23 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { CartesianGrid,
+import {
+    CartesianGrid,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis } from 'recharts';
+    Tooltip, XAxis, YAxis,
+} from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
-import styles from './styles.scss';
 import RealTimeValues from '#views/VizRisk/Common/RealTimeValues';
+import styles from './styles.scss';
 
 
 interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -113,19 +115,19 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Max
+                        Avg Max
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                       Avg Min
+                        Avg Min
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
-                       Daily Avg
+                        Daily Avg
                     </div>
                 </div>
             </div>
@@ -139,7 +141,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Rainfall
+                        Avg Rainfall
                     </div>
                 </div>
 
@@ -193,11 +195,11 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Gulariya Municipality  </h1>
                 <p>
-                Gulariya municipality lies in the Terai region of Bardiya district in Lumbini Province. It covers a total area of 118 sq. km and is situated at an elevation of 145m from sea level.
+                    Gulariya municipality lies in the Terai region of Bardiya district in Lumbini Province. It covers a total area of 118 sq. km and is situated at an elevation of 145m from sea level.
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Gulariya experiences a subtropical climate. Summer starts in March and lasts till June. Winter begins in November (Mangsir) and lasts till February. Gulariya faces heavy downpours during the monsoon, from June to October.
+                    Gulariya experiences a subtropical climate. Summer starts in March and lasts till June. Winter begins in November and lasts till February. Gulariya faces heavy downpours during the monsoon, from June to October.
 
                 </p>
                 <RealTimeValues
