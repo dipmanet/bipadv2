@@ -176,7 +176,7 @@ const BulletinPDFLoss = (props: Props) => {
             },
         ];
         setGenderWiseChart(pieChart);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [language]);
 
 
@@ -209,8 +209,8 @@ const BulletinPDFLoss = (props: Props) => {
         const cD = Object.keys(covidProvinceWiseTotal).map(c => ({
             province: language === 'np' ? nepaliRef[c] : provincesRef[c],
             [language === 'np' ? 'कुल संक्रमित संन्ख्या' : 'Total Affected']: covidProvinceWiseTotal[c].totalAffected,
-            [language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active']: covidProvinceWiseTotal[c].totalActive,
-            [language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths']: covidProvinceWiseTotal[c].totalDeaths,
+            [language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active']: covidProvinceWiseTotal[c].totalActive ? covidProvinceWiseTotal[c].totalActive : 0,
+            [language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths']: covidProvinceWiseTotal[c].totalDeaths ? covidProvinceWiseTotal[c].totalDeaths : 0,
         }));
         setprovinceWiseTotal(cD);
     }, [covidProvinceWiseTotal, language]);
@@ -494,7 +494,7 @@ const BulletinPDFLoss = (props: Props) => {
                             // tickFormatter={tick => tick.toLocaleString()}
                             tickFormatter={e => DataFormater(e, language)}
                             tick={{ fontSize: 10, width: 250 }}
-                                    // unit={'लाख'}
+                        // unit={'लाख'}
                         />
                         <YAxis
                             type="category"
@@ -556,10 +556,14 @@ const BulletinPDFLoss = (props: Props) => {
                                     </Translation>
 
                                     {
+
                                         Object.keys(covidProvinceWiseTotal)
                                             .map(prov => (
+
                                                 <td key={prov}>
-                                                    {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
+                                                    {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString() === 'NaN'
+                                                        ? '-'
+                                                        : Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
                                                 </td>
                                             ))
 
