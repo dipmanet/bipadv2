@@ -106,7 +106,7 @@ const selectDateForQuery = (today) => {
     // const today = new Date();
     const yesterday = new Date(today);
 
-    yesterday.setDate(yesterday.getDate() - 1);
+    // yesterday.setDate(yesterday.getDate() - 1);
 
     const DEFAULT_START_DATE = yesterday;
     const DEFAULT_END_DATE = today;
@@ -291,11 +291,11 @@ const Bulletin = (props: Props) => {
                 today = selectedDate;
                 yesterday = new Date(today);
 
-                yesterday.setDate(yesterday.getDate() - 1);
+                // yesterday.setDate(yesterday.getDate() - 1);
             } else {
                 today = new Date();
                 yesterday = new Date(today);
-                yesterday.setDate(yesterday.getDate() - 1);
+                // yesterday.setDate(yesterday.getDate() - 1);
             }
             const DEFAULT_START_DATE = yesterday;
             const DEFAULT_END_DATE = today;

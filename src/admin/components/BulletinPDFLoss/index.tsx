@@ -123,7 +123,7 @@ const BulletinPDF = (props: Props) => {
     const day = bsDate.split('-')[2];
 
     const yesterday = new Date(a);
-    yesterday.setDate(yesterday.getDate() - 1);
+    // yesterday.setDate(yesterday.getDate() - 1);
     const dd_yesterday = String(yesterday.getDate()).padStart(2, '0');
     const mm_yesterday = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0!
     const yyyy_yesterday = yesterday.getFullYear();

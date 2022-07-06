@@ -107,7 +107,7 @@ const transformFilters = ({
 const today = new Date();
 const yesterday = new Date(today);
 
-yesterday.setDate(yesterday.getDate() - 1);
+// yesterday.setDate(yesterday.getDate() - 1);
 
 const DEFAULT_START_DATE = yesterday;
 const DEFAULT_END_DATE = today;
