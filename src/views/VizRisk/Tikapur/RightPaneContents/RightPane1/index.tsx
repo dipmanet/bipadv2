@@ -1,10 +1,14 @@
+/* eslint-disable max-len */
+/* eslint-disable no-trailing-spaces */
 import React from 'react';
-import { CartesianGrid,
+import {
+    CartesianGrid,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis } from 'recharts';
+    Tooltip, XAxis, YAxis,
+} from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
@@ -18,7 +22,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -153,19 +157,19 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Max
+                        Avg Max
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                       Avg Min
+                        Avg Min
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
-                       Daily Avg
+                        Daily Avg
                     </div>
                 </div>
             </div>
@@ -179,7 +183,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Rainfall
+                        Avg Rainfall
                     </div>
                 </div>
 
@@ -229,18 +233,16 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Tikapur Municipality  </h1>
                 <p>
-                Tikapur Municipality is located in the Kailali district
-                of Sudurpaschim province. Tikapur municipality has a total
-                area of 118 sq. km and is situated at an elevation of 145m
-                to 161m AMSL.
+                    Tikapur Municipality is located in the Kailali district
+                    of Sudurpaschim province. Tikapur municipality has a total
+                    area of 118 sq. km and is situated at an elevation of 145m
+                    to 161m AMSL.
 
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Tikapur Municipality is located in the Kailali district of
-                Sudurpaschim province. Tikapur municipality has a total area
-                of 118 sq. km and is situated at an elevation of 145m to 161m
-                AMSL.
+                    Tikapur experiences a lower tropical climate. Summer starts from March
+                    and lasts till June. Winter begins in November and lasts till February. Tikapur faces heavy downpours during the monsoon, from June to October.
 
                 </p>
                 <div className={styles.iconRow}>
@@ -252,11 +254,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>35.3℃</div>
                             <div className={styles.iconText}>
-                            Maximum
+                                Maximum
                                 <br />
-                            Temperature in
+                                Temperature in
                                 <br />
-                            Summer
+                                Summer
                             </div>
 
                         </div>
@@ -269,11 +271,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>0.5℃</div>
                             <div className={styles.iconText}>
-                            Minimum
+                                Minimum
                                 <br />
-                            Temperature in
+                                Temperature in
                                 <br />
-                            Winter
+                                Winter
                             </div>
 
                         </div>
@@ -288,7 +290,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>1643.6mm</div>
                             <div className={styles.iconText}>
-                            Annual Rainfall
+                                Annual Rainfall
                             </div>
 
                         </div>
@@ -301,7 +303,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>142m - 154m</div>
                             <div className={styles.iconText}>
-                            Elevation from Sea Level
+                                Elevation from Sea Level
                             </div>
 
                         </div>
