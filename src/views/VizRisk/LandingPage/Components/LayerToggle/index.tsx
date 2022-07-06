@@ -30,7 +30,7 @@ const LayerToggle = (props: Props) => {
             >
                 <div className={styles.toggleDiv}>
                     <div
-                        className={clickedState ? styles.circle : styles.circleMove}
+                        className={vzLabel === 'province' ? styles.circle : styles.circleMove}
                     />
                 </div>
             </button>

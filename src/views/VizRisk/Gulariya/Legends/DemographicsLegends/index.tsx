@@ -38,15 +38,10 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationIndicator5} />
                             </div>
                             <div className={styles.populationTextContainer}>
-                                <div className={styles.populationText}>
-                                    {/* {'>'}
-                                    {' '} */}
-                                        9077
-                                </div>
-                                <div className={styles.populationText}>8000</div>
+                                <div className={styles.populationText}>10000</div>
+                                <div className={styles.populationText}>8500</div>
                                 <div className={styles.populationText}>7000</div>
-                                <div className={styles.populationText}>6000</div>
-                                <div className={styles.populationText}>5000</div>
+                                <div className={styles.populationText}>5500</div>
                                 <div className={styles.populationText}>4000</div>
                             </div>
 
@@ -60,7 +55,7 @@ const DemoGraphicsLegends = (props) => {
                             <br />
                             (per 0.06 km
                             <sup>2</sup>
-)
+                            )
                         </h2>
 
                         <div className={styles.populationContainer}>
@@ -77,7 +72,6 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationText}>4800</div>
                                 <div className={styles.populationText}>2400</div>
                                 <div className={styles.populationText}>720</div>
-                                <div className={styles.populationText}>0</div>
                             </div>
 
                         </div>
@@ -101,7 +95,7 @@ const DemoGraphicsLegends = (props) => {
                         }}
                         className={styles.educationHexagon}
                     />
-                            By Ward
+                    By Ward
                 </button>
             </div>
             <div className={styles.hazardItemContainer}>
@@ -121,7 +115,7 @@ const DemoGraphicsLegends = (props) => {
                         className={styles.educationHexagon}
                     />
 
-                           By Density
+                    By Density
                 </button>
             </div>
         </>

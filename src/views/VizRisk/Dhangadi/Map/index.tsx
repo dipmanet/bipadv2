@@ -4,9 +4,6 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import Data from '../Data/dhangadiGEOJSON';
-import demographicsData from '../Data/demographicsData';
-import styles from './styles.scss';
 import {
     // provincesSelector,
     municipalitiesSelector,
@@ -18,10 +15,12 @@ import {
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
 } from '#selectors';
-
 import {
     getWardFilter,
 } from '#utils/domain';
+import Data from '../Data/dhangadiGEOJSON';
+import demographicsData from '../Data/demographicsData';
+import styles from './styles.scss';
 
 
 const mapStateToProps = (state, props) => ({
@@ -205,6 +204,7 @@ class FloodHistoryMap extends React.Component {
 
         const evacCulture = cI.features.filter(item => item.properties.Type === 'cultural');
         const evaceducation = cI.features.filter(item => item.properties.Type === 'education');
+        const safeshelter = cI.features.filter(item => item.properties.Type === 'safeshelter');
         console.log('map:', this.map);
 
         const categoriesEvac = ['cultural', 'education'];
@@ -234,7 +234,7 @@ class FloodHistoryMap extends React.Component {
         const evaccenters = {
             type: 'FeatureCollection',
             name: 'CI',
-            features: [...evacCulture, ...evaceducation],
+            features: [...evacCulture, ...evaceducation, ...safeshelter],
         };
         const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
             item => item.properties.Type,
@@ -269,6 +269,9 @@ class FloodHistoryMap extends React.Component {
         this.setState({ slideFourLayers });
         this.setState({ slideFiveLayers });
         this.setState({ slideSixLayers });
+
+        console.log('evaccenters', cI);
+
 
         this.map.on('style.load', () => {
             categoriesEvac.map((layer) => {
@@ -426,6 +429,8 @@ class FloodHistoryMap extends React.Component {
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const ciName = e.features[0].properties.Title;
+                    console.log('ciName', e.features[0]);
+
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                     <p>${ciName}</p>
@@ -646,8 +651,8 @@ class FloodHistoryMap extends React.Component {
             if (nextProps.showPopulation !== showPopulation) {
                 if (nextProps.showPopulation === 'popdensity') {
                     this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-                // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
+                    // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+                    // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
                 } else {
                     this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
                 }

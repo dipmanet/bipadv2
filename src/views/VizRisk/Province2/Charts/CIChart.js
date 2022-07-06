@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import {
     Label,
@@ -53,11 +54,12 @@ export default function BuildingChart(props) {
                         tick={{ fill: '#94bdcf' }}
                         domain={vulnrerability === 'Human Poverty Index' ? [dataMin => Math.floor(dataMin - 10), dataMax => Math.floor(dataMax + 5)]
                             : [dataMin => parseFloat(dataMin - 0.1).toFixed(2),
-                                dataMax => parseFloat(dataMax + 0.1).toFixed(2)]
+                            // eslint-disable-next-line indent
+                            dataMax => parseFloat(dataMax + 0.1).toFixed(2)]
                         }
                     >
                         <Label
-                            value="HDI/HPI Score"
+                            value={vulnrerability === 'Human Development Index' ? 'HDI Score' : 'HPI Score'}
                             offset={-10}
                             position="insideBottom"
                             style={{

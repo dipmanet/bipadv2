@@ -5,14 +5,13 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import DemographyData from '../../Data/demographyChartData';
 import styles from '../styles.scss';
 
 // import NavButtons from '#views/VizRisk/Common/NavButtons';
 import NavButtons from '../../Components/NavButtons';
 
 
-const demoChartdata = DemographyData.chartData;
+import demographicsData from '../../Data/demographicsData';
 
 interface Props {
     handleNext: () => void;
@@ -29,7 +28,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Male Pop
+                    Male Pop
                     <sup>n</sup>
                 </div>
             </div>
@@ -43,7 +42,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMin} />
                 <div className={styles.legendText}>
-                       Total Household
+                    Total Household
                 </div>
             </div>
         </div>
@@ -63,19 +62,19 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in Jugal Rural Municipality is largely
-                uneven with some pockets of dense settlements. The rural municipality
-                has total population of 19,231 with 9581 male and 9650 female population
-                residing in total 3941 households. Ward 2 has the largest household number
-                with 731 households while ward 6 has the least number of households comprising
-                of 378 households.
+                    Population distribution in Jugal Rural Municipality is largely
+                    uneven with some pockets of dense settlements. The rural municipality
+                    has total population of 19,231 with 9581 male and 9650 female population
+                    residing in total 3941 households. Ward 2 has the largest household number
+                    with 731 households while ward 6 has the least number of households comprising
+                    of 378 households.
                 </p>
                 <div className={styles.chartContainer}>
                     <ResponsiveContainer width="100%" height={500}>
                         <BarChart
                             // width={330}
                             // height={700}
-                            data={demoChartdata.filter(item => item.name !== 'Ward 99')}
+                            data={demographicsData}
                             layout="vertical"
                             margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
                         >

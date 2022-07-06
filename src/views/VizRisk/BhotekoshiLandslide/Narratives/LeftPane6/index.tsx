@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 import styles from '../../styles.scss';
 
-interface Props{
+interface Props {
     handleNext: () => void;
     handlePrev: () => void;
     pagenumber: number;
@@ -57,7 +57,7 @@ const LeftPane6 = (props: Props) => {
                 Community Infrastructures are socially, economically
                 or operationally essential to the functioning of a society
                 or community, both in routine circumstances and in the
-                extreme events of an emergency
+                extreme events of an emergency.
                 The residential and governmental buildings, religious
                 and cultural sites, banking institutions, as well as
                 critical infrastructures such as hospitals, schools,

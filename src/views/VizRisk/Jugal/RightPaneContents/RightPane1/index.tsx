@@ -1,16 +1,18 @@
 import React from 'react';
-import { CartesianGrid,
+import {
+    CartesianGrid,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis } from 'recharts';
+    Tooltip, XAxis, YAxis,
+} from 'recharts';
 // import NavButtons from '#views/VizRisk/Common/NavButtons';
-import NavButtons from '../../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';
 import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
+import NavButtons from '../../Components/NavButtons';
 import { lineData, rainfallData } from '../../Data/temperatureData';
 import styles from '../styles.scss';
 
@@ -18,7 +20,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 
 class RightPane1 extends React.PureComponent<Props, State> {
@@ -27,19 +29,19 @@ class RightPane1 extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Avg Max
+                    Avg Max
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendMin} />
                 <div className={styles.legendText}>
-                       Avg Min
+                    Avg Min
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendDaily} />
                 <div className={styles.legendText}>
-                       Daily Avg
+                    Daily Avg
                 </div>
             </div>
         </div>
@@ -90,10 +92,10 @@ class RightPane1 extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Jugal Rural Municipality</h1>
                 <p>
-                Jugal Rural Municipality is located in Sindhupalchok
-                district of Bagmati province. The rural municipality
-                has 7 wards covering a total area of 592 sq. km and
-                is situated at an elevation of 800 m to 7000m AMSL.
+                    Jugal Rural Municipality is located in Sindhupalchok
+                    district of Bagmati province. The rural municipality
+                    has 7 wards covering a total area of 592 sq. km and
+                    is situated at an elevation of 800 m to 7000m MASL.
 
                 </p>
 
@@ -106,9 +108,9 @@ class RightPane1 extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>32.1℃</div>
                             <div className={styles.iconText}>
-                            Maximum
+                                Maximum
                                 <br />
-                            Temperature in Summer
+                                Temperature in Summer
                             </div>
 
                         </div>
@@ -121,9 +123,9 @@ class RightPane1 extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>4℃</div>
                             <div className={styles.iconText}>
-                            Minimum
+                                Minimum
                                 <br />
-                            Temperature in Winter
+                                Temperature in Winter
                             </div>
 
                         </div>
@@ -138,8 +140,8 @@ class RightPane1 extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>3949.5 mm</div>
                             <div className={styles.iconText}>
-                            Annual
-                            Rainfall
+                                Annual
+                                Rainfall
                             </div>
 
                         </div>
@@ -152,7 +154,7 @@ class RightPane1 extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>142m - 154m</div>
                             <div className={styles.iconText}>
-                            Elevation from Sea Level
+                                Elevation from Sea Level
                             </div>
 
                         </div>
