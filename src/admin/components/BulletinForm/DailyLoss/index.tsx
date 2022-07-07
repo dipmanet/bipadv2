@@ -216,7 +216,7 @@ const Bulletin = (props: Props) => {
                         t => <h3>{t('Disaster details of the last 24 hours')}</h3>
                     }
                 </Translation>
-                <div className={styles.formSubContainer}>
+                <div className={styles.formSubContainer} style={{ flexWrap: 'unset' }}>
                     <div className={styles.formItem}>
                         <form className={_cs(
                             styles.datePickerForm,
@@ -225,7 +225,7 @@ const Bulletin = (props: Props) => {
                         >
                             <label htmlFor="date">
                                 {' '}
-                                {language === 'np' ? 'मिती' : 'Date'}
+                                {language === 'np' ? 'मिती from' : 'Date from'}
                             </label>
                             {
                                 Object.keys(bulletinEditData).length > 0
@@ -252,6 +252,98 @@ const Bulletin = (props: Props) => {
                             }
                         </form>
 
+                    </div>
+                    <div className={styles.formItem} style={{ marginLeft: '20px' }}>
+                        <form style={{ display: 'flex', flexDirection: 'column' }}>
+                            <label htmlFor="appt">Time From:</label>
+                            <input
+                                type="time"
+                                id="appt"
+                                name="appt"
+                                onChange={e => console.log('This time', e.target.value)}
+                                className={styles.timeSelector}
+                            />
+
+                        </form>
+                    </div>
+                </div>
+                <div className={styles.formSubContainer} style={{ flexWrap: 'unset' }}>
+                    <div className={styles.formItem}>
+                        <form className={_cs(
+                            styles.datePickerForm,
+                            bulletinEditData && bulletinEditData.language === 'nepali' && styles.nep,
+                        )}
+                        >
+                            <label htmlFor="date">
+                                {' '}
+                                {language === 'np' ? 'मिती to' : 'Date to'}
+                            </label>
+                            {
+                                Object.keys(bulletinEditData).length > 0
+                                    ? (
+                                        <h3
+                                            style={{ position: 'relative', bottom: '5px' }}
+                                        >
+                                            {ADToBS(dateAlt)}
+                                        </h3>
+                                    )
+                                    : (
+                                        <NepaliDatePicker
+                                            inputClassName="form-control"
+                                            className={styles.datePick}
+                                            value={ADToBS(dateAlt)}
+                                            onChange={
+                                                (value: string) => setDateAlt(BSToAD(value))}
+                                            options={{
+                                                calenderLocale: language === 'np' ? 'ne' : 'en',
+                                                valueLocale: 'en',
+                                            }}
+                                        />
+                                    )
+                            }
+                        </form>
+
+                    </div>
+                    <div className={styles.formItem} style={{ marginLeft: '20px' }}>
+                        <form style={{ display: 'flex', flexDirection: 'column' }}>
+                            <label htmlFor="appt">Time To:</label>
+                            <input
+                                type="time"
+                                id="appt"
+                                name="appt"
+                                onChange={e => console.log('This time', e.target.value)}
+                                className={styles.timeSelector}
+                            />
+
+                        </form>
+                    </div>
+                </div>
+                <div className={styles.formSubContainer}>
+                    <div className={styles.formItem}>
+                        <FormControl style={{ margin: '15px 0' }} fullWidth>
+                            <InputLabel id="hazardInput">
+                                {/* <Translation>
+                                    {
+                                        t => <span>{t('Add New Hazard')}</span>
+                                    }
+                                </Translation> */}
+                                Filter By
+                            </InputLabel>
+                            <Select
+                                labelId="hazardLabel"
+                                id="hazardInput"
+                                value={hazard}
+                                label="Add New Hazard Field"
+                                onChange={e => handleHazardChange(e.target.value)}
+                                style={{ borderRadius: '3px', padding: '0 10px' }}
+                                disableUnderline
+                            >
+                                {/* <MenuItem value={null}>--</MenuItem> */}
+                                <MenuItem value="Reported Date">Reported Date</MenuItem>
+                                <MenuItem value="Incident Date">Incident Date</MenuItem>
+
+                            </Select>
+                        </FormControl>
                     </div>
                 </div>
                 <div className={styles.formSubContainer}>
