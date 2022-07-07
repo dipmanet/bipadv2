@@ -127,9 +127,9 @@ const Response = (props: Props) => {
                     hazard: hazardNp,
                     district: language === 'np' ? item.wards[0] && item.wards[0].municipality.district.titleNe : item.wards[0] && item.wards[0].municipality.district.title,
                     description: '',
-                    deaths: item.loss.peopleDeathCount || 0,
-                    missing: item.loss.peopleMissingCount || 0,
-                    injured: item.loss.peopleInjuredCount || 0,
+                    deaths: item.loss ? item.loss.peopleDeathCount : 0,
+                    missing: item.loss ? item.loss.peopleMissingCount : 0,
+                    injured: item.loss ? item.loss.peopleInjuredCount : 0,
                     response: '',
                 };
                 return null;
@@ -140,7 +140,7 @@ const Response = (props: Props) => {
                 // setBulletinFeedback({ feedback: { ...feedback, ...temp } });
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [incidentList, hazardTypes, language]);
 
 
@@ -167,7 +167,7 @@ const Response = (props: Props) => {
             setCumulative({ ...cumulativeData, ...other });
             setCumulativeRedux({ cumulative: { ...cumulativeData, ...other } });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annex, feedback]);
 
     return (
@@ -270,7 +270,7 @@ const Response = (props: Props) => {
                                                     {i + 1}
                                                 </td>
                                                 <td>
-                                                    {getHazard(feedback[hwL].hazard) }
+                                                    {getHazard(feedback[hwL].hazard)}
                                                 </td>
                                                 <td>
                                                     {getDistrict(feedback[hwL].district)}

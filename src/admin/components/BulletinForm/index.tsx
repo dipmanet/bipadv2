@@ -134,7 +134,7 @@ const requestQueryCovidNational = ({
     params,
 }) => ({
     limit: 1,
-    reported_on__lt: params.dateAlt, // eslint-disable-line @typescript-eslint/camelcase
+    reported_on__lt: params.dateAltTo, // eslint-disable-line @typescript-eslint/camelcase
     ordering: '-reported_on',
 });
 const requestQueryCovidQuarantine = () => ({
@@ -152,6 +152,8 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             limit: params.limit,
             incident_on__lt: params.incident_on__lt,
             incident_on__gt: params.incident_on__gt,
+            reported_on__lt: params.reported_on__lt,
+            reported_on__gt: params.reported_on__gt,
             ordering: params.ordering,
         }),
         onMount: false,
@@ -159,6 +161,9 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             setIncidentList({ incidentList: response.results });
             if (params && params.setLossData) {
                 params.setLossData(response.results);
+            }
+            if (params && params.setLoading) {
+                params.setLoading(false);
             }
         },
     },
@@ -240,10 +245,22 @@ const Bulletin = (props: Props) => {
     const [progress, setProgress] = useState(0);
     const [sitRep, setSitRep] = useState(0);
     const [selectedDate, setSelectedate] = useState();
+    const [selectedDateTo, setSelectedateTo] = useState();
     const [rainSummaryFooter, setRainSummaryFooter] = useState('');
     // const [bulletinDate, setBulletinDate] = useState();
     const [date, setDate] = useState();
     const [dateAlt, setDateAlt] = useState('');
+
+    const [dateTo, setDateTo] = useState();
+    const [dateAltTo, setDateAltTo] = useState('');
+
+
+    const [startingTime, setStartingTime] = useState('');
+
+    const [endingTime, setEndingTime] = useState('');
+    const [filterDateType, setFilterDateType] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [filterDataTypeError, setFilterDataTypeError] = useState(false);
 
     const countId = useRef(0);
     const {
@@ -275,7 +292,7 @@ const Bulletin = (props: Props) => {
     const [covidQuaratine, setCovidQurantine] = useState([]);
 
 
-    covidNationalInfo.setDefaultParams({ setCovidNational, dateAlt });
+    covidNationalInfo.setDefaultParams({ setCovidNational, dateAltTo });
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 
@@ -286,40 +303,51 @@ const Bulletin = (props: Props) => {
     useEffect(() => {
         let today; let
             yesterday;
-        if (Object.keys(bulletinEditData).length === 0) {
-            if (selectedDate) {
-                today = selectedDate;
-                yesterday = new Date(today);
+        if (filterDateType) {
+            if (Object.keys(bulletinEditData).length === 0) {
+                setLoading(true);
+                if (selectedDate) {
+                    today = selectedDateTo;
+                    yesterday = new Date(selectedDate);
 
-                // yesterday.setDate(yesterday.getDate() - 1);
-            } else {
-                today = new Date();
-                yesterday = new Date(today);
-                // yesterday.setDate(yesterday.getDate() - 1);
+                    // yesterday.setDate(yesterday.getDate() - 1);
+                } else {
+                    today = new Date();
+                    yesterday = new Date(today);
+                    // yesterday.setDate(yesterday.getDate() - 1);
+                }
+                // const dateFrom=selectedDate;
+                // const dateTo=selectedDateTo
+
+                const DEFAULT_START_DATE = yesterday;
+                const DEFAULT_END_DATE = today;
+                const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T${startingTime || '00:00'}:00+05:45`;
+                const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T${endingTime || '23:59'}:59+05:45`;
+                const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
+                const limit = -1;
+                const incident_on__lt = filterDateType === 'incident_on' ? endDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+                const incident_on__gt = filterDateType === 'incident_on' ? startDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+                const reported_on__lt = filterDateType === 'reported_on' ? endDate : '';
+                const reported_on__gt = filterDateType === 'reported_on' ? startDate : '';
+                const ordering = '-incident_on';
+
+                const test = selectDateForQuery(selectedDate);
+                resetFeedback();
+
+                incidentsGetRequest.do({
+                    expand,
+                    limit,
+                    incident_on__lt,
+                    incident_on__gt,
+                    reported_on__lt,
+                    reported_on__gt,
+                    ordering,
+                    setLossData,
+                    setLoading,
+                });
             }
-            const DEFAULT_START_DATE = yesterday;
-            const DEFAULT_END_DATE = today;
-            const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`;
-            const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`;
-            const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
-            const limit = -1;
-            const incident_on__lt = endDate; // eslint-disable-line @typescript-eslint/camelcase
-            const incident_on__gt = startDate; // eslint-disable-line @typescript-eslint/camelcase
-            const ordering = '-incident_on';
-
-            const test = selectDateForQuery(selectedDate);
-            resetFeedback();
-
-            incidentsGetRequest.do({
-                expand,
-                limit,
-                incident_on__lt,
-                incident_on__gt,
-                ordering,
-                setLossData,
-            });
         }
-    }, [selectedDate]);
+    }, [filterDateType]);
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
@@ -330,7 +358,12 @@ const Bulletin = (props: Props) => {
                     setBulletinFeedback({ feedback: bulletinEditData.feedback });
                 }
             };
+            const start = bulletinEditData.fromDateTime.split('T')[1].substring(0, 5);
+            const end = bulletinEditData.toDateTime.split('T')[1].substring(0, 5);
 
+            setStartingTime(start);
+            setEndingTime(end);
+            setFilterDateType(bulletinEditData.filterBy);
             setSitRep(bulletinEditData.sitrep);
             setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);
@@ -377,10 +410,10 @@ const Bulletin = (props: Props) => {
     }, [bulletinEditData]);
 
     useEffect(() => {
-        if (dateAlt) {
+        if (dateAltTo) {
             covidNationalInfo.do();
         }
-    }, [dateAlt]);
+    }, [dateAltTo]);
 
     const handleSitRep = (num) => {
         setSitRep(num);
@@ -543,7 +576,10 @@ const Bulletin = (props: Props) => {
 
 
     const handleNextBtn = () => {
-        if (progress < Menu.bulletinProgressMenu.length - 1) {
+        if (!filterDateType) {
+            setFilterDataTypeError(true);
+            return null;
+        } if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
                 setBulletinLoss({
                     incidentSummary: incidentData,
@@ -553,9 +589,15 @@ const Bulletin = (props: Props) => {
                     sitRep,
                     hilight,
                     bulletinDate: date,
+                    startDate: date,
+                    endDate: dateTo,
+                    startTime: startingTime,
+                    endTime: endingTime,
+                    filterDateType,
                     addedHazards: addedHazardFields,
                 });
             }
+
             if (progress === 1) {
                 setBulletinCovid({
                     covid24hrsStat: covid24hrsStatData,
@@ -583,6 +625,7 @@ const Bulletin = (props: Props) => {
             setProgress(progress + 1);
             setActive(progress + 1);
         }
+        return null;
     };
 
     const calculateSummary = (data) => {
@@ -634,11 +677,15 @@ const Bulletin = (props: Props) => {
     const recordSelectedDate = (dat) => {
         setSelectedate(dat);
     };
-
+    const recordSelectedDateTo = (dat) => {
+        setSelectedateTo(dat);
+    };
     const handleBulletinDate = (bulletinDate) => {
         setDate(bulletinDate);
     };
-
+    const handleDateTo = (bulletinDate) => {
+        setDateTo(bulletinDate);
+    };
     useEffect(() => () => {
         setBulletinEditData({});
         setBulletinFeedback({ feedback: {} });
@@ -834,6 +881,7 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [covidQuaratine]);
+
     const formSections = [
         <DailyLoss
             handleIncidentChange={handleIncidentChange}
@@ -854,11 +902,25 @@ const Bulletin = (props: Props) => {
             handleSameHazardChange={handleSameHazardChange}
             recordSelectedDate={recordSelectedDate}
             handleBulletinDate={handleBulletinDate}
+            handleDateTo={handleDateTo}
             uri={uri}
             resetFeedback={resetFeedback}
             handlesitRepBlur={handlesitRepBlur}
             dateAlt={dateAlt}
             setDateAlt={setDateAlt}
+            dateAltTo={dateAltTo}
+            setDateAltTo={setDateAltTo}
+            startingTime={startingTime}
+            endingTime={endingTime}
+            setStartingTime={setStartingTime}
+            setEndingTime={setEndingTime}
+            setFilterDateType={setFilterDateType}
+            filterDateType={filterDateType}
+            recordSelectedDateTo={recordSelectedDateTo}
+            loading={loading}
+            filterDataTypeError={filterDataTypeError}
+            setFilterDataTypeError={setFilterDataTypeError}
+
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}
@@ -901,25 +963,25 @@ const Bulletin = (props: Props) => {
             deleteFeedbackChange={deleteFeedbackChange}
             hazardWiseLossData={hazardWiseLossData}
             handleSubFieldChange={handleSubFieldChange}
-            // bulletinData={
-            //     {
-            //         incidentSummary: incidentData,
-            //         peopleLoss: peopleLossData,
-            //         hazardWiseLoss: hazardWiseLossData,
-            //         genderWiseLoss: genderWiseLossData,
-            //         covidTwentyfourHrsStat: covid24hrsStatData,
-            //         covidTotalStat: covidTotalStatData,
-            //         vaccineStat: vaccineStatData,
-            //         covidProvinceWiseTotal: covidProvinceWiseData,
-            //         feedback,
-            //         tempMax: maxTemp,
-            //         tempMin: minTemp,
-            //         dailySummary,
-            //         sitrep: sitRep,
-            //         rainSummaryFooter,
-            //         bulletinDate: date,
-            //     }
-            // }
+        // bulletinData={
+        //     {
+        //         incidentSummary: incidentData,
+        //         peopleLoss: peopleLossData,
+        //         hazardWiseLoss: hazardWiseLossData,
+        //         genderWiseLoss: genderWiseLossData,
+        //         covidTwentyfourHrsStat: covid24hrsStatData,
+        //         covidTotalStat: covidTotalStatData,
+        //         vaccineStat: vaccineStatData,
+        //         covidProvinceWiseTotal: covidProvinceWiseData,
+        //         feedback,
+        //         tempMax: maxTemp,
+        //         tempMin: minTemp,
+        //         dailySummary,
+        //         sitrep: sitRep,
+        //         rainSummaryFooter,
+        //         bulletinDate: date,
+        //     }
+        // }
         />,
     ];
 
@@ -941,18 +1003,22 @@ const Bulletin = (props: Props) => {
                     progress < 4
                     && (
                         <div className={styles.buttonsContainer}>
-                            <button
-                                type="button"
-                                onClick={handlePrevBtn}
-                                className={styles.prevBtn}
-                            >
-                                Previous
-                            </button>
+                            {progress > 0
+                                && (
+                                    <button
+                                        type="button"
+                                        onClick={handlePrevBtn}
+                                        className={styles.prevBtn}
+                                    >
+                                        Previous
+                                    </button>
+                                )}
 
                             <button
                                 type="button"
                                 onClick={handleNextBtn}
                                 className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
+                                disabled={loading}
                             >
                                 Next
                             </button>

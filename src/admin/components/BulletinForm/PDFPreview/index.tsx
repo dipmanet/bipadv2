@@ -67,6 +67,11 @@ const PDFPreview = (props) => {
             rainSummaryFooter,
             bulletinDate,
             addedHazards,
+            startDate,
+            endDate,
+            startTime,
+            endTime,
+            filterDateType,
         },
         user,
         bulletinEditData,
@@ -159,6 +164,9 @@ const PDFPreview = (props) => {
                 rainSummaryPictureFooterNe: rainSummaryFooter,
                 bulletinDate,
                 addedHazardsNe: addedHazards,
+                fromDateTime: `${startDate}T${startTime || '00:00'}:00+05:45`,
+                toDateTime: `${endDate}T${endTime || '23:59'}:59+05:45`,
+                filterBy: filterDateType,
             });
         }
         return getFormData({
@@ -188,6 +196,9 @@ const PDFPreview = (props) => {
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
             addedHazards,
+            fromDateTime: `${startDate}T${startTime || '00:00'}:00+05:45`,
+            toDateTime: `${endDate}T${endTime || '23:59'}:59+05:45`,
+            filterBy: filterDateType,
         });
     };
 
@@ -229,6 +240,9 @@ const PDFPreview = (props) => {
                 rainSummaryPictureFooterNe: rainSummaryFooter,
                 bulletinDate,
                 addedHazardsNe: addedHazards,
+                fromDateTime: `${startDate}T${startTime || '00:00'}:00+05:45`,
+                toDateTime: `${endDate}T${endTime || '23:59'}:59+05:45`,
+                filterBy: filterDateType,
                 ...picObjects,
 
             });
@@ -267,6 +281,9 @@ const PDFPreview = (props) => {
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
             addedHazards,
+            fromDateTime: `${startDate}T${startTime || '00:00'}:00+05:45`,
+            toDateTime: `${endDate}T${endTime || '23:59'}:59+05:45`,
+            filterBy: filterDateType,
             ...picObjects,
         });
     };

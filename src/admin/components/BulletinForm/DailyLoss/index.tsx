@@ -12,10 +12,11 @@ import FormControl from '@material-ui/core/FormControl';
 import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
 import TextField from '@mui/material/TextField';
-
+import { FormHelperText } from '@material-ui/core';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import Loader from 'react-loader';
 import {
     hazardTypesSelector,
     provincesSelector,
@@ -37,7 +38,6 @@ import {
 
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
-
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
@@ -93,7 +93,20 @@ const Bulletin = (props: Props) => {
         handlesitRepBlur,
         dateAlt,
         setDateAlt,
+        dateAltTo,
+        setDateAltTo,
         setBulletinEditData,
+        startingTime,
+        endingTime,
+        setStartingTime,
+        setEndingTime,
+        handleDateTo,
+        filterDateType,
+        setFilterDateType,
+        recordSelectedDateTo,
+        loading,
+        filterDataTypeError,
+        setFilterDataTypeError,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -184,8 +197,8 @@ const Bulletin = (props: Props) => {
             // if there is date in redux dont update
         } else {
             let today;
-            if (bulletinEditData && Object.keys(bulletinEditData).length > 0 && bulletinEditData.bulletinDate) {
-                today = new Date(bulletinEditData.bulletinDate);
+            if (bulletinEditData && Object.keys(bulletinEditData).length > 0 && bulletinEditData.fromDateTime) {
+                today = new Date(bulletinEditData.fromDateTime);
             } else {
                 today = new Date();
             }
@@ -201,10 +214,55 @@ const Bulletin = (props: Props) => {
             handleBulletinDate(finalDate);
         }
     }, [dateAlt, bulletinEditData]);
+    useEffect(() => {
+        if (dateAltTo) {
+            const selectedDate = new Date(dateAltTo);
+            recordSelectedDateTo(selectedDate);
+            handleDateTo(dateAltTo);
+            // update the covid API
+            // if there is date in redux dont update
+        } else {
+            let today;
+            if (bulletinEditData && Object.keys(bulletinEditData).length > 0 && bulletinEditData.toDateTime) {
+                today = new Date(bulletinEditData.toDateTime);
+            } else {
+                today = new Date();
+            }
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            const yyyy = today.getFullYear();
 
+            const finalDate = `${yyyy}-${mm}-${dd}`;
+
+            const selectedDate = new Date(finalDate);
+            recordSelectedDateTo(selectedDate);
+            setDateAltTo(finalDate);
+            handleDateTo(finalDate);
+        }
+    }, [dateAltTo, bulletinEditData]);
+
+    const handleStartTime = (e) => {
+        setStartingTime(e.target.value);
+    };
+    const handleEndTime = (e) => {
+        setEndingTime(e.target.value);
+    };
 
     return (
         <>
+            {loading
+                ? (
+                    <Loader options={{
+                        position: 'fixed',
+                        top: '48%',
+                        right: 0,
+                        bottom: 0,
+                        left: '48%',
+                        background: 'gray',
+                        zIndex: 9999,
+                    }}
+                    />
+                ) : ''}
             <div className={styles.formContainer}>
                 <Translation>
                     {
@@ -225,7 +283,7 @@ const Bulletin = (props: Props) => {
                         >
                             <label htmlFor="date">
                                 {' '}
-                                {language === 'np' ? 'मिती from' : 'Date from'}
+                                {language === 'np' ? 'मिती बाट' : 'Date from'}
                             </label>
                             {
                                 Object.keys(bulletinEditData).length > 0
@@ -242,7 +300,11 @@ const Bulletin = (props: Props) => {
                                             className={styles.datePick}
                                             value={ADToBS(dateAlt)}
                                             onChange={
-                                                (value: string) => setDateAlt(BSToAD(value))}
+                                                (value: string) => {
+                                                    setDateAlt(BSToAD(value));
+                                                    setFilterDateType('');
+                                                }
+                                            }
                                             options={{
                                                 calenderLocale: language === 'np' ? 'ne' : 'en',
                                                 valueLocale: 'en',
@@ -255,13 +317,15 @@ const Bulletin = (props: Props) => {
                     </div>
                     <div className={styles.formItem} style={{ marginLeft: '20px' }}>
                         <form style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label htmlFor="appt">Time From:</label>
+                            <label htmlFor="appt">{language === 'np' ? 'समय बाट' : 'Time From:'}</label>
                             <input
                                 type="time"
                                 id="appt"
                                 name="appt"
-                                onChange={e => console.log('This time', e.target.value)}
+                                value={startingTime}
+                                onChange={handleStartTime}
                                 className={styles.timeSelector}
+                                disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
                             />
 
                         </form>
@@ -276,7 +340,7 @@ const Bulletin = (props: Props) => {
                         >
                             <label htmlFor="date">
                                 {' '}
-                                {language === 'np' ? 'मिती to' : 'Date to'}
+                                {language === 'np' ? 'मिती सम्म' : 'Date upto'}
                             </label>
                             {
                                 Object.keys(bulletinEditData).length > 0
@@ -284,16 +348,19 @@ const Bulletin = (props: Props) => {
                                         <h3
                                             style={{ position: 'relative', bottom: '5px' }}
                                         >
-                                            {ADToBS(dateAlt)}
+                                            {ADToBS(dateAltTo)}
                                         </h3>
                                     )
                                     : (
                                         <NepaliDatePicker
                                             inputClassName="form-control"
                                             className={styles.datePick}
-                                            value={ADToBS(dateAlt)}
+                                            value={ADToBS(dateAltTo)}
                                             onChange={
-                                                (value: string) => setDateAlt(BSToAD(value))}
+                                                (value: string) => {
+                                                    setDateAltTo(BSToAD(value));
+                                                    setFilterDateType('');
+                                                }}
                                             options={{
                                                 calenderLocale: language === 'np' ? 'ne' : 'en',
                                                 valueLocale: 'en',
@@ -306,13 +373,15 @@ const Bulletin = (props: Props) => {
                     </div>
                     <div className={styles.formItem} style={{ marginLeft: '20px' }}>
                         <form style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label htmlFor="appt">Time To:</label>
+                            <label htmlFor="appt">{language === 'np' ? 'समय सम्म :' : 'Time upto :'}</label>
                             <input
                                 type="time"
                                 id="appt"
                                 name="appt"
-                                onChange={e => console.log('This time', e.target.value)}
+                                value={endingTime}
+                                onChange={handleEndTime}
                                 className={styles.timeSelector}
+                                disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
                             />
 
                         </form>
@@ -327,22 +396,39 @@ const Bulletin = (props: Props) => {
                                         t => <span>{t('Add New Hazard')}</span>
                                     }
                                 </Translation> */}
-                                Filter By
+                                {language === 'np' ? 'मिति प्रकारले फिल्टर गर्नुहोस्' : 'Filter By Date Type'}
+
                             </InputLabel>
                             <Select
+                                disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
                                 labelId="hazardLabel"
                                 id="hazardInput"
-                                value={hazard}
-                                label="Add New Hazard Field"
-                                onChange={e => handleHazardChange(e.target.value)}
+                                value={filterDateType}
+                                label="Filter By Date Type"
+                                onChange={(e) => {
+                                    setFilterDateType(e.target.value);
+                                    setFilterDataTypeError(false);
+                                }}
                                 style={{ borderRadius: '3px', padding: '0 10px' }}
                                 disableUnderline
+                                error={filterDataTypeError}
                             >
-                                {/* <MenuItem value={null}>--</MenuItem> */}
-                                <MenuItem value="Reported Date">Reported Date</MenuItem>
-                                <MenuItem value="Incident Date">Incident Date</MenuItem>
+                                <MenuItem value={''}>--</MenuItem>
+                                <MenuItem value="reported_on">
+                                    {language === 'np' ? 'रिपोर्ट गरिएको मिति बाट' : 'Reported Date'}
+                                    {' '}
+                                </MenuItem>
+                                <MenuItem value="incident_on">
+                                    {language === 'np' ? 'घटना भएको मिति बाट' : 'Incident Date'}
+                                    {' '}
+                                </MenuItem>
 
                             </Select>
+                            {filterDataTypeError ? (
+                                <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>
+                                    {language === 'np' ? 'कृपया मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
+                                </FormHelperText>
+                            ) : ''}
                         </FormControl>
                     </div>
                 </div>
@@ -666,6 +752,11 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
+                {filterDataTypeError ? (
+                    <FormHelperText style={{ color: '#f44336', marginLeft: '14px', marginTop: '20px', fontSize: '16px' }}>
+                        {language === 'np' ? 'कृपया माथि मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
+                    </FormHelperText>
+                ) : ''}
             </div>
 
         </>

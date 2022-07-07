@@ -1804,6 +1804,11 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
         deferedState.bulletinPage.sitRep = bulletinData.sitRep;
         deferedState.bulletinPage.hilight = bulletinData.hilight;
+        deferedState.bulletinPage.startDate = bulletinData.startDate;
+        deferedState.bulletinPage.endDate = bulletinData.endDate;
+        deferedState.bulletinPage.startTime = bulletinData.startTime;
+        deferedState.bulletinPage.endTime = bulletinData.endTime;
+        deferedState.bulletinPage.filterDateType = bulletinData.filterDateType;
         deferedState.bulletinPage.bulletinDate = bulletinData.bulletinDate;
         deferedState.bulletinPage.addedHazards = bulletinData.addedHazards;
     });

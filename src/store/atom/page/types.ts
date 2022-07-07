@@ -256,6 +256,11 @@ export interface Bulletin {
     municipality: number;
     ward: number;
     hilight: string;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    filterDateType: string;
     bulletinDate: string;
     addedHazards: object;
     cumulative: object;
