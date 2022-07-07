@@ -25,11 +25,16 @@ const LeftpaneSlide6 = () => {
 
     const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState(selectFieldValues[0]);
     const [curerntChartData, setCurerntChartData] = useState([]);
+    const filterChartSelectedData = (currentChartSelectedData: any) => {
+        const filterData = currentChartSelectedData.filter((data: any) => !data.name.toLowerCase().includes('total_population'));
+        return filterData;
+    };
+
 
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
-
-        setCurerntChartData(currentChartSelectedData);
+        const filteredData = filterChartSelectedData(currentChartSelectedData);
+        setCurerntChartData(filteredData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selctFieldCurrentValue]);
 

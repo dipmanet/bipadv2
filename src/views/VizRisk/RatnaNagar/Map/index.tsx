@@ -208,6 +208,8 @@ const Map = (props: any) => {
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
             style: 'mapbox://styles/yilab/cl02b42zi00b414qm2i7xqqex',
+            // style: process.env.REACT_APP_VIZRISK_RAJAPUR_FLOOD,
+
             // center: [
             //     84.51393887409917,
             //     27.619152424687197,
@@ -235,7 +237,7 @@ const Map = (props: any) => {
                     27.5488495368228,
                     84.5618032266611,
                     27.6813334045862,
-                ], { duration: 3000, padding: 20 },
+                ], { duration: 7000, padding: 20 },
             );
         }, 2000);
 

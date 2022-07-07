@@ -72,15 +72,15 @@ export const fillPaint = (mainArray: any, getColorFunc: (item: string) => void) 
 
 export const getHouseHoldDataColor = (number: number) => {
     switch (true) {
-        case number >= 0 && number <= 1.9:
+        case number >= 0 && number < 2:
             return '#457ded';
-        case number >= 2 && number <= 3.4:
+        case number >= 2 && number < 3.5:
             return '#45c4fe';
-        case number >= 3.5 && number <= 4.9:
+        case number >= 3.5 && number < 5:
             return 'yellow';
-        case number >= 5 && number <= 6.4:
+        case number >= 5 && number < 6.5:
             return '#e79546';
-        case number > 6.4:
+        case number >= 6.5:
             return '#e75d4f';
         default:
             return 'white';
@@ -89,15 +89,15 @@ export const getHouseHoldDataColor = (number: number) => {
 
 export const getHouseHoldDataStatus = (number: number) => {
     switch (true) {
-        case number >= 0 && number <= 1.9:
+        case number >= 0 && number < 2:
             return 'Very Low';
-        case number >= 2 && number <= 3.4:
+        case number >= 2 && number < 3.5:
             return 'Low';
-        case number >= 3.5 && number <= 4.9:
+        case number >= 3.5 && number < 5:
             return 'Medium';
-        case number >= 5 && number <= 6.4:
+        case number >= 5 && number < 6.5:
             return 'High';
-        case number > 6.4:
+        case number >= 6.5:
             return 'Very High';
         default:
             return 'None';
