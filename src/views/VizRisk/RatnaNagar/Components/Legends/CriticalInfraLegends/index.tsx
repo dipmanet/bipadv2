@@ -13,7 +13,7 @@ import Bank from '#resources/icons/icon_set_bank.svg';
 import Evacuation from '../../../../Common/Icons/IDP-refugee-camp.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Bridge from '#resources/icons/bridge copy.svg';
-import Communication from '#resources/icons/communication.svg';
+import Communication from '#resources/icons/CommunicationVR.svg';
 import Sanitation from '../../../../Common/Icons/sanitationviz.svg';
 import Hotel from '../../../../Common/Icons/hotelci.svg';
 import Industry from '#resources/icons/IndustryVR.svg';
