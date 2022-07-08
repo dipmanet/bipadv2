@@ -71,7 +71,6 @@ const CriticalInfraLegends = (props) => {
                             onClick={handleCriticalToggle}
                             className={styles.chevrontoggle}
                         />
-                        )
                     </button>
                     {showCriticalElements && (
 
