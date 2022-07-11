@@ -9,28 +9,28 @@ export const rangeData = [
         name: 'high',
         status: 'High(5 - 6.5)',
         color: '#e79546',
-        range: [5, 6.5],
+        range: [5, 6.4],
 
     },
     {
         name: 'medium',
         status: 'Medium(3.5 - 5)',
         color: 'yellow',
-        range: [3.5, 5],
+        range: [3.5, 4.9],
 
     },
     {
         name: 'low',
         status: 'Low(2 - 3.5)',
         color: '#45c4fe',
-        range: [2, 3.5],
+        range: [2, 3.4],
 
     },
     {
         name: 'very_low',
         status: 'Very Low(0 - 2)',
         color: '#457ded',
-        range: [0, 2],
+        range: [0, 1.9],
 
     },
 ];
