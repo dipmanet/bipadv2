@@ -380,7 +380,14 @@ const PDFPreview = (props) => {
             <div id="bulletinPDFReport">
                 <div id="page1" className="page">
 
-                    <BulletinPDFLoss bulletinDate={bulletinDate} />
+                    <BulletinPDFLoss
+                        startDate={startDate}
+                        endDate={endDate}
+                        startTime={startTime}
+                        endTime={endTime}
+                        bulletinDate={bulletinDate}
+                        filterDateType={filterDateType}
+                    />
                 </div>
                 <div id="page2" className="page">
 

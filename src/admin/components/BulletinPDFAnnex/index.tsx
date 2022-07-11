@@ -51,6 +51,9 @@ const BulletinPDFAnnex = (props) => {
             deleteFeedbackChange,
             hazardWiseLossData,
             handleSubFieldChange,
+            endDate,
+            endTime,
+            filterDateType,
         },
     } = props;
 
@@ -125,7 +128,7 @@ const BulletinPDFAnnex = (props) => {
                 1
             </h1>
 
-            <YearlyData />
+            <YearlyData endDate={endDate} endTime={endTime} filterDateType={filterDateType} />
             <h3>
                 <Translation>
                     {
@@ -528,21 +531,26 @@ const BulletinPDFAnnex = (props) => {
                     {
                         Object.keys(covidProvinceWiseTotal.p1).map((pwT, i) => (
                             <tr>
-                                <td>
-                                    {
-                                        language === 'np'
-                                            ? nepaliRef[pwT]
-                                            : englishRef[pwT]
-                                    }
-                                </td>
+                                {pwT === 'totalActive' || pwT === 'totalDeaths' ? '' : (
+                                    <td>
+                                        {
+                                            language === 'np'
+                                                ? nepaliRef[pwT]
+                                                : englishRef[pwT]
+                                        }
+                                    </td>
+                                )}
                                 {
                                     Object.keys(covidProvinceWiseTotal)
                                         .map(prov => (
-                                            <td key={prov}>
-                                                {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString() === 'NaN'
-                                                    ? '-'
-                                                    : Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
-                                            </td>
+                                            pwT === 'totalActive' || pwT === 'totalDeaths' ? ''
+                                                : (
+                                                    <td key={prov}>
+                                                        {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString() === 'NaN'
+                                                            ? '-'
+                                                            : Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
+                                                    </td>
+                                                )
                                         ))
 
                                 }

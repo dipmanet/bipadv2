@@ -1,3 +1,4 @@
+/* eslint-disable no-octal */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
@@ -100,7 +101,7 @@ const BulletinPDF = (props: Props) => {
         feedback,
 
     } = props.bulletinData;
-    const { bulletinDate } = props;
+    const { bulletinDate, startDate, endDate, startTime, endTime } = props;
 
     const [provWiseLossChart, setProvWiseChart] = useState([]);
     const [filteredHazardTypes, setHazardLegends] = useState([]);
@@ -109,7 +110,7 @@ const BulletinPDF = (props: Props) => {
 
     const { hazardTypes, language: { language } } = props;
 
-    const a = new Date(bulletinDate);
+    const a = new Date(endDate);
     // const b = yesterday.toLocaleString();
     // const ourDate = b.split(',')[0].split('/');
     const dd = String(a.getDate()).padStart(2, '0');
@@ -122,7 +123,7 @@ const BulletinPDF = (props: Props) => {
     const monthEn = monthsEn[Number(bsDate.split('-')[1])];
     const day = bsDate.split('-')[2];
 
-    const yesterday = new Date(a);
+    const yesterday = new Date(startDate);
     // yesterday.setDate(yesterday.getDate() - 1);
     const dd_yesterday = String(yesterday.getDate()).padStart(2, '0');
     const mm_yesterday = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -133,6 +134,24 @@ const BulletinPDF = (props: Props) => {
     const month_yesterday = months[Number(bsDate_yesterday.split('-')[1])];
     const monthEn_yesterday = monthsEn[Number(bsDate_yesterday.split('-')[1])];
     const day_yesterday = bsDate_yesterday.split('-')[2];
+
+    const timeConverter = (time) => {
+        let currentTime;
+        const timeSplit = time.split(':');
+        const timeHour = timeSplit[0];
+        const timeMinute = timeSplit[1];
+        const stringCheck = String(timeHour);
+        if (timeHour > 12) {
+            currentTime = `${language === 'np' ? 'अपरान्ह ' : ''}${timeHour - 12}:${timeMinute}${language === 'np' ? ' बजे' : ' PM'}`;
+        } else if (stringCheck === '00') {
+            currentTime = `${language === 'np' ? 'पूर्वान्ह ' : ''}12:${timeMinute}${language === 'np' ? ' बजे' : ' AM'}`;
+        } else {
+            currentTime = `${language === 'np' ? 'पूर्वान्ह ' : ''}${timeHour}:${timeMinute}${language === 'np' ? ' बजे' : ' AM'}`;
+        }
+        return currentTime;
+    };
+    const BulletinStartTime = timeConverter(startTime);
+    const BulletinEndTime = timeConverter(endTime);
 
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
@@ -339,8 +358,8 @@ const BulletinPDF = (props: Props) => {
                     <h2 style={{ marginBottom: '10px' }}>
                         {
                             language === 'np'
-                                ? `${month_yesterday} ${day_yesterday} देखी ${month} ${day} सम्म`
-                                : `Disaster Incidents from ${day_yesterday} ${monthEn_yesterday} to ${day} ${monthEn}`
+                                ? `${month_yesterday} ${day_yesterday} ${BulletinStartTime} देखी ${month} ${day} ${BulletinEndTime}  सम्म`
+                                : `Disaster Incidents from ${day_yesterday} ${monthEn_yesterday} ${BulletinStartTime} to ${day} ${monthEn} ${BulletinEndTime}`
                         }
 
 

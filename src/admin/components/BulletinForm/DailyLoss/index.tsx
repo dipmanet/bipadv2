@@ -201,6 +201,7 @@ const Bulletin = (props: Props) => {
                 today = new Date(bulletinEditData.fromDateTime);
             } else {
                 today = new Date();
+                today.setDate(today.getDate() - 1);
             }
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -240,7 +241,16 @@ const Bulletin = (props: Props) => {
             handleDateTo(finalDate);
         }
     }, [dateAltTo, bulletinEditData]);
-
+    useEffect(() => {
+        if (!startingTime && !endingTime) {
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = String(currentDate.getMinutes());
+            const presentTime = `${currentHour}:${currentMinute.length === 1 ? `0${currentMinute}` : currentMinute}`;
+            setStartingTime('10:00');
+            setEndingTime('10:00');
+        }
+    }, []);
     const handleStartTime = (e) => {
         setStartingTime(e.target.value);
     };

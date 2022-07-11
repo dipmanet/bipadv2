@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -510,7 +512,7 @@ const BulletinPDFLoss = (props: Props) => {
                             fill="#A6B2DE"
                             barSize={12}
                         />
-                        <Bar
+                        {/* <Bar
                             stackId={'a'}
                             dataKey={language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active'}
                             fill="#3F69C8"
@@ -522,7 +524,7 @@ const BulletinPDFLoss = (props: Props) => {
                             dataKey={language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths'}
                             fill="#3457A6"
                             barSize={12}
-                        />
+                        /> */}
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -541,32 +543,36 @@ const BulletinPDFLoss = (props: Props) => {
                         </tr>
                     </thead>
                     <tbody>
+
                         {
                             Object.keys(covidProvinceWiseTotal.p1).map((pwT, i) => (
+
                                 <tr>
-                                    <Translation>
-                                        {
-                                            t => (
-                                                <td>
-                                                    {bullets[i]}
-                                                    {t(`${pwT}`)}
-                                                </td>
-                                            )
-                                        }
-                                    </Translation>
+                                    {pwT === 'totalActive' || pwT === 'totalDeaths' ? '' : (
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <td>
+                                                        {bullets[i]}
+                                                        {t(`${pwT}`)}
+                                                    </td>
+                                                )
+                                            }
+                                        </Translation>
+                                    )}
 
-                                    {
 
-                                        Object.keys(covidProvinceWiseTotal)
-                                            .map(prov => (
-
-                                                <td key={prov}>
-                                                    {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString() === 'NaN'
-                                                        ? '-'
-                                                        : Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
-                                                </td>
-                                            ))
-
+                                    {Object.keys(covidProvinceWiseTotal)
+                                        .map(prov => (
+                                            pwT === 'totalActive' || pwT === 'totalDeaths' ? ''
+                                                : (
+                                                    <td key={prov}>
+                                                        {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString() === 'NaN'
+                                                            ? '-'
+                                                            : Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
+                                                    </td>
+                                                )
+                                        ))
                                     }
 
                                 </tr>
