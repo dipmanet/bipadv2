@@ -74,10 +74,14 @@ const Map = (props: Props) => {
         const allAvialableVizrisks = [...vzRiskMunicipalData, ...vzRiskProvinceData]
             .map(item => item.id);
 
+        const bounds = [
+            [79.161987, 25.923467], [89.626465, 30.789037],
+        ];
 
         const landingPageMap = new mapboxgl.Map({
             container: mapContainer,
-            style: 'mapbox://styles/yilab/cl4npfhi4002x14l5jf8bn4d3',
+            // style: 'mapbox://styles/yilab/cl4npfhi4002x14l5jf8bn4d3',
+            style: 'mapbox://styles/yilab/ckr1mucvr7q3f1ao91578bqcq',
             logoPosition: 'top-left',
             minZoom: 5,
             // makes initial map center to Nepal
@@ -86,6 +90,7 @@ const Map = (props: Props) => {
             //     lat: 28.384151,
             // },
             zoom: 7,
+            maxBounds: bounds,
         });
 
         if (updateMap) {
