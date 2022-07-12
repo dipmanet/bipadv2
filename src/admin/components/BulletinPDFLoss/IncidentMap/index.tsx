@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -43,8 +44,8 @@ import Page from '#components/Page';
 import Loading from '#components/Loading';
 import HazardsLegend from '#components/HazardsLegend';
 
-import Map from './Map';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import Map from './Map';
 import styles from './styles.scss';
 
 const emptyHoverAttributeList: {
@@ -127,6 +128,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             // eslint-disable-next-line @typescript-eslint/camelcase
             incident_on__lt: `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
             limit: -1,
+            data_source: 'drr_api',
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }

@@ -122,6 +122,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             incident_on__gt: params.filterDateType === 'incident_on' ? params.date_gt : '',
             reported_on__lt: params.filterDateType === 'reported_on' ? params.date_lt : '',
             reported_on__gt: params.filterDateType === 'reported_on' ? params.date_gt : '',
+            data_source: 'drr_api',
 
         }),
         onMount: true,

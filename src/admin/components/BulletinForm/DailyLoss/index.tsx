@@ -28,6 +28,7 @@ import {
 
 import { setLanguageAction, setBulletinEditDataAction } from '#actionCreators';
 
+import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import {
     incidentSummary,
     peopleLoss,
@@ -37,7 +38,6 @@ import {
 } from '../formFields';
 
 import styles from './styles.scss';
-import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
@@ -253,9 +253,11 @@ const Bulletin = (props: Props) => {
     }, []);
     const handleStartTime = (e) => {
         setStartingTime(e.target.value);
+        setFilterDateType('');
     };
     const handleEndTime = (e) => {
         setEndingTime(e.target.value);
+        setFilterDateType('');
     };
 
     return (

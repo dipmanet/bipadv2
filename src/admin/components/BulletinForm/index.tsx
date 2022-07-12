@@ -9,6 +9,28 @@ import {
     isDefined,
     _cs,
 } from '@togglecorp/fujs';
+import {
+    sum,
+} from '#utils/common';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+import {
+    incidentListSelectorIP,
+    filtersSelector,
+    hazardTypesSelector,
+    regionsSelector,
+    bulletinEditDataSelector,
+    languageSelector,
+    bulletinPageSelector,
+} from '#selectors';
+import {
+    setBulletinCovidAction, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
+    setEventListAction, setBulletinEditDataAction,
+} from '#actionCreators';
 import DailyLoss from './DailyLoss';
 import Covid from './Covid';
 import Response from './Response';
@@ -26,29 +48,7 @@ import {
     vaccineStat,
     covidProvinceWiseTotal,
 } from './formFields';
-import {
-    sum,
-} from '#utils/common';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
 
-import {
-    incidentListSelectorIP,
-    filtersSelector,
-    hazardTypesSelector,
-    regionsSelector,
-    bulletinEditDataSelector,
-    languageSelector,
-    bulletinPageSelector,
-} from '#selectors';
-import {
-    setBulletinCovidAction, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
-    setEventListAction, setBulletinEditDataAction,
-} from '#actionCreators';
 import styles from './styles.scss';
 import { Menu } from '../ProgressMenu/utils';
 
@@ -155,6 +155,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             reported_on__lt: params.reported_on__lt,
             reported_on__gt: params.reported_on__gt,
             ordering: params.ordering,
+            data_source: 'drr_api',
         }),
         onMount: false,
         onSuccess: ({ response, params, props: { setIncidentList } }) => {
