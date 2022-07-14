@@ -288,7 +288,7 @@ const PDFPreview = (props) => {
         });
     };
 
-    const savePDf = (file, doc) => {
+    const savePDf = (file) => {
         axios
             .post(`${baseUrl}/bipad-bulletin/`, getPostData(file), {
                 headers: {
@@ -303,7 +303,7 @@ const PDFPreview = (props) => {
             });
     };
 
-    const updatePDF = (file, doc, id) => {
+    const updatePDF = (file, id) => {
         axios
             .patch(`${baseUrl}/bipad-bulletin/${id}/`, getPatchData(file), {
                 headers: {
@@ -349,14 +349,16 @@ const PDFPreview = (props) => {
     const handleDownload = async (reportType: string) => {
         const pageNumber = 0;
         setPending(true);
-        const doc = new JsPDF('p', 'mm', 'a4');
         // const doc = new JsPDF('p', 'mm', 'a4');
-        const ids = document.querySelectorAll('.page');
+        // const doc = new JsPDF('p', 'mm', 'a4');
+        // const ids = document.querySelectorAll('.page');
         // const { length } = ids;
         const reportContent = document.getElementById('bulletinPDFReport');
 
         const options = {
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+            pagebreak: { avoid: 'tr', mode: ['css', 'legacy'] },
+            // margin: [10, 0, 10, 0],
+            html2canvas: { scale: 2 },
         };
 
         // eslint-disable-next-line no-undef
@@ -364,11 +366,11 @@ const PDFPreview = (props) => {
             .then((bulletin: Blob) => {
                 axios.get(`${baseUrl}/bipad-bulletin/?sitrep=${sitRep}`).then((res) => {
                     if (res.data.results.length === 0) {
-                        savePDf(bulletin, doc);
+                        savePDf(bulletin);
                     } else {
                         // const { id } = bulletinEditData;
                         const { id } = res.data.results[0];
-                        updatePDF(bulletin, doc, id);
+                        updatePDF(bulletin, id);
                     }
                 });
             })

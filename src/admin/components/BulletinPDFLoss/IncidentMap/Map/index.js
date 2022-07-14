@@ -150,9 +150,6 @@ const IncidentMap = (props) => {
 
     const getPointFeatureCollection = memoize(incidentPointToGeojson);
     const pointFeatureCollection = getPointFeatureCollection(incidentList, hazards);
-    console.log('This is data', pointFeatureCollection);
-    console.log('This is list', incidentList);
-    console.log('This is hazard', hazards);
     const { language: { language } } = props;
 
     useEffect(() => {

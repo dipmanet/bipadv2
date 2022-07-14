@@ -283,6 +283,7 @@ const Bulletin = (props: Props) => {
         uri,
         id,
         urlLanguage,
+        bulletinEditData: { feedbackNe },
         bulletinData: { feedback },
         setBulletinEditData,
     } = props;
@@ -305,51 +306,48 @@ const Bulletin = (props: Props) => {
         let today; let
             yesterday;
         if (filterDateType) {
-            if (Object.keys(bulletinEditData).length === 0) {
-                setLoading(true);
-                if (selectedDate) {
-                    today = selectedDateTo;
-                    yesterday = new Date(selectedDate);
+            setLoading(true);
+            if (selectedDate) {
+                today = selectedDateTo;
+                yesterday = new Date(selectedDate);
 
-                    // yesterday.setDate(yesterday.getDate() - 1);
-                } else {
-                    today = new Date();
-                    yesterday = new Date(today);
-                    // yesterday.setDate(yesterday.getDate() - 1);
-                }
-                // const dateFrom=selectedDate;
-                // const dateTo=selectedDateTo
-
-                const DEFAULT_START_DATE = yesterday;
-                const DEFAULT_END_DATE = today;
-                const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T${startingTime || '00:00'}:00+05:45`;
-                const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T${endingTime || '23:59'}:59+05:45`;
-                const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
-                const limit = -1;
-                const incident_on__lt = filterDateType === 'incident_on' ? endDate : ''; // eslint-disable-line @typescript-eslint/camelcase
-                const incident_on__gt = filterDateType === 'incident_on' ? startDate : ''; // eslint-disable-line @typescript-eslint/camelcase
-                const reported_on__lt = filterDateType === 'reported_on' ? endDate : '';
-                const reported_on__gt = filterDateType === 'reported_on' ? startDate : '';
-                const ordering = '-incident_on';
-
-                const test = selectDateForQuery(selectedDate);
-                resetFeedback();
-
-                incidentsGetRequest.do({
-                    expand,
-                    limit,
-                    incident_on__lt,
-                    incident_on__gt,
-                    reported_on__lt,
-                    reported_on__gt,
-                    ordering,
-                    setLossData,
-                    setLoading,
-                });
+                // yesterday.setDate(yesterday.getDate() - 1);
+            } else {
+                today = new Date();
+                yesterday = new Date(today);
+                // yesterday.setDate(yesterday.getDate() - 1);
             }
+            // const dateFrom=selectedDate;
+            // const dateTo=selectedDateTo
+
+            const DEFAULT_START_DATE = yesterday;
+            const DEFAULT_END_DATE = today;
+            const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T${startingTime || '00:00'}:00+05:45`;
+            const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T${endingTime || '23:59'}:59+05:45`;
+            const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
+            const limit = -1;
+            const incident_on__lt = filterDateType === 'incident_on' ? endDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+            const incident_on__gt = filterDateType === 'incident_on' ? startDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+            const reported_on__lt = filterDateType === 'reported_on' ? endDate : '';
+            const reported_on__gt = filterDateType === 'reported_on' ? startDate : '';
+            const ordering = '-incident_on';
+
+            const test = selectDateForQuery(selectedDate);
+            resetFeedback();
+
+            incidentsGetRequest.do({
+                expand,
+                limit,
+                incident_on__lt,
+                incident_on__gt,
+                reported_on__lt,
+                reported_on__gt,
+                ordering,
+                setLossData,
+                setLoading,
+            });
         }
     }, [filterDateType]);
-
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
             const finalFeedbackFromEdit = () => {
@@ -364,7 +362,8 @@ const Bulletin = (props: Props) => {
 
             setStartingTime(start);
             setEndingTime(end);
-            setFilterDateType(bulletinEditData.filterBy);
+            // setFilterDateType(bulletinEditData.filterBy);
+            setFilterDateType('');
             setSitRep(bulletinEditData.sitrep);
             setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);

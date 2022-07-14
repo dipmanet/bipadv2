@@ -412,7 +412,7 @@ const Bulletin = (props: Props) => {
 
                             </InputLabel>
                             <Select
-                                disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
+                                // disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
                                 labelId="hazardLabel"
                                 id="hazardInput"
                                 value={filterDateType}

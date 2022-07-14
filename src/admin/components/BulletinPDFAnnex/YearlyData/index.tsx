@@ -253,7 +253,6 @@ const YearlyData = (props: Props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData, language]);
-    console.log('This is cumulative', cumulative);
     return (
         <>
             <Loading pending={incidentsGetRequest.pending} />

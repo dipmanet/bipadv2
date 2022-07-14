@@ -49,7 +49,6 @@ const MenuCommon = (props: Props) => {
 
     const handleMenuItemClick = (menuItem: MenuItem) => {
         const { setBulletinEditData } = props;
-        console.log('This is menu item', menuItem);
         if (menuItem.children) {
             navigate(`/admin/${menuItem.slug}/${menuItem.children[0].slug}`);
         } else if (menuItem.parent && adminMenu) {

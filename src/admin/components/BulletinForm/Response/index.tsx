@@ -1,3 +1,9 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -44,7 +50,9 @@ const Response = (props: Props) => {
         hazardTypes,
         language: { language },
         setBulletinFeedback,
-        bulletinEditData,
+        bulletinEditData: {
+            feedbackNe,
+        },
         bulletinData: {
             feedback,
         },
@@ -61,8 +69,21 @@ const Response = (props: Props) => {
         injured: 0,
         response: '',
     });
-
     const [cumulative, setCumulative] = useState();
+    const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
+
+    const getUpdatedFeedbackResponse = (id, key) => (feedbackNe[id] ? feedbackNe[id][key] : '');
+
+    useEffect(() => {
+        !isFeedbackDataUpdated ? Object.keys(feedback).map((id, i) => {
+            setIsFeedbackDataUpdated(true);
+            feedback[id] ? (feedback[id].description = getUpdatedFeedbackResponse(id, 'description')) : '';
+            feedback[id] ? (feedback[id].response = getUpdatedFeedbackResponse(id, 'response')) : '';
+        }) : '';
+
+        setBulletinFeedback({ feedback });
+    }, [feedbackNe, feedback]);
+
 
     const handleRemarksChange = (e, field) => {
         setRemarks({ ...remarks, [field]: e });

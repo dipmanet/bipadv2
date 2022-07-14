@@ -33,6 +33,7 @@ import {
     hazardTypesSelector,
     regionsSelector,
     bulletinEditDataSelector,
+    bulletinPageSelector,
 } from '#selectors';
 import { hazardTypesList } from '#utils/domain';
 import {
@@ -90,6 +91,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     regions: regionsSelector(state),
     filters: filtersSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
+    bulletinData: bulletinPageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -133,8 +135,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             data_source: 'drr_api',
         }),
         onSuccess: ({ response, params, props: { setIncidentList } }) => {
-            console.log('params', params);
-            console.log('This entered here', response.results);
             setIncidentList({ incidentList: response.results });
         },
         onMount: false,
@@ -193,7 +193,7 @@ class Incidents extends React.PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        const { bulletinEditData, requests: {
+        const { bulletinEditData, bulletinData, requests: {
             incidentsGetRequest,
         } } = this.props;
         if (Object.keys(bulletinEditData).length > 0) {
@@ -202,10 +202,10 @@ class Incidents extends React.PureComponent<Props, State> {
             const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
             const limit = -1;
             const ordering = '-incident_on';
-            const incident_on__lt = bulletinEditData.filterBy === 'incident_on' ? endDate : ''; // eslint-disable-line @typescript-eslint/camelcase
-            const incident_on__gt = bulletinEditData.filterBy === 'incident_on' ? startDate : ''; // eslint-disable-line @typescript-eslint/camelcase
-            const reported_on__lt = bulletinEditData.filterBy === 'reported_on' ? endDate : '';
-            const reported_on__gt = bulletinEditData.filterBy === 'reported_on' ? startDate : '';
+            const incident_on__lt = bulletinData.filterDateType === 'incident_on' ? endDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+            const incident_on__gt = bulletinData.filterDateType === 'incident_on' ? startDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+            const reported_on__lt = bulletinData.filterDateType === 'reported_on' ? endDate : '';
+            const reported_on__gt = bulletinData.filterDateType === 'reported_on' ? startDate : '';
             incidentsGetRequest.do({
                 expand,
                 limit,
@@ -262,7 +262,6 @@ class Incidents extends React.PureComponent<Props, State> {
             incidentPoints,
             bulletinEditData,
         } = this.props;
-        console.log('This is bulletin edit data', bulletinEditData);
         const { hoveredIncidentId } = this.state;
 
         const sanitizedIncidentList = this.getSanitizedIncidents(
@@ -272,7 +271,6 @@ class Incidents extends React.PureComponent<Props, State> {
         );
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
         const pending = pendingEvents || pendingIncidents;
-        console.log('incident points', incidentPoints);
         return (
             <div>
                 <Loading pending={pending} />
