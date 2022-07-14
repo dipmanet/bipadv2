@@ -235,6 +235,7 @@ const BulletinPDF = (props: Props) => {
             const uniqueAddedHazards = [...new Set(allHazardsAdded)];
             newhazardLegends = uniqueAddedHazards.map(h => ({
                 title: getHazardTitle(h),
+                titleNe: getHazardTitle(h),
                 // titleEn: getHazardTitle(h),
                 color: getHazardColor(h),
             }));
@@ -491,6 +492,8 @@ const BulletinPDF = (props: Props) => {
                                 filteredHazardTypes={filteredHazardTypes}
                                 className={styles.legend}
                                 itemClassName={styles.legendItem}
+                                language={language}
+
                             />
                         </div>
                     </div>

@@ -7,8 +7,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import styles from './styles.module.scss';
-import { userSelector, adminMenuSelector } from '#selectors';
-import { SetAdminMenuAction } from '#actionCreators';
+import { userSelector, adminMenuSelector, bulletinEditDataSelector } from '#selectors';
+import { SetAdminMenuAction, setBulletinEditDataAction } from '#actionCreators';
 
 interface Props {
     currentPage?: MenuItem;
@@ -34,9 +34,11 @@ interface MenuItem {
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     user: userSelector(state),
     adminMenu: adminMenuSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAdminMenu: params => dispatch(SetAdminMenuAction(params)),
+    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
 
 const MenuCommon = (props: Props) => {
@@ -46,9 +48,12 @@ const MenuCommon = (props: Props) => {
     const currentPageSlug = useRef(null);
 
     const handleMenuItemClick = (menuItem: MenuItem) => {
+        const { setBulletinEditData } = props;
+        console.log('This is menu item', menuItem);
         if (menuItem.children) {
             navigate(`/admin/${menuItem.slug}/${menuItem.children[0].slug}`);
         } else if (menuItem.parent && adminMenu) {
+            setBulletinEditData({});
             const parentSlug = adminMenu.filter(mI => mI.id === menuItem.parent)[0].slug;
             navigate(`/admin/${parentSlug}/${menuItem.slug}`);
         } else {

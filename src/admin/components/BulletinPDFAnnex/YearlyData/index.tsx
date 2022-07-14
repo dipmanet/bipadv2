@@ -205,7 +205,7 @@ const YearlyData = (props: Props) => {
             } else {
                 setSummaryData(bulletinEditData.yearlyData);
             }
-        } else if (lossData && Object.keys(lossData).length > 0) {
+        } if (lossData && Object.keys(lossData).length > 0) {
             const newhazardData = {};
             // const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
 
@@ -253,6 +253,7 @@ const YearlyData = (props: Props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData, language]);
+    console.log('This is cumulative', cumulative);
     return (
         <>
             <Loading pending={incidentsGetRequest.pending} />

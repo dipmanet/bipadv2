@@ -32,6 +32,7 @@ import {
     filtersSelector,
     hazardTypesSelector,
     regionsSelector,
+    bulletinEditDataSelector,
 } from '#selectors';
 import { hazardTypesList } from '#utils/domain';
 import {
@@ -88,6 +89,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
     filters: filtersSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -119,23 +121,23 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/incident/',
         method: methods.GET,
         // We have to transform dateRange to incident_on__lt and incident_on__gt
-        query: ({ props: { filters } }) => ({
-            ...transformFilters(filters),
-            expand: ['loss', 'event', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
-            ordering: '-incident_on',
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            incident_on__gt: `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            incident_on__lt: `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
-            limit: -1,
+        query: ({ params }) => ({
+
+            expand: params.expand,
+            limit: params.limit,
+            incident_on__lt: params.incident_on__lt,
+            incident_on__gt: params.incident_on__gt,
+            reported_on__lt: params.reported_on__lt,
+            reported_on__gt: params.reported_on__gt,
+            ordering: params.ordering,
             data_source: 'drr_api',
         }),
-        onSuccess: ({ response, props: { setIncidentList } }) => {
-            interface Response { results: PageType.Incident[] }
-            const { results: incidentList = [] } = response as Response;
-            // setIncidentList({ incidentList });
+        onSuccess: ({ response, params, props: { setIncidentList } }) => {
+            console.log('params', params);
+            console.log('This entered here', response.results);
+            setIncidentList({ incidentList: response.results });
         },
-        onMount: true,
+        onMount: false,
         // extras: { schemaName: 'incidentResponse' },
     },
     eventsRequest: {
@@ -190,6 +192,32 @@ class Incidents extends React.PureComponent<Props, State> {
         };
     }
 
+    public componentDidMount() {
+        const { bulletinEditData, requests: {
+            incidentsGetRequest,
+        } } = this.props;
+        if (Object.keys(bulletinEditData).length > 0) {
+            const startDate = bulletinEditData.fromDateTime;
+            const endDate = bulletinEditData.toDateTime;
+            const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
+            const limit = -1;
+            const ordering = '-incident_on';
+            const incident_on__lt = bulletinEditData.filterBy === 'incident_on' ? endDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+            const incident_on__gt = bulletinEditData.filterBy === 'incident_on' ? startDate : ''; // eslint-disable-line @typescript-eslint/camelcase
+            const reported_on__lt = bulletinEditData.filterBy === 'reported_on' ? endDate : '';
+            const reported_on__gt = bulletinEditData.filterBy === 'reported_on' ? startDate : '';
+            incidentsGetRequest.do({
+                expand,
+                limit,
+                incident_on__lt,
+                incident_on__gt,
+                reported_on__lt,
+                reported_on__gt,
+                ordering,
+            });
+        }
+    }
+
     private getSanitizedIncidents = memoize(getSanitizedIncidents)
 
     private getIncidentHazardTypesList = memoize((incidentList) => {
@@ -232,8 +260,9 @@ class Incidents extends React.PureComponent<Props, State> {
             hazardTypes,
             filters,
             incidentPoints,
+            bulletinEditData,
         } = this.props;
-
+        console.log('This is bulletin edit data', bulletinEditData);
         const { hoveredIncidentId } = this.state;
 
         const sanitizedIncidentList = this.getSanitizedIncidents(
@@ -243,6 +272,7 @@ class Incidents extends React.PureComponent<Props, State> {
         );
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
         const pending = pendingEvents || pendingIncidents;
+        console.log('incident points', incidentPoints);
         return (
             <div>
                 <Loading pending={pending} />
