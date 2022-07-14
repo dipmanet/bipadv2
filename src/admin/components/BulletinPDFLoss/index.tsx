@@ -87,7 +87,7 @@ const radiusSelector = (d: LegendItem) => d.radius;
 const incidentPointSizeData: LegendItem[] = [
     { label: 'Minor (0)', labelNe: 'सामान्य (0)', style: styles.symbol, color: '#a3a3a3', radius: 4 },
     { label: 'Major (<10)', labelNe: 'मुख्य (<10)', style: styles.symbol, color: '#a3a3a3', radius: 6 },
-    { label: 'Severe (<100)', labelNe: 'गम्भिर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Severe (<100)', labelNe: 'गम्भीर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
     { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 10 },
 ];
 
@@ -359,7 +359,7 @@ const BulletinPDF = (props: Props) => {
                     <h2 style={{ marginBottom: '10px' }}>
                         {
                             language === 'np'
-                                ? `${month_yesterday} ${day_yesterday} ${BulletinStartTime} देखी ${month} ${day} ${BulletinEndTime}  सम्म`
+                                ? `${month_yesterday} ${day_yesterday} ${BulletinStartTime} देखि ${month} ${day} ${BulletinEndTime}  सम्म`
                                 : `Disaster Incidents from ${day_yesterday} ${monthEn_yesterday} ${BulletinStartTime} to ${day} ${monthEn} ${BulletinEndTime}`
                         }
 
