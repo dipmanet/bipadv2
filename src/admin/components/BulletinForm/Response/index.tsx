@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-undef */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-return-assign */
@@ -56,6 +58,7 @@ const Response = (props: Props) => {
         bulletinData: {
             feedback,
         },
+        bulletinEditData,
         setCumulativeRedux,
     } = props;
 
@@ -72,7 +75,9 @@ const Response = (props: Props) => {
     const [cumulative, setCumulative] = useState();
     const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
 
-    const getUpdatedFeedbackResponse = (id, key) => (feedbackNe[id] ? feedbackNe[id][key] : '');
+    const getUpdatedFeedbackResponse = (id, key) => (Object.keys(bulletinEditData).length > 0
+        ? feedbackNe[id] ? feedbackNe[id][key] : ''
+        : feedback[id] ? feedback[id][key] : '');
 
     useEffect(() => {
         !isFeedbackDataUpdated ? Object.keys(feedback).map((id, i) => {
