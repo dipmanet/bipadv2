@@ -79,6 +79,12 @@ const Response = (props: Props) => {
         ? feedbackNe[id] ? feedbackNe[id][key] : ''
         : feedback[id] ? feedback[id][key] : '');
 
+    const test = Object.keys(feedbackNe).length > 0 && Object.keys(feedbackNe).map((item) => {
+        const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
+        return data;
+    });
+
+    console.log('This is final test', test);
     useEffect(() => {
         !isFeedbackDataUpdated ? Object.keys(feedback).map((id, i) => {
             setIsFeedbackDataUpdated(true);
@@ -88,7 +94,8 @@ const Response = (props: Props) => {
 
         setBulletinFeedback({ feedback });
     }, [feedbackNe, feedback]);
-
+    console.log('This feedback', feedback);
+    console.log('This ne feedback', feedbackNe);
 
     const handleRemarksChange = (e, field) => {
         setRemarks({ ...remarks, [field]: e });

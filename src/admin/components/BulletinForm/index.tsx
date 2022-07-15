@@ -349,8 +349,10 @@ const Bulletin = (props: Props) => {
         }
     }, [filterDateType]);
     useEffect(() => {
+        console.log('This is bulletin', bulletinEditData);
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
             const finalFeedbackFromEdit = () => {
+                console.log('This is bulletin edit data', bulletinEditData);
                 if (bulletinEditData.language === 'nepali') {
                     setBulletinFeedback({ feedback: bulletinEditData.feedbackNe });
                 } else {
@@ -452,10 +454,18 @@ const Bulletin = (props: Props) => {
 
     // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
+        console.log('This is e', e);
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
-            const newSubData = { ...newFieldData, coordinates: e.coordinates, district: e.district };
+            const newSubData = {
+                ...newFieldData,
+                coordinates: e.coordinates,
+                district: e.district,
+                provinceId: e.provinceId,
+                districtId: e.districtId,
+                municipalityId: e.municipalityId,
+            };
             setAddedData({ ...newData, [field]: newSubData });
             setBulletinFeedback({ feedback: { ...feedback, ...newData, [field]: newSubData } });
         } else {

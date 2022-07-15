@@ -135,8 +135,21 @@ const Bulletin = (props: Props) => {
             };
         }
         if (adminLevel === 3) {
+            console.log('provinces', provinces);
+            console.log('districts', districts);
+            console.log('municipalities', municipalities);
+            console.log('geo area', geoarea);
+            const districtId = districts.filter(d => d.id === (municipalities.find(p => p.id === geoarea).district))[0].id;
+            const municipalityId = geoarea;
+            const provinceId = districts.filter(d => d.id === (municipalities.find(p => p.id === geoarea).district))[0].province;
+            console.log('district id', districtId);
+            console.log('province id', provinceId);
+            console.log('municipality id', municipalityId);
             return {
                 centroid: municipalities.find(p => p.id === geoarea).centroid,
+                municipalityId,
+                districtId,
+                provinceId,
                 district: districts.filter(d => d.id === (municipalities.find(p => p.id === geoarea).district))[0].title_ne,
             };
         }
@@ -144,8 +157,8 @@ const Bulletin = (props: Props) => {
     };
 
     const handleFormRegion = (region, field, subfield) => {
-        const { centroid: { coordinates }, district } = getRegionDetails(region);
-        handleSameHazardChange({ district, coordinates }, field, 'location');
+        const { centroid: { coordinates }, district, municipalityId, districtId, provinceId } = getRegionDetails(region);
+        handleSameHazardChange({ district, coordinates, municipalityId, districtId, provinceId }, field, 'location');
     };
 
     const handleCheckFilterDisableButtonForProvince = (province) => {
@@ -177,14 +190,28 @@ const Bulletin = (props: Props) => {
     };
 
     const getRegionValue = (distCoordinate) => {
-        if (distCoordinate) {
-            const obj = districts.filter(item => item.centroid.coordinates[0] === distCoordinate[0] && item.centroid.coordinates[1] === distCoordinate[1]);
-            if (obj.length > 0) {
-                return { adminLevel: 2, geoarea: obj[0].id };
-            }
-            return null;
+        console.log('distCoordinate', distCoordinate);
+        const { provinceId, districtId, municipalityId } = distCoordinate;
+        if (provinceId && districtId && municipalityId) {
+            return { adminLevel: 3, geoarea: municipalityId };
+        } if (provinceId && districtId && !municipalityId) {
+            return { adminLevel: 2, geoarea: districtId };
+        } if (provinceId && !districtId && !municipalityId) {
+            return { adminLevel: 1, geoarea: provinceId };
         }
+
         return null;
+
+
+        // if (distCoordinate) {
+        //     const obj = districts.filter(item => item.centroid.coordinates[0] === distCoordinate[0] && item.centroid.coordinates[1] === distCoordinate[1]);
+        //     console.log('This coordinates', obj);
+        //     if (obj.length > 0) {
+        //         return { adminLevel: 2, geoarea: obj[0].id };
+        //     }
+        //     return null;
+        // }
+        // return null;
     };
 
 
@@ -259,7 +286,7 @@ const Bulletin = (props: Props) => {
         setEndingTime(e.target.value);
         setFilterDateType('');
     };
-
+    console.log('addedHazardFields', addedHazardFields);
     return (
         <>
             {loading
@@ -628,6 +655,7 @@ const Bulletin = (props: Props) => {
 
                                 </h3>
                                 {field && Object.keys(addedHazardFields[field]).map((subField) => {
+                                    console.log('field subField', field, subField);
                                     if (subField === 'coordinates') {
                                         return (
                                             <div className={styles.inputContainer}>
@@ -637,7 +665,7 @@ const Bulletin = (props: Props) => {
                                                     faramElementName="region"
                                                     wardsHidden
                                                     bulletin
-                                                    value={getRegionValue(addedHazardFields[field][subField])}
+                                                    value={getRegionValue(addedHazardFields[field])}
                                                     onChange={region => handleFormRegion(region, field, subField)}
                                                     checkProvince={handleCheckFilterDisableButtonForProvince}
                                                     checkDistrict={handleCheckFilterDisableButtonForDistrict}
@@ -653,6 +681,15 @@ const Bulletin = (props: Props) => {
                                     } if (subField === 'hazard') {
                                         return null;
                                     } if (subField === 'district') {
+                                        return null;
+                                    }
+                                    if (subField === 'provinceId') {
+                                        return null;
+                                    }
+                                    if (subField === 'districtId') {
+                                        return null;
+                                    }
+                                    if (subField === 'municipalityId') {
                                         return null;
                                     }
                                     return (
