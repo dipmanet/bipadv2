@@ -282,7 +282,7 @@ export const checkSameRegionPermission = (user, region) => {
             permission = true;
         }
     } else if (region.adminLevel === 2) {
-        if (user && user.profile.district === region.geoarea && user.profile.province === null) {
+        if (user && user.profile.district === region.geoarea) {
             permission = true;
         }
     } else if (region.adminLevel === 3) {
