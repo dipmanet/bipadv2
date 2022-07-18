@@ -188,7 +188,7 @@ const Bulletin = (props: Props) => {
     const handleHazardChange = (e) => {
         setHazard(e);
     };
-
+    console.log('This final hazard', hazard);
     const getRegionValue = (distCoordinate) => {
         console.log('distCoordinate', distCoordinate);
         const { provinceId, districtId, municipalityId } = distCoordinate;

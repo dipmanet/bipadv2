@@ -163,6 +163,9 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             if (params && params.setLossData) {
                 params.setLossData(response.results);
             }
+            if (params && params.testFunction) {
+                params.testFunction();
+            }
             if (params && params.setLoading) {
                 params.setLoading(false);
             }
@@ -263,6 +266,10 @@ const Bulletin = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [filterDataTypeError, setFilterDataTypeError] = useState(false);
 
+
+    const [incidentFetchCondition, setIncidentFetchCondition] = useState(true);
+
+
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -283,7 +290,7 @@ const Bulletin = (props: Props) => {
         uri,
         id,
         urlLanguage,
-        bulletinEditData: { feedbackNe },
+        bulletinEditData: { feedbackNe, addedHazardsNe },
         bulletinData: { feedback },
         setBulletinEditData,
     } = props;
@@ -292,7 +299,7 @@ const Bulletin = (props: Props) => {
     const [lossData, setLossData] = useState();
     const [covidNational, setCovidNational] = useState([]);
     const [covidQuaratine, setCovidQurantine] = useState([]);
-
+    const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
 
     covidNationalInfo.setDefaultParams({ setCovidNational, dateAltTo });
     covidQuarantine.setDefaultParams({ setCovidQurantine });
@@ -302,6 +309,46 @@ const Bulletin = (props: Props) => {
         setBulletinFeedback({ feedback: {} });
     };
 
+    // const testFunction = () => {
+    //     if (addedHazardsNe && Object.keys(addedHazardsNe).length > 0) {
+    //         const data = { ...feedback, ...addedHazardsNe };
+    //         console.log('This is data', data);
+    //         setBulletinFeedback({ feedback: data });
+    //         // return data;
+    //         // Object.keys(feedbackNe).map((item) => {
+    //         //     const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
+    //         //     return data;
+    //         // });
+    //     }
+    //     return null;
+    // };
+
+    useEffect(() => {
+        if (addedHazardsNe && Object.keys(addedHazardsNe).length > 0) {
+            console.log('feedback', feedback);
+            console.log('incident fetch condition', incidentFetchCondition);
+            if (feedback && Object.keys(feedback).length > 0 && incidentFetchCondition) {
+                const data = { ...feedback, ...addedHazardsNe };
+                console.log('This is data', data);
+
+                setBulletinFeedback({ feedback: data });
+                setIncidentFetchCondition(false);
+                setIsFeedbackDataUpdated(true);
+            }
+
+            // return data;
+            // Object.keys(feedbackNe).map((item) => {
+            //     const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
+            //     return data;
+            // });
+        }
+    }, [addedHazardsNe, incidentFetchCondition, feedback]);
+    const testFunction = () => {
+        setIncidentFetchCondition(true);
+    };
+
+    console.log('This test function', feedback);
+    console.log('This is total count', countId);
     useEffect(() => {
         let today; let
             yesterday;
@@ -333,7 +380,7 @@ const Bulletin = (props: Props) => {
             const ordering = '-incident_on';
 
             const test = selectDateForQuery(selectedDate);
-            resetFeedback();
+            // resetFeedback();
 
             incidentsGetRequest.do({
                 expand,
@@ -345,6 +392,7 @@ const Bulletin = (props: Props) => {
                 ordering,
                 setLossData,
                 setLoading,
+                testFunction,
             });
         }
     }, [filterDateType]);
@@ -454,7 +502,7 @@ const Bulletin = (props: Props) => {
 
     // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
-        console.log('This is e', e);
+        console.log('This is e', typeof e);
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
@@ -469,7 +517,7 @@ const Bulletin = (props: Props) => {
             setAddedData({ ...newData, [field]: newSubData });
             setBulletinFeedback({ feedback: { ...feedback, ...newData, [field]: newSubData } });
         } else {
-            const newSubData = { ...newFieldData, [subfield]: e };
+            const newSubData = { ...newFieldData, [subfield]: Number(e) };
             setAddedData({ ...newData, [field]: newSubData });
             setBulletinFeedback({ feedback: { ...feedback, ...newData, [field]: newSubData } });
         }
@@ -477,7 +525,10 @@ const Bulletin = (props: Props) => {
 
     // this runs when button is clicked
     const handleSameHazardAdd = (hazard) => {
+        const countIdTotal = addedHazardsNe && Object.keys(addedHazardsNe).length;
+        countId.current = countId.current === 0 && addedHazardsNe && Object.keys(addedHazardsNe).length > 0 ? countIdTotal : countId.current;
         const newData = { ...addedHazardFields };
+        console.log('This is new data', newData);
         setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         setBulletinFeedback({ feedback: { ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } } });
         countId.current += 1;
@@ -949,6 +1000,9 @@ const Bulletin = (props: Props) => {
             deleteFeedbackChange={deleteFeedbackChange}
             hazardWiseLossData={hazardWiseLossData}
             handleSubFieldChange={handleSubFieldChange}
+            isFeedbackDataUpdated={isFeedbackDataUpdated}
+            setIsFeedbackDataUpdated={setIsFeedbackDataUpdated}
+
         />,
         <Temperatures
             minTemp={minTemp}

@@ -60,6 +60,8 @@ const Response = (props: Props) => {
         },
         bulletinEditData,
         setCumulativeRedux,
+        isFeedbackDataUpdated,
+        setIsFeedbackDataUpdated,
     } = props;
 
 
@@ -73,27 +75,35 @@ const Response = (props: Props) => {
         response: '',
     });
     const [cumulative, setCumulative] = useState();
-    const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
 
+    const test = (id, key) => {
+        console.log('this key and id', key, id);
+        console.log('feedbackNe[id][key]', feedbackNe[id][key]);
+        return feedbackNe[id][key];
+    };
     const getUpdatedFeedbackResponse = (id, key) => (Object.keys(bulletinEditData).length > 0
-        ? feedbackNe[id] ? feedbackNe[id][key] : ''
+        ? feedbackNe[id] ? test(id, key) : ''
         : feedback[id] ? feedback[id][key] : '');
 
-    const test = Object.keys(feedbackNe).length > 0 && Object.keys(feedbackNe).map((item) => {
-        const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
-        return data;
-    });
+    // const test = Object.keys(feedbackNe).length > 0 && Object.keys(feedbackNe).map((item) => {
+    //     const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
+    //     return data;
+    // });
 
-    console.log('This is final test', test);
+    // console.log('This is final test', test);
     useEffect(() => {
-        !isFeedbackDataUpdated ? Object.keys(feedback).map((id, i) => {
-            setIsFeedbackDataUpdated(true);
-            feedback[id] ? (feedback[id].description = getUpdatedFeedbackResponse(id, 'description')) : '';
-            feedback[id] ? (feedback[id].response = getUpdatedFeedbackResponse(id, 'response')) : '';
-        }) : '';
+        console.log('This feedback effect', feedback);
+        isFeedbackDataUpdated
+            ? Object.keys(feedback).map((id, i) => {
+                console.log('This id', id);
+                setIsFeedbackDataUpdated(false);
+                feedback[id] ? (feedback[id].description = getUpdatedFeedbackResponse(id, 'description')) : '';
+                feedback[id] ? (feedback[id].response = getUpdatedFeedbackResponse(id, 'response')) : '';
+            })
+            : '';
 
         setBulletinFeedback({ feedback });
-    }, [feedbackNe, feedback]);
+    }, [isFeedbackDataUpdated, feedback, feedbackNe]);
     console.log('This feedback', feedback);
     console.log('This ne feedback', feedbackNe);
 
@@ -351,6 +361,8 @@ const Response = (props: Props) => {
                                                 </td>
                                                 <td>
                                                     <div className={styles.formItemHalf}>
+                                                        {console.log('feedback', feedback)}
+                                                        {console.log('feedback hlw', hwL)}
                                                         {
                                                             annex
                                                                 ? feedback[hwL].response || ''
