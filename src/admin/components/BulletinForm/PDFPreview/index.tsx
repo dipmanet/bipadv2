@@ -373,7 +373,7 @@ const PDFPreview = (props) => {
         const options = {
             pagebreak: { avoid: 'tr', mode: ['css', 'legacy'] },
             // margin: [10, 0, 10, 0],
-            html2canvas: { scale: 2 },
+            html2canvas: { scale: 3 },
         };
         let image1 = '';
         let image2 = '';
