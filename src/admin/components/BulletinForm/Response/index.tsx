@@ -75,27 +75,12 @@ const Response = (props: Props) => {
         response: '',
     });
     const [cumulative, setCumulative] = useState();
-
-    const test = (id, key) => {
-        console.log('this key and id', key, id);
-        console.log('feedbackNe[id][key]', feedbackNe[id][key]);
-        return feedbackNe[id][key];
-    };
     const getUpdatedFeedbackResponse = (id, key) => (Object.keys(bulletinEditData).length > 0
-        ? feedbackNe[id] ? test(id, key) : ''
+        ? feedbackNe[id] ? feedbackNe[id][key] : ''
         : feedback[id] ? feedback[id][key] : '');
-
-    // const test = Object.keys(feedbackNe).length > 0 && Object.keys(feedbackNe).map((item) => {
-    //     const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
-    //     return data;
-    // });
-
-    // console.log('This is final test', test);
     useEffect(() => {
-        console.log('This feedback effect', feedback);
         isFeedbackDataUpdated
             ? Object.keys(feedback).map((id, i) => {
-                console.log('This id', id);
                 setIsFeedbackDataUpdated(false);
                 feedback[id] ? (feedback[id].description = getUpdatedFeedbackResponse(id, 'description')) : '';
                 feedback[id] ? (feedback[id].response = getUpdatedFeedbackResponse(id, 'response')) : '';
@@ -104,9 +89,6 @@ const Response = (props: Props) => {
 
         setBulletinFeedback({ feedback });
     }, [isFeedbackDataUpdated, feedback, feedbackNe]);
-    console.log('This feedback', feedback);
-    console.log('This ne feedback', feedbackNe);
-
     const handleRemarksChange = (e, field) => {
         setRemarks({ ...remarks, [field]: e });
     };
@@ -361,8 +343,6 @@ const Response = (props: Props) => {
                                                 </td>
                                                 <td>
                                                     <div className={styles.formItemHalf}>
-                                                        {console.log('feedback', feedback)}
-                                                        {console.log('feedback hlw', hwL)}
                                                         {
                                                             annex
                                                                 ? feedback[hwL].response || ''

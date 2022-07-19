@@ -163,8 +163,8 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             if (params && params.setLossData) {
                 params.setLossData(response.results);
             }
-            if (params && params.testFunction) {
-                params.testFunction();
+            if (params && params.incidentFetchFunction) {
+                params.incidentFetchFunction();
             }
             if (params && params.setLoading) {
                 params.setLoading(false);
@@ -309,46 +309,19 @@ const Bulletin = (props: Props) => {
         setBulletinFeedback({ feedback: {} });
     };
 
-    // const testFunction = () => {
-    //     if (addedHazardsNe && Object.keys(addedHazardsNe).length > 0) {
-    //         const data = { ...feedback, ...addedHazardsNe };
-    //         console.log('This is data', data);
-    //         setBulletinFeedback({ feedback: data });
-    //         // return data;
-    //         // Object.keys(feedbackNe).map((item) => {
-    //         //     const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
-    //         //     return data;
-    //         // });
-    //     }
-    //     return null;
-    // };
-
     useEffect(() => {
         if (addedHazardsNe && Object.keys(addedHazardsNe).length > 0) {
-            console.log('feedback', feedback);
-            console.log('incident fetch condition', incidentFetchCondition);
             if (feedback && Object.keys(feedback).length > 0 && incidentFetchCondition) {
                 const data = { ...feedback, ...addedHazardsNe };
-                console.log('This is data', data);
-
                 setBulletinFeedback({ feedback: data });
                 setIncidentFetchCondition(false);
                 setIsFeedbackDataUpdated(true);
             }
-
-            // return data;
-            // Object.keys(feedbackNe).map((item) => {
-            //     const data = !feedback[item] ? { ...feedback, [item]: feedbackNe[item] } : '';
-            //     return data;
-            // });
         }
     }, [addedHazardsNe, incidentFetchCondition, feedback]);
-    const testFunction = () => {
+    const incidentFetchFunction = () => {
         setIncidentFetchCondition(true);
     };
-
-    console.log('This test function', feedback);
-    console.log('This is total count', countId);
     useEffect(() => {
         let today; let
             yesterday;
@@ -392,15 +365,13 @@ const Bulletin = (props: Props) => {
                 ordering,
                 setLossData,
                 setLoading,
-                testFunction,
+                incidentFetchFunction,
             });
         }
     }, [filterDateType]);
     useEffect(() => {
-        console.log('This is bulletin', bulletinEditData);
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
             const finalFeedbackFromEdit = () => {
-                console.log('This is bulletin edit data', bulletinEditData);
                 if (bulletinEditData.language === 'nepali') {
                     setBulletinFeedback({ feedback: bulletinEditData.feedbackNe });
                 } else {
@@ -502,7 +473,6 @@ const Bulletin = (props: Props) => {
 
     // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
-        console.log('This is e', typeof e);
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
@@ -528,7 +498,6 @@ const Bulletin = (props: Props) => {
         const countIdTotal = addedHazardsNe && Object.keys(addedHazardsNe).length;
         countId.current = countId.current === 0 && addedHazardsNe && Object.keys(addedHazardsNe).length > 0 ? countIdTotal : countId.current;
         const newData = { ...addedHazardFields };
-        console.log('This is new data', newData);
         setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         setBulletinFeedback({ feedback: { ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } } });
         countId.current += 1;

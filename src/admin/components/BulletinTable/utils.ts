@@ -254,5 +254,5 @@ export const tableTitleRef = {
     sitrep: 'Sit Rep',
     createdOn: 'Created on',
     modifiedOn: 'Modified on',
-    pdfFile: 'Bulletin PDF',
+    pdfFile: 'Download Bulletin',
 };

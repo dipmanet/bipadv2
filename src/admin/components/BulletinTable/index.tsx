@@ -1,3 +1,10 @@
+/* eslint-disable no-delete-var */
+/* eslint-disable prefer-const */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable react/button-has-type */
+/* eslint-disable func-names */
+/* eslint-disable no-plusplus */
 /* eslint-disable indent */
 /* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable @typescript-eslint/indent */
@@ -21,6 +28,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
+import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -30,10 +38,14 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { getUserPermission } from 'src/admin/utils';
 // import EditIcon from '../../../resources/editicon.svg';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { makeStyles } from '@material-ui/core/styles';
 import { visuallyHidden } from '@mui/utils';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import { ADToBS } from 'bikram-sambat-js';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import { setBulletinEditDataAction, setLanguageAction } from '#actionCreators';
 import {
     bulletinEditDataSelector,
@@ -86,7 +98,7 @@ interface HeadCell {
     numeric: boolean;
 }
 
-interface InventoryData{
+interface InventoryData {
     id: number;
     item: InventoryItem;
     itemId: number;
@@ -132,7 +144,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     <TableCell
                         align="center"
                         key={headCell.id}
-						// align={headCell.numeric ? 'right' : 'left'}
+                        // align={headCell.numeric ? 'right' : 'left'}
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
@@ -163,8 +175,8 @@ interface EnhancedTableToolbarProps {
     dispatch?: Dispatch;
     deleteHealthTable?: ActionCreator;
     formDataForEdit?: ActionCreator;
-    userDataMain?: Record<string|undefined>;
-    healthFormEditData?: Record<string|undefined>;
+    userDataMain?: Record<string | undefined>;
+    healthFormEditData?: Record<string | undefined>;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
@@ -213,7 +225,20 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Toolbar>
     );
 };
-
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        border: 'none',
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}));
 
 const BulletinTable = (props) => {
     const {
@@ -228,7 +253,7 @@ const BulletinTable = (props) => {
         totalRows,
         setLanguage,
         handleBulletinDelete,
-     } = props;
+    } = props;
 
     const [searchValue, setsearchValue] = React.useState('');
     const [filteredRowDatas, setfilteredRowDatas] = React.useState(props.bulletinTableData);
@@ -245,6 +270,10 @@ const BulletinTable = (props) => {
     const [tableShow, setTableShow] = useState(true);
     const [offset, setOffset] = useState(0);
 
+
+    const classes = useStyles();
+    const [value, setValue] = React.useState(1);
+
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
         setLoader(true);
@@ -259,12 +288,12 @@ const BulletinTable = (props) => {
 
     useEffect(() => {
         fetchBulletins(offset);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 
     useEffect(() => {
         setfilteredRowDatas(props.bulletinTableData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.bulletinTableData]);
 
 
@@ -292,7 +321,7 @@ const BulletinTable = (props) => {
                     disablePadding: false,
                     label: finalObj[invD],
                 }));
-                setHeadCells(headCellsData);
+            setHeadCells(headCellsData);
         } else {
             const finalObj = { ...tableTitleRef, action: 'Actions' };
             setFinalObj(finalObj);
@@ -303,7 +332,7 @@ const BulletinTable = (props) => {
                     disablePadding: false,
                     label: finalObj[invD],
                 }));
-                setHeadCells(headCellsData);
+            setHeadCells(headCellsData);
         }
     }, [bulletinTableData]);
 
@@ -339,12 +368,30 @@ const BulletinTable = (props) => {
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelected([]);
     };
+    const handleDownloadFile = (url) => {
+        if (url) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute(
+                'download',
+                '',
+            );
 
+            // Append to html link element page
+            document.body.appendChild(link);
+
+            // Start download
+            link.click();
+
+            // Clean up and remove the link
+            link.parentNode.removeChild(link);
+        }
+    };
     return (
         <>
             {
                 tableShow && (totalRows === 0 || loader)
-                    && <h1 className={styles.noDataHeading}>No Table Data</h1>
+                && <h1 className={styles.noDataHeading}>No Table Data</h1>
             }
             {
                 tableShow && (filteredRowDatas.length > 0) && (
@@ -383,7 +430,7 @@ const BulletinTable = (props) => {
                             >
                                 <Table
                                     sx={{ minWidth: 750 }}
-                            // aria-labelledby="tableTitle"
+                                    // aria-labelledby="tableTitle"
                                     size={dense ? 'small' : 'medium'}
                                     stickyHeader
                                     aria-label="sticky table"
@@ -404,7 +451,7 @@ const BulletinTable = (props) => {
                                         {
                                             filteredRowDatas
                                             && stableSort(filteredRowDatas, order, orderBy)
-                                            .map((row, index) => (
+                                                .map((row, index) => (
                                                     <TableRow
                                                         hover
                                                         role="checkbox"
@@ -413,98 +460,131 @@ const BulletinTable = (props) => {
                                                     >
 
                                                         <>
-        {
-           tableTitle && Object.keys(tableTitle).map((k) => {
-                if (k === 'sitrep') {
-                    return (
-                        <TableCell
-                            align="center"
-                            padding="normal"
-                        >
-                           {row.sitrep}
-                        </TableCell>
-                    );
-                } if (k === 'pdfFile') {
-                    return (
-                        <TableCell
-                            align="center"
-                            padding="normal"
-                        >
-                            <a href={row[k]}>Download</a>
-                        </TableCell>
-                    );
-                } if (k === 'modifiedOn') {
-                    return (
-                        <TableCell
-                            align="center"
-                            padding="normal"
-                        >
-                            {ADToBS(row[k]).split('T')[0]}
-                        </TableCell>
-                    );
-                } if (k === 'createdOn') {
-                    return (
-                        <TableCell
-                            align="center"
-                            padding="normal"
-                        >
-                            {ADToBS(row[k]).split('T')[0]}
-                        </TableCell>
-                    );
-                }
-                if (k === 'action') {
-                    return (
-
-                         <TableCell
-                             align="center"
-                             padding="normal"
-                    >
-                        {
-                            (permission === 'editor' || permission === 'user' || permission === 'superuser')
-                            ? (
-                                <>
-                                <button
-                                    type="button"
-                                    className={styles.editBtn}
-                                    onClick={() => handleTableEdit(row, 'nepali')}
-                                >
-                                Edit Nepali
-                                </button>
-                                <button
-                                    type="button"
-                                    className={styles.editBtn}
-                                    onClick={() => handleTableEdit(row, 'english')}
-                                >
-                                Edit English
-                                </button>
-                                <button
-                                    type="button"
-                                    className={styles.editBtn}
-                                    onClick={() => handleBulletinDelete(row.id)}
-                                >
-                                Delete
-                                </button>
-                                </>
-                            )
-                            : <span>No Action</span>
-
-                        }
+                                                            {
+                                                                tableTitle && Object.keys(tableTitle).map((k) => {
+                                                                    if (k === 'sitrep') {
+                                                                        return (
+                                                                            <TableCell
+                                                                                align="center"
+                                                                                padding="normal"
+                                                                            >
+                                                                                {row.sitrep}
+                                                                            </TableCell>
+                                                                        );
+                                                                    } if (k === 'pdfFile') {
+                                                                        return (
+                                                                            <TableCell
+                                                                                align="center"
+                                                                                padding="normal"
+                                                                            >
 
 
-                         </TableCell>
+                                                                                <div className={styles.downloadDropdown}>
 
-                    );
-                }
-                return (
-                    <TableCell
-                        align="center"
-                        padding="normal"
-                    >
-                        { row[k] || '-'}
-                    </TableCell>
-                );
-            })
-        }
+
+                                                                                    <select style={{ fontSize: '120%', width: '50%' }} name="cars" id="cars" onChange={e => handleDownloadFile(e.target.value)}>
+                                                                                        <option value="">
+                                                                                            Download
+                                                                                        </option>
+                                                                                        {row.pdfFileNe ? (
+                                                                                            <option value={row.pdfFileNe}>
+                                                                                                Bulletin PDF Nepali
+                                                                                            </option>
+                                                                                        ) : ''}
+                                                                                        {row.pdfFile ? (
+                                                                                            <option value={row.pdfFile}>
+                                                                                                Bulletin PDF English
+                                                                                            </option>
+                                                                                        ) : ''}
+                                                                                        {row.pdfFileNeSummary ? (
+                                                                                            <option value={row.pdfFileNeSummary}>
+                                                                                                Bulletin Summary Nepali
+                                                                                            </option>
+                                                                                        ) : ''}
+                                                                                        {row.pdfFileSummary ? (
+                                                                                            <option value={row.pdfFileSummary}>
+                                                                                                Bulletin Summary English
+                                                                                            </option>
+                                                                                        ) : ''}
+
+                                                                                    </select>
+
+                                                                                </div>
+
+                                                                            </TableCell>
+                                                                        );
+                                                                    } if (k === 'modifiedOn') {
+                                                                        return (
+                                                                            <TableCell
+                                                                                align="center"
+                                                                                padding="normal"
+                                                                            >
+                                                                                {ADToBS(row[k]).split('T')[0]}
+                                                                            </TableCell>
+                                                                        );
+                                                                    } if (k === 'createdOn') {
+                                                                        return (
+                                                                            <TableCell
+                                                                                align="center"
+                                                                                padding="normal"
+                                                                            >
+                                                                                {ADToBS(row[k]).split('T')[0]}
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
+                                                                    if (k === 'action') {
+                                                                        return (
+
+                                                                            <TableCell
+                                                                                align="center"
+                                                                                padding="normal"
+                                                                            >
+                                                                                {
+                                                                                    (permission === 'editor' || permission === 'user' || permission === 'superuser')
+                                                                                        ? (
+                                                                                            <>
+                                                                                                <button
+                                                                                                    type="button"
+                                                                                                    className={styles.editBtn}
+                                                                                                    onClick={() => handleTableEdit(row, 'nepali')}
+                                                                                                >
+                                                                                                    Edit Nepali
+                                                                                                </button>
+                                                                                                <button
+                                                                                                    type="button"
+                                                                                                    className={styles.editBtn}
+                                                                                                    onClick={() => handleTableEdit(row, 'english')}
+                                                                                                >
+                                                                                                    Edit English
+                                                                                                </button>
+                                                                                                <button
+                                                                                                    type="button"
+                                                                                                    className={styles.editBtn}
+                                                                                                    onClick={() => handleBulletinDelete(row.id)}
+                                                                                                >
+                                                                                                    Delete
+                                                                                                </button>
+                                                                                            </>
+                                                                                        )
+                                                                                        : <span>No Action</span>
+
+                                                                                }
+
+
+                                                                            </TableCell>
+
+                                                                        );
+                                                                    }
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            padding="normal"
+                                                                        >
+                                                                            {row[k] || '-'}
+                                                                        </TableCell>
+                                                                    );
+                                                                })
+                                                            }
 
                                                         </>
 
@@ -527,5 +607,5 @@ const BulletinTable = (props) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-            BulletinTable,
+    BulletinTable,
 );

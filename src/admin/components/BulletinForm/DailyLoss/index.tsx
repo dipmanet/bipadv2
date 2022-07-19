@@ -135,16 +135,9 @@ const Bulletin = (props: Props) => {
             };
         }
         if (adminLevel === 3) {
-            console.log('provinces', provinces);
-            console.log('districts', districts);
-            console.log('municipalities', municipalities);
-            console.log('geo area', geoarea);
             const districtId = districts.filter(d => d.id === (municipalities.find(p => p.id === geoarea).district))[0].id;
             const municipalityId = geoarea;
             const provinceId = districts.filter(d => d.id === (municipalities.find(p => p.id === geoarea).district))[0].province;
-            console.log('district id', districtId);
-            console.log('province id', provinceId);
-            console.log('municipality id', municipalityId);
             return {
                 centroid: municipalities.find(p => p.id === geoarea).centroid,
                 municipalityId,
@@ -188,9 +181,8 @@ const Bulletin = (props: Props) => {
     const handleHazardChange = (e) => {
         setHazard(e);
     };
-    console.log('This final hazard', hazard);
+
     const getRegionValue = (distCoordinate) => {
-        console.log('distCoordinate', distCoordinate);
         const { provinceId, districtId, municipalityId } = distCoordinate;
         if (provinceId && districtId && municipalityId) {
             return { adminLevel: 3, geoarea: municipalityId };
@@ -199,19 +191,7 @@ const Bulletin = (props: Props) => {
         } if (provinceId && !districtId && !municipalityId) {
             return { adminLevel: 1, geoarea: provinceId };
         }
-
         return null;
-
-
-        // if (distCoordinate) {
-        //     const obj = districts.filter(item => item.centroid.coordinates[0] === distCoordinate[0] && item.centroid.coordinates[1] === distCoordinate[1]);
-        //     console.log('This coordinates', obj);
-        //     if (obj.length > 0) {
-        //         return { adminLevel: 2, geoarea: obj[0].id };
-        //     }
-        //     return null;
-        // }
-        // return null;
     };
 
 
@@ -286,7 +266,6 @@ const Bulletin = (props: Props) => {
         setEndingTime(e.target.value);
         setFilterDateType('');
     };
-    console.log('addedHazardFields', addedHazardFields);
     return (
         <>
             {loading
@@ -655,7 +634,6 @@ const Bulletin = (props: Props) => {
 
                                 </h3>
                                 {field && Object.keys(addedHazardFields[field]).map((subField) => {
-                                    console.log('field subField', field, subField);
                                     if (subField === 'coordinates') {
                                         return (
                                             <div className={styles.inputContainer}>
