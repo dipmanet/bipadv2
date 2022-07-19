@@ -173,11 +173,16 @@ const Bulletin = (props: Props) => {
     const handleHazardAddItem = () => {
         if (hazard) {
             // handlehazardAdd(hazard);
+            console.log('hazard', hazard);
             handleSameHazardAdd(hazard);
             setHazard(null);
         }
     };
-
+    const handleHazardRemoveItem = (removeHazard, id) => {
+        if (removeHazard) {
+            console.log('removing removeHazard', removeHazard);
+        }
+    };
     const handleHazardChange = (e) => {
         setHazard(e);
     };
@@ -627,12 +632,43 @@ const Bulletin = (props: Props) => {
                         && Object.keys(addedHazardFields).length > 0
                         && Object.keys(addedHazardFields).map(field => (
                             <>
-                                <h3>
+                                {console.log('addedHazardFields', addedHazardFields)}
+                                <h3 style={{ width: '90%' }}>
                                     {
                                         field
                                         && addedHazardFields[field].hazard}
 
                                 </h3>
+                                <button
+                                    style={{ width: '10%', marginTop: '10px' }}
+                                    type="button"
+                                    onClick={() => handleHazardRemoveItem(addedHazardFields[field].hazard, field)}
+                                    className={styles.hazardAddBtn}
+                                // disabled={hazard === null}
+                                >
+                                    {
+                                        language === 'np'
+                                            ? 'Delete'
+                                            : 'Delete'
+                                    }
+                                </button>
+
+                                {/* <div className={styles.btnContainer}>
+                                        <button
+                                            type="button"
+                                            onClick={handleHazardAddItem}
+                                            className={styles.hazardAddBtn}
+                                            disabled={hazard === null}
+                                        >
+                                            {
+                                                language === 'np'
+                                                    ? '- थप्नुहोस्'
+                                                    : 'Delete'
+                                            }
+                                        </button>
+                                    </div> */}
+
+
                                 {field && Object.keys(addedHazardFields[field]).map((subField) => {
                                     if (subField === 'coordinates') {
                                         return (

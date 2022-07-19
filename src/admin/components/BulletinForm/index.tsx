@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -226,7 +228,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         },
     },
 };
-
+let duplicateFeedbackField = {};
 const Bulletin = (props: Props) => {
     const [incidentData, setIncidentData] = useState(incidentSummary);
     const [peopleLossData, setPeopleLoss] = useState(peopleLoss);
@@ -291,7 +293,7 @@ const Bulletin = (props: Props) => {
         uri,
         id,
         urlLanguage,
-        bulletinEditData: { feedbackNe, addedHazardsNe, addedHazards, language: lang },
+        bulletinEditData: { feedback: feedbackEn, feedbackNe, addedHazardsNe, addedHazards, language: lang },
         bulletinData: { feedback },
         setBulletinEditData,
         incidentList,
@@ -311,6 +313,42 @@ const Bulletin = (props: Props) => {
         setBulletinFeedback({ feedback: {} });
     };
 
+    const testing = () => {
+        const final = { ...feedback };
+        duplicateFeedbackField = { ...addedHazardFields };
+        const finalData = incidentList.map(i => (final[i.id]
+            ? duplicateFeedbackField[i.id] = {
+                response: final[i.id].response,
+                deaths: final[i.id].deaths,
+                description: final[i.id].description,
+                district: final[i.id].district,
+                hazard: final[i.id].hazard,
+                hazardEn: final[i.id].hazardEn,
+                hazardNp: final[i.id].hazardNp,
+                injured: final[i.id].injured,
+                missing: final[i.id].missing,
+            }
+            : duplicateFeedbackField[i.id] = {
+                response: '',
+                deaths: i.loss.peopleDeathCount,
+                description: '',
+                district: i.wards[0].municipality.district.titleEn,
+                hazard: i.hazardInfo.title,
+                hazardEn: i.hazardInfo.titleEn,
+                hazardNp: i.hazardInfo.titleNe,
+                injured: i.loss.peopleInjuredCount,
+                missing: i.loss.peopleMissingCount,
+            }));
+
+
+        return finalData;
+    };
+    useEffect(() => {
+        testing();
+    }, [incidentList, feedback]);
+    console.log('This is final test', testing());
+    console.log('addedHazardFields', addedHazardFields);
+    console.log('duplicateFeedbackField', duplicateFeedbackField);
     useEffect(() => {
         if (language === 'en') {
             if (addedHazards && Object.keys(addedHazards).length > 0) {
@@ -625,6 +663,7 @@ const Bulletin = (props: Props) => {
             return null;
         } if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
+                setBulletinFeedback({ feedback: duplicateFeedbackField });
                 setBulletinLoss({
                     incidentSummary: incidentData,
                     peopleLoss: peopleLossData,
