@@ -670,6 +670,13 @@ const Bulletin = (props: Props) => {
                                     if (subField === 'municipalityId') {
                                         return null;
                                     }
+                                    if (subField === 'description') {
+                                        return null;
+                                    }
+                                    if (subField === 'response') {
+                                        return null;
+                                    }
+
                                     return (
                                         <div className={styles.formItemThird}>
                                             <FormControl fullWidth>
