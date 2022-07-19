@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-bracket-spacing */
@@ -290,9 +291,10 @@ const Bulletin = (props: Props) => {
         uri,
         id,
         urlLanguage,
-        bulletinEditData: { feedbackNe, addedHazardsNe },
+        bulletinEditData: { feedbackNe, addedHazardsNe, addedHazards, language: lang },
         bulletinData: { feedback },
         setBulletinEditData,
+        incidentList,
     } = props;
 
 
@@ -310,7 +312,16 @@ const Bulletin = (props: Props) => {
     };
 
     useEffect(() => {
-        if (addedHazardsNe && Object.keys(addedHazardsNe).length > 0) {
+        if (language === 'en') {
+            if (addedHazards && Object.keys(addedHazards).length > 0) {
+                if (feedback && Object.keys(feedback).length > 0 && incidentFetchCondition) {
+                    const data = { ...feedback, ...addedHazards };
+                    setBulletinFeedback({ feedback: data });
+                    setIncidentFetchCondition(false);
+                    setIsFeedbackDataUpdated(true);
+                }
+            }
+        } else if (addedHazardsNe && Object.keys(addedHazardsNe).length > 0) {
             if (feedback && Object.keys(feedback).length > 0 && incidentFetchCondition) {
                 const data = { ...feedback, ...addedHazardsNe };
                 setBulletinFeedback({ feedback: data });
@@ -318,10 +329,11 @@ const Bulletin = (props: Props) => {
                 setIsFeedbackDataUpdated(true);
             }
         }
-    }, [addedHazardsNe, incidentFetchCondition, feedback]);
+    }, [addedHazardsNe, incidentFetchCondition, feedback, addedHazards]);
     const incidentFetchFunction = () => {
         setIncidentFetchCondition(true);
     };
+    console.log('This feedback', feedback);
     useEffect(() => {
         let today; let
             yesterday;
@@ -353,6 +365,7 @@ const Bulletin = (props: Props) => {
             const ordering = '-incident_on';
 
             const test = selectDateForQuery(selectedDate);
+
             // resetFeedback();
 
             incidentsGetRequest.do({
@@ -496,7 +509,9 @@ const Bulletin = (props: Props) => {
     // this runs when button is clicked
     const handleSameHazardAdd = (hazard) => {
         const countIdTotal = addedHazardsNe && Object.keys(addedHazardsNe).length;
-        countId.current = countId.current === 0 && addedHazardsNe && Object.keys(addedHazardsNe).length > 0 ? countIdTotal : countId.current;
+        const countIdTotalEnglish = addedHazards && Object.keys(addedHazards).length;
+        countId.current = lang === 'english' ? countId.current === 0 && addedHazards && Object.keys(addedHazards).length > 0 ? countIdTotalEnglish : countId.current
+            : countId.current === 0 && addedHazardsNe && Object.keys(addedHazardsNe).length > 0 ? countIdTotal : countId.current;
         const newData = { ...addedHazardFields };
         setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         setBulletinFeedback({ feedback: { ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } } });

@@ -54,6 +54,7 @@ const Response = (props: Props) => {
         setBulletinFeedback,
         bulletinEditData: {
             feedbackNe,
+            feedback: feedbackEn,
         },
         bulletinData: {
             feedback,
@@ -76,7 +77,7 @@ const Response = (props: Props) => {
     });
     const [cumulative, setCumulative] = useState();
     const getUpdatedFeedbackResponse = (id, key) => (Object.keys(bulletinEditData).length > 0
-        ? feedbackNe[id] ? feedbackNe[id][key] : ''
+        ? language === 'en' ? feedbackEn[id] ? feedbackEn[id][key] : '' : feedbackNe[id] ? feedbackNe[id][key] : ''
         : feedback[id] ? feedback[id][key] : '');
     useEffect(() => {
         isFeedbackDataUpdated
@@ -92,7 +93,7 @@ const Response = (props: Props) => {
     const handleRemarksChange = (e, field) => {
         setRemarks({ ...remarks, [field]: e });
     };
-
+    console.log('isFeedbackDataUpdated', feedback);
 
     const handleFeedback = () => {
         if (remarks) {
