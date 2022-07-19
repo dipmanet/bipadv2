@@ -45,7 +45,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             offset: params.offset,
             limit: 100,
             count: true,
-            ordering: '-modified_on',
+            ordering: '-sitrep',
         }),
         onSuccess: ({ response, params: { setTableData, setCount, setPending } }) => {
             setTableData(response.results);
@@ -108,25 +108,25 @@ const Bulletin = (props: Props) => {
             <div className={styles.container}>
                 {
                     bulletinEditData && Object.keys(bulletinEditData).length === 0
-                && <h1 className={styles.heading}> Bulletin Data Table</h1>
+                    && <h1 className={styles.heading}> Bulletin Data Table</h1>
                 }
                 {
                     bulletinEditData && Object.keys(bulletinEditData).length > 0
-                && (
-                    <div className={styles.btnContainer}>
-                        <button
-                            type="button"
-                            onClick={handleBack}
-                            className={styles.backBtn}
-                            title="Back to table page"
-                        >
-                            <Icon
-                                name="chevronLeft"
-                                className={styles.backIcon}
-                            />
-                        </button>
-                    </div>
-                )
+                    && (
+                        <div className={styles.btnContainer}>
+                            <button
+                                type="button"
+                                onClick={handleBack}
+                                className={styles.backBtn}
+                                title="Back to table page"
+                            >
+                                <Icon
+                                    name="chevronLeft"
+                                    className={styles.backIcon}
+                                />
+                            </button>
+                        </div>
+                    )
                 }
 
                 {
@@ -153,7 +153,7 @@ const Bulletin = (props: Props) => {
             >
                 <Box className={styles.box}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                       Bulletin has been deleted successfully
+                        Bulletin has been deleted successfully
                     </Typography>
                     <button
                         onClick={handleClose}

@@ -202,97 +202,101 @@ const IncidentMap = (props) => {
                     visibility: 'visible',
                     'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
                     'text-anchor': 'center',
-                    'text-size': 9,
+                    'text-size': 14,
+                    'text-font': [language === 'np' ? 'Preeti Bold' : 'Rubik Bold'],
                 },
                 paint: {
                     'text-color': 'black',
                 },
             });
 
-            Map.addLayer({
-                id: 'district-line',
-                source: 'nepal',
-                'source-layer': 'districtgeo',
-                type: 'line',
-                layout: {
-                    visibility: 'none',
-                },
-                paint: {
-                    'line-color': '#000000',
-                    'line-width': 1,
-                },
-            });
-            Map.addLayer({
-                id: 'district-name',
-                source: 'nepal-centroid',
-                'source-layer': 'districtcentroidgeo',
-                type: 'symbol',
-                layout: {
-                    visibility: 'none',
-                    'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
-                    'text-anchor': 'center',
-                    'text-size': 9,
-                },
-                paint: {
-                    'text-color': 'black',
-                },
-            });
-            Map.addLayer({
-                id: 'municipality-line',
-                source: 'nepal',
-                'source-layer': 'municipalitygeo',
-                type: 'line',
-                layout: {
-                    visibility: 'none',
-                },
-                paint: {
-                    'line-color': '#000000',
-                    'line-width': 0.8,
-                },
-            });
-            Map.addLayer({
-                id: 'municipality-name',
-                source: 'nepal-centroid',
-                'source-layer': 'municipalitycentroidgeo',
-                type: 'symbol',
-                layout: {
-                    visibility: 'none',
-                    'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
-                    'text-anchor': 'center',
-                    'text-size': 9,
+            // Map.addLayer({
+            //     id: 'district-line',
+            //     source: 'nepal',
+            //     'source-layer': 'districtgeo',
+            //     type: 'line',
+            //     layout: {
+            //         visibility: 'none',
+            //     },
+            //     paint: {
+            //         'line-color': '#000000',
+            //         'line-width': 1,
+            //     },
+            // });
+            // Map.addLayer({
+            //     id: 'district-name',
+            //     source: 'nepal-centroid',
+            //     'source-layer': 'districtcentroidgeo',
+            //     type: 'symbol',
+            //     layout: {
+            //         visibility: 'none',
+            //         'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
+            //         'text-anchor': 'center',
+            //         'text-size': 9,
+            //         'text-font': [language === 'np' ? 'Preeti Bold' : 'Rubik Bold'],
+            //     },
+            //     paint: {
+            //         'text-color': 'black',
+            //     },
+            // });
+            // Map.addLayer({
+            //     id: 'municipality-line',
+            //     source: 'nepal',
+            //     'source-layer': 'municipalitygeo',
+            //     type: 'line',
+            //     layout: {
+            //         visibility: 'none',
+            //     },
+            //     paint: {
+            //         'line-color': '#000000',
+            //         'line-width': 0.8,
+            //     },
+            // });
+            // Map.addLayer({
+            //     id: 'municipality-name',
+            //     source: 'nepal-centroid',
+            //     'source-layer': 'municipalitycentroidgeo',
+            //     type: 'symbol',
+            //     layout: {
+            //         visibility: 'none',
+            //         'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
+            //         'text-anchor': 'center',
+            //         'text-size': 9,
+            //         'text-font': [language === 'np' ? 'Preeti Bold' : 'Rubik Bold'],
 
-                },
-                paint: {
-                    'text-color': 'black',
-                },
-            });
-            Map.addLayer({
-                id: 'ward-line',
-                source: 'nepal',
-                'source-layer': 'wardgeo',
-                type: 'line',
-                layout: {
-                    visibility: 'none',
-                },
-                paint: {
-                    'line-color': '#000000',
-                    'line-width': 1,
-                },
-            });
-            Map.addLayer({
-                id: 'ward-name',
-                source: 'nepal-centroid',
-                'source-layer': 'wardcentroidgeo',
-                type: 'symbol',
-                layout: {
-                    visibility: 'none',
-                    'text-field': ['get', 'title'],
-                    'text-anchor': 'center',
-                },
-                paint: {
-                    'text-color': 'black',
-                },
-            });
+            //     },
+            //     paint: {
+            //         'text-color': 'black',
+            //     },
+            // });
+            // Map.addLayer({
+            //     id: 'ward-line',
+            //     source: 'nepal',
+            //     'source-layer': 'wardgeo',
+            //     type: 'line',
+            //     layout: {
+            //         visibility: 'none',
+            //     },
+            //     paint: {
+            //         'line-color': '#000000',
+            //         'line-width': 1,
+            //     },
+            // });
+            // Map.addLayer({
+            //     id: 'ward-name',
+            //     source: 'nepal-centroid',
+            //     'source-layer': 'wardcentroidgeo',
+            //     type: 'symbol',
+            //     layout: {
+            //         visibility: 'none',
+            //         'text-field': ['get', 'title'],
+            //         'text-anchor': 'center',
+            //         'text-font': [language === 'np' ? 'Preeti Bold' : 'Rubik Bold'],
+            //     },
+            //     paint: {
+            //         'text-color': 'black',
+            //     },
+            // });
             Map.addSource('incidents-bulletin', {
                 type: 'geojson',
                 data: pointFeatureCollection,

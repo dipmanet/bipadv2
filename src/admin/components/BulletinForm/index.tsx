@@ -195,7 +195,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         },
     },
     sitRepQuery: {
-        url: '/bipad-bulletin/?ordering=-id&limit=1',
+        url: '/bipad-bulletin/?ordering=-sitrep&limit=1',
         method: methods.GET,
         onMount: false,
         onSuccess: ({ response, params: { setSitRep } }) => {
@@ -333,7 +333,6 @@ const Bulletin = (props: Props) => {
     const incidentFetchFunction = () => {
         setIncidentFetchCondition(true);
     };
-    console.log('This feedback', feedback);
     useEffect(() => {
         let today; let
             yesterday;
