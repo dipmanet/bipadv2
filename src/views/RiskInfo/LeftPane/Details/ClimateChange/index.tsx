@@ -601,7 +601,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const rawData = measurementType === 'temperature' ? temperature : precipitation;
         const flatData = this.getFlatData(rawData);
         const layer = this.getLayer(layerGroupList, measurementType);
-
         return (
             <>
                 <Loading pending={pending} />

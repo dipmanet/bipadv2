@@ -44,7 +44,8 @@ const mapStateToProps = state => ({
 
 // const orderedKeys = {
 //     general: {
-//         dateOfReceipt: '',
+//         datasetTitle: '',
+//         datasetCreationDate: '',
 //         abstract: '',
 //         purpose: '',
 //         descriptiveKeyword: '',
@@ -64,11 +65,7 @@ const mapStateToProps = state => ({
 //         email: '',
 //     },
 //     identificationInfo: {
-//         title: '',
-//         date: '',
-//         dateType: '',
-//         abstract: '',
-//         purpose: '',
+//         dataType: '',
 //         status: '',
 //         charset: '',
 //         topicCategory: '',
@@ -80,13 +77,13 @@ const mapStateToProps = state => ({
 //         organizationName: '',
 //         positionName: '',
 //         role: '',
+//         email: '',
 //     },
-//     geographicExtend: {
-//         geographicExtend: '',
-//         geographicExtendEast: '',
-//         geographicExtendWest: '',
-//         geographicExtendNorth: '',
-//         geographicExtendSouth: '',
+//     geographicExtent: {
+//         geographicExtentEast: '',
+//         geographicExtentWest: '',
+//         geographicExtentNorth: '',
+//         geographicExtentSouth: '',
 //     },
 //     resourceMaintenanceInformation: {
 //         maintenanceAndUpdateFrequency: '',
@@ -113,76 +110,6 @@ const mapStateToProps = state => ({
 //         role: '',
 //     },
 // };
-
-const orderedKeys = {
-    general: {
-        datasetTitle: '',
-        datasetCreationDate: '',
-        abstract: '',
-        purpose: '',
-        descriptiveKeyword: '',
-    },
-    metadataRecordInfo: {
-        language: '',
-        charset: '',
-        hierarchyLevel: '',
-        date: '',
-        standardName: '',
-    },
-    contact: {
-        name: '',
-        organizationName: '',
-        positionName: '',
-        role: '',
-        email: '',
-    },
-    identificationInfo: {
-        dataType: '',
-        status: '',
-        charset: '',
-        topicCategory: '',
-        spaticalRepresentationType: '',
-        spaticalResolutionEquivalentScale: '',
-    },
-    pointOfContact: {
-        name: '',
-        organizationName: '',
-        positionName: '',
-        role: '',
-        email: '',
-    },
-    geographicExtent: {
-        geographicExtentEast: '',
-        geographicExtentWest: '',
-        geographicExtentNorth: '',
-        geographicExtentSouth: '',
-    },
-    resourceMaintenanceInformation: {
-        maintenanceAndUpdateFrequency: '',
-        userDefinedUpdateFrequency: '',
-        dateOfNextUpdate: '',
-    },
-    legalConstraints: {
-        useLimitation: '',
-        accessConstraints: '',
-        useConstraints: '',
-    },
-    referenceSystemInformation: {
-        code: '',
-    },
-    dataQualityInfo: {
-        hierarchyLevel: '',
-        statement: '',
-    },
-    distributorInfo: {
-        individualName: '',
-        organizationName: '',
-        positionName: '',
-        email: '',
-        role: '',
-    },
-};
-
 class LayerDetailModal extends React.PureComponent<ModalProps> {
     public state = {
         activeView: 'details',
@@ -197,7 +124,6 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
         details: {
             component: () => {
                 const { layer, language } = this.props;
-
                 if (!layer.longDescription) {
                     return (
                         <div className={styles.details}>
@@ -240,9 +166,13 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                     );
                 }
 
-                const groups = layer.metadata.value;
-                const orderedKeyList = Object.keys(orderedKeys);
+                const groups = language === 'en'
+                    ? layer.metadata.value
+                    : layer.metadata.valueNe === undefined
+                        ? layer.metadata.value
+                        : layer.metadata.valueNe;
 
+                const orderedKeyList = Object.keys(groups);
                 return (
                     <div className={styles.metadata}>
                         {orderedKeyList.map((groupKey) => {
@@ -250,9 +180,7 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                             if (!group) {
                                 return null;
                             }
-
-                            const orderGroup = orderedKeys[groupKey];
-
+                            const orderGroup = groups[groupKey];
                             return (
                                 <div
                                     key={groupKey}
@@ -268,7 +196,6 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                                             if (!metadata) {
                                                 return null;
                                             }
-
                                             return (
                                                 <div
                                                     className={styles.metadataItem}

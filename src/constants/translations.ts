@@ -1,5 +1,9 @@
 export const enTranslation = {
     translation: {
+        'Edit data': 'Edit data',
+        'View Details': 'View Details',
+        Inventories: 'Inventories',
+        'Capacity and Resources': 'Capacity and Resources',
         'loading legend...': 'loading legend...',
         Opacity: 'Opacity',
         Year: 'Year',
@@ -812,6 +816,10 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Edit data': 'डाटा सम्पादन गर्नुहोस्',
+        'View Details': 'विवरणहरू हेर्नुहोस्',
+        Inventories: 'आविष्कारहरू',
+        'Capacity and Resources': 'श्रोत तथा क्षमता',
         'loading legend...': 'लेजेन्‍ड लोड गर्दै...',
         Opacity: 'अस्पष्टता',
         Year: 'वर्ष',
