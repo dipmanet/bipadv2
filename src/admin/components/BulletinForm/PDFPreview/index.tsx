@@ -419,7 +419,7 @@ const PDFPreview = (props) => {
                         saveAs(zipContent, `bulletin_${endDate}.zip`);
                     });
             })
-            .save(`Bipad Bulletin ${bulletinEditData.endDate} || ''}`);
+            .save(`Bipad_Bulletin_${endDate} || ''}`);
     };
 
     return (
