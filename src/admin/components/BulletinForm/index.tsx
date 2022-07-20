@@ -313,7 +313,7 @@ const Bulletin = (props: Props) => {
         setBulletinFeedback({ feedback: {} });
     };
 
-    const testing = () => {
+    const updateFeedbackData = () => {
         const final = { ...feedback };
         duplicateFeedbackField = { ...addedHazardFields };
         const finalData = incidentList.map(i => (final[i.id]
@@ -344,11 +344,8 @@ const Bulletin = (props: Props) => {
         return finalData;
     };
     useEffect(() => {
-        testing();
-    }, [incidentList, feedback]);
-    console.log('This is final test', testing());
-    console.log('addedHazardFields', addedHazardFields);
-    console.log('duplicateFeedbackField', duplicateFeedbackField);
+        updateFeedbackData();
+    }, [incidentList, feedback, addedHazardFields]);
     useEffect(() => {
         if (language === 'en') {
             if (addedHazards && Object.keys(addedHazards).length > 0) {
@@ -542,6 +539,13 @@ const Bulletin = (props: Props) => {
             setBulletinFeedback({ feedback: { ...feedback, ...newData, [field]: newSubData } });
         }
     };
+
+    const handleSameHazardRemove = (hazard, key) => {
+        const newData = { ...addedHazardFields };
+        delete newData[key];
+        setAddedData(newData);
+    };
+
 
     // this runs when button is clicked
     const handleSameHazardAdd = (hazard) => {
@@ -1003,6 +1007,7 @@ const Bulletin = (props: Props) => {
             loading={loading}
             filterDataTypeError={filterDataTypeError}
             setFilterDataTypeError={setFilterDataTypeError}
+            handleSameHazardRemove={handleSameHazardRemove}
 
         />,
         <Covid

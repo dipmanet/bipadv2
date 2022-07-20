@@ -107,6 +107,7 @@ const Bulletin = (props: Props) => {
         loading,
         filterDataTypeError,
         setFilterDataTypeError,
+        handleSameHazardRemove,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -172,15 +173,13 @@ const Bulletin = (props: Props) => {
 
     const handleHazardAddItem = () => {
         if (hazard) {
-            // handlehazardAdd(hazard);
-            console.log('hazard', hazard);
             handleSameHazardAdd(hazard);
             setHazard(null);
         }
     };
     const handleHazardRemoveItem = (removeHazard, id) => {
         if (removeHazard) {
-            console.log('removing removeHazard', removeHazard);
+            handleSameHazardRemove(removeHazard, id);
         }
     };
     const handleHazardChange = (e) => {
@@ -632,7 +631,6 @@ const Bulletin = (props: Props) => {
                         && Object.keys(addedHazardFields).length > 0
                         && Object.keys(addedHazardFields).map(field => (
                             <>
-                                {console.log('addedHazardFields', addedHazardFields)}
                                 <h3 style={{ width: '90%' }}>
                                     {
                                         field
@@ -648,7 +646,7 @@ const Bulletin = (props: Props) => {
                                 >
                                     {
                                         language === 'np'
-                                            ? 'Delete'
+                                            ? 'मेटाउनहोस्'
                                             : 'Delete'
                                     }
                                 </button>

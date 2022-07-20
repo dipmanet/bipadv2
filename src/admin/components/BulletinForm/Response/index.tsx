@@ -93,8 +93,6 @@ const Response = (props: Props) => {
     const handleRemarksChange = (e, field) => {
         setRemarks({ ...remarks, [field]: e });
     };
-    console.log('isFeedbackDataUpdated', feedback);
-
     const handleFeedback = () => {
         if (remarks) {
             handleFeedbackChange(remarks);
