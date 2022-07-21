@@ -1,3 +1,16 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    unicode-range: U+30-39;
+    size-adjust: 85%;
+
+
+}
+
+.languageFont {
+    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
+
 .rain-detail-modal {
     width: 90vw;
     height: 90vh;

@@ -54,6 +54,7 @@ interface LegendItem {
     key: string;
     label: string;
     color: string;
+    language: string;
 }
 
 const RainEmptyComponent = () => (
@@ -62,9 +63,16 @@ const RainEmptyComponent = () => (
     </Message>
 );
 
-const rainLegendData: LegendItem[] = [
-    { key: 'averages', label: 'Average Rainfall (mm)', color: '#7fc97f' },
-];
+const RainEmptyComponentNe = () => (
+    <Message>
+        डाटा हाल उपलब्ध छैन
+    </Message>
+);
+
+
+const rainLegendData: LegendItem[] = language => ([
+    { key: 'averages', label: language === 'en' ? 'Average Rainfall (mm)' : 'औसत वर्षा (मिमी)', color: '#7fc97f' },
+]);
 
 const labelSelector = (d: LegendItem) => d.label;
 const keySelector = (d: LegendItem) => d.label;
@@ -141,6 +149,7 @@ class RainDetails extends React.PureComponent<Props> {
                 modifier: row => (
                     <FormattedDate
                         value={row.createdOn}
+                        language={language}
                         mode="yyyy-MM-dd, hh:mm aaa"
                     />
                 ),
@@ -292,6 +301,7 @@ class RainDetails extends React.PureComponent<Props> {
             title,
             handleModalClose,
             className,
+            language,
         } = this.props;
 
         let rainDetails: RealTimeRainDetails[] = emptyArray;
@@ -316,7 +326,8 @@ class RainDetails extends React.PureComponent<Props> {
                         <Modal
                             // closeOnEscape
                             // onClose={handleModalClose}
-                            className={_cs(className, styles.rainDetailModal)}
+                            className={_cs(className, styles.rainDetailModal,
+                                language === 'np' && styles.languageFont)}
                         >
                             <ModalHeader
                                 title={title}
@@ -390,6 +401,7 @@ class RainDetails extends React.PureComponent<Props> {
                                                     value={(
                                                         <FormattedDate
                                                             value={latestRainDetail.createdOn}
+                                                            language={language}
                                                             mode="yyyy-MM-dd, hh:mm:aaa"
                                                         />
                                                     )}
@@ -409,7 +421,9 @@ class RainDetails extends React.PureComponent<Props> {
                                                         data={latestRainDetail.averages}
                                                         headers={this.latestWaterLevelHeader}
                                                         keySelector={waterLevelKeySelector}
-                                                        emptyComponent={RainEmptyComponent}
+                                                        emptyComponent={language === 'en'
+                                                            ? RainEmptyComponent
+                                                            : RainEmptyComponentNe}
                                                     />
                                                     <div className={styles.chartContainer}>
                                                         <header className={styles.header}>
@@ -424,7 +438,7 @@ class RainDetails extends React.PureComponent<Props> {
                                                         <Legend
                                                             className={styles.rainChartLegend}
                                                             colorSelector={colorSelector}
-                                                            data={rainLegendData}
+                                                            data={rainLegendData(language)}
                                                             keySelector={keySelector}
                                                             labelSelector={labelSelector}
                                                             itemClassName={styles.legendItem}
@@ -459,7 +473,7 @@ class RainDetails extends React.PureComponent<Props> {
                                                         <Legend
                                                             className={styles.rainChartLegend}
                                                             colorSelector={colorSelector}
-                                                            data={rainLegendData}
+                                                            data={rainLegendData(language)}
                                                             keySelector={keySelector}
                                                             labelSelector={labelSelector}
                                                             itemClassName={styles.legendItem}

@@ -1,5 +1,10 @@
 export const enTranslation = {
     translation: {
+        Flow: 'Flow',
+        'Water Level': 'Water Level',
+        'Hourly Water Level': 'Hourly Water Level',
+        'Danger Level': 'Danger Level',
+
         'Measured On': 'Measured On',
         'Latest Rainfall': 'Latest Rainfall',
         'Average Weekly Rainfall': 'Average Weekly Rainfall',
@@ -821,6 +826,11 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Flow: 'प्रवाह',
+        'Water Level': 'पानीको तह',
+        'Hourly Water Level': 'प्रति घण्टा पानी स्तर',
+        'Danger Level': 'खतरा स्तर',
+
         'Measured On': 'मापन गरिएको मिति',
         'Latest Rainfall': 'पछिल्‍लो वर्षा',
         'Average Weekly Rainfall': 'औसत साप्‍ताहिक वर्षा',

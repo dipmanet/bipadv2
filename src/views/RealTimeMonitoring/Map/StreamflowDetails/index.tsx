@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { doesObjectHaveNoData } from '@togglecorp/fujs';
+import { _cs, doesObjectHaveNoData } from '@togglecorp/fujs';
 import {
     ResponsiveContainer,
     ComposedChart,
@@ -129,6 +129,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
             id,
             handleModalClose,
             requests,
+            language,
         } = this.props;
 
         const streamflowData: StreamflowData[] = getResults(requests, 'streamflowGetRequest');
@@ -144,7 +145,8 @@ class StreamflowDetails extends React.PureComponent<Props> {
                         <Modal
                             // closeOnEscape
                             // onClose={handleModalClose}
-                            className={styles.streamflowModal}
+                            className={_cs(styles.streamflowModal,
+                                language === 'np' && styles.languageFont)}
                         >
 
                             <ModalHeader
@@ -154,7 +156,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
                                         transparent
                                         iconName="close"
                                         onClick={handleModalClose}
-                                        title="Close Modal"
+                                        title={t('Close Modal')}
                                     />
                                 )}
                             />
@@ -164,7 +166,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
                                     <div className={styles.streamflow}>
                                         <header className={styles.header}>
                                             <h3 className={styles.heading}>
-                                                Return Period
+                                                {t('Return Period')}
                                             </h3>
                                         </header>
                                         <ListView
