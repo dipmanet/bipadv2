@@ -1,5 +1,6 @@
 import React from 'react';
 import { Translation } from 'react-i18next';
+import { convertDateAccToLanguage } from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -71,6 +72,7 @@ const PollutionTooltip = (
     description: string,
     createdDate: string,
     referenceData: ReferenceData,
+    language,
 ) => {
     const { fields:
         { title: headerTitle,
@@ -83,13 +85,13 @@ const PollutionTooltip = (
             <div className={styles.header}>
                 <div className={styles.title}>{headerTitle || 'N/A'}</div>
                 <div className={styles.date}>
-                    { createdDate
+                    {createdDate
                         ? (
                             <>
                                 <span>
-                                    {date}
+                                    {convertDateAccToLanguage(date, language)}
                                     {' '}
-                                |
+                                    |
                                     {' '}
                                     {timeOnly}
                                 </span>
@@ -121,7 +123,7 @@ const PollutionTooltip = (
                                 t => <span className={styles.value}>{t('AQI')}</span>
                             }
                         </Translation>
-                    :
+                        :
 
                     </div>
                     <div className={styles.value}>{aqi ? aqi.toFixed(2) : 'N/A'}</div>
@@ -134,7 +136,7 @@ const PollutionTooltip = (
                             }
                         </Translation>
                     </div>
-                        :
+                    :
                     <Translation>
                         {
                             t => <span className={styles.value}>{t(`${renderAqiIndicator(aqi)}`)}</span>

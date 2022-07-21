@@ -1,9 +1,11 @@
+/* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { Translation } from 'react-i18next';
+import { convertDateAccToLanguage } from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -36,6 +38,7 @@ const EarthquakeToolTip = (
     description: string,
     createdDate: string,
     referenceData: ReferenceData,
+    language,
 ) => {
     const { fields:
         { address: epicenter,
@@ -51,91 +54,91 @@ const EarthquakeToolTip = (
                 <div className={styles.title}>
                     {epicenter
                         ? (
-                    <>
+                            <>
 
-                        <Translation>
-                            {
-                                t => <span>{t('Earthquake at')}</span>
-                            }
-                        </Translation>
-                        {' '}
-                        <span>{epicenter}</span>
-                    </>
-                    )
+                                <Translation>
+                                    {
+                                        t => <span>{t('Earthquake at')}</span>
+                                    }
+                                </Translation>
+                                {' '}
+                                <span>{epicenter}</span>
+                            </>
+                        )
                         : title
 
                         || (
-                    <Translation>
-                            {
-                                t => <span>{t('N/A')}</span>
-                            }
-                    </Translation>
-                    )
-                        }
-                </div>
-                <div className={styles.date}>
-                    { createdDate
-                        ? (
-                            <>
-                            <span>
-                                {date}
-                                {' '}
-                                |
-                                {' '}
-                                {timeOnly}
-                            </span>
-                            <span>
-                                {' '}
                             <Translation>
                                 {
-                                    t => <span>{t('(NPT)')}</span>
+                                    t => <span>{t('N/A')}</span>
                                 }
                             </Translation>
-                            </span>
+                        )
+                    }
+                </div>
+                <div className={styles.date}>
+                    {createdDate
+                        ? (
+                            <>
+                                <span>
+                                    {convertDateAccToLanguage(date, language)}
+                                    {' '}
+                                    |
+                                    {' '}
+                                    {timeOnly}
+                                </span>
+                                <span>
+                                    {' '}
+                                    <Translation>
+                                        {
+                                            t => <span>{t('(NPT)')}</span>
+                                        }
+                                    </Translation>
+                                </span>
                             </>
-)
+                        )
                         : (
-                        <Translation>
-                            {
-                                t => <span>{t('N/A')}</span>
-                            }
-                        </Translation>
+                            <Translation>
+                                {
+                                    t => <span>{t('N/A')}</span>
+                                }
+                            </Translation>
                         )
 
-                        }
+                    }
                 </div>
             </div>
             <div className={styles.content}>
                 <div className={styles.magnitude}>
                     <div className={styles.title}>
-                    <Translation>
+                        <Translation>
                             {
                                 t => <span>{t('Magnitude')}</span>
                             }
-                    </Translation>
+                        </Translation>
                         :
                     </div>
                     <div className={styles.value}>
-                {magnitude
-                ? (
-                <span>
-                    {magnitude}
-                    {' '}
-                    {<Translation>
-                            {
-                                t => <span>{t('ML')}</span>
-                            }
-                     </Translation>}
-                </span>
-)
-                    : (
-                    <Translation>
-                            {
-                                t => <span>{t('N/A')}</span>
-                            }
-                    </Translation>
-)
-                    }
+                        {magnitude
+                            ? (
+                                <span>
+                                    {magnitude}
+                                    {' '}
+                                    {<Translation>
+                                        {
+                                            t => <span>{t('ML')}</span>
+                                        }
+                                    </Translation>}
+                                </span>
+                            )
+                            : (
+                                <Translation>
+                                    {
+                                        t => <span>{t('N/A')}</span>
+                                    }
+                                </Translation>
+                            )
+                        }
 
                     </div>
                 </div>

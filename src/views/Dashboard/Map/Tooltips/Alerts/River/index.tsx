@@ -1,5 +1,6 @@
 import React from 'react';
 import { Translation } from 'react-i18next';
+import { convertDateAccToLanguage } from '#utils/common';
 import styles from './styles.scss';
 
 interface ReferenceData {
@@ -26,6 +27,7 @@ const RiverTooltip = (
     description: string,
     createdDate: string,
     referenceData: ReferenceData,
+    language,
 ) => {
     const { fields:
         { title: headerTitle,
@@ -40,9 +42,9 @@ const RiverTooltip = (
             <div className={styles.header}>
                 <div className={styles.title}>{headerTitle || 'N/A'}</div>
                 <div className={styles.date}>
-                    { createdDate
-                        ? `${date} | ${timeOnly} (NPT)`
-                        : 'N/A' }
+                    {createdDate
+                        ? `${convertDateAccToLanguage(date, language)} | ${timeOnly} (NPT)`
+                        : 'N/A'}
                 </div>
             </div>
             <div className={styles.content}>
@@ -53,18 +55,18 @@ const RiverTooltip = (
                                 t => <span>{t('Basin')}</span>
                             }
                         </Translation>
-:
+                        :
 
                     </div>
                     <div className={styles.value}>
                         {basin
-                       || (
-                           <Translation>
-                               {
-                                   t => <span>{t('N/A')}</span>
-                               }
-                           </Translation>
-                       )
+                            || (
+                                <Translation>
+                                    {
+                                        t => <span>{t('N/A')}</span>
+                                    }
+                                </Translation>
+                            )
                         }
 
                     </div>
@@ -73,13 +75,13 @@ const RiverTooltip = (
                     <div className={styles.title}>Station Name:</div>
                     <div className={styles.value}>
                         {headerTitle
-                        || (
-                            <Translation>
-                                {
-                                    t => <span>{t('N/A')}</span>
-                                }
-                            </Translation>
-                        )
+                            || (
+                                <Translation>
+                                    {
+                                        t => <span>{t('N/A')}</span>
+                                    }
+                                </Translation>
+                            )
                         }
 
                     </div>
@@ -122,7 +124,7 @@ const RiverTooltip = (
                                 t => <span>{t('Source')}</span>
                             }
                         </Translation>
-                    :
+                        :
 
                     </div>
                     <a

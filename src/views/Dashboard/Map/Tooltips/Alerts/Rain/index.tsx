@@ -1,5 +1,6 @@
 import React from 'react';
 import { Translation } from 'react-i18next';
+import { convertDateAccToLanguage } from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -35,6 +36,7 @@ const RainTooltip = (
     description: string,
     createdDate: string,
     referenceData: ReferenceData,
+    language,
 ) => {
     const {
         fields:
@@ -71,7 +73,7 @@ const RainTooltip = (
                                     ? (
                                         <>
                                             <span>
-                                                {date}
+                                                {convertDateAccToLanguage(date, language)}
                                                 {' '}
                                                 |
                                                 {' '}

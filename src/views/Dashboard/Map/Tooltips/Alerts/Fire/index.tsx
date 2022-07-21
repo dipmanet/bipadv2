@@ -5,6 +5,7 @@ import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 interface ReferenceData {
     fields: {
@@ -39,6 +40,7 @@ const FireTooltip = (
     description: string,
     createdDate: string,
     referenceData: ReferenceData,
+    language,
 ) => {
     const { fields:
         { title: headerTitle,
@@ -65,7 +67,7 @@ const FireTooltip = (
                                     ? (
                                         <>
                                             <span>
-                                                {date}
+                                                {convertDateAccToLanguage(date, language)}
                                                 {' '}
                                                 |
                                                 {' '}
