@@ -1,5 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-danger */
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import {
     _cs,

@@ -18,6 +18,7 @@
 //   top: 0;
 //   z-index: 999;
 // }
+
 .tickFormat {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -92,6 +93,11 @@
     margin-top: 20px;
     margin-bottom: 20px;
 
+    .loaderDownload {
+        position: absolute;
+        left: -80px;
+    }
+
     h3 {
         font-size: 20px;
     }
@@ -114,6 +120,11 @@
 .graphicalVisualization {
 
     // display: flex;
+    .loaderDownload {
+        position: absolute;
+        left: -80px;
+    }
+
     h3 {
         font-size: 20px;
         margin-left: 10px;

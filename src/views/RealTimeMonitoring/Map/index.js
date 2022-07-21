@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
+import { connect } from 'react-redux';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
@@ -31,7 +32,14 @@ import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
 
-const noop = () => {};
+import { languageSelector } from '#selectors';
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+const noop = () => { };
 
 const RealTimeTooltip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -51,7 +59,7 @@ const GIS_URL = [
     '&outputFormat=application/json',
 ].join('');
 
-export default class RealTimeMap extends React.PureComponent {
+class RealTimeMap extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -338,6 +346,7 @@ export default class RealTimeMap extends React.PureComponent {
             onHazardHover,
             hazardHoveredAttribute,
             isHovered,
+            language: { language },
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -403,7 +412,7 @@ export default class RealTimeMap extends React.PureComponent {
                     name="forest-fire"
                 />
                 */}
-                { showStreamflow && (
+                {showStreamflow && (
                     <MapSource
                         sourceKey="streamflow-source"
                         sourceOptions={{
@@ -437,7 +446,7 @@ export default class RealTimeMap extends React.PureComponent {
                         />
                     </MapSource>
                 )}
-                { coordinates && (
+                {coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
                         tooltipOptions={tooltipOptions}
@@ -474,7 +483,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={rainFeatureCollection}
                     supportHover
                 >
-                    { showRain && (
+                    {showRain && (
                         <>
                             <MapLayer
                                 layerKey="real-time-rain-circle"
@@ -522,7 +531,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={riverFeatureCollection}
                     supportHover
                 >
-                    { showRiver && (
+                    {showRiver && (
                         <>
                             {/* <MapLayer
                                 layerKey="real-time-river-circle"
@@ -569,7 +578,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={earthquakeFeatureCollection}
                     supportHover
                 >
-                    { showEarthquake && (
+                    {showEarthquake && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-earthquake-points-fill"
@@ -618,7 +627,7 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
-                    { showFire && (
+                    {showFire && (
                         <>
                             <MapLayer
                                 layerKey="real-time-fire-points-cirle"
@@ -657,7 +666,7 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
-                    { showPollution && (
+                    {showPollution && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-pollution-points-fill"
@@ -702,18 +711,21 @@ export default class RealTimeMap extends React.PureComponent {
                 {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
+                        language={language}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
                 {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        language={language}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
-                { streamflowId && (
+                {streamflowId && (
                     <StreamflowDetails
                         id={streamflowId}
+                        language={language}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
@@ -721,3 +733,5 @@ export default class RealTimeMap extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(RealTimeMap);

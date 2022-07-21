@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable valid-typeof */
 /* eslint-disable no-undef */
@@ -39,7 +42,7 @@ const CustomLoader = language => (
         <Spinner />
         <div>
             {
-                language === 'en'
+                language.language === 'en'
                     ? 'Loading Data,Please Wait...'
                     : 'डाटा लोड गर्दै, कृपया पर्खनुहोस्...'
             }

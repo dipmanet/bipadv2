@@ -344,7 +344,7 @@ class Filters extends React.PureComponent<Props, State> {
         if (adminLevel === 2) {
             const districtObj = districts.find(d => d.id === geoarea);
             const district = districtObj.id;
-            const { province } = district;
+            const { province } = districtObj;
             return {
                 province,
                 district,

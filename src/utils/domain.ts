@@ -1,3 +1,6 @@
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import { Obj, isTruthy, isDefined, normalize } from '@togglecorp/fujs';
 import { centroid, AllGeoJSON, convex } from '@turf/turf';
@@ -2518,56 +2521,56 @@ export const capacityResource = [
         subCategory: [
             {
                 id: 81,
-                name: 'Arch',
-                nameNe: 'आर्क',
+                name: 'Arch Bridge',
+                nameNe: 'आर्क पुल',
                 type: 'Arch',
             },
             {
                 id: 82,
-                name: 'Beam',
-                nameNe: 'बिम',
+                name: 'Beam Bridge',
+                nameNe: 'बिम पुल',
                 type: 'Beam',
             },
             {
                 id: 83,
-                name: 'Cantilever',
-                nameNe: 'क्यान्टिलिभर',
+                name: 'Cantilever Bridge',
+                nameNe: 'क्यान्टिलिभर पुल',
                 type: 'Cantilever',
             },
             {
                 id: 84,
-                name: 'Wooden',
-                nameNe: 'काठको',
+                name: 'Wooden Bridge',
+                nameNe: 'काठको पुल',
                 type: 'Wooden',
             },
             {
                 id: 85,
-                name: 'Suspension',
-                nameNe: 'भ्कुण्डीएको',
+                name: 'Suspension Bridge',
+                nameNe: 'भ्कुण्डीएको पुल',
                 type: 'Suspension',
             },
             {
                 id: 86,
-                name: 'Cable-stayed',
-                nameNe: 'केबल रहेको',
+                name: 'Cable-stayed Bridge',
+                nameNe: 'केबल रहेको पुल',
                 type: 'Cable-stayed',
             },
             {
                 id: 87,
-                name: 'Culvert',
-                nameNe: 'कल्भर्ट',
+                name: 'Culvert Bridge',
+                nameNe: 'कल्भर्ट पुल',
                 type: 'Culvert',
             },
             {
                 id: 88,
-                name: 'Bailey',
-                nameNe: 'बेली',
+                name: 'Bailey Bridge',
+                nameNe: 'बेली पुल',
                 type: 'Bailey',
             },
             {
                 id: 89,
-                name: 'Truss',
-                nameNe: 'ट्रस',
+                name: 'Truss Bridge',
+                nameNe: 'ट्रस पुल',
                 type: 'Truss',
             },
             {

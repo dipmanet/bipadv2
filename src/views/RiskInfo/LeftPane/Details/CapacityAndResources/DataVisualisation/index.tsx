@@ -1,4 +1,12 @@
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable no-tabs */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-lone-blocks */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable no-useless-concat */
 /* eslint-disable prefer-spread */
 /* eslint-disable max-len */
 /* eslint-disable indent */
@@ -366,12 +374,18 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'शिक्षा संस्था',
         chartDataType: [
             {
-                label: 'Education Institutions',
+                label: 'Education Institution Types',
                 labelNe: 'शिक्षा संस्था',
                 key: 'type',
-                values: ['Pre Primary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
+                values: ['Preprimary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
                 valuesNe: ['पूर्वप्राथमिक', 'आधारभूत शिक्षा', 'उच्च विद्यालय', 'कलेज', 'विश्वविद्यालय', 'परम्परागत शिक्षा', 'पुस्तकालय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Education Institutions',
+                visualizationWordEnd: '',
+
+
             },
             {
                 label: 'Operator Type',
@@ -380,14 +394,23 @@ const visualizationKeyValues = [
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Education Institutions are ',
+                visualizationWordEnd: ' Run',
             },
+
             {
-                label: 'Open Space',
-                labelNe: 'खुल्‍ला ठाउँ',
-                key: 'hasOpenSpace',
-                values: ['Open Space'],
-                valuesNe: ['खुल्‍ला ठाउँ'],
+                label: 'Education Institution With',
+                labelNe: 'शैक्षिक संस्था संग',
+                key: ['hasOpenSpace', 'hasEvacuationRoute', 'hasHealthCenterPsychoCounseling'],
+                values: ['Open space', 'Evacuation route available', 'Health center/psycho counseling'],
+                valuesNe: ['खुला ठाउँ', 'निकासी मार्ग उपलब्ध', 'स्वास्थ्य केन्द्र/साइको काउन्सिलिङ'],
                 isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Available ',
 
             },
             {
@@ -397,15 +420,23 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
 
             },
             {
@@ -415,15 +446,22 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
-
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Students ',
+                visualizationWordEnd: '',
             },
             {
-                label: 'Students with Disability',
-                labelNe: 'अपाङ्गता भएका विद्यार्थीहरू',
+                label: 'Differently-abled Students',
+                labelNe: 'फरक क्षमता भएका विद्यार्थीहरू',
                 key: ['noOfDifferentlyAbledMaleStudents', 'noOfDifferentlyAbledFemaleStudents', 'noOfDifferentlyAbledOtherStudents'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Students ',
+                visualizationWordEnd: '',
 
             },
         ],
@@ -435,12 +473,16 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'बैंकिङ र वित्त संस्था',
         chartDataType: [
             {
-                label: 'Banking & Financial Institutions',
+                label: 'Banking & Financial Institution Types',
                 labelNe: 'बैंकिङ र वित्तीय संस्थाहरू',
                 key: 'type',
                 values: ['Commercial', 'Micro Credit Development', 'Finance', 'Development Bank', 'Cooperative', 'Money Exchange', 'ATM'],
-                valuesNe: [],
+                valuesNe: ['वाणिज्य', 'माइक्रो क्रेडिट विकास', 'वित्त', 'विकास बैंक', 'सहकारी', 'मनी एक्सचेन्ज', 'एटीएम'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Banking and Financial Institutions ',
+                visualizationWordEnd: '',
 
 
             },
@@ -451,18 +493,25 @@ const visualizationKeyValues = [
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Banking and Financial Institutions are ',
+                visualizationWordEnd: ' Run',
 
 
             },
-            {
-                label: 'Services Available',
-                labelNe: 'उपलब्ध सेवाहरू',
-                key: ['bank', 'moneyExchange', 'atm', 'hasOtherServices'],
-                values: ['Bank', 'Money Exchange', 'ATM', 'Other Services'],
-                valuesNe: ['बैंक', 'मनी एक्सचेन्ज', 'एटीएम', 'अन्य सेवाहरू'],
-                isBoolean: true,
+            // {
+            //     label: 'Services Available',
+            //     labelNe: 'उपलब्ध सेवाहरू',
+            //     key: ['bank', 'moneyExchange', 'atm', 'hasOtherServices'],
+            //     values: ['Bank', 'Money Exchange', 'ATM', 'Other Services'],
+            //     valuesNe: ['बैंक', 'मनी एक्सचेन्ज', 'एटीएम', 'अन्य सेवाहरू'],
+            //     isBoolean: true,
+            //     visualizationKey: 'highestValue',
+            //     visualizationWordStart: 'Banking and Financial institutions are ',
+            //     visualizationWordEnd: 'run',
 
-            },
+            // },
             {
                 label: 'Number of Employees',
                 labelNe: 'कर्मचारी संख्या',
@@ -470,16 +519,24 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
 
             },
 
@@ -492,12 +549,16 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'सञ्चार संस्था',
         chartDataType: [
             {
-                label: 'communication Institutions Types',
+                label: 'Communication Facility Types',
                 labelNe: 'सञ्चार संस्थाका प्रकारहरू',
                 key: 'type',
                 values: ['FM Radio', 'TV Station', 'Newspapers', 'Phone Service', 'Cable', 'Online Media', 'Internet Service Provider'],
                 valuesNe: ['एफएम रेडियो', 'टिभी स्टेशन', 'न्युजपेपर', 'फोन सेवा', 'केबल', 'अनलाइन मिडिया', 'इन्टरनेट सेवा प्रदायक'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Communication Facilities ',
+                visualizationWordEnd: '',
 
 
             },
@@ -508,6 +569,10 @@ const visualizationKeyValues = [
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Communication Facilities are ',
+                visualizationWordEnd: ' Run',
 
 
             },
@@ -519,16 +584,37 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Disaster Management',
+                labelNe: 'विपद् व्यवस्थापन',
+                key: 'hasEvacuationRoute',
+                values: ['Evacuation route'],
+                valuesNe: ['निकासी मार्ग'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Institution have Evacuation Route ',
+                visualizationWordEnd: '',
 
             },
 
@@ -547,6 +633,10 @@ const visualizationKeyValues = [
                 values: ['Government', 'INGO', 'NGO', 'CSO', 'Other'],
                 valuesNe: ['सरकार', 'अन्तर्राष्ट्रिय गैर सरकारी संस्था', 'गैर सरकारी संस्था', 'सिएसवो', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Governance Institutions ',
+                visualizationWordEnd: '',
 
 
             },
@@ -557,25 +647,32 @@ const visualizationKeyValues = [
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Institutions are ',
+                visualizationWordEnd: ' Run',
             },
-            {
-                label: 'Helipad ',
-                labelNe: 'हेलिप्याड',
-                key: 'hasHelipad',
-                values: ['Helipad'],
-                valuesNe: ['हेलिप्याड'],
-                isBoolean: true,
+            // {
+            //     label: 'Helipad ',
+            //     labelNe: 'हेलिप्याड',
+            //     key: 'hasHelipad',
+            //     values: ['Helipad '],
+            //     valuesNe: ['हेलिप्याड'],
+            //     isBoolean: true,
+            //     visualizationKey: 'total',
+            //     visualizationWordStart: 'Number of governance institutions ',
+            //     visualizationWordEnd: '',
 
-            },
-            {
-                label: 'Open Space',
-                labelNe: 'खुल्‍ला ठाउँ',
-                key: 'hasOpenSpace',
-                values: ['Open Space'],
-                valuesNe: ['खुल्‍ला ठाउँ'],
-                isBoolean: true,
+            // },
+            // {
+            //     label: 'Open Space ',
+            //     labelNe: 'खुल्‍ला ठाउँ',
+            //     key: 'hasOpenSpace',
+            //     values: ['Open Space '],
+            //     valuesNe: ['खुल्‍ला ठाउँ'],
+            //     isBoolean: true,
 
-            },
+            // },
 
             {
                 label: 'Number of Employees',
@@ -584,16 +681,37 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Governance Institutions with ',
+                labelNe: 'सुशासन संस्थाहरु संग',
+                key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute', 'hasDisasterMgmtUnit'],
+                values: ['Helipad', 'Open space', 'Evacuation route', 'Have disaster management unit'],
+                valuesNe: ['हेलिप्याड', 'खुला ठाउँ', 'निकासी मार्ग', 'विपद् व्यवस्थापन इकाई छ'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Governance Institutions with ',
+                visualizationWordEnd: ' available',
 
             },
 
@@ -606,22 +724,18 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'होटल र रेस्टुरेन्ट',
         chartDataType: [
             {
-                label: 'Hotel & Restaurant Types',
-                labelNe: 'होटल र रेस्टुरेन्ट प्रकार',
+                label: 'Hospitality',
+                labelNe: 'आतिथ्य',
                 key: 'type',
                 values: ['Hotel', 'Restaurant', 'Lodge', 'Resort', 'Homestay'],
                 valuesNe: ['होटेल', 'रेष्टुरेन्ट', 'लज', 'रिसोर्ट', 'होमस्टे'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Hotel and Restaurants ',
+                visualizationWordEnd: '',
             },
-            {
-                label: 'Bed Capacity',
-                labelNe: 'बेड क्षमता',
-                key: ['bedCount'],
-                values: ['Bed Capacity'],
-                valuesNe: ['बेड क्षमता'],
-                isBoolean: false,
 
-            },
             {
                 label: 'Number of Employees',
                 labelNe: 'कर्मचारीहरूको संख्या',
@@ -629,16 +743,37 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Hotel and Restaurants With',
+                labelNe: 'होटल र रेस्टुरेन्ट संग',
+                key: ['noOfRoom', 'noOfBed'],
+                values: ['Rooms Available', 'Beds Available'],
+                valuesNe: ['कोठा उपलब्ध छ', 'बेडहरू उपलब्ध छन्'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: '',
 
             },
 
@@ -651,67 +786,74 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'सांस्कृतिक साइटहरू',
         chartDataType: [
             {
-                label: 'Religions',
-                labelNe: 'धर्महरू',
+                label: 'Cultural Site Types',
+                labelNe: 'सांस्कृतिक साइट प्रकारहरू',
                 key: 'religion',
                 values: ['Hindu', 'Islam', 'Christian', 'Buddhist', 'Kirat', 'Sikhism', 'Judaism', 'Other'],
                 valuesNe: ['हिन्दू', 'इस्लाम', 'क्रिस्चियन', 'बौद्ध', 'किरात', 'सिख', 'यहूदी', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Cultural Sites ',
+                visualizationWordEnd: '',
             },
             {
-                label: 'Open Space ',
-                labelNe: 'खुल्‍ला ठाउँ',
-                key: 'hasOpenSpace',
-                values: ['Open Space '],
-                valuesNe: ['खुल्‍ला ठाउँ'],
+                label: 'Cultural Site With ',
+                labelNe: 'सांस्कृतिक साइट संग',
+                key: ['hasOpenSpace', 'drinkingWater', 'toilet', 'hasWashFacility', 'hasSleepingFacility', 'hasElectricity'],
+                values: ['Open Space', 'Drinking Water', 'Toilet', 'WASH facilities', 'Sleeping facilities', 'Electricity facilities'],
+                valuesNe: ['खुला ठाउँ', 'पिउने पानी', 'शौचालय', 'धुने सुविधा', 'सुत्ने सुविधा', 'बिजुली सुविधा'],
                 isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Cultural Sites with ',
+                visualizationWordEnd: ' Available',
 
             },
-            {
-                label: 'Drinking Water Available ',
-                labelNe: 'उपलब्ध पिउने पानी',
-                key: 'drinkingWater',
-                values: ['Drinking Water'],
-                valuesNe: ['पिउने पानी'],
-                isBoolean: true,
 
-            },
-            {
-                label: 'Toilet Available',
-                labelNe: 'उपलब्ध शौचालय',
-                key: 'toilet',
-                values: ['Toilet '],
-                valuesNe: ['शौचालय'],
-                isBoolean: true,
 
-            },
-            {
-                label: 'Wash Facility Available ',
-                labelNe: 'उपलब्ध धुने सुविधा ',
-                key: 'hasWashFacility',
-                values: ['Wash Facility '],
-                valuesNe: ['धुने सुविधा'],
-                isBoolean: true,
+            // {
+            //     label: 'Open Space ',
+            //     key: 'hasOpenSpace',
+            //     values: ['Open Space '],
+            //     isBoolean: true,
 
-            },
-            {
-                label: 'Sleeping Facility Available ',
-                labelNe: 'उपलब्ध सुत्ने सुविधा',
-                key: 'hasSleepingFacility',
-                values: ['Sleeping Facility '],
-                valuesNe: ['सुत्ने सुविधा'],
-                isBoolean: true,
+            // },
+            // {
+            //     label: 'Drinking Water Available ',
+            //     key: 'drinkingWater',
+            //     values: ['Drinking Water '],
+            //     isBoolean: true,
 
-            },
-            {
-                label: 'Electricity Facility Available ',
-                labelNe: 'उपलब्ध बिजुली सुविधा',
-                key: 'hasElectricity',
-                values: ['Electricity Facility '],
-                valuesNe: ['बिजुली सुविधा'],
-                isBoolean: true,
+            // },
+            // {
+            //     label: 'Toilet Available ',
+            //     key: 'toilet',
+            //     values: ['Toilet '],
+            //     isBoolean: true,
 
-            },
+            // },
+            // {
+            //     label: 'Wash Facility Available ',
+            //     key: 'hasWashFacility',
+            //     values: ['Wash Facility '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Sleeping Facility Available ',
+            //     key: 'hasSleepingFacility',
+            //     values: ['Sleeping Facility '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Electricity Facility Available ',
+            //     key: 'hasElectricity',
+            //     values: ['Electricity Facility '],
+            //     isBoolean: true,
+
+            // },
 
 
         ],
@@ -728,6 +870,10 @@ const visualizationKeyValues = [
                 values: ['Cottage Industry', 'Micro Industry', 'Small Industry', 'Medium Industry', 'Large Industry', 'Other'],
                 valuesNe: ['घरेलु उद्योग', 'सूक्ष्म उद्योग', 'साना उद्योग', 'मध्यम उद्योग', 'ठूला उद्योग', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Industries ',
+                visualizationWordEnd: '',
             },
             {
                 label: 'Operator Type',
@@ -736,6 +882,10 @@ const visualizationKeyValues = [
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Industries are ',
+                visualizationWordEnd: ' Run',
             },
             {
                 label: 'Number of Employees',
@@ -744,16 +894,37 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Industries with  ',
+                labelNe: 'उद्योगहरु संग ',
+                key: 'hasEvacuationRoute',
+                values: ['Evacuation route'],
+                valuesNe: ['निकासी मार्ग'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Industries have Evacuation Route ',
+                visualizationWordEnd: '',
 
             },
 
@@ -769,35 +940,46 @@ const visualizationKeyValues = [
                 label: 'Bridge Types',
                 labelNe: 'पुलका प्रकार',
                 key: 'type',
-                values: ['Arch', 'Beam', 'Cantilever', 'Wooden', 'Suspension', 'Cable-stayed', 'Culvert', 'Bailey', 'Truss', 'Other'],
-                valuesNe: ['आर्क', 'बीम', 'केन्टिलिभर', 'काठ', 'सस्पेन्सन', 'केबल-स्टेड', 'कलभर्ट', 'बेली', 'ट्रस', 'अन्य'],
+                values: ['Arch Bridge', 'Beam Bridge', 'Cantilever Bridge', 'Wooden Bridge', 'Suspension Bridge', 'Cable-stayed Bridge', 'Culvert Bridge', 'Bailey Bridge', 'Truss Bridge', 'Other'],
+                valuesNe: ['आर्क पुल', 'बीम पुल', 'केन्टिलिभर पुल', 'काठे पुल', 'सस्पेन्सन पुल', 'केबल-स्टेड पुल', 'कलभर्ट पुल', 'बेली पुल', 'ट्रस पुल', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Bridges ',
+                visualizationWordEnd: '',
             },
 
+            // {
+            //     label: 'Operator Type',
+            //     key: 'operatorType',
+            //     values: ['Government', 'Private', 'Community', 'Other'],
+            //     isBoolean: false,
+            //     showFalseValue: false,
+            // },
             {
-                label: 'Operator Type',
-                labelNe: 'अपरेटर प्रकार',
-                key: 'operatorType',
-                values: ['Government', 'Private', 'Community', 'Other'],
-                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
-                isBoolean: false,
-            },
-            {
-                label: 'Motorable Bridge',
+                label: 'Motorable Bridge ',
                 labelNe: ['मोटरेबल ब्रिज'],
                 key: ['isMotorable'],
                 values: ['Motorable Bridge'],
                 valuesNe: ['मोटरेबल ब्रिज'],
                 isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Motorable Bridges ',
+                visualizationWordEnd: '',
 
             },
             {
-                label: 'Condition',
-                labelNe: 'अवस्था',
+                label: 'Condition of the Bridge',
+                labelNe: 'पुलको अवस्था',
                 key: 'condition',
-                values: ['Good ', 'Bad'],
+                values: ['Good', 'Bad'],
                 valuesNe: ['राम्रो', 'नराम्रो'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Bridges in ',
+                visualizationWordEnd: ' Condition',
 
             },
 
@@ -810,12 +992,29 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'बिजुली',
         chartDataType: [
             {
-                label: 'Electricity Components',
-                labelNe: 'बिजुली घटक',
+                label: 'Hydropower/Components',
+                labelNe: 'जलविद्युत/कम्पोनेन्टहरू',
                 key: 'components',
                 values: ['Hydropower', 'Substation', 'Dam', 'Transmission Pole', 'Other'],
                 valuesNe: ['जलविद्युत', 'सबस्टेशन', 'बाँध', 'ट्रान्समिशन पोल', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Status',
+                labelNe: 'स्थिति',
+                key: 'status',
+                values: ['Operational ', 'Under construction', 'Survey'],
+                valuesNe: ['कार्यात्मक', 'निर्माणाधीन', 'सर्वेक्षण'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Hydropower/Components are ',
+                visualizationWordEnd: '',
+
             },
         ],
     },
@@ -825,22 +1024,49 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'सरसफाई सेवा',
         chartDataType: [
             {
-                label: 'Sanitation Service Types',
-                labelNe: 'सरसफाई सेवा प्रकार',
+                label: 'Sanitation Infrastructure Types',
+                labelNe: 'सरसफाई पूर्वाधारको प्रकार',
                 key: 'type',
                 values: ['Landfill', 'Dumping Site', 'Public Toilet'],
                 valuesNe: ['ल्याण्डफिल', 'डम्पिङ साइट', 'सार्वजनिक शौचालय'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Sanitation Infrastructures',
+                visualizationWordEnd: '',
             },
             {
-                label: 'Permanent Landfill',
-                labelNe: ['स्थायी ल्यान्डफिल'],
-                key: ['isPermanent'],
-                values: ['Permanent Landfill '],
-                valuesNe: ['स्थायी ल्यान्डफिल'],
-                isBoolean: true,
+                label: 'Permanent Infrastructures',
+                labelNe: 'स्थायी पूर्वाधारहरू',
+                key: 'type',
+                values: ['Landfill', 'Dumping Site'],
+                valuesNe: ['ल्याण्डफिल', 'डम्पिङ साइट'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Permanent',
+            },
+            {
+                label: 'Public Toilets',
+                labelNe: 'सार्वजनिक शौचालय',
+                key: ['noOfMaleToilets', 'noOfFemaleToilets', 'noOfCommonToilets'],
+                values: ['Male Toilet', 'Female Toilet', 'Common Toilet'],
+                valuesNe: ['पुरुष शौचालय', 'महिला शौचालय', 'सामान्य शौचालय'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Public Toilets Available',
+                visualizationWordEnd: '',
 
             },
+            // {
+            //     label: 'Permanent Landfill',
+            //     key: ['isPermanent'],
+            //     values: ['Permanent Landfill '],
+            //     isBoolean: true,
+
+            // },
 
         ],
     },
@@ -857,6 +1083,10 @@ const visualizationKeyValues = [
                 values: ['Total Area', 'Usable Area', 'Alternate Usable Area'],
                 valuesNe: ['कुल क्षेत्र', 'प्रयोगयोग्य क्षेत्र', 'वैकल्पिक प्रयोगयोग्य क्षेत्र'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of sanitation infrastructures',
+                visualizationWordEnd: '',
 
             },
 
@@ -869,14 +1099,39 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'सामुदायिक ठाउँ',
         chartDataType: [
 
-            {
-                label: 'Community Space Area Details(Sq Km)',
-                labelNe: 'सामुदायिक क्षेत्र विवरण (वर्ग किलोमिटर)',
-                key: ['capacity'],
-                values: ['Capacity of Community Space'],
-                valuesNe: ['सामुदायिक ठाउँको क्षमता'],
-                isBoolean: false,
+            // {
+            //     label: 'Community Space Area Details(Sq Km)',
+            //     key: ['capacity'],
+            //     values: ['Capacity of Community Space'],
+            //     isBoolean: false,
+            //     visualizationKey: 'total',
+            //     visualizationWordStart: 'Number of sanitation infrastructures',
+            //     visualizationWordEnd: '',
 
+            // },
+            {
+                label: 'Number of Community Spaces',
+                labelNe: 'सामुदायिक स्थानहरूको संख्या',
+                key: 'resourceType',
+                values: ['communityspace'],
+                valuesNe: ['सामुदायिक स्थान'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Community Spaces',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Community Space With',
+                labelNe: 'सामुदायिक ठाउँ संग',
+                key: ['usedAsHelipad', 'isDrinkingWaterAvailable', 'isToiletAvailable'],
+                values: ['Emergency Landing', 'Drinking water facility', 'Toilet'],
+                valuesNe: ['इमर्जेन्सी ल्यान्डिङ', 'पिउने पानीको सुविधा', 'शौचालय'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Community Space with ',
+                visualizationWordEnd: '',
             },
 
 
@@ -895,6 +1150,10 @@ const visualizationKeyValues = [
                 values: ['Small', 'Medium', 'Large'],
                 valuesNe: ['सानो', 'मध्यम', 'ठूलो'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Water Supply Infrastructures',
+                visualizationWordEnd: '',
             },
             {
                 label: 'Operator Type',
@@ -903,6 +1162,10 @@ const visualizationKeyValues = [
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordEnd: ' Run',
             },
             {
                 label: 'Number of Employees',
@@ -911,36 +1174,52 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees',
+                visualizationWordEnd: '',
 
             },
             {
-                label: 'Technical Staff',
-                labelNe: 'प्राविधिक कर्मचारी',
-                key: ['hasTechnicalStaff'],
-                values: ['Technical Staff '],
-                valuesNe: ['प्राविधिक कर्मचारी'],
+                label: 'Water Supply Infrastructure',
+                labelNe: 'पानी आपूर्ति पूर्वाधार',
+                key: 'isWaterSupplyOperational',
+                values: ['Operational', 'Not operational'],
+                valuesNe: ['परिचालन', 'परिचालन छैन'],
                 isBoolean: true,
-
+                showFalseValue: true,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordEnd: '',
             },
-            {
-                label: 'Operational Water Supply Infrastructure',
-                labelNe: 'परिचालित पानी आपूर्ति पूर्वाधार',
-                key: ['isWaterSupplyOperational'],
-                values: ['Operational Water Supply Infrastructure '],
-                valuesNe: ['कार्यात्मक पानी आपूर्ति पूर्वाधार'],
-                isBoolean: true,
+            // {
+            //     label: 'Technical Staff',
+            //     key: ['hasTechnicalStaff'],
+            //     values: ['Technical Staff '],
+            //     isBoolean: true,
 
-            },
+            // },
+            // {
+            //     label: 'Operational Water Supply Infrastructure',
+            //     key: ['isWaterSupplyOperational'],
+            //     values: ['Operational Water Supply Infrastructure '],
+            //     isBoolean: true,
+
+            // },
 
 
         ],
@@ -951,12 +1230,41 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'सडक मार्गहरू',
         chartDataType: [
             {
-                label: 'Types of Vehicles',
+                label: 'Vehicle Types',
                 labelNe: 'गाडीका प्रकार',
                 key: 'kindOfVehicle',
                 values: ['Bus', 'Micro', 'Van', 'Other'],
                 valuesNe: ['बस', 'माइक्रो', 'भ्यान', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Vehicles',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees',
+                visualizationWordEnd: '',
             },
         ],
     },
@@ -966,13 +1274,44 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'हेलिप्याड',
         chartDataType: [
             {
+                label: 'Helipad',
+                labelNe: 'हेलिप्याड',
+                key: 'ownership',
+                values: ['Civil Aviation Authority of Nepal', 'Nepal Army', 'Nepal Police', 'Armed Police Force', 'Other'],
+                valuesNe: ['नेपाल नागरिक उड्डयन प्राधिकरण', 'नेपाली सेना', 'नेपाल प्रहरी', 'सशस्त्र प्रहरी बल', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Helipad',
+                visualizationWordEnd: '',
+            },
+            {
                 label: 'Surface Type of Helipad',
                 labelNe: 'हेलिप्याडको सतह प्रकार',
                 key: 'surfaceType',
                 values: ['Concrete', 'Grass land', 'Dirt surface', 'Other'],
                 valuesNe: ['कंक्रिट', 'घाँस जग्गा', 'माटो सतह', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Helipads have ',
+                visualizationWordEnd: ' Surface',
             },
+
+            {
+                label: 'Helipad with ',
+                labelNe: 'हेलिप्याड संग',
+                key: ['hasRoadAccess', 'storageFacilityAvailable', 'internetFacilityAvailable', 'windDirectionIndicatorAvailable', 'heliMarkerAvailable', 'nightLightingAvailable'],
+                values: ['Road access', 'Storage facility', 'Internet service', 'Wind direction indicator', 'Heli marker', 'Night lighting'],
+                valuesNe: ['सडक पहुँच', 'भण्डारण सुविधा', 'इन्टरनेट सेवा', 'हावाको दिशा सूचक', 'हेली मार्कर', 'रात्रि प्रकाश'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Helipads have ',
+                visualizationWordEnd: '',
+            },
+
+
             {
                 label: 'Condition of Helipad',
                 labelNe: 'हेलिप्याडको अवस्था',
@@ -980,52 +1319,47 @@ const visualizationKeyValues = [
                 values: ['Operational', 'Need Repair', 'Not in working condition'],
                 valuesNe: ['अपरेशनल', 'रिपेयर आवश्यक छ', 'काम गर्ने अवस्थामा छैन'],
                 isBoolean: false,
-            },
-            {
-                label: 'Wind Direction Indicator Available',
-                labelNe: 'उपलब्ध पवन दिशा सूचक',
-                key: 'windDirectionIndicatorAvailable',
-                values: ['Wind Direction Indicator Available'],
-                valuesNe: ['उपलब्ध पवन दिशा सूचक'],
-                isBoolean: true,
-            },
-            {
-                label: 'Heli Marker Available',
-                labelNe: 'उपलब्ध हेली मार्कर',
-                key: 'heliMarkerAvailable',
-                values: ['Heli Marker Available'],
-                valuesNe: ['उपलब्ध हेली मार्कर'],
-                isBoolean: true,
-
-            },
-            {
-                label: 'Night Lighting Available',
-                labelNe: 'उपलब्ध रात प्रकाश',
-                key: 'nightLightingAvailable',
-                values: ['Night Lighting Available'],
-                valuesNe: ['उपलब्ध रात प्रकाश'],
-                isBoolean: true,
-
-            },
-            {
-                label: 'Number of Employees',
-                labelNe: 'Number of Employees',
-                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-                values: ['Male', 'Female', 'Other'],
-                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
-                isBoolean: false,
-
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Helipads are ',
+                visualizationWordEnd: '',
             },
 
-            {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
-                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-                values: ['Male', 'Female', 'Other'],
-                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
-                isBoolean: false,
+            // {
+            //     label: 'Wind Direction Indicator Available',
+            //     key: 'windDirectionIndicatorAvailable',
+            //     values: ['Wind Direction Indicator Available'],
+            //     isBoolean: true,
+            // },
+            // {
+            //     label: 'Heli Marker Available ',
+            //     key: 'heliMarkerAvailable',
+            //     values: ['Heli Marker Available '],
+            //     isBoolean: true,
 
-            },
+            // },
+            // {
+            //     label: 'Night Lighting Available',
+            //     key: 'nightLightingAvailable',
+            //     values: ['Night Lighting Available'],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Number of Employees',
+            //     key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+            //     values: ['Male', 'Female', 'Other'],
+            //     isBoolean: false,
+
+            // },
+
+            // {
+            //     label: 'Employees with Disability',
+            //     key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+            //     values: ['Male', 'Female', 'Other'],
+            //     isBoolean: false,
+
+            // },
 
         ],
     },
@@ -1035,14 +1369,56 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'जलमार्ग',
         chartDataType: [
             {
-                label: 'Types of waterways',
+                label: 'Waterway Types',
                 labelNe: 'जलमार्गका प्रकार',
                 key: 'type',
                 values: ['General Boat', 'Electrical Boat', 'Other'],
                 valuesNe: ['सामान्य डुङ्गा', 'विद्युतीय डुङ्गा', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Waterways ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
             },
 
+            {
+                label: 'Differently-abled employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Condition of Boat',
+                labelNe: 'डुङ्गाको अवस्था',
+                key: 'condition',
+                values: ['Good', 'Bad'],
+                valuesNe: ['राम्रो', 'नराम्रो'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Waterways in ',
+                visualizationWordEnd: ' Condition ',
+            },
 
         ],
     },
@@ -1052,12 +1428,55 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'वायुमार्ग',
         chartDataType: [
             {
-                label: 'Types of airways',
+                label: 'Airway Types',
                 labelNe: 'वायुमार्गका प्रकारहरू',
                 key: 'type',
                 values: ['National', 'International'],
                 valuesNe: ['राष्ट्रिय', 'अन्तर्राष्ट्रिय'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Airways ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Airways with  ',
+                labelNe: 'वायुमार्ग संग',
+                key: ['hasEvacuationRoute', 'hasHumanitarianStagingArea'],
+                values: ['Evacuation route', 'Humanitarian staging area'],
+                valuesNe: ['निकासी मार्ग', 'मानवीय मञ्चन क्षेत्र'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Airways with ',
+                visualizationWordEnd: '',
+
             },
 
 
@@ -1086,19 +1505,41 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'आगो नियनत्रण उपकरण',
         chartDataType: [
             {
+                label: 'Fire Fighting Apparatus Types',
+                labelNe: 'फायर फाइटिंग उपकरणको प्रकार',
+                key: 'typeOfApparatus',
+                values: ['Fire Engine', 'Fire Bike', 'Other'],
+                valuesNe: ['दमकल', 'फायर बाइक', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Fire Fighting Apparatus ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Condition of fire fighting apparatus',
+                labelNe: 'फायर फाइटिंग उपकरणको अवस्था',
+                key: 'condition',
+                values: ['Operational', 'Need Repair', 'Not in working condition'],
+                valuesNe: ['कार्यात्मक', 'मरम्मत आवश्यक छ', 'काम गर्ने अवस्थामा छैन'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordEnd: '',
+            },
+            {
                 label: 'Operator Type of fire fighting apparatus',
-                labelNe: 'आगो नियनत्रण उपकरणको अपरेटर को प्रकार',
+                labelNe: 'आगो नियन्त्रक उपकरणको अपरेटर प्रकार',
                 key: 'operatorType',
                 values: ['Private', 'Government', 'Community'],
                 valuesNe: ['निजी', 'सरकारी', 'समुदाय'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordEnd: ' Run',
             },
-            // {
-            //     label: 'Condition of fire engine',
-            //     key: 'condition',
-            //     values: ['Operational', 'Need Repair', 'Not in working condition'],
-            //     isBoolean: false,
-            // },
 
 
         ],
@@ -1109,51 +1550,89 @@ const visualizationKeyValues = [
         visualizationHeadingNe: 'निकासी केन्द्र',
         chartDataType: [
             {
-                label: 'Government Institution Types',
-                labelNe: 'सरकारी संस्थाका प्रकारहरू',
+                label: 'Evacuation Centers',
+                labelNe: 'निकासी केन्द्रहरू',
                 key: 'operatedBy',
                 values: ['Government', 'INGO', 'NGO', 'CSO'],
                 valuesNe: ['सरकार', 'अन्तर्राष्ट्रिय गैर सरकारी संस्था', 'गैर सरकारी संस्था', 'सिएसवो'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Evacuation Centers ',
+                visualizationWordEnd: '',
 
 
             },
             {
-                label: 'Drinking Water Available',
-                labelNe: 'उपलब्ध पिउने पानी',
-                key: 'hasDrinkingWater',
-                values: ['Drinking Water'],
-                valuesNe: ['पिउने पानी'],
-                isBoolean: true,
+                label: 'Structure',
+                labelNe: 'संरचना',
+                key: 'structure',
+                values: ['Single story', 'Multiple story'],
+                valuesNe: ['एक तले', 'बहु तले'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Evacuation Centers are ',
+                visualizationWordEnd: '',
+
 
             },
             {
-                label: 'Toilet Available',
-                labelNe: 'उपलब्ध शौचालय',
-                key: 'hasToilet',
-                values: ['Toilet'],
-                valuesNe: ['शौचालय'],
-                isBoolean: true,
+                label: 'Capacity of Evacuation Center',
+                labelNe: 'निकासी केन्द्रको क्षमता',
+                key: ['capacity'],
+                values: ['Capacity'],
+                valuesNe: ['क्षमता'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Maximum Capacity  ',
+                visualizationWordEnd: '',
 
             },
             {
-                label: 'Wash Facility Available',
-                labelNe: 'उपलब्ध धुने सुविधा',
-                key: 'hasHandWashingFacility',
-                values: ['Wash Facility'],
-                valuesNe: ['धुने सुविधा'],
+                label: 'Evacuation Center With  ',
+                labelNe: 'निकासी केन्द्र संग',
+                key: ['hasEvacuationRoute', 'hasDrinkingWater', 'hasToilet', 'hasHandWashingFacility', 'hasFoodPreparationFacility', 'hasSleepingFacility'],
+                values: ['Evacuation Route', 'Drinking Water', 'Toilet', 'Wash Facility', 'Food Preparation Facility', 'Sleeping Facility'],
+                valuesNe: ['निकासी मार्ग', 'पिउने पानी', 'शौचालय', 'धुने सुविधा', 'खाना तयारी सुविधा', 'सुत्ने सुविधा'],
                 isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Available ',
 
             },
-            {
-                label: 'Sleeping Facility Available',
-                labelNe: 'उपलब्ध सुत्ने सुविधा',
-                key: 'hasSleepingFacility',
-                values: ['Sleeping Facility'],
-                valuesNe: ['सुत्ने सुविधा'],
-                isBoolean: true,
 
-            },
+
+            // {
+            //     label: 'Drinking Water Available ',
+            //     key: 'hasDrinkingWater',
+            //     values: ['Drinking Water '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Toilet Available ',
+            //     key: 'hasToilet',
+            //     values: ['Toilet '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Wash Facility Available ',
+            //     key: 'hasHandWashingFacility',
+            //     values: ['Wash Facility '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Sleeping Facility Available ',
+            //     key: 'hasSleepingFacility',
+            //     values: ['Sleeping Facility '],
+            //     isBoolean: true,
+
+            // },
 
 
         ],
@@ -1161,12 +1640,11 @@ const visualizationKeyValues = [
     {
         resourceType: 'health',
         visualizationHeading: 'Health Institution Category',
-        visualizationHeadingNe: 'स्वास्थ्य संस्था कोटि',
+        visualizationHeadingNe: 'स्वास्थ्य संस्था श्रेणी',
         chartDataType: [
 
             {
-                label: 'Health Institutions Types',
-                labelNe: 'स्वास्थ्य संस्थाका प्रकारहरू',
+                label: 'Health Infrastructure Types',
                 key: 'type',
                 values: ['Specialized Hospital', 'Center Hospital', 'Teaching Hospital',
                     'Regional Hospital', 'Sub Regional Hospital', 'Zonal Hospital',
@@ -1187,77 +1665,89 @@ const visualizationKeyValues = [
                     'सेकेन्डरी ए अस्पताल', 'सेकेन्डरी बी अस्पताल', 'टर्टियरी अस्पताल', 'सुपर स्पेशलाइज्ड अस्पताल',
                     'आधारभूत स्वास्थ्य सेवा केन्द्र', 'भेटेनरी', 'प्याथोलोजी', 'फार्मेसी', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Health Infrastructures ',
+                visualizationWordEnd: '',
             },
 
+            // {
+            //     label: 'Services Available',
+            //     key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
+            //         'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
+            //         'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
+            //         'hasLaboratoryService', 'hasVolunteerCounselingTest', 'hasPmtct', 'hasAntiRetroViralTreatment', 'hasDental',
+            //         'hasInPatient', 'hasRadiology'],
+            //     values: ['Child Immunization', 'TD Vaccination', 'IMNCI',
+            //         'Growth Monitoring', 'Safe Motherhood', 'Family Planning', 'OPD', 'Treatment of Tuberculosis',
+            //         'Treatment of MDR tuberculosis', 'Treatment of Leprosy',
+            //         'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
+            //         'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
+            //         'Dental', 'Inpatient', 'Radiology'],
+            //     isBoolean: false,
+            //     showFalseValue: false,
+            //     visualizationKey: 'highestValue',
+            //     visualizationWordStart: '',
+            //     visualizationWordEnd: ' Available',
+
+            // },
             {
                 label: 'Services Available',
                 labelNe: 'उपलब्ध सेवाहरू',
-                key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
-                    'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
-                    'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
-                    'hasLaboratoryService', 'hasVolunteerCounselingTest', 'hasPmtct', 'hasAntiRetroViralTreatment', 'hasDental',
-                    'hasInPatient', 'hasRadiology'],
-                values: ['Child Immunization', 'TD Vaccination', 'IMNCI',
-                    'Growth Monitoring', 'Safe Motherhood', 'Family Planning', 'OPD', 'Treatment of Tuberculosis',
-                    'Treatment of MDR tuberculosis', 'Treatment of Leprosy',
-                    'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
-                    'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
-                    'Dental', 'Inpatient', 'Radiology'],
-                valuesNe: ['बाल खोप', 'TD खोप', 'IMNCI',
-                    'वृद्धि अनुगमन', 'सुरक्षित मातृत्व', 'परिवार योजना', 'ओपीडी', 'क्षयरोगको उपचार',
-                    'एमडीआर क्षयरोगको उपचार', 'कुष्ठरोगको उपचार',
-                    'औलोको उपचार', 'कालाजारको उपचार', 'जापानीज इन्सेफलाइटिसको उपचार', 'प्रयोगशाला सेवा',
-                    'एचआईभी/एड्सका लागि VCT', 'PMTCT', 'एन्टि-रेट्रो भाइरल उपचार',
-                    'दन्त', 'इनपेन्टल', 'रेडियोलोजी'],
-                isBoolean: false,
+                key: ['hasAmbulanceService', 'hasPharmacy', 'hasCovidClinicService', 'hasEmergencyServices', 'hasOperatingTheatre', 'hasBloodDonation'],
+                values: ['Ambulance service', 'Pharmacy', 'COVID clinic service', 'Emergency service', 'Operating theatre', 'Blood donation'],
+                valuesNe: ['एम्बुलेन्स सेवा', 'फार्मेसी', 'कोभिड क्लिनिक सेवा', 'आकस्मिक सेवा', 'अपरेटिङ थिएटर', 'रक्तदान'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' Available',
 
             },
-            {
-                label: 'Surgical Service',
-                labelNe: 'सर्जिकल सेवा',
-                key: ['hasCaesarianSection', 'hasGastrointestinal', 'hasTraumaSurgery', 'hasCardiacSurgery',
-                    'hasNeuroSurgery', 'hasPlasticSurgery'],
-                values: ['Caesarian Section', 'Gastro Intestinal', 'Trauma Surgery', 'Cardiac Surgery', 'Neuro Surgery', 'Plastic Surgery'],
-                valuesNe: ['सिजेरियन सेक्शन', 'ग्यास्ट्रो इन्टेस्टाइनल', 'ट्रमा सर्जरी', 'कार्डियाक सर्जरी', 'न्यूरो सर्जरी', 'प्लास्टिक सर्जरी'],
-                isBoolean: false,
 
-            },
-            {
-                label: 'Specialized Service',
-                labelNe: 'विशेष सेवा',
-                key: ['hasIcu', 'hasCcu', 'hasNicu', 'hasMicu', 'hasSncu', 'hasPicu'],
-                values: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
-                valuesNe: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
-                isBoolean: false,
 
-            },
+            // {
+            //     label: 'Surgical Service',
+            //     key: ['hasCaesarianSection', 'hasGastrointestinal', 'hasTraumaSurgery', 'hasCardiacSurgery',
+            //         'hasNeuroSurgery', 'hasPlasticSurgery'],
+            //     values: ['Caesarian Section', 'Gastro Intestinal', 'Trauma Surgery', 'Cardiac Surgery', 'Neuro Surgery', 'Plastic Surgery'],
+            //     isBoolean: false,
+
+            // },
+            // {
+            //     label: 'Specialized Service',
+            //     key: ['hasIcu', 'hasCcu', 'hasNicu', 'hasMicu', 'hasSncu', 'hasPicu'],
+            //     values: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
+            //     isBoolean: false,
+
+            // },
             {
-                label: 'Bed Capacity',
-                labelNe: 'बेड क्षमता',
+                label: 'Bed Count',
+                labelNe: 'बेड गणना',
                 key: ['hospitalBedCount', 'icuBedCount', 'ventilatorBedCount'],
                 values: ['Hospital Bed', 'ICU Bed', 'Ventilator Bed'],
                 valuesNe: ['हस्पिटल बेड', 'आईसीयू बेड', 'भेन्टिलेटर बेड'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Beds ',
+                visualizationWordEnd: '',
 
             },
-            {
-                label: 'Helipad Available',
-                labelNe: 'उपलब्ध हेलिप्याड',
-                key: ['hasHelipad'],
-                values: ['Helipad Available'],
-                valuesNe: ['उपलब्ध हेलिप्याड'],
-                isBoolean: false,
+            // {
+            //     label: 'Helipad Available',
+            //     key: ['hasHelipad'],
+            //     values: ['Helipad Available'],
+            //     isBoolean: false,
 
-            },
-            {
-                label: 'Open Space Available',
-                labelNe: 'उपलब्ध खुला ठाउँ',
-                key: ['hasOpenSpace'],
-                values: ['Open Space Available'],
-                valuesNe: ['उपलब्ध खुला ठाउँ'],
-                isBoolean: false,
+            // },
+            // {
+            //     label: 'Open Space Available',
+            //     key: ['hasOpenSpace'],
+            //     values: ['Open Space Available'],
+            //     isBoolean: false,
 
-            },
+            // },
             {
                 label: 'Number of Employees',
                 labelNe: 'कर्मचारी संख्या',
@@ -1265,16 +1755,37 @@ const visualizationKeyValues = [
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
-                labelNe: 'अपाङ्गता भएका कर्मचारीहरू',
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 valuesNe: ['पुरुष', 'महिला', 'अन्य'],
                 isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Health Infrastructures with ',
+                labelNe: 'स्वास्थ्य पूर्वाधारहरु संग',
+                key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute'],
+                values: ['Helipad', 'Open space', 'Evacuation route'],
+                valuesNe: ['हेलिप्याड', 'ओपन स्पेस'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Health Infrastructures with ',
+                visualizationWordEnd: ' available',
 
             },
 
@@ -1412,6 +1923,10 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             for (let jindex = 0; jindex < chartData.length; jindex++) {
                 const engVal = chartData[jindex].values;
                 const nepaliVal = chartData[jindex].valuesNe;
+                if (!nepaliVal) {
+                    // eslint-disable-next-line no-continue
+                    continue;
+                }
                 // eslint-disable-next-line no-plusplus
                 for (let k = 0; k < engVal.length; k++) {
                     const indiVidualData = engVal[k];

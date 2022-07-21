@@ -1,3 +1,8 @@
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable no-tabs */
 import React, { useState, useEffect } from 'react';
 import { _cs, isDefined } from '@togglecorp/fujs';
 import memoize from 'memoize-one';

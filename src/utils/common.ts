@@ -214,11 +214,13 @@ export const imageUrlToDataUrl = (url, callback) => {
     xhr.send();
 };
 
-export function saveChart(elementId: string, name: string) {
+export function saveChart(elementId: string, name: string, functionData) {
     domtoimage.toBlob(document.getElementById(elementId))
         .then(blob => (
             saveAs(blob, `${name}.png`)
+
         ));
+    functionData();
 }
 
 export const arrayGroupBy = (array: any[], key: any) => array.reduce((result, currentValue) => {
@@ -283,7 +285,7 @@ export const checkSameRegionPermission = (user, region) => {
             permission = true;
         }
     } else if (region.adminLevel === 2) {
-        if (user && user.profile.district === region.geoarea && user.profile.province === null) {
+        if (user && user.profile.district === region.geoarea) {
             permission = true;
         }
     } else if (region.adminLevel === 3) {

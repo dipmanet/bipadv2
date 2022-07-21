@@ -1,9 +1,18 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable indent */
+/* eslint-disable no-tabs */
+import React, { useContext } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
+import Bbox from '#resources/icons/bbox.svg';
 import SortableListView from '#rscv/SortableListView';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import LayerLegend from '#components/LayerLegend';
@@ -11,6 +20,7 @@ import LayerLegend from '#components/LayerLegend';
 import OpacityInput from '#components/OpacityInput';
 
 import styles from './styles.scss';
+import { MapChildContext } from '#re-map/context';
 
 interface Props {
     className?: string;
@@ -20,7 +30,6 @@ interface State {
     showOpacityInput: boolean;
     showLegend: boolean;
 }
-
 const ActiveLayer = ({
     className,
     layer,
@@ -28,35 +37,59 @@ const ActiveLayer = ({
     onOpacityChange,
     showLegend,
     showOpacityInput,
-}) => (
-    <div className={styles.activeLayer}>
-        <header className={styles.header}>
-            <h4 className={styles.heading}>
-                {layer.fullName || layer.title}
-            </h4>
-            <Button
-                transparent
-                className={styles.removeLayerButton}
-                iconName="close"
-                onClick={() => onRemoveButtonClick(layer)}
-            />
-        </header>
-        <div className={styles.content}>
-            {showOpacityInput && (
-                <OpacityInput
-                    className={styles.opacityInput}
-                    value={layer.opacity}
-                    onChange={(key, value) => onOpacityChange(layer, value)}
+}) => {
+    const { map } = useContext(MapChildContext);
+
+    const zoomToBbox = () => {
+        if (map) {
+            if (!layer && !layer.bbox) return;
+            map.fitBounds(layer.bbox);
+        }
+    };
+    return (
+        <div className={styles.activeLayer}>
+            <header className={styles.header}>
+                <h4 className={styles.heading}>
+                    {layer.fullName || layer.title}
+                </h4>
+                <Button
+                    transparent
+                    className={styles.removeLayerButton}
+                    iconName="close"
+                    onClick={() => onRemoveButtonClick(layer)}
                 />
-            )}
-            {showLegend && (
-                <LayerLegend
-                    layer={layer}
-                />
-            )}
+
+                {
+                    layer && layer.bbox && layer.bbox.length > 0
+                    && (
+                        <img
+                            src={Bbox}
+                            alt=""
+                            className={styles.bboxIcon}
+                            onClick={zoomToBbox}
+                            role="button"
+                        />
+                    )
+                }
+
+            </header>
+            <div className={styles.content}>
+                {showOpacityInput && (
+                    <OpacityInput
+                        className={styles.opacityInput}
+                        value={layer.opacity}
+                        onChange={(key, value) => onOpacityChange(layer, value)}
+                    />
+                )}
+                {showLegend && (
+                    <LayerLegend
+                        layer={layer}
+                    />
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 class ActiveLayers extends React.PureComponent<Props, State> {
     public state = {

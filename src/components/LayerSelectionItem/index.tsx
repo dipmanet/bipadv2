@@ -1,4 +1,9 @@
 /* eslint-disable no-nested-ternary */
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';

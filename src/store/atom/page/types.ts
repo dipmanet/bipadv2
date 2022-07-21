@@ -806,10 +806,14 @@ export interface PageState {
     drrmInventory: DrrmInventory;
     drrmCritical: DrrmCritical;
     drrmContacts: DrrmContacts;
-    palikaanguage: PalikaLanguage;
+    palikaLanguage: PalikaLanguage;
     budgetData: BudgetData;
     budgetActivityData: BudgetActivityData;
     programAndPolicyData: ProgramAndPolicyData;
+    ibfPage: IbfPage;
+    bulletinPage: Bulletin;
+    epidemicsPage: EpidemicPage;
+    bulletinEditData: Bulletin;
 }
 
 // Data Archive
@@ -874,12 +878,6 @@ export interface DataArchiveRiver extends RealTimeRiver {
 
 export interface DataArchiveEarthquakeFilters {
     dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
-
-    ibfPage: IbfPage;
-    bulletinPage: Bulletin;
-    epidemicsPage: EpidemicPage;
-    bulletinEditData: Bulletin;
-
 }
 
 

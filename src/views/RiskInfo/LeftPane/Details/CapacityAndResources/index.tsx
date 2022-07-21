@@ -1,3 +1,4 @@
+/* eslint-disable space-infix-ops */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-self-assign */
 /* eslint-disable no-return-assign */
@@ -522,6 +523,11 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 }
             }
         },
+        onFailure: ({ error, params }) => {
+            if (params && params.ErrorData) {
+                params.ErrorData(error);
+            }
+        },
     },
     resourceDetailGetRequest: {
         url: ({ params }) => {
@@ -795,6 +801,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 evacuationcentre: [],
 
             },
+            ErrorData: '',
             activeLayersIndication: { ...initialActiveLayersIndication },
             palikaRedirectState: false,
             isLoggedInUser: false,
@@ -809,6 +816,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 setIndividualResourceList: this.setIndividualResourceList,
                 getRegionDetails: this.getRegionDetails,
                 region,
+                ErrorData: this.handleErrorData,
                 // filterClickCheckCondition: isFilterClicked,
             },
         );
@@ -890,6 +898,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         region,
                         resourceType: carKeys,
                         filterClickCheckCondition: isFilterClicked,
+                        handleErrorData: this.handleErrorData,
                     },
                 );
             }
@@ -951,6 +960,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         handleActiveLayerIndication(initialActiveLayersIndication);
     }
 
+    public handleErrorData = () => {
+        this.setState({ ErrorData: 'Error in Network Connection' });
+    }
+
     public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         const {
             provinces,
@@ -983,6 +996,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceType: carKeys,
             region,
             filterClickCheckCondition: isFilterClicked,
+            handleErrorData: this.handleErrorData,
         });
     }
 
@@ -1034,6 +1048,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
                     filterClickCheckCondition: isFilterClicked,
+                    handleErrorData: this.handleErrorData,
                 });
             }
         } else if (temp[key] && resourceCollection[key].length === 0) {
@@ -1054,6 +1069,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
                     filterClickCheckCondition: isFilterClicked,
+                    handleErrorData: this.handleErrorData,
                 });
             }
         } else return null;
@@ -1408,6 +1424,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             this.props.requests.resourceGetRequest.do({
                 resourceType: layerKey,
                 filterClickCheckCondition: isFilterClicked,
+                handleErrorData: this.handleErrorData,
             });
         }
     }
@@ -2306,6 +2323,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleVisualization = (boolean, checkedCategory, resourceType, level, lvl2catName, typeName) => {
+        const { region, wards } = this.props;
+        const { resourceCollection } = this.state;
         this.setState({ openVisualization: boolean });
         this.handleMainCategoryCheckBox(checkedCategory, resourceType, level, lvl2catName, typeName, boolean);
 
@@ -2373,7 +2392,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             categoryLevel,
             lvl2catName,
             disableCheckbox,
-
+            ErrorData,
 
         } = this.state;
 
@@ -2448,6 +2467,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         typeName={lvl2TypeName}
                         selectedCategoryName={selectedCategoryName}
                         pendingAPICall={pending}
+                        ErrorData={ErrorData}
 
 
                     />

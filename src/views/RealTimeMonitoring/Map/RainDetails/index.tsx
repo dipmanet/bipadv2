@@ -12,6 +12,7 @@ import {
 } from '@togglecorp/fujs';
 import { timeFormat } from 'd3-time-format';
 
+import { Translation } from 'react-i18next';
 import Message from '#rscv/Message';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
@@ -41,13 +42,13 @@ import {
 
 import styles from './styles.scss';
 
-interface Params {}
+interface Params { }
 interface OwnProps {
     handleModalClose: () => void;
     title: string;
     className?: string;
 }
-interface State {}
+interface State { }
 
 interface LegendItem {
     key: string;
@@ -94,21 +95,23 @@ class RainDetails extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
 
+        const { language } = this.props;
+
         this.latestWaterLevelHeader = [
             {
                 key: 'interval',
-                label: 'INTERVAL',
+                label: language === 'en' ? 'INTERVAL' : 'अन्तराल',
                 order: 1,
             },
             {
                 key: 'value',
-                label: 'VALUE (mm)',
+                label: language === 'en' ? 'VALUE (mm)' : 'VALUE (मिमी)',
                 order: 2,
                 modifier: row => `${row.value || '-'}`,
             },
             {
                 key: 'status',
-                label: 'STATUS',
+                label: language === 'en' ? 'STATUS' : 'स्थिति',
                 order: 3,
                 modifier: (row) => {
                     const {
@@ -133,7 +136,7 @@ class RainDetails extends React.PureComponent<Props> {
         this.rainHeader = [
             {
                 key: 'createdOn',
-                label: 'DATE',
+                label: language === 'en' ? 'DATE' : 'मिति',
                 order: 1,
                 modifier: row => (
                     <FormattedDate
@@ -144,7 +147,7 @@ class RainDetails extends React.PureComponent<Props> {
             },
             {
                 key: 'averages',
-                label: 'AVERAGE RAINFALL (mm)',
+                label: language === 'en' ? 'AVERAGE RAINFALL (mm)' : 'औसत वर्षा (मिमी)',
                 order: 2,
                 modifier: (row) => {
                     const {
@@ -307,165 +310,172 @@ class RainDetails extends React.PureComponent<Props> {
         const weeklyRainChartData = this.getWeeklyRainDetails(rainDetails);
 
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={handleModalClose}
-                className={_cs(className, styles.rainDetailModal)}
-            >
-                <ModalHeader
-                    title={title}
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={handleModalClose}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    { pending && <LoadingAnimation /> }
-                    { latestRainDetail && (
-                        <div className={styles.rainDetails}>
-                            <div className={styles.top}>
-                                {latestRainDetail.image ? (
-                                    <Image
-                                        className={styles.image}
-                                        src={latestRainDetail.image}
-                                        alt="rain-image"
-                                        zoomable
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={handleModalClose}
+                            className={_cs(className, styles.rainDetailModal)}
+                        >
+                            <ModalHeader
+                                title={title}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={handleModalClose}
+                                        title={t('Close Modal')}
                                     />
-                                ) : (
-                                    <div className={styles.noImage}>
-                                        Image not available
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                {pending && <LoadingAnimation />}
+                                {latestRainDetail && (
+                                    <div className={styles.rainDetails}>
+                                        <div className={styles.top}>
+                                            {latestRainDetail.image ? (
+                                                <Image
+                                                    className={styles.image}
+                                                    src={latestRainDetail.image}
+                                                    alt="rain-image"
+                                                    zoomable
+                                                />
+                                            ) : (
+                                                <div className={styles.noImage}>
+                                                    {t('Image not available')}
+                                                </div>
+                                            )}
+                                            <div className={styles.details}>
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Description')}
+                                                    value={latestRainDetail.description}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Basin')}
+                                                    value={latestRainDetail.basin}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Status')}
+                                                    value={latestRainDetail.status}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Latitude')}
+                                                    value={latestRainDetail.point.coordinates[1]}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Longitude')}
+                                                    value={latestRainDetail.point.coordinates[0]}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Measured On')}
+                                                    value={(
+                                                        <FormattedDate
+                                                            value={latestRainDetail.createdOn}
+                                                            mode="yyyy-MM-dd, hh:mm:aaa"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className={styles.bottom}>
+                                            <div className={styles.latestRainfall}>
+                                                <header className={styles.header}>
+                                                    <h4 className={styles.heading}>
+                                                        {t('Latest Rainfall')}
+                                                    </h4>
+                                                </header>
+                                                <div className={styles.content}>
+                                                    <Table
+                                                        className={styles.table}
+                                                        data={latestRainDetail.averages}
+                                                        headers={this.latestWaterLevelHeader}
+                                                        keySelector={waterLevelKeySelector}
+                                                        emptyComponent={RainEmptyComponent}
+                                                    />
+                                                    <div className={styles.chartContainer}>
+                                                        <header className={styles.header}>
+                                                            <h4 className={styles.heading}>
+                                                                {t('Average Weekly Rainfall')}
+                                                            </h4>
+                                                        </header>
+                                                        <MultiLineChart
+                                                            className={styles.rainChart}
+                                                            data={weeklyRainChartData}
+                                                        />
+                                                        <Legend
+                                                            className={styles.rainChartLegend}
+                                                            colorSelector={colorSelector}
+                                                            data={rainLegendData}
+                                                            keySelector={keySelector}
+                                                            labelSelector={labelSelector}
+                                                            itemClassName={styles.legendItem}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className={styles.accumulatedRainfall}>
+                                                <header className={styles.header}>
+                                                    <h4 className={styles.heading}>
+                                                        {t('Accumulated Rainfall')}
+                                                    </h4>
+                                                </header>
+                                                <div className={styles.content}>
+                                                    <Table
+                                                        className={styles.table}
+                                                        data={hourlyRainDetails}
+                                                        headers={this.rainHeader}
+                                                        keySelector={rainKeySelector}
+                                                    />
+                                                    <div className={styles.chartContainer}>
+                                                        <header className={styles.header}>
+                                                            <h4 className={styles.heading}>
+                                                                {t('Average Daily Rainfall')}
+                                                            </h4>
+                                                        </header>
+                                                        <MultiLineChart
+                                                            className={styles.rainChart}
+                                                            data={hourlyRainChartData}
+                                                            tickArguments={[8, timeFormat('%I %p')]}
+                                                        />
+                                                        <Legend
+                                                            className={styles.rainChartLegend}
+                                                            colorSelector={colorSelector}
+                                                            data={rainLegendData}
+                                                            keySelector={keySelector}
+                                                            labelSelector={labelSelector}
+                                                            itemClassName={styles.legendItem}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
-                                <div className={styles.details}>
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Description"
-                                        value={latestRainDetail.description}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Basin"
-                                        value={latestRainDetail.basin}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Status"
-                                        value={latestRainDetail.status}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Latitude"
-                                        value={latestRainDetail.point.coordinates[1]}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Longitude"
-                                        value={latestRainDetail.point.coordinates[0]}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Measured On"
-                                        value={(
-                                            <FormattedDate
-                                                value={latestRainDetail.createdOn}
-                                                mode="yyyy-MM-dd, hh:mm:aaa"
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.bottom}>
-                                <div className={styles.latestRainfall}>
-                                    <header className={styles.header}>
-                                        <h4 className={styles.heading}>
-                                            Latest Rainfall
-                                        </h4>
-                                    </header>
-                                    <div className={styles.content}>
-                                        <Table
-                                            className={styles.table}
-                                            data={latestRainDetail.averages}
-                                            headers={this.latestWaterLevelHeader}
-                                            keySelector={waterLevelKeySelector}
-                                            emptyComponent={RainEmptyComponent}
-                                        />
-                                        <div className={styles.chartContainer}>
-                                            <header className={styles.header}>
-                                                <h4 className={styles.heading}>
-                                                    Average Weekly Rainfall
-                                                </h4>
-                                            </header>
-                                            <MultiLineChart
-                                                className={styles.rainChart}
-                                                data={weeklyRainChartData}
-                                            />
-                                            <Legend
-                                                className={styles.rainChartLegend}
-                                                colorSelector={colorSelector}
-                                                data={rainLegendData}
-                                                keySelector={keySelector}
-                                                labelSelector={labelSelector}
-                                                itemClassName={styles.legendItem}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={styles.accumulatedRainfall}>
-                                    <header className={styles.header}>
-                                        <h4 className={styles.heading}>
-                                            Accumulated Rainfall
-                                        </h4>
-                                    </header>
-                                    <div className={styles.content}>
-                                        <Table
-                                            className={styles.table}
-                                            data={hourlyRainDetails}
-                                            headers={this.rainHeader}
-                                            keySelector={rainKeySelector}
-                                        />
-                                        <div className={styles.chartContainer}>
-                                            <header className={styles.header}>
-                                                <h4 className={styles.heading}>
-                                                    Average Daily Rainfall
-                                                </h4>
-                                            </header>
-                                            <MultiLineChart
-                                                className={styles.rainChart}
-                                                data={hourlyRainChartData}
-                                                tickArguments={[8, timeFormat('%I %p')]}
-                                            />
-                                            <Legend
-                                                className={styles.rainChartLegend}
-                                                colorSelector={colorSelector}
-                                                data={rainLegendData}
-                                                keySelector={keySelector}
-                                                labelSelector={labelSelector}
-                                                itemClassName={styles.legendItem}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </ModalBody>
-            </Modal>
+                            </ModalBody>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

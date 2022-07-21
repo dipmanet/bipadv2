@@ -81,6 +81,16 @@
             margin: calc(var(--spacing-small) - var(--spacing-extra-small-alt)) calc(var(--spacing-medium) - var(--spacing-small));
             padding: var(--spacing-extra-small-alt) var(--spacing-small);
         }
+		.bboxIcon{
+			flex-shrink: 0;
+            margin: calc(var(--spacing-small) - var(--spacing-extra-small-alt)) calc(var(--spacing-medium) - var(--spacing-small));
+            padding: var(--spacing-extra-small-alt) var(--spacing-small);
+			width: 22px;
+			position: relative;	
+			right:99.5% ;
+			top: 13px;
+			cursor: pointer;
+		}
     }
 
     .content {

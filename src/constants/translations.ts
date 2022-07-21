@@ -1,5 +1,10 @@
 export const enTranslation = {
     translation: {
+        'Measured On': 'Measured On',
+        'Latest Rainfall': 'Latest Rainfall',
+        'Average Weekly Rainfall': 'Average Weekly Rainfall',
+        'Average Daily Rainfall': 'Average Daily Rainfall',
+
         'Edit data': 'Edit data',
         'View Details': 'View Details',
         Inventories: 'Inventories',
@@ -816,6 +821,11 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Measured On': 'मापन गरिएको मिति',
+        'Latest Rainfall': 'पछिल्‍लो वर्षा',
+        'Average Weekly Rainfall': 'औसत साप्‍ताहिक वर्षा',
+        'Average Daily Rainfall': 'औसत दैनिक वर्षा',
+
         'Edit data': 'डाटा सम्पादन गर्नुहोस्',
         'View Details': 'विवरणहरू हेर्नुहोस्',
         Inventories: 'आविष्कारहरू',

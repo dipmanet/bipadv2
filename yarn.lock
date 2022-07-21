@@ -1590,7 +1590,7 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
-"@reglendo/canvas2image@1.0.5-2":
+"@reglendo/canvas2image@^1.0.5-2":
   version "1.0.5-2"
   resolved "https://registry.yarnpkg.com/@reglendo/canvas2image/-/canvas2image-1.0.5-2.tgz#57b50017d1a4914ff687fb65eb7aef341762d20d"
   integrity sha512-nt9QaZPwJxZdPZall2GuxpTLyZwSXwHlL35K8uJjpl29uCYVlWJAMa8JZ8vAXIhHSJ8e5a1tbiOqDBWX5JxVvA==
@@ -9617,11 +9617,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.15:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
-  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
-
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
@@ -9930,6 +9925,11 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^2.0.0"
     p-is-promise "^2.0.0"
+
+memoize-one@5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.0.5.tgz#8cd3809555723a07684afafcd6f756072ac75d7e"
+  integrity sha512-ey6EpYv0tEaIbM/nTDOpHciXUvd+ackQrJgEzBwemhZZIWZjcyodqEcrmqDy2BKRTM3a65kKBV4WtLXJDt26SQ==
 
 memoize-one@^5.0.5:
   version "5.2.1"
@@ -11651,6 +11651,15 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
+prop-types@15.7.2:
+  version "15.7.2"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
+  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.8.1"
+
 prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.0, prop-types@^15.7.2:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
@@ -11838,10 +11847,10 @@ range-parser@^1.2.1, range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
-raven-js@^3.25.2:
-  version "3.27.2"
-  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.27.2.tgz#6c33df952026cd73820aa999122b7b7737a66775"
-  integrity sha512-mFWQcXnhRFEQe5HeFroPaEghlnqy7F5E2J3Fsab189ondqUzcjwSVi7el7F36cr6PvQYXoZ1P2F5CSF2/azeMQ==
+raven-js@3.25.2:
+  version "3.25.2"
+  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.25.2.tgz#d3ad1c694f70855dda6f705204ee6ab76ba62884"
+  integrity sha512-En+UitE5SW8flqfqreZl2WIPslubX8/EWUJcg0V1XShxXkFM3rS6ddWc9kXkjS1mNOleEfamDGWQ4YWWtefUVg==
 
 raw-body@2.4.0:
   version "2.4.0"
@@ -11877,14 +11886,13 @@ rbush@^2.0.1:
   dependencies:
     quickselect "^1.0.1"
 
-react-color@^2.17.3:
-  version "2.19.3"
-  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.19.3.tgz#ec6c6b4568312a3c6a18420ab0472e146aa5683d"
-  integrity sha512-LEeGE/ZzNLIsFWa1TMe8y5VYqr7bibneWmvJwm1pCn/eNmrabWDh659JSPn9BuaMpEfU83WTOJfnCcjDZwNQTA==
+react-color@2.17.3:
+  version "2.17.3"
+  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.17.3.tgz#b8556d744f95193468c7061d2aa19180118d4a48"
+  integrity sha512-1dtO8LqAVotPIChlmo6kLtFS1FP89ll8/OiA8EcFRDR+ntcK+0ukJgByuIQHRtzvigf26dV5HklnxDIvhON9VQ==
   dependencies:
     "@icons/material" "^0.2.4"
-    lodash "^4.17.15"
-    lodash-es "^4.17.15"
+    lodash "^4.17.11"
     material-colors "^1.2.1"
     prop-types "^15.5.10"
     reactcss "^1.2.0"
@@ -11897,32 +11905,34 @@ react-data-table-component@7.4.6:
   dependencies:
     deepmerge "^4.2.2"
 
-react-dom@^16.8.6:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
-  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
+react-dom@17.0.2:
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
+  integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.19.1"
+    scheduler "^0.20.2"
 
 react-fast-compare@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
-react-focus-trap@^2.7.1:
+react-focus-trap@2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/react-focus-trap/-/react-focus-trap-2.7.1.tgz#681b8fd72908df420befe9512a2fbbfe712b87ce"
   integrity sha512-23LD3kjQiL27L5pSZBFSnR0pmI0kg9PlPdfpNdMg5gTXF7YyxZhYwKX6D5zIFif3cI2z7i9f5ToPruUiTWvNFQ==
 
-react-ga@^2.5.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.7.0.tgz#24328f157f31e8cffbf4de74a3396536679d8d7c"
-  integrity sha512-AjC7UOZMvygrWTc2hKxTDvlMXEtbmA0IgJjmkhgmQQ3RkXrWR11xEagLGFGaNyaPnmg24oaIiaNPnEoftUhfXA==
+react-ga@2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.5.0.tgz#fbba2b33d41ce727f7d4cf383d54dbbfbf96c507"
+  integrity sha512-pnkoXO9YOHOC9+0qCD3HhmYJrKvhU0iEvNpS2IKRHb9BBrpwCjk23/gaClnj4lewwIKsD2PYZ74YpHiNQ4WRNg==
+  optionalDependencies:
+    prop-types "^15.6.0"
+    react "^15.6.2 || ^16.0"
 
-react-helmet@^5.2.1:
+react-helmet@5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-5.2.1.tgz#16a7192fdd09951f8e0fe22ffccbf9bb3e591ffa"
   integrity sha512-CnwD822LU8NDBnjCpZ4ySh8L6HYyngViTZLfBBb3NjtrpN8m49clH8hidHouq20I51Y6TpCTISCBbqiY5GamwA==
@@ -11941,7 +11951,7 @@ react-i18next@^11.12.0:
     html-escaper "^2.0.2"
     html-parse-stringify "^3.0.1"
 
-react-icons-kit@^1.3.1:
+react-icons-kit@1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-icons-kit/-/react-icons-kit-1.3.1.tgz#fbe56ce4379fc4391b4c6dfc1aa96e2b31e23623"
   integrity sha512-9Xy81M+Vgt5DO9qAL0jIazNmjelcKWn+uNvChDAMYvawm4yaIecr5I8i/jDEEHgQcEqHpB848AitvRKKNAoljA==
@@ -11949,31 +11959,31 @@ react-icons-kit@^1.3.1:
     camel-case "^3.0.0"
     prop-types "^15.5.8"
 
-react-image-pan-zoom-rotate@^1.3.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-image-pan-zoom-rotate/-/react-image-pan-zoom-rotate-1.5.0.tgz#69e04f75d25702d3756142b518900c83c899b33c"
-  integrity sha512-Rme454tuArJRJ2yD0G/XcrElv0c1WLXii7S2U7sO2vAxR4yRIO2JhYPW8luXZ3/BHCCu1/3bJ/d6grBG2vZqLA==
+react-image-pan-zoom-rotate@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-image-pan-zoom-rotate/-/react-image-pan-zoom-rotate-1.3.0.tgz#2283687a9cb82838e67a8004fd06251725f9d754"
+  integrity sha512-V6udXi+m+II8bbcR03xp1WVtV17LvWJXUv+51/F9AfmTD4pYebYypyCczqIHwAJeozHn6mGHf2hN0/P3l0Vlqg==
 
-react-input-range@^1.3.0:
+react-input-range@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-input-range/-/react-input-range-1.3.0.tgz#f96d001631ab817417f1e26d8f9f9684b4827f59"
-  integrity sha1-+W0AFjGrgXQX8eJtj5+WhLSCf1k=
+  integrity sha512-G//kJqUHo7zQA5PuGZNKhuzhGcj83FJsv62tcP4Eo61DUC/0usHPYxFfIZ3zOfdMWuWEaduD6N4lNsZMmaOJgw==
   dependencies:
     autobind-decorator "^1.3.4"
     prop-types "^15.5.8"
 
-react-input-slider@^5.1.4:
-  version "5.1.7"
-  resolved "https://registry.yarnpkg.com/react-input-slider/-/react-input-slider-5.1.7.tgz#738030f88d6781f1fe423a6de62682991282be20"
-  integrity sha512-w8ciwQCJcY5qKygQQTKTvnxR1CYiTE6fd1M0w29sHqzXPq+44SiWqPJxg7esuejFzRAluHaus7BEgRSJcQcpLg==
+react-input-slider@5.1.4:
+  version "5.1.4"
+  resolved "https://registry.yarnpkg.com/react-input-slider/-/react-input-slider-5.1.4.tgz#8fca02fffc8d7c40864e1ced257bb2437498b359"
+  integrity sha512-WvzmXk7VKfJBjfq4/HopzZrfyItokWi3ovrlkDxUW0iN0kytoSJOlNkxmEHLW5zVtbMEvL32pgJf1iu0kcTKFQ==
   dependencies:
-    "@babel/runtime" "^7.9.2"
+    "@babel/runtime" "^7.5.5"
     "@emotion/core" "^10.0.14"
 
-react-input-switch@^2.2.1:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-input-switch/-/react-input-switch-2.2.2.tgz#2a0fd505c8a4cdb257160940d7ac92d421d7742c"
-  integrity sha512-vi7/jciZcZLS2sRp27Vzmj/uSZzkaFHWw5g7KJ8+NR9EtEIctF/BPPr9yuAWgfaslB7ierNs00TN7Eo5DOnrmA==
+react-input-switch@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-input-switch/-/react-input-switch-2.2.1.tgz#32991eaf27e6cc0fcd80eac0d3706c3bf22fd957"
+  integrity sha512-FsZXXQGN53kZQUUwsASqwBwbbYS/5hKRKvW6tsJt6u3eNimMMPvBVsRomRjUDjBo/OhiKKdnGwWxiNeegay3fw==
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@emotion/core" "^10.0.14"
@@ -11983,15 +11993,15 @@ react-input-switch@^2.2.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-is@^16.13.1, react-is@^16.6.0, react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.4, react-is@^16.8.6:
+react-is@^16.13.1, react-is@^16.6.0, react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-lazy-load-image-component@^1.5.0:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/react-lazy-load-image-component/-/react-lazy-load-image-component-1.5.4.tgz#e75b6520c972b6278a9811876716cdab56e401fb"
-  integrity sha512-PSi9tckzZmiqfYZwS6ke2RoRbICsN5m0qsG6fEjUdQNe5STiJieXLlRuGD3uAASOQPFiKYFSLoueN07nk0uffw==
+react-lazy-load-image-component@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/react-lazy-load-image-component/-/react-lazy-load-image-component-1.5.0.tgz#48939f86cb262b93b345c6fa6322f75ede55160d"
+  integrity sha512-dAvuueTq0FNjswHEII8tcd0FRRHZgPoIdVhE1fcAfCdqY7LZ37IHd0xWb2c6rCl+dsSm9Z4AloEffM8JYPxTlA==
   dependencies:
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
@@ -12001,7 +12011,7 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-loadable@^5.5.0:
+react-loadable@5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/react-loadable/-/react-loadable-5.5.0.tgz#582251679d3da86c32aae2c8e689c59f1196d8c4"
   integrity sha512-C8Aui0ZpMd4KokxRdVAm2bQtI03k2RMRNzOB+IipV3yxFTSVICv7WoUr5L9ALB5BmKO1iHgZtWM8EvYG83otdg==
@@ -12196,15 +12206,22 @@ react-transition-group@^4.4.0, react-transition-group@^4.4.2:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@16.8.6:
-  version "16.8.6"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
-  integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
+react@17.0.2:
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
+  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+"react@^15.6.2 || ^16.0":
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.13.6"
 
 reactcss@^1.2.0:
   version "1.2.3"
