@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable react/no-did-update-set-state */
@@ -905,6 +906,16 @@ class ContactPage extends React.PureComponent<Props, State> {
         );
     }
 
+    private trainingTitleName = (title) => {
+        const trainingList = {
+            LSAR: 'Lite Search & Rescue',
+            rapid_assessment: 'Rapid Assessment',
+            first_aid: 'First Aid',
+            fire_fighting: 'Fire Fighting',
+        };
+        return trainingList[title];
+    }
+
     private listComponent = () => {
         const { sortData, searchActivated, selectedContactFromLabelListId } = this.state;
 
@@ -971,14 +982,21 @@ class ContactPage extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                                 <div className={styles.contactDetailsFooter}>
-                                    <div style={{ marginLeft: '10px', marginRight: '10px' }}>
-                                        <p>First Aid,Search & Rescue and Drill exercise</p>
-                                    </div>
+                                    <div style={{ marginLeft: '10px', marginRight: '10px', flex: 2 }}>
+                                        <p>
+                                            {item.trainings.length ? item.trainings.map((data, index) => (
+                                                <>
+                                                    {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
+                                                    {this.trainingTitleName(data.title)}
 
-                                    {this.editDeleteButton(item.id, item)}
-                                    {/* <div className={styles.footerContent}>First Aid</div>
-                                        <div className={styles.footerContent}>Search & Rescue</div>
-                                        <div className={styles.footerContent}>Drill exercise</div> */}
+                                                    {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
+                                                </>
+                                            )) : null}
+                                        </p>
+                                    </div>
+                                    <div className={styles.editDeleteButtn}>
+                                        {this.editDeleteButton(item.id, item)}
+                                    </div>
 
                                 </div>
                             </div>
@@ -1027,13 +1045,23 @@ class ContactPage extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                                 <div className={styles.contactDetailsFooter}>
-                                    <div style={{ marginLeft: '10px', marginRight: '10px' }}>
-                                        <p>First Aid,Search & Rescue and Drill exercise</p>
+                                    <div style={{ marginLeft: '10px', marginRight: '10px', flex: 2 }}>
+                                        <p>
+                                            {item.trainings.length ? item.trainings.map((data, index) => (
+                                                <>
+                                                    {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
+                                                    {this.trainingTitleName(data.title)}
+
+                                                    {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
+                                                </>
+                                            )) : null}
+                                        </p>
+                                        {/* <p>First Aid,Search & Rescue and Drill exercise</p> */}
                                     </div>
-                                    {this.editDeleteButton(item.id, item)}
-                                    {/* <div className={styles.footerContent}>First Aid</div>
-                                        <div className={styles.footerContent}>Search & Rescue</div>
-                                        <div className={styles.footerContent}>Drill exercise</div> */}
+                                    <div className={styles.editDeleteButtn}>
+                                        {this.editDeleteButton(item.id, item)}
+                                    </div>
+
 
                                 </div>
                             </div>
@@ -1099,7 +1127,6 @@ class ContactPage extends React.PureComponent<Props, State> {
         const nonClusteredPointFilter = ['!', clusteredPointFilter];
 
         const positionOptions = this.getPositionOptions(contactList);
-
         return (
             <>
                 <Loading pending={pending} />
