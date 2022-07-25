@@ -64,6 +64,8 @@ import {
 
 import styles from './styles.scss';
 import Overview from './Overview';
+import Dropdown from './DropDown';
+import DataCount from './DataCount';
 
 const ModalButton = modalize(Button);
 
@@ -374,7 +376,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         );
         const chartData = this.getDataAggregatedByYear(filteredData);
 
-
         return (
             <>
                 <Loading pending={pending} />
@@ -419,12 +420,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         Submit
                                     </div>
                                 </div>
-                                { startDate > endDate
-                                        && (
-                                            <div className={styles.warningText}>
-                                                WARNING! Start date cannot be greater than End Date
-                                            </div>
-                                        )
+                                {startDate > endDate
+                                    && (
+                                        <div className={styles.warningText}>
+                                            WARNING! Start date cannot be greater than End Date
+                                        </div>
+                                    )
                                 }
                                 <div className={styles.sourceDetails}>
                                     <div className={styles.infoIconContainer}>
@@ -478,6 +479,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     )}
                                 />
                             </div>
+                            <Dropdown data={incidentMetricChartParams} />
+                            <DataCount />
+
                             <div className={styles.mainContent}>
                                 <LossDetails
                                     className={styles.lossDetails}
@@ -492,17 +496,19 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     onClick={this.handleSaveClick}
                                     iconName="download"
                                 />
+
+
                                 <div
                                     className={styles.chartList}
                                     id="chartList"
                                 >
-                                    { Object.values(incidentMetricChartParams).map(metric => (
+                                    {Object.values(incidentMetricChartParams).map(metric => (
                                         <div
                                             key={metric.dataKey}
                                             className={styles.chartContainer}
                                         >
                                             <h4 className={styles.heading}>
-                                                { metric.title }
+                                                {metric.title}
                                             </h4>
                                             <div className={styles.content}>
                                                 <ResponsiveContainer>
