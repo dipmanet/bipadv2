@@ -981,8 +981,10 @@ class ContactPage extends React.PureComponent<Props, State> {
                                         src={emailContactLogo}
                                     />
                                 </div>
-                                <div className={styles.contactDetailsFooter}>
-                                    <div style={{ marginLeft: '10px', marginRight: '10px', flex: 2 }}>
+                                <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
+                                    <div style={item.trainings.length ? { marginLeft: '10px', marginRight: '10px' }
+                                        : { marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}
+                                    >
                                         <p>
                                             {item.trainings.length ? item.trainings.map((data, index) => (
                                                 <>
@@ -991,7 +993,7 @@ class ContactPage extends React.PureComponent<Props, State> {
 
                                                     {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
                                                 </>
-                                            )) : null}
+                                            )) : 'No Training Attained'}
                                         </p>
                                     </div>
                                     <div className={styles.editDeleteButtn}>
@@ -1044,8 +1046,8 @@ class ContactPage extends React.PureComponent<Props, State> {
                                         src={emailContactLogo}
                                     />
                                 </div>
-                                <div className={styles.contactDetailsFooter}>
-                                    <div style={{ marginLeft: '10px', marginRight: '10px', flex: 2 }}>
+                                <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
+                                    <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}>
                                         <p>
                                             {item.trainings.length ? item.trainings.map((data, index) => (
                                                 <>
@@ -1054,7 +1056,7 @@ class ContactPage extends React.PureComponent<Props, State> {
 
                                                     {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
                                                 </>
-                                            )) : null}
+                                            )) : 'No Training Attained'}
                                         </p>
                                         {/* <p>First Aid,Search & Rescue and Drill exercise</p> */}
                                     </div>
