@@ -1,5 +1,15 @@
 export const enTranslation = {
     translation: {
+        'Download Csv': 'Download Csv',
+        'Literacy Rate': 'Literacy Rate',
+        Male: 'Male',
+        Female: 'Female',
+        'Population By Age Group': 'Population By Age Group',
+        'Household Statistics': 'Household Statistics',
+        'Literacy Rate (%)': 'Literacy Rate (%)',
+        'Gender Breakdown': 'Gender Breakdown',
+        'Download Chart': 'Download Chart',
+        'Demography (Census 2011)': 'Demography (Census 2011)',
         Demography: 'Demography',
         Visualization: 'Visualization',
         Demographics: 'Demographics',
@@ -830,10 +840,20 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Download Csv': 'Csv डाउनलोड गर्नुहोस्',
+        'Literacy Rate': 'साक्षरता दर',
+        Male: 'पुरुष',
+        Female: 'महिला',
+        'Population By Age Group': 'उमेर समूह द्वारा जनसंख्या',
+        'Household Statistics': 'घरधुरी तथ्याङ्क',
+        'Literacy Rate (%)': 'साक्षरता दर (%)',
+        'Gender Breakdown': 'लिङ्ग वर्गीकरण ',
+        'Download Chart': 'चार्ट डाउनलोड गर्नुहोस',
+        'Demography (Census 2011)': 'जनसांख्यिकी (जनगणना २०११)',
         Demography: 'जनसांख्यिकी',
         Visualization: 'भिज्युअल',
-        Demographics: 'जनसांख्यिकी',
-        'NEP-DAT Profile': 'नेप-डयाट प्रोफाइल',
+        Demographics: 'जनसांख्यिकी विवरण',
+        'NEP-DAT Profile': 'NEP-DAT प्रोफाइल',
         Flow: 'प्रवाह',
         'Water Level': 'पानीको तह',
         'Hourly Water Level': 'प्रति घण्टा पानी स्तर',

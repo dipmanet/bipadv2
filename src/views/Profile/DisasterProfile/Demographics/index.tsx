@@ -951,11 +951,7 @@ class Demographics extends React.PureComponent<Props> {
             <>
                 {!closedVisualization
                     ? (
-                        <Modal className={
-                            styles.contactFormModal
-
-                        }
-                        >
+                        <Modal className={styles.contactFormModal}>
                             {/* <ModalHeader
                     // title={'Add Contact'}
                     rightComponent={(
@@ -967,59 +963,65 @@ class Demographics extends React.PureComponent<Props> {
                 />
                     )}
                 /> */}
-                            <ModalBody className={styles.modalBody}>
-
-
-                                <div className={styles.header}>
-                                    <div className={styles.headingCategories}>
-                                        <div
-                                            role="button"
-                                            tabIndex={0}
-                                            onKeyDown={undefined}
-                                            className={!isDataSetClicked ? styles.visualization : ''}
-                                            onClick={() => this.setState({ isDataSetClicked: false })}
-                                        >
-                                            <h2>VISUALIZATION</h2>
-                                        </div>
-                                        <div
-                                            style={{ marginLeft: '30px' }}
-                                            role="button"
-                                            tabIndex={0}
-                                            className={isDataSetClicked ? styles.visualization : ''}
-                                            onKeyDown={undefined}
-                                            onClick={() => this.setState({ isDataSetClicked: true })}
-                                        >
-                                            <h2>DATASET</h2>
-                                        </div>
-
-                                    </div>
-
-                                    <DangerButton
-                                        transparent
-                                        iconName="close"
-                                        // onClick={() => closeVisualization(false,
-                                        //                 checkedCategory, resourceType, level, lvl2catName, typeName)}
-                                        onClick={this.handleCloseVisualization}
-                                        title="Close Modal"
-                                        className={styles.closeButton}
-                                    />
-                                    {' '}
-
-                                </div>
-                                <div className={styles.categoryName}>
-                                    <div className={styles.categoryLogo}>
-                                        {selectedDataType === 1 ? (
-                                            <ScalableVectorGraphics
-                                                className={styles.categoryLogoIcon}
-
-                                                src={iconImage}
-                                            />
-                                        ) : ''
+                            <Translation>
+                                {
+                                    t => (
+                                        <ModalBody className={
+                                            _cs(styles.modalBody, language === 'np' && styles.languageFont)
                                         }
+                                        >
 
-                                        <h3>{selectedDataType === 1 ? 'Demography (Census 2011)' : ''}</h3>
-                                    </div>
-                                    {/* <div
+
+                                            <div className={styles.header}>
+                                                <div className={styles.headingCategories}>
+                                                    <div
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        onKeyDown={undefined}
+                                                        className={!isDataSetClicked ? styles.visualization : ''}
+                                                        onClick={() => this.setState({ isDataSetClicked: false })}
+                                                    >
+                                                        <h2>{t('VISUALIZATION')}</h2>
+                                                    </div>
+                                                    <div
+                                                        style={{ marginLeft: '30px' }}
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        className={isDataSetClicked ? styles.visualization : ''}
+                                                        onKeyDown={undefined}
+                                                        onClick={() => this.setState({ isDataSetClicked: true })}
+                                                    >
+                                                        <h2>{t('DATASET')}</h2>
+                                                    </div>
+
+                                                </div>
+
+                                                <DangerButton
+                                                    transparent
+                                                    iconName="close"
+                                                    // onClick={() => closeVisualization(false,
+                                                    //                 checkedCategory, resourceType, level, lvl2catName, typeName)}
+                                                    onClick={this.handleCloseVisualization}
+                                                    title={t('Close Modal')}
+                                                    className={styles.closeButton}
+                                                />
+                                                {' '}
+
+                                            </div>
+                                            <div className={styles.categoryName}>
+                                                <div className={styles.categoryLogo}>
+                                                    {selectedDataType === 1 ? (
+                                                        <ScalableVectorGraphics
+                                                            className={styles.categoryLogoIcon}
+
+                                                            src={iconImage}
+                                                        />
+                                                    ) : ''
+                                                    }
+
+                                                    <h3>{selectedDataType === 1 ? t('Demography (Census 2011)') : ''}</h3>
+                                                </div>
+                                                {/* <div
                     style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                     role="button"
                     tabIndex={0}
@@ -1040,177 +1042,221 @@ class Demographics extends React.PureComponent<Props> {
                     />
 
                 </div> */}
-                                </div>
-                                {selectedDataType === 1 ? isDataSetClicked
-                                    ? (
-                                        <TableDataCensus
-                                            population={sexRatio}
-                                            literacy={literacyRatio}
-                                            ageGroup={ageGroupSummary}
-                                            householdSummary={householdSummary}
-                                            selectedFederalName={selectedFederalName}
-                                        />
-                                    )
-                                    : (
-                                        <div>
-                                            <div className={styles.barChartSection}>
+                                            </div>
+                                            {selectedDataType === 1 ? isDataSetClicked
+                                                ? (
+                                                    <TableDataCensus
+                                                        population={sexRatio}
+                                                        literacy={literacyRatio}
+                                                        ageGroup={ageGroupSummary}
+                                                        householdSummary={householdSummary}
+                                                        selectedFederalName={selectedFederalName}
+                                                        language={language}
+                                                    />
+                                                )
+                                                : (
+                                                    <div>
+                                                        <div className={styles.barChartSection}>
 
-                                                <div className={styles.percentageValue}>
-                                                    {/* <h1>Education Institution</h1> */}
-                                                    <h1>
-                                                        {sexRatio.sort((a, b) => b.percent - a.percent)[0].percent}
-                                                        %
-                                                    </h1>
+                                                            <div className={styles.percentageValue}>
+                                                                {/* <h1>Education Institution</h1> */}
+
+                                                                {
+                                                                    language === 'en'
+                                                                        ? (
+                                                                            <h1>
+                                                                                {sexRatio.sort((a, b) => b.percent - a.percent)[0].percent}
+                                                                                %
+                                                                            </h1>
+                                                                        )
+                                                                        : (
+                                                                            <h1>
+                                                                                कुल जनसंख्यामा
+                                                                                {' '}
+                                                                                {sexRatio.sort((a, b) => b.percent - a.percent)[0].percent}
+                                                                                %
+                                                                            </h1>
+                                                                        )
+
+                                                                }
 
 
-                                                    <>
-                                                        <span>
-                                                            of total population are
-                                                            {' '}
-                                                            {sexRatio.sort((a, b) => b.percent - a.percent)[0].label}
-                                                        </span>
+                                                                <>
+                                                                    {
+                                                                        language === 'en'
+                                                                            ? (
+                                                                                <span>
+                                                                                    of total population are
+                                                                                    {' '}
+                                                                                    {sexRatio.sort((a, b) => b.percent - a.percent)[0].label}
+                                                                                </span>
+                                                                            )
+                                                                            : (
+                                                                                <span>
+                                                                                    {sexRatio.sort((a, b) => b.percent - a.percent)[0].label}
+                                                                                    {' '}
+                                                                                    छन्
+                                                                                </span>
+                                                                            )
+                                                                    }
 
-                                                    </>
+                                                                </>
 
 
-                                                </div>
+                                                            </div>
 
 
-                                                <div style={{ flex: '4' }}>
+                                                            <div style={{ flex: '4' }}>
 
-                                                    <div className={styles.graphicalVisualization}>
+                                                                <div className={styles.graphicalVisualization}>
 
-                                                        {/* <div style={{ display: 'flex',
+                                                                    {/* <div style={{ display: 'flex',
                                                                 justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                     /> */}
-                                                        <div id="genderBreakdown">
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                <h3>Gender Breakdown</h3>
-                                                                <Button
-                                                                    title="Download Chart"
-                                                                    className={styles.chartDownload}
-                                                                    transparent
-                                                                    onClick={() => this.handleSaveClick('genderBreakdown')}
-                                                                    iconName="download"
-                                                                />
+                                                                    <div id="genderBreakdown">
+                                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                            <h3>{t('Gender Breakdown')}</h3>
+                                                                            <Button
+                                                                                title={t('Download Chart')}
+                                                                                className={styles.chartDownload}
+                                                                                transparent
+                                                                                onClick={() => this.handleSaveClick('genderBreakdown')}
+                                                                                iconName="download"
+                                                                            />
+                                                                        </div>
+                                                                        <BarchartVisualization item={sexRatio} />
+                                                                    </div>
+
+
+                                                                </div>
+
                                                             </div>
-                                                            <BarchartVisualization item={sexRatio} />
+
+
                                                         </div>
+                                                        <div className={styles.barChartSection}>
+
+                                                            <div className={styles.percentageValue}>
+                                                                {/* <h1>Education Institution</h1> */}
+                                                                <h1>
+                                                                    {literacyRatio.sort((a, b) => b.value - a.value)[0].value}
+                                                                    %
+                                                                </h1>
 
 
-                                                    </div>
+                                                                <>
+                                                                    {
+                                                                        language === 'en'
+                                                                            ? (
+                                                                                <span>
+                                                                                    {literacyRatio.sort((a, b) => b.value - a.value)[0].label}
+                                                                                    {' '}
+                                                                                    are literate
+                                                                                </span>
+                                                                            )
+                                                                            : (
+                                                                                <span>
+                                                                                    {literacyRatio.sort((a, b) => b.value - a.value)[0].label}
+                                                                                    {' '}
+                                                                                    साक्षर  छन्
+                                                                                </span>
+                                                                            )
+                                                                    }
 
-                                                </div>
-
-
-                                            </div>
-                                            <div className={styles.barChartSection}>
-
-                                                <div className={styles.percentageValue}>
-                                                    {/* <h1>Education Institution</h1> */}
-                                                    <h1>
-                                                        {literacyRatio.sort((a, b) => b.value - a.value)[0].value}
-                                                        %
-                                                    </h1>
-
-
-                                                    <>
-                                                        <span>
-                                                            {literacyRatio.sort((a, b) => b.value - a.value)[0].label}
-                                                            {' '}
-                                                            are literate
-                                                        </span>
-
-                                                    </>
+                                                                </>
 
 
-                                                </div>
+                                                            </div>
 
 
-                                                <div style={{ flex: '4' }}>
+                                                            <div style={{ flex: '4' }}>
 
-                                                    <div className={styles.graphicalVisualization}>
+                                                                <div className={styles.graphicalVisualization}>
 
-                                                        {/* <div style={{ display: 'flex',
+                                                                    {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                          /> */}
-                                                        <div id="literacyRate">
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                <h3>Literacy Rate (%)</h3>
-                                                                <Button
-                                                                    title="Download Chart"
-                                                                    className={styles.chartDownload}
-                                                                    transparent
-                                                                    onClick={() => this.handleSaveClick('literacyRate')}
-                                                                    iconName="download"
-                                                                />
+                                                                    <div id="literacyRate">
+                                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                            <h3>{t('Literacy Rate (%)')}</h3>
+                                                                            <Button
+                                                                                title={t('Download Chart')}
+                                                                                className={styles.chartDownload}
+                                                                                transparent
+                                                                                onClick={() => this.handleSaveClick('literacyRate')}
+                                                                                iconName="download"
+                                                                            />
+                                                                        </div>
+                                                                        <BarchartVisualization item={literacyRatio} percentage />
+                                                                    </div>
+
+
+                                                                </div>
+
                                                             </div>
-                                                            <BarchartVisualization item={literacyRatio} percentage />
+
+
                                                         </div>
+                                                        <div className={styles.barChartSection}>
+
+                                                            <div className={styles.percentageValue}>
+                                                                {/* <h1>Education Institution</h1> */}
+                                                                <h1>
+                                                                    {NumberWithCommas(householdSummary.find(i => i.key === 'householdCount').value)}
+                                                                </h1>
 
 
-                                                    </div>
+                                                                <>
+                                                                    <span>
+                                                                        {
+                                                                            language === 'en'
+                                                                                ? 'Number of Household are present'
+                                                                                : 'परिवार संख्या उपस्थित  छन् '
+                                                                        }
+                                                                    </span>
 
-                                                </div>
-
-
-                                            </div>
-                                            <div className={styles.barChartSection}>
-
-                                                <div className={styles.percentageValue}>
-                                                    {/* <h1>Education Institution</h1> */}
-                                                    <h1>
-                                                        {NumberWithCommas(householdSummary.find(i => i.key === 'householdCount').value)}
-                                                    </h1>
+                                                                </>
 
 
-                                                    <>
-                                                        <span>
-                                                            Number of Household are present
-                                                        </span>
-
-                                                    </>
+                                                            </div>
 
 
-                                                </div>
+                                                            <div style={{ flex: '4' }}>
 
+                                                                <div className={styles.graphicalVisualization}>
 
-                                                <div style={{ flex: '4' }}>
-
-                                                    <div className={styles.graphicalVisualization}>
-
-                                                        {/* <div style={{ display: 'flex',
+                                                                    {/* <div style={{ display: 'flex',
                                                          justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                          /> */}
-                                                        <div id="houseHold">
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                <h3>Household Statistics</h3>
-                                                                <Button
-                                                                    title="Download Chart"
-                                                                    className={styles.chartDownload}
-                                                                    transparent
-                                                                    onClick={() => this.handleSaveClick('houseHold')}
-                                                                    iconName="download"
-                                                                />
+                                                                    <div id="houseHold">
+                                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                            <h3>{t('Household Statistics')}</h3>
+                                                                            <Button
+                                                                                title={t('Download Chart')}
+                                                                                className={styles.chartDownload}
+                                                                                transparent
+                                                                                onClick={() => this.handleSaveClick('houseHold')}
+                                                                                iconName="download"
+                                                                            />
+                                                                        </div>
+                                                                        <BarchartVisualization item={householdSummary} />
+                                                                    </div>
+
+
+                                                                </div>
+
                                                             </div>
-                                                            <BarchartVisualization item={householdSummary} />
+
+
                                                         </div>
+                                                        <div className={styles.barChartSection}>
 
+                                                            <div className={styles.percentageValue}>
 
-                                                    </div>
-
-                                                </div>
-
-
-                                            </div>
-                                            <div className={styles.barChartSection}>
-
-                                                <div className={styles.percentageValue}>
-
-                                                    {/* <h1>
+                                                                {/* <h1>
                                                         {ageGroupSummary.sort((a, b) => b.value - a.value)[0].value}
                                                         1
                                                     </h1>
@@ -1224,328 +1270,328 @@ class Demographics extends React.PureComponent<Props> {
                                                     </> */}
 
 
-                                                </div>
+                                                            </div>
 
 
-                                                <div style={{ flex: '4' }}>
+                                                            <div style={{ flex: '4' }}>
 
-                                                    <div className={styles.graphicalVisualization}>
+                                                                <div className={styles.graphicalVisualization}>
 
-                                                        {/* <div style={{ display: 'flex',
+                                                                    {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                        <div id="ageGroup">
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                <h3>Age Group</h3>
-                                                                <Button
-                                                                    title="Download Chart"
-                                                                    className={styles.chartDownload}
-                                                                    transparent
-                                                                    onClick={() => this.handleSaveClick('ageGroup')}
-                                                                    iconName="download"
-                                                                />
+                                                                    <div id="ageGroup">
+                                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                            <h3>{t('Age Group')}</h3>
+                                                                            <Button
+                                                                                title={t('Download Chart')}
+                                                                                className={styles.chartDownload}
+                                                                                transparent
+                                                                                onClick={() => this.handleSaveClick('ageGroup')}
+                                                                                iconName="download"
+                                                                            />
+                                                                        </div>
+                                                                        <BarchartVisualization item={ageGroupSummary} category />
+                                                                    </div>
+
+
+                                                                </div>
+
                                                             </div>
-                                                            <BarchartVisualization item={ageGroupSummary} category />
+
+
                                                         </div>
-
-
                                                     </div>
-
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    ) : isDataSetClicked
-                                    ? (
-                                        <TableDataLGProfile
-                                            selectedFederalName={selectedFederalName}
-                                            lgProfileWardLevelData={lgProfileWardLevelData}
-                                        />
-                                    )
-                                    : (
-                                        <div>
-                                            <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Demographics</h3>
-                                            {filteredLGProfileEducationLevel.length
+                                                ) : isDataSetClicked
                                                 ? (
-                                                    <div className={styles.barChartSection}>
+                                                    <TableDataLGProfile
+                                                        selectedFederalName={selectedFederalName}
+                                                        lgProfileWardLevelData={lgProfileWardLevelData}
+                                                    />
+                                                )
+                                                : (
+                                                    <div>
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Demographics</h3>
+                                                        {filteredLGProfileEducationLevel.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Education Attainment
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].percentage}
-                                                                %
-                                                            </h2>
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Education Attainment
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].percentage}
+                                                                            %
+                                                                        </h2>
 
-                                                            <>
-                                                                <span>
-                                                                    of the population has received
-                                                                    {' '}
-                                                                    {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                    {' '}
-                                                                    education
-                                                                </span>
+                                                                        <>
+                                                                            <span>
+                                                                                of the population has received
+                                                                                {' '}
+                                                                                {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                {' '}
+                                                                                education
+                                                                            </span>
 
-                                                            </>
-
-
-                                                        </div>
+                                                                        </>
 
 
-                                                        <div style={{ flex: '4' }}>
+                                                                    </div>
 
-                                                            <div className={styles.graphicalVisualization}>
 
-                                                                {/* <div style={{ display: 'flex',
+                                                                    <div style={{ flex: '4' }}>
+
+                                                                        <div className={styles.graphicalVisualization}>
+
+                                                                            {/* <div style={{ display: 'flex',
                                                                 justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                     /> */}
-                                                                <div id="filteredLGProfileEducationLevel">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Population by highest level of education completion</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileEducationLevel')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileEducationLevel">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Population by highest level of education completion</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileEducationLevel')}
+                                                                                        iconName="download"
+                                                                                    />
+                                                                                </div>
+
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileEducationLevel} />
+                                                                            </div>
+
+
+                                                                        </div>
+
                                                                     </div>
 
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileEducationLevel} />
+
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileMigration.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        <h1>
+                                                                            Migration
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].percentage}
+                                                                            %
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                of the population
+                                                                                {' '}
+                                                                                {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].label}
+
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileMigration.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            <h1>
-                                                                Migration
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].percentage}
-                                                                %
-                                                            </h2>
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            <>
-                                                                <span>
-                                                                    of the population
-                                                                    {' '}
-                                                                    {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].label}
-
-                                                                </span>
-
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                          /> */}
-                                                                <div id="filteredLGProfileMigration">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Population by Presence in Household</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileMigration')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileMigration">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Population by Presence in Household</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileMigration')}
+                                                                                        iconName="download"
+                                                                                    />
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileMigration} />
+
+                                                                            </div>
+
+
+                                                                        </div>
+
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileMigration} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileSocialSecurity.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+                                                                    <div className={styles.percentageValue}>
+                                                                        <h1>
+                                                                            Social Security
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {summationLGProfileSocialSecurity}
+
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                people make use of social security benefits
+
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileSocialSecurity.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
-                                                        <div className={styles.percentageValue}>
-                                                            <h1>
-                                                                Social Security
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {summationLGProfileSocialSecurity}
+                                                                    <div style={{ flex: '4' }}>
 
-                                                            </h2>
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            <>
-                                                                <span>
-                                                                    people make use of social security benefits
-
-                                                                </span>
-
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                          justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                          /> */}
-                                                                <div id="filteredLGProfileSocialSecurity">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Population by type of social security benefit</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileSocialSecurity')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileSocialSecurity">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Population by type of social security benefit</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileSocialSecurity')}
+                                                                                        iconName="download"
+                                                                                    />
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileSocialSecurity} />
+
+                                                                            </div>
+
+                                                                        </div>
+
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileSocialSecurity} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileDisability.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
 
-                                                            </div>
+                                                                    <div className={styles.percentageValue}>
+                                                                        <h1>
+                                                                            People with Disability
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {summationLGProfileDisability}
 
-                                                        </div>
-
-
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileDisability.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
-
-                                                        <div className={styles.percentageValue}>
-                                                            <h1>
-                                                                People with Disability
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {summationLGProfileDisability}
-
-                                                            </h2>
+                                                                        </h2>
 
 
-                                                        </div>
+                                                                    </div>
 
 
-                                                        <div style={{ flex: '4' }}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                            <div className={styles.graphicalVisualization}>
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileDisability">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Population by Disability</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileDisability')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileDisability">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Population by Disability</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileDisability')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileDisability} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileDisability} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Household Statistics</h3>
+                                                        {filteredLGProfileHouseHold.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Number of households
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {summationLGProfileHouseHold}
+
+                                                                        </h2>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Household Statistics</h3>
-                                            {filteredLGProfileHouseHold.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Number of households
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {summationLGProfileHouseHold}
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </h2>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileHouseHold">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Breakdown of household heads</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileHouseHold')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileHouseHold">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Breakdown of household heads</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileHouseHold')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileHouseHold} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileHouseHold} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileAverageMonthlyIncome.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
 
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileAverageMonthlyIncome.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
-
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            {/* <h1>
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        {/* <h1>
                                                             Maximum household income
                                                             </h1>
                                                             <h1>
@@ -1560,481 +1606,485 @@ class Demographics extends React.PureComponent<Props> {
                                                                 </span>
 
                                                             </> */}
-                                                            <h1>
-                                                                Maximum household income Range
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileAverageMonthlyIncome.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                        <h1>
+                                                                            Maximum household income Range
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileAverageMonthlyIncome.sort((a, b) => b.percentage - a.percentage))[0].label}
 
-                                                            </h2>
+                                                                        </h2>
 
-                                                            <>
-                                                                <span>
-                                                                    on average per month
+                                                                        <>
+                                                                            <span>
+                                                                                on average per month
 
-                                                                </span>
+                                                                            </span>
 
-                                                            </>
-
-
-                                                        </div>
+                                                                        </>
 
 
-                                                        <div style={{ flex: '4' }}>
+                                                                    </div>
 
-                                                            <div className={styles.graphicalVisualization}>
 
-                                                                {/* <div style={{ display: 'flex',
+                                                                    <div style={{ flex: '4' }}>
+
+                                                                        <div className={styles.graphicalVisualization}>
+
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileAverageMonthlyIncome">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Household by average monthly income</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileAverageMonthlyIncome')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileAverageMonthlyIncome">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Household by average monthly income</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileAverageMonthlyIncome')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileAverageMonthlyIncome} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileAverageMonthlyIncome} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileAverageMajorOccupation.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+
+                                                                        <h1>
+                                                                            Occupation
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].value}
+
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                Household are engaged in
+                                                                                {' '}
+                                                                                {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].label}
+
+                                                                            </span>
+
+                                                                        </>
+
+                                                                    </div>
 
 
-                                                            </div>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        </div>
+                                                                        <div className={styles.graphicalVisualization}>
 
-
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileAverageMajorOccupation.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
-
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-
-                                                            <h1>
-                                                                Occupation
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].value}
-
-                                                            </h2>
-
-                                                            <>
-                                                                <span>
-                                                                    Household are engaged in
-                                                                    {' '}
-                                                                    {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].label}
-
-                                                                </span>
-
-                                                            </>
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileAverageMajorOccupation">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Major occupation</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileAverageMajorOccupation')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileAverageMajorOccupation">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Major occupation</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileAverageMajorOccupation')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileAverageMajorOccupation} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileAverageMajorOccupation} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileDrinkingWater.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Drinking Water
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].value}
+
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                households use
+                                                                                {' '}
+                                                                                {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].label}
+
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileDrinkingWater.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Drinking Water
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].value}
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </h2>
-
-                                                            <>
-                                                                <span>
-                                                                    households use
-                                                                    {' '}
-                                                                    {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].label}
-
-                                                                </span>
-
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileDrinkingWater">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Source of Drinking water by Household</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileDrinkingWater')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileDrinkingWater">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Source of Drinking water by Household</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileDrinkingWater')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileDrinkingWater} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileDrinkingWater} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileResidentHousehold.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Number of buildings
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {summationLGProfileResidentHousehold}
+
+                                                                        </h2>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileResidentHousehold.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Number of buildings
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {summationLGProfileResidentHousehold}
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </h2>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileResidentHousehold">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Building by number of resident households</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileResidentHousehold')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileResidentHousehold">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Building by number of resident households</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileResidentHousehold')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileResidentHousehold} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileResidentHousehold} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Agriculture and Livestock</h3>
+                                                        {filteredLGProfileAgriculturePractice.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Agriculture
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].percentage}
+                                                                            %
+
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                of households are
+                                                                                {' '}
+                                                                                {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].label}
+
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Agriculture and Livestock</h3>
-                                            {filteredLGProfileAgriculturePractice.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Agriculture
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].percentage}
-                                                                %
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </h2>
-
-                                                            <>
-                                                                <span>
-                                                                    of households are
-                                                                    {' '}
-                                                                    {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].label}
-
-                                                                </span>
-
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileAgriculturePractice">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Agricuture practice</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileAgriculturePractice')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileAgriculturePractice">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Agricuture practice</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileAgriculturePractice')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileAgriculturePractice} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileAgriculturePractice} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileAgricultureProduct.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Agricultural Products
+                                                                        </h1>
+                                                                        <>
+                                                                            <span>
+                                                                                {(filteredLGProfileAgricultureProduct.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                {' '}
+                                                                                is major Agricultural product
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileAgricultureProduct.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Agricultural Products
-                                                            </h1>
-                                                            <>
-                                                                <span>
-                                                                    {(filteredLGProfileAgricultureProduct.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                    {' '}
-                                                                    is major Agricultural product
-                                                                </span>
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileAgricultureProduct">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Major Agricultural products</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileAgricultureProduct')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileAgricultureProduct">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Major Agricultural products</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileAgricultureProduct')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileAgricultureProduct} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileAgricultureProduct} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Physical Structure of House</h3>
+                                                        {filteredLGProfileBuildingType.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Majority of building type
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].percentage}
+                                                                            %
+
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                are
+                                                                                {' '}
+                                                                                {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                {' '}
+                                                                                house
+
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Physical Structure of House</h3>
-                                            {filteredLGProfileBuildingType.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Majority of building type
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].percentage}
-                                                                %
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </h2>
-
-                                                            <>
-                                                                <span>
-                                                                    are
-                                                                    {' '}
-                                                                    {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                    {' '}
-                                                                    house
-
-                                                                </span>
-
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileBuildingType">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Building by Type of Superstructure</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileBuildingType')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileBuildingType">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Building by Type of Superstructure</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileBuildingType')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileBuildingType} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileBuildingType} />
+
 
                                                                 </div>
+                                                            ) : ''}
+                                                        {filteredLGProfileBuildingFoundation.length
+                                                            ? (
+                                                                <div className={styles.barChartSection}>
+
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            Majority of building
+                                                                        </h1>
+                                                                        <h2 style={{ fontSize: '22px', color: 'black' }}>
+                                                                            {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].percentage}
+                                                                            %
+
+                                                                        </h2>
+
+                                                                        <>
+                                                                            <span>
+                                                                                have
+                                                                                {' '}
+                                                                                {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                {' '}
+                                                                                foundation
+
+                                                                            </span>
+
+                                                                        </>
 
 
-                                                            </div>
-
-                                                        </div>
+                                                                    </div>
 
 
-                                                    </div>
-                                                ) : ''}
-                                            {filteredLGProfileBuildingFoundation.length
-                                                ? (
-                                                    <div className={styles.barChartSection}>
+                                                                    <div style={{ flex: '4' }}>
 
-                                                        <div className={styles.percentageValue}>
-                                                            {/* <h1>Education Institution</h1> */}
-                                                            <h1>
-                                                                Majority of building
-                                                            </h1>
-                                                            <h2 style={{ fontSize: '22px', color: 'black' }}>
-                                                                {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].percentage}
-                                                                %
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                            </h2>
-
-                                                            <>
-                                                                <span>
-                                                                    have
-                                                                    {' '}
-                                                                    {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                    {' '}
-                                                                    foundation
-
-                                                                </span>
-
-                                                            </>
-
-
-                                                        </div>
-
-
-                                                        <div style={{ flex: '4' }}>
-
-                                                            <div className={styles.graphicalVisualization}>
-
-                                                                {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                         justifyContent: 'flex-end',
                                                         fontSize: '25px' }}
                                                         /> */}
-                                                                <div id="filteredLGProfileBuildingFoundation">
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                        <h3>Buildings by Type of Foundation</h3>
-                                                                        <Button
-                                                                            title="Download Chart"
-                                                                            className={styles.chartDownload}
-                                                                            transparent
-                                                                            onClick={() => this.handleSaveClick('filteredLGProfileBuildingFoundation')}
-                                                                            iconName="download"
-                                                                        />
+                                                                            <div id="filteredLGProfileBuildingFoundation">
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>Buildings by Type of Foundation</h3>
+                                                                                    <Button
+                                                                                        title="Download Chart"
+                                                                                        className={styles.chartDownload}
+                                                                                        transparent
+                                                                                        onClick={() => this.handleSaveClick('filteredLGProfileBuildingFoundation')}
+                                                                                        iconName="download"
+                                                                                    />
+
+                                                                                </div>
+                                                                                <LGProfileVisualization percentage item={filteredLGProfileBuildingFoundation} />
+
+                                                                            </div>
+
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <LGProfileVisualization percentage item={filteredLGProfileBuildingFoundation} />
+
 
                                                                 </div>
-
-
-                                                            </div>
-
-                                                        </div>
-
-
+                                                            ) : ''}
                                                     </div>
-                                                ) : ''}
-                                        </div>
+                                                )
+
+                                            }
+
+
+                                            {/* </div> */}
+
+
+                                        </ModalBody>
                                     )
-
                                 }
+                            </Translation>
 
-
-                                {/* </div> */}
-
-
-                            </ModalBody>
                         </Modal>
                     ) : ''
                 }

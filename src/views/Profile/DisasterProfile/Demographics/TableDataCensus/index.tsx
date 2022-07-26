@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import Button from '#rsca/Button';
 import TableDataList from './TableDataList';
 
-const TableData = ({ population, literacy, ageGroup, householdSummary, selectedFederalName }) => {
+const TableData = ({ population, literacy, ageGroup,
+    householdSummary, selectedFederalName, language }) => {
     const [selectedCategory, setSelectedCategory] = useState(1);
     const [selectedCategoryName, setSelectedCategoryName] = useState('Population');
     const handleClickedDataset = (id, name) => {
@@ -32,44 +34,53 @@ const TableData = ({ population, literacy, ageGroup, householdSummary, selectedF
     };
 
     return (
-        <div>
-            <div>
-                <Button
-                    className={selectedCategory === 1 ? styles.active : ''}
-                    onClick={() => handleClickedDataset(1, 'Population')}
-                >
-                    Population
+        <Translation>
+            {
+                t => (
+                    <div>
 
-                </Button>
-                <Button
-                    className={selectedCategory === 2 ? styles.active : ''}
-                    onClick={() => handleClickedDataset(2, 'Age_Group')}
-                >
-                    Age Group
+                        <div>
+                            <Button
+                                className={selectedCategory === 1 ? styles.active : ''}
+                                onClick={() => handleClickedDataset(1, 'Population')}
+                            >
+                                {t('Population')}
 
-                </Button>
-                <Button
-                    className={selectedCategory === 3 ? styles.active : ''}
-                    onClick={() => handleClickedDataset(3, 'Literacy_Rate')}
-                >
-                    Literacy Rate
+                            </Button>
+                            <Button
+                                className={selectedCategory === 2 ? styles.active : ''}
+                                onClick={() => handleClickedDataset(2, 'Age_Group')}
+                            >
+                                {t('Age Group')}
 
-                </Button>
+                            </Button>
+                            <Button
+                                className={selectedCategory === 3 ? styles.active : ''}
+                                onClick={() => handleClickedDataset(3, 'Literacy_Rate')}
+                            >
+                                {t('Literacy Rate')}
 
-                <Button className={styles.downloadButton}>
-                    {' '}
-                    <a href="" id="dd" onClick={handleDownload}>Download Csv</a>
-                </Button>
-            </div>
-            <TableDataList
-                population={population}
-                literacy={literacy}
-                householdSummary={householdSummary}
-                ageGroup={ageGroup}
-                selectedCategory={selectedCategory}
-            />
+                            </Button>
 
-        </div>
+                            <Button className={styles.downloadButton}>
+                                {' '}
+                                <a href="" id="dd" onClick={handleDownload}>{t('Download Csv')}</a>
+                            </Button>
+                        </div>
+                        <TableDataList
+                            population={population}
+                            literacy={literacy}
+                            householdSummary={householdSummary}
+                            ageGroup={ageGroup}
+                            selectedCategory={selectedCategory}
+                            language={language}
+                        />
+
+                    </div>
+                )
+            }
+        </Translation>
+
     );
 };
 
