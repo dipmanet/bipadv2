@@ -413,7 +413,7 @@ const BulletinPDF = (props: Props) => {
                     <h2 style={{ paddingLeft: '20px' }}>
                         <Translation>
                             {
-                                t => <span>{t('Province-wise death, missing and injured')}</span>
+                                t => <span>{t('Provincewise Death, Missing and Injured Counts')}</span>
                             }
                         </Translation>
                     </h2>

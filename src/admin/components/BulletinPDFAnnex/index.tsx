@@ -143,7 +143,7 @@ const BulletinPDFAnnex = (props) => {
                 feedback={feedback}
                 deleteFeedbackChange={deleteFeedbackChange}
                 hazardWiseLossData={hazardWiseLossData}
-                handleSubFieldChange={handleSubFieldChange}
+                 handleSubFieldChange={handleSubFieldChange}
             /> */}
             <div className={_cs(
                 (styles.formContainerAnnex),
