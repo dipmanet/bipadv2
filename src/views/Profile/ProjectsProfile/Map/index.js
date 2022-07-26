@@ -48,6 +48,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
         );
 
         const mapping = {};
+
         projects.forEach((project) => {
             const values = project[accessor];
             Object.keys(values).forEach((id) => {
@@ -64,7 +65,12 @@ export default class ProjectsProfileMap extends React.PureComponent {
 
         return mapToList(
             selectedRegion,
-            (_, key) => ({ id: key, value: mapping[key] || 0 }),
+            (_, key) => ({
+                id: key,
+                value: regionLevel === 3
+                    ? projects.length
+                    : mapping[key] || 0,
+            }),
         );
     });
 
@@ -76,13 +82,11 @@ export default class ProjectsProfileMap extends React.PureComponent {
             regions,
             regionLevel,
         } = this.props;
-
         const mapState = this.generateMapState(projects, regionLevel, regions);
         const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         const colorPaint = this.generatePaint(color);
-
         return (
             <React.Fragment>
                 <div
@@ -114,7 +118,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
                         />
                     </div>
                     <div className={styles.scale}>
-                        { colorGrade.map(c => (
+                        {colorGrade.map(c => (
                             <div
                                 key={c}
                                 className={styles.colorUnit}

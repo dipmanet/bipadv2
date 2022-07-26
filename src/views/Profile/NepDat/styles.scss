@@ -1,0 +1,84 @@
+.documents {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        padding: var(--spacing-medium);
+
+        // .heading {
+        //     flex-grow: 1;
+        // }
+    }
+    .content{
+        padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
+        padding-right: 4%;
+        text-align: justify;
+        p{
+            font-size: 14px;
+            margin-top: 0px;
+        }
+    }
+    .dropdownHeaders{
+        padding: var(--spacing-medium);
+    }
+    .dropdowns{
+        padding: var(--spacing-medium);
+        padding-right: 25%;
+       
+    }
+    .dropdownDatePick{
+        padding: var(--spacing-medium);
+        padding-right: 25%;
+        
+        .dateSelect{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        .datePick{
+             
+                        border-radius: 5px;
+                        border:1px solid #BEBEBE;
+                        height: 35px;
+                        cursor: pointer;
+                        padding-left: 10px;
+                    }   
+        }
+        .react-datepicker-wrapper{
+            width: auto !important;
+        }
+    }
+    // .filters {
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: flex-start;
+    //     padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+    //     .region-select-input,
+    //     .category-select-input {
+    //         margin: var(--spacing-small);
+    //     }
+    // }
+
+    // .content {
+    //     flex-grow: 1;
+    // }
+    .agreeBtn {
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        filter: saturate(100%);
+        background-color: #3684d8 !important;
+        opacity: 1;
+        border-radius: 5px;
+        color: white !important;
+        border-radius: 5px;
+        height: 30px;
+        font-size: 12px;
+        padding: 20px;
+    }
+
+}

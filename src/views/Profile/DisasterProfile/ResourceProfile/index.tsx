@@ -56,7 +56,7 @@ const attributes = {
     },
     tourism: {
         dataKey: 'tourismCount',
-        title: 'Hotel and Restaurant',
+        title: 'Tourism',
         icon: TourismIcon,
     },
     industry: {

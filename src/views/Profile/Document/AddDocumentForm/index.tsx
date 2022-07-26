@@ -50,6 +50,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import TextArea from '#rsci/TextArea';
 
 const StepwiseRegionSelectInput = FaramInputElement(NormalStepwiseRegionSelectInput);
 
@@ -242,10 +243,12 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             fields: {
                 title: [requiredCondition],
                 file: [requiredCondition],
+                description: [],
                 category: [],
                 region: [],
                 event: [],
                 stepwiseRegion: [],
+                publishedBy: [],
                 // province: [],
                 // district: [],
                 // municipality: [],
@@ -293,9 +296,18 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleCloseModal = () => {
+        const { handleEditDeleteButtonClick, closeModal } = this.props;
+        if (handleEditDeleteButtonClick) {
+            handleEditDeleteButtonClick(undefined);
+        }
+        closeModal();
+    }
+
     private handleFaramValidationSuccess = (_: unknown, faramValues: FaramValues) => {
         const {
             requests: { addDocumentPostRequest },
+            handleEditDeleteButtonClick,
         } = this.props;
         const {
             publishedDate,
@@ -309,6 +321,9 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             ...others,
             publishedDate,
         };
+        if (handleEditDeleteButtonClick) {
+            handleEditDeleteButtonClick(undefined);
+        }
 
         if (stepwiseRegion) {
             switch (stepwiseRegion.adminLevel) {
@@ -387,7 +402,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             <DangerButton
                                 transparent
                                 iconName="close"
-                                onClick={closeModal}
+                                onClick={closeModal ? this.handleCloseModal : closeModal()}
                                 title="Close Modal"
                             />
                         )}
@@ -399,12 +414,21 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             label="Title"
                             autoFocus
                         />
+                        <TextArea
+                            faramElementName="description"
+                            label="Description"
+                        />
+
                         <SelectInput
                             faramElementName="category"
                             options={categoryList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Category"
+                        />
+                        <TextInput
+                            faramElementName="publishedBy"
+                            label="Published By"
                         />
                         <DateInput
                             faramElementName="publishedDate"
@@ -445,7 +469,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton onClick={closeModal}>
+                        <DangerButton onClick={closeModal ? this.handleCloseModal : closeModal()}>
                             Close
                         </DangerButton>
                         <PrimaryButton

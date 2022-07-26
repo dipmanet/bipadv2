@@ -8,9 +8,9 @@ import Faram, {
     requiredCondition,
     emailCondition,
 } from '@togglecorp/faram';
-
-import { compose } from 'redux';
+import * as ReachRouter from '@reach/router';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ModalHeader from '#rscv/Modal/Header';
@@ -29,12 +29,15 @@ import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
 
+import { palikaRedirectSelector, languageSelector } from '#selectors';
+import { setPalikaRedirectAction } from '#actionCreators';
 
 import {
     createRequestClient,
     NewProps,
     ClientAttributes,
     methods,
+    createConnectedRequestCoordinator,
 } from '#request';
 
 import { MultiResponse } from '#store/atom/response/types';
@@ -53,10 +56,14 @@ import {
 import ContactTrainingList from './ContactTrainingList';
 import styles from './styles.scss';
 
-import { languageSelector } from '#selectors';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    palikaRedirect: palikaRedirectSelector(state),
     language: languageSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
 });
 
 const StepwiseRegionSelectInput = FaramInputElement(FullStepwiseRegionSelectInput);
@@ -282,6 +289,23 @@ class ContactForm extends React.PureComponent<Props, State> {
         },
     }
 
+    private handleDRRMRedirect = () => {
+        const {
+            palikaRedirect,
+            setPalikaRedirect,
+
+        } = this.props;
+        const { redirectTo } = palikaRedirect;
+        if (palikaRedirect.showForm) {
+            setPalikaRedirect({
+                showForm: false,
+                redirectTo,
+            });
+            ReachRouter.navigate('/drrm-report/',
+                { state: { showForm: true }, replace: true });
+        }
+    }
+
     private setPristine = (pristine: boolean) => {
         this.setState({ pristine });
     }
@@ -394,6 +418,7 @@ class ContactForm extends React.PureComponent<Props, State> {
             },
             details,
             language: { language },
+            palikaRedirect,
         } = this.props;
 
         const {
@@ -523,15 +548,32 @@ class ContactForm extends React.PureComponent<Props, State> {
                                 className={styles.stepwiseInput}
                                 faramElementName="stepwiseRegion"
                                 showHintAndError
+                                wardsHidden
                             />
                         </div>
                         <div className={styles.inputsContainer}>
                             <LocationInput
                                 className={styles.locationInput}
                                 faramElementName="location"
+
                             />
                         </div>
                         <div className={styles.actionButtons}>
+                            {
+                                palikaRedirect.showForm
+                                && palikaRedirect.showModal === 'contact'
+                                && (
+                                    <PrimaryButton
+                                        // disabled={pristine}
+                                        className={styles.button}
+                                        // pending={contactEditPending || contactAddPending}
+                                        type="button"
+                                        onClick={this.handleDRRMRedirect}
+                                    >
+                                        Close and Return to DRRM Report
+                                    </PrimaryButton>
+                                )
+                            }
                             <PrimaryButton
                                 disabled={pristine}
                                 className={styles.button}
@@ -555,4 +597,12 @@ class ContactForm extends React.PureComponent<Props, State> {
     }
 }
 
-export default compose(connect(mapStateToProps), createRequestClient(requests))(ContactForm);
+// export default createRequestClient(requests)(ContactForm);
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            ContactForm,
+        ),
+    ),
+);

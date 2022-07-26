@@ -104,6 +104,7 @@ class ProjectsProfileFilter extends React.PureComponent {
         });
     }
 
+
     render() {
         const {
             className,
@@ -120,45 +121,48 @@ class ProjectsProfileFilter extends React.PureComponent {
             elementsOptions,
             organizationOptions,
             // projectStatusOptions = [],
+            showFilterOnly,
+            getSelectedOption,
         } = this.props;
-
         return (
-            <Translation>
-                {
-                    t => (
-                        <Faram
-                            className={_cs(className, styles.filterForm)}
-                            onChange={this.handleFaramChange}
-                            onValidationFailure={this.handleFaramFailure}
-                            schema={ProjectsProfileFilter.schema}
-                            value={faramValues}
-                            error={faramErrors}
-                        >
+            <Faram
+                className={_cs(className, styles.filterForm)}
+                onChange={this.handleFaramChange}
+                onValidationFailure={this.handleFaramFailure}
+                schema={ProjectsProfileFilter.schema}
+                value={faramValues}
+                error={faramErrors}
+            >
+                <SelectInput
+                    faramElementName="priority"
+                    label="priority area"
+                    options={priorityOptions}
+                    keySelector={ndrrsapKeySelector}
+                    labelSelector={ndrrsapLabelSelector}
+                    getSelectedOption={getSelectedOption}
+                // autoFocus
+                />
+                <SelectInput
+                    faramElementName="subPriority"
+                    label="priority action"
+                    disabled={!faramValues.priority}
+                    options={subPriorityOptions}
+                    keySelector={ndrrsapKeySelector}
+                    labelSelector={ndrrsapLabelSelector}
+                    getSelectedOption={getSelectedOption}
 
-                            <SelectInput
-                                faramElementName="priority"
-                                label={t('priority area')}
-                                options={priorityOptions}
-                                keySelector={ndrrsapKeySelector}
-                                labelSelector={ndrrsapLabelSelector}
-                            />
-                            <SelectInput
-                                faramElementName="subPriority"
-                                label={t('priority action')}
-                                disabled={!faramValues.priority}
-                                options={subPriorityOptions}
-                                keySelector={ndrrsapKeySelector}
-                                labelSelector={ndrrsapLabelSelector}
-                            />
-                            <SelectInput
-                                faramElementName="activity"
-                                label={t('activities')}
-                                disabled={!faramValues.subPriority}
-                                options={activityOptions}
-                                keySelector={ndrrsapKeySelector}
-                                labelSelector={ndrrsapLabelSelector}
-                            />
-                            {/* <MultiSelectInput
+                />
+                <SelectInput
+                    faramElementName="activity"
+                    label="activities"
+                    disabled={!faramValues.subPriority}
+                    options={activityOptions}
+                    keySelector={ndrrsapKeySelector}
+                    labelSelector={ndrrsapLabelSelector}
+                    getSelectedOption={getSelectedOption}
+
+                />
+                {/* <MultiSelectInput
                     label="drr cycles"
                     faramElementName="drrCycles"
                     keySelector={drrCyclesKeySelector}
@@ -172,19 +176,26 @@ class ProjectsProfileFilter extends React.PureComponent {
                     keySelector={elementsKeySelector}
                     labelSelector={elementsLabelSelector}
                 /> */}
-                            <MultiSelectInput
-                                label={t('organization')}
-                                faramElementName="organizations"
-                                options={organizationOptions}
-                                keySelector={organizationKeySelector}
-                                labelSelector={organizationLabelSelector}
-                            />
-
-
-                        </Faram>
+                {!showFilterOnly
+                    && (
+                        <MultiSelectInput
+                            label="organization"
+                            faramElementName="organizations"
+                            options={organizationOptions}
+                            keySelector={organizationKeySelector}
+                            labelSelector={organizationLabelSelector}
+                        />
                     )
                 }
-            </Translation>
+                {/* <MultiSelectInput
+                    label="organization"
+                    faramElementName="organizations"
+                    options={organizationOptions}
+                    keySelector={organizationKeySelector}
+                    labelSelector={organizationLabelSelector}
+                /> */}
+
+            </Faram>
         );
     }
 }
