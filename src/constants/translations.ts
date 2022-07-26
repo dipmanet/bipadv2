@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        Demography: 'Demography',
+        Visualization: 'Visualization',
         Demographics: 'Demographics',
         'NEP-DAT Profile': 'NEP-DAT Profile',
         Flow: 'Flow',
@@ -828,6 +830,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Demography: 'जनसांख्यिकी',
+        Visualization: 'भिज्युअल',
         Demographics: 'जनसांख्यिकी',
         'NEP-DAT Profile': 'नेप-डयाट प्रोफाइल',
         Flow: 'प्रवाह',
