@@ -46,137 +46,143 @@ interface State {
 class Profile extends React.PureComponent<Props, State> {
     public render() {
         return (
-            <>
 
-                <Page
+            <Translation>
+                {
+                    t => (
+                        <>
+
+                            <Page
+
+                                hideFilter
+                                hideMap
+                            />
+
+                            <div className={styles.profileMainContainer}>
+                                <div className={styles.profileMainDiv}>
+                                    <div className={styles.profileHeading}>
+                                        <h1>{t('Profile')}</h1>
+                                    </div>
+                                    <div className={styles.profileList}>
+                                        <div
+                                            className={styles.profileListContent}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => navigate('/profile/demography')}
+                                            onKeyDown={undefined}
 
 
-                    hideFilter
-                    hideMap
+                                        >
+                                            <h1>
+                                                {t('Demographics')}
+
+                                            </h1>
+                                            <div style={{ fontSize: '50px' }}>
+                                                <Icon
+                                                    className={styles.visualizationIcon}
+                                                    name="bars"
+                                                />
+                                            </div>
+
+                                        </div>
+                                        <div
+                                            className={styles.profileListContent}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => navigate('/profile/projects')}
+                                            onKeyDown={undefined}
 
 
-                />
-
-                <div className={styles.profileMainContainer}>
-                    <div className={styles.profileMainDiv}>
-                        <div className={styles.profileHeading}>
-                            <h1>Profile</h1>
-                        </div>
-                        <div className={styles.profileList}>
-                            <div
-                                className={styles.profileListContent}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => navigate('/profile/demography')}
-                                onKeyDown={undefined}
+                                        >
 
 
-                            >
-                                <h1>
-                                    Demographics
+                                            <h1>
+                                                {t('Projects')}
 
-                                </h1>
-                                <div style={{ fontSize: '50px' }}>
-                                    <Icon
-                                        className={styles.visualizationIcon}
-                                        name="bars"
-                                    />
+                                            </h1>
+                                            <div style={{ fontSize: '50px' }}>
+                                                <Icon
+                                                    className={styles.visualizationIcon}
+                                                    name="briefcase"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            className={styles.profileListContent}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => navigate('/profile/contacts')}
+                                            onKeyDown={undefined}
+
+
+                                        >
+
+                                            <h1>
+                                                {t('Contacts')}
+
+                                            </h1>
+                                            <div style={{ fontSize: '50px' }}>
+                                                <Icon
+                                                    className={styles.visualizationIcon}
+                                                    name="contacts"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            className={styles.profileListContent}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => navigate('/profile/documents')}
+                                            onKeyDown={undefined}
+
+
+                                        >
+                                            <h1>
+                                                {t('Documents')}
+
+                                            </h1>
+                                            <div style={{ fontSize: '50px' }}>
+                                                <Icon
+                                                    className={styles.visualizationIcon}
+                                                    name="document"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            className={styles.profileListContent}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => navigate('/profile/nepDat-profile')}
+                                            onKeyDown={undefined}
+
+
+                                        >
+                                            <h1>
+                                                {t('NEP-DAT Profile')}
+
+                                            </h1>
+                                            <div style={{ fontSize: '50px' }}>
+                                                <ScalableVectorGraphics
+                                                    className={styles.nepDatIcon}
+                                                    src={nepDat}
+                                                // style={{ color: hazardDetail.color || '#4666b0' }}
+                                                />
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
                                 </div>
 
                             </div>
-                            <div
-                                className={styles.profileListContent}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => navigate('/profile/projects')}
-                                onKeyDown={undefined}
+
+                        </>
+                    )
+                }
+            </Translation>
 
 
-                            >
-
-
-                                <h1>
-                                    Projects
-
-                                </h1>
-                                <div style={{ fontSize: '50px' }}>
-                                    <Icon
-                                        className={styles.visualizationIcon}
-                                        name="briefcase"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                className={styles.profileListContent}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => navigate('/profile/contacts')}
-                                onKeyDown={undefined}
-
-
-                            >
-
-                                <h1>
-                                    Contacts
-
-                                </h1>
-                                <div style={{ fontSize: '50px' }}>
-                                    <Icon
-                                        className={styles.visualizationIcon}
-                                        name="contacts"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                className={styles.profileListContent}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => navigate('/profile/documents')}
-                                onKeyDown={undefined}
-
-
-                            >
-                                <h1>
-                                    Documents
-
-                                </h1>
-                                <div style={{ fontSize: '50px' }}>
-                                    <Icon
-                                        className={styles.visualizationIcon}
-                                        name="document"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                className={styles.profileListContent}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => navigate('/profile/nepDat-profile')}
-                                onKeyDown={undefined}
-
-
-                            >
-                                <h1>
-                                    NEP-DAT Profile
-
-                                </h1>
-                                <div style={{ fontSize: '50px' }}>
-                                    <ScalableVectorGraphics
-                                        className={styles.nepDatIcon}
-                                        src={nepDat}
-                                    // style={{ color: hazardDetail.color || '#4666b0' }}
-                                    />
-
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </>
         );
     }
 }

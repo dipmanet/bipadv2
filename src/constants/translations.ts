@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        Demographics: 'Demographics',
+        'NEP-DAT Profile': 'NEP-DAT Profile',
         Flow: 'Flow',
         'Water Level': 'Water Level',
         'Hourly Water Level': 'Hourly Water Level',
@@ -826,6 +828,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Demographics: 'जनसांख्यिकी',
+        'NEP-DAT Profile': 'नेप-डयाट प्रोफाइल',
         Flow: 'प्रवाह',
         'Water Level': 'पानीको तह',
         'Hourly Water Level': 'प्रति घण्टा पानी स्तर',
