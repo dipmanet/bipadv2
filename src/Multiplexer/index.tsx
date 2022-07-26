@@ -1314,7 +1314,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-        const Routes = ['', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
+        const Routes = ['', 'profile', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
         const queryStringParamsTranlation = window.location.href.split('/')[3];
 
         if (Routes.includes(queryStringParamsTranlation)) {

@@ -847,12 +847,12 @@ class Demographics extends React.PureComponent<Props> {
         const literacyRatioLGProfile = literacyRatioLGProfileData(lgProfileData, literatePeopleTotalPopulationLGProfile);
         const houseHoldSummaryLGProfile = houseHoldSummaryLGProfileData(lgProfileData, sexRatioTotalPopulationLGProfile);
 
-        const finalSexRatio = [{ label: 'genderRatio', male: sexRatio.find(d => d.label === 'Male').value, female: sexRatio.find(d => d.label === 'Female').value }];
-        const finalSexRatioPercentage = [{ male: sexRatio.find(d => d.label === 'Male').percent, female: sexRatio.find(d => d.label === 'Female').percent }];
+        const finalSexRatio = [{ label: 'genderRatio', male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
+        const finalSexRatioPercentage = [{ male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').percent, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').percent }];
         const literacySummary = this.getLiteracySummary(demographics);
         const literacyRatio = literacySummary
             .filter(v => ['maleLiteracyRate', 'femaleLiteracyRate'].includes(v.key));
-        const finalLiteracyRate = [{ label: 'literacyRate', male: literacyRatio.find(d => d.label === 'Male').value, female: literacyRatio.find(d => d.label === 'Female').value }];
+        const finalLiteracyRate = [{ label: 'literacyRate', male: literacyRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: literacyRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
 
         const householdSummary = this.getHouseholdSummary(demographics);
         const finalHouseholdSummary = [{ label: 'houseHoldInfo', totalPopulation: householdSummary.find(d => d.key === 'totalPopulation').value, householdCount: householdSummary.find(d => d.key === 'householdCount').value }];
