@@ -479,8 +479,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     )}
                                 />
                             </div>
-                            <Dropdown data={incidentMetricChartParams} />
-                            <DataCount />
+                            <Dropdown data={filteredData} />
 
                             <div className={styles.mainContent}>
                                 <LossDetails

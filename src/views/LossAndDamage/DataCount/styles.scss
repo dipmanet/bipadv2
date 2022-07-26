@@ -1,0 +1,29 @@
+.container {
+    margin-top: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .wrapper {
+        width: 95%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .alertText {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+
+    .alertValue {
+        text-align: center;
+        padding: 8px 20px;
+        color: #9fbcf4;
+        border: 1px solid #9fbcf4;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+}

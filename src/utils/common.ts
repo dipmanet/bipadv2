@@ -7,6 +7,7 @@ import {
 
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
+import { lossMetrics } from '#utils/domain';
 
 interface Row {
     [key: string]: string | number | boolean | undefined | null;
@@ -293,4 +294,31 @@ export const checkSameRegionPermission = (user, region) => {
         permission = false;
     }
     return permission;
+};
+
+
+export const calculateSummary = (lossAndDamageList) => {
+    const stat = lossMetrics.reduce((acc, { key }) => ({
+        ...acc,
+        [key]: sum(
+            lossAndDamageList
+                .filter(incident => incident.loss)
+                .map(incident => incident.loss[key])
+                .filter(isDefined),
+        ),
+    }), {});
+    stat.count = lossAndDamageList.length;
+    return stat;
+};
+
+export const nullCheck = (nullCondition, data, m) => {
+    if (nullCondition) {
+        const summaryData = calculateSummary(data);
+        summaryData.estimatedLoss = '-';
+
+        return summaryData[m];
+    }
+    const summaryData = calculateSummary(data);
+
+    return summaryData[m];
 };
