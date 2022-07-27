@@ -14,6 +14,7 @@ import {
     setProjectsProfileFiltersAction,
 } from '#actionCreators';
 import {
+    languageSelector,
     projectsProfileFiltersSelector,
 } from '#selectors';
 
@@ -31,6 +32,7 @@ const defaultProps = {
 
 const mapStateToProps = state => ({
     filters: projectsProfileFiltersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -123,46 +125,55 @@ class ProjectsProfileFilter extends React.PureComponent {
             // projectStatusOptions = [],
             showFilterOnly,
             getSelectedOption,
+            language: { language },
         } = this.props;
         return (
-            <Faram
-                className={_cs(className, styles.filterForm)}
-                onChange={this.handleFaramChange}
-                onValidationFailure={this.handleFaramFailure}
-                schema={ProjectsProfileFilter.schema}
-                value={faramValues}
-                error={faramErrors}
-            >
-                <SelectInput
-                    faramElementName="priority"
-                    label="priority area"
-                    options={priorityOptions}
-                    keySelector={ndrrsapKeySelector}
-                    labelSelector={ndrrsapLabelSelector}
-                    getSelectedOption={getSelectedOption}
-                // autoFocus
-                />
-                <SelectInput
-                    faramElementName="subPriority"
-                    label="priority action"
-                    disabled={!faramValues.priority}
-                    options={subPriorityOptions}
-                    keySelector={ndrrsapKeySelector}
-                    labelSelector={ndrrsapLabelSelector}
-                    getSelectedOption={getSelectedOption}
+            <Translation>
+                {
+                    t => (
+                        <Faram
+                            className={_cs(className, styles.filterForm)}
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramFailure}
+                            schema={ProjectsProfileFilter.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                        >
+                            <SelectInput
+                                faramElementName="priority"
+                                label={t('priority area')}
+                                options={priorityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
+                                getSelectedOption={getSelectedOption}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
 
-                />
-                <SelectInput
-                    faramElementName="activity"
-                    label="activities"
-                    disabled={!faramValues.subPriority}
-                    options={activityOptions}
-                    keySelector={ndrrsapKeySelector}
-                    labelSelector={ndrrsapLabelSelector}
-                    getSelectedOption={getSelectedOption}
+                            // autoFocus
+                            />
+                            <SelectInput
+                                faramElementName="subPriority"
+                                label={t('priority action')}
+                                disabled={!faramValues.priority}
+                                options={subPriorityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
+                                getSelectedOption={getSelectedOption}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
 
-                />
-                {/* <MultiSelectInput
+                            />
+                            <SelectInput
+                                faramElementName="activity"
+                                label={t('activities')}
+                                disabled={!faramValues.subPriority}
+                                options={activityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
+                                getSelectedOption={getSelectedOption}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+
+                            />
+                            {/* <MultiSelectInput
                     label="drr cycles"
                     faramElementName="drrCycles"
                     keySelector={drrCyclesKeySelector}
@@ -176,18 +187,20 @@ class ProjectsProfileFilter extends React.PureComponent {
                     keySelector={elementsKeySelector}
                     labelSelector={elementsLabelSelector}
                 /> */}
-                {!showFilterOnly
-                    && (
-                        <MultiSelectInput
-                            label="organization"
-                            faramElementName="organizations"
-                            options={organizationOptions}
-                            keySelector={organizationKeySelector}
-                            labelSelector={organizationLabelSelector}
-                        />
-                    )
-                }
-                {/* <MultiSelectInput
+                            {!showFilterOnly
+                                && (
+                                    <MultiSelectInput
+                                        label={t('Organization')}
+                                        faramElementName="organizations"
+                                        options={organizationOptions}
+                                        keySelector={organizationKeySelector}
+                                        labelSelector={organizationLabelSelector}
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                                    />
+                                )
+                            }
+                            {/* <MultiSelectInput
                     label="organization"
                     faramElementName="organizations"
                     options={organizationOptions}
@@ -195,7 +208,11 @@ class ProjectsProfileFilter extends React.PureComponent {
                     labelSelector={organizationLabelSelector}
                 /> */}
 
-            </Faram>
+                        </Faram>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
