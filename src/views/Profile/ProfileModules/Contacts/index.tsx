@@ -3,6 +3,7 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import { navigate } from '@reach/router';
+import { Translation } from 'react-i18next';
 import AccentButton from '#rsca/Button/AccentButton';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
@@ -65,18 +66,22 @@ export default class Profile extends React.PureComponent<Props, State> {
                 leftContent={(
                     <>
                         <header className={styles.header}>
-                            <div className={styles.backButtonProfile}>
-                                <Button
-                                    className={styles.backButton}
-                                    onClick={() => navigate('/profile/')}
-                                    iconName="back"
-                                    transparent
-                                />
+                            <Translation>
+                                {
+                                    t => (
+                                        <div className={styles.backButtonProfile}>
+                                            <Button
+                                                className={styles.backButton}
+                                                onClick={() => navigate('/profile/')}
+                                                iconName="back"
+                                                transparent
+                                            />
 
-                                <h1>Contact Personals</h1>
-                            </div>
-
-
+                                            <h1>{t('Contact Personals')}</h1>
+                                        </div>
+                                    )
+                                }
+                            </Translation>
                         </header>
                         <Contact
                             className={styles.viewLeft}

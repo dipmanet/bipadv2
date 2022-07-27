@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
@@ -21,6 +22,7 @@ import {
 } from '@togglecorp/fujs';
 import { Item } from 'semantic-ui-react';
 import { Translation } from 'react-i18next';
+import { t } from 'i18next';
 import { MapChildContext } from '#re-map/context';
 import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
@@ -50,6 +52,7 @@ import {
     profileContactFiltersSelector,
     palikaRedirectSelector,
     userSelector,
+    languageSelector,
 } from '#selectors';
 import {
     AppState,
@@ -112,7 +115,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
-
+    language: languageSelector(state),
     user: userSelector(state),
 });
 
@@ -744,7 +747,8 @@ class ContactPage extends React.PureComponent<Props, State> {
     private editDeleteButton = (contactId, contact) => {
         const { user, region, requests: {
             municipalityContactDeleteRequest,
-        } } = this.props;
+        },
+            language: { language } } = this.props;
         const filterPermissionGranted = checkSameRegionPermission(user, region);
         const { name } = contact;
 
@@ -756,42 +760,51 @@ class ContactPage extends React.PureComponent<Props, State> {
         };
 
         const { pending } = municipalityContactDeleteRequest;
-        const confirmationMessage = `Are you sure you want to remove the contact ${name}?`;
+        const confirmationMessage = language === 'en'
+            ? `Are you sure you want to remove the contact ${name}?`
+            : `के तपाइँ निश्चित हुनुहुन्छ कि तपाइँ ${name} लाई हटाउन चाहनुहुन्छ ?`;
         return (
             filterPermissionGranted
                 ? (
-                    <>
-                        <div className={styles.actionButtons}>
-                            <Cloak hiddenIf={p => !p.change_contact}>
-                                <ModalButton
-                                    className={styles.editButton}
-                                    iconName="edit"
-                                    transparent
-                                    modal={(
-                                        <ContactEditForm
-                                            contactId={contactId}
-                                            details={contact}
-                                            onEditSuccess={this.handleContactEdit}
-                                        />
-                                    )}
-                                >
-                                    Edit
-                                </ModalButton>
-                            </Cloak>
-                            <Cloak hiddenIf={p => !p.delete_contact}>
-                                <DangerConfirmButton
-                                    className={styles.editButton}
-                                    iconName="delete"
-                                    confirmationMessage={confirmationMessage}
-                                    pending={pending}
-                                    onClick={handleContactDetailsDelete}
-                                    transparent
-                                >
-                                    Delete
-                                </DangerConfirmButton>
-                            </Cloak>
-                        </div>
-                    </>
+                    <Translation>
+                        {
+                            t => (
+                                <>
+                                    <div className={styles.actionButtons}>
+                                        <Cloak hiddenIf={p => !p.change_contact}>
+                                            <ModalButton
+                                                className={styles.editButton}
+                                                iconName="edit"
+                                                transparent
+                                                modal={(
+                                                    <ContactEditForm
+                                                        contactId={contactId}
+                                                        details={contact}
+                                                        onEditSuccess={this.handleContactEdit}
+                                                    />
+                                                )}
+                                            >
+                                                {t('Edit')}
+                                            </ModalButton>
+                                        </Cloak>
+                                        <Cloak hiddenIf={p => !p.delete_contact}>
+                                            <DangerConfirmButton
+                                                className={styles.editButton}
+                                                iconName="delete"
+                                                confirmationMessage={confirmationMessage}
+                                                pending={pending}
+                                                onClick={handleContactDetailsDelete}
+                                                transparent
+                                            >
+                                                {t('Delete')}
+                                            </DangerConfirmButton>
+                                        </Cloak>
+                                    </div>
+                                </>
+                            )
+                        }
+                    </Translation>
+
                 )
                 : ''
         );
@@ -803,123 +816,132 @@ class ContactPage extends React.PureComponent<Props, State> {
             searchActivated, selectedSortList } = this.state;
         return (
             <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
-                <table className={styles.contacts}>
-                    <thead>
-                        <tr style={{ position: 'sticky', top: '0', zIndex: '1' }}>
-                            <th>
-                                S/N
+                <Translation>
+                    {
+                        t => (
+                            <table className={styles.contacts}>
+                                <thead>
+                                    <tr style={{ position: 'sticky', top: '0', zIndex: '1' }}>
+                                        <th>
+                                            {t('S/N')}
 
 
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
 
-                                    Name
+                                                {t('Name')}
 
-                                    {this.SortButton('name')}
+                                                {this.SortButton('name')}
 
-                                </div>
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
 
-                                    Position
-                                    {this.SortButton('position')}
+                                                {t('Position')}
+                                                {this.SortButton('position')}
 
-                                </div>
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Organization
-                                    {this.SortButton('position')}
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Organization')}
+                                                {this.SortButton('position')}
 
-                                </div>
-                            </th>
-                            {/* <th>Organization</th> */}
-                            <th>Phone Number</th>
-                            <th>Email</th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Committe
-                                    {this.SortButton('committee')}
-                                </div>
-                            </th>
-                            <Cloak hiddenIf={p => !p.add_contact}>
-                                <th>Action</th>
-                            </Cloak>
+                                            </div>
+                                        </th>
+                                        {/* <th>Organization</th> */}
+                                        <th>{t('Phone Number')}</th>
+                                        <th>{t('Email')}</th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Committe')}
+                                                {this.SortButton('committee')}
+                                            </div>
+                                        </th>
+                                        <Cloak hiddenIf={p => !p.add_contact}>
+                                            <th>{t('Action')}</th>
+                                        </Cloak>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {searchActivated ? !sortData.length
-                            ? (
-                                <tr>
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td>No Data Available</td>
-                                    <td />
-                                    <td />
-                                    <td />
-                                </tr>
-                            )
-                            : sortData.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.position}</td>
-                                    <td>
-                                        {item.organization ? item.organization.title : '-'}
-                                    </td>
-                                    <td>{item.mobileNumber}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.committee}</td>
-                                    <td>{this.editDeleteButton(item.id, item)}</td>
-                                </tr>
-                            )) : filteredContactList.length ? filteredContactList.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.position}</td>
-                                    <td>
-                                        {item.organization ? item.organization.title : '-'}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {searchActivated ? !sortData.length
+                                        ? (
+                                            <tr>
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td>{t('No Data Available')}</td>
+                                                <td />
+                                                <td />
+                                                <td />
+                                            </tr>
+                                        )
+                                        : sortData.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.name}</td>
+                                                <td>{item.position}</td>
+                                                <td>
+                                                    {item.organization ? item.organization.title : '-'}
+                                                </td>
+                                                <td>{item.mobileNumber}</td>
+                                                <td>{item.email}</td>
+                                                <td>{item.committee}</td>
+                                                <td>{this.editDeleteButton(item.id, item)}</td>
+                                            </tr>
+                                        )) : filteredContactList.length ? filteredContactList.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.name}</td>
+                                                <td>{item.position}</td>
+                                                <td>
+                                                    {item.organization ? item.organization.title : '-'}
 
-                                    </td>
-                                    <td>{item.mobileNumber}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.committee}</td>
-                                    <td>{this.editDeleteButton(item.id, item)}</td>
-                                </tr>
-                            )) : (
-                            <tr>
-                                <td />
-                                <td />
-                                <td />
-                                <td>No Data Available</td>
-                                <td />
-                                <td />
-                                <td />
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                                                </td>
+                                                <td>{item.mobileNumber}</td>
+                                                <td>{item.email}</td>
+                                                <td>{item.committee}</td>
+                                                <td>{this.editDeleteButton(item.id, item)}</td>
+                                            </tr>
+                                        )) : (
+                                        <tr>
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td>{t('No Data Available')}</td>
+                                            <td />
+                                            <td />
+                                            <td />
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )
+                    }
+                </Translation>
+
             </div>
         );
     }
 
     private trainingTitleName = (title) => {
+        const { language: { language } } = this.props;
+
         const trainingList = {
-            LSAR: 'Lite Search & Rescue',
-            rapid_assessment: 'Rapid Assessment',
-            first_aid: 'First Aid',
-            fire_fighting: 'Fire Fighting',
+            LSAR: language === 'en' ? 'Lite Search & Rescue' : 'लाइट खोज र उद्धार',
+            rapid_assessment: language === 'en' ? 'Rapid Assessment' : 'द्रुत मूल्याङ्कन',
+            first_aid: language === 'en' ? 'First Aid' : 'प्राथमिक उपचार',
+            fire_fighting: language === 'en' ? 'Fire Fighting' : 'आगो  नियन्‍त्रण',
         };
         return trainingList[title];
     }
 
     private listComponent = () => {
         const { sortData, searchActivated, selectedContactFromLabelListId } = this.state;
-
+        const { language: { language } } = this.props;
 
         const handleClick = (coordinates, id) => {
             const { map } = this.context;
@@ -931,151 +953,163 @@ class ContactPage extends React.PureComponent<Props, State> {
 
         return (
 
-            <div style={{ overflowY: 'scroll' }}>
-                <div className={styles.row}>
-                    {searchActivated ? !sortData.length
-                        ? (
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <h2>No Data Availabe</h2>
+            <Translation>
+                {
+                    t => (
+                        <div style={{ overflowY: 'scroll' }}>
+                            <div className={styles.row}>
+                                {searchActivated ? !sortData.length
+                                    ? (
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <h2>{t('No Data Availabe')}</h2>
+                                        </div>
+
+                                    )
+                                    : sortData.map((item, i) => (
+
+                                        <div
+                                            key={item.id}
+                                            className={item.id === selectedContactFromLabelListId ? _cs(styles.column, styles.active) : styles.column}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => handleClick(item.point.coordinates, item.id)}
+                                            onKeyDown={undefined}
+                                        >
+                                            <div className={styles.contactImageProfile}>
+                                                <img
+                                                    className={styles.image}
+                                                    src={item.image}
+                                                    alt="profile"
+                                                    loading="lazy"
+                                                />
+                                                <div className={styles.contactNameDetails}>
+                                                    <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
+                                                    <span>
+                                                        {item.position}
+                                                        ,
+                                                        {item.committee}
+                                                    </span>
+
+
+                                                </div>
+                                            </div>
+                                            <div className={styles.contactPhoneDetails}>
+                                                <span style={{ color: 'black' }}>{item.mobileNumber || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={phoneContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactEmailDetails}>
+                                                <span style={{ color: 'black', wordBreak: 'break-word', marginRight: '10px' }}>{item.email || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={emailContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
+                                                <div style={item.trainings.length ? { marginLeft: '10px', marginRight: '10px' }
+                                                    : { marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}
+                                                >
+                                                    <p>
+                                                        {item.trainings.length ? item.trainings.map((data, index) => (
+                                                            <>
+                                                                {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
+                                                                {this.trainingTitleName(data.title)}
+
+                                                                {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
+                                                            </>
+                                                        ))
+                                                            : t('No Training Attained')
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <div className={styles.editDeleteButtn}>
+                                                    {this.editDeleteButton(item.id, item)}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                    )) : filteredContactList.length ? filteredContactList.map((item, i) => (
+
+                                        <div
+                                            key={item.id}
+                                            className={item.id === selectedContactFromLabelListId ? _cs(styles.column, styles.active) : styles.column}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => handleClick(item.point.coordinates, item.id)}
+                                            onKeyDown={undefined}
+                                        >
+                                            <div className={styles.contactImageProfile}>
+                                                <img
+                                                    className={styles.image}
+                                                    src={item.image}
+                                                    alt="profile"
+                                                    loading="lazy"
+                                                />
+                                                <div className={styles.contactNameDetails}>
+                                                    <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
+                                                    <span>
+                                                        {item.position}
+                                                        ,
+                                                        {item.committee}
+                                                    </span>
+
+
+                                                </div>
+                                            </div>
+                                            <div className={styles.contactPhoneDetails}>
+                                                <span style={{ color: 'black' }}>{item.mobileNumber || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={phoneContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactEmailDetails}>
+                                                <span style={{ color: 'black', wordBreak: 'break-word', marginRight: '10px' }}>{item.email || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={emailContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
+                                                <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+                                                    <p>
+                                                        {item.trainings.length ? item.trainings.map((data, index) => (
+                                                            <>
+                                                                {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
+                                                                {this.trainingTitleName(data.title)}
+
+                                                                {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
+                                                            </>
+                                                        ))
+
+                                                            : t('No Training Attained')
+                                                        }
+                                                    </p>
+                                                    {/* <p>First Aid,Search & Rescue and Drill exercise</p> */}
+                                                </div>
+                                                <div className={styles.editDeleteButtn}>
+                                                    {this.editDeleteButton(item.id, item)}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    )) : (
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <h2>{t('No Data Available')}</h2>
+                                    </div>
+                                )}
                             </div>
-
-                        )
-                        : sortData.map((item, i) => (
-
-                            <div
-                                key={item.id}
-                                className={item.id === selectedContactFromLabelListId ? _cs(styles.column, styles.active) : styles.column}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => handleClick(item.point.coordinates, item.id)}
-                                onKeyDown={undefined}
-                            >
-                                <div className={styles.contactImageProfile}>
-                                    <img
-                                        className={styles.image}
-                                        src={item.image}
-                                        alt="profile"
-                                        loading="lazy"
-                                    />
-                                    <div className={styles.contactNameDetails}>
-                                        <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
-                                        <span>
-                                            {item.position}
-                                            ,
-                                            {item.committee}
-                                        </span>
-
-
-                                    </div>
-                                </div>
-                                <div className={styles.contactPhoneDetails}>
-                                    <span style={{ color: 'black' }}>{item.mobileNumber || '-'}</span>
-                                    <ScalableVectorGraphcis
-                                        className={styles.icon}
-                                        src={phoneContactLogo}
-                                    />
-                                </div>
-                                <div className={styles.contactEmailDetails}>
-                                    <span style={{ color: 'black', wordBreak: 'break-word', marginRight: '10px' }}>{item.email || '-'}</span>
-                                    <ScalableVectorGraphcis
-                                        className={styles.icon}
-                                        src={emailContactLogo}
-                                    />
-                                </div>
-                                <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
-                                    <div style={item.trainings.length ? { marginLeft: '10px', marginRight: '10px' }
-                                        : { marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}
-                                    >
-                                        <p>
-                                            {item.trainings.length ? item.trainings.map((data, index) => (
-                                                <>
-                                                    {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
-                                                    {this.trainingTitleName(data.title)}
-
-                                                    {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
-                                                </>
-                                            )) : 'No Training Attained'}
-                                        </p>
-                                    </div>
-                                    <div className={styles.editDeleteButtn}>
-                                        {this.editDeleteButton(item.id, item)}
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        )) : filteredContactList.length ? filteredContactList.map((item, i) => (
-
-                            <div
-                                key={item.id}
-                                className={item.id === selectedContactFromLabelListId ? _cs(styles.column, styles.active) : styles.column}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => handleClick(item.point.coordinates, item.id)}
-                                onKeyDown={undefined}
-                            >
-                                <div className={styles.contactImageProfile}>
-                                    <img
-                                        className={styles.image}
-                                        src={item.image}
-                                        alt="profile"
-                                        loading="lazy"
-                                    />
-                                    <div className={styles.contactNameDetails}>
-                                        <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
-                                        <span>
-                                            {item.position}
-                                            ,
-                                            {item.committee}
-                                        </span>
-
-
-                                    </div>
-                                </div>
-                                <div className={styles.contactPhoneDetails}>
-                                    <span style={{ color: 'black' }}>{item.mobileNumber || '-'}</span>
-                                    <ScalableVectorGraphcis
-                                        className={styles.icon}
-                                        src={phoneContactLogo}
-                                    />
-                                </div>
-                                <div className={styles.contactEmailDetails}>
-                                    <span style={{ color: 'black', wordBreak: 'break-word', marginRight: '10px' }}>{item.email || '-'}</span>
-                                    <ScalableVectorGraphcis
-                                        className={styles.icon}
-                                        src={emailContactLogo}
-                                    />
-                                </div>
-                                <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
-                                    <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-                                        <p>
-                                            {item.trainings.length ? item.trainings.map((data, index) => (
-                                                <>
-                                                    {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
-                                                    {this.trainingTitleName(data.title)}
-
-                                                    {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
-                                                </>
-                                            )) : 'No Training Attained'}
-                                        </p>
-                                        {/* <p>First Aid,Search & Rescue and Drill exercise</p> */}
-                                    </div>
-                                    <div className={styles.editDeleteButtn}>
-                                        {this.editDeleteButton(item.id, item)}
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                        )) : (
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <h2>No Data Available</h2>
                         </div>
-                    )}
-                </div>
-            </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 
@@ -1169,47 +1203,54 @@ class ContactPage extends React.PureComponent<Props, State> {
                         }}
                     />
                 </MapSource>
-                <div className={_cs(className, styles.left)}>
-                    <header className={styles.header}>
-                        <input className={styles.search} name="search" type="text" value={searchKeyword} placeholder="SEARCH BY POSITION" onChange={e => this.handleSearch(e.target.value)} />
+                <Translation>
+                    {
+                        t => (
+                            <div className={_cs(className, styles.left)}>
+                                <header className={styles.header}>
+                                    <input className={styles.search} name="search" type="text" value={searchKeyword} placeholder={t('SEARCH BY POSITION')} onChange={e => this.handleSearch(e.target.value)} />
 
-                        <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}>
-                            <Button
-                                className={styles.SelectTableButton}
-                                onClick={() => this.setState({ enableListView: !enableListView })}
-                                disabled={!filteredContactList.length}
-                                title={enableListView ? 'Table View' : 'List View'}
-                            >
-                                <div key={enableListView}>
-                                    <ScalableVectorGraphcis
-                                        className={styles.iconDataView}
-                                        src={enableListView ? tableView : listView}
-                                    />
-                                </div>
+                                    <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}>
+                                        <Button
+                                            className={styles.SelectTableButton}
+                                            onClick={() => this.setState({ enableListView: !enableListView })}
+                                            disabled={!filteredContactList.length}
+                                            title={enableListView ? t('Table View') : t('List View')}
+                                        >
+                                            <div key={enableListView}>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.iconDataView}
+                                                    src={enableListView ? tableView : listView}
+                                                />
+                                            </div>
 
 
-                            </Button>
+                                        </Button>
 
 
-                            <Cloak hiddenIf={p => !p.add_contact}>
-                                <AccentModalButton
-                                    className={styles.button}
-                                    iconName="add"
-                                    transparent
-                                    modal={(
-                                        <ContactEditForm
-                                            onAddSuccess={this.handleContactAdd}
-                                        />
-                                    )}
-                                >
-                                    Add Contact
-                                </AccentModalButton>
-                            </Cloak>
-                        </div>
-                    </header>
-                    {enableListView ? this.listComponent() : this.tableComponent()}
+                                        <Cloak hiddenIf={p => !p.add_contact}>
+                                            <AccentModalButton
+                                                className={styles.button}
+                                                iconName="add"
+                                                transparent
+                                                modal={(
+                                                    <ContactEditForm
+                                                        onAddSuccess={this.handleContactAdd}
+                                                    />
+                                                )}
+                                            >
+                                                {t('Add Contact')}
+                                            </AccentModalButton>
+                                        </Cloak>
+                                    </div>
+                                </header>
+                                {enableListView ? this.listComponent() : this.tableComponent()}
 
-                </div>
+                            </div>
+                        )
+                    }
+                </Translation>
+
             </>
         );
     }
