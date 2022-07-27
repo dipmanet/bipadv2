@@ -1125,7 +1125,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 iconName="download"
                                                                             />
                                                                         </div>
-                                                                        <BarchartVisualization item={sexRatio} />
+                                                                        <BarchartVisualization item={sexRatio} language={language} />
                                                                     </div>
 
 
@@ -1189,7 +1189,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 iconName="download"
                                                                             />
                                                                         </div>
-                                                                        <BarchartVisualization item={literacyRatio} percentage />
+                                                                        <BarchartVisualization item={literacyRatio} percentage language={language} />
                                                                     </div>
 
 
@@ -1242,7 +1242,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 iconName="download"
                                                                             />
                                                                         </div>
-                                                                        <BarchartVisualization item={householdSummary} />
+                                                                        <BarchartVisualization item={householdSummary} language={language} />
                                                                     </div>
 
 
@@ -1292,7 +1292,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 iconName="download"
                                                                             />
                                                                         </div>
-                                                                        <BarchartVisualization item={ageGroupSummary} category />
+                                                                        <BarchartVisualization item={ageGroupSummary} category language={language} />
                                                                     </div>
 
 
