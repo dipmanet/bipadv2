@@ -244,17 +244,17 @@ const pastDataKeySelector = d => d.key;
 
 const pastDataLabelSelector = d => d.label;
 
-const pastDateRangeOptions = [
+const pastDateRangeOptions = language => ([
     {
-        label: 'Census 2011',
+        label: language === 'en' ? 'Census 2011' : 'जनगणना २०११',
         key: 1,
     },
     {
-        label: 'LG Profile',
+        label: language === 'en' ? 'LG Profile' : 'LG प्रोफाइल',
         key: 2,
     },
 
-];
+]);
 const NumberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 const LGProfileCustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -307,33 +307,69 @@ const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         if (payload.length === 2) {
             return (
-                <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
-                    <p>
-                        Age Group
-                        {' '}
-                        {label}
-                        {' '}
-                        Years
-                        {' '}
-                    </p>
+                <Translation>
                     {
-                        payload.map(item => (
-                            <p key={item.name}>{`${item.name.charAt(0).toUpperCase() + item.name.slice(1)} : ${NumberWithCommas(item.value)}`}</p>
+                        t => (
+                            <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
+                                <p>
+                                    {t('Age Group')}
+                                    {' '}
+                                    {label}
+                                    {' '}
+                                    {t('Years')}
+                                    {' '}
+                                </p>
+                                {
+                                    payload.map(item => (
+                                        <p key={item.name}>
+                                            {t(item.name.charAt(0).toUpperCase() + item.name.slice(1))}
+                                            {' '}
+                                            :
+                                            {' '}
+                                            {NumberWithCommas(item.value)}
+                                        </p>
 
-                        ))
+                                    ))
+                                }
+
+
+                            </div>
+                        )
                     }
+                </Translation>
 
 
-                </div>
             );
         }
         return (
-            <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
-                <p>{label}</p>
-                <p>{`Value : ${NumberWithCommas(payload[0].value)}`}</p>
-                {payload[0].payload.percent ? <p>{`Percentage: ${payload[0].payload.percent.toFixed(2)}%`}</p> : ''}
+            <Translation>
+                {
+                    t => (
+                        <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
+                            <p>{label}</p>
+                            <p>
+                                {t('Value')}
+                                {' '}
+                                :
+                                {' '}
+                                {NumberWithCommas(payload[0].value)}
+                            </p>
+                            {payload[0].payload.percent ? (
+                                <p>
+                                    {t('Percentage')}
+                                    {' '}
+                                    :
+                                    {' '}
+                                    {payload[0].payload.percent.toFixed(2)}
+                                    %
+                                </p>
+                            ) : ''}
 
-            </div>
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
     return null;
@@ -351,16 +387,23 @@ const renderLegend = (props) => {
     const { payload } = props;
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '50px' }}>
+        <Translation>
             {
-                payload.map((entry, index) => (
-                    <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
-                        <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
-                        <h2 style={{ marginTop: '5px' }}>{entry.value.charAt(0).toUpperCase() + entry.value.slice(1)}</h2>
+                t => (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '50px' }}>
+                        {
+                            payload.map((entry, index) => (
+                                <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
+                                    <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
+                                    <h2 style={{ marginTop: '5px' }}>{t(entry.value.charAt(0).toUpperCase() + entry.value.slice(1))}</h2>
+                                </div>
+                            ))
+                        }
                     </div>
-                ))
+                )
             }
-        </div>
+        </Translation>
+
     );
 };
 const LGProfileRenderLegend = (props) => {
@@ -870,7 +913,7 @@ class Demographics extends React.PureComponent<Props> {
         const LGProfilehouseHold = this.getGeojson(LGProfilehouseHoldData);
 
 
-        const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions : pastDateRangeOptions.filter(i => i.key === 1);
+        const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions(language) : pastDateRangeOptions(language).filter(i => i.key === 1);
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
                 if (profile.mainModule === 'Summary' && prevProfile.subModule !== selectedAttribute) {
@@ -2087,595 +2130,602 @@ class Demographics extends React.PureComponent<Props> {
                         </Modal>
                     ) : ''
                 }
-                <div className={_cs(styles.demographics, className)}>
+                <Translation>
+                    {
+                        t => (
+                            <div className={_cs(styles.demographics, className)}>
 
-                    <div className={styles.radioInputDiv}>
-                        <div className={styles.radioInputHeading}><h1>Select Data Format</h1></div>
-                        <div>
-                            <RadioInput
-                                keySelector={pastDataKeySelector}
-                                labelSelector={pastDataLabelSelector}
-                                options={dateRangeOption}
-                                onChange={e => this.setState({ selectedDataType: e })}
-                                value={selectedDataType}
-                                contentClassName={styles.dateRanges}
-                            />
-
-                        </div>
-                    </div>
-
-
-                    <div className={styles.dataDisplayDiv}>
-                        {selectedDataType === 1
-                            ? (
-                                <div>
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-                                            {/* <h1>Individual Characteristics</h1> */}
-                                            <div
-                                                className={selectedAttribute === 'totalPopulation' ? styles.demographyHeading : ''}
-                                                style={{ cursor: 'pointer' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => this.setState({ selectedAttribute: 'totalPopulation' })}
-                                                onKeyDown={undefined}
-                                            >
-                                                <h2>Population</h2>
-                                            </div>
-
-                                            {sexRatio && sexRatio.length ? (
-                                                <h2 style={{
-                                                    fontSize: '30px',
-                                                    paddingLeft: '10px',
-                                                    paddingRight: '10px',
-                                                    paddingTop: '0px',
-                                                    paddingBottom: '0px',
-                                                }}
-                                                >
-                                                    {NumberWithCommas(populationSummary
-                                                        .find(i => i.key === 'totalPopulation').value)}
-                                                </h2>
-                                            ) : ''}
-                                        </div>
-                                        <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3>
-                                        {sexRatio && sexRatio.length
-                                            ? (
-                                                <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                    <ResponsiveContainer>
-
-                                                        <BarChart
-                                                            data={sexRatio}
-                                                            layout="vertical"
-                                                            // margin={chartMargin}
-                                                            margin={{
-                                                                top: 0,
-                                                                right: 30,
-                                                                bottom: 0,
-                                                                left: 2,
-                                                            }
-
-                                                            }
-                                                            width={600}
-                                                            height={50}
-                                                        >
-                                                            <XAxis
-                                                                type="number"
-                                                                tick={<CustomizedAxisTick />}
-                                                            />
-                                                            <YAxis
-                                                                width={yAxisWidth}
-                                                                dataKey="label"
-                                                                type="category"
-                                                            />
-                                                            <Tooltip content={<CustomTooltip />} />
-                                                            <Bar
-                                                                dataKey="value"
-                                                                fill="#dcdcde"
-                                                                barSize={25}
-                                                            >
-                                                                {sexRatio.map(v => (
-                                                                    <Cell
-                                                                        key={v.key}
-                                                                        fill={v.color}
-                                                                    />
-                                                                ))}
-
-                                                            </Bar>
-                                                        </BarChart>
-                                                    </ResponsiveContainer>
-                                                </div>
-                                            ) : <h2>No Data Available</h2>}
-                                    </div>
-
-
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-                                            <div
-                                                className={selectedAttribute === 'literacyRate' ? styles.demographyHeading : ''}
-                                                style={{ cursor: 'pointer' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => this.setState({ selectedAttribute: 'literacyRate' })}
-                                                onKeyDown={undefined}
-                                            >
-                                                <h2>Literacy Rate</h2>
-                                            </div>
-                                            {literacyRatio && literacyRatio.length
-                                                ? (
-                                                    <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
-                                                        {NumberWithCommas(literacySummary.find(i => i.key === 'literacyRate').value)}
-                                                        %
-                                                    </h2>
-                                                ) : ''}
-                                        </div>
-                                        <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3>
-                                        {literacyRatio && literacyRatio.length
-                                            ? (
-                                                <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                    <ResponsiveContainer>
-                                                        <BarChart
-                                                            data={literacyRatio}
-                                                            layout="vertical"
-                                                            // margin={chartMargin}
-                                                            margin={{
-                                                                top: 0,
-                                                                right: 30,
-                                                                bottom: 0,
-                                                                left: 2,
-                                                            }}
-                                                            width={500}
-                                                            height={50}
-                                                        >
-                                                            <XAxis type="number" />
-                                                            <YAxis
-                                                                width={yAxisWidth}
-                                                                dataKey="label"
-                                                                type="category"
-                                                            />
-                                                            <Tooltip content={<CustomTooltip />} />
-                                                            <Bar
-                                                                dataKey="value"
-                                                                fill="#dcdcde"
-                                                                barSize={25}
-                                                            >
-                                                                {literacyRatio.map(v => (
-                                                                    <Cell
-                                                                        key={v.key}
-                                                                        fill={v.color}
-                                                                    />
-                                                                ))}
-
-                                                            </Bar>
-                                                        </BarChart>
-
-                                                    </ResponsiveContainer>
-                                                </div>
-                                            ) : <h2>No Data Available</h2>}
-
+                                <div className={styles.radioInputDiv}>
+                                    <div className={styles.radioInputHeading}><h1>{t('Select Data Format')}</h1></div>
+                                    <div>
+                                        <RadioInput
+                                            keySelector={pastDataKeySelector}
+                                            labelSelector={pastDataLabelSelector}
+                                            options={dateRangeOption}
+                                            onChange={e => this.setState({ selectedDataType: e })}
+                                            value={selectedDataType}
+                                            contentClassName={styles.dateRanges}
+                                        />
 
                                     </div>
-
-
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-                                            <div
-                                                className={selectedAttribute === 'householdCount' ? styles.demographyHeading : ''}
-                                                style={{ cursor: 'pointer' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
-                                                onKeyDown={undefined}
-                                            >
-                                                <h2>Household</h2>
-                                            </div>
-
-                                        </div>
-                                        {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
-                                        {householdSummary && householdSummary.length
-                                            ? (
-                                                <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                    <ResponsiveContainer>
-                                                        <BarChart
-                                                            data={householdSummary}
-                                                            layout="vertical"
-                                                            // margin={chartMargin}
-                                                            margin={{
-                                                                top: 0,
-                                                                right: 30,
-                                                                bottom: 0,
-                                                                left: 2,
-                                                            }}
-                                                            width={500}
-                                                            height={50}
-                                                        >
-                                                            <XAxis
-                                                                type="number"
-                                                                tick={<CustomizedAxisTick />}
-                                                            />
-                                                            <YAxis
-                                                                width={yAxisWidth}
-                                                                dataKey="label"
-                                                                type="category"
-                                                            />
-                                                            <Tooltip content={<CustomTooltip />} />
-                                                            <Bar
-                                                                dataKey="value"
-                                                                fill="#dcdcde"
-                                                                barSize={25}
-                                                            >
-                                                                {householdSummary.map(v => (
-                                                                    <Cell
-                                                                        key={v.key}
-                                                                        fill={v.color}
-                                                                    />
-                                                                ))}
-                                                                <LabelList
-                                                                    className={styles.label}
-                                                                    dataKey="percent"
-                                                                    position="insideRight"
-                                                                    formatter={value => `${value} %`}
-                                                                />
-                                                            </Bar>
-                                                        </BarChart>
-
-
-                                                    </ResponsiveContainer>
-                                                </div>
-                                            ) : <h2>No Data Available</h2>}
-
-
-                                    </div>
-
-
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-
-                                            <h2>Age Group</h2>
-
-                                        </div>
-                                        {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
-                                        {ageGroupSummary && ageGroupSummary.length
-                                            ? (
-                                                <div style={{ height: '590px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                    <ResponsiveContainer>
-                                                        <BarChart
-                                                            width={500}
-                                                            height={300}
-                                                            data={ageGroupSummary}
-                                                            layout="vertical"
-                                                            margin={{
-                                                                top: 5,
-                                                                right: 30,
-                                                                left: 2,
-                                                                bottom: 5,
-                                                            }}
-                                                        >
-
-                                                            <XAxis
-                                                                type="number"
-                                                                tick={<CustomizedAxisTick />}
-                                                            />
-                                                            <YAxis
-                                                                width={yAxisWidth}
-                                                                dataKey="label"
-                                                                type="category"
-                                                            />
-                                                            <Tooltip content={<CustomTooltip />} />
-                                                            {/* <Tooltip /> */}
-                                                            <Legend align="center" content={renderLegend} />
-                                                            <Bar
-                                                                dataKey="male"
-                                                                fill="#2A7BBB"
-                                                                stackId="a"
-                                                                barSize={25}
-                                                            />
-                                                            <Bar
-                                                                dataKey="female"
-                                                                fill="#83A4D3"
-                                                                stackId="a"
-                                                                barSize={25}
-                                                            />
-                                                        </BarChart>
-
-
-                                                    </ResponsiveContainer>
-                                                </div>
-                                            ) : <h2>No Data Available</h2>}
-
-
-                                    </div>
-
-
                                 </div>
-                            )
-                            : (
-                                <div>
-
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-                                            {/* <h1>Individual Characteristics</h1> */}
-                                            <div
-                                                className={selectedAttribute === 'totalPopulation' ? styles.demographyHeading : ''}
-                                                style={{ cursor: 'pointer' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => this.setState({ selectedAttribute: 'totalPopulation' })}
-                                                onKeyDown={undefined}
-                                            >
-                                                <h2>Population</h2>
-                                            </div>
-                                            {sexRatioTotalPopulationLGProfile
-
-                                                ? (
-                                                    <h2 style={{
-                                                        fontSize: '30px',
-                                                        paddingLeft: '10px',
-                                                        paddingRight: '10px',
-                                                        paddingTop: '0px',
-                                                        paddingBottom: '0px',
-                                                    }}
-                                                    >
-                                                        {NumberWithCommas(sexRatioTotalPopulationLGProfile)}
-
-                                                    </h2>
-                                                ) : ''}
-
-                                        </div>
-                                        {sexRatioTotalPopulationLGProfile
-                                            ? (
-                                                <>
-                                                    <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3>
-
-                                                    <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                        <ResponsiveContainer>
-
-                                                            <BarChart
-                                                                data={sexRatioLGProfile}
-                                                                layout="vertical"
-                                                                // margin={chartMargin}
-                                                                margin={{
-                                                                    top: 0,
-                                                                    right: 30,
-                                                                    bottom: 0,
-                                                                    left: 2,
-                                                                }
-
-                                                                }
-                                                                width={600}
-                                                                height={50}
-                                                            >
-                                                                <XAxis
-                                                                    type="number"
-                                                                    tick={<CustomizedAxisTick />}
-                                                                />
-                                                                <YAxis
-                                                                    width={yAxisWidth}
-                                                                    dataKey="label"
-                                                                    type="category"
-                                                                    interval={0}
-                                                                />
-                                                                <Tooltip content={<CustomTooltip />} />
-                                                                <Bar
-                                                                    dataKey="value"
-                                                                    fill="#dcdcde"
-                                                                    barSize={25}
-                                                                >
-                                                                    {sexRatioLGProfile.map(v => (
-                                                                        <Cell
-                                                                            key={v.key}
-                                                                            fill={v.color}
-                                                                        />
-                                                                    ))}
-
-                                                                </Bar>
-                                                            </BarChart>
-                                                        </ResponsiveContainer>
-                                                    </div>
-                                                </>
-                                            ) : <h3 style={{ textAlign: 'center' }}>No Data Available</h3>}
-                                    </div>
 
 
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-                                            <div
-                                                className={selectedAttribute === 'literacyRate' ? styles.demographyHeading : ''}
-                                                style={{ cursor: 'pointer' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => this.setState({ selectedAttribute: 'literacyRate' })}
-                                                onKeyDown={undefined}
-                                            >
-                                                <h2>Literacy Rate</h2>
-                                            </div>
-                                            {literatePeopleTotalPopulationLGProfile
-                                                ? (
-                                                    <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
-                                                        {literacyRateLGProfile.toFixed(2)}
-                                                        %
-                                                    </h2>
-                                                ) : ''}
-                                        </div>
-                                        {literatePeopleTotalPopulationLGProfile
-                                            ? (
-                                                <>
-                                                    <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3>
-
-                                                    <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                        <ResponsiveContainer>
-                                                            <BarChart
-                                                                data={literacyRatioLGProfile}
-                                                                layout="vertical"
-                                                                // margin={chartMargin}
-                                                                margin={{
-                                                                    top: 0,
-                                                                    right: 30,
-                                                                    bottom: 0,
-                                                                    left: 2,
-                                                                }}
-                                                                width={500}
-                                                                height={50}
-                                                            >
-                                                                <XAxis type="number" />
-                                                                <YAxis
-                                                                    width={yAxisWidth}
-                                                                    dataKey="label"
-                                                                    type="category"
-                                                                />
-                                                                <Tooltip content={<CustomTooltip />} />
-                                                                <Bar
-                                                                    dataKey="value"
-                                                                    fill="#dcdcde"
-                                                                    barSize={25}
-                                                                >
-                                                                    {literacyRatioLGProfile.map(v => (
-                                                                        <Cell
-                                                                            key={v.key}
-                                                                            fill={v.color}
-                                                                        />
-                                                                    ))}
-
-                                                                </Bar>
-                                                            </BarChart>
-
-                                                        </ResponsiveContainer>
-                                                    </div>
-                                                </>
-                                            ) : <h3 style={{ textAlign: 'center' }}>No Data Available</h3>}
-
-
-                                    </div>
-
-
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-                                            <div
-                                                className={selectedAttribute === 'householdCount' ? styles.demographyHeading : ''}
-                                                style={{ cursor: 'pointer' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
-                                                onKeyDown={undefined}
-                                            >
-                                                <h2>Household</h2>
-                                            </div>
-
-                                        </div>
-                                        {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
-                                        {sexRatioTotalPopulationLGProfile ? (
-                                            <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                <ResponsiveContainer>
-                                                    <BarChart
-                                                        data={houseHoldSummaryLGProfile}
-                                                        layout="vertical"
-                                                        // margin={chartMargin}
-                                                        margin={{
-                                                            top: 0,
-                                                            right: 30,
-                                                            bottom: 0,
-                                                            left: 2,
-                                                        }}
-                                                        width={500}
-                                                        height={50}
-                                                    >
-                                                        <XAxis
-                                                            type="number"
-                                                            tick={<CustomizedAxisTick />}
-                                                        />
-                                                        <YAxis
-                                                            width={yAxisWidth}
-                                                            dataKey="label"
-                                                            type="category"
-                                                        />
-                                                        <Tooltip content={<CustomTooltip />} />
-                                                        <Bar
-                                                            dataKey="value"
-                                                            fill="#dcdcde"
-                                                            barSize={25}
+                                <div className={styles.dataDisplayDiv}>
+                                    {selectedDataType === 1
+                                        ? (
+                                            <div>
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+                                                        {/* <h1>Individual Characteristics</h1> */}
+                                                        <div
+                                                            className={selectedAttribute === 'totalPopulation' ? styles.demographyHeading : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => this.setState({ selectedAttribute: 'totalPopulation' })}
+                                                            onKeyDown={undefined}
                                                         >
-                                                            {houseHoldSummaryLGProfile.map(v => (
-                                                                <Cell
-                                                                    key={v.key}
-                                                                    fill={v.color}
-                                                                />
-                                                            ))}
-                                                            <LabelList
-                                                                className={styles.label}
-                                                                dataKey="percent"
-                                                                position="insideRight"
-                                                                formatter={value => `${value} %`}
-                                                            />
-                                                        </Bar>
-                                                    </BarChart>
+                                                            <h2>{t('Population')}</h2>
+                                                        </div>
+
+                                                        {sexRatio && sexRatio.length ? (
+                                                            <h2 style={{
+                                                                fontSize: '30px',
+                                                                paddingLeft: '10px',
+                                                                paddingRight: '10px',
+                                                                paddingTop: '0px',
+                                                                paddingBottom: '0px',
+                                                            }}
+                                                            >
+                                                                {NumberWithCommas(populationSummary
+                                                                    .find(i => i.key === 'totalPopulation').value)}
+                                                            </h2>
+                                                        ) : ''}
+                                                    </div>
+                                                    <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
+                                                    {sexRatio && sexRatio.length
+                                                        ? (
+                                                            <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                <ResponsiveContainer>
+
+                                                                    <BarChart
+                                                                        data={sexRatio}
+                                                                        layout="vertical"
+                                                                        // margin={chartMargin}
+                                                                        margin={{
+                                                                            top: 0,
+                                                                            right: 30,
+                                                                            bottom: 0,
+                                                                            left: 2,
+                                                                        }
+
+                                                                        }
+                                                                        width={600}
+                                                                        height={50}
+                                                                    >
+                                                                        <XAxis
+                                                                            type="number"
+                                                                            tick={<CustomizedAxisTick />}
+                                                                        />
+                                                                        <YAxis
+                                                                            width={yAxisWidth}
+                                                                            dataKey="label"
+                                                                            type="category"
+                                                                        />
+                                                                        <Tooltip content={<CustomTooltip />} />
+                                                                        <Bar
+                                                                            dataKey="value"
+                                                                            fill="#dcdcde"
+                                                                            barSize={25}
+                                                                        >
+                                                                            {sexRatio.map(v => (
+                                                                                <Cell
+                                                                                    key={v.key}
+                                                                                    fill={v.color}
+                                                                                />
+                                                                            ))}
+
+                                                                        </Bar>
+                                                                    </BarChart>
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        ) : <h2>{t('No Data Available')}</h2>}
+                                                </div>
 
 
-                                                </ResponsiveContainer>
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+                                                        <div
+                                                            className={selectedAttribute === 'literacyRate' ? styles.demographyHeading : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => this.setState({ selectedAttribute: 'literacyRate' })}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <h2>{t('Literacy Rate')}</h2>
+                                                        </div>
+                                                        {literacyRatio && literacyRatio.length
+                                                            ? (
+                                                                <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
+                                                                    {NumberWithCommas(literacySummary.find(i => i.key === 'literacyRate').value)}
+                                                                    %
+                                                                </h2>
+                                                            ) : ''}
+                                                    </div>
+                                                    <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
+                                                    {literacyRatio && literacyRatio.length
+                                                        ? (
+                                                            <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                <ResponsiveContainer>
+                                                                    <BarChart
+                                                                        data={literacyRatio}
+                                                                        layout="vertical"
+                                                                        // margin={chartMargin}
+                                                                        margin={{
+                                                                            top: 0,
+                                                                            right: 30,
+                                                                            bottom: 0,
+                                                                            left: 2,
+                                                                        }}
+                                                                        width={500}
+                                                                        height={50}
+                                                                    >
+                                                                        <XAxis type="number" />
+                                                                        <YAxis
+                                                                            width={yAxisWidth}
+                                                                            dataKey="label"
+                                                                            type="category"
+                                                                        />
+                                                                        <Tooltip content={<CustomTooltip />} />
+                                                                        <Bar
+                                                                            dataKey="value"
+                                                                            fill="#dcdcde"
+                                                                            barSize={25}
+                                                                        >
+                                                                            {literacyRatio.map(v => (
+                                                                                <Cell
+                                                                                    key={v.key}
+                                                                                    fill={v.color}
+                                                                                />
+                                                                            ))}
+
+                                                                        </Bar>
+                                                                    </BarChart>
+
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        ) : <h2>{t('No Data Available')}</h2>}
+
+
+                                                </div>
+
+
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+                                                        <div
+                                                            className={selectedAttribute === 'householdCount' ? styles.demographyHeading : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <h2>{t('Household')}</h2>
+                                                        </div>
+
+                                                    </div>
+                                                    {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
+                                                    {householdSummary && householdSummary.length
+                                                        ? (
+                                                            <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                <ResponsiveContainer>
+                                                                    <BarChart
+                                                                        data={householdSummary}
+                                                                        layout="vertical"
+                                                                        // margin={chartMargin}
+                                                                        margin={{
+                                                                            top: 0,
+                                                                            right: 30,
+                                                                            bottom: 0,
+                                                                            left: 2,
+                                                                        }}
+                                                                        width={500}
+                                                                        height={50}
+                                                                    >
+                                                                        <XAxis
+                                                                            type="number"
+                                                                            tick={<CustomizedAxisTick />}
+                                                                        />
+                                                                        <YAxis
+                                                                            width={yAxisWidth}
+                                                                            dataKey="label"
+                                                                            type="category"
+                                                                        />
+                                                                        <Tooltip content={<CustomTooltip />} />
+                                                                        <Bar
+                                                                            dataKey="value"
+                                                                            fill="#dcdcde"
+                                                                            barSize={25}
+                                                                        >
+                                                                            {householdSummary.map(v => (
+                                                                                <Cell
+                                                                                    key={v.key}
+                                                                                    fill={v.color}
+                                                                                />
+                                                                            ))}
+                                                                            <LabelList
+                                                                                className={styles.label}
+                                                                                dataKey="percent"
+                                                                                position="insideRight"
+                                                                                formatter={value => `${value} %`}
+                                                                            />
+                                                                        </Bar>
+                                                                    </BarChart>
+
+
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        ) : <h2>{t('No Data Available')}</h2>}
+
+
+                                                </div>
+
+
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+
+                                                        <h2>{t('Age Group')}</h2>
+
+                                                    </div>
+                                                    {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
+                                                    {ageGroupSummary && ageGroupSummary.length
+                                                        ? (
+                                                            <div style={{ height: '590px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                <ResponsiveContainer>
+                                                                    <BarChart
+                                                                        width={500}
+                                                                        height={300}
+                                                                        data={ageGroupSummary}
+                                                                        layout="vertical"
+                                                                        margin={{
+                                                                            top: 5,
+                                                                            right: 30,
+                                                                            left: 2,
+                                                                            bottom: 5,
+                                                                        }}
+                                                                    >
+
+                                                                        <XAxis
+                                                                            type="number"
+                                                                            tick={<CustomizedAxisTick />}
+                                                                        />
+                                                                        <YAxis
+                                                                            width={yAxisWidth}
+                                                                            dataKey="label"
+                                                                            type="category"
+                                                                        />
+                                                                        <Tooltip content={<CustomTooltip />} />
+                                                                        {/* <Tooltip /> */}
+                                                                        <Legend align="center" content={renderLegend} />
+                                                                        <Bar
+                                                                            dataKey="male"
+                                                                            fill="#2A7BBB"
+                                                                            stackId="a"
+                                                                            barSize={25}
+                                                                        />
+                                                                        <Bar
+                                                                            dataKey="female"
+                                                                            fill="#83A4D3"
+                                                                            stackId="a"
+                                                                            barSize={25}
+                                                                        />
+                                                                    </BarChart>
+
+
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        ) : <h2>{t('No Data Available')}</h2>}
+
+
+                                                </div>
+
+
                                             </div>
                                         )
-                                            : <h3 style={{ textAlign: 'center' }}>No Data Available</h3>}
+                                        : (
+                                            <div>
 
-
-                                    </div>
-
-
-                                    <div className={styles.dataDetails}>
-                                        <div style={{ padding: '10px' }}>
-
-                                            <h2>Age Group</h2>
-
-                                        </div>
-                                        {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
-                                        {filteredLGProfileAgeGroup && filteredLGProfileAgeGroup.length
-                                            ? (
-                                                <div style={{ height: '590px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
-                                                    <ResponsiveContainer>
-                                                        <BarChart
-                                                            width={500}
-                                                            height={300}
-                                                            data={filteredLGProfileAgeGroup}
-                                                            layout="vertical"
-                                                            margin={{
-                                                                top: 5,
-                                                                right: 30,
-                                                                left: 2,
-                                                                bottom: 5,
-                                                            }}
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+                                                        {/* <h1>Individual Characteristics</h1> */}
+                                                        <div
+                                                            className={selectedAttribute === 'totalPopulation' ? styles.demographyHeading : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => this.setState({ selectedAttribute: 'totalPopulation' })}
+                                                            onKeyDown={undefined}
                                                         >
+                                                            <h2>{t('Population')}</h2>
+                                                        </div>
+                                                        {sexRatioTotalPopulationLGProfile
 
-                                                            <XAxis
-                                                                type="number"
-                                                                tick={<CustomizedAxisTick />}
-                                                            />
-                                                            <YAxis
-                                                                width={yAxisWidth}
-                                                                dataKey="label"
-                                                                type="category"
-                                                            />
-                                                            <Tooltip content={<LGProfileCustomTooltip />} />
-                                                            {/* <Tooltip /> */}
-                                                            <Legend align="center" content={LGProfileRenderLegend} />
-                                                            <Bar
-                                                                dataKey="value"
-                                                                fill="#2A7BBB"
-                                                                stackId="a"
-                                                                barSize={25}
-                                                            />
-                                                        </BarChart>
-                                                    </ResponsiveContainer>
+                                                            ? (
+                                                                <h2 style={{
+                                                                    fontSize: '30px',
+                                                                    paddingLeft: '10px',
+                                                                    paddingRight: '10px',
+                                                                    paddingTop: '0px',
+                                                                    paddingBottom: '0px',
+                                                                }}
+                                                                >
+                                                                    {NumberWithCommas(sexRatioTotalPopulationLGProfile)}
+
+                                                                </h2>
+                                                            ) : ''}
+
+                                                    </div>
+                                                    {sexRatioTotalPopulationLGProfile
+                                                        ? (
+                                                            <>
+                                                                <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
+
+                                                                <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                    <ResponsiveContainer>
+
+                                                                        <BarChart
+                                                                            data={sexRatioLGProfile}
+                                                                            layout="vertical"
+                                                                            // margin={chartMargin}
+                                                                            margin={{
+                                                                                top: 0,
+                                                                                right: 30,
+                                                                                bottom: 0,
+                                                                                left: 2,
+                                                                            }
+
+                                                                            }
+                                                                            width={600}
+                                                                            height={50}
+                                                                        >
+                                                                            <XAxis
+                                                                                type="number"
+                                                                                tick={<CustomizedAxisTick />}
+                                                                            />
+                                                                            <YAxis
+                                                                                width={yAxisWidth}
+                                                                                dataKey="label"
+                                                                                type="category"
+                                                                                interval={0}
+                                                                            />
+                                                                            <Tooltip content={<CustomTooltip />} />
+                                                                            <Bar
+                                                                                dataKey="value"
+                                                                                fill="#dcdcde"
+                                                                                barSize={25}
+                                                                            >
+                                                                                {sexRatioLGProfile.map(v => (
+                                                                                    <Cell
+                                                                                        key={v.key}
+                                                                                        fill={v.color}
+                                                                                    />
+                                                                                ))}
+
+                                                                            </Bar>
+                                                                        </BarChart>
+                                                                    </ResponsiveContainer>
+                                                                </div>
+                                                            </>
+                                                        ) : <h3 style={{ textAlign: 'center' }}>{t('No Data Available')}</h3>}
                                                 </div>
-                                            ) : <h3 style={{ textAlign: 'center' }}>No Data Available</h3>}
 
 
-                                    </div>
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+                                                        <div
+                                                            className={selectedAttribute === 'literacyRate' ? styles.demographyHeading : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => this.setState({ selectedAttribute: 'literacyRate' })}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <h2>{t('Literacy Rate')}</h2>
+                                                        </div>
+                                                        {literatePeopleTotalPopulationLGProfile
+                                                            ? (
+                                                                <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
+                                                                    {literacyRateLGProfile.toFixed(2)}
+                                                                    %
+                                                                </h2>
+                                                            ) : ''}
+                                                    </div>
+                                                    {literatePeopleTotalPopulationLGProfile
+                                                        ? (
+                                                            <>
+                                                                <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
 
+                                                                <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                    <ResponsiveContainer>
+                                                                        <BarChart
+                                                                            data={literacyRatioLGProfile}
+                                                                            layout="vertical"
+                                                                            // margin={chartMargin}
+                                                                            margin={{
+                                                                                top: 0,
+                                                                                right: 30,
+                                                                                bottom: 0,
+                                                                                left: 2,
+                                                                            }}
+                                                                            width={500}
+                                                                            height={50}
+                                                                        >
+                                                                            <XAxis type="number" />
+                                                                            <YAxis
+                                                                                width={yAxisWidth}
+                                                                                dataKey="label"
+                                                                                type="category"
+                                                                            />
+                                                                            <Tooltip content={<CustomTooltip />} />
+                                                                            <Bar
+                                                                                dataKey="value"
+                                                                                fill="#dcdcde"
+                                                                                barSize={25}
+                                                                            >
+                                                                                {literacyRatioLGProfile.map(v => (
+                                                                                    <Cell
+                                                                                        key={v.key}
+                                                                                        fill={v.color}
+                                                                                    />
+                                                                                ))}
+
+                                                                            </Bar>
+                                                                        </BarChart>
+
+                                                                    </ResponsiveContainer>
+                                                                </div>
+                                                            </>
+                                                        ) : <h3 style={{ textAlign: 'center' }}>{t('No Data Available')}</h3>}
+
+
+                                                </div>
+
+
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+                                                        <div
+                                                            className={selectedAttribute === 'householdCount' ? styles.demographyHeading : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <h2>{t('Household')}</h2>
+                                                        </div>
+
+                                                    </div>
+                                                    {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
+                                                    {sexRatioTotalPopulationLGProfile ? (
+                                                        <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                            <ResponsiveContainer>
+                                                                <BarChart
+                                                                    data={houseHoldSummaryLGProfile}
+                                                                    layout="vertical"
+                                                                    // margin={chartMargin}
+                                                                    margin={{
+                                                                        top: 0,
+                                                                        right: 30,
+                                                                        bottom: 0,
+                                                                        left: 2,
+                                                                    }}
+                                                                    width={500}
+                                                                    height={50}
+                                                                >
+                                                                    <XAxis
+                                                                        type="number"
+                                                                        tick={<CustomizedAxisTick />}
+                                                                    />
+                                                                    <YAxis
+                                                                        width={yAxisWidth}
+                                                                        dataKey="label"
+                                                                        type="category"
+                                                                    />
+                                                                    <Tooltip content={<CustomTooltip />} />
+                                                                    <Bar
+                                                                        dataKey="value"
+                                                                        fill="#dcdcde"
+                                                                        barSize={25}
+                                                                    >
+                                                                        {houseHoldSummaryLGProfile.map(v => (
+                                                                            <Cell
+                                                                                key={v.key}
+                                                                                fill={v.color}
+                                                                            />
+                                                                        ))}
+                                                                        <LabelList
+                                                                            className={styles.label}
+                                                                            dataKey="percent"
+                                                                            position="insideRight"
+                                                                            formatter={value => `${value} %`}
+                                                                        />
+                                                                    </Bar>
+                                                                </BarChart>
+
+
+                                                            </ResponsiveContainer>
+                                                        </div>
+                                                    )
+                                                        : <h3 style={{ textAlign: 'center' }}>{t('No Data Available')}</h3>}
+
+
+                                                </div>
+
+
+                                                <div className={styles.dataDetails}>
+                                                    <div style={{ padding: '10px' }}>
+
+                                                        <h2>{t('Age Group')}</h2>
+
+                                                    </div>
+                                                    {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
+                                                    {filteredLGProfileAgeGroup && filteredLGProfileAgeGroup.length
+                                                        ? (
+                                                            <div style={{ height: '590px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+                                                                <ResponsiveContainer>
+                                                                    <BarChart
+                                                                        width={500}
+                                                                        height={300}
+                                                                        data={filteredLGProfileAgeGroup}
+                                                                        layout="vertical"
+                                                                        margin={{
+                                                                            top: 5,
+                                                                            right: 30,
+                                                                            left: 2,
+                                                                            bottom: 5,
+                                                                        }}
+                                                                    >
+
+                                                                        <XAxis
+                                                                            type="number"
+                                                                            tick={<CustomizedAxisTick />}
+                                                                        />
+                                                                        <YAxis
+                                                                            width={yAxisWidth}
+                                                                            dataKey="label"
+                                                                            type="category"
+                                                                        />
+                                                                        <Tooltip content={<LGProfileCustomTooltip />} />
+                                                                        {/* <Tooltip /> */}
+                                                                        <Legend align="center" content={LGProfileRenderLegend} />
+                                                                        <Bar
+                                                                            dataKey="value"
+                                                                            fill="#2A7BBB"
+                                                                            stackId="a"
+                                                                            barSize={25}
+                                                                        />
+                                                                    </BarChart>
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        ) : <h3 style={{ textAlign: 'center' }}>{t('No Data Available')}</h3>}
+
+
+                                                </div>
+
+
+                                            </div>
+                                        )
+                                    }
 
                                 </div>
-                            )
-                        }
 
-                    </div>
+                            </div>
+                        )
+                    }
+                </Translation>
 
-                </div>
 
                 {
                     selectedDataType === 1 ? (

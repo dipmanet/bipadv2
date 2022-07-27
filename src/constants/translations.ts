@@ -1,5 +1,9 @@
 export const enTranslation = {
     translation: {
+        Value: 'Value',
+        Percentage: 'Percentage',
+        Years: 'Years',
+        'Select Data Format': 'Select Data Format',
         'Download Csv': 'Download Csv',
         'Literacy Rate': 'Literacy Rate',
         Male: 'Male',
@@ -840,6 +844,10 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Value: 'मान',
+        Percentage: 'प्रतिशत',
+        Years: 'वर्ष',
+        'Select Data Format': 'डाटा ढाँचा चयन गर्नुहोस्',
         'Download Csv': 'Csv डाउनलोड गर्नुहोस्',
         'Literacy Rate': 'साक्षरता दर',
         Male: 'पुरुष',
@@ -847,7 +855,7 @@ export const npTranslation = {
         'Population By Age Group': 'उमेर समूह द्वारा जनसंख्या',
         'Household Statistics': 'घरधुरी तथ्याङ्क',
         'Literacy Rate (%)': 'साक्षरता दर (%)',
-        'Gender Breakdown': 'लिङ्ग वर्गीकरण ',
+        'Gender Breakdown': 'लिङ्ग वर्गीकरण',
         'Download Chart': 'चार्ट डाउनलोड गर्नुहोस',
         'Demography (Census 2011)': 'जनसांख्यिकी (जनगणना २०११)',
         Demography: 'जनसांख्यिकी',
