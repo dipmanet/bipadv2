@@ -12,6 +12,7 @@ import {
 import { navigate } from '@reach/router';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import AccentButton from '#rsca/Button/AccentButton';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
@@ -471,8 +472,13 @@ export class Profile extends React.PureComponent<Props, State> {
                                     iconName="back"
                                     transparent
                                 />
-
-                                <h1>Projects</h1>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <h1>{t('Projects')}</h1>
+                                        )
+                                    }
+                                </Translation>
                             </div>
                         </header>
                         <ProjectsProfile

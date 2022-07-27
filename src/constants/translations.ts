@@ -1,5 +1,15 @@
 export const enTranslation = {
     translation: {
+        Budget: 'Budget',
+        'SEARCH BY TITLE': 'SEARCH BY TITLE',
+        'Table View': 'Table View',
+        'List View': 'List View',
+        'S/N': 'S/N',
+        Organization: 'Organization',
+        Project: 'Project',
+        'Budget(USD)': 'Budget(USD)',
+
+        'No Data Available': 'No Data Available',
         Value: 'Value',
         Percentage: 'Percentage',
         Years: 'Years',
@@ -844,6 +854,16 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Budget: 'बजेट',
+        'SEARCH BY TITLE': 'शीर्षक द्वारा खोज्नुहोस्',
+        'Table View': 'तालिका दृश्य',
+        'List View': 'सूची दृश्य',
+        'S/N': 'क्रम/नं',
+        Organization: 'संगठन',
+        Project: 'परियोजना',
+        'Budget(USD)': 'बजेट (USD)',
+
+        'No Data Available': 'कुनै डाटा उपलब्ध छैन',
         Value: 'मान',
         Percentage: 'प्रतिशत',
         Years: 'वर्ष',

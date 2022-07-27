@@ -270,311 +270,342 @@ class ProjectsProfileLeftPane extends React.PureComponent {
 
             splittedData.length
                 ? splittedData.map((item, i) => (
-                    <div key={i} style={{ display: 'flex', width: '100%', height: '220px', marginBottom: '60px' }}>
+                    <Translation>
+                        {
+                            t => (
+                                <div key={i} style={{ display: 'flex', width: '100%', height: '220px', marginBottom: '60px' }}>
 
-                        <div
-                            className={i > mainColumnIndex ? clickedColumn === 'col1' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
-                            style={{ width: '33.33%' }}
-                        >
-                            {item.map((data, idx) => (
-                                <div key={idx}>
-                                    {idx === 0 ? (
-                                        <div
+                                    <div
+                                        className={i > mainColumnIndex ? clickedColumn === 'col1' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
+                                        style={{ width: '33.33%' }}
+                                    >
+                                        {item.map((data, idx) => (
+                                            <div key={idx}>
+                                                {idx === 0 ? (
+                                                    <div
 
 
-                                            className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col1Div) : styles.col1Div}
+                                                        className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col1Div) : styles.col1Div}
 
-                                        >
-
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => handleClick(data.id, 'col1', i)}
-                                                onKeyDown={undefined}
-                                            >
-                                                <div
-                                                    className="col1"
-
-                                                >
-
-                                                    <h4
-                                                        style={{
-                                                            wordBreak: 'break-word',
-                                                            padding: '10px',
-                                                            maxHeight: '130px',
-                                                            justifyContent: 'space-between',
-                                                            textOverflow: 'ellipsis',
-                                                            overflow: 'hidden',
-                                                            display: '-webkit-box',
-                                                            WebkitBoxOrient: 'vertical',
-                                                            WebkitLineClamp: '7',
-                                                            minHeight: '130px',
-                                                        }}
-                                                        title={data.ptitle}
                                                     >
-                                                        {data.ptitle}
 
-                                                    </h4>
-
-
-                                                </div>
-                                                <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Organization:</div>
                                                         <div
-                                                            style={{
-                                                                marginLeft: '2px',
-                                                                maxHeight: '35px',
-                                                                textOverflow: 'ellipsis',
-                                                                overflow: 'hidden',
-                                                                display: '-webkit-box',
-                                                                WebkitBoxOrient: 'vertical',
-                                                                WebkitLineClamp: '2',
-                                                                minHeight: '35px',
-                                                            }}
-                                                            title={data.oname}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => handleClick(data.id, 'col1', i)}
+                                                            onKeyDown={undefined}
                                                         >
-                                                            {data.oname}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Budget:</div>
-                                                        <div style={{ marginLeft: '30px' }}>
-                                                            <span>
-                                                                USD
-                                                                {' '}
-                                                                {data.budget_usd}
-                                                            </span>
+                                                            <div
+                                                                className="col1"
+
+                                                            >
+
+                                                                <h4
+                                                                    style={{
+                                                                        wordBreak: 'break-word',
+                                                                        padding: '10px',
+                                                                        maxHeight: '130px',
+                                                                        justifyContent: 'space-between',
+                                                                        textOverflow: 'ellipsis',
+                                                                        overflow: 'hidden',
+                                                                        display: '-webkit-box',
+                                                                        WebkitBoxOrient: 'vertical',
+                                                                        WebkitLineClamp: '7',
+                                                                        minHeight: '130px',
+                                                                    }}
+                                                                    title={data.ptitle}
+                                                                >
+                                                                    {data.ptitle}
+
+                                                                </h4>
+
+
+                                                            </div>
+                                                            <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Organization')}
+                                                                        :
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            marginLeft: '2px',
+                                                                            maxHeight: '35px',
+                                                                            textOverflow: 'ellipsis',
+                                                                            overflow: 'hidden',
+                                                                            display: '-webkit-box',
+                                                                            WebkitBoxOrient: 'vertical',
+                                                                            WebkitLineClamp: '2',
+                                                                            minHeight: '35px',
+                                                                        }}
+                                                                        title={data.oname}
+                                                                    >
+                                                                        {data.oname}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>Budget:</div>
+                                                                    <div style={{ marginLeft: '30px' }}>
+                                                                        <span>
+                                                                            USD
+                                                                            {' '}
+                                                                            {data.budget_usd}
+                                                                        </span>
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
 
                                                         </div>
+                                                        <div className={styles.footer}>
+                                                            <div style={{ display: 'flex', borderTop: '1px solid rgb(225, 225, 225)', position: 'relative', padding: '10px' }}>
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.icon}
+                                                                    src={dateCalender}
+                                                                />
+                                                                <div style={{ marginLeft: '5px' }}>
+
+                                                                    {data.listViewDate}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
-                                                </div>
-
-
+                                                ) : (
+                                                    ''
+                                                )}
                                             </div>
-                                            <div className={styles.footer}>
-                                                <div style={{ display: 'flex', borderTop: '1px solid rgb(225, 225, 225)', position: 'relative', padding: '10px' }}>
-                                                    <ScalableVectorGraphics
-                                                        className={styles.icon}
-                                                        src={dateCalender}
-                                                    />
-                                                    <div style={{ marginLeft: '5px' }}>
-
-                                                        {data.listViewDate}
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        <div
-                            className={i > mainColumnIndex ? clickedColumn === 'col2' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
-                            style={{ width: '33.33%' }}
-                        >
-                            {item.map((data, idx) => (
-                                <div key={idx}>
-                                    {idx === 1 ? (
-                                        <div
-                                            className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col2Div) : styles.col2Div}
+                                        ))}
+                                    </div>
+                                    <div
+                                        className={i > mainColumnIndex ? clickedColumn === 'col2' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
+                                        style={{ width: '33.33%' }}
+                                    >
+                                        {item.map((data, idx) => (
+                                            <div key={idx}>
+                                                {idx === 1 ? (
+                                                    <div
+                                                        className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col2Div) : styles.col2Div}
 
 
-                                        >
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => handleClick(data.id, 'col2', i)}
-                                                onKeyDown={undefined}
-                                            >
-                                                <div
-                                                    className="col1"
-
-                                                >
-
-                                                    <h4
-                                                        style={{
-                                                            wordBreak: 'break-word',
-                                                            padding: '10px',
-                                                            maxHeight: '130px',
-                                                            justifyContent: 'space-between',
-                                                            textOverflow: 'ellipsis',
-                                                            overflow: 'hidden',
-                                                            display: '-webkit-box',
-                                                            WebkitBoxOrient: 'vertical',
-                                                            WebkitLineClamp: '7',
-                                                            minHeight: '130px',
-                                                        }}
-                                                        title={data.ptitle}
                                                     >
-                                                        {data.ptitle}
-
-                                                    </h4>
-
-
-                                                </div>
-                                                <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Organization:</div>
                                                         <div
-                                                            style={{
-                                                                marginLeft: '2px',
-                                                                maxHeight: '35px',
-                                                                textOverflow: 'ellipsis',
-                                                                overflow: 'hidden',
-                                                                display: '-webkit-box',
-                                                                WebkitBoxOrient: 'vertical',
-                                                                WebkitLineClamp: '2',
-                                                                minHeight: '35px',
-                                                            }}
-                                                            title={data.oname}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => handleClick(data.id, 'col2', i)}
+                                                            onKeyDown={undefined}
                                                         >
-                                                            {data.oname}
+                                                            <div
+                                                                className="col1"
+
+                                                            >
+
+                                                                <h4
+                                                                    style={{
+                                                                        wordBreak: 'break-word',
+                                                                        padding: '10px',
+                                                                        maxHeight: '130px',
+                                                                        justifyContent: 'space-between',
+                                                                        textOverflow: 'ellipsis',
+                                                                        overflow: 'hidden',
+                                                                        display: '-webkit-box',
+                                                                        WebkitBoxOrient: 'vertical',
+                                                                        WebkitLineClamp: '7',
+                                                                        minHeight: '130px',
+                                                                    }}
+                                                                    title={data.ptitle}
+                                                                >
+                                                                    {data.ptitle}
+
+                                                                </h4>
+
+
+                                                            </div>
+                                                            <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Organization')}
+                                                                        :
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            marginLeft: '2px',
+                                                                            maxHeight: '35px',
+                                                                            textOverflow: 'ellipsis',
+                                                                            overflow: 'hidden',
+                                                                            display: '-webkit-box',
+                                                                            WebkitBoxOrient: 'vertical',
+                                                                            WebkitLineClamp: '2',
+                                                                            minHeight: '35px',
+                                                                        }}
+                                                                        title={data.oname}
+                                                                    >
+                                                                        {data.oname}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Budget')}
+                                                                        :
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '30px' }}>
+                                                                        <span>
+                                                                            USD
+                                                                            {' '}
+                                                                            {data.budget_usd}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div className={styles.footer}>
+                                                            <div style={{ display: 'flex', borderTop: '1px solid rgb(225, 225, 225)', position: 'relative', padding: '10px' }}>
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.icon}
+                                                                    src={dateCalender}
+                                                                />
+                                                                <div style={{ marginLeft: '5px' }}>
+
+                                                                    {data.listViewDate}
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Budget:</div>
-                                                        <div style={{ marginLeft: '30px' }}>
-                                                            <span>
-                                                                USD
-                                                                {' '}
-                                                                {data.budget_usd}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
+                                                ) : (
+                                                    ''
+                                                )}
                                             </div>
-                                            <div className={styles.footer}>
-                                                <div style={{ display: 'flex', borderTop: '1px solid rgb(225, 225, 225)', position: 'relative', padding: '10px' }}>
-                                                    <ScalableVectorGraphics
-                                                        className={styles.icon}
-                                                        src={dateCalender}
-                                                    />
-                                                    <div style={{ marginLeft: '5px' }}>
+                                        ))}
+                                    </div>
+                                    <div
+                                        className={i > mainColumnIndex ? clickedColumn === 'col3' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
+                                        style={{ width: '33.33%' }}
+                                    >
+                                        {item.map((data, idx) => (
+                                            <div key={idx}>
+                                                {idx === 2 ? (
+                                                    <div
+                                                        className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col3Div) : styles.col3Div}
 
-                                                        {data.listViewDate}
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        <div
-                            className={i > mainColumnIndex ? clickedColumn === 'col3' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
-                            style={{ width: '33.33%' }}
-                        >
-                            {item.map((data, idx) => (
-                                <div key={idx}>
-                                    {idx === 2 ? (
-                                        <div
-                                            className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col3Div) : styles.col3Div}
-
-                                        >
-                                            <div
-
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => handleClick(data.id, 'col3', i)}
-                                                onKeyDown={undefined}
-                                            >
-                                                <div
-                                                    className="col1"
-
-                                                >
-
-                                                    <h4
-                                                        style={{
-                                                            wordBreak: 'break-word',
-                                                            padding: '10px',
-                                                            maxHeight: '130px',
-                                                            justifyContent: 'space-between',
-                                                            textOverflow: 'ellipsis',
-                                                            overflow: 'hidden',
-                                                            display: '-webkit-box',
-                                                            WebkitBoxOrient: 'vertical',
-                                                            WebkitLineClamp: '7',
-                                                            minHeight: '130px',
-                                                        }}
-
-                                                        title={data.ptitle}
                                                     >
-                                                        {data.ptitle}
-
-                                                    </h4>
-
-
-                                                </div>
-                                                <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Organization: </div>
                                                         <div
-                                                            style={{
-                                                                marginLeft: '2px',
-                                                                maxHeight: '35px',
-                                                                textOverflow: 'ellipsis',
-                                                                overflow: 'hidden',
-                                                                display: '-webkit-box',
-                                                                WebkitBoxOrient: 'vertical',
-                                                                WebkitLineClamp: '2',
-                                                                minHeight: '35px',
-                                                            }}
-                                                            title={data.oname}
+
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => handleClick(data.id, 'col3', i)}
+                                                            onKeyDown={undefined}
                                                         >
-                                                            {data.oname}
+                                                            <div
+                                                                className="col1"
+
+                                                            >
+
+                                                                <h4
+                                                                    style={{
+                                                                        wordBreak: 'break-word',
+                                                                        padding: '10px',
+                                                                        maxHeight: '130px',
+                                                                        justifyContent: 'space-between',
+                                                                        textOverflow: 'ellipsis',
+                                                                        overflow: 'hidden',
+                                                                        display: '-webkit-box',
+                                                                        WebkitBoxOrient: 'vertical',
+                                                                        WebkitLineClamp: '7',
+                                                                        minHeight: '130px',
+                                                                    }}
+
+                                                                    title={data.ptitle}
+                                                                >
+                                                                    {data.ptitle}
+
+                                                                </h4>
+
+
+                                                            </div>
+                                                            <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Organization')}
+                                                                        :
+                                                                        {' '}
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            marginLeft: '2px',
+                                                                            maxHeight: '35px',
+                                                                            textOverflow: 'ellipsis',
+                                                                            overflow: 'hidden',
+                                                                            display: '-webkit-box',
+                                                                            WebkitBoxOrient: 'vertical',
+                                                                            WebkitLineClamp: '2',
+                                                                            minHeight: '35px',
+                                                                        }}
+                                                                        title={data.oname}
+                                                                    >
+                                                                        {data.oname}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Budget')}
+                                                                        :
+                                                                        {' '}
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '30px' }}>
+                                                                        <span>
+                                                                            USD
+                                                                            {' '}
+                                                                            {data.budget_usd}
+                                                                        </span>
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div className={styles.footer}>
+                                                            <div style={{ display: 'flex', borderTop: '1px solid rgb(225, 225, 225)', position: 'relative', padding: '10px' }}>
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.icon}
+                                                                    src={dateCalender}
+                                                                />
+                                                                <div style={{ marginLeft: '5px' }}>
+
+                                                                    {data.listViewDate}
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Budget: </div>
-                                                        <div style={{ marginLeft: '30px' }}>
-                                                            <span>
-                                                                USD
-                                                                {' '}
-                                                                {data.budget_usd}
-                                                            </span>
-
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                                ) : (
+                                                    ''
+                                                )}
                                             </div>
-                                            <div className={styles.footer}>
-                                                <div style={{ display: 'flex', borderTop: '1px solid rgb(225, 225, 225)', position: 'relative', padding: '10px' }}>
-                                                    <ScalableVectorGraphics
-                                                        className={styles.icon}
-                                                        src={dateCalender}
-                                                    />
-                                                    <div style={{ marginLeft: '5px' }}>
-
-                                                        {data.listViewDate}
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            )
+                        }
+                    </Translation>
+
                 )) : (
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        No Data Available
-                        <div />
-                    </div>
+                    <Translation>
+                        {
+                            t => (
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    {t('No Data Available')}
+                                    <div />
+                                </div>
+                            )
+                        }
+                    </Translation>
+
                 )
 
 
@@ -614,100 +645,107 @@ class ProjectsProfileLeftPane extends React.PureComponent {
 
 
         return (
-            <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
-                <table className={styles.contacts}>
-                    <thead>
-                        <tr style={{ position: 'sticky', top: '0', zIndex: '2' }}>
-                            <th>S/N</th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Project
-                                    {this.SortButton('ptitle')}
-                                </div>
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Organization
-                                    {this.SortButton('oname')}
-                                </div>
-                            </th>
+            <Translation>
+                {
+                    t => (
+                        <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
+                            <table className={styles.contacts}>
+                                <thead>
+                                    <tr style={{ position: 'sticky', top: '0', zIndex: '2' }}>
+                                        <th>{t('S/N')}</th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Project')}
+                                                {this.SortButton('ptitle')}
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Organization')}
+                                                {this.SortButton('oname')}
+                                            </div>
+                                        </th>
 
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Budget(USD)
-                                    {this.SortButton('budget_usd')}
-                                </div>
-                            </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Budget(USD)')}
+                                                {this.SortButton('budget_usd')}
+                                            </div>
+                                        </th>
 
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Start Date
-                                    {this.SortButton('pdurfrom')}
-                                </div>
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    End Date
-                                    {this.SortButton('pdurto')}
-                                </div>
-                            </th>
-
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {searchActivated ? (
-                            !splitingValue.length ? (
-                                <tr>
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td>No Data Available</td>
-                                    <td />
-                                    <td />
-                                    <td />
-                                </tr>
-                            ) : (
-                                splitingValue.map((item, i) => (
-                                    <tr key={item.pid}>
-                                        <td>{i + 1}</td>
-                                        <td>{item.ptitle}</td>
-                                        <td>{item.oname}</td>
-                                        <td>{item.budget_usd}</td>
-                                        <td>{item.pdurfrom}</td>
-                                        <td>{item.pdurto}</td>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Start Date')}
+                                                {this.SortButton('pdurfrom')}
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('End Date')}
+                                                {this.SortButton('pdurto')}
+                                            </div>
+                                        </th>
 
 
                                     </tr>
-                                ))
-                            )
-                        ) : splitingValue.length ? (
-                            splitingValue.map((item, i) => (
-                                <tr key={item.pid}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.ptitle}</td>
-                                    <td>{item.oname}</td>
-                                    <td>{item.budget_usd}</td>
-                                    <td>{item.pdurfrom}</td>
-                                    <td>{item.pdurto}</td>
+                                </thead>
+                                <tbody>
+                                    {searchActivated ? (
+                                        !splitingValue.length ? (
+                                            <tr>
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td>{t('No Data Available')}</td>
+                                                <td />
+                                                <td />
+                                                <td />
+                                            </tr>
+                                        ) : (
+                                            splitingValue.map((item, i) => (
+                                                <tr key={item.pid}>
+                                                    <td>{i + 1}</td>
+                                                    <td>{item.ptitle}</td>
+                                                    <td>{item.oname}</td>
+                                                    <td>{item.budget_usd}</td>
+                                                    <td>{item.pdurfrom}</td>
+                                                    <td>{item.pdurto}</td>
 
 
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td />
-                                <td />
-                                <td />
-                                <td>No Data Available</td>
-                                <td />
-                                <td />
-                                <td />
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                                                </tr>
+                                            ))
+                                        )
+                                    ) : splitingValue.length ? (
+                                        splitingValue.map((item, i) => (
+                                            <tr key={item.pid}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.ptitle}</td>
+                                                <td>{item.oname}</td>
+                                                <td>{item.budget_usd}</td>
+                                                <td>{item.pdurfrom}</td>
+                                                <td>{item.pdurto}</td>
+
+
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td>{t('No Data Available')}</td>
+                                            <td />
+                                            <td />
+                                            <td />
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     };
 
@@ -741,38 +779,41 @@ class ProjectsProfileLeftPane extends React.PureComponent {
         } = this.props;
         const { enableListView, searchKeyword } = this.state;
         return (
-            <div className={_cs(className, styles.leftPane)}>
-                <header className={styles.header}>
-                    <input
-                        className={styles.search}
-                        name="search"
-                        type="text"
-                        placeholder="SEARCH BY TITLE"
-                        value={searchKeyword}
-                        onChange={e => this.handleSearch(e.target.value)}
-                    />
-                    <div
-                        style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}
-                    >
-                        <Button
-                            className={styles.SelectTableButton}
-                            onClick={() => this.setState({ enableListView: !enableListView })}
-                            disabled={!projects.length}
-                            title={enableListView ? 'Table View' : 'List View'}
-                        >
-                            <div key={enableListView}>
-                                <ScalableVectorGraphics
-                                    className={styles.iconDataView}
-                                    src={enableListView ? tableView : listView}
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.leftPane)}>
+                            <header className={styles.header}>
+                                <input
+                                    className={styles.search}
+                                    name="search"
+                                    type="text"
+                                    placeholder={t('SEARCH BY TITLE')}
+                                    value={searchKeyword}
+                                    onChange={e => this.handleSearch(e.target.value)}
                                 />
-                            </div>
-                        </Button>
+                                <div
+                                    style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}
+                                >
+                                    <Button
+                                        className={styles.SelectTableButton}
+                                        onClick={() => this.setState({ enableListView: !enableListView })}
+                                        disabled={!projects.length}
+                                        title={enableListView ? t('Table View') : t('List View')}
+                                    >
+                                        <div key={enableListView}>
+                                            <ScalableVectorGraphics
+                                                className={styles.iconDataView}
+                                                src={enableListView ? tableView : listView}
+                                            />
+                                        </div>
+                                    </Button>
 
-                    </div>
-                </header>
-                {enableListView ? this.listComponent() : this.tableComponent()}
+                                </div>
+                            </header>
+                            {enableListView ? this.listComponent() : this.tableComponent()}
 
-                {/* <StatOutput
+                            {/* <StatOutput
           className={styles.stat}
           label="No. of Projects"
           value={projects.length}
@@ -784,7 +825,10 @@ class ProjectsProfileLeftPane extends React.PureComponent {
           keySelector={projectKeySelector}
           rendererParams={this.projectRendererParams}
         /> */}
-            </div>
+                        </div>
+                    )
+                }
+            </Translation>
         );
     }
 }
