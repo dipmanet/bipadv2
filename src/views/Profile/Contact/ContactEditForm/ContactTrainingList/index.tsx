@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -21,7 +22,8 @@ import { Header } from '#store/atom/table/types';
 import { MultiResponse } from '#store/atom/response/types';
 
 import AddTraining from './AddTrainingModal';
-import { trainingValues } from '../../utils';
+import { trainingValues, trainingValuesNe } from '../../utils';
+
 import styles from './styles.scss';
 
 const ModalAccentButton = modalize(AccentButton);
@@ -48,11 +50,12 @@ interface Params {
     itemId?: number;
 }
 
+
 const keySelector = (d: PageType.Field) => d.id;
 
 type Props = NewProps<OwnProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     listRequest: {
         url: '/contact-training/',
         query: ({ props: { contactId } }) => ({
@@ -92,21 +95,23 @@ class ContactTrainingList extends React.PureComponent<Props, State> {
             onListGet: this.handleListGet,
         });
 
-        this.headers = [
+        this.headers = language => ([
             {
                 key: 'title',
-                label: 'title',
+                label: language === 'en' ? 'title' : 'शीर्षक',
                 order: 1,
-                modifier: (row: PageType.Training) => trainingValues[row.title],
+                modifier: (row: PageType.Training) => (language === 'en'
+                    ? trainingValues[row.title]
+                    : trainingValuesNe[row.title]),
             },
             {
                 key: 'durationDays',
-                label: 'Duration In Days',
+                label: language === 'en' ? 'Duration In Days' : 'दिन अवधि ',
                 order: 2,
             },
             {
                 key: 'actions',
-                label: 'Actions',
+                label: language === 'en' ? 'Actions' : 'कार्यहरु',
                 order: 3,
                 modifier: (row) => {
                     const {
@@ -114,18 +119,25 @@ class ContactTrainingList extends React.PureComponent<Props, State> {
                     } = row;
 
                     return (
-                        <div className={styles.actionButton}>
-                            <DangerConfirmButton
-                                iconName="delete"
-                                transparent
-                                confirmationMessage="Are you sure you want to delete this item?"
-                                onClick={() => this.handleItemRemove(rowKey)}
-                            />
-                        </div>
+                        <Translation>
+                            {
+                                t => (
+                                    <div className={styles.actionButton}>
+                                        <DangerConfirmButton
+                                            iconName="delete"
+                                            transparent
+                                            confirmationMessage={t('Are you sure you want to delete this item?')}
+                                            onClick={() => this.handleItemRemove(rowKey)}
+                                        />
+                                    </div>
+                                )
+                            }
+                        </Translation>
+
                     );
                 },
             },
-        ];
+        ]);
 
         this.state = {
             list: [],
@@ -188,41 +200,50 @@ class ContactTrainingList extends React.PureComponent<Props, State> {
                     pending: itemRemovePending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const { list } = this.state;
         const pending = listPending || itemRemovePending;
 
         return (
-            <div className={_cs(styles.listContainer, className)}>
-                {pending && <LoadingAnimation />}
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Contact Training
-                    </h4>
-                    <Cloak hiddenIf={p => !p.add_training}>
-                        <ModalAccentButton
-                            className={styles.button}
-                            transparent
-                            iconName="add"
-                            modal={(
-                                <AddTraining
-                                    contactId={contactId}
-                                    onAddSuccess={this.handleListItemAdd}
-                                />
-                            )}
-                        >
-                            Add Training
-                        </ModalAccentButton>
-                    </Cloak>
-                </header>
-                <Table
-                    className={styles.table}
-                    headers={this.headers}
-                    data={list}
-                    keySelector={keySelector}
-                />
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(styles.listContainer, className)}>
+                            {pending && <LoadingAnimation />}
+                            <header className={styles.header}>
+                                <h4 className={styles.heading}>
+                                    {t('Contact Training')}
+                                </h4>
+                                <Cloak hiddenIf={p => !p.add_training}>
+                                    <ModalAccentButton
+                                        className={styles.button}
+                                        transparent
+                                        iconName="add"
+                                        modal={(
+                                            <AddTraining
+                                                contactId={contactId}
+                                                onAddSuccess={this.handleListItemAdd}
+                                                language={language}
+                                            />
+                                        )}
+                                    >
+                                        {t('Add Training')}
+                                    </ModalAccentButton>
+                                </Cloak>
+                            </header>
+                            <Table
+                                className={styles.table}
+                                headers={this.headers(language)}
+                                data={list}
+                                keySelector={keySelector}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

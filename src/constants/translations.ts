@@ -1,5 +1,15 @@
 export const enTranslation = {
     translation: {
+        'Duration in Days': 'Duration in Days',
+        'Contact Training': 'Contact Training',
+        'Add Training': 'Add Training',
+        'Is DRR Focal Person': 'Is DRR Focal Person',
+        'Work Number': 'Work Number',
+        'Mobile Number': 'Mobile Number',
+        Committee: 'Committee',
+        'Community Address': 'Community Address',
+
+        'Edit Contact': 'Edit Contact',
         'SEARCH BY POSITION': 'SEARCH BY POSITION',
         'Add Contact': 'Add Contact',
         Committe: 'Committe',
@@ -861,6 +871,17 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Duration in Days': 'अवधिमा दिनहरू',
+        'Contact Training': 'सम्पर्क प्रशिक्षण',
+        'Add Training': 'तालिम थप्नुहोस्',
+        'Previous Image': 'अघिल्‍लो फोटो',
+        'Is DRR Focal Person': 'के विपद सम्पर्क व्यक्ति हो',
+        'Work Number': 'कार्य नम्बर',
+        'Mobile Number': 'मोबाइल नम्बर',
+        Committee: 'समिति',
+        'Community Address': 'सामुदायिक ठेगाना',
+
+        'Edit Contact': 'सम्पर्क सम्पादन गर्नुहोस्',
         'SEARCH BY POSITION': 'पद अनुसार खोज्नुहोस्',
         'Add Contact': 'सम्पर्क थप्नुहोस्',
         Committe: 'समिति',

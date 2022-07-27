@@ -19,6 +19,20 @@ export const trainingValueList = mapToList(
     (v, k) => ({ key: k, label: v }),
 );
 
+export const trainingValuesNe: {
+    [key in Training['title']]: string;
+} = {
+    LSAR: 'लाइट खोज र उद्धार',
+    rapid_assessment: 'द्रुत मूल्याङ्कन', // eslint-disable-line @typescript-eslint/camelcase
+    first_aid: 'प्राथमिक उपचार', // eslint-disable-line @typescript-eslint/camelcase
+    fire_fighting: 'आगो नियन्‍त्रण', // eslint-disable-line @typescript-eslint/camelcase
+};
+
+export const trainingValueListNe = mapToList(
+    trainingValuesNe,
+    (v, k) => ({ key: k, label: v }),
+);
+
 export const trainingKeySelector = (committee: { key: string }) => committee.key;
 export const trainingLabelSelector = (committee: { label: string }) => committee.label;
 
