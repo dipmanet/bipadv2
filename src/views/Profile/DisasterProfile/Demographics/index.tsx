@@ -867,7 +867,6 @@ class Demographics extends React.PureComponent<Props> {
             visibility: 'none',
         };
 
-
         const LGProfilehouseHold = this.getGeojson(LGProfilehouseHoldData);
 
 

@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
+import { Translation } from 'react-i18next';
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, Legend, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styles from '../styles.scss';
 
@@ -86,7 +87,14 @@ const renderLegend = (props) => {
                 payload.map((entry, index) => (
                     <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                         <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}`, marginRight: '10px' }} />
-                        <h2>{entry.value.charAt(0).toUpperCase() + entry.value.slice(1)}</h2>
+                        <Translation>
+                            {
+                                t => (
+                                    <h2>{t(entry.value.charAt(0).toUpperCase() + entry.value.slice(1))}</h2>
+
+                                )
+                            }
+                        </Translation>
                     </div>
                 ))
             }
