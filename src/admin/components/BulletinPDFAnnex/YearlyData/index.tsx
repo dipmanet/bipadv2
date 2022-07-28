@@ -118,10 +118,12 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         query: ({ params }) => ({
             summary: params.summary,
             summary_type: params.summary_type,
-            incident_on__lt: params.filterDateType === 'incident_on' ? params.date_lt : '',
-            incident_on__gt: params.filterDateType === 'incident_on' ? params.date_gt : '',
-            reported_on__lt: params.filterDateType === 'reported_on' ? params.date_lt : '',
-            reported_on__gt: params.filterDateType === 'reported_on' ? params.date_gt : '',
+            // incident_on__lt: params.filterDateType === 'incident_on' ? params.date_lt : '',
+            // incident_on__gt: params.filterDateType === 'incident_on' ? params.date_gt : '',
+            // reported_on__lt: params.filterDateType === 'reported_on' ? params.date_lt : '',
+            // reported_on__gt: params.filterDateType === 'reported_on' ? params.date_gt : '',
+            incident_on__lt: params.date_lt,
+            incident_on__gt: params.date_gt,
             data_source: 'drr_api',
 
         }),
