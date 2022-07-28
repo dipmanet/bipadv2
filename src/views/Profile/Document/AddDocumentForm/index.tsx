@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 import React from 'react';
 import Redux, {
     compose,
@@ -9,6 +11,7 @@ import Faram, {
     FaramInputElement,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Icon from '#rscg/Icon';
@@ -80,7 +83,7 @@ interface PropsFromDispatch {
 interface FaramValues {
     title?: string;
     category?: number;
-    region?: 'national' | 'province' | 'district' | 'municipality';
+    region?: 'national' | 'province' | 'district' | 'municipality' | 'राष्ट्रिय' | 'प्रदेश' | 'जिल्‍ला' | 'नगरपालिका';
     file?: File;
     event?: number;
     // severity?: string;
@@ -105,7 +108,11 @@ interface State {
     pristine: boolean;
 }
 const keySelector = (d: PageType.Field) => d.id;
-const labelSelector = (d: PageType.Field) => d.title;
+const labelSelector = (d: PageType.Field, language: string) => (language === 'en'
+    ? d.title
+    : d.titleNe === undefined
+        ? d.title
+        : d.titleNe);
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     eventTypesGetRequest: {
@@ -267,6 +274,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                     const currentRegion = regionList.find(
                         item => item.id === stepwiseRegion.adminLevel,
                     );
+
                     if (currentRegion && region !== currentRegion.title) {
                         errors.push('Proper region is not selected');
                     }
@@ -379,109 +387,123 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal
-                className={_cs(styles.addDocumentModal, className)}
-            // onClose={closeModal}
-            // closeOnEscape
-            >
-                {pending && <LoadingAnimation />}
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={this.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    disabled={pending}
-                >
-                    <ModalHeader
-                        title={
-                            value ? 'Edit Document' : 'Add Document'
-                        }
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal ? this.handleCloseModal : closeModal()}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody>
-                        <NonFieldErrors faramElement />
-                        <TextInput
-                            faramElementName="title"
-                            label="Title"
-                            autoFocus
-                        />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                        />
-
-                        <SelectInput
-                            faramElementName="category"
-                            options={categoryList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Category"
-                        />
-                        <TextInput
-                            faramElementName="publishedBy"
-                            label="Published By"
-                        />
-                        <DateInput
-                            faramElementName="publishedDate"
-                            label="Published Date"
-                            language={language}
-                        />
-                        <SelectInput
-                            faramElementName="region"
-                            options={regionList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                            label="Region"
-                        />
-                        <StepwiseRegionSelectInput
-                            faramElementName="stepwiseRegion"
-                            wardsHidden
-                        />
-
-                        <SelectInput
-                            faramElementName="event"
-                            options={eventList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Event"
-                        />
-                        {!value && (
-                            <RawFileInput
-                                className={styles.fileInput}
-                                faramElementName="file"
-                                language={language}
-                            // error={faramErrors.file}
-                            >
-                                <Icon name="upload" />
-                                <span className={styles.load}>
-                                    Add document
-                                </span>
-                            </RawFileInput>
-                        )}
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal ? this.handleCloseModal : closeModal()}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            className={_cs(styles.addDocumentModal, className)}
                         >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+                            {pending && <LoadingAnimation />}
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={this.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                                disabled={pending}
+                            >
+                                <ModalHeader
+                                    title={
+                                        value ? t('Edit Document') : t('Add Document')
+                                    }
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal ? this.handleCloseModal : closeModal()}
+                                            title={t('Close Modal')}
+                                        />
+                                    )}
+                                />
+                                <ModalBody>
+                                    <NonFieldErrors faramElement />
+                                    <TextInput
+                                        faramElementName="title"
+                                        label={t('Title')}
+                                        autoFocus
+                                    />
+                                    <TextArea
+                                        faramElementName="description"
+                                        label={t('Description')}
+                                    />
+
+                                    <SelectInput
+                                        faramElementName="category"
+                                        options={categoryList}
+                                        keySelector={keySelector}
+                                        labelSelector={d => labelSelector(d, language)}
+                                        label={t('Category')}
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                                    />
+                                    <TextInput
+                                        faramElementName="publishedBy"
+                                        label={t('Published By')}
+                                    />
+                                    <div className="dateCalender">
+                                        <DateInput
+                                            faramElementName="publishedDate"
+                                            label={t('Published Date')}
+                                            className={'startDateInput'}
+                                            language={language}
+                                        />
+                                    </div>
+
+                                    <SelectInput
+                                        faramElementName="region"
+                                        options={regionList}
+                                        keySelector={d => labelSelector(d, language)}
+                                        labelSelector={d => labelSelector(d, language)}
+                                        label={t('Region')}
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                    />
+                                    <StepwiseRegionSelectInput
+                                        faramElementName="stepwiseRegion"
+                                        wardsHidden
+                                    />
+
+                                    <SelectInput
+                                        faramElementName="event"
+                                        options={eventList}
+                                        keySelector={keySelector}
+                                        labelSelector={d => labelSelector(d, language)}
+                                        label={t('Event')}
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                                    />
+                                    {!value && (
+                                        <RawFileInput
+                                            className={styles.fileInput}
+                                            faramElementName="file"
+                                            language={language}
+                                        // error={faramErrors.file}
+                                        >
+                                            <Icon name="upload" />
+                                            <span className={styles.load}>
+                                                {t('Add document')}
+                                            </span>
+                                        </RawFileInput>
+                                    )}
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal ? this.handleCloseModal : closeModal()}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

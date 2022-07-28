@@ -1,5 +1,12 @@
 export const enTranslation = {
     translation: {
+        'Edit Document': 'Edit Document',
+        'Add Document': 'Add Document',
+        'Add document': 'Add document',
+        'Published Date': 'Published Date',
+        'Published By': 'Published By',
+        'No Description Available': 'No Description Available',
+
         'Duration in Days': 'Duration in Days',
         'Contact Training': 'Contact Training',
         'Add Training': 'Add Training',
@@ -871,6 +878,13 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Edit Document': 'कागजात सम्पादन गर्नुहोस्',
+        'Add Document': 'कागजात थप्नुहोस्',
+        'Add document': 'कागजात थप्नुहोस्',
+
+        'Published Date': 'प्रकाशित मिति',
+        'Published By': 'प्रकाशक',
+        'No Description Available': 'कुनै विवरण उपलब्ध छैन',
         'Duration in Days': 'अवधिमा दिनहरू',
         'Contact Training': 'सम्पर्क प्रशिक्षण',
         'Add Training': 'तालिम थप्नुहोस्',

@@ -322,6 +322,15 @@ button {
         width: 0;
     }
 
+    @media only screen and (min-width: 1200px) {
+        .dateCalender {
+            .calender {
+                width: 588px;
+            }
+        }
+
+    }
+
     .mapboxgl-ctrl-top-left {
         top: 36px !important;
     }

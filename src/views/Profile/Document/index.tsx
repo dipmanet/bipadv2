@@ -26,7 +26,7 @@ import Icon from '#rscg/Icon';
 import ListView from '#rscv/List/ListView';
 import SelectInput from '#rsci/SelectInput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import { checkSameRegionPermission } from '#utils/common';
+import { checkSameRegionPermission, convertDateAccToLanguage } from '#utils/common';
 import documentIcon from '#resources/icons/file-document.svg';
 import tableView from '../../../resources/icons/list-view.svg';
 import listView from '../../../resources/icons/category-view.svg';
@@ -179,35 +179,41 @@ const DocumentRenderer = (props: DocumentProps) => {
 
                     <div className={styles.actions}>
 
-                        <>
-                            <Cloak hiddenIf={p => !p.change_document}>
-                                <ModalButton
-                                    id="popup-edit"
-                                    className={styles.editButton}
-                                    iconName="edit"
-                                    transparent
-                                    modal={
-                                        <AddDocumentForm handleEditDeleteButtonClick={handleEditDeleteButtonClick} value={document} onUpdate={onUpdate} />
-                                    }
-                                    disabled={disabled}
-                                >
-                                    Edit
-                                </ModalButton>
-                            </Cloak>
-                            <Cloak hiddenIf={p => !p.delete_document}>
-                                <DangerConfirmButton
-                                    id="popup-delete"
-                                    className={styles.deleteButton}
-                                    confirmationMessage="Are you sure you want to delete this document?"
-                                    disabled={disabled}
-                                    iconName="delete"
-                                    onClick={handleDelete}
-                                    transparent
-                                >
-                                    Delete
-                                </DangerConfirmButton>
-                            </Cloak>
-                        </>
+                        <Translation>
+                            {
+                                t => (
+                                    <>
+                                        <Cloak hiddenIf={p => !p.change_document}>
+                                            <ModalButton
+                                                id="popup-edit"
+                                                className={styles.editButton}
+                                                iconName="edit"
+                                                transparent
+                                                modal={
+                                                    <AddDocumentForm handleEditDeleteButtonClick={handleEditDeleteButtonClick} value={document} onUpdate={onUpdate} />
+                                                }
+                                                disabled={disabled}
+                                            >
+                                                {t('Edit')}
+                                            </ModalButton>
+                                        </Cloak>
+                                        <Cloak hiddenIf={p => !p.delete_document}>
+                                            <DangerConfirmButton
+                                                id="popup-delete"
+                                                className={styles.deleteButton}
+                                                confirmationMessage={t('Are you sure you want to delete this document?')}
+                                                disabled={disabled}
+                                                iconName="delete"
+                                                onClick={handleDelete}
+                                                transparent
+                                            >
+                                                {t('Delete')}
+                                            </DangerConfirmButton>
+                                        </Cloak>
+                                    </>
+                                )
+                            }
+                        </Translation>
 
 
                     </div>
@@ -550,20 +556,20 @@ class Document extends React.PureComponent<Props, State> {
             documentDeleteRequest: {
                 pending,
             },
-        } } = this.props;
-        const nepaliMonth = [{ id: '01', month: 'Baisakh' },
-        { id: '02', month: 'Jestha' },
-        { id: '03', month: 'Ashad' },
-        { id: '04', month: 'Shrawn' },
-        { id: '05', month: 'Bhadra' },
-        { id: '06', month: 'Ashoj' },
-        { id: '07', month: 'Kartik' },
-        { id: '08', month: 'Mangsir' },
-        { id: '09', month: 'Poush' },
-        { id: '10', month: 'Magh' },
-        { id: '11', month: 'Falgun' },
-        { id: '12', month: 'Chaitra' },
-        ];
+        }, language: { language } } = this.props;
+        // const nepaliMonth = [{ id: '01', month: 'Baisakh' },
+        // { id: '02', month: 'Jestha' },
+        // { id: '03', month: 'Ashad' },
+        // { id: '04', month: 'Shrawn' },
+        // { id: '05', month: 'Bhadra' },
+        // { id: '06', month: 'Ashoj' },
+        // { id: '07', month: 'Kartik' },
+        // { id: '08', month: 'Mangsir' },
+        // { id: '09', month: 'Poush' },
+        // { id: '10', month: 'Magh' },
+        // { id: '11', month: 'Falgun' },
+        // { id: '12', month: 'Chaitra' },
+        // ];
 
         const handleClick = (id, selectedColumn, mainIndex) => {
             if (selectedContactFromLabelListId === id) {
@@ -598,10 +604,11 @@ class Document extends React.PureComponent<Props, State> {
         splittedData = Array.from(new Set(splittedData.map(JSON.stringify)), JSON.parse);
         const dataList = splittedData.length && splittedData.map((item) => {
             const individualItem = item.map((d) => {
-                const splittedDate = d.publishedDate && d.publishedDate.split('-');
+                // const splittedDate = d.publishedDate && d.publishedDate.split('-');
+                // `${splittedDate[2]} ${nepaliMonthConverted} ${splittedDate[0]}`
 
-                const nepaliMonthConverted = splittedDate && nepaliMonth.find(m => m.id === splittedDate[1]).month;
-                const listViewDate = splittedDate ? `${splittedDate[2]} ${nepaliMonthConverted} ${splittedDate[0]}` : 'Unavailable';
+                // const nepaliMonthConverted = splittedDate && nepaliMonth.find(m => m.id === splittedDate[1]).month;
+                const listViewDate = d.publishedDate ? convertDateAccToLanguage(d.publishedDate, language) : 'Unavailable';
                 return ({
                     ...d,
                     listViewDate,
@@ -616,413 +623,449 @@ class Document extends React.PureComponent<Props, State> {
 
             splittedData.length
                 ? splittedData.map((item, i) => (
-                    <div key={i} style={{ display: 'flex', width: '100%', height: '220px', marginBottom: '40px' }}>
+                    <Translation>
+                        {
+                            t => (
+                                <div key={i} style={{ display: 'flex', width: '100%', height: '220px', marginBottom: '40px' }}>
 
-                        <div
-                            className={i > mainColumnIndex ? clickedColumn === 'col1' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
-                            style={{ width: '33.33%' }}
-                        >
-                            {item.map((data, idx) => (
-                                <div key={idx}>
-                                    {idx === 0 ? (
-                                        <div
-
-
-                                            className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col1Div) : styles.col1Div}
-
-                                        >
-
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => handleClick(data.id, 'col1', i)}
-                                                onKeyDown={undefined}
-                                            >
-                                                <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
-                                                    <div style={{ paddingRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                                        <h4 style={{ wordBreak: 'break-word' }}>{data.title}</h4>
-                                                        <div style={{ display: 'flex' }}>
-                                                            <div style={{ fontWeight: 'bold' }}>
-                                                                <ScalableVectorGraphics
-                                                                    className={styles.icon}
-                                                                    src={dateCalender}
-                                                                />
-                                                            </div>
-                                                            <div style={{ marginLeft: '2px' }}>
-                                                                {' '}
-                                                                {data.listViewDate}
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div style={{ height: '60px', display: 'flex', borderRadius: '5px', width: '60px', backgroundColor: '#F2F2F2' }}>
-                                                        <ScalableVectorGraphics
-                                                            className={styles.iconTitle}
-                                                            src={bookIcon}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col1" style={{ borderTop: '1px solid #e1e1e1', padding: '10px' }}>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Region:</div>
-                                                        <div style={{ marginLeft: '2px' }}>
-                                                            {' '}
-                                                            {data.region}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Published By:</div>
-                                                        <div style={{ marginLeft: '2px' }}>{data.publishedBy ? data.publishedBy : '-'}</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className={data.id === selectedContactFromLabelListId ? styles.description : styles.hideDiv}>
-                                                    {data.description
-                                                        ? (
-                                                            <p>
-                                                                {data.description}
-                                                            </p>
-                                                        ) : <p style={{ display: 'flex', justifyContent: 'center' }}>No Description Available</p>}
-                                                </div>
-                                            </div>
-                                            <div className={styles.footer}>
-                                                <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-                                                    <div style={{ fontWeight: 'bold' }}>Category:</div>
-                                                    <div className={styles.categoryName} style={this.colourForCategory(data.categoryName)}>
-                                                        {data.categoryName}
-                                                        <div className={styles.tableTooltip}>
-                                                            {data.categoryName}
-
-                                                        </div>
-                                                        {/* <span className={styles.tooltiptext}>{data.categoryName}</span> */}
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <a
-                                                        className={styles.downloadLink}
-                                                        href={data.file}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        title="Download"
-                                                    >
-                                                        <ScalableVectorGraphics
-                                                            className={styles.icon}
-                                                            src={downloadCloud}
-                                                        />
-                                                    </a>
-                                                    {filterPermissionGranted
-                                                        ? (
-                                                            <>
-                                                                {' '}
-                                                                <Cloak hiddenIf={p => !p.change_document}>
-                                                                    <ModalButton
-                                                                        id="popup-edit"
-                                                                        className={styles.editButtonListView}
-                                                                        iconName="edit"
-                                                                        transparent
-                                                                        title="Edit"
-                                                                        modal={
-                                                                            <AddDocumentForm value={data} onUpdate={this.handleUpdate} />
-                                                                        }
-                                                                        disabled={pending}
-                                                                    />
-                                                                </Cloak>
-                                                                <Cloak hiddenIf={p => !p.delete_document}>
-                                                                    <DangerConfirmButton
-                                                                        id="popup-delete"
-                                                                        className={styles.deleteButtonListView}
-                                                                        confirmationMessage="Are you sure you want to delete this document?"
-                                                                        disabled={pending}
-                                                                        iconName="delete"
-                                                                        onClick={() => this.handleDelete(data.id)}
-                                                                        transparent
-                                                                        title="Delete"
-                                                                    />
-                                                                </Cloak>
-
-                                                            </>
-                                                        )
-                                                        : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        <div
-                            className={i > mainColumnIndex ? clickedColumn === 'col2' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
-                            style={{ width: '33.33%' }}
-                        >
-                            {item.map((data, idx) => (
-                                <div key={idx}>
-                                    {idx === 1 ? (
-                                        <div
-                                            className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col2Div) : styles.col2Div}
+                                    <div
+                                        className={i > mainColumnIndex ? clickedColumn === 'col1' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
+                                        style={{ width: '33.33%' }}
+                                    >
+                                        {item.map((data, idx) => (
+                                            <div key={idx}>
+                                                {idx === 0 ? (
+                                                    <div
 
 
-                                        >
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => handleClick(data.id, 'col2', i)}
-                                                onKeyDown={undefined}
-                                            >
-                                                <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
-                                                    <div style={{ paddingRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                                        <h4 style={{ wordBreak: 'break-word' }}>{data.title}</h4>
-                                                        <div style={{ display: 'flex' }}>
-                                                            <div style={{ fontWeight: 'bold' }}>
-                                                                <ScalableVectorGraphics
-                                                                    className={styles.icon}
-                                                                    src={dateCalender}
-                                                                />
-                                                            </div>
-                                                            <div style={{ marginLeft: '2px' }}>
-                                                                {' '}
-                                                                {data.listViewDate}
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div style={{ height: '60px', display: 'flex', borderRadius: '5px', width: '60px', backgroundColor: '#F2F2F2' }}>
-                                                        <ScalableVectorGraphics
-                                                            className={styles.iconTitle}
-                                                            src={bookIcon}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col1" style={{ borderTop: '1px solid #e1e1e1', padding: '10px' }}>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Region:</div>
-                                                        <div style={{ marginLeft: '2px' }}>
-                                                            {' '}
-                                                            {data.region}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Published By:</div>
-                                                        <div style={{ marginLeft: '2px' }}>
-                                                            {' '}
-                                                            {data.publishedBy ? data.publishedBy : '-'}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div className={data.id === selectedContactFromLabelListId ? styles.description : styles.hideDiv}>
-                                                    {data.description
-                                                        ? (
-                                                            <p>
-                                                                {data.description}
-                                                            </p>
-                                                        ) : <p style={{ display: 'flex', justifyContent: 'center' }}>No Description Available</p>}
-                                                </div>
-                                            </div>
-                                            <div className={styles.footer}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <div style={{ fontWeight: 'bold' }}>Category:</div>
-                                                    <div className={styles.categoryName} style={this.colourForCategory(data.categoryName)}>
-                                                        {data.categoryName}
-                                                        <div className={styles.tableTooltip}>
-                                                            {data.categoryName}
-
-                                                        </div>
-                                                        {/* <span className={styles.tooltiptext}>{data.categoryName}</span> */}
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <a
-                                                        className={styles.downloadLink}
-                                                        href={data.file}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        title="Download"
-                                                    >
-                                                        <ScalableVectorGraphics
-                                                            className={styles.icon}
-                                                            src={downloadCloud}
-                                                        />
-                                                    </a>
-                                                    {filterPermissionGranted
-                                                        ? (
-                                                            <>
-                                                                {' '}
-                                                                <Cloak hiddenIf={p => !p.change_document}>
-                                                                    <ModalButton
-                                                                        id="popup-edit"
-                                                                        className={styles.editButtonListView}
-                                                                        iconName="edit"
-                                                                        transparent
-                                                                        title="Edit"
-                                                                        modal={
-                                                                            <AddDocumentForm value={data} onUpdate={this.handleUpdate} />
-                                                                        }
-                                                                        disabled={pending}
-                                                                    />
-                                                                </Cloak>
-                                                                <Cloak hiddenIf={p => !p.delete_document}>
-                                                                    <DangerConfirmButton
-                                                                        id="popup-delete"
-                                                                        className={styles.deleteButtonListView}
-                                                                        confirmationMessage="Are you sure you want to delete this document?"
-                                                                        disabled={pending}
-                                                                        iconName="delete"
-                                                                        onClick={() => this.handleDelete(data.id)}
-                                                                        transparent
-                                                                        title="Delete"
-                                                                    />
-                                                                </Cloak>
-
-                                                            </>
-                                                        )
-                                                        : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        <div
-                            className={i > mainColumnIndex ? clickedColumn === 'col3' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
-                            style={{ width: '33.33%' }}
-                        >
-                            {item.map((data, idx) => (
-                                <div key={idx}>
-                                    {idx === 2 ? (
-                                        <div
-                                            className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col3Div) : styles.col3Div}
-
-                                        >
-                                            <div
-
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => handleClick(data.id, 'col3', i)}
-                                                onKeyDown={undefined}
-                                            >
-                                                <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
-                                                    <div style={{ paddingRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                                        <h4 style={{ wordBreak: 'break-word' }}>{data.title}</h4>
-                                                        <div style={{ display: 'flex' }}>
-                                                            <div style={{ fontWeight: 'bold' }}>
-                                                                <ScalableVectorGraphics
-                                                                    className={styles.icon}
-                                                                    src={dateCalender}
-                                                                />
-                                                            </div>
-                                                            <div style={{ marginLeft: '2px' }}>
-                                                                {' '}
-                                                                {data.listViewDate}
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div style={{ height: '60px', display: 'flex', borderRadius: '5px', width: '60px', backgroundColor: '#F2F2F2' }}>
-                                                        <ScalableVectorGraphics
-                                                            className={styles.iconTitle}
-                                                            src={bookIcon}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col1" style={{ borderTop: '1px solid #e1e1e1', padding: '10px' }}>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Region: </div>
-                                                        <div style={{ marginLeft: '2px' }}>
-                                                            {' '}
-                                                            {data.region}
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold' }}>Published By: </div>
-                                                        <div style={{ marginLeft: '2px' }}>
-                                                            {' '}
-                                                            {data.publishedBy ? data.publishedBy : '-'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={data.id === selectedContactFromLabelListId ? styles.description : styles.hideDiv}>
-                                                    {data.description
-                                                        ? (
-                                                            <p>
-                                                                {data.description}
-                                                            </p>
-                                                        ) : <p style={{ display: 'flex', justifyContent: 'center' }}>No Description Available</p>}
-                                                </div>
-                                            </div>
-                                            <div className={styles.footer}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <div style={{ fontWeight: 'bold' }}>Category:</div>
-                                                    <div className={styles.categoryName} style={this.colourForCategory(data.categoryName)}>
-                                                        {data.categoryName}
-                                                        <div className={styles.tableTooltip}>
-                                                            {data.categoryName}
-
-                                                        </div>
-                                                        {/* <span className={styles.tooltiptext}>{data.categoryName}</span> */}
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <a
-                                                        className={styles.downloadLink}
-                                                        href={data.file}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        title="Download"
+                                                        className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col1Div) : styles.col1Div}
 
                                                     >
-                                                        <ScalableVectorGraphics
-                                                            className={styles.icon}
-                                                            src={downloadCloud}
-                                                        />
-                                                    </a>
-                                                    {filterPermissionGranted
-                                                        ? (
-                                                            <>
-                                                                {' '}
-                                                                <Cloak hiddenIf={p => !p.change_document}>
-                                                                    <ModalButton
-                                                                        id="popup-edit"
-                                                                        className={styles.editButtonListView}
-                                                                        iconName="edit"
-                                                                        transparent
-                                                                        title="Edit"
-                                                                        modal={
-                                                                            <AddDocumentForm value={data} onUpdate={this.handleUpdate} />
-                                                                        }
-                                                                        disabled={pending}
-                                                                    />
-                                                                </Cloak>
-                                                                <Cloak hiddenIf={p => !p.delete_document}>
-                                                                    <DangerConfirmButton
-                                                                        id="popup-delete"
-                                                                        className={styles.deleteButtonListView}
-                                                                        confirmationMessage="Are you sure you want to delete this document?"
-                                                                        disabled={pending}
-                                                                        iconName="delete"
-                                                                        onClick={() => this.handleDelete(data.id)}
-                                                                        transparent
-                                                                        title="Delete"
-                                                                    />
-                                                                </Cloak>
 
-                                                            </>
-                                                        )
-                                                        : ''}
-                                                </div>
+                                                        <div
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => handleClick(data.id, 'col1', i)}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
+                                                                <div style={{ paddingRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                                    <h4 style={{ wordBreak: 'break-word' }}>{data.title}</h4>
+                                                                    <div style={{ display: 'flex' }}>
+                                                                        <div style={{ fontWeight: 'bold' }}>
+                                                                            <ScalableVectorGraphics
+                                                                                className={styles.icon}
+                                                                                src={dateCalender}
+                                                                            />
+                                                                        </div>
+                                                                        <div style={{ marginLeft: '2px' }}>
+                                                                            {' '}
+                                                                            {data.listViewDate}
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div style={{ height: '60px', display: 'flex', borderRadius: '5px', width: '60px', backgroundColor: '#F2F2F2' }}>
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.iconTitle}
+                                                                        src={bookIcon}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col1" style={{ borderTop: '1px solid #e1e1e1', padding: '10px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Region')}
+                                                                        :
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '2px' }}>
+                                                                        {' '}
+                                                                        {data.region}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Published By')}
+                                                                        :
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '2px' }}>{data.publishedBy ? data.publishedBy : '-'}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className={data.id === selectedContactFromLabelListId ? styles.description : styles.hideDiv}>
+                                                                {data.description
+                                                                    ? (
+                                                                        <p>
+                                                                            {data.description}
+                                                                        </p>
+                                                                    ) : <p style={{ display: 'flex', justifyContent: 'center' }}>{t('No Description Available')}</p>}
+                                                            </div>
+                                                        </div>
+                                                        <div className={styles.footer}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+                                                                <div style={{ fontWeight: 'bold' }}>
+                                                                    {t('Category')}
+                                                                    :
+                                                                </div>
+                                                                <div className={styles.categoryName} style={this.colourForCategory(data.categoryName)}>
+                                                                    {data.categoryName}
+                                                                    <div className={styles.tableTooltip}>
+                                                                        {data.categoryName}
+
+                                                                    </div>
+                                                                    {/* <span className={styles.tooltiptext}>{data.categoryName}</span> */}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a
+                                                                    className={styles.downloadLink}
+                                                                    href={data.file}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    title={t('Download')}
+                                                                >
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.icon}
+                                                                        src={downloadCloud}
+                                                                    />
+                                                                </a>
+                                                                {filterPermissionGranted
+                                                                    ? (
+                                                                        <>
+                                                                            {' '}
+                                                                            <Cloak hiddenIf={p => !p.change_document}>
+                                                                                <ModalButton
+                                                                                    id="popup-edit"
+                                                                                    className={styles.editButtonListView}
+                                                                                    iconName="edit"
+                                                                                    transparent
+                                                                                    title={t('Edit')}
+                                                                                    modal={
+                                                                                        <AddDocumentForm value={data} onUpdate={this.handleUpdate} />
+                                                                                    }
+                                                                                    disabled={pending}
+                                                                                />
+                                                                            </Cloak>
+                                                                            <Cloak hiddenIf={p => !p.delete_document}>
+                                                                                <DangerConfirmButton
+                                                                                    id="popup-delete"
+                                                                                    className={styles.deleteButtonListView}
+                                                                                    confirmationMessage={t('Are you sure you want to delete this document?')}
+                                                                                    disabled={pending}
+                                                                                    iconName="delete"
+                                                                                    onClick={() => this.handleDelete(data.id)}
+                                                                                    transparent
+                                                                                    title={t('Delete')}
+                                                                                />
+                                                                            </Cloak>
+
+                                                                        </>
+                                                                    )
+                                                                    : ''}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    ''
+                                                )}
                                             </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
+                                        ))}
+                                    </div>
+                                    <div
+                                        className={i > mainColumnIndex ? clickedColumn === 'col2' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
+                                        style={{ width: '33.33%' }}
+                                    >
+                                        {item.map((data, idx) => (
+                                            <div key={idx}>
+                                                {idx === 1 ? (
+                                                    <div
+                                                        className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col2Div) : styles.col2Div}
+
+
+                                                    >
+                                                        <div
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => handleClick(data.id, 'col2', i)}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
+                                                                <div style={{ paddingRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                                    <h4 style={{ wordBreak: 'break-word' }}>{data.title}</h4>
+                                                                    <div style={{ display: 'flex' }}>
+                                                                        <div style={{ fontWeight: 'bold' }}>
+                                                                            <ScalableVectorGraphics
+                                                                                className={styles.icon}
+                                                                                src={dateCalender}
+                                                                            />
+                                                                        </div>
+                                                                        <div style={{ marginLeft: '2px' }}>
+                                                                            {' '}
+                                                                            {data.listViewDate}
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div style={{ height: '60px', display: 'flex', borderRadius: '5px', width: '60px', backgroundColor: '#F2F2F2' }}>
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.iconTitle}
+                                                                        src={bookIcon}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col1" style={{ borderTop: '1px solid #e1e1e1', padding: '10px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Region')}
+                                                                        :
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '2px' }}>
+                                                                        {' '}
+                                                                        {data.region}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Published By')}
+                                                                        :
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '2px' }}>
+                                                                        {' '}
+                                                                        {data.publishedBy ? data.publishedBy : '-'}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div className={data.id === selectedContactFromLabelListId ? styles.description : styles.hideDiv}>
+                                                                {data.description
+                                                                    ? (
+                                                                        <p>
+                                                                            {data.description}
+                                                                        </p>
+                                                                    ) : <p style={{ display: 'flex', justifyContent: 'center' }}>{t('No Description Available')}</p>}
+                                                            </div>
+                                                        </div>
+                                                        <div className={styles.footer}>
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <div style={{ fontWeight: 'bold' }}>
+                                                                    {t('Category')}
+                                                                    :
+                                                                </div>
+                                                                <div className={styles.categoryName} style={this.colourForCategory(data.categoryName)}>
+                                                                    {data.categoryName}
+                                                                    <div className={styles.tableTooltip}>
+                                                                        {data.categoryName}
+
+                                                                    </div>
+                                                                    {/* <span className={styles.tooltiptext}>{data.categoryName}</span> */}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a
+                                                                    className={styles.downloadLink}
+                                                                    href={data.file}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    title={t('Download')}
+                                                                >
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.icon}
+                                                                        src={downloadCloud}
+                                                                    />
+                                                                </a>
+                                                                {filterPermissionGranted
+                                                                    ? (
+                                                                        <>
+                                                                            {' '}
+                                                                            <Cloak hiddenIf={p => !p.change_document}>
+                                                                                <ModalButton
+                                                                                    id="popup-edit"
+                                                                                    className={styles.editButtonListView}
+                                                                                    iconName="edit"
+                                                                                    transparent
+                                                                                    title={t('Edit')}
+                                                                                    modal={
+                                                                                        <AddDocumentForm value={data} onUpdate={this.handleUpdate} />
+                                                                                    }
+                                                                                    disabled={pending}
+                                                                                />
+                                                                            </Cloak>
+                                                                            <Cloak hiddenIf={p => !p.delete_document}>
+                                                                                <DangerConfirmButton
+                                                                                    id="popup-delete"
+                                                                                    className={styles.deleteButtonListView}
+                                                                                    confirmationMessage={t('Are you sure you want to delete this document?')}
+                                                                                    disabled={pending}
+                                                                                    iconName="delete"
+                                                                                    onClick={() => this.handleDelete(data.id)}
+                                                                                    transparent
+                                                                                    title={t('Delete')}
+                                                                                />
+                                                                            </Cloak>
+
+                                                                        </>
+                                                                    )
+                                                                    : ''}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    ''
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div
+                                        className={i > mainColumnIndex ? clickedColumn === 'col3' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
+                                        style={{ width: '33.33%' }}
+                                    >
+                                        {item.map((data, idx) => (
+                                            <div key={idx}>
+                                                {idx === 2 ? (
+                                                    <div
+                                                        className={data.id === selectedContactFromLabelListId ? _cs(styles.active, styles.col3Div) : styles.col3Div}
+
+                                                    >
+                                                        <div
+
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => handleClick(data.id, 'col3', i)}
+                                                            onKeyDown={undefined}
+                                                        >
+                                                            <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
+                                                                <div style={{ paddingRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                                    <h4 style={{ wordBreak: 'break-word' }}>{data.title}</h4>
+                                                                    <div style={{ display: 'flex' }}>
+                                                                        <div style={{ fontWeight: 'bold' }}>
+                                                                            <ScalableVectorGraphics
+                                                                                className={styles.icon}
+                                                                                src={dateCalender}
+                                                                            />
+                                                                        </div>
+                                                                        <div style={{ marginLeft: '2px' }}>
+                                                                            {' '}
+                                                                            {data.listViewDate}
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div style={{ height: '60px', display: 'flex', borderRadius: '5px', width: '60px', backgroundColor: '#F2F2F2' }}>
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.iconTitle}
+                                                                        src={bookIcon}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col1" style={{ borderTop: '1px solid #e1e1e1', padding: '10px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Region')}
+                                                                        :
+                                                                        {' '}
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '2px' }}>
+                                                                        {' '}
+                                                                        {data.region}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ fontWeight: 'bold' }}>
+                                                                        {t('Published By')}
+                                                                        :
+                                                                        {' '}
+                                                                    </div>
+                                                                    <div style={{ marginLeft: '2px' }}>
+                                                                        {' '}
+                                                                        {data.publishedBy ? data.publishedBy : '-'}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className={data.id === selectedContactFromLabelListId ? styles.description : styles.hideDiv}>
+                                                                {data.description
+                                                                    ? (
+                                                                        <p>
+                                                                            {data.description}
+                                                                        </p>
+                                                                    ) : <p style={{ display: 'flex', justifyContent: 'center' }}>{t('No Description Available')}</p>}
+                                                            </div>
+                                                        </div>
+                                                        <div className={styles.footer}>
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <div style={{ fontWeight: 'bold' }}>
+                                                                    {t('Category')}
+                                                                    :
+                                                                </div>
+                                                                <div className={styles.categoryName} style={this.colourForCategory(data.categoryName)}>
+                                                                    {data.categoryName}
+                                                                    <div className={styles.tableTooltip}>
+                                                                        {data.categoryName}
+
+                                                                    </div>
+                                                                    {/* <span className={styles.tooltiptext}>{data.categoryName}</span> */}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a
+                                                                    className={styles.downloadLink}
+                                                                    href={data.file}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    title={t('Download')}
+
+                                                                >
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.icon}
+                                                                        src={downloadCloud}
+                                                                    />
+                                                                </a>
+                                                                {filterPermissionGranted
+                                                                    ? (
+                                                                        <>
+                                                                            {' '}
+                                                                            <Cloak hiddenIf={p => !p.change_document}>
+                                                                                <ModalButton
+                                                                                    id="popup-edit"
+                                                                                    className={styles.editButtonListView}
+                                                                                    iconName="edit"
+                                                                                    transparent
+                                                                                    title={t('Edit')}
+                                                                                    modal={
+                                                                                        <AddDocumentForm value={data} onUpdate={this.handleUpdate} />
+                                                                                    }
+                                                                                    disabled={pending}
+                                                                                />
+                                                                            </Cloak>
+                                                                            <Cloak hiddenIf={p => !p.delete_document}>
+                                                                                <DangerConfirmButton
+                                                                                    id="popup-delete"
+                                                                                    className={styles.deleteButtonListView}
+                                                                                    confirmationMessage={t('Are you sure you want to delete this document?')}
+                                                                                    disabled={pending}
+                                                                                    iconName="delete"
+                                                                                    onClick={() => this.handleDelete(data.id)}
+                                                                                    transparent
+                                                                                    title={t('Delete')}
+                                                                                />
+                                                                            </Cloak>
+
+                                                                        </>
+                                                                    )
+                                                                    : ''}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    ''
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            )
+                        }
+                    </Translation>
+
                 )) : (
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         No Data Available
@@ -1396,46 +1439,49 @@ class Document extends React.PureComponent<Props, State> {
             });
         }
         return (
-            <div className={_cs(className, styles.documents)}>
-                <Loading pending={pending} />
-                <CommonMap sourceKey="profile-document" />
-                <header className={styles.header}>
-                    <input
-                        className={styles.search}
-                        name="search"
-                        type="text"
-                        placeholder="SEARCH BY TITLE"
-                        value={searchKeyword}
-                        onChange={e => this.handleSearch(e.target.value)}
-                    />
-                    <div
-                        style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}
-                    >
-                        <Button
-                            className={styles.SelectTableButton}
-                            onClick={() => this.setState({ enableListView: !enableListView })}
-                            disabled={!expandedDocuments.length}
-                            title={enableListView ? 'Table View' : 'List View'}
-                        >
-                            <div key={enableListView}>
-                                <ScalableVectorGraphics
-                                    className={styles.iconDataView}
-                                    src={enableListView ? tableView : listView}
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.documents)}>
+                            <Loading pending={pending} />
+                            <CommonMap sourceKey="profile-document" />
+                            <header className={styles.header}>
+                                <input
+                                    className={styles.search}
+                                    name="search"
+                                    type="text"
+                                    placeholder={t('SEARCH BY TITLE')}
+                                    value={searchKeyword}
+                                    onChange={e => this.handleSearch(e.target.value)}
                                 />
-                            </div>
-                        </Button>
-                        <Cloak hiddenIf={p => !p.add_document}>
-                            <AccentModalButton
-                                transparent
-                                iconName="add"
-                                modal={<AddDocumentForm onUpdate={this.handleUpdate} />}
-                            >
-                                New document
-                            </AccentModalButton>
-                        </Cloak>
-                    </div>
-                </header>
-                {/* <div className={styles.filters}>
+                                <div
+                                    style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}
+                                >
+                                    <Button
+                                        className={styles.SelectTableButton}
+                                        onClick={() => this.setState({ enableListView: !enableListView })}
+                                        disabled={!expandedDocuments.length}
+                                        title={enableListView ? 'Table View' : 'List View'}
+                                    >
+                                        <div key={enableListView}>
+                                            <ScalableVectorGraphics
+                                                className={styles.iconDataView}
+                                                src={enableListView ? tableView : listView}
+                                            />
+                                        </div>
+                                    </Button>
+                                    <Cloak hiddenIf={p => !p.add_document}>
+                                        <AccentModalButton
+                                            transparent
+                                            iconName="add"
+                                            modal={<AddDocumentForm onUpdate={this.handleUpdate} />}
+                                        >
+                                            {t('New document')}
+                                        </AccentModalButton>
+                                    </Cloak>
+                                </div>
+                            </header>
+                            {/* <div className={styles.filters}>
 					<SelectInput
 						className={styles.categorySelectInput}
 						label="category"
@@ -1457,7 +1503,7 @@ class Document extends React.PureComponent<Props, State> {
 						labelSelector={regionLabelSelector}
 					/>
 				</div> */}
-                {/* <ListView
+                            {/* <ListView
 					className={styles.content}
 					data={expandedDocuments}
 					renderer={DocumentRenderer}
@@ -1465,8 +1511,12 @@ class Document extends React.PureComponent<Props, State> {
 					rendererParams={this.rendererParams}
 				/> */}
 
-                {enableListView ? this.listComponent() : this.tableComponent()}
-            </div>
+                            {enableListView ? this.listComponent() : this.tableComponent()}
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

@@ -74,18 +74,22 @@ const state: PageState = {
         {
             id: 0,
             title: 'national',
+            titleNe: 'राष्ट्रिय',
         },
         {
             id: 1,
             title: 'province',
+            titleNe: 'प्रदेश',
         },
         {
             id: 2,
             title: 'district',
+            titleNe: 'जिल्‍ला',
         },
         {
             id: 3,
             title: 'municipality',
+            titleNe: 'नगरपालिका',
         },
     ],
 

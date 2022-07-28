@@ -304,6 +304,7 @@ export interface SeverityType extends Field {
 export interface ResourceType extends Field {
     id: number;
     title: ResourceTypeKeys;
+    titleNe: string;
 }
 export interface DocumentCategory extends Field {
 }
@@ -453,6 +454,7 @@ export interface MapStyle {
 export interface AdminLevel {
     id: number;
     title: string;
+    titleNe: string;
 }
 
 export interface Region {
