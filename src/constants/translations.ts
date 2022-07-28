@@ -1,5 +1,12 @@
 export const enTranslation = {
     translation: {
+        Language: 'Language',
+        'GENERATE REPORT': 'GENERATE REPORT',
+        'Select Date': 'Select Date',
+        About: 'About',
+        'Report Type': 'Report Type',
+
+        'NepDat Profile': 'NepDat Profile',
         'Edit Document': 'Edit Document',
         'Add Document': 'Add Document',
         'Add document': 'Add document',
@@ -878,6 +885,12 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Language: 'भाषा',
+        'GENERATE REPORT': 'रिपोर्ट उत्पन्‍न गर्नुहोस्',
+        'Select Date': 'मिति चयन गर्नुहोस्',
+        About: 'बारे',
+        'Report Type': 'रिपोर्ट प्रकार',
+        'NepDat Profile': 'NepDat प्रोफाइल',
         'Edit Document': 'कागजात सम्पादन गर्नुहोस्',
         'Add Document': 'कागजात थप्नुहोस्',
         'Add document': 'कागजात थप्नुहोस्',

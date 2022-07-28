@@ -3,6 +3,7 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import { navigate } from '@reach/router';
+import { Translation } from 'react-i18next';
 import AccentButton from '#rsca/Button/AccentButton';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
@@ -73,8 +74,13 @@ export default class Profile extends React.PureComponent<Props, State> {
                                     iconName="back"
                                     transparent
                                 />
-
-                                <h1>NepDat Profile</h1>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <h1>{t('NepDat Profile')}</h1>
+                                        )
+                                    }
+                                </Translation>
                             </div>
 
 

@@ -13,6 +13,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
@@ -24,6 +25,7 @@ import {
     municipalitiesSelector,
     carKeysSelector,
     dataDateRangeFilterSelector,
+    languageSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -41,6 +43,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    language: languageSelector(state),
 
 
 });
@@ -77,7 +80,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 const NepDataProfile = (props) => {
     const { className, provinces, districts, municipalities,
-        requests: { nepDatGetRequest } } = props;
+        requests: { nepDatGetRequest }, language: { language } } = props;
     const [selectedReportType, setSelectedReportType] = useState(null);
     const [selectedLanguage, setSelectedLanguage] = useState(null);
     const [selectedProvince, setSelectedProvince] = useState(null);
@@ -89,23 +92,23 @@ const NepDataProfile = (props) => {
     const [selectedEndDate, setSelectedEndDate] = useState(null);
     const reportType = [
 
-        { value: '1', id: 'national', label: 'National' },
-        { value: '2', id: 'province', label: 'Province' },
-        { value: '3', id: 'district', label: 'District' },
-        { value: '4', id: 'municipality', label: 'Municipality' },
+        { value: '1', id: 'national', label: language === 'en' ? 'National' : 'राष्ट्रिय' },
+        { value: '2', id: 'province', label: language === 'en' ? 'Province' : 'प्रदेश' },
+        { value: '3', id: 'district', label: language === 'en' ? 'District' : 'जिल्‍ला' },
+        { value: '4', id: 'municipality', label: language === 'en' ? 'Municipality' : 'नगरपालिका' },
     ];
-    const language = [
-        { value: 'en', label: 'English' },
-        { value: 'ne', label: 'Nepali' },
+    const languages = [
+        { value: 'en', label: language === 'en' ? 'English' : 'अंग्रेजी' },
+        { value: 'ne', label: language === 'en' ? 'Nepali' : 'नेपाली' },
 
     ];
-    const province = provinces.map(data => ({ ...data, label: data.title_en, value: data.id }));
+    const province = provinces.map(data => ({ ...data, label: language === 'en' ? data.title_en : data.title_ne, value: data.id }));
     const district = selectedProvince && districts
         .filter(data => data.province === selectedProvince.id)
-        .map(dist => ({ ...dist, label: dist.title_en, value: dist.id }));
+        .map(dist => ({ ...dist, label: language === 'en' ? dist.title_en : dist.title_ne, value: dist.id }));
     const municipality = selectedDistrict && municipalities
         .filter(data => data.district === selectedDistrict.id)
-        .map(mun => ({ ...mun, label: mun.title_en, value: mun.id }));
+        .map(mun => ({ ...mun, label: language === 'en' ? mun.title_en : mun.title_ne, value: mun.id }));
 
     const handleChangeReportType = (e) => {
         setSelectedReportType(e);
@@ -161,170 +164,221 @@ const NepDataProfile = (props) => {
 
 
     return (
-        <div className={_cs(className, styles.documents)}>
+        <Translation>
+            {
+                t => (
+                    <div className={_cs(className, styles.documents)}>
 
-            <CommonMap sourceKey="profile-document-nepdat" />
-            <div className={styles.header}>
-                <h2>About</h2>
+                        <CommonMap sourceKey="profile-document-nepdat" />
+                        <div className={styles.header}>
+                            <h2>{t('About')}</h2>
 
-            </div>
-            <div className={styles.content}>
-                <p>
-                    The Nep Dat Profile generates disaster reports at national,
-                    provincial district, and municipal levels for the selected
-                    time frame. The report is generated in both English and Nepali
-                    versions. Using the data available in the BIPAD portal and DRR
-                    portal, the analysis is done to present data in terms of the
-                    number of disaster incidents, people deaths due to disaster
-                    incidents, estimated economic loss, hazard calendar, seasonal
-                    hazards, and most recurrent disasters.
+                        </div>
+                        <div className={styles.content}>
+                            <p>
+                                {
+                                    language === 'en'
+                                        ? `The Nep Dat Profile generates disaster reports at national,
+                                   provincial district, and municipal levels for the selected
+                                   time frame. The report is generated in both English and Nepali
+                                   versions. Using the data available in the BIPAD portal and DRR
+                                   portal, the analysis is done to present data in terms of the
+                                   number of disaster incidents, people deaths due to disaster
+                                   incidents, estimated economic loss, hazard calendar, seasonal
+                                   hazards, and most recurrent disasters.`
+                                        : `Nep Dat प्रोफाइलले राष्ट्रिय स्तरमा विपद् रिपोर्टहरू उत्पन्‍न गर्दछ,
+                                   प्रादेशिक जिल्‍ला, र नगरपालिका स्तरहरू चयनका लागि
+                                   समय सीमा। प्रतिवेदन अङ्ग्रेजी र नेपाली दुवै भाषामा तयार गरिएको छ
+                                   संस्करणहरू। BIPAD पोर्टल र DRR मा उपलब्ध डाटा प्रयोग गर्दै
+                                   पोर्टल, विश्लेषणको सन्दर्भमा डाटा प्रस्तुत गर्न गरिन्छ
+                                   प्रकोपका घटनाहरूको संख्या, प्रकोपका कारण मानिसहरूको मृत्यु
+                                   घटनाहरू, अनुमानित आर्थिक क्षति, खतरा क्यालेन्डर, मौसमी
+                                   खतराहरू, र प्राय: पुनरावर्ती प्रकोपहरू।`
 
-                </p>
-            </div>
-            <div className={styles.dropdownHeaders}>
-                <h2>Provide following details to generate profile</h2>
-            </div>
-            <div className={styles.dropdowns}>
-                <h3>Report Type:</h3>
-                <Select
-                    value={selectedReportType}
-                    onChange={handleChangeReportType}
-                    options={reportType}
-                    placeholder={'Select Report Type'}
-                />
+                                }
 
-            </div>
-            <div className={styles.dropdowns}>
-                <h3>Language:</h3>
-                <Select
-                    value={selectedLanguage}
-                    onChange={handleChangeLanguage}
-                    options={language}
-                    isSearchable={false}
-                    placeholder={'Select Language'}
-                    isDisabled={!selectedReportType}
-                />
-            </div>
-            {selectedReportType && selectedReportType.value === '4'
-                ? (
-                    <>
-                        <div className={styles.dropdowns}>
-                            <h3>Province:</h3>
-                            <Select
-                                value={selectedProvince}
-                                onChange={handleSelectProvince}
-                                options={province}
-                                placeholder={'Select Province'}
-                                isDisabled={!selectedLanguage}
+                            </p>
+                        </div>
+                        <div className={styles.dropdownHeaders}>
+                            <h2>
+                                {
+                                    language === 'en'
+                                        ? 'Provide following details to generate profile'
+                                        : 'प्रोफाइल उत्पन्‍न गर्न निम्न विवरणहरू प्रदान गर्नुहोस्'
+                                }
 
-                            />
+                            </h2>
                         </div>
                         <div className={styles.dropdowns}>
-                            <h3>District:</h3>
+                            <h3>
+                                {t('Report Type')}
+                                :
+                            </h3>
                             <Select
-                                value={selectedDistrict}
-                                onChange={handleSelectDistrict}
-                                options={district}
-                                placeholder={'Select District'}
-                                isDisabled={!selectedProvince}
+                                value={selectedReportType}
+                                onChange={handleChangeReportType}
+                                options={reportType}
+                                placeholder={language === 'en' ? 'Select Report Type' : 'रिपोर्ट प्रकार चयन गर्नुहोस्'}
                             />
+
                         </div>
                         <div className={styles.dropdowns}>
-                            <h3>Municipality:</h3>
+                            <h3>
+                                {t('Language')}
+                                :
+                            </h3>
                             <Select
-                                value={selectedMunicipality}
-                                onChange={handleSelectedMunicipality}
-                                options={municipality}
-                                placeholder={'Select Municipality'}
-                                isDisabled={!selectedDistrict}
+                                value={selectedLanguage}
+                                onChange={handleChangeLanguage}
+                                options={languages}
+                                isSearchable={false}
+                                placeholder={language === 'en' ? 'Select Language' : 'भाषा छनोट गर्नुस'}
+                                isDisabled={!selectedReportType}
                             />
                         </div>
-                    </>
-                )
-                : selectedReportType && selectedReportType.value === '3'
-                    ? (
-                        <>
-                            <div className={styles.dropdowns}>
-                                <h3>Province:</h3>
-                                <Select
-                                    value={selectedProvince}
-                                    onChange={handleSelectProvince}
-                                    options={province}
-                                    placeholder={'Select Province'}
-                                    isDisabled={!selectedLanguage}
-                                />
-                            </div>
-                            <div className={styles.dropdowns}>
-                                <h3>District:</h3>
-                                <Select
-                                    value={selectedDistrict}
-                                    onChange={handleSelectDistrict}
-                                    options={district}
-                                    placeholder={'Select District'}
-                                    isDisabled={!selectedProvince}
-                                />
-                            </div>
-                        </>
-                    ) : selectedReportType && selectedReportType.value === '2'
-                        ? (
-                            <>
-                                <div className={styles.dropdowns}>
-                                    <h3>Province:</h3>
-                                    <Select
-                                        value={selectedProvince}
-                                        onChange={handleSelectProvince}
-                                        options={province}
-                                        placeholder={'Select Province'}
-                                        isDisabled={!selectedLanguage}
+                        {selectedReportType && selectedReportType.value === '4'
+                            ? (
+                                <>
+                                    <div className={styles.dropdowns}>
+                                        <h3>
+                                            {t('Province')}
+                                            :
+                                        </h3>
+                                        <Select
+                                            value={selectedProvince}
+                                            onChange={handleSelectProvince}
+                                            options={province}
+                                            placeholder={language === 'en' ? 'Select Province' : 'प्रदेश छनोट गर्नुस'}
+                                            isDisabled={!selectedLanguage}
+
+                                        />
+                                    </div>
+                                    <div className={styles.dropdowns}>
+                                        <h3>
+                                            {t('District')}
+                                            :
+                                        </h3>
+                                        <Select
+                                            value={selectedDistrict}
+                                            onChange={handleSelectDistrict}
+                                            options={district}
+                                            placeholder={language === 'en' ? 'Select District' : 'जिल्‍ला छनोट गर्नुस'}
+                                            isDisabled={!selectedProvince}
+                                        />
+                                    </div>
+                                    <div className={styles.dropdowns}>
+                                        <h3>
+                                            {t('Municipality')}
+                                            :
+                                        </h3>
+                                        <Select
+                                            value={selectedMunicipality}
+                                            onChange={handleSelectedMunicipality}
+                                            options={municipality}
+                                            placeholder={language === 'en' ? 'Select Municipality' : 'नगरपालिका छनोट गर्नुस'}
+                                            isDisabled={!selectedDistrict}
+                                        />
+                                    </div>
+                                </>
+                            )
+                            : selectedReportType && selectedReportType.value === '3'
+                                ? (
+                                    <>
+                                        <div className={styles.dropdowns}>
+                                            <h3>
+                                                {t('Province')}
+                                                :
+                                            </h3>
+                                            <Select
+                                                value={selectedProvince}
+                                                onChange={handleSelectProvince}
+                                                options={province}
+                                                placeholder={language === 'en' ? 'Select Province' : 'प्रदेश छनोट गर्नुस'}
+                                                isDisabled={!selectedLanguage}
+                                            />
+                                        </div>
+                                        <div className={styles.dropdowns}>
+                                            <h3>
+                                                {t('District')}
+                                                :
+                                            </h3>
+                                            <Select
+                                                value={selectedDistrict}
+                                                onChange={handleSelectDistrict}
+                                                options={district}
+                                                placeholder={language === 'en' ? 'Select District' : 'जिल्‍ला छनोट गर्नुस'}
+                                                isDisabled={!selectedProvince}
+                                            />
+                                        </div>
+                                    </>
+                                ) : selectedReportType && selectedReportType.value === '2'
+                                    ? (
+                                        <>
+                                            <div className={styles.dropdowns}>
+                                                <h3>
+                                                    {t('Province')}
+                                                    :
+                                                </h3>
+                                                <Select
+                                                    value={selectedProvince}
+                                                    onChange={handleSelectProvince}
+                                                    options={province}
+                                                    placeholder={language === 'en' ? 'Select Province' : 'प्रदेश छनोट गर्नुस'}
+                                                    isDisabled={!selectedLanguage}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : ''}
+
+                        <div className={styles.dropdownDatePick}>
+                            <h3>
+                                {t('Select Date')}
+                                :
+                            </h3>
+                            <div className={styles.dateSelect}>
+                                <div>
+                                    <DatePicker
+                                        className={styles.datePick}
+                                        selected={startDate}
+                                        onChange={date => setStartDate(date)}
+                                        placeholderText={t('Start Date')}
                                     />
                                 </div>
-                            </>
-                        ) : ''}
+                                <h4>{language === 'en' ? 'to' : 'देखि'}</h4>
+                                <div>
+                                    <DatePicker
+                                        className={styles.datePick}
+                                        selected={endDate}
+                                        onChange={date => setEndDate(date)}
+                                        placeholderText={t('End Date')}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.dropdowns}>
+                            <PrimaryButton
+                                type="button"
+                                className={styles.agreeBtn}
+                                disabled={!(selectedReportType && selectedLanguage && selectedStartDate && selectedEndDate)}
+                                onClick={handleSubmit}
 
-            <div className={styles.dropdownDatePick}>
-                <h3>Select Date:</h3>
-                <div className={styles.dateSelect}>
-                    <div>
-                        <DatePicker
-                            className={styles.datePick}
-                            selected={startDate}
-                            onChange={date => setStartDate(date)}
-                            placeholderText="Start Date"
+                            >
+                                <div style={{ marginRight: '10px' }}>
+                                    <ScalableVectorGraphics
+                                        src={nepDatDownload}
+                                    />
+                                </div>
+                                {t('GENERATE REPORT')}
+                            </PrimaryButton>
+
+                        </div>
 
 
-                        />
                     </div>
-                    <h4>to</h4>
-                    <div>
-                        <DatePicker
-                            className={styles.datePick}
-                            selected={endDate}
-                            onChange={date => setEndDate(date)}
-                            placeholderText="End Date"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className={styles.dropdowns}>
-                <PrimaryButton
-                    type="button"
-                    className={styles.agreeBtn}
-                    disabled={!(selectedReportType && selectedLanguage && selectedStartDate && selectedEndDate)}
-                    onClick={handleSubmit}
+                )
+            }
+        </Translation>
 
-                >
-                    <div style={{ marginRight: '10px' }}>
-                        <ScalableVectorGraphics
-                            src={nepDatDownload}
-                        />
-                    </div>
-                    GENERATE REPORT
-                </PrimaryButton>
-
-            </div>
-
-
-        </div>
     );
 };
 
