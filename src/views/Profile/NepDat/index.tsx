@@ -9,6 +9,9 @@ import { _cs } from '@togglecorp/fujs';
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
+import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
+import { BSToAD } from 'bikram-sambat-js';
+import 'nepali-datepicker-reactjs/dist/index.css';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
@@ -86,8 +89,9 @@ const NepDataProfile = (props) => {
     const [selectedProvince, setSelectedProvince] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedMunicipality, setSelectedMunicipality] = useState(null);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [startDate, setStartDate] = useState<any>(null);
+    const [endDate, setEndDate] = useState<any>(null);
+    const [nepaliDate, setNepalidate] = useState({ start: '', end: '' });
     const [selectedStartDate, setSelectedStartDate] = useState(null);
     const [selectedEndDate, setSelectedEndDate] = useState(null);
     const reportType = [
@@ -152,7 +156,16 @@ const NepDataProfile = (props) => {
             const formattedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
             setSelectedStartDate(formattedDate);
         }
-    }, [startDate]);
+
+        if (startDate === null && language === 'en') {
+            setNepalidate({});
+        }
+
+        if (startDate && language === 'np') {
+            setStartDate(null);
+            setSelectedStartDate(null);
+        }
+    }, [language, startDate]);
     useEffect(() => {
         if (endDate) {
             const date = new Date(endDate);
@@ -160,8 +173,43 @@ const NepDataProfile = (props) => {
 
             setSelectedEndDate(formattedDate);
         }
-    }, [endDate]);
+        if (endDate === null && language === 'en') {
+            setNepalidate({});
+        }
 
+        if (endDate && language === 'np') {
+            setEndDate(null);
+            setSelectedEndDate(null);
+        }
+    }, [endDate, language]);
+
+    useEffect(() => {
+        if (nepaliDate.start) {
+            const date = BSToAD(nepaliDate.start);
+            // const formattedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+            setSelectedStartDate(date);
+        }
+
+        if (nepaliDate.start && language === 'en') {
+            setStartDate(null);
+            setSelectedStartDate(null);
+        }
+    }, [language, nepaliDate.start]);
+
+    useEffect(() => {
+        if (nepaliDate.end) {
+            const date = BSToAD(nepaliDate.end);
+            // const formattedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+            setSelectedEndDate(date);
+        }
+
+        if (nepaliDate.end && language === 'en') {
+            setEndDate(null);
+            setSelectedEndDate(null);
+        }
+    }, [language, nepaliDate.end]);
 
     return (
         <Translation>
@@ -337,21 +385,49 @@ const NepDataProfile = (props) => {
                             </h3>
                             <div className={styles.dateSelect}>
                                 <div>
-                                    <DatePicker
-                                        className={styles.datePick}
-                                        selected={startDate}
-                                        onChange={date => setStartDate(date)}
-                                        placeholderText={t('Start Date')}
-                                    />
+                                    {
+                                        language === 'en' ? (
+                                            <DatePicker
+                                                className={styles.datePick}
+                                                selected={startDate}
+                                                onChange={date => setStartDate(date)}
+                                                placeholderText={t('Start Date')}
+                                            />
+                                        )
+                                            : (
+                                                <NepaliDatePicker
+                                                    className="NepaliDate"
+                                                    inputClassName={styles.datePick}
+                                                    // className={styles.datePick}
+                                                    value={nepaliDate.start}
+                                                    onChange={value => setNepalidate({ ...nepaliDate, start: value })}
+                                                    options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                                />
+                                            )
+                                    }
                                 </div>
                                 <h4>{language === 'en' ? 'to' : 'देखि'}</h4>
                                 <div>
-                                    <DatePicker
-                                        className={styles.datePick}
-                                        selected={endDate}
-                                        onChange={date => setEndDate(date)}
-                                        placeholderText={t('End Date')}
-                                    />
+                                    {language === 'en'
+                                        ? (
+                                            <DatePicker
+                                                className={styles.datePick}
+                                                selected={endDate}
+                                                onChange={date => setEndDate(date)}
+                                                placeholderText={t('End Date')}
+                                            />
+                                        )
+                                        : (
+                                            <NepaliDatePicker
+                                                className="NepaliDate"
+                                                inputClassName={styles.datePick}
+                                                // className={styles.datePick}
+                                                value={nepaliDate.end}
+                                                onChange={value => setNepalidate({ ...nepaliDate, end: value })}
+                                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                            />
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
