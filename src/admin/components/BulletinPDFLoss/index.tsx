@@ -356,7 +356,7 @@ const BulletinPDF = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.loss}>
-                    <h2 style={{ marginBottom: '10px' }}>
+                    {/* <h2 style={{ marginBottom: '10px' }}>
                         {
                             language === 'np'
                                 ? `${month_yesterday} ${day_yesterday} ${BulletinStartTime} देखि ${month} ${day} ${BulletinEndTime}  सम्म`
@@ -364,7 +364,7 @@ const BulletinPDF = (props: Props) => {
                         }
 
 
-                    </h2>
+                    </h2> */}
                     {/* <h2>
                         <Translation>
                             {
