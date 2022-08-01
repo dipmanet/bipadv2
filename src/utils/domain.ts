@@ -1000,67 +1000,67 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
  * @param parts Number of divisions for quantile division
  */
 
-export const houseHoldSummaryLGProfileData = (lgProfileData, sexRatioTotalPopulationLGProfile) => (
+export const houseHoldSummaryLGProfileData = (lgProfileData, sexRatioTotalPopulationLGProfile, language) => (
     [
         {
             color: '#2A7BBB',
             key: 'totalPopulation',
-            label: 'Total Population',
+            label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
             value: sexRatioTotalPopulationLGProfile,
         },
         {
             color: '#83A4D3',
             key: 'householdCount',
-            label: 'Household Count',
+            label: language === 'en' ? 'Household Count' : 'घरपरिवार गणना',
             value: lgProfileData.totalHouseholds,
         },
     ]
 );
-export const literacyRatioLGProfileData = (lgProfileData, literatePeopleTotalPopulationLGProfile) => (
+export const literacyRatioLGProfileData = (lgProfileData, literatePeopleTotalPopulationLGProfile, language) => (
     [
         {
             color: '#2A7BBB',
             key: 'male',
-            label: 'Male',
+            label: language === 'en' ? 'Male' : 'पुरुष',
 
             value: (lgProfileData.literacyRate.male / literatePeopleTotalPopulationLGProfile) * 100,
         },
         {
             color: '#83A4D3',
             key: 'female',
-            label: 'Female',
+            label: language === 'en' ? 'Female' : 'महिला',
             value: (lgProfileData.literacyRate.female / literatePeopleTotalPopulationLGProfile) * 100,
 
         },
         {
             color: '#83A4D3',
             key: 'Other',
-            label: 'other',
+            label: language === 'en' ? 'other' : 'अन्य',
             value: (lgProfileData.literacyRate.other / literatePeopleTotalPopulationLGProfile) * 100,
 
         },
     ]
 );
-export const sexRatioLGProfileData = (lgProfileData, sexRatioTotalPopulationLGProfile) => (
+export const sexRatioLGProfileData = (lgProfileData, sexRatioTotalPopulationLGProfile, language) => (
     [
         {
             color: '#2A7BBB',
             key: 'male',
-            label: 'Male',
+            label: language === 'en' ? 'Male' : 'पुरुष',
             value: lgProfileData.gender.male,
             percent: (lgProfileData.gender.male / sexRatioTotalPopulationLGProfile) * 100,
         },
         {
             color: '#83A4D3',
             key: 'female',
-            label: 'Female',
+            label: language === 'en' ? 'Female' : 'महिला',
             value: lgProfileData.gender.female,
             percent: (lgProfileData.gender.female / sexRatioTotalPopulationLGProfile) * 100,
         },
         {
             color: '#83A4D3',
             key: 'Other',
-            label: 'other',
+            label: language === 'en' ? 'other' : 'पुरुष',
             value: lgProfileData.gender.other,
             percent: (lgProfileData.gender.other / sexRatioTotalPopulationLGProfile) * 100,
         },
@@ -1170,156 +1170,159 @@ export const SummationLGProfileEducationLevelData = lgProfileData => (
     + (lgProfileData.educationLevel.noEducation ? lgProfileData.educationLevel.noEducation : 0) + (lgProfileData.educationLevel.otherNonformal ? lgProfileData.educationLevel.otherNonformal : 0)
     + (lgProfileData.educationLevel.notEligible ? lgProfileData.educationLevel.notEligible : 0) + (lgProfileData.educationLevel.unknown ? lgProfileData.educationLevel.unknown : 0)
 );
-export const LGProfileBuildingFoundationData = (lgProfileData, summationLGProfileBuildingFoundation) => (
+export const LGProfileBuildingFoundationData = (lgProfileData, summationLGProfileBuildingFoundation, language) => (
     [
         {
             key: 'bambooTimber',
-            label: 'Bamboo/Timber',
+            label: language === 'en' ? 'Bamboo/Timber' : 'बांस/टिम्बर',
             value: lgProfileData.buildingFoundationType.bambooTimber ? lgProfileData.buildingFoundationType.bambooTimber : 0,
             percentage: lgProfileData.buildingFoundationType.bambooTimber ? (lgProfileData.buildingFoundationType.bambooTimber / summationLGProfileBuildingFoundation) * 100 : 0,
         },
         {
             key: 'cement',
-            label: 'Cement',
+            label: language === 'en' ? 'Cement' : 'सिमेन्ट',
             value: lgProfileData.buildingFoundationType.cement ? lgProfileData.buildingFoundationType.cement : 0,
             percentage: lgProfileData.buildingFoundationType.cement ? (lgProfileData.buildingFoundationType.cement / summationLGProfileBuildingFoundation) * 100 : 0,
         },
         {
             key: 'mud',
-            label: 'Mud',
+            label: language === 'en' ? 'Mud' : 'माटो',
             value: lgProfileData.buildingFoundationType.mud ? lgProfileData.buildingFoundationType.mud : 0,
             percentage: lgProfileData.buildingFoundationType.mud ? (lgProfileData.buildingFoundationType.mud / summationLGProfileBuildingFoundation) * 100 : 0,
         },
         {
             key: 'reinforcedConcrete',
-            label: 'Re Inforced Concrete',
+            label: language === 'en' ? 'Re Inforced Concrete' : 'पुन: बलियो कंक्रीट',
             value: lgProfileData.buildingFoundationType.reinforcedConcrete ? lgProfileData.buildingFoundationType.reinforcedConcrete : 0,
             percentage: lgProfileData.buildingFoundationType.reinforcedConcrete ? (lgProfileData.buildingFoundationType.reinforcedConcrete / summationLGProfileBuildingFoundation) * 100 : 0,
         },
         {
             key: 'other',
-            label: 'Other',
+            label: language === 'en' ? 'Other' : 'अन्य',
             value: lgProfileData.buildingFoundationType.other ? lgProfileData.buildingFoundationType.other : 0,
             percentage: lgProfileData.buildingFoundationType.other ? (lgProfileData.buildingFoundationType.other / summationLGProfileBuildingFoundation) * 100 : 0,
         },
     ]
 );
-export const LGProfileBuildingTypeData = (lgProfileData, summationLGProfileBuildingType) => (
+export const LGProfileBuildingTypeData = (lgProfileData, summationLGProfileBuildingType, language) => (
     [
         {
             key: 'AdobeMudConstruction',
-            label: 'Adobe Mud Construction',
+            label: language === 'en' ? 'Adobe Mud Construction' : 'एडोब मड निर्माण',
             value: lgProfileData.buildingType.AdobeMudConstruction ? lgProfileData.buildingType.AdobeMudConstruction : 0,
             percentage: lgProfileData.buildingType.AdobeMudConstruction ? (lgProfileData.buildingType.AdobeMudConstruction / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'bamboo',
-            label: 'Bamboo',
+            label: language === 'en' ? 'Bamboo' : 'बाँस',
             value: lgProfileData.buildingType.bamboo ? lgProfileData.buildingType.bamboo : 0,
             percentage: lgProfileData.buildingType.bamboo ? (lgProfileData.buildingType.bamboo / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'timber',
-            label: 'Timber',
+            label: language === 'en' ? 'Timber' : 'काठ',
             value: lgProfileData.buildingType.timber ? lgProfileData.buildingType.timber : 0,
             percentage: lgProfileData.buildingType.timber ? (lgProfileData.buildingType.timber / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'cementBrick',
-            label: 'Cement Brick',
+            label: language === 'en' ? 'Cement Brick' : 'सिमेन्टको ईंट्टा',
             value: lgProfileData.buildingType.cementBrick ? lgProfileData.buildingType.cementBrick : 0,
             percentage: lgProfileData.buildingType.cementBrick ? (lgProfileData.buildingType.cementBrick / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'cementStone',
-            label: 'Cement Stone',
+            label: language === 'en' ? 'Cement Stone' : 'सिमेन्टको ढुंगा',
             value: lgProfileData.buildingType.cementStone ? lgProfileData.buildingType.cementStone : 0,
             percentage: lgProfileData.buildingType.cementStone ? (lgProfileData.buildingType.cementStone / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'mudBrick',
-            label: 'Mud Brick',
+            label: language === 'en' ? 'Mud Brick' : 'माटोको इट्टा',
             value: lgProfileData.buildingType.mudBrick ? lgProfileData.buildingType.mudBrick : 0,
             percentage: lgProfileData.buildingType.mudBrick ? (lgProfileData.buildingType.mudBrick / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'mudStone',
-            label: 'Mud Stone',
+            label: language === 'en' ? 'Mud Stone' : 'माटोको ढुङ्गा',
             value: lgProfileData.buildingType.mudStone ? lgProfileData.buildingType.mudStone : 0,
             percentage: lgProfileData.buildingType.mudStone ? (lgProfileData.buildingType.mudStone / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'rcEngg',
-            label: 'RC Engg',
+            label: language === 'en' ? 'RC Engg' : 'RC Engg',
             value: lgProfileData.buildingType.rcEngg ? lgProfileData.buildingType.rcEngg : 0,
             percentage: lgProfileData.buildingType.rcEngg ? (lgProfileData.buildingType.rcEngg / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'rcNonEngg',
-            label: 'RC Non Engg',
+            label: language === 'en' ? 'RC Non Engg' : 'RC Non Engg',
             value: lgProfileData.buildingType.rcNonEngg ? lgProfileData.buildingType.rcNonEngg : 0,
             percentage: lgProfileData.buildingType.rcNonEngg ? (lgProfileData.buildingType.rcNonEngg / summationLGProfileBuildingType) * 100 : 0,
         },
         {
             key: 'other',
-            label: 'Other',
+            label: language === 'en' ? 'Other' : 'अन्य',
             value: lgProfileData.buildingType.other ? lgProfileData.buildingType.other : 0,
             percentage: lgProfileData.buildingType.other ? (lgProfileData.buildingType.other / summationLGProfileBuildingType) * 100 : 0,
         },
     ]
 );
 
-export const LGProfileAgricultureProductData = (lgProfileData, summationLGProfileAgricultureProduct) => (
+export const LGProfileAgricultureProductData = (lgProfileData, summationLGProfileAgricultureProduct, language) => (
     [
         {
             key: 'cereals',
-            label: 'Cereals',
+            label: language === 'en' ? 'Cereals' : 'अनाज',
             value: lgProfileData.majorAgriProducts.cereals ? lgProfileData.majorAgriProducts.cereals : 0,
             percentage: lgProfileData.majorAgriProducts.cereals ? (lgProfileData.majorAgriProducts.cereals / summationLGProfileAgricultureProduct) * 100 : 0,
         },
         {
             key: 'oilseeds',
-            label: 'Oilseeds',
+            label: language === 'en' ? 'Oilseeds' : 'तेलको बीउ',
             value: lgProfileData.majorAgriProducts.oilseeds ? lgProfileData.majorAgriProducts.oilseeds : 0,
             percentage: lgProfileData.majorAgriProducts.oilseeds ? (lgProfileData.majorAgriProducts.oilseeds / summationLGProfileAgricultureProduct) * 100 : 0,
         },
         {
             key: 'vegetableCrop',
-            label: 'Vegetable Crop',
+            label: language === 'en' ? 'Vegetable Crop' : 'तरकारी बाली',
             value: lgProfileData.majorAgriProducts.vegetableCrop ? lgProfileData.majorAgriProducts.vegetableCrop : 0,
             percentage: lgProfileData.majorAgriProducts.vegetableCrop ? (lgProfileData.majorAgriProducts.vegetableCrop / summationLGProfileAgricultureProduct) * 100 : 0,
         },
         {
             key: 'spicyCrop',
-            label: 'Spicy Crop',
+            label: language === 'en' ? 'Spicy Crop' : 'मसालेदार बाली',
             value: lgProfileData.majorAgriProducts.spicyCrop ? lgProfileData.majorAgriProducts.spicyCrop : 0,
             percentage: lgProfileData.majorAgriProducts.spicyCrop ? (lgProfileData.majorAgriProducts.spicyCrop / summationLGProfileAgricultureProduct) * 100 : 0,
         },
         {
             key: 'cashCrop',
-            label: 'Cash Crop',
+            label: language === 'en' ? 'Cash Crop' : 'नगद बाली',
             value: lgProfileData.majorAgriProducts.cashCrop ? lgProfileData.majorAgriProducts.cashCrop : 0,
             percentage: lgProfileData.majorAgriProducts.cashCrop ? (lgProfileData.majorAgriProducts.cashCrop / summationLGProfileAgricultureProduct) * 100 : 0,
         },
     ]
 );
-export const LGProfileAgriculturePracticeData = (lgProfileData, summationLGProfileAgriculturePractice) => (
+export const LGProfileAgriculturePracticeData = (lgProfileData, summationLGProfileAgriculturePractice, language) => (
     [
         {
             key: 'totalNumberOfHouseholdEngagedInAgriculture',
-            label: 'Total Number Of Household Engaged In Agriculture',
+            label: language === 'en'
+                ? 'Total Number Of Household Engaged In Agriculture' : 'कृषिमा संलग्‍न परिवारको कुल संख्या',
             value: lgProfileData.agriculturePractice.totalNumberOfHouseholdEngagedInAgriculture ? lgProfileData.agriculturePractice.totalNumberOfHouseholdEngagedInAgriculture : 0,
             percentage: lgProfileData.agriculturePractice.totalNumberOfHouseholdEngagedInAgriculture ? ((lgProfileData.agriculturePractice.totalNumberOfHouseholdEngagedInAgriculture / summationLGProfileAgriculturePractice) * 100).toFixed(2) : 0,
         },
         {
             key: 'householdHavingOwnLandForAgriculture',
-            label: 'Household Having Own Land For Agriculture',
+            label: language === 'en'
+                ? 'Household Having Own Land For Agriculture' : 'कृषिका लागि आफ्नै जग्गा भएका घरपरिवार',
             value: lgProfileData.agriculturePractice.householdHavingOwnLandForAgriculture ? lgProfileData.agriculturePractice.householdHavingOwnLandForAgriculture : 0,
             percentage: lgProfileData.agriculturePractice.householdHavingOwnLandForAgriculture ? ((lgProfileData.agriculturePractice.householdHavingOwnLandForAgriculture / summationLGProfileAgriculturePractice) * 100).toFixed(2) : 0,
         },
         {
             key: 'householdRaisingLivestockForAgriculturePurposes',
-            label: 'Household Raising Livestock For Agriculture Purposes',
+            label: language === 'en'
+                ? 'Household Raising Livestock For Agriculture Purposes' : 'कृषि उद्देश्यका लागि घरेलु पशुपालन',
             value: lgProfileData.agriculturePractice.householdRaisingLivestockForAgriculturePurposes ? lgProfileData.agriculturePractice.householdRaisingLivestockForAgriculturePurposes : 0,
             percentage: lgProfileData.agriculturePractice.householdRaisingLivestockForAgriculturePurposes ? ((lgProfileData.agriculturePractice.householdRaisingLivestockForAgriculturePurposes / summationLGProfileAgriculturePractice) * 100).toFixed(2) : 0,
         },
@@ -1360,134 +1363,134 @@ export const LGProfileResidentHouseholdData = (lgProfileData, summationLGProfile
     ]
 );
 
-export const LGProfileDrinkingWaterData = (lgProfileData, summationLGProfileDrinkingWater) => (
+export const LGProfileDrinkingWaterData = (lgProfileData, summationLGProfileDrinkingWater, language) => (
     [
         {
             key: 'pipeWaterAtHome',
-            label: 'Pipe Water At Home',
+            label: language === 'en' ? 'Pipe Water At Home' : 'घरमा पाइप पानी',
             value: lgProfileData.drinkingWater.pipeWaterAtHome ? lgProfileData.drinkingWater.pipeWaterAtHome : 0,
             percentage: lgProfileData.drinkingWater.pipeWaterAtHome ? (lgProfileData.drinkingWater.pipeWaterAtHome / summationLGProfileDrinkingWater) * 100 : 0,
         },
         {
             key: 'deepBoring',
-            label: 'Deep Boring',
+            label: language === 'en' ? 'Deep Boring' : 'गहिरो बोरिंग',
             value: lgProfileData.drinkingWater.deepBoring ? lgProfileData.drinkingWater.deepBoring : 0,
             percentage: lgProfileData.drinkingWater.deepBoring ? (lgProfileData.drinkingWater.deepBoring / summationLGProfileDrinkingWater) * 100 : 0,
         },
         {
             key: 'tubeWellHandPump',
-            label: 'TubeWell HandPump',
+            label: language === 'en' ? 'TubeWell HandPump' : 'ट्यूबवेल ह्यान्डपम्प',
             value: lgProfileData.drinkingWater.tubeWellHandPump ? lgProfileData.drinkingWater.tubeWellHandPump : 0,
             percentage: lgProfileData.drinkingWater.tubeWellHandPump ? (lgProfileData.drinkingWater.tubeWellHandPump / summationLGProfileDrinkingWater) * 100 : 0,
         },
         {
             key: 'coveredWell',
-            label: 'Covered Well',
+            label: language === 'en' ? 'Covered Well' : 'राम्रोसँग ढाकिएको ईनार',
             value: lgProfileData.drinkingWater.coveredWell ? lgProfileData.drinkingWater.coveredWell : 0,
             percentage: lgProfileData.drinkingWater.coveredWell ? (lgProfileData.drinkingWater.coveredWell / summationLGProfileDrinkingWater) * 100 : 0,
         },
         {
             key: 'openWell',
-            label: 'Open Well',
+            label: language === 'en' ? 'Open Well' : 'खुल्‍ला ईनार',
             value: lgProfileData.drinkingWater.openWell ? lgProfileData.drinkingWater.openWell : 0,
             percentage: lgProfileData.drinkingWater.openWell ? (lgProfileData.drinkingWater.openWell / summationLGProfileDrinkingWater) * 100 : 0,
         },
         {
             key: 'groundWater',
-            label: 'Ground Water',
+            label: language === 'en' ? 'Ground Water' : 'जमीनको पानी',
             value: lgProfileData.drinkingWater.groundWater ? lgProfileData.drinkingWater.groundWater : 0,
             percentage: lgProfileData.drinkingWater.groundWater ? (lgProfileData.drinkingWater.groundWater / summationLGProfileDrinkingWater) * 100 : 0,
         },
         {
             key: 'river',
-            label: 'River',
+            label: language === 'en' ? 'River' : 'नदी',
             value: lgProfileData.drinkingWater.river ? lgProfileData.drinkingWater.river : 0,
             percentage: lgProfileData.drinkingWater.river ? (lgProfileData.drinkingWater.river / summationLGProfileDrinkingWater) * 100 : 0,
         },
     ]
 );
-export const LGProfileAverageMajorOccupationData = (lgProfileData, summationLGProfileMajorOccupation) => (
+export const LGProfileAverageMajorOccupationData = (lgProfileData, summationLGProfileMajorOccupation, language) => (
     [
         {
             key: 'notEligible',
-            label: 'Not Eligible',
+            label: language === 'en' ? 'Not Eligible' : 'अयाेग्य',
             value: lgProfileData.majorOccupation.notEligible ? lgProfileData.majorOccupation.notEligible : 0,
             percentage: lgProfileData.majorOccupation.notEligible ? (lgProfileData.majorOccupation.notEligible / summationLGProfileMajorOccupation) * 100 : 0,
         },
         {
             key: 'unknown',
-            label: 'Unknown',
+            label: language === 'en' ? 'Unknown' : 'अज्ञात',
             value: lgProfileData.majorOccupation.unknown ? lgProfileData.majorOccupation.unknown : 0,
             percentage: lgProfileData.majorOccupation.unknown ? (lgProfileData.majorOccupation.unknown / summationLGProfileMajorOccupation) * 100 : 0,
         },
         {
             key: 'business',
-            label: 'Business',
+            label: language === 'en' ? 'Business' : 'व्यापार',
             value: lgProfileData.majorOccupation.business ? lgProfileData.majorOccupation.business : 0,
             percentage: lgProfileData.majorOccupation.business ? (lgProfileData.majorOccupation.business / summationLGProfileMajorOccupation) * 100 : 0,
         },
         {
             key: 'service',
-            label: 'Service',
+            label: language === 'en' ? 'Service' : 'सेवा',
             value: lgProfileData.majorOccupation.service ? lgProfileData.majorOccupation.service : 0,
             percentage: lgProfileData.majorOccupation.service ? (lgProfileData.majorOccupation.service / summationLGProfileMajorOccupation) * 100 : 0,
         },
         {
             key: 'foreignEmployment',
-            label: 'Foreign Employment',
+            label: language === 'en' ? 'Foreign Employment' : 'वैदेशिक रोजगारी',
             value: lgProfileData.majorOccupation.foreignEmployment ? lgProfileData.majorOccupation.foreignEmployment : 0,
             percentage: lgProfileData.majorOccupation.foreignEmployment ? (lgProfileData.majorOccupation.foreignEmployment / summationLGProfileMajorOccupation) * 100 : 0,
         },
         {
             key: 'student',
-            label: 'Student',
+            label: language === 'en' ? 'Student' : 'विद्यार्थी',
             value: lgProfileData.majorOccupation.student ? lgProfileData.majorOccupation.student : 0,
             percentage: lgProfileData.majorOccupation.student ? (lgProfileData.majorOccupation.student / summationLGProfileMajorOccupation) * 100 : 0,
         },
         {
             key: 'others',
-            label: 'Others',
+            label: language === 'en' ? 'Others' : 'अन्‍य',
             value: lgProfileData.majorOccupation.others ? lgProfileData.majorOccupation.others : 0,
             percentage: lgProfileData.majorOccupation.others ? (lgProfileData.majorOccupation.others / summationLGProfileMajorOccupation) * 100 : 0,
         },
     ]
 );
 
-export const LGProfileAverageMonthlyIncomeData = (lgProfileData, summationLGProfileAverageMonthlyIncome) => (
+export const LGProfileAverageMonthlyIncomeData = (lgProfileData, summationLGProfileAverageMonthlyIncome, language) => (
     [
         {
             key: 'lessThanNpr15',
-            label: 'Less Than Npr 15,000',
+            label: language === 'en' ? 'Less Than Npr 15,000' : 'रु १५,००० भन्दा कम',
             value: lgProfileData.householdIncome.lessThanNpr15 ? lgProfileData.householdIncome.lessThanNpr15 : 0,
             percentage: lgProfileData.householdIncome.lessThanNpr15 ? (lgProfileData.householdIncome.lessThanNpr15 / summationLGProfileAverageMonthlyIncome) * 100 : 0,
         },
         {
             key: '15To30',
-            label: 'NPR15,000 to NPR30,000',
+            label: language === 'en' ? 'NPR15,000 to NPR30,000' : 'रु १५,००० देखि रु ३०,०००',
             value: lgProfileData.householdIncome['15To30'] ? lgProfileData.householdIncome['15To30'] : 0,
             percentage: lgProfileData.householdIncome['15To30'] ? (lgProfileData.householdIncome['15To30'] / summationLGProfileAverageMonthlyIncome) * 100 : 0,
         },
         {
             key: '30To60',
-            label: 'NPR30,000 to NPR60,000',
+            label: language === 'en' ? 'NPR30,000 to NPR60,000' : 'रु ३०,००० देखि रु ६०,०००',
             value: lgProfileData.householdIncome['30To60'] ? lgProfileData.householdIncome['30To60'] : 0,
             percentage: lgProfileData.householdIncome['30To60'] ? (lgProfileData.householdIncome['30To60'] / summationLGProfileAverageMonthlyIncome) * 100 : 0,
         },
         {
             key: '60To120',
-            label: 'NPR60,000 to NPR120,000',
+            label: language === 'en' ? 'NPR60,000 to NPR120,000' : 'रु ६०,००० देखि रु १२०,०००',
             value: lgProfileData.householdIncome['60To120'] ? lgProfileData.householdIncome['60To120'] : 0,
             percentage: lgProfileData.householdIncome['60To120'] ? (lgProfileData.householdIncome['60To120'] / summationLGProfileAverageMonthlyIncome) * 100 : 0,
         },
         {
             key: '120To240',
-            label: 'NPR120,000 to NPR240,000',
+            label: language === 'en' ? 'NPR120,000 to NPR240,000' : 'रु १२०,००० देखि रु २४०,०००',
             value: lgProfileData.householdIncome['120To240'] ? lgProfileData.householdIncome['120To240'] : 0,
             percentage: lgProfileData.householdIncome['120To240'] ? (lgProfileData.householdIncome['120To240'] / summationLGProfileAverageMonthlyIncome) * 100 : 0,
         },
         {
             key: 'moreThan240',
-            label: 'More Than Npr 240,000',
+            label: language === 'en' ? 'More Than Npr 240,000' : 'रु २४०,००० भन्‍दा माथि',
             value: lgProfileData.householdIncome.moreThan240 ? lgProfileData.householdIncome.moreThan240 : 0,
             percentage: lgProfileData.householdIncome.moreThan240 ? (lgProfileData.householdIncome.moreThan240 / summationLGProfileAverageMonthlyIncome) * 100 : 0,
         },
@@ -1495,133 +1498,133 @@ export const LGProfileAverageMonthlyIncomeData = (lgProfileData, summationLGProf
 );
 
 
-export const LGProfileHouseHoldData = (lgProfileData, summationLGProfileHouseHold) => (
+export const LGProfileHouseHoldData = (lgProfileData, summationLGProfileHouseHold, language) => (
     [
         {
             key: 'femaleHeadedHouseholds',
-            label: 'Female Headed Households',
+            label: language === 'en' ? 'Female Headed Households' : 'महिला प्रमुख घरपरिवार',
             value: lgProfileData.noOfHouseholds.femaleHeadedHouseholds ? lgProfileData.noOfHouseholds.femaleHeadedHouseholds : 0,
             percentage: lgProfileData.noOfHouseholds.femaleHeadedHouseholds ? (lgProfileData.noOfHouseholds.femaleHeadedHouseholds / summationLGProfileHouseHold) * 100 : 0,
         },
         {
             key: 'householdWithMemberAged60',
-            label: 'Household With Member Aged 60',
+            label: language === 'en' ? 'Household With Member Aged 60' : '६० वर्ष पुगेका सदस्य भएको परिवार',
             value: lgProfileData.noOfHouseholds.householdWithMemberAged60 ? lgProfileData.noOfHouseholds.householdWithMemberAged60 : 0,
             percentage: lgProfileData.noOfHouseholds.householdWithMemberAged60 ? (lgProfileData.noOfHouseholds.householdWithMemberAged60 / summationLGProfileHouseHold) * 100 : 0,
         },
         {
             key: 'numberOfHouseholdsWithDifferentlyAbleIndividual',
-            label: 'Number Of Households With Differently Able Individual',
+            label: language === 'en' ? 'Number Of Households With Differently Able Individual' : 'फरक रूपमा सक्षम व्यक्ति भएका परिवारहरूको संख्या',
             value: lgProfileData.noOfHouseholds.numberOfHouseholdsWithDifferentlyAbleIndividual ? lgProfileData.noOfHouseholds.numberOfHouseholdsWithDifferentlyAbleIndividual : 0,
             percentage: lgProfileData.noOfHouseholds.numberOfHouseholdsWithDifferentlyAbleIndividual ? (lgProfileData.noOfHouseholds.numberOfHouseholdsWithDifferentlyAbleIndividual / summationLGProfileHouseHold) * 100 : 0,
         },
     ]
 );
-export const LGProfileDisabilityData = (lgProfileData, summationLGProfileDisability) => (
+export const LGProfileDisabilityData = (lgProfileData, summationLGProfileDisability, language) => (
     [
         {
             key: 'physicalDisabilities',
-            label: 'Physical Disabilities',
+            label: language === 'en' ? 'Physical Disabilities' : 'शारीरिक असक्षमताहरू',
             value: lgProfileData.disability.physicalDisabilities ? lgProfileData.disability.physicalDisabilities : 0,
             percentage: lgProfileData.disability.physicalDisabilities ? (lgProfileData.disability.physicalDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'visualDisabilities',
-            label: 'Visual Disabilities',
+            label: language === 'en' ? 'Visual Disabilities' : 'भिजुअल असक्षमता',
             value: lgProfileData.disability.visualDisabilities ? lgProfileData.disability.visualDisabilities : 0,
             percentage: lgProfileData.disability.visualDisabilities ? (lgProfileData.disability.visualDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'hearingDisabilities',
-            label: 'Hearing Disabilities',
+            label: language === 'en' ? 'Hearing Disabilities' : 'सुन्‍ने असक्षमता',
             value: lgProfileData.disability.hearingDisabilities ? lgProfileData.disability.hearingDisabilities : 0,
             percentage: lgProfileData.disability.hearingDisabilities ? (lgProfileData.disability.hearingDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'hearingVisualDisabilities',
-            label: 'Hearing Visual Disabilities',
+            label: language === 'en' ? 'Hearing Visual Disabilities' : 'सुन्‍ने भिजुअल असक्षमता',
             value: lgProfileData.disability.hearingVisualDisabilities ? lgProfileData.disability.hearingVisualDisabilities : 0,
             percentage: lgProfileData.disability.hearingVisualDisabilities ? (lgProfileData.disability.hearingVisualDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'speakingDisabilities',
-            label: 'Speaking Disabilities',
+            label: language === 'en' ? 'Speaking Disabilities' : 'बोल्ने असक्षमता',
             value: lgProfileData.disability.speakingDisabilities ? lgProfileData.disability.speakingDisabilities : 0,
             percentage: lgProfileData.disability.speakingDisabilities ? (lgProfileData.disability.speakingDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'mentalDisabilities',
-            label: 'Mental Disabilities',
+            label: language === 'en' ? 'Mental Disabilities' : 'मानसिक असक्षमता',
             value: lgProfileData.disability.mentalDisabilities ? lgProfileData.disability.mentalDisabilities : 0,
             percentage: lgProfileData.disability.mentalDisabilities ? (lgProfileData.disability.mentalDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'intellectualDisabilities',
-            label: 'Intellectual Disabilities',
+            label: language === 'en' ? 'Intellectual Disabilities' : 'बौद्धिक असक्षमता',
             value: lgProfileData.disability.intellectualDisabilities ? lgProfileData.disability.intellectualDisabilities : 0,
             percentage: lgProfileData.disability.intellectualDisabilities ? (lgProfileData.disability.intellectualDisabilities / summationLGProfileDisability) * 100 : 0,
         },
         {
             key: 'multipleDisabilities',
-            label: 'Multiple Disabilities',
+            label: language === 'en' ? 'Multiple Disabilities' : 'बहु अपाङ्गता',
             value: lgProfileData.disability.multipleDisabilities ? lgProfileData.disability.multipleDisabilities : 0,
             percentage: lgProfileData.disability.multipleDisabilities ? (lgProfileData.disability.multipleDisabilities / summationLGProfileDisability) * 100 : 0,
         },
     ]
 );
-export const LGProfileSocialSecurityData = (lgProfileData, summationLGProfileSocialSecurity) => (
+export const LGProfileSocialSecurityData = (lgProfileData, summationLGProfileSocialSecurity, language) => (
     [
         {
             key: 'elderCitizen',
-            label: 'Elder citizen',
+            label: language === 'en' ? 'Elder citizen' : 'जेष्‍ठ नागरिक',
             value: lgProfileData.socialSecurityBenefitAvailed.elderCitizen ? lgProfileData.socialSecurityBenefitAvailed.elderCitizen : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.elderCitizen ? (lgProfileData.socialSecurityBenefitAvailed.elderCitizen / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'singleWomen',
-            label: 'single women',
+            label: language === 'en' ? 'single women' : 'एकल महिला',
             value: lgProfileData.socialSecurityBenefitAvailed.singleWomen ? lgProfileData.socialSecurityBenefitAvailed.singleWomen : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.singleWomen ? (lgProfileData.socialSecurityBenefitAvailed.singleWomen / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'differentlyAble',
-            label: 'differently Able',
+            label: language === 'en' ? 'differently Able' : 'फरक रूपमा सक्षम',
             value: lgProfileData.socialSecurityBenefitAvailed.differentlyAble ? lgProfileData.socialSecurityBenefitAvailed.differentlyAble : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.differentlyAble ? (lgProfileData.socialSecurityBenefitAvailed.differentlyAble / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'extinctCaste',
-            label: 'Extinct Caste',
+            label: language === 'en' ? 'Extinct Caste' : 'विलुप्‍त जाति',
             value: lgProfileData.socialSecurityBenefitAvailed.extinctCaste ? lgProfileData.socialSecurityBenefitAvailed.extinctCaste : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.extinctCaste ? (lgProfileData.socialSecurityBenefitAvailed.extinctCaste / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'childSecurity',
-            label: 'Child Security',
+            label: language === 'en' ? 'Child Security' : 'बाल सुरक्षा',
             value: lgProfileData.socialSecurityBenefitAvailed.childSecurity ? lgProfileData.socialSecurityBenefitAvailed.childSecurity : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.childSecurity ? (lgProfileData.socialSecurityBenefitAvailed.childSecurity / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'pension',
-            label: 'Pension',
+            label: language === 'en' ? 'Pension' : 'पेन्सन',
             value: lgProfileData.socialSecurityBenefitAvailed.pension ? lgProfileData.socialSecurityBenefitAvailed.pension : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.pension ? (lgProfileData.socialSecurityBenefitAvailed.pension / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'others',
-            label: 'Others',
+            label: language === 'en' ? 'Others' : 'अन्‍य',
             value: lgProfileData.socialSecurityBenefitAvailed.others ? lgProfileData.socialSecurityBenefitAvailed.others : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.others ? (lgProfileData.socialSecurityBenefitAvailed.others / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'notAvailed',
-            label: 'Not Availed',
+            label: language === 'en' ? 'Not Availed' : 'उपलब्ध छैन',
             value: lgProfileData.socialSecurityBenefitAvailed.notAvailed ? lgProfileData.socialSecurityBenefitAvailed.notAvailed : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.notAvailed ? (lgProfileData.socialSecurityBenefitAvailed.notAvailed / summationLGProfileSocialSecurity) * 100 : 0,
         },
         {
             key: 'notApplicable',
-            label: 'Not Applicable',
+            label: language === 'en' ? 'Not Applicable' : 'लागु हुँदैन',
             value: lgProfileData.socialSecurityBenefitAvailed.notApplicable ? lgProfileData.socialSecurityBenefitAvailed.notApplicable : 0,
             percentage: lgProfileData.socialSecurityBenefitAvailed.notApplicable ? (lgProfileData.socialSecurityBenefitAvailed.notApplicable / summationLGProfileSocialSecurity) * 100 : 0,
         },
@@ -1629,29 +1632,29 @@ export const LGProfileSocialSecurityData = (lgProfileData, summationLGProfileSoc
 );
 
 
-export const LGProfileMigrationData = (lgProfileData, summationLGProfileMigration) => (
+export const LGProfileMigrationData = (lgProfileData, summationLGProfileMigration, language) => (
     [
         {
             key: 'mostlyPresent',
-            label: 'Mostly Present',
+            label: language === 'en' ? 'Mostly Present' : 'प्राय उपस्‍थित',
             value: lgProfileData.migration.mostlyPresent ? lgProfileData.migration.mostlyPresent : 0,
             percentage: lgProfileData.migration.mostlyPresent ? (lgProfileData.migration.mostlyPresent / summationLGProfileMigration) * 100 : 0,
         },
         {
             key: 'notPresentInsideNepal',
-            label: 'Not present,inside Nepal',
+            label: language === 'en' ? 'Not present,inside Nepal' : 'उपस्‍थित छेैन नेपाल भित्र',
             value: lgProfileData.migration.notPresentInsideNepal ? lgProfileData.migration.notPresentInsideNepal : 0,
             percentage: lgProfileData.migration.notPresentInsideNepal ? (lgProfileData.migration.notPresentInsideNepal / summationLGProfileMigration) * 100 : 0,
         },
         {
             key: 'notPresentOutsideNepal',
-            label: 'Not Present,Outside Nepal',
+            label: language === 'en' ? 'Not Present,Outside Nepal' : 'उपस्‍थित छेैन नेपाल बाहिर',
             value: lgProfileData.migration.notPresentOutsideNepal ? lgProfileData.migration.notPresentOutsideNepal : 0,
             percentage: lgProfileData.migration.notPresentOutsideNepal ? (lgProfileData.migration.notPresentOutsideNepal / summationLGProfileMigration) * 100 : 0,
         },
         {
             key: 'notKnown',
-            label: 'Not Known',
+            label: language === 'en' ? 'Not Known' : 'थाहा छैन',
             value: lgProfileData.migration.notKnown ? lgProfileData.migration.notKnown : 0,
             percentage: lgProfileData.migration.notKnown ? (lgProfileData.migration.notKnown / summationLGProfileMigration) * 100 : 0,
         },
@@ -1659,65 +1662,65 @@ export const LGProfileMigrationData = (lgProfileData, summationLGProfileMigratio
 );
 
 
-export const LGProfileEducationLevelData = (lgProfileData, SummationLGProfileEducationLevel) => (
+export const LGProfileEducationLevelData = (lgProfileData, SummationLGProfileEducationLevel, language) => (
     [
         {
             key: 'primary',
-            label: 'Primary',
+            label: language === 'en' ? 'Primary' : 'प्राथमिक',
             value: lgProfileData.educationLevel.primary ? lgProfileData.educationLevel.primary : 0,
             percentage: lgProfileData.educationLevel.primary ? (lgProfileData.educationLevel.primary / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'lowerSecondary',
-            label: 'Lower Secondary',
+            label: language === 'en' ? 'Lower Secondary' : 'निम्न माध्यमिक',
             value: lgProfileData.educationLevel.lowerSecondary ? lgProfileData.educationLevel.lowerSecondary : 0,
             percentage: lgProfileData.educationLevel.lowerSecondary ? ((lgProfileData.educationLevel.lowerSecondary / SummationLGProfileEducationLevel) * 100) : 0,
         },
         {
             key: 'slcOrEquivalent',
-            label: 'SLC or equivalent',
+            label: language === 'en' ? 'SLC or equivalent' : 'एसएलसी वा समकक्ष',
             value: lgProfileData.educationLevel.slcOrEquivalent ? lgProfileData.educationLevel.slcOrEquivalent : 0,
             percentage: lgProfileData.educationLevel.slcOrEquivalent ? (lgProfileData.educationLevel.slcOrEquivalent / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'intermediateOrEquivalent',
-            label: 'Intermediate or equivalent',
+            label: language === 'en' ? 'Intermediate or equivalent' : 'मध्यवर्ती वा समकक्ष',
             value: lgProfileData.educationLevel.intermediateOrEquivalent ? lgProfileData.educationLevel.intermediateOrEquivalent : 0,
             percentage: lgProfileData.educationLevel.intermediateOrEquivalent ? (lgProfileData.educationLevel.intermediateOrEquivalent / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'bachelorOrEquivalent',
-            label: 'Bachelor or Equivalent',
+            label: language === 'en' ? 'Bachelor or Equivalent' : 'स्नातक वा समकक्ष',
             value: lgProfileData.educationLevel.bachelorOrEquivalent ? lgProfileData.educationLevel.bachelorOrEquivalent : 0,
             percentage: lgProfileData.educationLevel.bachelorOrEquivalent ? (lgProfileData.educationLevel.bachelorOrEquivalent / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'mastersPhd',
-            label: 'Masters/Ph.D',
+            label: language === 'en' ? 'Masters/Ph.D' : 'मास्टर्स/पीएचडी',
             value: lgProfileData.educationLevel.mastersPhd ? lgProfileData.educationLevel.mastersPhd : 0,
             percentage: lgProfileData.educationLevel.mastersPhd ? (lgProfileData.educationLevel.mastersPhd / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'noEducation',
-            label: 'No education',
+            label: language === 'en' ? 'No education' : 'शिक्षा छैन',
             value: lgProfileData.educationLevel.noEducation ? lgProfileData.educationLevel.noEducation : 0,
             percentage: lgProfileData.educationLevel.noEducation ? (lgProfileData.educationLevel.noEducation / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'otherNonformal',
-            label: 'Other/Non-formal',
+            label: language === 'en' ? 'Other/Non-formal' : 'अन्य/अनौपचारिक',
             value: lgProfileData.educationLevel.otherNonformal ? lgProfileData.educationLevel.otherNonformal : 0,
             percentage: lgProfileData.educationLevel.otherNonformal ? (lgProfileData.educationLevel.otherNonformal / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'notEligible',
-            label: 'Not Eligible(less than 5 years of age)',
+            label: language === 'en' ? 'Not Eligible(less than 5 years of age)' : 'योग्य छैन (५ वर्ष भन्दा कम उमेर)',
             value: lgProfileData.educationLevel.notEligible ? lgProfileData.educationLevel.notEligible : 0,
             percentage: lgProfileData.educationLevel.notEligible ? (lgProfileData.educationLevel.notEligible / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'unknown',
-            label: 'Unknown',
+            label: language === 'en' ? 'Unknown' : 'अज्ञात',
             value: lgProfileData.educationLevel.unknown ? lgProfileData.educationLevel.unknown : 0,
             percentage: lgProfileData.educationLevel.unknown ? (lgProfileData.educationLevel.unknown / SummationLGProfileEducationLevel) * 100 : 0,
         },

@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
+import { Translation } from 'react-i18next';
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, Legend, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styles from '../styles.scss';
 
@@ -13,7 +14,7 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }) => (
         </text>
     </g>
 );
-const CustomizedLabelMale = ({ x, y, fill, value, width, height }) => (
+const CustomizedLabelMale = ({ x, y, fill, value, width, height, language }) => (
     <text
         x={x + width - 39}
         y={y + 22}
@@ -22,13 +23,14 @@ const CustomizedLabelMale = ({ x, y, fill, value, width, height }) => (
         fontFamily="sans-serif"
         fill={'#ffffff'}
         textAnchor="middle"
+        className={language === 'np' && styles.languageFont}
 
 
     >
         {NumberWithCommas(Math.abs(value))}
     </text>
 );
-const CustomizedLabelFemale = ({ x, y, fill, value, width, height }) => (
+const CustomizedLabelFemale = ({ x, y, fill, value, width, height, language }) => (
     <text
         x={x + width + 39}
         y={y + 22}
@@ -37,13 +39,14 @@ const CustomizedLabelFemale = ({ x, y, fill, value, width, height }) => (
         fontFamily="sans-serif"
         fill={'#ffffff'}
         textAnchor="middle"
+        className={language === 'np' && styles.languageFont}
 
 
     >
         {NumberWithCommas(Math.abs(value))}
     </text>
 );
-const CustomizedLabel = ({ x, y, fill, value, width, height }) => (
+const CustomizedLabel = ({ x, y, fill, value, width, height, language }) => (
     <text
         x={x + width - 45}
         y={y + 21}
@@ -52,13 +55,14 @@ const CustomizedLabel = ({ x, y, fill, value, width, height }) => (
         fontFamily="sans-serif"
         fill={'#ffffff'}
         textAnchor="middle"
+        className={language === 'np' && styles.languageFont}
 
 
     >
         {NumberWithCommas(Math.abs(value).toFixed(2))}
     </text>
 );
-const CustomizedLabelLiteracyRate = ({ x, y, fill, value, width, height }) => (
+const CustomizedLabelLiteracyRate = ({ x, y, fill, value, width, height, language }) => (
     <text
         x={x + width - 35}
         y={y + 21}
@@ -67,6 +71,7 @@ const CustomizedLabelLiteracyRate = ({ x, y, fill, value, width, height }) => (
         fontFamily="sans-serif"
         fill={'#ffffff'}
         textAnchor="middle"
+        className={language === 'np' && styles.languageFont}
 
 
     >
@@ -83,14 +88,20 @@ const renderLegend = (props) => {
                 payload.map((entry, index) => (
                     <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                         <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}`, marginRight: '10px' }} />
-                        <h2>{entry.value.charAt(0).toUpperCase() + entry.value.slice(1)}</h2>
+                        <Translation>
+                            {
+                                t => (
+                                    <h2>{t(entry.value.charAt(0).toUpperCase() + entry.value.slice(1))}</h2>
+                                )
+                            }
+                        </Translation>
                     </div>
                 ))
             }
         </div>
     );
 };
-const BarchartVisualization = ({ item, category, percentage }) => {
+const BarchartVisualization = ({ item, category, percentage, language }) => {
     const [data, setData] = useState([]);
     useEffect(() => {
         if (category) {
@@ -140,7 +151,7 @@ const BarchartVisualization = ({ item, category, percentage }) => {
                             barSize={25}
                             radius={[0, 0, 0, 0]}
                             // label={{ position: 'insideRight', fill: '#ffffff', fontSize: '16px' }}
-                            label={percentage ? <CustomizedLabelLiteracyRate /> : <CustomizedLabel />}
+                            label={percentage ? <CustomizedLabelLiteracyRate language={language} /> : <CustomizedLabel language={language} />}
 
                         >
                             {data.map(hazard => (
@@ -194,7 +205,7 @@ const BarchartVisualization = ({ item, category, percentage }) => {
 
                                 barSize={25}
                                 stackId="stack"
-                                label={<CustomizedLabelFemale />}
+                                label={<CustomizedLabelFemale language={language} />}
                                 // label={{ position: 'right', fill: '#ffffff', fontSize: '16px' }}
                                 minPointSize={70}
                             />
@@ -203,7 +214,7 @@ const BarchartVisualization = ({ item, category, percentage }) => {
                                 fill="#2A7BBB"
                                 stackId="stack"
                                 barSize={25}
-                                label={<CustomizedLabelMale />}
+                                label={<CustomizedLabelMale language={language} />}
                                 // label={{ position: 'insideRight', fill: '#ffffff', fontSize: '16px' }}
                                 minPointSize={70}
                             />

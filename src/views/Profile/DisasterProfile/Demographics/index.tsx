@@ -260,41 +260,74 @@ const LGProfileCustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         if (payload.length === 2) {
             return (
-                <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
-                    <p>
-                        Age Group
-                        {' '}
-                        {label}
-                        {' '}
-                        Years
-                        {' '}
-                    </p>
+                <Translation>
                     {
-                        payload.map(item => (
-                            <p key={item.name}>{`${item.name.charAt(0).toUpperCase() + item.name.slice(1)} : ${NumberWithCommas(item.value)}`}</p>
+                        t => (
+                            <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
+                                <p>
+                                    {t('Age Group')}
+                                    {' '}
+                                    {label}
+                                    {' '}
+                                    {t('Years')}
+                                    {' '}
+                                </p>
+                                {
+                                    payload.map(item => (
+                                        <p key={item.name}>
+                                            {t(item.name.charAt(0).toUpperCase() + item.name.slice(1))}
+                                            {' '}
+                                            :
+                                            {' '}
+                                            {NumberWithCommas(item.value)}
+                                        </p>
+                                    ))
+                                }
 
-                        ))
+
+                            </div>
+                        )
                     }
-
-
-                </div>
+                </Translation>
             );
         }
         return (
-            <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
-                <p>
-                    Age Group
-                    {' '}
-                    {label}
-                    {' '}
-                    Years
-                    {' '}
+            <Translation>
+                {
+                    t => (
+                        <div style={{ backgroundColor: 'white', color: 'black', padding: '8px', border: '1px solid #e1e1e1' }}>
+                            <p>
+                                {t('Age Group')}
+                                {' '}
+                                {label}
+                                {' '}
+                                {t('Years')}
+                                {' '}
 
-                </p>
-                <p>{`Value : ${NumberWithCommas(payload[0].value)}`}</p>
-                {payload[0].payload.percent ? <p>{`Percentage: ${payload[0].payload.percent.toFixed(2)}%`}</p> : ''}
+                            </p>
+                            <p>
+                                {t('Value')}
+                                {' '}
+                                :
+                                {' '}
+                                {NumberWithCommas(payload[0].value)}
+                            </p>
+                            {payload[0].payload.percent ? (
+                                <p>
+                                    {t('Percentage')}
+                                    {' '}
+                                    :
+                                    {' '}
+                                    {payload[0].payload.percent.toFixed(2)}
+                                    %
+                                </p>
+                            ) : ''}
 
-            </div>
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 
@@ -415,7 +448,13 @@ const LGProfileRenderLegend = (props) => {
                 payload.map((entry, index) => (
                     <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                         <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
-                        <h2 style={{ marginTop: '5px' }}>Age Group</h2>
+                        <Translation>
+                            {
+                                t => (
+                                    <h2 style={{ marginTop: '5px' }}>{t('Age Group')}</h2>
+                                )
+                            }
+                        </Translation>
                     </div>
                 ))
             }
@@ -858,6 +897,7 @@ class Demographics extends React.PureComponent<Props> {
             lgProfileWardLevelData,
 
         } = this.props;
+
         const { demographyData, resourceLngLat, houseHoldInformation } = this.state;
 
 
@@ -884,11 +924,11 @@ class Demographics extends React.PureComponent<Props> {
         const sexRatio = populationSummary
             .filter(v => ['malePopulation', 'femalePopulation'].includes(v.key));
         const sexRatioTotalPopulationLGProfile = lgProfileData.gender.male + lgProfileData.gender.female + lgProfileData.gender.other;
-        const sexRatioLGProfile = sexRatioLGProfileData(lgProfileData, sexRatioTotalPopulationLGProfile);
+        const sexRatioLGProfile = sexRatioLGProfileData(lgProfileData, sexRatioTotalPopulationLGProfile, language);
         const literatePeopleTotalPopulationLGProfile = lgProfileData.literacyRate.male + lgProfileData.literacyRate.female + lgProfileData.literacyRate.other;
         const literacyRateLGProfile = (literatePeopleTotalPopulationLGProfile / sexRatioTotalPopulationLGProfile) * 100;
-        const literacyRatioLGProfile = literacyRatioLGProfileData(lgProfileData, literatePeopleTotalPopulationLGProfile);
-        const houseHoldSummaryLGProfile = houseHoldSummaryLGProfileData(lgProfileData, sexRatioTotalPopulationLGProfile);
+        const literacyRatioLGProfile = literacyRatioLGProfileData(lgProfileData, literatePeopleTotalPopulationLGProfile, language);
+        const houseHoldSummaryLGProfile = houseHoldSummaryLGProfileData(lgProfileData, sexRatioTotalPopulationLGProfile, language);
 
         const finalSexRatio = [{ label: 'genderRatio', male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
         const finalSexRatioPercentage = [{ male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').percent, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').percent }];
@@ -934,57 +974,57 @@ class Demographics extends React.PureComponent<Props> {
 
         const filteredLGProfileAgeGroup = lgProfileAgeGroup.filter(i => i.value !== 0);
         const SummationLGProfileEducationLevel = SummationLGProfileEducationLevelData(lgProfileData);
-        const LGProfileEducationLevel = LGProfileEducationLevelData(lgProfileData, SummationLGProfileEducationLevel);
+        const LGProfileEducationLevel = LGProfileEducationLevelData(lgProfileData, SummationLGProfileEducationLevel, language);
         const filteredLGProfileEducationLevel = LGProfileEducationLevel.filter(i => i.value !== 0);
         const summationLGProfileMigration = summationLGProfileMigrationData(lgProfileData);
 
-        const LGProfileMigration = LGProfileMigrationData(lgProfileData, summationLGProfileMigration);
+        const LGProfileMigration = LGProfileMigrationData(lgProfileData, summationLGProfileMigration, language);
         const filteredLGProfileMigration = LGProfileMigration.filter(i => i.value !== 0);
 
 
         const summationLGProfileSocialSecurity = summationLGProfileSocialSecurityData(lgProfileData);
 
-        const LGProfileSocialSecurity = LGProfileSocialSecurityData(lgProfileData, summationLGProfileSocialSecurity);
+        const LGProfileSocialSecurity = LGProfileSocialSecurityData(lgProfileData, summationLGProfileSocialSecurity, language);
         const filteredLGProfileSocialSecurity = LGProfileSocialSecurity.filter(i => i.value !== 0);
 
 
         const summationLGProfileDisability = summationLGProfileDisabilityData(lgProfileData);
-        const LGProfileDisability = LGProfileDisabilityData(lgProfileData, summationLGProfileDisability);
+        const LGProfileDisability = LGProfileDisabilityData(lgProfileData, summationLGProfileDisability, language);
         const filteredLGProfileDisability = LGProfileDisability.filter(i => i.value !== 0);
         const summationLGProfileHouseHold = summationLGProfileHouseHoldData(lgProfileData);
 
-        const LGProfileHouseHold = LGProfileHouseHoldData(lgProfileData, summationLGProfileHouseHold);
+        const LGProfileHouseHold = LGProfileHouseHoldData(lgProfileData, summationLGProfileHouseHold, language);
         const filteredLGProfileHouseHold = LGProfileHouseHold.filter(i => i.value !== 0);
 
         const summationLGProfileAverageMonthlyIncome = summationLGProfileAverageMonthlyIncomeData(lgProfileData);
 
-        const LGProfileAverageMonthlyIncome = LGProfileAverageMonthlyIncomeData(lgProfileData, summationLGProfileAverageMonthlyIncome);
+        const LGProfileAverageMonthlyIncome = LGProfileAverageMonthlyIncomeData(lgProfileData, summationLGProfileAverageMonthlyIncome, language);
         const filteredLGProfileAverageMonthlyIncome = LGProfileAverageMonthlyIncome.filter(i => i.value !== 0);
 
         const summationLGProfileMajorOccupation = summationLGProfileMajorOccupationData(lgProfileData);
 
-        const LGProfileAverageMajorOccupation = LGProfileAverageMajorOccupationData(lgProfileData, summationLGProfileMajorOccupation);
+        const LGProfileAverageMajorOccupation = LGProfileAverageMajorOccupationData(lgProfileData, summationLGProfileMajorOccupation, language);
         const filteredLGProfileAverageMajorOccupation = LGProfileAverageMajorOccupation.filter(i => i.value !== 0);
         const summationLGProfileDrinkingWater = summationLGProfileDrinkingWaterData(lgProfileData);
 
 
-        const LGProfileDrinkingWater = LGProfileDrinkingWaterData(lgProfileData, summationLGProfileDrinkingWater);
+        const LGProfileDrinkingWater = LGProfileDrinkingWaterData(lgProfileData, summationLGProfileDrinkingWater, language);
         const filteredLGProfileDrinkingWater = LGProfileDrinkingWater.filter(i => i.value !== 0);
         const summationLGProfileResidentHousehold = summationLGProfileResidentHouseholdData(lgProfileData);
 
         const LGProfileResidentHousehold = LGProfileResidentHouseholdData(lgProfileData, summationLGProfileResidentHousehold);
         const filteredLGProfileResidentHousehold = LGProfileResidentHousehold.filter(i => i.value !== 0);
         const summationLGProfileAgriculturePractice = summationLGProfileAgriculturePracticeData(lgProfileData);
-        const LGProfileAgriculturePractice = LGProfileAgriculturePracticeData(lgProfileData, summationLGProfileAgriculturePractice);
+        const LGProfileAgriculturePractice = LGProfileAgriculturePracticeData(lgProfileData, summationLGProfileAgriculturePractice, language);
         const filteredLGProfileAgriculturePractice = LGProfileAgriculturePractice.filter(i => i.value !== 0);
         const summationLGProfileAgricultureProduct = summationLGProfileAgricultureProductData(lgProfileData);
-        const LGProfileAgricultureProduct = LGProfileAgricultureProductData(lgProfileData, summationLGProfileAgricultureProduct);
+        const LGProfileAgricultureProduct = LGProfileAgricultureProductData(lgProfileData, summationLGProfileAgricultureProduct, language);
         const filteredLGProfileAgricultureProduct = LGProfileAgricultureProduct.filter(i => i.value !== 0);
         const summationLGProfileBuildingType = summationLGProfileBuildingTypeData(lgProfileData);
-        const LGProfileBuildingType = LGProfileBuildingTypeData(lgProfileData, summationLGProfileBuildingType);
+        const LGProfileBuildingType = LGProfileBuildingTypeData(lgProfileData, summationLGProfileBuildingType, language);
         const filteredLGProfileBuildingType = LGProfileBuildingType.filter(i => i.value !== 0);
         const summationLGProfileBuildingFoundation = summationLGProfileBuildingFoundationData(lgProfileData);
-        const LGProfileBuildingFoundation = LGProfileBuildingFoundationData(lgProfileData, summationLGProfileBuildingFoundation);
+        const LGProfileBuildingFoundation = LGProfileBuildingFoundationData(lgProfileData, summationLGProfileBuildingFoundation, language);
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
         const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
         const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total, currentValue) => total + currentValue.totalPeople || 0, 0) : '-';
@@ -1354,7 +1394,7 @@ class Demographics extends React.PureComponent<Props> {
                                                 )
                                                 : (
                                                     <div>
-                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Demographics</h3>
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>{t('Demographics')}</h3>
                                                         {filteredLGProfileEducationLevel.length
                                                             ? (
                                                                 <div className={styles.barChartSection}>
@@ -1362,7 +1402,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Education Attainment
+                                                                            {t('Education Attainment')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].percentage}
@@ -1370,13 +1410,29 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                of the population has received
-                                                                                {' '}
-                                                                                {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                                {' '}
-                                                                                education
-                                                                            </span>
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            of the population has received
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            education
+                                                                                        </span>
+                                                                                    )
+                                                                                    : (
+                                                                                        <span>
+                                                                                            जनसंख्याले
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileEducationLevel.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            शिक्षा प्राप्‍त गरेको छन्
+                                                                                        </span>
+                                                                                    )
+
+                                                                            }
+
 
                                                                         </>
 
@@ -1389,14 +1445,19 @@ class Demographics extends React.PureComponent<Props> {
                                                                         <div className={styles.graphicalVisualization}>
 
                                                                             {/* <div style={{ display: 'flex',
-                                                                justifyContent: 'flex-end',
-                                                        fontSize: '25px' }}
-                                                    /> */}
+                                                                        justifyContent: 'flex-end',
+                                                                fontSize: '25px' }}
+                                                            /> */}
                                                                             <div id="filteredLGProfileEducationLevel">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Population by highest level of education completion</h3>
+                                                                                    <h3>
+                                                                                        {language === 'en'
+                                                                                            ? 'Population by highest level of education completion'
+                                                                                            : 'शिक्षा पूरा गरेको उच्चतम स्तर'}
+
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileEducationLevel')}
@@ -1404,7 +1465,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
                                                                                 </div>
 
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileEducationLevel} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileEducationLevel} />
                                                                             </div>
 
 
@@ -1421,7 +1482,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                     <div className={styles.percentageValue}>
                                                                         <h1>
-                                                                            Migration
+                                                                            {t('Migration')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].percentage}
@@ -1429,12 +1490,28 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                of the population
-                                                                                {' '}
-                                                                                {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            of the population
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].label}
 
-                                                                            </span>
+                                                                                        </span>
+                                                                                    )
+                                                                                    : (
+                                                                                        <span>
+                                                                                            जनसंख्या
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileMigration.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {''}
+                                                                                            छन्
+
+
+                                                                                        </span>
+                                                                                    )
+                                                                            }
 
                                                                         </>
 
@@ -1452,16 +1529,23 @@ class Demographics extends React.PureComponent<Props> {
                                                          /> */}
                                                                             <div id="filteredLGProfileMigration">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Population by Presence in Household</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Population by Presence in Household'
+                                                                                                : 'घरपरिवारमा उपस्थिति द्वारा जनसंख्या'
+                                                                                        }
+
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileMigration')}
                                                                                         iconName="download"
                                                                                     />
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileMigration} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileMigration} />
 
                                                                             </div>
 
@@ -1478,7 +1562,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                 <div className={styles.barChartSection}>
                                                                     <div className={styles.percentageValue}>
                                                                         <h1>
-                                                                            Social Security
+                                                                            {t('Social Security')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {summationLGProfileSocialSecurity}
@@ -1487,7 +1571,11 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                         <>
                                                                             <span>
-                                                                                people make use of social security benefits
+                                                                                {
+                                                                                    language === 'en'
+                                                                                        ? 'people make use of social security benefits'
+                                                                                        : 'मानिसहरूले सामाजिक सुरक्षा लाभहरू प्रयोग गर्छन्'
+                                                                                }
 
                                                                             </span>
 
@@ -1507,16 +1595,23 @@ class Demographics extends React.PureComponent<Props> {
                                                          /> */}
                                                                             <div id="filteredLGProfileSocialSecurity">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Population by type of social security benefit</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Population by type of social security benefit'
+                                                                                                : 'सामाजिक सुरक्षा लाभ को प्रकार द्वारा जनसंख्या'
+                                                                                        }
+
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileSocialSecurity')}
                                                                                         iconName="download"
                                                                                     />
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileSocialSecurity} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileSocialSecurity} />
 
                                                                             </div>
 
@@ -1533,7 +1628,9 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                     <div className={styles.percentageValue}>
                                                                         <h1>
-                                                                            People with Disability
+                                                                            {language === 'en'
+                                                                                ? 'People with Disability'
+                                                                                : 'अपाङ्गता भएका व्यक्तिहरू'}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {summationLGProfileDisability}
@@ -1554,9 +1651,16 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileDisability">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Population by Disability</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Population by Disability'
+                                                                                                : 'असक्षमता द्वारा जनसंख्या'
+                                                                                        }
+
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileDisability')}
@@ -1564,7 +1668,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileDisability} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileDisability} />
 
                                                                             </div>
 
@@ -1576,7 +1680,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                 </div>
                                                             ) : ''}
-                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Household Statistics</h3>
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>{t('Household Statistics')}</h3>
                                                         {filteredLGProfileHouseHold.length
                                                             ? (
                                                                 <div className={styles.barChartSection}>
@@ -1584,7 +1688,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Number of households
+                                                                            {t('Number of households')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {summationLGProfileHouseHold}
@@ -1605,9 +1709,16 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileHouseHold">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Breakdown of household heads</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Breakdown of household heads'
+                                                                                                : 'घरमुलिको ब्रेकडाउन'
+                                                                                        }
+
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileHouseHold')}
@@ -1615,7 +1726,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileHouseHold} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileHouseHold} />
 
                                                                             </div>
 
@@ -1649,7 +1760,11 @@ class Demographics extends React.PureComponent<Props> {
 
                                                             </> */}
                                                                         <h1>
-                                                                            Maximum household income Range
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? 'Maximum household income Range'
+                                                                                    : 'अधिकतम पारिवारिक आय दायरा'
+                                                                            }
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileAverageMonthlyIncome.sort((a, b) => b.percentage - a.percentage))[0].label}
@@ -1658,7 +1773,11 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                         <>
                                                                             <span>
-                                                                                on average per month
+                                                                                {
+                                                                                    language === 'en'
+                                                                                        ? 'on average per month'
+                                                                                        : 'औसत प्रति महिना'
+                                                                                }
 
                                                                             </span>
 
@@ -1678,9 +1797,15 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileAverageMonthlyIncome">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Household by average monthly income</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Household by average monthly income'
+                                                                                                : 'औसत मासिक आम्दानी द्वारा घरपरिवार'
+                                                                                        }
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileAverageMonthlyIncome')}
@@ -1688,7 +1813,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileAverageMonthlyIncome} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileAverageMonthlyIncome} />
 
                                                                             </div>
 
@@ -1708,7 +1833,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                         {/* <h1>Education Institution</h1> */}
 
                                                                         <h1>
-                                                                            Occupation
+                                                                            {t('Occupation')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].value}
@@ -1716,13 +1841,28 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                Household are engaged in
-                                                                                {' '}
-                                                                                {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            Household are engaged in
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].label}
 
-                                                                            </span>
+                                                                                        </span>
+                                                                                    )
 
+                                                                                    : (
+                                                                                        <span>
+                                                                                            घरपरिवार
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileAverageMajorOccupation.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {''}
+                                                                                            छन्
+
+                                                                                        </span>
+                                                                                    )
+                                                                            }
                                                                         </>
 
                                                                     </div>
@@ -1738,9 +1878,17 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileAverageMajorOccupation">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Major occupation</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Major occupation'
+                                                                                                : 'प्रमुख पेशा'
+                                                                                        }
+                                                                                        {' '}
+
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileAverageMajorOccupation')}
@@ -1748,7 +1896,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileAverageMajorOccupation} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileAverageMajorOccupation} />
 
                                                                             </div>
 
@@ -1767,7 +1915,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Drinking Water
+                                                                            {t('Drinking Water')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].value}
@@ -1775,12 +1923,26 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                households use
-                                                                                {' '}
-                                                                                {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            households use
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].label}
 
-                                                                            </span>
+                                                                                        </span>
+                                                                                    )
+                                                                                    : (
+                                                                                        <span>
+                                                                                            घरपरिवारहरू
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileDrinkingWater.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            प्रयोग गर्छन्
+                                                                                        </span>
+                                                                                    )
+                                                                            }
 
                                                                         </>
 
@@ -1798,9 +1960,15 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileDrinkingWater">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Source of Drinking water by Household</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Source of Drinking water by Household'
+                                                                                                : 'घरायसी पिउने पानीको स्रोत'
+                                                                                        }
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileDrinkingWater')}
@@ -1808,7 +1976,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileDrinkingWater} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileDrinkingWater} />
 
                                                                             </div>
 
@@ -1827,7 +1995,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Number of buildings
+                                                                            {t('Number of buildings')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {summationLGProfileResidentHousehold}
@@ -1848,9 +2016,15 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileResidentHousehold">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Building by number of resident households</h3>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            language === 'en'
+                                                                                                ? 'Building by number of resident households'
+                                                                                                : 'आवासीय घरपरिवारको संख्या अनुसार निर्माण'
+                                                                                        }
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileResidentHousehold')}
@@ -1858,7 +2032,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileResidentHousehold} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileResidentHousehold} />
 
                                                                             </div>
 
@@ -1870,7 +2044,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                 </div>
                                                             ) : ''}
-                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Agriculture and Livestock</h3>
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>{t('Agriculture and Livestock')}</h3>
                                                         {filteredLGProfileAgriculturePractice.length
                                                             ? (
                                                                 <div className={styles.barChartSection}>
@@ -1878,7 +2052,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Agriculture
+                                                                            {t('Agriculture')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].percentage}
@@ -1887,12 +2061,26 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                of households are
-                                                                                {' '}
-                                                                                {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            of households are
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].label}
 
-                                                                            </span>
+                                                                                        </span>
+                                                                                    )
+                                                                                    : (
+                                                                                        <span>
+                                                                                            घरपरिवार
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileAgriculturePractice.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            छन्
+                                                                                        </span>
+                                                                                    )
+                                                                            }
 
                                                                         </>
 
@@ -1910,9 +2098,9 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileAgriculturePractice">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Agricuture practice</h3>
+                                                                                    <h3>{t('Agricuture practice')}</h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileAgriculturePractice')}
@@ -1920,7 +2108,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileAgriculturePractice} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileAgriculturePractice} />
 
                                                                             </div>
 
@@ -1939,14 +2127,24 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Agricultural Products
+                                                                            {t('Agricultural Products')}
                                                                         </h1>
                                                                         <>
-                                                                            <span>
-                                                                                {(filteredLGProfileAgricultureProduct.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                                {' '}
-                                                                                is major Agricultural product
-                                                                            </span>
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            {(filteredLGProfileAgricultureProduct.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            is major Agricultural product
+                                                                                        </span>
+                                                                                    ) : (
+                                                                                        <span>
+                                                                                            {(filteredLGProfileAgricultureProduct.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            प्रमुख कृषि उत्पादन हो
+                                                                                        </span>
+                                                                                    )}
 
                                                                         </>
 
@@ -1964,9 +2162,12 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileAgricultureProduct">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Major Agricultural products</h3>
+                                                                                    <h3>
+                                                                                        {t('Major Agricultural products')}
+                                                                                        {' '}
+                                                                                    </h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileAgricultureProduct')}
@@ -1974,7 +2175,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileAgricultureProduct} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileAgricultureProduct} />
 
                                                                             </div>
 
@@ -1986,7 +2187,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                 </div>
                                                             ) : ''}
-                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>Physical Structure of House</h3>
+                                                        <h3 style={{ marginBottom: '30px', color: '#4785DE', fontSize: '20px' }}>{t('Physical Structure of House')}</h3>
                                                         {filteredLGProfileBuildingType.length
                                                             ? (
                                                                 <div className={styles.barChartSection}>
@@ -1994,7 +2195,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Majority of building type
+                                                                            {t('Majority of building type')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].percentage}
@@ -2003,14 +2204,28 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                are
-                                                                                {' '}
-                                                                                {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                                {' '}
-                                                                                house
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            are
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            house
 
-                                                                            </span>
+                                                                                        </span>
+                                                                                    )
+                                                                                    : (
+                                                                                        <span>
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileBuildingType.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            घर छन्
+
+                                                                                        </span>
+                                                                                    )
+                                                                            }
 
                                                                         </>
 
@@ -2028,9 +2243,9 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileBuildingType">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Building by Type of Superstructure</h3>
+                                                                                    <h3>{t('Building by Type of Superstructure')}</h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileBuildingType')}
@@ -2038,7 +2253,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileBuildingType} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileBuildingType} />
 
                                                                             </div>
 
@@ -2057,7 +2272,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                     <div className={styles.percentageValue}>
                                                                         {/* <h1>Education Institution</h1> */}
                                                                         <h1>
-                                                                            Majority of building
+                                                                            {t('Majority of building')}
                                                                         </h1>
                                                                         <h2 style={{ fontSize: '22px', color: 'black' }}>
                                                                             {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].percentage}
@@ -2066,14 +2281,28 @@ class Demographics extends React.PureComponent<Props> {
                                                                         </h2>
 
                                                                         <>
-                                                                            <span>
-                                                                                have
-                                                                                {' '}
-                                                                                {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].label}
-                                                                                {' '}
-                                                                                foundation
+                                                                            {
+                                                                                language === 'en'
+                                                                                    ? (
+                                                                                        <span>
+                                                                                            have
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            foundation
 
-                                                                            </span>
+                                                                                        </span>
+                                                                                    )
+                                                                                    : (
+                                                                                        <span>
+                                                                                            {' '}
+                                                                                            {(filteredLGProfileBuildingFoundation.sort((a, b) => b.percentage - a.percentage))[0].label}
+                                                                                            {' '}
+                                                                                            आधार छन्
+
+                                                                                        </span>
+                                                                                    )
+                                                                            }
 
                                                                         </>
 
@@ -2091,9 +2320,9 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileBuildingFoundation">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>Buildings by Type of Foundation</h3>
+                                                                                    <h3>{t('Buildings by Type of Foundation')}</h3>
                                                                                     <Button
-                                                                                        title="Download Chart"
+                                                                                        title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
                                                                                         transparent
                                                                                         onClick={() => this.handleSaveClick('filteredLGProfileBuildingFoundation')}
@@ -2101,7 +2330,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     />
 
                                                                                 </div>
-                                                                                <LGProfileVisualization percentage item={filteredLGProfileBuildingFoundation} />
+                                                                                <LGProfileVisualization language={language} percentage item={filteredLGProfileBuildingFoundation} />
 
                                                                             </div>
 
@@ -2816,232 +3045,238 @@ class Demographics extends React.PureComponent<Props> {
                                             onHide={this.handleTooltipClose}
 
                                         >
-                                            <div style={{ margin: '10px' }}>
-                                                <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                                            <Translation>
+                                                {
+                                                    t => (
+                                                        <div style={{ margin: '10px' }}>
+                                                            <div style={{ marginTop: '20px', marginBottom: '20px' }}>
 
-                                                    <h1>
-                                                        Household ID:
-                                                        {' '}
-                                                        {houseHoldInformation.houseNo}
-                                                    </h1>
-                                                    <table id={styles.customers}>
-
-                                                        <tr>
-                                                            <td>Total Number of family members</td>
-
-                                                            <td><b>{houseHoldInformation.totalFamilyMembers}</b></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Ethinicity</td>
-
-                                                            <td><b>{houseHoldInformation.ethnicity}</b></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Religion</td>
-
-                                                            <td><b>{houseHoldInformation.religion}</b></td>
-                                                        </tr>
-
-
-                                                    </table>
-                                                </div>
-                                                <div style={{ height: '200px', overflowY: 'scroll' }}>
-                                                    <div
-
-                                                        role="button"
-                                                        tabIndex={0}
-                                                        onClick={() => this.setState({ enableSensitivePopulationDiv: !enableSensitivePopulationDiv })}
-                                                        onKeyDown={undefined}
-
-                                                        style={{
-                                                            marginTop: '10px',
-                                                            marginBottom: '10px',
-                                                            cursor: 'pointer',
-                                                            borderBottom: '1px solid #AEAEAE',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center',
-                                                            paddingTop: '10px',
-                                                            paddingBottom: '10px',
-                                                            marginRight: '5px',
-                                                        }}
-                                                    >
-                                                        <h3>Sensative Populations</h3>
-                                                        <Icon
-                                                            name={enableSensitivePopulationDiv
-                                                                ? 'lgprofilePopupUpArrow'
-                                                                : 'lgprofilePopupDownArrow'}
-                                                        />
-                                                    </div>
-                                                    {enableSensitivePopulationDiv
-                                                        ? (
-                                                            <div>
+                                                                <h1>
+                                                                    {t('Household ID')}
+                                                                    :
+                                                                    {' '}
+                                                                    {houseHoldInformation.houseNo}
+                                                                </h1>
                                                                 <table id={styles.customers}>
 
                                                                     <tr>
-                                                                        <td>Above 60 years old</td>
+                                                                        <td>{t('Total Number of family members')}</td>
 
-                                                                        <td><b>{houseHoldInformation.peopleAboveSixty || '-'}</b></td>
+                                                                        <td><b>{houseHoldInformation.totalFamilyMembers}</b></td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td>Pregnant Women</td>
+                                                                        <td>{t('Ethinicity')}</td>
 
-                                                                        <td><b>{houseHoldInformation.totalPregnantAndLactatingWomen || '-'}</b></td>
-                                                                    </tr>
-                                                                    {/* <tr>
-                                                                    <td>Lactating Mother</td>
-
-                                                                    <td><b>5</b></td>
-                                                                </tr> */}
-                                                                    <tr>
-                                                                        <td>People With Disability</td>
-
-                                                                        <td><b>{totalDisableCount}</b></td>
+                                                                        <td><b>{houseHoldInformation.ethnicity}</b></td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td>Children Below 5 Years old</td>
+                                                                        <td>{t('Religion')}</td>
 
-                                                                        <td><b>{houseHoldInformation.peopleBelowFive || '-'}</b></td>
-                                                                    </tr>
-
-                                                                </table>
-                                                            </div>
-                                                        ) : ''}
-                                                    <div
-
-                                                        role="button"
-                                                        tabIndex={0}
-                                                        onClick={() => this.setState({ enableBuildingStructureDiv: !enableBuildingStructureDiv })}
-                                                        onKeyDown={undefined}
-
-                                                        style={{
-                                                            marginTop: '10px',
-                                                            marginBottom: '10px',
-                                                            cursor: 'pointer',
-                                                            borderBottom: '1px solid #AEAEAE',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center',
-                                                            paddingTop: '10px',
-                                                            paddingBottom: '10px',
-                                                            marginRight: '5px',
-                                                        }}
-                                                    >
-                                                        <h3>Building Structure</h3>
-                                                        <Icon
-
-                                                            name={enableBuildingStructureDiv
-                                                                ? 'lgprofilePopupUpArrow'
-                                                                : 'lgprofilePopupDownArrow'}
-                                                        />
-                                                    </div>
-                                                    {enableBuildingStructureDiv
-                                                        ? (
-                                                            <div>
-                                                                <table id={styles.customers}>
-
-                                                                    <tr>
-                                                                        <td>Age of Building</td>
-
-                                                                        <td>
-                                                                            <b>
-                                                                                {houseHoldInformation.buildingAge}
-                                                                                {' '}
-                                                                                Years
-                                                                            </b>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Number of Stories</td>
-
-                                                                        <td><b>{houseHoldInformation.numberOfStory}</b></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Roof Type</td>
-
-                                                                        <td><b>{houseHoldInformation.materialUsedForRoof}</b></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Building Foundation</td>
-
-                                                                        <td><b>{houseHoldInformation.foundationType}</b></td>
+                                                                        <td><b>{houseHoldInformation.religion}</b></td>
                                                                     </tr>
 
 
                                                                 </table>
                                                             </div>
-                                                        ) : ''}
+                                                            <div style={{ height: '200px', overflowY: 'scroll' }}>
+                                                                <div
 
-                                                    <div
+                                                                    role="button"
+                                                                    tabIndex={0}
+                                                                    onClick={() => this.setState({ enableSensitivePopulationDiv: !enableSensitivePopulationDiv })}
+                                                                    onKeyDown={undefined}
 
-                                                        role="button"
-                                                        tabIndex={0}
-                                                        onClick={() => this.setState({ enableEconomicAspectDiv: !enableEconomicAspectDiv })}
-                                                        onKeyDown={undefined}
+                                                                    style={{
+                                                                        marginTop: '10px',
+                                                                        marginBottom: '10px',
+                                                                        cursor: 'pointer',
+                                                                        borderBottom: '1px solid #AEAEAE',
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                        paddingTop: '10px',
+                                                                        paddingBottom: '10px',
+                                                                        marginRight: '5px',
+                                                                    }}
+                                                                >
+                                                                    <h3>{t('Sensative Populations')}</h3>
+                                                                    <Icon
+                                                                        name={enableSensitivePopulationDiv
+                                                                            ? 'lgprofilePopupUpArrow'
+                                                                            : 'lgprofilePopupDownArrow'}
+                                                                    />
+                                                                </div>
+                                                                {enableSensitivePopulationDiv
+                                                                    ? (
+                                                                        <div>
+                                                                            <table id={styles.customers}>
 
-                                                        style={{
-                                                            marginTop: '10px',
-                                                            marginBottom: '10px',
-                                                            cursor: 'pointer',
-                                                            borderBottom: '1px solid #AEAEAE',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center',
-                                                            paddingTop: '10px',
-                                                            paddingBottom: '10px',
-                                                            marginRight: '5px',
-                                                        }}
-                                                    >
-                                                        <h3>Economic Aspects</h3>
-                                                        <Icon
+                                                                                <tr>
+                                                                                    <td>{t('Above 60 years old')}</td>
 
-                                                            name={enableEconomicAspectDiv
-                                                                ? 'lgprofilePopupUpArrow'
-                                                                : 'lgprofilePopupDownArrow'}
-                                                        />
-                                                    </div>
-                                                    {enableEconomicAspectDiv
-                                                        ? (
-                                                            <div>
-                                                                <table id={styles.customers}>
+                                                                                    <td><b>{houseHoldInformation.peopleAboveSixty || '-'}</b></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Pregnant Women')}</td>
 
-                                                                    <tr>
-                                                                        <td>Major Occupation</td>
+                                                                                    <td><b>{houseHoldInformation.totalPregnantAndLactatingWomen || '-'}</b></td>
+                                                                                </tr>
+                                                                                {/* <tr>
+                                                                        <td>Lactating Mother</td>
 
-                                                                        <td>
-                                                                            {majorOccupationList && majorOccupationList.length ? majorOccupationList.map((i, index) => (
-                                                                                <b key={index}>
-                                                                                    {i}
-                                                                                    {index === majorOccupationList.length - 1 ? '' : ','}
-                                                                                </b>
-                                                                            )) : '-'}
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Supporting Occupation</td>
+                                                                        <td><b>5</b></td>
+                                                                    </tr> */}
+                                                                                <tr>
+                                                                                    <td>{t('People With Disability')}</td>
 
-                                                                        <td>
-                                                                            {supportingOccupationList && supportingOccupationList.length ? supportingOccupationList.map((i, index) => (
-                                                                                <b key={index}>
-                                                                                    {i}
-                                                                                    {index === supportingOccupationList.length - 1 ? '' : ','}
-                                                                                </b>
-                                                                            )) : '-'}
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Annual Income</td>
+                                                                                    <td><b>{totalDisableCount}</b></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Children Below 5 Years old')}</td>
 
-                                                                        <td><b>{houseHoldInformation.annualIncome}</b></td>
-                                                                    </tr>
+                                                                                    <td><b>{houseHoldInformation.peopleBelowFive || '-'}</b></td>
+                                                                                </tr>
+
+                                                                            </table>
+                                                                        </div>
+                                                                    ) : ''}
+                                                                <div
+
+                                                                    role="button"
+                                                                    tabIndex={0}
+                                                                    onClick={() => this.setState({ enableBuildingStructureDiv: !enableBuildingStructureDiv })}
+                                                                    onKeyDown={undefined}
+
+                                                                    style={{
+                                                                        marginTop: '10px',
+                                                                        marginBottom: '10px',
+                                                                        cursor: 'pointer',
+                                                                        borderBottom: '1px solid #AEAEAE',
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                        paddingTop: '10px',
+                                                                        paddingBottom: '10px',
+                                                                        marginRight: '5px',
+                                                                    }}
+                                                                >
+                                                                    <h3>{t('Building Structure')}</h3>
+                                                                    <Icon
+
+                                                                        name={enableBuildingStructureDiv
+                                                                            ? 'lgprofilePopupUpArrow'
+                                                                            : 'lgprofilePopupDownArrow'}
+                                                                    />
+                                                                </div>
+                                                                {enableBuildingStructureDiv
+                                                                    ? (
+                                                                        <div>
+                                                                            <table id={styles.customers}>
+
+                                                                                <tr>
+                                                                                    <td>{t('Age of Building')}</td>
+
+                                                                                    <td>
+                                                                                        <b>
+                                                                                            {houseHoldInformation.buildingAge}
+                                                                                            {' '}
+                                                                                            {t('Years')}
+                                                                                        </b>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Number of Stories')}</td>
+
+                                                                                    <td><b>{houseHoldInformation.numberOfStory}</b></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Roof Type')}</td>
+
+                                                                                    <td><b>{houseHoldInformation.materialUsedForRoof}</b></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Building Foundation')}</td>
+
+                                                                                    <td><b>{houseHoldInformation.foundationType}</b></td>
+                                                                                </tr>
 
 
-                                                                </table>
+                                                                            </table>
+                                                                        </div>
+                                                                    ) : ''}
+
+                                                                <div
+
+                                                                    role="button"
+                                                                    tabIndex={0}
+                                                                    onClick={() => this.setState({ enableEconomicAspectDiv: !enableEconomicAspectDiv })}
+                                                                    onKeyDown={undefined}
+
+                                                                    style={{
+                                                                        marginTop: '10px',
+                                                                        marginBottom: '10px',
+                                                                        cursor: 'pointer',
+                                                                        borderBottom: '1px solid #AEAEAE',
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                        paddingTop: '10px',
+                                                                        paddingBottom: '10px',
+                                                                        marginRight: '5px',
+                                                                    }}
+                                                                >
+                                                                    <h3>{t('Economic Aspects')}</h3>
+                                                                    <Icon
+
+                                                                        name={enableEconomicAspectDiv
+                                                                            ? 'lgprofilePopupUpArrow'
+                                                                            : 'lgprofilePopupDownArrow'}
+                                                                    />
+                                                                </div>
+                                                                {enableEconomicAspectDiv
+                                                                    ? (
+                                                                        <div>
+                                                                            <table id={styles.customers}>
+
+                                                                                <tr>
+                                                                                    <td>{t('Major Occupation')}</td>
+
+                                                                                    <td>
+                                                                                        {majorOccupationList && majorOccupationList.length ? majorOccupationList.map((i, index) => (
+                                                                                            <b key={index}>
+                                                                                                {i}
+                                                                                                {index === majorOccupationList.length - 1 ? '' : ','}
+                                                                                            </b>
+                                                                                        )) : '-'}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Supporting Occupation')}</td>
+
+                                                                                    <td>
+                                                                                        {supportingOccupationList && supportingOccupationList.length ? supportingOccupationList.map((i, index) => (
+                                                                                            <b key={index}>
+                                                                                                {i}
+                                                                                                {index === supportingOccupationList.length - 1 ? '' : ','}
+                                                                                            </b>
+                                                                                        )) : '-'}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>{t('Annual Income')}</td>
+
+                                                                                    <td><b>{houseHoldInformation.annualIncome}</b></td>
+                                                                                </tr>
+
+
+                                                                            </table>
+                                                                        </div>
+                                                                    ) : ''}
                                                             </div>
-                                                        ) : ''}
-                                                </div>
-                                            </div>
-
+                                                        </div>
+                                                    )
+                                                }
+                                            </Translation>
                                         </MapTooltip>
                                     )}
                                 </MapSource>
