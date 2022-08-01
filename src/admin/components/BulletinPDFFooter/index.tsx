@@ -114,7 +114,7 @@ const BulletinPDFFooter = (props) => {
                             t => <span>{t('Phone')}</span>
                         }
                     </Translation>
-                    :  +977-1-4493847, +977-1-4439485
+                    :  +977-1-4211195, +977-1-4211196
                     {' '}
 
                 </p>

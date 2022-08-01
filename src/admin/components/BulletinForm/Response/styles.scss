@@ -31,6 +31,7 @@
         border-collapse: collapse;
         position: relative;
         width: 100%;
+        page-break-before: avoid;
         table {
             table-layout:fixed;
             width:100%;

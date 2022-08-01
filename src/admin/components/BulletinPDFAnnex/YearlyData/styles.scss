@@ -1,11 +1,16 @@
 .responseTable{
     border-collapse: collapse;
     position: relative;
+    page-break-before: avoid;
     td,th{
         height: 20px;
         border: 1px solid rgb(107, 106, 106);
         padding: 2px 8px;
         text-align: left;
+        page-break-inside: avoid;
+    }
+    tr{
+        page-break-inside: avoid;
     }
     td{
         font-size: 12px;
@@ -22,4 +27,8 @@
     width: 100%;
     position: relative;
    
+}
+
+.nobreak {
+    page-break-inside: avoid;
 }

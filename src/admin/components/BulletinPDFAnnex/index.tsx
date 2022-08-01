@@ -129,14 +129,16 @@ const BulletinPDFAnnex = (props) => {
             </h1>
 
             <YearlyData endDate={endDate} endTime={endTime} filterDateType={filterDateType} />
-            <h3>
-                <Translation>
-                    {
-                        t => <span>{t('Incident Summary')}</span>
-                    }
-                </Translation>
+            <div className={styles.nobreak}>
+                <h3>
+                    <Translation>
+                        {
+                            t => <span>{t('Incident Summary')}</span>
+                        }
+                    </Translation>
 
-            </h3>
+                </h3>
+            </div>
             {/* <Response
                 annex
                 handleFeedbackChange={handleFeedbackChange}
@@ -291,11 +293,13 @@ const BulletinPDFAnnex = (props) => {
                 </div>
             </div>
             <div className={styles.annexTable}>
-                <Translation>
-                    {
-                        t => <h3>{t('Disaster details of the last 24 hours')}</h3>
-                    }
-                </Translation>
+                <div className={styles.nobreak}>
+                    <Translation>
+                        {
+                            t => <h3>{t('Disaster details of the last 24 hours')}</h3>
+                        }
+                    </Translation>
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -325,11 +329,13 @@ const BulletinPDFAnnex = (props) => {
             </div>
 
             <div className={styles.provTable}>
-                <Translation>
-                    {
-                        t => <h3>{t('Provincewise Death, Missing and Injured Counts')}</h3>
-                    }
-                </Translation>
+                <div className={styles.nobreak}>
+                    <Translation>
+                        {
+                            t => <h3>{t('Provincewise Death, Missing and Injured Counts')}</h3>
+                        }
+                    </Translation>
+                </div>
 
                 <table>
                     <thead>
@@ -376,11 +382,13 @@ const BulletinPDFAnnex = (props) => {
 
             <div className={styles.twoCols}>
                 <div className={styles.annexTable}>
-                    <Translation>
-                        {
-                            t => <h3>{t('Genderwise Deaths')}</h3>
-                        }
-                    </Translation>
+                    <div className={styles.nobreak}>
+                        <Translation>
+                            {
+                                t => <h3>{t('Genderwise Deaths')}</h3>
+                            }
+                        </Translation>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -408,11 +416,13 @@ const BulletinPDFAnnex = (props) => {
                     </table>
                 </div>
                 <div className={styles.annexTable}>
-                    <Translation>
-                        {
-                            t => <h3>{t('COVID-19 details of the last 24 hrs')}</h3>
-                        }
-                    </Translation>
+                    <div className={styles.nobreak}>
+                        <Translation>
+                            {
+                                t => <h3>{t('COVID-19 details of the last 24 hrs')}</h3>
+                            }
+                        </Translation>
+                    </div>
 
                     <table>
                         <thead>
@@ -443,11 +453,13 @@ const BulletinPDFAnnex = (props) => {
             </div>
             <div className={styles.twoCols}>
                 <div className={styles.annexTable}>
-                    <Translation>
-                        {
-                            t => <h3>{t('Stats till date')}</h3>
-                        }
-                    </Translation>
+                    <div className={styles.nobreak}>
+                        <Translation>
+                            {
+                                t => <h3>{t('Stats till date')}</h3>
+                            }
+                        </Translation>
+                    </div>
 
                     <table>
                         <thead>
@@ -508,11 +520,13 @@ const BulletinPDFAnnex = (props) => {
                     </table>
                 </div> */}
             </div>
-            <Translation>
-                {
-                    t => <h3>{t('Provincewise stats till date')}</h3>
-                }
-            </Translation>
+            <div className={styles.nobreak}>
+                <Translation>
+                    {
+                        t => <h3>{t('Provincewise stats till date')}</h3>
+                    }
+                </Translation>
+            </div>
 
             <table className={styles.provTable}>
                 <thead>

@@ -4,6 +4,10 @@
 }
 
 
+.nobreak {
+    page-break-inside: avoid;
+}
+
 .footerPDFContainer {
     font-family: "Kalimati Regular" !important;
     width: 210mm;
@@ -127,6 +131,7 @@
         // background-color: #EAEBEC;
         // padding: 2mm 10mm;
         margin-top: 5mm;
+        page-break-before: avoid;
 
         // height: 80mm;
         ul {
@@ -140,6 +145,7 @@
             margin: 2mm;
             font-size: 14px;
             list-style: none;
+            page-break-inside: avoid;
         }
     }
 
@@ -147,6 +153,7 @@
         border-collapse: collapse;
         position: relative;
         width: 100%;
+        page-break-before: avoid;
 
 
         table {
@@ -154,12 +161,16 @@
             width: 190mm;
         }
 
+        tr {
+            page-break-inside: avoid;
+        }
         td,
         th {
             height: 20px;
             border: 1px solid rgb(107, 106, 106);
             padding: 2px 8px;
             text-align: left;
+            page-break-inside: avoid;
         }
 
         td {
@@ -290,7 +301,7 @@
         background-color: #ffffff;
         padding: 0 0;
         margin-top: 0mm;
-        page-break-inside: avoid;
+        page-break-before: avoid;
 
         // height: 80mm;
         ul {
@@ -304,6 +315,7 @@
             margin: 2mm;
             font-size: 14px;
             list-style: none;
+            page-break-inside: avoid;
         }
     }
 }

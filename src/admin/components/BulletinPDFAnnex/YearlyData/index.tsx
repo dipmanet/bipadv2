@@ -259,33 +259,35 @@ const YearlyData = (props: Props) => {
         <>
             <Loading pending={incidentsGetRequest.pending} />
             <div className={styles.pratikriyas}>
-                {
-                    language === 'np'
-                        ? (
-                            <h3>
-                                {
-                                    `${year} बैशाख १ देखि `
-                                }
+                <div className={styles.nobreak}>
+                    {
+                        language === 'np'
+                            ? (
+                                <h3>
+                                    {
+                                        `${year} बैशाख १ देखि `
+                                    }
 
-                                {
-                                    `${month} ${day} गते सम्मका विपद्का प्रमुख घटनाहरुको विवरण`
-                                }
+                                    {
+                                        `${month} ${day} गते सम्मका विपद्का प्रमुख घटनाहरुको विवरण`
+                                    }
 
-                            </h3>
-                        )
-                        : (
-                            <h3>
-                                {
-                                    `Disaster incidents form Baisakh 1, ${year} to`
-                                }
+                                </h3>
+                            )
+                            : (
+                                <h3>
+                                    {
+                                        `Disaster incidents form Baisakh 1, ${year} to`
+                                    }
 
-                                {
-                                    ` ${monthEn} ${day}, ${year}`
-                                }
+                                    {
+                                        ` ${monthEn} ${day}, ${year}`
+                                    }
 
-                            </h3>
-                        )
-                }
+                                </h3>
+                            )
+                    }
+                </div>
                 {
                     summaryData && Object.keys(summaryData).length > 0
                     && cumulative && Object.keys(cumulative).length > 0

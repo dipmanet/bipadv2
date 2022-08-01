@@ -144,7 +144,7 @@ export const nepaliRef = {
     estimatedLoss: 'अनुमानित क्षति',
     roadBlock: 'सडक अवरोध',
     cattleLoss: 'चौपाया',
-    p1: 'प्रदेश १',
+    p1: 'प्रदेश न.१',
     p2: 'मधेश',
     sudurpaschim: 'सुदूरपश्चिम',
     lumbini: 'लुम्बिनी',
