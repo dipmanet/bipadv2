@@ -91,8 +91,13 @@ class Polygon extends React.PureComponent<Props, State> {
         const {
             requests: {
                 mediaGetRequest: { response },
+
             },
         } = this.props;
+        // const { coordinates } = JSON.parse(point);
+        // console.log('This coordinates', coordinates);
+        const points = JSON.parse(this.props.resourceInfo.resourceInfo.point);
+
 
         const { map } = this.state;
         if (response) {
@@ -109,6 +114,7 @@ class Polygon extends React.PureComponent<Props, State> {
         const polygonsCoordinates = response
             && response.results[0]
             && response.results[0].polygons.coordinates[0];
+
 
         if (polygonsCoordinates) {
             map.addSource('maine', {
@@ -135,6 +141,7 @@ class Polygon extends React.PureComponent<Props, State> {
 
             map.flyTo({
                 zoom: 16,
+                center: points.coordinates,
             });
         }
     };

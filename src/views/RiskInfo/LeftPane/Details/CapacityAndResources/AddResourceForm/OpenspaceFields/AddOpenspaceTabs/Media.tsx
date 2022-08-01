@@ -1,7 +1,7 @@
 import React from 'react';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 
 interface Props {
     openspaceId: number;
@@ -34,6 +34,8 @@ class Media extends React.PureComponent<Props, State> {
 
     private postImagesinBulk = () => {
         const { files } = this.state;
+        const { LoadingSuccessHalt } = this.props;
+        LoadingSuccessHalt(true);
         if (files.length !== 0) {
             // eslint-disable-next-line no-plusplus
             for (let i = 0; i < files.length; i++) {
@@ -41,11 +43,12 @@ class Media extends React.PureComponent<Props, State> {
             }
         } else {
             this.props.handleTabClick('closeModal');
+            LoadingSuccessHalt(false);
         }
     }
 
     private postOpenspaceImage = (image, count: number, totalCount: number) => {
-        const { openspaceId, resourceId } = this.props;
+        const { openspaceId, resourceId, LoadingSuccessHalt, faramValueSetNull } = this.props;
         const formdata = new FormData();
         formdata.append('image', image);
         formdata.append('openSpace', JSON.stringify(resourceId || openspaceId));
@@ -62,6 +65,7 @@ class Media extends React.PureComponent<Props, State> {
                         this.setState({
                             pristine: false,
                         });
+
                         setTimeout(() => {
                             this.props.handleTabClick('closeModal');
                         }, 2500);
@@ -71,11 +75,15 @@ class Media extends React.PureComponent<Props, State> {
                         mediaPostError: true,
                     });
                 }
+                LoadingSuccessHalt(false);
+                faramValueSetNull();
             })
             .catch(() => {
                 this.setState({
                     mediaPostError: true,
                 });
+                LoadingSuccessHalt(false);
+                faramValueSetNull();
             });
     }
 
@@ -132,7 +140,7 @@ class Media extends React.PureComponent<Props, State> {
                 }
 
                 <div className={styles.stepButtons}>
-                    <PrimaryButton
+                    {/* <PrimaryButton
                         type="submit"
                         disabled={pristine}
                         // disabled={pristine}
@@ -140,7 +148,7 @@ class Media extends React.PureComponent<Props, State> {
                         onClick={() => handleTabClick('closeModal')}
                     >
                         Close
-                    </PrimaryButton>
+                    </PrimaryButton> */}
                     <PrimaryButton
 
                         // pending={addResourcePending || editResourcePending}

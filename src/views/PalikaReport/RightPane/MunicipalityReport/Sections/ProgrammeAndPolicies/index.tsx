@@ -112,6 +112,7 @@ const ProgramPolicies = (props: Props) => {
         setProgress,
         drrmProgress,
         drrmLanguage,
+        setProgramData,
     } = props;
 
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
@@ -137,6 +138,7 @@ const ProgramPolicies = (props: Props) => {
 
     const handleSavefinalPolicyData = (response) => {
         setFinalPolicyData(response);
+        setProgramData(response);
         setPoint('');
         setLoader(false);
         setDataSubmittedResponse(false);

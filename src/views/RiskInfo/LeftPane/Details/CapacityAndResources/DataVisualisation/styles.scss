@@ -1,0 +1,116 @@
+// [data-column-id="title"].rdt_TableCol {
+//   background-color: white;
+//   position: sticky;
+//   left: 0;
+//   top: 0;
+//   z-index: 999;
+// }
+.tickFormat{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 30px;
+}
+.loader {
+  // top: 50% !important;
+  // left: 50% !important;
+  height: auto !important;
+  width: auto !important;
+  top: 40% !important;
+  left: 45% !important;
+}
+.chartDownload {
+  font-size: 18px;
+}
+.contact-form-modal {
+  padding: 0;
+  width: 80%;
+  padding-top: 0px;
+  min-height: 500px;
+}
+// .chart-download {
+//   padding: 0 $spacing-medium;
+// }
+.closeButton {
+  font-size: 16px;
+}
+.modalBody {
+  padding-top: 1px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  border-bottom: 0.5px solid #808080;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+  padding-top: 20px;
+}
+.headingCategories {
+  display: flex;
+  h2 {
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .visualization {
+    margin-right: 10px;
+    border-bottom: 4px solid blue;
+    padding-bottom: 10px;
+  }
+}
+.categoryName {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  h3 {
+    font-size: 20px;
+  }
+}
+.categoryLogo {
+  display: flex;
+  align-items: center;
+  .categoryLogoIcon {
+    margin-right: 10px;
+  }
+}
+.barChartSection {
+  display: flex;
+  justify-content: space-around;
+}
+.graphicalVisualization {
+  // display: flex;
+  h3 {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+}
+.percentageValue {
+  margin-left: 40px;
+  flex: 1;
+  padding-right: 20px;
+  // margin-top: 8px;
+  margin-right: 40px;
+  span {
+    font-size: 20px;
+  }
+  h3 {
+    margin-bottom: 30px;
+  }
+  h1 {
+    color: #4785de;
+  }
+}
+.label-list {
+  // fonts: '1rem', fontWeight: 'bold', fill: '#E35163'
+  font-size: 1rem;
+  font-weight: normal;
+  fill: black;
+  margin: 10rem;
+}

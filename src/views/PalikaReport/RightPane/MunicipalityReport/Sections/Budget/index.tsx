@@ -124,7 +124,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             params.budgetId(response);
-            params.callGetApi(response);
+            // params.callGetApi(response);
         },
         onFailure: ({ error, params }) => {
             console.log('params:', params);
@@ -206,6 +206,24 @@ const Budget = (props: Props) => {
         handlePendingState: handlePending,
     });
 
+    useEffect(() => {
+        if (annualBudgetData.length > 0) {
+            const {
+                totalBudgetNrs,
+                disasterBudgetNrs,
+                otherBudgetNrs,
+            } = annualBudgetData[0];
+            console.log('budget data new', totalBudgetNrs,
+                disasterBudgetNrs,
+                otherBudgetNrs);
+            setBudgetDatapp({
+                totMunBudget: totalBudgetNrs,
+                totDrrBudget: disasterBudgetNrs,
+                additionalDrrBudget: otherBudgetNrs,
+            });
+        }
+    }, [annualBudgetData]);
+
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
     };
@@ -231,12 +249,8 @@ const Budget = (props: Props) => {
         }
     };
 
-    const handleBudgetId = (response) => {
-        setBudgetId({ id: response.id });
-        setEditBudget(false);
-    };
 
-    const handleCallGetApi = (response) => {
+    const handleCallGetApi = () => {
         BudgetGetRequest.do({
             fiscalYear: generalData.fiscalYear,
             district,
@@ -248,6 +262,14 @@ const Budget = (props: Props) => {
 
         });
         props.handleNextClick();
+    };
+
+
+    const handleBudgetId = (response) => {
+        console.log('budget id response', response);
+        setBudgetId({ id: response.id });
+        handleCallGetApi();
+        setEditBudget(false);
     };
 
     const handleCallUpdateApi = (response) => {
@@ -284,16 +306,16 @@ const Budget = (props: Props) => {
 
                 });
             } else {
-                const {
-                    totalBudgetNrs,
-                    disasterBudgetNrs,
-                    otherBudgetNrs,
-                } = annualBudgetData[0];
-                setBudgetDatapp({
-                    municipalBudget: totalBudgetNrs,
-                    drrFund: disasterBudgetNrs,
-                    additionalFund: otherBudgetNrs,
-                });
+                // const {
+                //     totalBudgetNrs,
+                //     disasterBudgetNrs,
+                //     otherBudgetNrs,
+                // } = annualBudgetData[0];
+                // setBudgetDatapp({
+                //     totMunBudget: totalBudgetNrs,
+                //     totDrrBudget: disasterBudgetNrs,
+                //     additionalDrrBudget: otherBudgetNrs,
+                // });
                 setBudgetId({ id: annualBudgetData[0].id });
                 props.handleNextClick();
                 updateTab();
@@ -709,7 +731,9 @@ const Budget = (props: Props) => {
                                             </h2>
                                         </li>
                                         <li>
-                                            <span className={styles.light}>Municipal Budget</span>
+                                            <span className={styles.light}>
+                                                <Gt section={Translations.MunBudget} />
+                                            </span>
                                         </li>
                                     </ul>
                                     <ul>
@@ -717,6 +741,7 @@ const Budget = (props: Props) => {
                                             {/* <span > */}
                                             {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
                                             {'%'}
+                                            <Gt section={Translations.approx} />
                                             {' '}
                                             <Gt section={Translations.OfMunBudget} />
 

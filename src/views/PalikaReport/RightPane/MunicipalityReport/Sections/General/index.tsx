@@ -91,7 +91,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
     },
     FiscalYearFetch: {
-        url: '/nepali-fiscal-year/?ordering=-id&offset=21',
+        url: '/nepali-fiscal-year/?ordering=-id',
         method: methods.GET,
         onMount: true,
 
@@ -102,6 +102,19 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.fiscalYearList(fiscalYearList);
         },
     },
+    FiscalYearFetchCurrent: {
+        url: '/nepali-fiscal-year/?current=true',
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let fiscalYearCurrent: CitizenReport[] = [];
+            const fiscalYearListResponse = response as MultiResponse<CitizenReport>;
+            fiscalYearCurrent = fiscalYearListResponse.results;
+            params.curentFiscalYear(fiscalYearCurrent);
+        },
+    },
+
 };
 
 
@@ -142,7 +155,7 @@ const General = (props: Props) => {
         updateTab,
         localMembers,
         showErr,
-        requests: { FiscalYearFetch, MunContacts },
+        requests: { FiscalYearFetchCurrent, FiscalYearFetch, MunContacts },
         setGeneralDatapp,
         user,
         drrmRegion,
@@ -156,7 +169,6 @@ const General = (props: Props) => {
     //     fiscalYear: fy,
     //     formationDate: fd,
     //     committeeMembers: cm,
-
     // } = generalData;
 
 
@@ -165,12 +177,14 @@ const General = (props: Props) => {
     const [formationDate, setformationDate] = useState<string>('');
     const [committeeMembers, setcommitteeMembers] = useState<number>(0);
     const [fiscalYearList, setFiscalYearList] = useState([]);
+    const [fiscalYearListNew, setFiscalYearListNew] = useState([]);
     const [showInfo, setShowInfo] = useState(false);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
     const [fiscalYearTitle, setFiscalYearTitle] = useState('');
     const [fetchedData, setFetechedData] = useState([]);
     const [disabled, setDisabled] = useState(false);
+    const [currentFiscalYear, setCurrentYear] = useState(null);
 
     const [mayor, setmayor] = useState('');
     const [cao, setcao] = useState('');
@@ -204,6 +218,7 @@ const General = (props: Props) => {
     }
 
     const handleSelectChange = (fiscal: any) => {
+        console.log('fiscal.target.value', fiscal.target.value);
         setfiscalYear(fiscal.target.value);
         const title = fiscalYearList
             .filter(data => Number(data.id) === Number(fiscal.target.value));
@@ -213,8 +228,22 @@ const General = (props: Props) => {
         setFiscalYearList(response);
     };
 
+    useEffect(() => {
+        if (currentFiscalYear && fiscalYearList.length > 0) {
+            const currentFyear = currentFiscalYear[0].titleEn;
+            const newList = fiscalYearList.filter(f => (
+                f.titleEn <= currentFyear
+            ));
+            setFiscalYearListNew(newList);
+        }
+    }, [currentFiscalYear, fiscalYearList]);
+
+
     FiscalYearFetch.setDefaultParams({
         fiscalYearList: handleFiscalYearList,
+    });
+    FiscalYearFetchCurrent.setDefaultParams({
+        curentFiscalYear: setCurrentYear,
     });
 
     const handleEditContacts = (contactItem) => {
@@ -270,7 +299,10 @@ const General = (props: Props) => {
             setShowInfo(true);
         }
     }, [cao, focalPerson, mayor]);
-    console.log('This fiscal year', (fiscalYear));
+    useEffect(() => {
+        console.log('This fiscal year list', (fiscalYearList));
+    });
+
     const validationErrs = () => {
         if (!generalData.item && generalData.fiscalYear) {
             setfiscalYear(generalData.fiscalYear);
@@ -380,7 +412,7 @@ const General = (props: Props) => {
                                                 : 'Select Fiscal Year'
                                             }
                                         </option>
-                                        {fiscalYearList && fiscalYearList
+                                        {fiscalYearListNew && fiscalYearListNew
                                             .map(item => (
                                                 <option
                                                     value={item.id}

@@ -228,15 +228,11 @@ const BudgetActivity = (props: Props) => {
     } = props;
 
     const {
-        municipalBudget,
-        drrFund,
-        additionalFund,
+        additionalDrrBudget,
+        totDrrBudget,
+        totMunBudget,
     } = budgetData;
 
-    const chartdata = [
-        { name: 'DRR funding of municipality', value: Number(drrFund) },
-        { name: 'Other DRR related funding', value: Number(additionalFund) },
-    ];
 
     const TableNameTitle = {
         name: 'Name of Activity',
@@ -338,6 +334,17 @@ const BudgetActivity = (props: Props) => {
     const [filteredpriorityActionFetched, setFilteredpriorityActionFetched] = useState();
     const [disablePriorityAction, setDisablePriorityAction] = useState(true);
     const [disablePriorityActivity, setDisablePriorityActivity] = useState(true);
+    const [chartData, setChartData] = useState([]);
+
+    useEffect(() => {
+        console.log('budgetData', budgetData);
+        if (budgetData.totDrrBudget) {
+            setChartData([
+                { name: 'DRR funding of municipality', value: budgetData.totDrrBudget },
+                { name: 'Other DRR related funding', value: budgetData.additionalDrrBudget },
+            ]);
+        }
+    }, [additionalDrrBudget, budgetData, budgetData.totDrrBudget, totDrrBudget]);
     const handleInfoBtn = () => {
         setShowInfo(!showInfo);
     };
@@ -1714,7 +1721,7 @@ const BudgetActivity = (props: Props) => {
 
                            <PieChart width={200} height={200}>
                                <Pie
-                                   data={chartdata}
+                                   data={chartData}
                                    cx={90}
                                    cy={95}
                                    innerRadius={40}
@@ -1725,7 +1732,7 @@ const BudgetActivity = (props: Props) => {
                                    startAngle={90}
                                    endAngle={450}
                                >
-                                   {chartdata.map((entry, index) => (
+                                   {chartData.map((entry, index) => (
                                        // eslint-disable-next-line react/no-array-index-key
                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                    ))}
@@ -1735,7 +1742,7 @@ const BudgetActivity = (props: Props) => {
                            <div className={styles.legend}>
                                <div className={styles.activitiesAmt}>
                                    <span className={styles.light}>
-                                       Total no. of activities
+                                       <Gt section={Translations.TotalActvities} />
                                        {' '}
                                    </span>
                                    <span className={styles.biggerNum}>
@@ -1758,13 +1765,15 @@ const BudgetActivity = (props: Props) => {
                                            <li>
                                                <span className={styles.bigerNum}>
                                                    {
-                                                       (Number(drrFund)
-                                                   / (Number(drrFund)
-                                                   + Number(additionalFund))
-                                                   * 100).toFixed(0)
+                                                       (typeof additionalDrrBudget === 'number'
+                                                       && typeof totDrrBudget === 'number')
+                                                           ? ((Number(totDrrBudget)
+                                                   / (Number(totDrrBudget)
+                                                   + Number(additionalDrrBudget))
+                                                   * 100).toFixed(0)) : '-'
                                                    }
                                                    {
-                                                       '%'
+                                                       totDrrBudget && '%'
                                                    }
 
                                                </span>
@@ -1789,13 +1798,13 @@ const BudgetActivity = (props: Props) => {
                                                <span className={styles.bigerNum}>
 
                                                    {
-                                                       (Number(additionalFund)
-                                                   / (Number(drrFund)
-                                                   + Number(additionalFund))
-                                                   * 100).toFixed(0)
+                                                       typeof additionalDrrBudget === 'number' ? ((Number(additionalDrrBudget)
+                                                   / (Number(totDrrBudget)
+                                                   + Number(additionalDrrBudget))
+                                                   * 100).toFixed(0)) : '-'
                                                    }
                                                    {
-                                                       '%'
+                                                       typeof additionalDrrBudget === 'number' && '%'
                                                    }
                                                </span>
                                            </li>
@@ -1821,14 +1830,13 @@ const BudgetActivity = (props: Props) => {
 
 
                           <ul>
-                              <li>
+                              {/* <li>
                                   <span className={styles.darkerText}>
                                       <Gt section={Translations.MonitoringAct} />
                                   </span>
-                              </li>
+                              </li> */}
                               <li>
-                                  <span className={styles.smallerText}>
-                                      <Gt section={Translations.DisasterRiskStrategic} />
+                                  <span className={styles.darkerText}>
                                       <Gt section={Translations.DisasterRiskStrategic} />
                                   </span>
                               </li>

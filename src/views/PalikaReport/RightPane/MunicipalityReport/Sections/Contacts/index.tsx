@@ -821,9 +821,9 @@ const Contacts = (props: Props) => {
                                             {!props.annex && finalArr.length ? <th><Gt section={Translations.ContactAction} /></th> : null}
 
                                         </tr>
-                                        {finalArr && finalArr.length > 0 && finalArr.map((data, i) => (
-                                            nonGovContactId === data.item.id
-                                                ? (
+                                        {finalArr && finalArr.length > 0 && finalArr.map((data, i) => {
+                                            if (data && data.item && nonGovContactId === data.item.id) {
+                                                return (
                                                     <tr>
 
                                                         <td>{nonGovContactIndex + 1}</td>
@@ -958,8 +958,10 @@ const Contacts = (props: Props) => {
                                                             </button>
                                                         </td>
                                                     </tr>
-                                                )
-                                                : (
+                                                );
+                                            }
+                                            if (data && data.item && nonGovContactId !== data.item.id) {
+                                                return (
                                                     <tr key={data.item.id}>
                                                         <td>
                                                             <input
@@ -1002,8 +1004,9 @@ const Contacts = (props: Props) => {
 
                                                         </td>
                                                     </tr>
-                                                )
-                                        ))}
+                                                );
+                                            } return '';
+                                        })}
                                         {!nonGovContactId && (
                                             <>
                                                 <tr>

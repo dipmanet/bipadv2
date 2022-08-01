@@ -235,6 +235,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
             },
             resourceId,
             palikaRedirect,
+            filterPermissionGranted,
         } = this.props;
 
         let inventoryList: PageType.Inventory[] = [];
@@ -257,24 +258,28 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                     )}
                 />
                 <ModalBody className={styles.modalBody}>
-                    <Cloak hiddenIf={p => !p.add_inventory}>
-                        <div className={styles.header}>
-                            <ModalButton
-                                className={styles.addButton}
-                                modal={(
-                                    <AddInventoryForm
-                                        onUpdate={this.handleRefresh}
-                                        resourceId={resourceId}
-                                    />
-                                )}
-                                iconName="add"
-                                transparent
-                                disabled={pending}
-                            >
+                    {filterPermissionGranted
+                        ? (
+                            <Cloak hiddenIf={p => !p.add_inventory}>
+                                <div className={styles.header}>
+                                    <ModalButton
+                                        className={styles.addButton}
+                                        modal={(
+                                            <AddInventoryForm
+                                                onUpdate={this.handleRefresh}
+                                                resourceId={resourceId}
+                                            />
+                                        )}
+                                        iconName="add"
+                                        transparent
+                                        disabled={pending}
+                                    >
                                 New Inventory
-                            </ModalButton>
-                        </div>
-                    </Cloak>
+                                    </ModalButton>
+                                </div>
+                            </Cloak>
+                        )
+                        : ''}
                     <ListView
                         className={styles.inventoryList}
                         data={inventoryList}

@@ -22,7 +22,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
             addLayer,
             removeLayer,
         } = this.context;
-        console.log('final data>>>', data);
+
         if (value) {
             addLayer(data);
         } else {
@@ -32,18 +32,14 @@ class LayerSelectionItem extends React.PureComponent<Props> {
 
     // TOOD: memoize
     private getIsActive = (activeLayers: LayerHierarchy[], layerKey: LayerHierarchy['id']) => {
-        // console.log('this is layer>>>', layerKey);
-        // console.log('This is active inside>>>', activeLayers);
         const layerIndex = activeLayers.findIndex(d => d.id === layerKey);
         // let demo = [];
         // if (activeLayers.length > 1 && layerIndex !== -1) {
         //     demo = activeLayers.filter(item => item.id === layerKey);
-        //     console.log('this demo>>>', demo);
+
         //     activeLayers.push(demo[0]);
         // }
 
-
-        // console.log('This index>>>', layerIndex);
 
         return layerIndex !== -1;
     }

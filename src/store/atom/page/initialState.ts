@@ -1,3 +1,5 @@
+import { number, string } from 'prop-types';
+import { setRealTimeEarthquakeList } from './reducer';
 import { PageState } from './types';
 
 // const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
@@ -29,6 +31,45 @@ const state: PageState = {
         },
     },
 
+    daEarthquakeFilter: {
+        region: {},
+        dataDateRange: {
+            rangeInDays: 183,
+            startDate: undefined,
+            endDate: undefined,
+        },
+        magnitude: [],
+    },
+
+    daPollutionFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRainFilter: {
+        station: {},
+        basin: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRiverFilter: {
+        station: {},
+        basin: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
     adminLevelList: [
         {
             id: 0,
@@ -52,7 +93,9 @@ const state: PageState = {
     districts: [],
     municipalities: [],
     wards: [],
-
+    pollutionStations: [],
+    rainStations: [],
+    riverStations: [],
     documentCategoryList: [],
 
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
@@ -61,42 +104,107 @@ const state: PageState = {
         {
             id: 1,
             title: 'education',
+            label: 'Education',
         },
         {
             id: 2,
             title: 'health',
+            label: 'Health',
         },
         {
             id: 3,
             title: 'finance',
+            label: 'Banking & Finance',
         },
         {
             id: 4,
             title: 'governance',
+            label: 'Governance',
         },
         {
             id: 5,
-            title: 'tourism',
+            title: 'hotelandrestaurant',
+            label: 'Hotel & Restaurant',
         },
         {
             id: 6,
             title: 'cultural',
+            label: 'Culture',
         },
         {
             id: 7,
             title: 'industry',
+            label: 'Industry',
         },
         {
             id: 8,
             title: 'communication',
+            label: 'Communication',
         },
         {
             id: 9,
-            title: 'openspace',
+            title: 'helipad',
+            label: 'Helipad',
         },
         {
             id: 10,
+            title: 'bridge',
+            label: 'Bridge',
+        },
+        {
+            id: 11,
+            title: 'electricity',
+            label: 'Electricity',
+        },
+        {
+            id: 12,
+            title: 'sanitation',
+            label: 'Sanitation',
+        },
+        {
+            id: 13,
+            title: 'watersupply',
+            label: 'Water Supply',
+        },
+        {
+            id: 14,
+            title: 'airway',
+            label: 'Airway',
+        },
+        {
+            id: 15,
+            title: 'waterway',
+            label: 'Waterway',
+        },
+        {
+            id: 16,
+            title: 'roadway',
+            label: 'Roadway',
+        },
+        // {
+        //     id: 17,
+        //     title: 'fireengine',
+        //     label: 'Fire Engine ',
+        // },
+        {
+            id: 21,
+            title: 'firefightingapparatus',
+            label: 'Firefighting apparatus ',
+        },
+        {
+            id: 18,
+            title: 'evacuationcentre',
+            label: 'Evacuation Center',
+        },
+        {
+            id: 19,
+            title: 'openspace',
+            label: 'Humanitarian Open Space',
+        },
+        {
+            id: 20,
             title: 'communityspace',
+            label: 'Community Space',
         },
     ],
     carKeys: [],
@@ -150,6 +258,22 @@ const state: PageState = {
             { id: 4, title: 'Forest Fire' },
             { id: 6, title: 'Streamflow' },
         ],
+        filters: {
+            faramValues: {
+                realtimeSources: [3, 2],
+            },
+            faramErrors: {},
+            pristine: true,
+        },
+        duration: 24,
+    },
+
+    dataArchivePage: {
+        dataArchiveRainList: [],
+        dataArchiveRiverList: [],
+        dataArchiveEarthquakeList: [],
+        // dataArchiveFireList: [],
+        dataArchivePollutionList: [],
         filters: {
             faramValues: {
                 realtimeSources: [3, 2],
@@ -258,5 +382,195 @@ const state: PageState = {
     },
     drrmProgress: -1,
 
+
+    ibfPage: {
+        demo: 1,
+        stations: {},
+        stationDetail: {},
+        selectedStation: {},
+        calendarData: [],
+        returnPeriod: 0,
+        leadTime: 0,
+        overallFloodHazard: [],
+        filter: { district: '', municipality: '', ward: '' },
+        householdJson: [],
+        showHouseHold: 0,
+        selectedIndicator: '',
+        householdDistrictAverage: {},
+        selectedLegend: '',
+    },
+    bulletinEditData: {},
+    bulletinPage: {
+        sitRep: 123,
+        incidentSummary: {
+            numberOfIncidents: 1,
+            numberOfDeath: 5,
+            numberOfMissing: 6,
+            numberOfInjured: 12,
+            estimatedLoss: 50,
+            roadBlock: 1,
+            cattleLoss: 0,
+        },
+        peopleLoss: {
+            p1: {
+                death: 5,
+                missing: 6,
+                injured: 12,
+            },
+            p2: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            bagmati: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            gandaki: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            lumbini: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            karnali: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            sudurpaschim: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+        },
+        hazardWiseLoss: {
+            पहिरो: {
+                deaths: 0,
+                incidents: 0,
+            },
+            'हुरी बतास': {
+                deaths: 0,
+                incidents: 0,
+            },
+            भूकम्प: {
+                deaths: 0,
+                incidents: 0,
+            },
+            'हेलिकप्टर दुर्घटना': {
+                deaths: 0,
+                incidents: 0,
+            },
+            डढेलो: {
+                deaths: 0,
+                incidents: 0,
+            },
+        },
+        genderWiseLoss: {
+            male: 2,
+            female: 3,
+            unknown: 0,
+        },
+        covid24hrsStat: {
+            affected: 0,
+            femaleAffected: 0,
+            maleAffected: 0,
+            deaths: 0,
+            recovered: 0,
+        },
+        covidTotalStat: {
+            totalAffected: 0,
+            totalActive: 0,
+            totalRecovered: 0,
+            totalDeaths: 0,
+        },
+        vaccineStat: {
+            firstDosage: 0,
+            secondDosage: 0,
+        },
+        covidProvinceWiseTotal: {
+            p1: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            p2: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            bagmati: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            gandaki: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            lumbini: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            karnali: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            sudurpaschim: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+        },
+        tempMin: 'http://bipaddev.yilab.org.np/media/bulletin/min/sdN1tB.webp',
+        tempMax: 'http://bipaddev.yilab.org.np/media/bulletin/max/sdN1tB.webp',
+        dailySummary: '',
+        feedback: [],
+        province: 3,
+        district: 27,
+        municipality: 27006,
+        ward: null,
+    },
+
+    epidemicsPage: {
+        lossID: null,
+        loader: false,
+        lossError: '',
+        incidentError: '',
+        lossPeopleError: '',
+        successMessage: '',
+        incidentData: [],
+        incidentEditData: {},
+        incidentUpdateError: '',
+        epidemicChartHourlyLoading: false,
+        epidemicChartHourlyData: [],
+        epidemicChartHourlyError: {},
+        epidemicChartDailyLoading: false,
+        epidemicChartDailyData: [],
+        epidemicChartDailyError: {},
+        epidemicChartWeeklyLoading: false,
+        epidemicChartWeeklyData: [],
+        epidemicChartWeeklyError: {},
+        epidemicChartYearlyLoading: false,
+        epidemicChartYearlyData: [],
+        epidemicChartYearlyError: {},
+        epidemicChartMonthlyLoading: false,
+        epidemicChartMonthlyData: [],
+        epidemicChartMonthlyError: {},
+        epidemicTableLoading: false,
+        epidemicTableData: [],
+        epidemicTableError: {},
+        epidemicTotalLoading: false,
+        epidemicTotalData: [],
+        epidemicTotalError: {},
+        incidentCount: null,
+    },
 };
 export default state;

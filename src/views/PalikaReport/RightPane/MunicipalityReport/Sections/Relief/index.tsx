@@ -40,7 +40,8 @@ import { provincesSelector,
     hazardTypesSelector,
     drrmProgresSelector,
     generalDataSelector,
-    palikaLanguageSelector } from '#selectors';
+    palikaLanguageSelector,
+    wardsSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setDrrmProgressAction,
@@ -73,6 +74,7 @@ const mapStateToProps = (state, props) => ({
     drrmProgress: drrmProgresSelector(state),
     generalData: generalDataSelector(state),
     drrmLanguage: palikaLanguageSelector(state),
+    wards: wardsSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -601,6 +603,7 @@ const Relief = (props: Props) => {
                 .filter(item => item !== undefined)
                 .map(item => item.estimatedLoss)
                 .filter(item => item !== undefined);
+            console.log('estimated loss obj', estimatedLoss);
             if (estimatedLoss.length > 0) {
                 estimatedLoss.reduce((a, b) => Number(a) + Number(b));
                 setTotalEstimatedLoss(estimatedLoss);
@@ -678,10 +681,12 @@ const Relief = (props: Props) => {
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathMaleCount)
                 .filter(item => item !== undefined);
+            console.log('death male data', deathMaleData);
             if (deathMaleData.length > 0) {
-                deathMaleData.reduce((a, b) => Number(a) + Number(b));
-
-                setMaleDeath(deathMaleData);
+                const count = deathMaleData.reduce((a, b) => a + Number(b) || 0);
+                setMaleDeath(count);
+            } else {
+                setMaleDeath(null);
             }
 
 
@@ -690,8 +695,10 @@ const Relief = (props: Props) => {
                 .map(item => item.peopleDeathFemaleCount)
                 .filter(item => item !== undefined);
             if (deathFemaleData.length > 0) {
-                deathFemaleData.reduce((a, b) => Number(a) + Number(b));
-                setFemaleDeath(deathFemaleData);
+                const count = deathFemaleData.reduce((a, b) => Number(a) + Number(b));
+                setFemaleDeath(count);
+            } else {
+                setFemaleDeath(null);
             }
 
 
@@ -730,6 +737,20 @@ const Relief = (props: Props) => {
                 ],
             );
             sethazardwiseImpact(hazardwiseImpactData);
+            const getWardTitle = (wardId) => {
+                if (wardId) {
+                    const filtered = props.wards.filter(item => item.id === wardId);
+                    if (filtered && filtered.length > 0) {
+                        if (drrmLanguage.language === 'en') {
+                            return `Ward ${filtered[0].title}`;
+                        }
+                        if (drrmLanguage.language === 'np') {
+                            return `वोडा ${filtered[0].title}`;
+                        }
+                    }
+                }
+                return '-';
+            };
 
             const getWardWiseDatum = (dataA, wardA) => dataA.map(item => item.loss).reduce((a, b) => ({
                 ward: wardA,
@@ -766,7 +787,7 @@ const Relief = (props: Props) => {
 
 
             const chartWardwiseData = newArr.map(item => ({
-                ward: item.ward,
+                ward: getWardTitle(item.ward),
                 Injured: item.peopleInjuredCount,
                 घाइते: item.peopleInjuredCount,
                 Missing: item.peopleMissingCount,
@@ -776,7 +797,7 @@ const Relief = (props: Props) => {
             }));
             setWardWiseImpact(chartWardwiseData);
         }
-    }, [drrmLanguage.language, fetchedData, hazardTypes]);
+    }, [drrmLanguage.language, fetchedData, hazardTypes, props.wards]);
 
 
     useEffect(() => {
@@ -977,6 +998,18 @@ const Relief = (props: Props) => {
         }
     };
 
+    const getMaleDeath = (m, f) => {
+        if (m === 0 && f === 0) {
+            return 0;
+        }
+        return `${(((m) / (m + f)) * 100).toFixed(0)}%`;
+    };
+    const getFemaleDeath = (m, f) => {
+        if (m === 0 && f === 0) {
+            return 0;
+        }
+        return `${(((f) / (m + f)) * 100).toFixed(0)}%`;
+    };
     // const handleUpdateAndClose = (response) => {
     useEffect(() => {
         if (reliefData && reliefData.length > 0) {
@@ -994,14 +1027,14 @@ const Relief = (props: Props) => {
                 totalJanjatiBenefited: a.totalJanjatiBenefited + b.totalJanjatiBenefited,
             }));
 
-            setTotReliefAmt(totData.reliefAmountNpr);
-            setTotBenFam(totData.numberOfBeneficiaryFamily);
-            setTotMale(totData.totalMaleBenefited);
-            setTotFemale(totData.totalFemaleBenefited);
-            setTotJanajatis(totData.totalJanjatiBenefited);
-            setTotMadhesis(totData.totalMadhesiBenefited);
-            setTotMinorities(totData.totalMinoritiesBenefited);
-            setTotDalits(totData.totalDalitBenefited);
+            setTotReliefAmt(totData.reliefAmountNpr || 0);
+            setTotBenFam(totData.numberOfBeneficiaryFamily || 0);
+            setTotMale(totData.totalMaleBenefited || 0);
+            setTotFemale(totData.totalFemaleBenefited || 0);
+            setTotJanajatis(totData.totalJanjatiBenefited || 0);
+            setTotMadhesis(totData.totalMadhesiBenefited || 0);
+            setTotMinorities(totData.totalMinoritiesBenefited || 0);
+            setTotDalits(totData.totalDalitBenefited || 0);
         }
     }, [reliefData]);
 
@@ -1160,6 +1193,32 @@ const Relief = (props: Props) => {
 
         });
     };
+
+    const getELWithUnit = (num) => {
+        if (drrmLanguage.language === 'np') {
+            if (totalEstimatedLoss > 10000000) {
+                return `${(num / 1000000).toFixed(2)} करोड`;
+            }
+            if (Number(num) > 100000) {
+                return `${(Number(num) / 100000).toFixed(2)} लाख`;
+            }
+            if (Number(num) > 1000) {
+                return `${(Number(num) / 1000).toFixed(2)} हजार`;
+            }
+        }
+        if (drrmLanguage.language === 'en') {
+            if (Number(num) > 1000000000) {
+                return `${(Number(num) / 1000000000).toFixed(2)} B`;
+            }
+            if (Number(num) > 1000000) {
+                return `${(Number(num) / 1000000).toFixed(2)} M`;
+            }
+            if (Number(num) > 1000) {
+                return `${(Number(num) / 1000).toFixed(2)} K`;
+            }
+        } return '0';
+    };
+
     const handleFilteredViewCause = (response) => {
         console.log('response', response);
         setCauseData(response[0].cause ? response[0].cause : '-');
@@ -1645,7 +1704,9 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{`${(Number(totalEstimatedLoss) / 1000000).toFixed(2)}m`}</p>
+                                        <p className={styles.darkerText}>
+                                            { getELWithUnit(totalEstimatedLoss)}
+                                        </p>
                                         <p className={styles.smallerText}>
                                             <Gt section={Translations.EstimatedLoss} />
                                         </p>
@@ -1775,35 +1836,11 @@ const Relief = (props: Props) => {
 
                             <div className={styles.incidentMiddleSection}>
                                 <h2>
-
                                     <Gt section={Translations.Genderwiseimpact} />
                                 </h2>
                                 <div className={styles.chartandlegend}>
-
-                                    {/* <PieChart width={200} height={175}>
-                                        <Pie
-                                            data={deathGenderChartData}
-                                            cx={80}
-                                            cy={110}
-                                            innerRadius={40}
-                                            outerRadius={60}
-                                            fill="#8884d8"
-                                            paddingAngle={1}
-                                            dataKey="value"
-                                            startAngle={90}
-                                            endAngle={450}
-                                        >
-                                            {genderWiseDeathData.map((entry, index) => (
-                                            // eslint-disable-next-line react/no-array-index-key
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Pie>
-                                    </PieChart> */}
-
                                     <div className={styles.legend}>
                                         <div className={styles.legenditem}>
-
-
                                             <div className={styles.numberRow}>
                                                 <ScalableVectorGraphics
                                                     className={styles.houseIcon}
@@ -1814,14 +1851,8 @@ const Relief = (props: Props) => {
                                                     <li>
 
                                                         <span className={styles.bigerNum}>
+                                                            { getMaleDeath(maleDeath, femaleDeath)
 
-
-                                                            { maleDeath && femaleDeath
-                                                                ? `${(Number(maleDeath)
-                                                                / (Number(maleDeath)
-                                                                + Number(femaleDeath))
-                                                                * 100).toFixed(0)} %`
-                                                                : '-'
                                                             }
                                                         </span>
                                                     </li>
@@ -1847,12 +1878,8 @@ const Relief = (props: Props) => {
 
                                                         <span className={styles.bigerNum}>
 
-                                                            { maleDeath && femaleDeath
-                                                                ? `${(Number(femaleDeath)
-                                                                / (Number(maleDeath)
-                                                                + Number(femaleDeath))
-                                                                * 100).toFixed(0)} %`
-                                                                : '-'
+                                                            { getFemaleDeath(maleDeath, femaleDeath)
+
                                                             }
                                                         </span>
                                                     </li>
@@ -1927,22 +1954,12 @@ const Relief = (props: Props) => {
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis
-                                        dx={10}
-                                        dy={10}
-                                        interval={0}
-                                        angle={40}
                                         dataKey="ward"
                                         tick={{ fontSize: 10 }}
                                     />
                                     <YAxis />
                                     <Tooltip />
-                                    <Legend
-                                        wrapperStyle={{
-                                            paddingTop: '5px',
-                                            paddingLeft: '5px',
-                                            marginLeft: '15px',
-                                        }}
-                                    />
+                                    <Legend />
 
 
                                     <Bar

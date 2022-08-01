@@ -1,9 +1,13 @@
-import React, { useMemo, useCallback } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useMemo, useCallback, useState } from 'react';
 import {
     _cs,
     listToMap,
 } from '@togglecorp/fujs';
 
+
+import Loader from 'react-loader-spinner';
+import { connect } from 'react-redux';
 import {
     Contact,
     Municipality,
@@ -20,15 +24,16 @@ import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
-
 import {
     trainingValues,
     committeeValues,
 } from '../utils';
-
 import ContactEditForm from '../ContactEditForm';
 
 import styles from './styles.scss';
+import Icon from '#rscg/Icon';
+import { checkSameRegionPermission } from '#utils/common';
+import { regionSelector, userSelector } from '#selectors';
 
 const ModalButton = modalize(Button);
 
@@ -99,13 +104,24 @@ const requests: { [key: string]: ClientAttributes<Props, Params> } = {
         },
     },
 };
+const mapStateToProps = (state: AppState): PropsFromState => ({
 
+    region: regionSelector(state),
+
+    user: userSelector(state),
+});
 const ContactItem = (props: Props) => {
     const {
+        user,
+        region,
         contact,
         contactId,
         municipalityList,
         onContactEdit,
+        onContactSortDown,
+        onContactSortUp,
+        filteredContactListLastIndex,
+        contactLoading,
         requests: {
             municipalityContactDeleteRequest,
         },
@@ -148,9 +164,10 @@ const ContactItem = (props: Props) => {
         ).join(', ') || '-'),
         [trainings],
     );
+    const filterPermissionGranted = checkSameRegionPermission(user, region);
+
 
     const confirmationMessage = `Are you sure you want to remove the contact ${name}?`;
-
     return (
         <div
             className={_cs(
@@ -198,61 +215,96 @@ const ContactItem = (props: Props) => {
                     />
                 </div>
             </div>
-            <Detail
-                label="Municipality"
-                value={municipalities[municipality]}
-            />
-            <Detail
-                label="Organization"
-                value={(organization ? organization.title : undefined) || '-'}
-            />
-            <Detail
-                label="Comittee"
-                value={committeeValues[committee] || '-'}
-            />
-            <Detail
-                className={styles.position}
-                label="Position"
-                value={position}
-            />
-            <Detail
-                label="Training"
-                value={trainingValueString}
-            />
-            <div className={styles.actionButtons}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                    <Detail
+                        label="Municipality"
+                        value={municipalities[municipality]}
+                    />
+                    <Detail
+                        label="Organization"
+                        value={(organization ? organization.title : undefined) || '-'}
+                    />
+                    <Detail
+                        label="Comittee"
+                        value={committeeValues[committee] || '-'}
+                    />
+                    <Detail
+                        className={styles.position}
+                        label="Position"
+                        value={position}
+                    />
+                    <Detail
+                        label="Training"
+                        value={trainingValueString}
+                    />
+                </div>
                 <Cloak hiddenIf={p => !p.change_contact}>
-                    <ModalButton
-                        className={styles.editButton}
-                        iconName="edit"
-                        transparent
-                        modal={(
-                            <ContactEditForm
-                                contactId={contactId}
-                                details={contact}
-                                onEditSuccess={onContactEdit}
-                            />
+                    {contactLoading ? <Loader type="Oval" color="#E35163" height={30} width={30} />
+                        : filterPermissionGranted ? (
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                {contact.indexValue !== 0
+                        && (
+                            <button style={{ height: 'fit-content', background: 'none', border: 'none', cursor: 'pointer' }} type="submit" onClick={() => onContactSortUp(contact)}>
+                                <Icon
+                                    name={'sortUp'}
+                                    className={styles.sortDown}
+                                />
+                            </button>
                         )}
-                    >
-                        Edit
-                    </ModalButton>
-                </Cloak>
-                <Cloak hiddenIf={p => !p.delete_contact}>
-                    <DangerConfirmButton
-                        className={styles.deleteButton}
-                        iconName="delete"
-                        confirmationMessage={confirmationMessage}
-                        pending={pending}
-                        onClick={handleContactDelete}
-                        transparent
-                    >
-                        Delete
-                    </DangerConfirmButton>
+                                {filteredContactListLastIndex !== contact.indexValue && (
+                                    <button style={{ height: 'fit-content', background: 'none', border: 'none', cursor: 'pointer' }} type="submit" onClick={() => onContactSortDown(contact)}>
+                                        <Icon
+                                            name={'sortDown'}
+                                            className={styles.sortDown}
+                                        />
+                                    </button>
+                                )}
+                            </div>
+                        ) : ''}
                 </Cloak>
             </div>
+            {filterPermissionGranted
+                ? (
+                    <div className={styles.actionButtons}>
+                        <Cloak hiddenIf={p => !p.change_contact}>
+                            <ModalButton
+                                className={styles.editButton}
+                                iconName="edit"
+                                transparent
+                                modal={(
+                                    <ContactEditForm
+                                        contactId={contactId}
+                                        details={contact}
+                                        onEditSuccess={onContactEdit}
+                                    />
+                                )}
+                            >
+                        Edit
+                            </ModalButton>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.delete_contact}>
+                            <DangerConfirmButton
+                                className={styles.deleteButton}
+                                iconName="delete"
+                                confirmationMessage={confirmationMessage}
+                                pending={pending}
+                                onClick={handleContactDelete}
+                                transparent
+                            >
+                        Delete
+                            </DangerConfirmButton>
+                        </Cloak>
+                    </div>
+                )
+                : ''}
         </div>
     );
 };
 
-export default createConnectedRequestCoordinator<Props>()(
-    createRequestClient(requests)(ContactItem),
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<Props>()(
+        createRequestClient(requests)(ContactItem),
+    ),
 );

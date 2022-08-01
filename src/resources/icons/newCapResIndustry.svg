@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Industry">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Industry" clip-path="url(#clip-Industry)">
+    <g id="Group_260" data-name="Group 260" transform="translate(-405.921 -588.135)">
+      <path id="Path_651" data-name="Path 651" d="M412.871,605.47l-.95,11.875H417.5l-1.266-11.875Z" transform="translate(0 -3.977)" fill="#0070ab"/>
+      <path id="Path_652" data-name="Path 652" d="M413.66,601.111l-.136,1.7h3.148l-.181-1.7Z" transform="translate(-0.562 -2.448)" fill="#0070ab"/>
+      <path id="Path_653" data-name="Path 653" d="M432.818,606.342l-3.031,3.664v-3.664h-1.549l-3.2,3.841v-3.841h-1.55l-2.573,3.122.391,3.669h1.736v1.132h-1.616l.362,3.4h12.573V606.342Zm-6.374,7.923H424.18v-1.132h2.264Zm3.4,0h-2.264v-1.132h2.264Zm3.4,0h-2.264v-1.132h2.264Z" transform="translate(-3.157 -4.283)" fill="#0070ab"/>
+      <path id="Path_654" data-name="Path 654" d="M418.122,597.531l.381,3.572a3.028,3.028,0,0,0,1.607-.64,3.392,3.392,0,0,0,4.17-.591,3.019,3.019,0,0,0,3.144-.318,2.736,2.736,0,1,0,.135-4.692,3.017,3.017,0,0,0-3.79-.112,3.395,3.395,0,0,0-4.48.519,3.018,3.018,0,0,0-4.017,2.263Z" transform="translate(-1.176)" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

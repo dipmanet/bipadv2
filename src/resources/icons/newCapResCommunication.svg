@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Communication">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Communication" clip-path="url(#clip-Communication)">
+    <g id="Group_253" data-name="Group 253" transform="translate(-426.999 -382.298)">
+      <path id="Path_633" data-name="Path 633" d="M438.846,414.4a7.632,7.632,0,0,0,10.248.42.54.54,0,0,0,.02-.815l-10.41-9.419a.543.543,0,0,0-.777.06C435.44,407.551,436.056,411.607,438.846,414.4Z" transform="translate(-2.03 -9.973)" fill="#0070ab"/>
+      <path id="Path_635" data-name="Path 635" d="M456.481,391.121a1.07,1.07,0,1,0-.822,1.977,12.065,12.065,0,0,1,6.915,6.914,1.07,1.07,0,1,0,1.978-.818A14.258,14.258,0,0,0,456.481,391.121Z" transform="translate(-10.69 -3.741)" fill="#0070ab"/>
+      <path id="Path_636" data-name="Path 636" d="M453.594,398.175a1.07,1.07,0,1,0-1.05,1.866,12.308,12.308,0,0,1,4.944,4.945,1.071,1.071,0,0,0,1.865-1.052A14.533,14.533,0,0,0,453.594,398.175Z" transform="translate(-9.295 -6.994)" fill="#0070ab"/>
+      <path id="Path_637" data-name="Path 637" d="M453.76,407.353a1.057,1.057,0,0,0-1.509,0l-1.541,1.541,1.579,1.44,1.472-1.472A1.057,1.057,0,0,0,453.76,407.353Z" transform="translate(-8.696 -11.176)" fill="#0070ab"/>
+      <path id="Path_638" data-name="Path 638" d="M435.632,424.243a.535.535,0,0,0-.843,0l-2.676,3.213a.535.535,0,0,0,.422.863h5.351a.535.535,0,0,0,.423-.863Z" transform="translate(0 -19.079)" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

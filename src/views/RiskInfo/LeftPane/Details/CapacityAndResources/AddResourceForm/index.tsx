@@ -1,3 +1,7 @@
+/* eslint-disable max-len */
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -21,7 +25,7 @@ import TextInput from '#rsci/TextInput';
 import TextArea from '#rsci/TextArea';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import { EnumItem, ModelEnum, ResourceTypeKeys } from '#types';
@@ -36,6 +40,7 @@ import {
     enumOptionsSelector,
     resourceTypeListSelector,
     palikaRedirectSelector,
+    wardsSelector,
 } from '#selectors';
 import {
     setPalikaRedirectAction,
@@ -52,8 +57,22 @@ import IndustryFields from './IndustryFields';
 import OpenspaceFields from './OpenspaceFields';
 import CommunitySpaceFields from './CommunitySpaceFields';
 import schemaMap, { defaultSchema } from './schema';
-
 import styles from './styles.scss';
+import HelipadFields from './HelipadFields';
+import { capacityResource } from '#utils/domain';
+import RawFileInput from '#rsci/RawFileInput';
+import BridgeFields from './BridgeFields';
+import ElectricityFields from './ElectricityFields';
+import SanitationFields from './SanitationFields';
+import WaterSupplyInfrastructureFields from './WaterSupplyInfrastructureFields';
+import AirwayFields from './AirwayFields';
+import WaterwayFields from './WaterwayFields';
+import RoadwayFields from './RoadwayFields';
+import Loading from '#components/Loading';
+import FireEngineFields from './FireEngineFields';
+import EvacuationCentreFields from './EvacuationCentreFields';
+import NumberInput from '#rsci/NumberInput';
+
 
 const getLocationDetails = (point: unknown, ward?: number) => {
     const geoJson = {
@@ -89,12 +108,13 @@ interface OwnProps {
     resourceDetails?: PageType.Resource;
     onAddSuccess?: (resource: PageType.Resource) => void;
     onEditSuccess?: (resourceId: PageType.Resource['id'], resource: PageType.Resource) => void;
-    modalPos?: {top: number | string; left: number | string};
+    modalPos?: { top: number | string; left: number | string };
 }
 
 interface PropsFromState {
     resourceTypeList: PageType.ResourceType[];
     enumOptions: ModelEnum[];
+    wards: PageType.Ward[];
 }
 
 interface PropsFromDispatch {
@@ -130,12 +150,14 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     enumOptions: enumOptionsSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
-
+    wards: wardsSelector(state),
 });
 
 const labelSelector = (d: PageType.Field) => d.title;
+const typeSelector = (d: PageType.Field) => d.type;
+const selectLabel = (d: PageType.Field) => d.label;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     addResourcePostRequest: {
         url: '/resource/',
         method: methods.POST,
@@ -151,11 +173,30 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    const data = error.response;
+                    const resultError = {};
+                    const keying = Object.keys(data);
+                    const valuing = Object.values(data).map(item => item[0]);
+                    const outputError = () => {
+                        const outputFinalError = keying.map((item, i) => (
+                            resultError[`${item}`] = valuing[i]
+                        ));
+                        return outputFinalError;
+                    };
+                    outputError();
+
+
+                    params.setFaramErrors(resultError);
+                }
             }
         },
         onFatal: ({ params }) => {
@@ -165,6 +206,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 });
             }
         },
+        extras: { hasFile: true },
     },
     editResourcePutRequest: {
         url: ({ params: { resourceId } }) => `/resource/${resourceId}/`,
@@ -182,11 +224,30 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    const data = error.response;
+                    const resultError = {};
+                    const keying = Object.keys(data);
+                    const valuing = Object.values(data).map(item => item[0]);
+                    const outputError = () => {
+                        const outputFinalError = keying.map((item, i) => (
+                            resultError[`${item}`] = valuing[i]
+                        ));
+                        return outputFinalError;
+                    };
+                    outputError();
+
+
+                    params.setFaramErrors(resultError);
+                }
             }
         },
         onFatal: ({ params }) => {
@@ -198,6 +259,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
     },
 };
+
 
 interface ExtraFieldProps {
     title: string;
@@ -213,12 +275,21 @@ const ExtraFields = ({
     faramValues,
     resourceId,
     closeModal,
+    iconName,
+    LoadingSuccessHalt,
+    addResourcePending,
+    faramValueSetNull,
+    handleFaramValidationFailure,
+
 }: ExtraFieldProps) => {
     switch (title) {
         case 'education':
             return (
                 <EducationFields
                     resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
 
@@ -226,6 +297,9 @@ const ExtraFields = ({
             return (
                 <HealthFields
                     resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
 
@@ -233,6 +307,9 @@ const ExtraFields = ({
             return (
                 <FinanceFields
                     resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
 
@@ -240,6 +317,9 @@ const ExtraFields = ({
             return (
                 <GovernanceFields
                     resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
 
@@ -247,21 +327,36 @@ const ExtraFields = ({
             return (
                 <CulturalFields
                     resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
-        case 'tourism':
+        case 'hotelandrestaurant':
             return (
-                <TourismFields />
+                <TourismFields
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
             );
         case 'communication':
             return (
                 <CommunicationFields
+                    faramValues={faramValues}
                     resourceEnums={resourceEnums}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
         case 'industry':
             return (
-                <IndustryFields />
+                <IndustryFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
             );
         case 'openspace':
             return (
@@ -270,6 +365,41 @@ const ExtraFields = ({
                     faramValues={faramValues}
                     resourceId={resourceId}
                     closeModal={closeModal}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                    LoadingSuccessHalt={LoadingSuccessHalt}
+                    addResourcePending={addResourcePending}
+                    faramValueSetNull={faramValueSetNull}
+                    handleFaramValidationFailure={handleFaramValidationFailure}
+                />
+            );
+
+        case 'bridge':
+            return (
+                <BridgeFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+            );
+
+        case 'electricity':
+            return (
+                <ElectricityFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+            );
+        case 'sanitation':
+            return (
+                <SanitationFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
                 />
             );
         case 'communityspace':
@@ -279,7 +409,96 @@ const ExtraFields = ({
                     faramValues={faramValues}
                     resourceId={resourceId}
                     closeModal={closeModal}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                    LoadingSuccessHalt={LoadingSuccessHalt}
+                    addResourcePending={addResourcePending}
+                    faramValueSetNull={faramValueSetNull}
+                    handleFaramValidationFailure={handleFaramValidationFailure}
+
                 />
+            );
+        case 'watersupply':
+            return (
+                <WaterSupplyInfrastructureFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+
+                />
+            );
+
+
+        case 'helipad':
+            return (
+                <HelipadFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'airway':
+            return (
+                <AirwayFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'waterway':
+            return (
+                <WaterwayFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'roadway':
+            return (
+                <RoadwayFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'fireengine':
+            return (
+                <FireEngineFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'firefightingapparatus':
+            return (
+                <FireEngineFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'evacuationcentre':
+            return (
+                <EvacuationCentreFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
             );
         default:
             return null;
@@ -313,7 +532,18 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             faramErrors: {},
             pristine: true,
             resourceId,
+            addResourcePending: false,
+
         };
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        const { faramValues: { resourceType } } = this.state;
+        if (prevState.faramValues.resourceType !== resourceType) {
+            this.setState({
+                faramValues: { resourceType },
+            });
+        }
     }
 
     private getSchema = memoize((resourceType?: ResourceTypeKeys) => {
@@ -323,9 +553,173 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         return defaultSchema;
     });
 
+    private LoadingSuccessHalt = (data) => {
+        this.setState({ addResourcePending: data });
+    }
+
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        // this.setState({ faramValues });
+        if ((faramValues.noOfMaleEmployee)
+            || (faramValues.noOfFemaleEmployee)) {
+            const { noOfMaleEmployee, noOfOtherEmployee,
+                noOfFemaleEmployee, noOfEmployee } = faramValues;
+            this.setState({
+                faramValues: {
+                    ...faramValues,
+                    noOfEmployee: (noOfMaleEmployee || 0)
+                        + (noOfFemaleEmployee || 0) + (noOfOtherEmployee || 0),
+                    noOfOtherEmployee: noOfOtherEmployee || 0,
+                },
+
+
+            });
+        } else {
+            this.setState({ faramValues });
+        }
+        if ((faramValues.noOfMaleStudent)
+            || (faramValues.noOfFemaleStudent)) {
+            const { noOfMaleStudent, noOfFemaleStudent, noOfOtherStudent } = faramValues;
+            this.setState({
+                faramValues: {
+                    ...faramValues,
+                    noOfStudent: (noOfMaleStudent || 0)
+                        + (noOfFemaleStudent || 0) + (noOfOtherStudent || 0),
+                    noOfOtherStudent: noOfOtherStudent || 0,
+                },
+
+            });
+        }
+        if (faramValues.resourceType === 'health') {
+            if ((faramValues.hasSafeMotherhood === (false))
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasAntenatalCare: false,
+                        hasPostnatalCare: false,
+                        birthingCenter: false,
+                        hasBasicEmergencyObstetricCare: false,
+                        hasComprehensiveEmergencyObstetricCare: false,
+                        hasComprehensiveAbortionCare: false,
+                        hasPostAbortionCare: false,
+                    },
+                });
+            }
+
+            if ((faramValues.familyPlanning === (false))
+
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasCondomPillsDepoprovera: false,
+                        hasIucd: false,
+                        hasImplant: false,
+                        hasVasectomy: false,
+                        hasMinilap: false,
+                    },
+                });
+            }
+            if ((faramValues.hasOpd === (false))
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasGeneral: false,
+                        hasPediatric: false,
+                        hasObsAndGynae: false,
+                        hasDentalOpd: false,
+                        hasSurgery: false,
+                        hasGastrointestinal: false,
+                        hasCardiac: false,
+                        hasMental: false,
+                        hasRespiratory: false,
+                        hasNephrology: false,
+                        hasEnt: false,
+                        hasDermatology: false,
+                        hasEndocrinology: false,
+                        hasOncology: false,
+                        hasNeurology: false,
+                        hasOphthalmology: false,
+                    },
+                });
+            }
+            if ((faramValues.hasLaboratoryService === (false))
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasTestHiv: false,
+                        hasTestMalaria: false,
+                        hasTestTb: false,
+                        hasTestKalaazar: false,
+                        hasUrineRe: false,
+                        hasStoolRe: false,
+                        hasGeneralBloodCbc: false,
+                        hasCulture: false,
+                        hasHormones: false,
+                        hasLeprosySmearTest: false,
+                        hasTestCovidPcr: false,
+                        hasTestCovidAntigen: false,
+                    },
+                });
+            }
+            if ((faramValues.hasRadiology === (false))
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasXRay: false,
+                        hasXRayWithContrast: false,
+                        hasUltrasound: false,
+                        hasEchocardiogram: false,
+                        hasEcg: false,
+                        hasTrademill: false,
+                        hasCtScan: false,
+                        hasMri: false,
+                        hasEndoscopy: false,
+                        hasColonoscopy: false,
+                    },
+                });
+            }
+            if ((faramValues.hasSurgicalService === (false))
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasCaesarianSection: false,
+                        hasGastrointestinalSurgery: false,
+                        hasTraumaSurgery: false,
+                        hasCardiacSurgery: false,
+                        hasNeuroSurgery: false,
+                        hasPlasticSurgery: false,
+                    },
+                });
+            }
+            if ((faramValues.hasSpecializedService === (false))
+
+            ) {
+                this.setState({
+                    faramValues: {
+                        ...faramValues,
+                        hasIcu: false,
+                        hasCcu: false,
+                        hasNicu: false,
+                        hasMicu: false,
+                        hasSncu: false,
+                        hasPicu: false,
+                    },
+                });
+            }
+        }
+
         this.setState({
-            faramValues,
             faramErrors,
             pristine: false,
         });
@@ -335,6 +729,11 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         this.setState({
             faramErrors,
         });
+
+        const myDiv = document.getElementById('capacityAndResources');
+
+        myDiv.scrollTop = 0;
+        this.setState({ addResourcePending: false });
     }
 
     private handleFaramValidationSuccess = (_: FaramValues, faramValues: FaramValues) => {
@@ -342,23 +741,30 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             location,
             ...others
         } = faramValues;
+
         const {
             resourceId,
         } = this.state;
         const {
             setPalikaRedirect,
             palikaRedirect,
+            wards,
         } = this.props;
-        console.warn('here', faramValues);
 
-        let values = others;
-        if (location) {
+
+        const finalValues = others;
+        const { picture, ...othersData } = finalValues;
+
+        let values = resourceId ? picture && picture.type ? finalValues : othersData : finalValues;
+
+        if (location && location.wards && location.wards.length) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
-
+            // const wardTitle: number | undefined = wards.filter(w => w.id === ward)[0].title;
             values = {
                 ...values,
                 point,
+                // ward: wardTitle || undefined,
                 ward,
             };
         }
@@ -368,7 +774,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 editResourcePutRequest,
             },
         } = this.props;
-
+        this.setState({ addResourcePending: true });
         if (isNotDefined(resourceId)) {
             addResourcePostRequest.do({
                 body: values,
@@ -385,22 +791,40 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
     }
 
+
     private handleAddResourceSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess } = this.props;
+        const { onAddSuccess, closeModal, faramValues, updateResourceOnDataAddition } = this.props;
 
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
+        const ResourceType = resource.resourceType;
 
-        this.setState({ resourceId: resource.id });
+        updateResourceOnDataAddition(ResourceType);
+        this.setState({ addResourcePending: false, faramValues: {} });
+        const myDiv = document.getElementById('capacityAndResources');
+
+        myDiv.scrollTop = 0;
     }
 
     private handleEditResourceSuccess = (resource: PageType.Resource) => {
-        const { onEditSuccess } = this.props;
+        const { onEditSuccess, closeModal, faramValues, updateResourceOnDataAddition } = this.props;
+        const { setAddResource } = this.context;
 
         if (onEditSuccess) {
             onEditSuccess(resource.id, resource);
         }
+        const ResourceType = resource.resourceType;
+
+        updateResourceOnDataAddition(ResourceType);
+        this.setState({ addResourcePending: false, faramValues: {} });
+
+
+        setAddResource(false);
+        const myDiv = document.getElementById('capacityAndResources');
+
+        myDiv.scrollTop = 0;
+        closeModal();
     }
 
     private filterEnumItem = (
@@ -412,6 +836,60 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             return options.enums;
         }
         return [];
+    }
+
+    // public componentDidMount(){
+    //     this.setState({
+    //         resourceId:
+    //     })
+    // }
+
+
+    private filterResourceTypeData = (dataResourceType) => {
+        const { faramValues } = this.state;
+        // if (dataResourceType === 'helipad' || dataResourceType === 'airway' || dataResourceType === 'waterway' || dataResourceType === 'roadway') {
+        //     const selectedDataTypeList = (capacityResource.filter(item => item.typeName === 'transportation')[0].Category);
+        //     const finaldatas = selectedDataTypeList
+        //         .filter(item => item.resourceType === dataResourceType)[0].subCategory;
+
+        //     return finaldatas;
+        // } if (dataResourceType === 'fireengine') {
+        //     const selectedDataTypeList = (capacityResource.filter(item => item.typeName === 'Fire Fighting Apparatus')[0].Category);
+        //     const finaldatas = selectedDataTypeList
+        //         .filter(item => item.resourceType === dataResourceType)[0].subCategory;
+
+        //     return finaldatas;
+        // }
+
+        const selectedType = faramValues && capacityResource
+            .filter(item => item.resourceType === dataResourceType)
+            .map(data => data.subCategory)[0];
+        return selectedType;
+    }
+
+    private filterResourceTypeDataAttribute = (dataResourceType) => {
+        const { faramValues } = this.state;
+        // if (dataResourceType === 'helipad' || dataResourceType === 'airway' || dataResourceType === 'waterway' || dataResourceType === 'roadway') {
+        //     const selectedDataTypeList = (capacityResource.filter(item => item.typeName === 'transportation')[0].Category);
+        //     const finaldatas = selectedDataTypeList
+        //         .filter(item => item.resourceType === dataResourceType)[0].attribute;
+
+        //     return [finaldatas];
+        // } if (dataResourceType === 'fireengine') {
+        //     const selectedDataTypeList = (capacityResource.filter(item => item.typeName === 'Fire Fighting Apparatus')[0].Category);
+        //     const finaldatas = selectedDataTypeList
+        //         .filter(item => item.resourceType === dataResourceType)[0].attribute;
+
+        //     return [finaldatas];
+        // }
+        const selectedAttribute = faramValues && capacityResource
+            .filter(item => item.resourceType === dataResourceType)
+            .map(data => data.attribute);
+        return selectedAttribute;
+    }
+
+    private faramValueSetNull = () => {
+        this.setState({ faramValues: {} });
     }
 
     public render() {
@@ -426,7 +904,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     pending: editResourcePending,
                 },
                 addResourcePostRequest: {
-                    pending: addResourcePending,
+                    pending,
                 }, addResourcePostRequest,
             },
             palikaRedirect,
@@ -437,6 +915,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             faramErrors,
             pristine,
             resourceId,
+            addResourcePending,
         } = this.state;
 
         const { resourceType } = faramValues;
@@ -446,13 +925,24 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         if (resourceType) {
             resourceEnums = this.filterEnumItem(enumOptions, resourceType);
         }
-
         const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
+        const selectedType = this.filterResourceTypeData(faramValues.resourceType);
+        const selectedAttribute = this.filterResourceTypeDataAttribute(faramValues.resourceType);
+        const industryTypeField = [
+            {
+                id: 1,
+                name: 'Service Oriented',
+                type: 'Service Oriented',
+            }, {
+                id: 2,
+                name: 'Production Oriented',
+                type: 'Production Oriented',
+            },
+        ];
         return (
-            <Modal
-                className={_cs(styles.addResourceModal, className)}
-                modalPos={modalPos}
-            >
+
+            <>
+                <Loading pending={addResourcePending} text={'Submitting Data Please Wait !!'} />
                 <Faram
                     className={styles.form}
                     onChange={this.handleFaramChange}
@@ -462,43 +952,110 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalHeader
-                        className={styles.header}
-                        title="Add Data"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
+
+                    <NonFieldErrors faramElement />
+
+                    <SelectInput
+                        addResourceDropdown={'capResAddFormDropdown'}
+                        faramElementName="resourceType"
+                        options={resourceTypeList}
+                        keySelector={labelSelector}
+                        labelSelector={selectLabel}
+                        label="Resource Type"
+                        autoFocus
+                        disabled={isDefined(resourceId)}
+                        className={styles.resourceType}
+                        optionsClassName={styles.optionsClassName}
+                        iconName={'capResAddFormDropdown'}
+
+
                     />
-                    <ModalBody className={styles.modalBody}>
-                        <NonFieldErrors faramElement />
+                    {(faramValues.resourceType !== ('sanitation' || 'watersupply' || 'openspace' || 'helipad' || 'bridge' || 'electricity')) && <h1>INSTITUTION DETAILS</h1>}
+                    {(faramValues.resourceType === ('roadway' || 'helipad' || 'waterway' || 'bridge' || 'airway')) && <h1>GENERAL DETAILS</h1>}
+                    <TextInput
+                        faramElementName="title"
+                        label="Name"
+                    />
+                    {faramValues.resourceType === 'industry'
+                        && (
+                            <SelectInput
+                                addResourceDropdown={'capResAddFormDropdown'}
+                                faramElementName={'type'}
+                                options={industryTypeField}
+                                keySelector={typeSelector}
+                                labelSelector={typeSelector}
+                                label={'Type'}
+                                autoFocus
+                                optionsClassName={styles.optionsClassName}
+                                iconName={'capResAddFormDropdown'}
+                            />
+                        )
+
+                    }
+
+                    {selectedAttribute.length && selectedType && selectedType.length ? (
                         <SelectInput
-                            faramElementName="resourceType"
-                            options={resourceTypeList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                            label="Resource Type"
+                            addResourceDropdown={'capResAddFormDropdown'}
+                            faramElementName={selectedAttribute[0]}
+                            options={selectedType}
+                            keySelector={typeSelector}
+                            labelSelector={typeSelector}
+                            label={(faramValues.resourceType
+                                === 'health') ? 'Facility Type' : faramValues.resourceType
+                                    === 'electricity' ? 'Component' : faramValues.resourceType
+                                        === 'watersupply' ? 'Scale' : 'Type'}
                             autoFocus
-                            disabled={isDefined(resourceId)}
+                            optionsClassName={styles.optionsClassName}
+                            iconName={'capResAddFormDropdown'}
                         />
-                        <TextInput
-                            faramElementName="title"
-                            label="Title"
-                        />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                        />
-                        <LocationInput
-                            className={styles.locationInput}
-                            faramElementName="location"
-                        />
-                        {
-                            resourceType && (
+                    ) : ''
+                    }
+
+                    {faramValues.type === 'Other'
+                        && (
+                            <TextInput
+                                faramElementName="otherType"
+                                label="If type is not mentioned above (other), name it here"
+                            />
+
+                        )
+                    }
+                    {faramValues.components === 'Other'
+                        && (
+                            <TextInput
+                                faramElementName="otherComponents"
+                                label="If component is not mentioned above (other), name it here"
+                            />
+
+                        )
+                    }
+                    {faramValues.type === 'Fire Engine'
+                        ? (
+                            <NumberInput
+                                faramElementName="numberOfFireEngine"
+                                label="Number of Fire Engine"
+                            />
+                        ) : ''
+                    }
+                    {faramValues.type === 'Fire Bike'
+                        ? (
+                            <NumberInput
+                                faramElementName="numberOfFireBike"
+                                label="Number of Fire Bike"
+                            />
+                        ) : ''
+                    }
+                    {faramValues.type === 'Other'
+                        ? (
+                            <NumberInput
+                                faramElementName="numberOfOtherApparatus"
+                                label="Number of Other Apparatus"
+                            />
+                        ) : ''
+                    }
+                    {
+                        resourceType && (
+                            <>
                                 <ExtraFields
                                     title={resourceType}
                                     resourceEnums={resourceEnums}
@@ -506,35 +1063,48 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     faramValues={faramValues}
                                     closeModal={closeModal}
                                     addResourcePostRequest={addResourcePostRequest}
+                                    iconName={'capResAddFormDropdown'}
+                                    LoadingSuccessHalt={this.LoadingSuccessHalt}
+                                    addResourcePending={addResourcePending}
+                                    faramValueSetNull={this.faramValueSetNull}
+                                    optionsClassName={styles.optionsClassName}
+                                    handleFaramValidationFailure={this.handleFaramValidationFailure}
                                 />
-                            )
-                        }
-                    </ModalBody>
+                                <LocationInput
+                                    // className={styles.locationInput}
+                                    faramElementName="location"
+                                    classCategory={styles.locationInput}
+                                    category={'capacityResource'}
+                                />
+                            </>
+                        )
+                    }
+
+                    {/* </ModalBody> */}
                     {
                         !hideButtons && (
-                            <ModalFooter className={styles.footer}>
-                                <DangerButton onClick={closeModal}>
-                                    {palikaRedirect.showForm
-                                        ? 'Close and return to DRRM Report'
-                                        : 'Close'
-                                    }
-                                </DangerButton>
+                            // <ModalFooter className={styles.footer}>
+                            //     <DangerButton onClick={closeModal}>
+                            // Close
+                            //     </DangerButton>
+                            <div className={pristine
+                                ? styles.submitButnDisabled : styles.submitButn}
+                            >
                                 <PrimaryButton
                                     type="submit"
                                     disabled={pristine}
                                     pending={addResourcePending || editResourcePending}
                                 >
-                                                Save
+                                    Submit Changes
                                 </PrimaryButton>
-
-                            </ModalFooter>
+                            </div>
+                            // </ModalFooter>
                         )}
                 </Faram>
-            </Modal>
+            </>
         );
     }
 }
-
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requests),

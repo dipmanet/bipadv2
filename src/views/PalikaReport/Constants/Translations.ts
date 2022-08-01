@@ -6,6 +6,10 @@ interface LanguageEntry {
     [key: string]: Section;
 }
 const languageTranslations: LanguageEntry = {
+    approx: {
+        en: '(approx.)',
+        np: '(लग्भग)',
+    },
     breadcrumb1: {
         np: 'प्रतिवेदनहरु',
         en: 'DRRM Reports',
@@ -210,7 +214,7 @@ const languageTranslations: LanguageEntry = {
 
     DRRfocal: {
         en: 'DRR focal person',
-        np: 'विपद् जोखिम न्यूनीकरणको फोकल व्यक्ति',
+        np: 'विपद सम्पर्क व्यक्ति',
     },
 
     Name: {
@@ -428,10 +432,9 @@ const languageTranslations: LanguageEntry = {
         en: '',
         np: 'को बजेट',
     },
-    // Budget Preview
-    OfMunBudget: {
-        en: 'of Municipal Budget',
-        np: 'नगरपालिकाको कुल बजेट को',
+    MunBudget: {
+        en: 'Municipal Budget',
+        np: 'नगरपालिकाको कुल बजेट',
     },
     Budget: {
         en: 'Budget',
@@ -838,8 +841,8 @@ const languageTranslations: LanguageEntry = {
         np: 'बजेट क्रियाकलापहरु',
     },
     TotalActivities: {
-        en: 'Total number of activities',
-        np: 'गतिविधिहरूको कुल संख्या',
+        en: 'Total number of activities: ',
+        np: 'गतिविधिहरूको कुल संख्या: ',
     },
     DRRRelatedAct: {
         en: 'DRR related activities',
@@ -858,7 +861,7 @@ const languageTranslations: LanguageEntry = {
     },
     DisasterRiskStrategic: {
         en: 'Disaster Risk Reduction National Strategic Plan of Action 2018-2030',
-        np: 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८-२०३०',
+        np: 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८ देखी २०३० मा आधारित प्राथमिकता क्षेत्र',
     },
     Organizationsworking: {
         en: 'Organizations working on DRRM in Rajapur',
@@ -875,6 +878,10 @@ const languageTranslations: LanguageEntry = {
     Genderwiseimpact: {
         en: 'Genderwise impact death',
         np: 'लिङ्गको आधारमा मृत्यु',
+    },
+    TotalActvities: {
+        en: 'Total Number of Activities:',
+        np: 'कार्यक्रमहरुको कुल संख्या:',
     },
     NOftrainedPeople: {
         en: 'No. of trained people',
@@ -1205,11 +1212,11 @@ const languageTranslations: LanguageEntry = {
     },
     ContactMessageGenerated: {
         en: 'This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/). ',
-        np: 'यो रिपोर्ट BIPAD पोर्टल मा उत्पन्न गरिएको छ (https://bipadportal.gov.np/)',
+        np: 'यो रिपोर्ट विपद पोर्टलको स्वचालित प्रणालीबाट तयार गरिएको हो(https://bipadportal.gov.np/)',
     },
     ContactNote: {
         en: 'Note: Please refer to the Annexes for details on each section',
-        np: 'नोट: कृपया प्रत्येक सेक्सनमा विवरणहरूको लागि एनेक्सिसलाई सन्दर्भ गर्नुहोस्',
+        np: 'नोट: विस्तृत जानकारीका लागि कृपया अनुसूची खण्ड हेर्नुहोला',
     },
     MayorNameUnavailable: {
         en: 'Name Unavailable',

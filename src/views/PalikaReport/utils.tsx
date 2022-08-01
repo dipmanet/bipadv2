@@ -29,9 +29,15 @@ const Gt = (props: Props) => {
     } = props;
 
     if (language === 'en') {
-        return section.en;
+        if (section && section.en) {
+            return section.en;
+        }
+        return '';
     }
-    return section.np;
+    if (section && section.np) {
+        return section.np;
+    }
+    return '';
 };
 
 export default connect(mapStateToProps, undefined)(
