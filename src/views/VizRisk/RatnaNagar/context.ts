@@ -49,6 +49,7 @@ interface MainPageData {
     handleRangeLegendClick: (item: any) => undefined;
     handleReset: (item: any) => undefined;
     setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentRechartsItem: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface MapData {
@@ -75,6 +76,7 @@ const initialMainPageData: MainPageData = {
     handleRangeLegendClick: () => undefined,
     handleReset: () => undefined,
     setNavIdleStatus: () => undefined,
+    setCurrentRechartsItem: () => undefined,
 
 };
 

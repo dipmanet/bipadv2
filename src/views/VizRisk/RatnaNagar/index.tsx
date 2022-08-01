@@ -147,6 +147,7 @@ const Ratnanagar = (props: any) => {
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
     const [navIdleStatus, setNavIdleStatus] = useState(false);
     const [floodLayer, setFloodLayer] = useState(5);
+    const [currentRechartsItem, setCurrentRechartsItem] = useState('');
     const mapRef = useRef<mapboxgl.Map>();
 
     /**
@@ -279,6 +280,7 @@ const Ratnanagar = (props: any) => {
         setNavIdleStatus,
         handleRangeLegendClick,
         handleReset,
+        setCurrentRechartsItem,
     };
 
     const mapValue = {
@@ -293,6 +295,9 @@ const Ratnanagar = (props: any) => {
         height: '100vh',
         zIndex: 250,
     };
+
+    console.log('currentRechartsItem', currentRechartsItem);
+
 
     return (
         <>
@@ -327,6 +332,7 @@ const Ratnanagar = (props: any) => {
                                                     setRangeNames={setRangeNames}
                                                     floodLayer={floodLayer}
                                                     setFloodLayer={setFloodLayer}
+                                                    currentRechartsItem={currentRechartsItem}
 
                                                 />
                                                 <LeftTopBar currentHeaderVal={currentHeaderVal} />

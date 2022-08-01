@@ -53,7 +53,8 @@ const Map = (props: any) => {
         floodLayer,
         setFloodLayer,
         setNavIdleStatus,
-        children } = props;
+        children,
+        currentRechartsItem } = props;
 
     const [currentOsmLayer, setCurrentOsmLayer] = useState<string>('Satellite Layer');
     const map = useRef<mapboxgl.Map | null>(null);
@@ -658,6 +659,7 @@ const Map = (props: any) => {
             });
         }
     }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
+
 
     useEffect(() => {
         if (popupRef.current) {
