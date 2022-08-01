@@ -1390,6 +1390,7 @@ class Demographics extends React.PureComponent<Props> {
                                                     <TableDataLGProfile
                                                         selectedFederalName={selectedFederalName}
                                                         lgProfileWardLevelData={lgProfileWardLevelData}
+                                                        language={language}
                                                     />
                                                 )
                                                 : (
@@ -2098,7 +2099,7 @@ class Demographics extends React.PureComponent<Props> {
                                                         /> */}
                                                                             <div id="filteredLGProfileAgriculturePractice">
                                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>{t('Agricuture practice')}</h3>
+                                                                                    <h3>{t('Agriculture Practice')}</h3>
                                                                                     <Button
                                                                                         title={t('Download Chart')}
                                                                                         className={styles.chartDownload}
