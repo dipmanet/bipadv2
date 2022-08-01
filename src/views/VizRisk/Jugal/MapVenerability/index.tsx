@@ -46,6 +46,11 @@ const draw = new MapboxDraw({
     defaultMode: 'draw_polygon',
 });
 
+const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: true,
+    className: 'popup',
+});
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -54,7 +59,7 @@ class FloodHistoryMap extends React.Component {
         this.state = {
             lng: 85.79108507481781,
             lat: 28.015490220644214,
-            zoom: 9.8,
+            zoom: 10.2,
             incidentYear: '0',
             playState: true,
             ciChartData: [],
@@ -90,24 +95,29 @@ class FloodHistoryMap extends React.Component {
         const { CIData: cidata, buildings, rasterLayer } = this.props;
 
 
-        // if (isDefined(cidata.features)) {
-        //     const arr = cidata.features.map(item => [
-        //         item.properties.Longitude,
-        //         item.properties.Latitude,
-        //     ]);
-        //     const points = turf.points(arr);
-        //     this.setState({ points });
-        // }
-        if (buildings.length > 0) {
+        if (isDefined(buildings.length > 0)) {
             const buildingsD = buildings.filter(item => item.point !== undefined)
                 .map(p => p.point.coordinates);
-            const buildingpointsData = turf.points(buildingsD);
+            // const buildingpointsData = turf.points(buildingsD);
+            const features = buildings.filter(item => (item.osmId)).map(b => ({
+                type: 'Feature',
+                geometry: b.point,
+                properties: {
+                    osmId: b.osmId,
+                    vuln: b.vulnerabilityScore || -1,
+                },
+            }));
+
+            const buildingpointsData = {
+                type: 'FeatureCollection',
+                features,
+            };
             this.setState({ buildingpoints: buildingpointsData });
-
-
+            console.log('buildingpointsData', buildingpointsData);
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
                 const { points, buildingpoints } = this.state;
+                console.time('function start');
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
                 const searchWithin = turf.multiPolygon([dataArr], {});
@@ -141,7 +151,11 @@ class FloodHistoryMap extends React.Component {
                     { layers: ['Forest'] },
                 );
                 const buildingsCount = ptsWithinBuildings.features.length;
+                console.timeEnd('function start');
+
+                console.time('bpoints array making');
                 const bPoints = ptsWithinBuildings.features.map(item => item.geometry.coordinates);
+                console.timeEnd('bpoints array making');
                 result.push({
                     buildings: buildingsCount,
                     forest: forest.length,
@@ -149,11 +163,13 @@ class FloodHistoryMap extends React.Component {
                     bPoints: bPoints || [],
                 });
                 handleDrawSelectedData(result);
-                this.setPending(false);
+
                 this.map.fitBounds(bbox, {
                     padding: 20,
                 });
             };
+
+
             this.map.on('draw.modechange', (e) => {
                 const data = draw.getAll();
                 if (draw.getMode() === 'draw_polygon') {
@@ -171,16 +187,18 @@ class FloodHistoryMap extends React.Component {
                 }
             });
             this.map.addControl(draw, 'top-right');
-
             this.map.on('draw.create', updateArea);
             this.map.on('draw.update', updateArea);
             this.map.on('draw.delete', this.resetArea);
         }
 
+
         this.map.on('style.load', () => {
-            this.map.on('click', 'Buildings', (e) => {
-                this.setState({ osmID: e.features[0].properties.osm_id });
-                this.setState({ searchTerm: e.features[0].properties.osm_id });
+            this.map.on('click', 'buildingPoints', (e) => {
+                console.log(' e.features[0].properties', e);
+                this.setState({ osmID: e.features[0].properties.osmId });
+                const searchTerm = e.features[0].properties.osmId;
+                this.setState({ searchTerm });
                 this.handleBuildingClick(true);
             });
 
@@ -200,13 +218,16 @@ class FloodHistoryMap extends React.Component {
             });
 
 
-            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
             this.map.setLayoutProperty('Snow', 'visibility', 'visible');
             this.map.setLayoutProperty('Roads', 'visibility', 'visible');
             this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
             this.map.setLayoutProperty('Forest', 'visibility', 'visible');
             this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            this.map.setLayoutProperty('Population Density', 'visibility', 'none');
+            this.map.setLayoutProperty('National Park Text', 'visibility', 'none');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.addSource('hillshadeJugal', {
                 type: 'raster',
@@ -264,9 +285,28 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
+
+            this.map.addSource('buildingPointSource', {
+                type: 'geojson',
+                data: this.state.buildingpoints,
+            });
+            this.map.addLayer({
+                id: 'buildingPoints',
+                type: 'circle',
+                source: 'buildingPointSource',
+                paint: {
+                    'circle-color': '#e3e3e3',
+                    'circle-radius': 7,
+                    'circle-stroke-color': '#444',
+                    'circle-stroke-width': 1,
+                },
+            });
+            this.map.setPaintProperty('buildingPoints', 'circle-color', buildingColor);
+
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.moveLayer('Buildings');
             this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
+
 
             rasterLayers.map((layer) => {
                 this.map.addSource(`floodraster${layer}`, {
@@ -328,18 +368,30 @@ class FloodHistoryMap extends React.Component {
         if (this.props.rasterLayer !== prevProps.rasterLayer) {
             this.switchFloodRasters(this.props.rasterLayer);
         }
+
+
         if (this.props.buildingVul !== prevProps.buildingVul) {
-            this.map.setFeatureState(
-                {
-                    id: this.props.buildingVul.osmId || 0,
-                    source: 'composite',
-                    sourceLayer: 'Jugal_building_polygon',
+            console.log('vul data changed');
+            console.log('vul data', this.props.buildingVul);
+
+            const newData = [...this.props.buildings, this.props.buildingVul];
+            const features = newData.filter(item => (item.osmId)).map(b => ({
+                type: 'Feature',
+                geometry: b.point,
+                properties: {
+                    osmId: b.osmId,
+                    vuln: b.vulnerabilityScore || -1,
                 },
-                {
-                    vuln: this.props.buildingVul.vulnerabilityScore || -1,
-                },
-            );
-            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            }));
+
+            const buildingpointsData = {
+                type: 'FeatureCollection',
+                features,
+            };
+
+            this.map.getSource('buildingPointSource').setData(buildingpointsData);
+            // this.map.setPaintProperty('buildingPoints', 'circle-color', buildingColor);
+            // need to remake the source data
         }
         if (this.props.showAddForm !== prevProps.showAddForm) {
             if (this.props.showAddForm) {
@@ -418,16 +470,6 @@ class FloodHistoryMap extends React.Component {
     }
 
     public showPopupOnBldgs = (coordinates, singularBuldingData, msg, showButton, permission) => {
-        const popupWithData = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
-        const popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
         const content = popupElement(
             singularBuldingData,
             msg,
@@ -438,18 +480,21 @@ class FloodHistoryMap extends React.Component {
 
         this.map.on('closeAllPopups', () => {
             popup.remove();
-            popupWithData.remove();
+            // popupWithData.remove();
         });
 
         this.setState({ cood: coordinates });
+        popup.remove();
+        // popupWithData.remove();
+
         if (Object.keys(singularBuldingData).length > 2) {
-            popup.remove();
-            popupWithData.setLngLat(coordinates)
+            // popup.remove();
+            popup.setLngLat(coordinates)
                 .setDOMContent(
                     content,
                 ).addTo(this.map);
         } else {
-            popupWithData.remove();
+            // popupWithData.remove();
             popup.setLngLat(coordinates)
                 .setDOMContent(
                     content,
@@ -503,14 +548,16 @@ class FloodHistoryMap extends React.Component {
             searchId = this.state.searchTerm;
         }
         if (searchId) {
-            const { buildingdataAddPermission } = this.props;
-
-            const coordinatesObj = this.props.buildinggeojson
-                .features
-                .filter(b => searchId === parseInt(b.properties.osm_id, 10));
+            // looking for
+            const { singularBuldingData, buildingdataAddPermission } = this.props;
+            // const coordinatesObj = this.props.buildinggeojson
+            //     .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
+            const coordinatesObj = this.state.buildingpoints
+                .features.filter(b => Number(searchId) === b.properties.osmId);
             let cood = [];
             if (coordinatesObj.length > 0) {
                 cood = coordinatesObj[0].geometry.coordinates;
+                // here
                 const singularBData = getSingularBuildingData(searchId, this.props.buildings);
                 if (Object.keys(singularBData).length > 0) {
                     this.props.setSingularBuilding(true, singularBData);

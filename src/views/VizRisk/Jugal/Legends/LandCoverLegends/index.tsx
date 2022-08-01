@@ -18,7 +18,7 @@ const LandCoverLegends = () => (
                     className={styles.buildingIcon}
                 />
             </span>
-                            Buildings
+            Buildings
 
         </p>
         <p className={styles.landcoverIconContainer}>
@@ -34,7 +34,7 @@ const LandCoverLegends = () => (
                 />
 
             </span>
-                            Water Bodies
+            Water Bodies
         </p>
 
         <p className={styles.landcoverIconContainer}>
@@ -50,7 +50,7 @@ const LandCoverLegends = () => (
                 />
 
             </span>
-                            Agricultural Land
+            Agricultural Land
         </p>
         <p className={styles.landcoverIconContainer}>
             <span>
@@ -58,26 +58,26 @@ const LandCoverLegends = () => (
                     style={{
                         stroke: '#a6dea6',
                         strokeWidth: 50,
-                        fill: '#90d086',
+                        fill: '#61dc09',
 
                     }}
                     className={styles.forestIcon}
                 />
 
             </span>
-                            Forest
+            Forest
         </p>
 
 
         <div className={styles.landcoverIconContainer}>
             <div className={styles.roadIcon} />
 
-                            Roads
+            Roads
         </div>
         <div className={styles.landcoverIconContainer}>
             <div className={styles.bridgeLine} />
 
-                            Bridges
+            Bridges
         </div>
 
         <p className={styles.landcoverIconContainer}>
@@ -92,7 +92,7 @@ const LandCoverLegends = () => (
                     className={styles.otherIcon}
                 />
             </span>
-                            Other
+            Other
         </p>
 
         <p className={styles.landcoverIconContainer}>
@@ -125,7 +125,7 @@ const LandCoverLegends = () => (
                 style={{
                     stroke: '#fff',
                     strokeWidth: 50,
-                    fill: '#e9e1d8',
+                    fill: '#c26f0f',
 
                 }}
                 className={styles.otherIcon}

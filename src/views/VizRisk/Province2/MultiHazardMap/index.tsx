@@ -1,3 +1,7 @@
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 /* eslint-disable no-mixed-spaces-and-tabs */
@@ -10,31 +14,30 @@ import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
 import * as geojson from 'geojson';
 import { listToMap, _cs } from '@togglecorp/fujs';
-import { mapSources } from '#constants';
-import * as PageTypes from '#store/atom/page/types';
-import {
-    getFloodRasterLayer,
-    getCommonRasterLayer,
-    getGeoJSONPH,
-    buildingColor,
-} from './utils';
-import { AppState } from '#store/types';
-
-import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
-import { getDistrictFilter } from '#utils/domain';
-import styles from './styles.scss';
+import Heli from '#resources/icons/Heli.png';
 import Education from '#resources/icons/Educationcopy.png';
 import Finance from '#resources/icons/bank.png';
 import Health from '#resources/icons/healthcopy.png';
 import Governance from '#resources/icons/governance.png';
 import Culture from '#resources/icons/culture.png';
 import Fireengine from '#resources/icons/Fireengine.png';
-import Heli from '#resources/icons/Heli.png';
+import { getDistrictFilter } from '#utils/domain';
+import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
+import { AppState } from '#store/types';
+import { mapSources } from '#constants';
+import * as PageTypes from '#store/atom/page/types';
+import { districtsSelector } from '../../../../store/atom/page/selector';
+import {
+    getFloodRasterLayer,
+    getCommonRasterLayer,
+    getGeoJSONPH,
+    buildingColor,
+} from './utils';
 import { getgeoJsonLayer } from '../utils';
 import { AlertTooltip, generatePaint, generatePaintByQuantile, generatePaintQuantile, parseStringToNumber } from '../Functions';
-import { districtsSelector } from '../../../../store/atom/page/selector';
 import { hdiData, hpiData } from '../Data/vulnerabilityData';
 import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
+import styles from './styles.scss';
 
 
 interface State {

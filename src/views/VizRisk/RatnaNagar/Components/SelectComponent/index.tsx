@@ -12,7 +12,7 @@ const SelectComponent = (props) => {
                 onChange={e => setSelctFieldCurrentValue(e.target.value)}
             >
                 {
-                    selectFieldValues.map(item => (
+                    selectFieldValues.sort().map(item => (
                         <option
                             className={styles.mainOptions}
                             key={`select-${item}`}

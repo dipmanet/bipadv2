@@ -1,10 +1,13 @@
+/* eslint-disable max-len */
 import React from 'react';
-import { CartesianGrid,
+import {
+    CartesianGrid,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis } from 'recharts';
+    Tooltip, XAxis, YAxis,
+} from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
@@ -16,7 +19,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -112,19 +115,19 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Avg Max
+                    Avg Max
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendMin} />
                 <div className={styles.legendText}>
-                       Avg Min
+                    Avg Min
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendDaily} />
                 <div className={styles.legendText}>
-                       Daily Avg
+                    Daily Avg
                 </div>
             </div>
         </div>
@@ -135,7 +138,7 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Avg Rainfall
+                    Avg Rainfall
                 </div>
             </div>
 
@@ -177,14 +180,14 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Dhangadhi Sub-Metropolitan City  </h1>
                 <p>
-                Dhangadhi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
-                It covers a total area of 260.92 sq. km and is located at an altitude of 109 MASL.
+                    Dhangadhi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
+                    It covers a total area of 260.92 sq. km and is located at an altitude of 109 MASL.
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Summer starts in March and lasts till June. Winter begins in November (Mangsir) and
-                lasts till February. Dhangadhi faces heavy downpours during the monsoon, from June
-                to October.
+                    Summer starts in March and lasts till June. Winter begins in November and
+                    lasts till February. Dhangadhi faces heavy downpours during the monsoon, from June
+                    to October.
 
                 </p>
                 <div className={styles.iconRow}>
@@ -196,11 +199,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>35.3℃</div>
                             <div className={styles.iconText}>
-                            Maximum
+                                Maximum
                                 <br />
-                            Temperature in
+                                Temperature in
                                 <br />
-                            Summer
+                                Summer
                             </div>
 
                         </div>
@@ -213,11 +216,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>0.5℃</div>
                             <div className={styles.iconText}>
-                            Minimum
+                                Minimum
                                 <br />
-                            Temeperature in
+                                Temeperature in
                                 <br />
-                            Winter
+                                Winter
                             </div>
 
                         </div>
@@ -232,8 +235,8 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>1504.5 mm</div>
                             <div className={styles.iconText}>
-                             Annual
-                            Rainfall
+                                Annual
+                                Rainfall
                             </div>
 
                         </div>
@@ -247,7 +250,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>142m - 154m</div>
                             <div className={styles.iconText}>
-                            Elevation from Sea Level
+                                Elevation from Sea Level
                             </div>
 
                         </div>

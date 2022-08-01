@@ -10,6 +10,8 @@ import { AppState } from '#types';
 import { getWardFilter } from '#utils/domain';
 import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
 import DemoGraphicsLegends from '#views/VizRisk/Butwal/Legends/DemographicsLegends';
+import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
+import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import { MainPageDataContext, RatnaNagarMapContext } from '../context';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import styles from './styles.scss';
@@ -22,11 +24,9 @@ import {
     layoutSwitch,
     showMapLayers,
 } from '../utils';
-import { getCommonRasterLayer } from '#views/VizRisk/Butwal/MultiHazardMap/utils';
 import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
 import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
 import InnundationLegend from '../Components/Legends/InnundationLegend';
-import FloodHistoryLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import mapImages from './MapImages';
 import RadioButton from '../Components/RadioButton';
 
@@ -34,9 +34,12 @@ const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
-const mapStateToProps = (state: AppState) => ({
-    wards: wardsSelector(state),
-});
+const mapStateToProps = (state: AppState) => {
+    console.log('mapStateToProps-stateValue', state);
+    return ({
+        wards: wardsSelector(state),
+    });
+};
 
 let hoveredWardId: number | string | undefined;
 
@@ -206,6 +209,10 @@ const Map = (props: any) => {
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
             style: 'mapbox://styles/yilab/cl02b42zi00b414qm2i7xqqex',
+            // center: [
+            //     84.51393887409917,
+            //     27.619152424687197,
+            // ],
             minZoom: 2,
             maxZoom: 22,
         });
@@ -225,18 +232,13 @@ const Map = (props: any) => {
                 setNavIdleStatus(true);
             });
             multihazardMap.fitBounds(
-                [82.9045981623205,
-                    27.5472027536931,
-                    83.1180839586179,
-                    27.8206868107314],
+                [84.4655766529013,
+                    27.5488495368228,
+                    84.5618032266611,
+                    27.6813334045862,
+                ], { duration: 3000, padding: 20 },
             );
-
-            multihazardMap.easeTo({
-                // pitch: 30,
-                zoom: 12.1,
-                duration: 8000,
-            });
-        }, 4000);
+        }, 2000);
 
         multihazardMap.on('style.load', () => {
             // --------------------------------------SLIDE-3 -> CI layer----------------------------------------

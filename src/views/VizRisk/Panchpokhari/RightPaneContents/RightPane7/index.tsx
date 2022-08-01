@@ -423,7 +423,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>Ownership of house</td>
-                                                    {(singularBuldingData && singularBuldingData.ownership) || '-'}
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.ownership) || '-'}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>People with disability</td>
@@ -481,7 +483,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                                     dataKey="name"
                                                                     tick={{ fill: '#94bdcf' }}
                                                                 />
-                                                                <Tooltip />
+                                                                <Tooltip
+                                                                    cursor={{ fill: '#1c333f' }}
+                                                                />
                                                                 <Bar
                                                                     dataKey="Total"
                                                                     fill="rgb(0,219,95)"
@@ -497,22 +501,28 @@ class SlideFivePane extends React.Component<Props, State> {
 
                                             <p>
                                 Economic Factors
-                                                <ul>
-                                                    <li>
-                                            Main source of income:
+                                            </p>
+
+                                            <table className={styles.singularPaneTable}>
+                                                <tr>
+                                                    <td>Main source of income</td>
+                                                    <td>
                                                         {' '}
                                                         {(singularBuldingData && singularBuldingData.majorOccupation) || '-'}
                                                         {' '}
-                                                    </li>
-                                                    <li>
-                                        Average yearly income (NPR):
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average yearly income (NPR)</td>
+                                                    <td>
                                                         {' '}
                                                         {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
                                                         {' '}
-                                                    </li>
+                                                    </td>
+                                                </tr>
+                                            </table>
 
-                                                </ul>
-                                            </p>
                                             <div className={styles.backBtnContainer}>
                                                 <button
                                                     onClick={this.handleBackBtn}
@@ -571,7 +581,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                     <div className={styles.iconLevel}>
 
                                         <Icon
-                                            name="home"
+                                            name="circle"
                                             className={styles.high}
                                         />
                                         <span className={styles.number}>
@@ -587,7 +597,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                     </span>
                                     <div className={styles.iconLevel}>
                                         <Icon
-                                            name="home"
+                                            name="circle"
                                             className={styles.med}
                                         />
                                         <span className={styles.number}>
@@ -603,12 +613,28 @@ class SlideFivePane extends React.Component<Props, State> {
                                     </span>
                                     <div className={styles.iconLevel}>
                                         <Icon
-                                            name="home"
+                                            name="circle"
                                             className={styles.low}
                                         />
                                         <span className={styles.number}>
                                             {' '}
                                             {buildingVulnerability.low}
+                                            {' '}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={styles.levelContainer}>
+                                    <span>
+                                        No Score
+                                    </span>
+                                    <div className={styles.iconLevel}>
+                                        <Icon
+                                            name="circle"
+                                            className={styles.noscore}
+                                        />
+                                        <span className={styles.number}>
+                                            {' '}
+                                            {buildingVulnerability.noscore}
                                             {' '}
                                         </span>
                                     </div>
@@ -639,7 +665,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -675,7 +703,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -712,7 +742,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -759,7 +791,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -805,7 +839,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -850,7 +886,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"

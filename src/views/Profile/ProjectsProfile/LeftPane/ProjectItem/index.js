@@ -89,7 +89,7 @@ class ProjectItem extends React.PureComponent {
             drrCycleMap = {},
             categoryMap = {},
         } = this.props;
-
+        console.log('what is d', d);
         const category = d.category.map(p => (categoryMap[p] || {}).title).join(', ');
         const drrCycle = d.drrcycle.map(p => (drrCycleMap[p] || {}).title).join(', ');
 
@@ -239,13 +239,13 @@ class ProjectItem extends React.PureComponent {
                                     value={donorNames}
                                 />
                             </div>
-                            <ListView
+                            {/* <ListView
                                 className={styles.outputs}
                                 data={output}
                                 renderer={Output}
                                 rendererParams={this.outputRendererParams}
                                 keySelector={outputKeySelector}
-                            />
+                            /> */}
                         </ModalBody>
                     </Modal>
                 )}

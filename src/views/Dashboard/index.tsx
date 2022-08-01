@@ -43,10 +43,6 @@ import {
 } from '#selectors';
 
 import Page from '#components/Page';
-
-import Map from './Map';
-import LeftPane from './LeftPane';
-
 import {
     MapStateElement,
     AlertElement,
@@ -54,6 +50,9 @@ import {
     FiltersElement,
     DataDateRangeValueElement,
 } from '#types';
+import Map from './Map';
+import LeftPane from './LeftPane';
+
 
 import styles from './styles.scss';
 
@@ -70,7 +69,7 @@ interface Params {
     triggerAlertRequest: (timeout: number) => void;
     triggerEventRequest: (timeout: number) => void;
 }
-interface ComponentProps {}
+interface ComponentProps { }
 interface PropsFromAppState {
     alertList: PageTypes.Alert[];
     eventList: PageTypes.Event[];
@@ -103,7 +102,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setHazardTypes: params => dispatch(setHazardTypesAction(params)),
 });
 
-interface DateFilterParamName{
+interface DateFilterParamName {
     start: string;
     end: string;
 }

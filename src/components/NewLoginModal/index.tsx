@@ -206,7 +206,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         onFatal: ({ params }) => {
             params.handlePending(false);
-            console.log('No reply, server error');
+
             alert('Some problem occured, please contact IT support.');
 
             window.location.reload();

@@ -96,9 +96,9 @@ const routeSettings: SomeRoute[] = [
         iconName: 'riskInfoSvg',
     },
     {
-        name: 'vizrisk',
-        title: 'Viz Risk',
-        path: '/viz-risk/',
+        name: 'visrisk',
+        title: 'VisRisk',
+        path: '/vis-risk/',
         load: () => import('../views/VizRisk'),
         navbar: true,
         disabled: false,

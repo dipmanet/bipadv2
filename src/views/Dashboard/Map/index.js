@@ -74,7 +74,7 @@ const AlertTooltip = ({ title, description, referenceType, referenceData, create
                     {title}
                 </h3>
                 <div className={styles.description}>
-                    { description }
+                    {description}
                 </div>
             </div>
         );

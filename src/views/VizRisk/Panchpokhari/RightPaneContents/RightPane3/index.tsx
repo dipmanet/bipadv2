@@ -40,6 +40,21 @@ class SlideThreePane extends React.PureComponent<Props, State> {
         </div>
     )
 
+    public CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Male Pop: ${payload[0].payload.MalePop}`}</p>
+                    <p>{`Female Pop: ${payload[0].payload.FemalePop}`}</p>
+                    <p>{`Total Household: ${payload[0].payload.TotalHousehold}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     public render() {
         const {
             payload,
@@ -64,8 +79,8 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 while ward number 5 has the least comprising of only 690
                 number of household.
                 </p>
-                <div className={styles.chartContainer}>
-                    <ResponsiveContainer width="100%" height={500}>
+                <div className={styles.demochartContainer}>
+                    <ResponsiveContainer>
                         <BarChart
                             // width={350}
                             // height={600}
@@ -76,8 +91,17 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis type="number" tick={{ fill: '#94bdcf' }} />
                             <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
-                            <Tooltip />
-                            <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
+                            <Tooltip
+                                content={this.CustomTooltip}
+                                cursor={{ fill: '#1c333f' }}
+                            />
+                            <Legend
+                                iconType="square"
+                                iconSize={10}
+                                align="center"
+                                content={this.renderLegend}
+
+                            />
                             <Bar
                                 dataKey="MalePop"
                                 fill="#ffbf00"

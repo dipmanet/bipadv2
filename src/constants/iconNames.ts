@@ -100,6 +100,8 @@ const iconNames = {
 
     search: 'fa fa-search',
     home: 'fa fa-home',
+    sortDown: 'fa fa-angle-down',
+    sortUp: 'fa fa-angle-up',
 };
 
 export default iconNames;

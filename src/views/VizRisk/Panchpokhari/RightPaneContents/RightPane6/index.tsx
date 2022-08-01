@@ -106,6 +106,19 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         }
     }
 
+    public CustomTooltipExposure = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{`${payload[0].payload.name}:${payload[0].payload.name}`}</h2>
+
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     public render() {
         const {
             handleNext,
@@ -284,32 +297,37 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         )
                 }
 
+                <div className={styles.climateChart}>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={400}>
-                    <BarChart
-                        width={350}
-                        height={600}
-                        data={chartData}
-                        layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <Tooltip />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(0,219,95)"
-                            barSize={15}
-                            label={{ position: 'right', fill: '#ffffff' }}
-                            radius={[0, 15, 15, 0]}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
+                    <ResponsiveContainer>
+                        <BarChart
+                            width={350}
+                            height={600}
+                            data={chartData}
+                            layout="vertical"
+                            margin={{ top: 10, bottom: 10, right: 20, left: 20 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                            <YAxis
+                                type="category"
+                                dataKey="name"
+                                tick={{ fill: '#94bdcf' }}
+                            />
+                            {/* <Tooltip
+
+                            cursor={{ fill: '#1c333f' }}
+                        /> */}
+                            <Bar
+                                dataKey="Total"
+                                fill="rgb(0,219,95)"
+                                barSize={15}
+                                label={{ position: 'right', fill: '#ffffff' }}
+                                radius={[0, 15, 15, 0]}
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
 
                 <NavButtons
                     handleNext={handleNext}
