@@ -5,6 +5,7 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
+// import { Radio } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FormControl } from '@mui/material';
@@ -39,7 +40,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
-interface Props{
+interface Props {
     handleFormData?: (e: EventTarget, fN: string) => void;
     formData?: FormDataType;
     progress?: number;
@@ -64,8 +65,8 @@ const InstitutionDetails = (props: Props): JSX.Element => {
         },
     } = props;
 
-    const [disabled, setDisabled] = useState<string|undefined>(undefined);
-    const [error, setError] = useState<string|undefined>(undefined);
+    const [disabled, setDisabled] = useState<string | undefined>(undefined);
+    const [error, setError] = useState<string | undefined>(undefined);
     const [fieldsToDisable, setDisableFields] = useState([]);
     // const navigate = useNavigate();
     const handleViewTableBtn = () => {
@@ -172,51 +173,51 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 </FormControl>
                 {
                     formData.authority === 'Government'
-                && (
-                    <div className={styles.row1}>
-                        <div className={styles.col1}>
-                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                <InputLabel id="authorityLevelInput">Authority Level</InputLabel>
-                                <Select
-                                    disabled={getDisabled('authority_level')}
-                                    labelId="authorityLevelLabel"
-                                    id="authorityLevel"
-                                    value={formData.authority === 'Government' ? formData.authority_level : null}
-                                    label="Authority Level"
-                                    onChange={e => handleFormData(e, 'authority_level')}
-                                    style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-                                    disableUnderline
-                                >
-                                    <MenuItem value={'Federal'}>Federal</MenuItem>
-                                    <MenuItem value={'Province'}>Province</MenuItem>
-                                    <MenuItem value={'Local'}>Local</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className={styles.col1}>
+                    && (
+                        <div className={styles.row1}>
+                            <div className={styles.col1}>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <InputLabel id="authorityLevelInput">Authority Level</InputLabel>
+                                    <Select
+                                        disabled={getDisabled('authority_level')}
+                                        labelId="authorityLevelLabel"
+                                        id="authorityLevel"
+                                        value={formData.authority === 'Government' ? formData.authority_level : null}
+                                        label="Authority Level"
+                                        onChange={e => handleFormData(e, 'authority_level')}
+                                        style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
+                                        disableUnderline
+                                    >
+                                        <MenuItem value={'Federal'}>Federal</MenuItem>
+                                        <MenuItem value={'Province'}>Province</MenuItem>
+                                        <MenuItem value={'Local'}>Local</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            <div className={styles.col1}>
 
-                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
 
-                                <InputLabel id="ownershipInput">Ownership</InputLabel>
-                                <Select
-                                    disabled={getDisabled('ownership')}
-                                    labelId="ownershipLabel"
-                                    id="ownership"
-                                    value={formData.authority === 'Government' ? formData.ownership : null}
-                                    label="Ownership"
-                                    onChange={e => handleFormData(e, 'ownership')}
-                                    style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-                                    disableUnderline
-                                >
-                                    {instDetail.Ownership.options.map(own => (
-                                        <MenuItem key={own} value={own}>{own}</MenuItem>
-                                    ))
-                                    }
-                                </Select>
-                            </FormControl>
+                                    <InputLabel id="ownershipInput">Ownership</InputLabel>
+                                    <Select
+                                        disabled={getDisabled('ownership')}
+                                        labelId="ownershipLabel"
+                                        id="ownership"
+                                        value={formData.authority === 'Government' ? formData.ownership : null}
+                                        label="Ownership"
+                                        onChange={e => handleFormData(e, 'ownership')}
+                                        style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
+                                        disableUnderline
+                                    >
+                                        {instDetail.Ownership.options.map(own => (
+                                            <MenuItem key={own} value={own}>{own}</MenuItem>
+                                        ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </div>
                         </div>
-                    </div>
-                )
+                    )
                 }
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -309,9 +310,9 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                 label="Hospital Bed Count"
                                 variant="filled"
                                 InputProps={{
-                            disableUnderline: true,
-                            inputMode: 'numeric',
-                        }}
+                                    disableUnderline: true,
+                                    inputMode: 'numeric',
+                                }}
                             />
                         </FormControl>
                     </div>
@@ -328,9 +329,9 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                 onChange={e => handleFormData(e, 'icu_bed')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
                                 InputProps={{
-                            disableUnderline: true,
-                            inputMode: 'numeric',
-                        }}
+                                    disableUnderline: true,
+                                    inputMode: 'numeric',
+                                }}
                             />
 
                         </FormControl>
@@ -347,15 +348,15 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                 label="Ventilator Bed Count"
                                 variant="filled"
                                 InputProps={{
-                            disableUnderline: true,
-                            inputMode: 'numeric',
-                        }}
+                                    disableUnderline: true,
+                                    inputMode: 'numeric',
+                                }}
                             />
                         </FormControl>
                     </div>
                 </div>
                 <h2>
-                Select the services offered at the facility
+                    Select the services offered at the facility
                 </h2>
                 <div className={styles.checkBoxGrp}>
                     <Box sx={{ display: 'flex' }}>
@@ -371,11 +372,11 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                                         checked={formData[instDetail['Services available'].ref[item]]}
                                                         onChange={(e => handleFormData(e, instDetail['Services available'].ref[item]))}
                                                     />
-                                            )}
+                                                )}
                                                 label={item}
                                                 key={item}
                                             />
-                                    ))
+                                        ))
                                 }
                             </FormGroup>
                         </FormControl>
@@ -400,31 +401,31 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         </FormControl> */}
                     </Box>
                     {
-                    formData.has_safe_motherhood
-                    && (
-                    <>
-                        <h2>Please select all services available</h2>
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['Services available (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['Services available (if yes)'].ref[item])}
-                                                    checked={formData.has_safe_motherhood ? formData[instDetail['Services available (if yes)'].ref[item]] : null}
-                                                    onChange={(e => handleFormData(e, instDetail['Services available (if yes)'].ref[item]))}
-                                                />
-                                                )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                        ))
-                                        }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                        formData.has_safe_motherhood
+                        && (
+                            <>
+                                <h2>Please select all services available</h2>
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['Services available (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['Services available (if yes)'].ref[item])}
+                                                                checked={formData.has_safe_motherhood ? formData[instDetail['Services available (if yes)'].ref[item]] : null}
+                                                                onChange={(e => handleFormData(e, instDetail['Services available (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Services available (if yes)'].ref).slice(-3).map((item: string) => (
@@ -443,9 +444,9 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </>
-                    )
+                                </Box>
+                            </>
+                        )
                     }
 
 
@@ -468,33 +469,33 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-                formData.family_planning
-                && (
-                <>
-                    <h2>Please select all that apply</h2>
-                    <div className={styles.checkBoxGrp}>
+                    formData.family_planning
+                    && (
+                        <>
+                            <h2>Please select all that apply</h2>
+                            <div className={styles.checkBoxGrp}>
 
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['Family Planning (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['Family Planning (if yes)'].ref[item])}
-                                                    checked={formData[instDetail['Family Planning (if yes)'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Family Planning (if yes)'].ref[item]))}
-                                                />
-                                                )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                        ))
-                                        }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['Family Planning (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['Family Planning (if yes)'].ref[item])}
+                                                                checked={formData[instDetail['Family Planning (if yes)'].ref[item]]}
+                                                                onChange={(e => handleFormData(e, instDetail['Family Planning (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Family Planning (if yes)'].ref).slice(-2).map((item: string) => (
@@ -513,10 +514,10 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </div>
-                </>
-                )}
+                                </Box>
+                            </div>
+                        </>
+                    )}
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                     <InputLabel id="OPD-Input">OPD</InputLabel>
                     <Select
@@ -534,32 +535,32 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-                formData.has_opd
-                && (
-                <>
-                    <h2>Please select all that apply</h2>
-                    <div className={styles.checkBoxGrp}>
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['OPD (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['OPD (if yes)'].ref[item])}
-                                                    checked={formData[instDetail['OPD (if yes)'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['OPD (if yes)'].ref[item]))}
-                                                />
-                                                )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                        ))
-                                    }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                    formData.has_opd
+                    && (
+                        <>
+                            <h2>Please select all that apply</h2>
+                            <div className={styles.checkBoxGrp}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['OPD (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['OPD (if yes)'].ref[item])}
+                                                                checked={formData[instDetail['OPD (if yes)'].ref[item]]}
+                                                                onChange={(e => handleFormData(e, instDetail['OPD (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['OPD (if yes)'].ref).slice(-2).map((item: string) => (
@@ -578,10 +579,10 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </div>
-                </>
-                )
+                                </Box>
+                            </div>
+                        </>
+                    )
                 }
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -704,32 +705,32 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 </FormControl>
 
                 {
-                formData.has_laboratory_service
-                && (
-                <>
-                    <h2>Please select all that apply</h2>
-                    <div className={styles.checkBoxGrp}>
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['Laboratory Service (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['Laboratory Service (if yes)'].ref[item])}
-                                                    checked={formData[instDetail['Laboratory Service (if yes)'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Laboratory Service (if yes)'].ref[item]))}
-                                                />
-                                                )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                        ))
-                                    }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                    formData.has_laboratory_service
+                    && (
+                        <>
+                            <h2>Please select all that apply</h2>
+                            <div className={styles.checkBoxGrp}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['Laboratory Service (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['Laboratory Service (if yes)'].ref[item])}
+                                                                checked={formData[instDetail['Laboratory Service (if yes)'].ref[item]]}
+                                                                onChange={(e => handleFormData(e, instDetail['Laboratory Service (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Laboratory Service (if yes)'].ref).slice(-2).map((item: string) => (
@@ -748,10 +749,10 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </div>
-                </>
-                )
+                                </Box>
+                            </div>
+                        </>
+                    )
                 }
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -858,31 +859,31 @@ const InstitutionDetails = (props: Props): JSX.Element => {
 
 
                 {
-                formData.has_radiology && (
-                <>
-                    <h2>Please select all that apply</h2>
-                    <div className={styles.checkBoxGrp}>
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['Radiology (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['Radiology (if yes)'].ref[item])}
-                                                    checked={formData[instDetail['Radiology (if yes)'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Radiology (if yes)'].ref[item]))}
-                                                />
-                                            )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                    ))
-                                    }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                    formData.has_radiology && (
+                        <>
+                            <h2>Please select all that apply</h2>
+                            <div className={styles.checkBoxGrp}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['Radiology (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['Radiology (if yes)'].ref[item])}
+                                                                checked={formData[instDetail['Radiology (if yes)'].ref[item]]}
+                                                                onChange={(e => handleFormData(e, instDetail['Radiology (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Radiology (if yes)'].ref).slice(-2).map((item: string) => (
@@ -901,10 +902,10 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </div>
-                </>
-                )
+                                </Box>
+                            </div>
+                        </>
+                    )
                 }
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -924,32 +925,32 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-                formData.has_surgical_service
-                && (
-                <>
-                    <h2>Please select all that apply</h2>
-                    <div className={styles.checkBoxGrp}>
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['Surgical Service (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['Surgical Service (if yes)'].ref[item])}
-                                                    checked={formData[instDetail['Surgical Service (if yes)'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Surgical Service (if yes)'].ref[item]))}
-                                                />
-                                            )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                        ))
-                                        }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                    formData.has_surgical_service
+                    && (
+                        <>
+                            <h2>Please select all that apply</h2>
+                            <div className={styles.checkBoxGrp}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['Surgical Service (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['Surgical Service (if yes)'].ref[item])}
+                                                                checked={formData[instDetail['Surgical Service (if yes)'].ref[item]]}
+                                                                onChange={(e => handleFormData(e, instDetail['Surgical Service (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Surgical Service (if yes)'].ref).slice(-2).map((item: string) => (
@@ -968,10 +969,10 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </div>
-                </>
-                )
+                                </Box>
+                            </div>
+                        </>
+                    )
                 }
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                     <InputLabel id="has_specialized_service-Input">Specialized Service</InputLabel>
@@ -990,32 +991,32 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-                formData.has_specialized_service
-                && (
-                <>
-                    <h2>Please select all that apply</h2>
-                    <div className={styles.checkBoxGrp}>
-                        <Box sx={{ display: 'flex' }}>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
-                                <FormGroup>
-                                    {
-                                    Object.keys(instDetail['Specialized Service (if yes)'].ref).map((item: string) => (
-                                        <FormControlLabel
-                                            control={(
-                                                <Checkbox
-                                                    disabled={getDisabled(instDetail['Specialized Service (if yes)'].ref[item])}
-                                                    checked={formData[instDetail['Specialized Service (if yes)'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Specialized Service (if yes)'].ref[item]))}
-                                                />
-                                            )}
-                                            label={item}
-                                            key={item}
-                                        />
-                                     ))
-                                     }
-                                </FormGroup>
-                            </FormControl>
-                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                    formData.has_specialized_service
+                    && (
+                        <>
+                            <h2>Please select all that apply</h2>
+                            <div className={styles.checkBoxGrp}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                                        <FormGroup>
+                                            {
+                                                Object.keys(instDetail['Specialized Service (if yes)'].ref).map((item: string) => (
+                                                    <FormControlLabel
+                                                        control={(
+                                                            <Checkbox
+                                                                disabled={getDisabled(instDetail['Specialized Service (if yes)'].ref[item])}
+                                                                checked={formData[instDetail['Specialized Service (if yes)'].ref[item]]}
+                                                                onChange={(e => handleFormData(e, instDetail['Specialized Service (if yes)'].ref[item]))}
+                                                            />
+                                                        )}
+                                                        label={item}
+                                                        key={item}
+                                                    />
+                                                ))
+                                            }
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Specialized Service (if yes)'].ref).slice(-2).map((item: string) => (
@@ -1034,10 +1035,10 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                                 </FormGroup>
                             </FormControl> */}
-                        </Box>
-                    </div>
-                </>
-                )
+                                </Box>
+                            </div>
+                        </>
+                    )
                 }
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -1284,20 +1285,20 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                             <FormGroup>
                                 {
-                                Object.keys(instDetail['Listed for free treatment Bipanna'].ref).map((item: string) => (
-                                    <FormControlLabel
-                                        control={(
-                                            <Checkbox
-                                                disabled={getDisabled(instDetail['Listed for free treatment Bipanna'].ref[item])}
-                                                checked={formData[instDetail['Listed for free treatment Bipanna'].ref[item]]}
-                                                onChange={(e => handleFormData(e, instDetail['Listed for free treatment Bipanna'].ref[item]))}
-                                            />
-                                        )}
-                                        label={item}
-                                        key={item}
-                                    />
+                                    Object.keys(instDetail['Listed for free treatment Bipanna'].ref).map((item: string) => (
+                                        <FormControlLabel
+                                            control={(
+                                                <Checkbox
+                                                    disabled={getDisabled(instDetail['Listed for free treatment Bipanna'].ref[item])}
+                                                    checked={formData[instDetail['Listed for free treatment Bipanna'].ref[item]]}
+                                                    onChange={(e => handleFormData(e, instDetail['Listed for free treatment Bipanna'].ref[item]))}
+                                                />
+                                            )}
+                                            label={item}
+                                            key={item}
+                                        />
                                     ))
-                                    }
+                                }
                             </FormGroup>
                         </FormControl>
                         {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
@@ -1537,8 +1538,8 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-                validationError
-                && <p style={{ color: 'red' }}>{validationError}</p>
+                    validationError
+                    && <p style={{ color: 'red' }}>{validationError}</p>
                 }
                 <NextButton
                     getActiveMenu={props.getActiveMenu}

@@ -258,8 +258,8 @@ const Bulletin = (props: Props) => {
             const currentHour = currentDate.getHours();
             const currentMinute = String(currentDate.getMinutes());
             const presentTime = `${currentHour}:${currentMinute.length === 1 ? `0${currentMinute}` : currentMinute}`;
-            setStartingTime('16:00');
-            setEndingTime('16:00');
+            setStartingTime('14:00');
+            setEndingTime('14:00');
         }
     }, []);
     const handleStartTime = (e) => {
