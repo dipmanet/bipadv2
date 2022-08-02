@@ -164,6 +164,7 @@
         tr {
             page-break-inside: avoid;
         }
+
         td,
         th {
             height: 20px;
@@ -193,6 +194,7 @@
             @extend .formItem;
             justify-content: space-between;
             width: calc(100%) !important;
+            text-align: justify;
 
             // margin-left: 4;
             .inputContainer {

@@ -69,7 +69,7 @@ const TemperaturesMin = (props: Props) => {
             };
             reader.readAsDataURL(acceptedFiles[0]);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [acceptedFiles]);
 
     const handleMinTempInput = (file: File) => {
@@ -102,30 +102,30 @@ const TemperaturesMin = (props: Props) => {
 
                 <div className={styles.subContainer}>
 
-                    <h3>
-                        <Translation>
-                            {
-                                t => <p>{t('Daily Min Temperature')}</p>
-                            }
-                        </Translation>
-                    </h3>
+
+                    <Translation>
+                        {
+                            t => <p>{t('Daily Min Temperature')}</p>
+                        }
+                    </Translation>
+
                     <div id="pictureContainerMin" className={styles.picture}>
                         {
                             picFromEdit
                             && (
-                            <>
-                                <img src={picLink} alt="temperature" />
+                                <>
+                                    <img src={picLink} alt="temperature" />
 
-                            </>
+                                </>
                             )
                         }
                         {
                             !picFromEdit && !minTemp
                             && (
-                            <>
-                                <img className={styles.placeholder} src={Placeholder} alt="temperature" />
+                                <>
+                                    <img className={styles.placeholder} src={Placeholder} alt="temperature" />
 
-                            </>
+                                </>
                             )
                         }
                     </div>

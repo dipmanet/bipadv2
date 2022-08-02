@@ -10,6 +10,8 @@ import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
 import BulletinPDFFooter from 'src/admin/components/BulletinPDFFooter';
 import BulletinPDFAnnex from 'src/admin/components/BulletinPDFAnnex';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import { englishToNepaliNumber, nepaliToEnglishNumber } from 'nepali-number';
 import { navigate } from '@reach/router';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -110,7 +112,8 @@ const PDFPreview = (props) => {
         if (!jsonData) {
             return formDataNew;
         }
-
+        const dateNep = ADToBS(endDate);
+        const engToNep = englishToNepaliNumber(dateNep);
         Object.entries(jsonData).forEach(
             ([key, value]) => {
                 if (isList(value)) {
@@ -118,9 +121,11 @@ const PDFPreview = (props) => {
                         if (val !== undefined && isBlob(value)) {
                             const sanitizedVal = sanitizeFormData(val);
                             if (key === 'pdfFileNeSummary' || key === 'pdfFileSummary') {
-                                formDataNew.append(key, sanitizedVal, `Bulletin_${endDate}.zip`);
+                                formDataNew.append(key, sanitizedVal, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.zip` : `${dateNep} Daily Bipad Bulletin.zip`);
+                            } else if (key === 'pdfFile' || key === 'pdfFileNe') {
+                                formDataNew.append(key, sanitizedVal, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.pdf` : `${dateNep} Daily Bipad Bulletin.pdf`);
                             } else {
-                                formDataNew.append(key, sanitizedVal, `Bulletin_${endDate}.pdf`);
+                                formDataNew.append(key, sanitizedVal, 'image.jpg');
                             }
                         } else if (val !== undefined && !isBlob(value)) {
                             const sanitizedVal = sanitizeFormData(val);
@@ -131,9 +136,11 @@ const PDFPreview = (props) => {
                     const sanitizedValue = sanitizeFormData(value);
                     if (value !== undefined && isBlob(value)) {
                         if (key === 'pdfFileNeSummary' || key === 'pdfFileSummary') {
-                            formDataNew.append(key, sanitizedValue, `Bulletin_${endDate || ''}.zip`);
+                            formDataNew.append(key, sanitizedValue, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.zip` : `${dateNep} Daily Bipad Bulletin.zip`);
+                        } else if (key === 'pdfFile' || key === 'pdfFileNe') {
+                            formDataNew.append(key, sanitizedValue, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.pdf` : `${dateNep} Daily Bipad Bulletin.pdf`);
                         } else {
-                            formDataNew.append(key, sanitizedValue, `Bulletin_${endDate || ''}.pdf`);
+                            formDataNew.append(key, sanitizedValue, 'image.jpg');
                         }
                     } else {
                         formDataNew.append(key, sanitizedValue);
@@ -401,7 +408,8 @@ const PDFPreview = (props) => {
         img.file('page1.jpg', image1, { base64: true });
         img.file('page2.jpg', image2, { base64: true });
         img.file('page3.jpg', image3, { base64: true });
-
+        const dateNep = ADToBS(endDate);
+        const engToNep = englishToNepaliNumber(dateNep);
         // eslint-disable-next-line no-undef
         const reportPDF = html2pdf().set(options).from(reportContent).outputPdf('blob')
             .then((bulletin: Blob) => {
@@ -416,11 +424,12 @@ const PDFPreview = (props) => {
                                 updatePDF(zipContent, bulletin, id);
                             }
                         });
-                        saveAs(zipContent, `bulletin_${endDate}.zip`);
+                        saveAs(zipContent, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.zip` : `${dateNep} Daily Bipad Bulletin.zip`);
                     });
             })
-            .save(`Bipad_Bulletin_${endDate} || ''}`);
+            .save(language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन` : `${dateNep} Daily Bipad Bulletin`);
     };
+
 
     return (
         <div className={styles.pdfContainer}>

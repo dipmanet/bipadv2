@@ -1,81 +1,95 @@
 @font-face {
     font-family: "Kalimati Regular";
     src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
-    }
-    
+}
+
 //   .nep{
 //     font-family: "Kalimati Regular"!important;
 //    }
 
-.pdfContainer{
-    font-family: "Kalimati Regular"!important;
+.pdfContainer {
+    font-family: "Kalimati Regular" !important;
     width: 210mm;
     height: 297mm;
     margin: 0 auto;
     border: 1px solid #cecccc;
     background-color: white;
     position: relative;
-    .headerNLoss{
+
+    .headerNLoss {
         background-image: linear-gradient(#0d2e69, #f0f3f6);
-        .header{
+
+        .header {
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            .subDiv{
+
+            .subDiv {
                 align-items: center;
                 display: flex;
-                img{
+
+                img {
                     width: 100px;
                 }
-                .govTitles{
+
+                .govTitles {
                     color: white;
                     position: relative;
                     right: 30px;
-                    ul{
+
+                    ul {
                         list-style: none;
+
                         // font-size: 16px;
-                        .bold{
+                        .bold {
                             font-weight: 600;
                         }
-                        li:first-child{
+
+                        li:first-child {
                             font-size: 12px;
                         }
-                        li:nth-child(2){
+
+                        li:nth-child(2) {
                             font-size: 14px;
                         }
-                        li:nth-child(3){
+
+                        li:nth-child(3) {
                             font-size: 16px;
                         }
                     }
                 }
             }
-            .reportTitles{
+
+            .reportTitles {
                 color: white;
             }
         }
-        .loss{
+
+        .loss {
             padding: 10px 50px;
 
-            h2{
+            h2 {
                 color: white;
                 font-size: 14px;
-                
+
             }
-            p{
+
+            p {
                 color: white;
-                
+
             }
-            .lossIconsRow{
+
+            .lossIconsRow {
                 display: flex;
                 justify-content: space-between;
             }
         }
-        
-      
+
+
     }
 
-    .pratikriyaContainer{
+    .pratikriyaContainer {
         width: 220mm;
         position: relative;
         // bottom: 70mm;
@@ -84,68 +98,78 @@
         margin-top: 10mm;
         flex-direction: column;
         left: -10mm;
-        h2{
+
+        h2 {
             margin-left: 20mm;
             font-size: 18px;
             color: #004877;
         }
-        .pratikriyas{
+
+        .pratikriyas {
             // background-color: #EAEBEC;
             padding: 0mm 10mm;
             // margin-top: 5mm;
             margin-left: 8mm;
             // height: 80mm;
-            line-height:2em;
+            line-height: 2em;
             color: #004877;
-            ul{
+
+            ul {
                 display: flex;
                 flex-wrap: wrap;
                 padding-left: 0;
             }
-            ul li{
+
+            ul li {
                 // width: calc(48% - 4mm);
                 margin: 2mm;
                 font-size: 16px;
                 list-style: none;
+                text-align: justify;
             }
         }
     }
 
-  
-    .provinceWiseLoss{
+
+    .provinceWiseLoss {
         display: flex;
-        padding:10mm ;
+        padding: 10mm;
         justify-content: space-between;
-        .provinceWiseChart{
+
+        .provinceWiseChart {
             width: 90mm;
             height: 70mm;
             position: relative;
             right: 5mm;
-            h2{
+
+            h2 {
                 position: relative;
                 left: 0mm;
                 font-size: 4mm;
                 margin-bottom: 2mm;
                 width: 85mm;
                 font-size: 14px;
-                
+
                 color: rgb(15, 11, 11)
             }
-            
+
         }
-        .provinceWiseIncidentsMap{
+
+        .provinceWiseIncidentsMap {
             width: 105mm;
             height: 90mm;
             position: relative;
+
             .pointSizeLegendContainer {
                 flex-shrink: 0;
                 background-color: var(--color-foreground);
                 // padding: var(--spacing-medium);
-                position:absolute;
+                position: absolute;
                 bottom: -25mm;
                 padding: var(--spacing-medium);
                 padding-bottom: 0;
                 z-index: 3;
+
                 .header {
                     display: flex;
                     align-items: center;
@@ -153,35 +177,37 @@
                     justify-content: flex-end;
                     // margin-bottom: var(--spacing-medium);
                     height: 2mm;
+
                     .heading {
                         align-self: flex-start;
                         flex-grow: 1;
                         color: var(--color-primary);
                     }
                 }
-            
+
                 .pointSizeLegend {
                     display: flex;
                     justify-content: center;
-                    border-bottom: 1px solid rgba(0,0,0, 0.1);
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
                     // border: 1px solid red;
                     height: 15mm;
+
                     .legend-item {
                         margin: var(--spacing-small) 0;
                         // height: var(--font-size-medium);
                         overflow: hidden;
-            
+
                         >:nth-child(2) {
                             // padding: 0 var(--spacing-medium);
                             padding: 0 var(--spacing-extra-small-alt);
                             font-size: var(--font-size-small);
                         }
                     }
-            
+
                     .symbol {
                         border-radius: 50%;
                         background-color: transparent !important;
-                        border: 1px solid rgba(0,0,0, 0.4);
+                        border: 1px solid rgba(0, 0, 0, 0.4);
                         box-sizing: border-box;
                         margin: 0 !important;
                         padding: 0 !important;
@@ -189,12 +215,13 @@
                     }
                 }
             }
+
             .hazard-legend {
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
                 padding: var(--spacing-medium) 0;
-        
+
                 .legendTitle {
                     flex-shrink: 0;
                     padding: 0;
@@ -202,7 +229,7 @@
                     font-size: var(--font-size-medium);
                     font-weight: var(--font-weight-bold);
                 }
-        
+
                 .legend {
                     display: flex;
                     align-content: flex-start;
@@ -212,43 +239,43 @@
                     justify-content: flex-start;
                     padding: var(--spacing-small) var(--spacing-medium);
                     max-width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 128px - 172px);
-        
+
                     .legend-item {
                         padding: var(--spacing-extra-small) 0;
-        
+
                         >:first-child {
                             border-radius: 50%;
                             width: var(--font-size-small);
                             height: var(--font-size-small);
                         }
-        
+
                         >:nth-child(2) {
                             font-size: var(--font-size-small);
                         }
                     }
                 }
             }
-            h2{
+
+            h2 {
                 font-size: 14px;
                 margin: 0 0 6mm 0mm;
                 color: rgb(15, 11, 11)
             }
         }
     }
-  
+
 }
 
-.pdfContainerEnglish{
+.pdfContainerEnglish {
     @extend .pdfContainer;
     font-family: 'Fira Sans' !important;
 }
-.bold{
+
+.bold {
     font-weight: 600;
 }
 
 .recharts-legend-item {
     margin-top: 40px !important;
     height: 500px !important;
- }
-
- 
+}

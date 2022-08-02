@@ -10466,7 +10466,7 @@ nepali-datepicker-reactjs@^1.1.5:
     bikram-sambat-js "^1.0.1"
     nepali-number "^1.0.3"
 
-nepali-number@1.0.3, nepali-number@^1.0.3:
+nepali-number@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/nepali-number/-/nepali-number-1.0.3.tgz#3d0079f77f0a85dfb86f54a0a716fd346a276ff3"
   integrity sha512-Vb6aMQM/xtE7KiiEhemgDcACxIMaDn18Ub/imWXB6JlhDwc2qVDnGW+sR0gDLPQmyiyk06bkKze1oK88FxWIjw==

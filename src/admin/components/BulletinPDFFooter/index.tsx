@@ -56,7 +56,7 @@ const BulletinPDFFooter = (props) => {
                 rainSummaryFooter={rainSummaryFooter}
             />
 
-            <p>
+            {/* <p>
                 <strong>
                     <Translation>
                         {
@@ -76,7 +76,7 @@ const BulletinPDFFooter = (props) => {
                 </Translation>
 
                 {' '}
-            </p>
+            </p> */}
 
             <div className={styles.footer}>
                 <h2>

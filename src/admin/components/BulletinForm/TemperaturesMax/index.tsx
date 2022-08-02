@@ -96,13 +96,13 @@ const TemperatureMax = (props: Props) => {
                 <input disabled={hideForm} {...getInputProps()} />
 
                 <div className={styles.subContainer}>
-                    <h3>
-                        <Translation>
-                            {
-                                t => <p>{t('Daily Max Temperature')}</p>
-                            }
-                        </Translation>
-                    </h3>
+
+                    <Translation>
+                        {
+                            t => <p>{t('Daily Max Temperature')}</p>
+                        }
+                    </Translation>
+
                     <div id="pictureContainerMax" className={styles.picture}>
                         {
                             picFromEdit
