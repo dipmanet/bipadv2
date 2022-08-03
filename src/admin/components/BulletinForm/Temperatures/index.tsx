@@ -66,10 +66,13 @@ const Bulletin = (props: Props) => {
         bulletinEditData,
     } = props;
     useEffect(() => {
-        if (advertisementFile || advertisementFileNe) {
-            setSelectedTemperatureImageType(2);
-        } else {
-            setSelectedTemperatureImageType(1);
+        // if (Object.keys(bulletinEditData).length > 0) {
+        if (selectedTemperatureImageType === null) {
+            if (advertisementFile || advertisementFileNe) {
+                setSelectedTemperatureImageType(2);
+            } else {
+                setSelectedTemperatureImageType(1);
+            }
         }
     }, []);
     return (

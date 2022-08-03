@@ -275,7 +275,7 @@ const Bulletin = (props: Props) => {
 
     const [incidentFetchCondition, setIncidentFetchCondition] = useState(true);
 
-    const [selectedTemperatureImageType, setSelectedTemperatureImageType] = useState(1);
+    const [selectedTemperatureImageType, setSelectedTemperatureImageType] = useState(null);
     const countId = useRef(0);
     const {
         setBulletinLoss,
