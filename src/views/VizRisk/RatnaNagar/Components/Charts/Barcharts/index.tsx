@@ -36,6 +36,7 @@ const CommonBarChart = (props: Props) => {
             </g>
         );
     };
+
     return (
         <div className={styles.mainBarChart}>
             <h3 className={styles.barTitle}>

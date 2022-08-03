@@ -45,11 +45,14 @@ interface MainPageData {
     navIdleStatus: boolean;
     householdData: [];
     keyValueHtmlData: [];
+    householdChartData: [];
     rangeValues: number[];
     handleRangeLegendClick: (item: any) => undefined;
     handleReset: (item: any) => undefined;
     setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentRechartsItem: React.Dispatch<React.SetStateAction<string>>;
+    setSelectFieldValue: React.Dispatch<React.SetStateAction<string>>;
+
 }
 
 interface MapData {
@@ -73,10 +76,12 @@ const initialMainPageData: MainPageData = {
     householdData: [],
     navIdleStatus: false,
     rangeValues: [],
+    householdChartData: [],
     handleRangeLegendClick: () => undefined,
     handleReset: () => undefined,
     setNavIdleStatus: () => undefined,
     setCurrentRechartsItem: () => undefined,
+    setSelectFieldValue: () => undefined,
 
 };
 

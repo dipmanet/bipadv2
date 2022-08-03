@@ -25,7 +25,7 @@ const LeftpaneSlide4 = () => {
 
     const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
 
-    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState(selectFieldValues[0]);
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Select');
     const [curerntChartData, setCurerntChartData] = useState([]);
 
     useEffect(() => {
@@ -92,7 +92,16 @@ const LeftpaneSlide4 = () => {
                 selctFieldCurrentValue={selctFieldCurrentValue}
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
-            <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
+            {
+                curerntChartData && curerntChartData.length > 0
+                && (
+                    <CommonBarChart
+                        barTitle={selctFieldCurrentValue}
+                        barData={curerntChartData}
+                    />
+                )
+            }
+
         </div>
     );
 };

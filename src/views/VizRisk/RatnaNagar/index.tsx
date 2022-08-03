@@ -148,6 +148,7 @@ const Ratnanagar = (props: any) => {
     const [navIdleStatus, setNavIdleStatus] = useState(false);
     const [floodLayer, setFloodLayer] = useState(5);
     const [currentRechartsItem, setCurrentRechartsItem] = useState('');
+    const [selectFieldValue, setSelectFieldValue] = useState('');
     const mapRef = useRef<mapboxgl.Map>();
 
     /**
@@ -281,6 +282,7 @@ const Ratnanagar = (props: any) => {
         handleRangeLegendClick,
         handleReset,
         setCurrentRechartsItem,
+        setSelectFieldValue,
     };
 
     const mapValue = {
@@ -296,7 +298,20 @@ const Ratnanagar = (props: any) => {
         zIndex: 250,
     };
 
-    console.log('currentRechartsItem', currentRechartsItem);
+    const requiredQuery = {
+        [currentHeaderVal]: {
+            [selectFieldValue]: currentRechartsItem,
+        },
+    };
+
+    useEffect(() => {
+        if (currentHeaderVal && selectFieldValue) {
+            console.log('we are changing');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentRechartsItem]);
+
+    console.log('requiredQuery', requiredQuery);
 
 
     return (
