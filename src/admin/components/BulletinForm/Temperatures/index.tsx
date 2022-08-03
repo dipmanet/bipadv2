@@ -1,3 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable no-lone-blocks */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable max-len */
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
@@ -16,6 +21,7 @@ import RainSummaryPic from 'src/admin/components/BulletinForm/RainSummaryPic';
 import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import {
+    bulletinEditDataSelector,
     bulletinPageSelector, languageSelector,
 } from '#selectors';
 import PromotionImage from '../PromotionImage';
@@ -23,6 +29,7 @@ import PromotionImage from '../PromotionImage';
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
     language: languageSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 
 
@@ -31,7 +38,6 @@ interface Props {
 }
 
 const Bulletin = (props: Props) => {
-    const [selectedImageType, setSelectedImageType] = useState(1);
     const {
         minTemp,
         maxTemp,
@@ -51,27 +57,49 @@ const Bulletin = (props: Props) => {
         handleRainSummaryFooter,
         handlePromotionPic,
         promotionPic,
+        selectedTemperatureImageType,
+        setSelectedTemperatureImageType,
         language: { language },
+        disableOptionButton,
+        advertisementFile,
+        advertisementFileNe,
+        bulletinEditData,
     } = props;
-    console.log('This is selected image type', selectedImageType);
+    useEffect(() => {
+        if (advertisementFile || advertisementFileNe) {
+            setSelectedTemperatureImageType(2);
+        } else {
+            setSelectedTemperatureImageType(1);
+        }
+    }, []);
     return (
         <div className={styles.formContainer}>
-            <FormControl className={styles.optionButton}>
-                {/* <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel> */}
-                <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                    value={selectedImageType}
-                    onChange={e => setSelectedImageType(Number(e.target.value))}
-                >
-                    <FormControlLabel value={1} control={<Radio />} label="DHM Data" />
-                    <FormControlLabel value={2} control={<Radio />} label="Promotion" />
+            {disableOptionButton ? ''
+                : (
+                    <FormControl className={styles.optionButton}>
+                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel> */}
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            value={selectedTemperatureImageType}
+                            onChange={(e) => {
+                                {
+                                    e.target.value === '1'
+                                        ? handlePromotionPic(null)
+                                        : handleRainSummaryPic(null);
+                                }
+                                setSelectedTemperatureImageType(Number(e.target.value));
+                            }}
+                        >
+                            <FormControlLabel value={1} control={<Radio />} label="DHM Data" />
+                            <FormControlLabel value={2} control={<Radio />} label="Promotion" />
 
 
-                </RadioGroup>
-            </FormControl>
-            {selectedImageType === 1
+                        </RadioGroup>
+                    </FormControl>
+                )}
+            {selectedTemperatureImageType === 1
                 ? (
                     <>
                         {
@@ -208,8 +236,8 @@ const Bulletin = (props: Props) => {
                 ) : (
                     <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
                         <PromotionImage
-                            rainSummaryPic={promotionPic}
-                            handleRainSummaryPic={handlePromotionPic}
+                            promotionPic={promotionPic}
+                            handlePromotionPic={handlePromotionPic}
 
                         />
                     </div>

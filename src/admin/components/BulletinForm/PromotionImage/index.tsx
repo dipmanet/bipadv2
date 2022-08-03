@@ -21,10 +21,10 @@ const mapStateToProps = state => ({
 });
 
 
-const TemperaturesMin = (props: Props) => {
+const PromotionImage = (props: Props) => {
     const {
-        rainSummaryPic,
-        handleRainSummaryPic,
+        promotionPic,
+        handlePromotionPic,
         hideForm,
         rainSummaryFooter,
         bulletinEditData,
@@ -53,7 +53,7 @@ const TemperaturesMin = (props: Props) => {
 
     useEffect(() => {
         if (acceptedFiles.length > 0) {
-            handleRainSummaryPic(acceptedFiles[0]);
+            handlePromotionPic(acceptedFiles[0]);
             const reader = new FileReader();
             // eslint-disable-next-line func-names
             reader.onload = function (e) {
@@ -71,24 +71,24 @@ const TemperaturesMin = (props: Props) => {
     }, [acceptedFiles]);
 
     const handleMinTempInput = (file: File) => {
-        handleRainSummaryPic(file);
+        handlePromotionPic(file);
         showPicMin(file);
     };
     useEffect(() => {
         window.scrollTo({ top: 400, left: 0 });
 
-        if (rainSummaryPic && typeof rainSummaryPic !== 'string') {
-            showPicMin(rainSummaryPic);
+        if (promotionPic && typeof promotionPic !== 'string') {
+            showPicMin(promotionPic);
         }
-    }, [rainSummaryPic]);
+    }, [promotionPic]);
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            if (bulletinEditData.language === 'nepali' && bulletinEditData.rainSummaryPictureNe) {
-                setpicLink(bulletinEditData.rainSummaryPictureNe);
+            if (bulletinEditData.language === 'nepali' && bulletinEditData.advertisementFileNe) {
+                setpicLink(bulletinEditData.advertisementFileNe);
                 setPicFromEdit(true);
-            } else if (bulletinEditData.language === 'english' && bulletinEditData.rainSummaryPicture) {
-                setpicLink(bulletinEditData.rainSummaryPicture);
+            } else if (bulletinEditData.language === 'english' && bulletinEditData.advertisementFile) {
+                setpicLink(bulletinEditData.advertisementFile);
                 setPicFromEdit(true);
             }
         }
@@ -101,7 +101,7 @@ const TemperaturesMin = (props: Props) => {
 
                 <div className={hideForm ? styles.subContainerReport : styles.subContainer} style={{ marginLeft: '0px' }}>
 
-                    {!hideForm
+                    {/* {!hideForm
                         && (
                             <Translation>
                                 {
@@ -110,7 +110,7 @@ const TemperaturesMin = (props: Props) => {
                             </Translation>
                         )
 
-                    }
+                    } */}
                     <div id="pictureContainerRain" className={styles.picture}>
                         {
                             picFromEdit
@@ -124,7 +124,7 @@ const TemperaturesMin = (props: Props) => {
                             )
                         }
                         {
-                            !picFromEdit && !rainSummaryPic
+                            !picFromEdit && !promotionPic
                             && (
                                 <>
                                     <img
@@ -152,4 +152,4 @@ const TemperaturesMin = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps)(TemperaturesMin);
+export default connect(mapStateToProps)(PromotionImage);

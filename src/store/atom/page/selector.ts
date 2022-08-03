@@ -59,6 +59,7 @@ export const riverStationsSelector = ({ page }: AppState) => page.riverStations;
 // Popup
 
 export const hidePopupSelector = ({ page }: AppState) => page.hidePopup;
+export const bulletinPromotionCheckSelector = ({ page }: AppState) => page.isBulletinPromotionPage;
 
 // geo
 

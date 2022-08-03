@@ -67,6 +67,8 @@ const PDFPreview = (props) => {
             pdfFile,
             dailySummary,
             rainSummaryPic,
+            advertisementFile,
+            advertisementFileNe,
             hilight,
             rainSummaryFooter,
             bulletinDate,
@@ -78,6 +80,10 @@ const PDFPreview = (props) => {
             filterDateType,
         },
         user,
+        selectedTemperatureImageType,
+        setSelectedTemperatureImageType,
+        handlePromotionPic,
+        promotionPic,
         bulletinEditData,
         setBulletinEditData,
         handlePrevBtn,
@@ -170,6 +176,8 @@ const PDFPreview = (props) => {
                 ward,
                 pdfFileNe: file,
                 pdfFileNeSummary: zipContent,
+                advertisementFile,
+                advertisementFileNe,
                 temp_min_ne: tempMin,
                 temp_min_footer_ne: minTempFooter,
                 temp_max_ne: tempMax,
@@ -211,6 +219,8 @@ const PDFPreview = (props) => {
             pdfFileSummary: zipContent,
             dailySummary,
             rainSummaryPicture: rainSummaryPic,
+            advertisementFile,
+            advertisementFileNe,
             hilight,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
@@ -250,6 +260,8 @@ const PDFPreview = (props) => {
                 municipality,
                 ward,
                 pdfFileNe: file,
+                advertisementFile,
+                advertisementFileNe,
                 pdfFileNeSummary: zipContent,
                 temp_min_footer_ne: minTempFooter,
                 temp_max_footer_ne: maxTempFooter,
@@ -299,6 +311,8 @@ const PDFPreview = (props) => {
             pdfFileSummary: zipContent,
             dailySummary,
             hilight,
+            advertisementFile,
+            advertisementFileNe,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
             addedHazards,
@@ -450,7 +464,15 @@ const PDFPreview = (props) => {
                     <BulletinPDFCovid />
                 </div>
                 <div id="page3" className="page">
-                    <BulletinPDFFooter rainSummaryFooter={rainSummaryFooter} />
+                    <BulletinPDFFooter
+                        selectedTemperatureImageType={selectedTemperatureImageType}
+                        rainSummaryFooter={rainSummaryFooter}
+                        handlePromotionPic={handlePromotionPic}
+                        promotionPic={promotionPic}
+                        setSelectedTemperatureImageType={setSelectedTemperatureImageType}
+                        advertisementFile={advertisementFile}
+                        advertisementFileNe={advertisementFileNe}
+                    />
 
                 </div>
                 <div id="page4" className="page">

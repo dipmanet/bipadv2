@@ -347,7 +347,7 @@ const Bulletin = (props: Props) => {
                                 value={startingTime}
                                 onChange={handleStartTime}
                                 className={styles.timeSelector}
-                                disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
+                            // disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
                             />
 
                         </form>
@@ -403,7 +403,7 @@ const Bulletin = (props: Props) => {
                                 value={endingTime}
                                 onChange={handleEndTime}
                                 className={styles.timeSelector}
-                                disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
+                            // disabled={bulletinEditData.toDateTime && bulletinEditData.fromDateTime}
                             />
 
                         </form>

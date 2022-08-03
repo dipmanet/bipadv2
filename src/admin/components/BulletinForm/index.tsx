@@ -275,7 +275,7 @@ const Bulletin = (props: Props) => {
 
     const [incidentFetchCondition, setIncidentFetchCondition] = useState(true);
 
-
+    const [selectedTemperatureImageType, setSelectedTemperatureImageType] = useState(1);
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -296,7 +296,8 @@ const Bulletin = (props: Props) => {
         uri,
         id,
         urlLanguage,
-        bulletinEditData: { feedback: feedbackEn, feedbackNe, addedHazardsNe, addedHazards, language: lang },
+        bulletinEditData: { feedback: feedbackEn, feedbackNe, addedHazardsNe,
+            addedHazards, language: lang, advertisementFileNe, advertisementFile },
         bulletinData: { feedback },
         setBulletinEditData,
         incidentList,
@@ -1057,6 +1058,10 @@ const Bulletin = (props: Props) => {
             rainSummaryFooter={rainSummaryFooter}
             handlePromotionPic={handlePromotionPic}
             promotionPic={promotionPic}
+            selectedTemperatureImageType={selectedTemperatureImageType}
+            setSelectedTemperatureImageType={setSelectedTemperatureImageType}
+            advertisementFile={advertisementFile}
+            advertisementFileNe={advertisementFileNe}
         />,
         <PDFPreview
             handlePrevBtn={handlePrevBtn}
@@ -1065,6 +1070,12 @@ const Bulletin = (props: Props) => {
             deleteFeedbackChange={deleteFeedbackChange}
             hazardWiseLossData={hazardWiseLossData}
             handleSubFieldChange={handleSubFieldChange}
+            selectedTemperatureImageType={selectedTemperatureImageType}
+            setSelectedTemperatureImageType={setSelectedTemperatureImageType}
+            handlePromotionPic={handlePromotionPic}
+            promotionPic={promotionPic}
+            advertisementFile={advertisementFile}
+            advertisementFileNe={advertisementFileNe}
         // bulletinData={
         //     {
         //         incidentSummary: incidentData,

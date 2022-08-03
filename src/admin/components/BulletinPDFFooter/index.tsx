@@ -24,21 +24,28 @@ const BulletinPDFFooter = (props) => {
         rainSummaryPic,
         maxTempFooter,
         minTempFooter,
+
     } = props.bulletinData;
 
-    const { language: { language }, rainSummaryFooter } = props;
+    const { language: { language }, rainSummaryFooter, selectedTemperatureImageType,
+        promotionPic,
+        handlePromotionPic, setSelectedTemperatureImageType, advertisementFile,
+        advertisementFileNe } = props;
 
     return (
         <div className={language === 'np' ? styles.footerContainer : styles.footerContainerEnglish}>
-            <div className={styles.dailySummary}>
-                <Translation>
-                    {
-                        t => <h2>{t('Daily Temperature and Rain Summary')}</h2>
-                    }
-                </Translation>
+            {selectedTemperatureImageType === 1
+                ? (
+                    <div className={styles.dailySummary}>
+                        <Translation>
+                            {
+                                t => <h2>{t('Daily Temperature and Rain Summary')}</h2>
+                            }
+                        </Translation>
 
-                <p>{dailySummary}</p>
-            </div>
+                        <p>{dailySummary}</p>
+                    </div>
+                ) : ''}
             {/*
             <div className={styles.temperaturePics}>
                 <img src={tempMin} alt="temp min" />
@@ -54,6 +61,14 @@ const BulletinPDFFooter = (props) => {
                 maxTempFooter={maxTempFooter}
                 minTempFooter={minTempFooter}
                 rainSummaryFooter={rainSummaryFooter}
+                selectedTemperatureImageType={selectedTemperatureImageType}
+                setSelectedTemperatureImageType={setSelectedTemperatureImageType}
+                handlePromotionPic={handlePromotionPic}
+                promotionPic={promotionPic}
+                disableOptionButton
+                advertisementFile={advertisementFile}
+                advertisementFileNe={advertisementFileNe}
+
             />
 
             {/* <p>

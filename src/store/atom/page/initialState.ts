@@ -16,7 +16,7 @@ const state: PageState = {
     eventTypes: {},
 
     hidePopup: false,
-
+    isBulletinPromotionPage: false,
     region: {
         adminLevel: undefined,
     },

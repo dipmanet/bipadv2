@@ -764,6 +764,7 @@ export interface EpidemicPage {
 
 export interface PageState {
     hidePopup: boolean;
+    isBulletinPromotionPage: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
     carKeys: [];
@@ -918,6 +919,7 @@ export enum PageType {
     SET_PROGRAM_AND_POLICY_DATA = 'page/DRRM_REPORT/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/DRRM_REPORT/SET_BUDGET_ACTIVITY_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
+    SET_BULLETIN_PROMOTION_CHECK = 'page/SET_BULLETIN_PROMOTION_CHECK',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
@@ -1131,6 +1133,11 @@ export interface SetProgramAndPolicyData {
 
 export interface SetInitialPopupHidden {
     type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
+    value: boolean;
+}
+
+export interface SetBulletinPromotionCheck {
+    type: typeof PageType.SET_BULLETIN_PROMOTION_CHECK;
     value: boolean;
 }
 
@@ -1456,7 +1463,7 @@ export interface SetEpidemicsPage {
 }
 
 export type PageActionTypes = (
-    SetLanguage | SetRegion | SetInitialPopupHidden | SetBulletinData |
+    SetLanguage | SetRegion | SetInitialPopupHidden | SetBulletinPromotionCheck | SetBulletinData |
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData | SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |

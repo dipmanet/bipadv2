@@ -135,6 +135,12 @@ export const setInitialPopupHiddenAction = (
     value,
 });
 
+export const setBulletinPromotionCheckAction = (
+    { value }: { value: boolean },
+) => ({
+    type: Type.PageType.SET_BULLETIN_PROMOTION_CHECK,
+    value,
+});
 export const setHazardTypesAction = (
     { hazardTypes }: { hazardTypes: Type.HazardType[] },
 ) => ({
@@ -599,7 +605,15 @@ const setInitialPopupHidden = (state: Type.PageState, action: Type.SetInitialPop
     });
     return newState;
 };
-
+const setBulletinPromotionCheck = (state: Type.PageState,
+    action: Type.SetBulletinPromotionCheck) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.isBulletinPromotionPage = value;
+    });
+    return newState;
+};
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
     const { hazardTypes: hazardTypesFromAction } = action;
 
@@ -2193,6 +2207,8 @@ export default function routeReducer(
             return setRegion(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
             return setInitialPopupHidden(state, action);
+        case Type.PageType.SET_BULLETIN_PROMOTION_CHECK:
+            return setBulletinPromotionCheck(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
         case Type.PageType.SET_DASHBOARD_HAZARD_TYPES:
