@@ -95,7 +95,7 @@ const TemperatureMax = (props: Props) => {
             <div {...getRootProps({ className: 'dropzone' })}>
                 <input disabled={hideForm} {...getInputProps()} />
 
-                <div className={styles.subContainer}>
+                <div className={styles.subContainer} style={{ marginRight: '5px' }}>
 
                     <Translation>
                         {
