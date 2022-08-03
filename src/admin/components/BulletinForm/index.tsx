@@ -243,6 +243,9 @@ const Bulletin = (props: Props) => {
     const [maxTemp, setMaxTemp] = useState(null);
     const [minTemp, setMinTemp] = useState(null);
     const [rainSummaryPic, setRainSummaryPic] = useState(null);
+    const [promotionPic, setPromotionPic] = useState(null);
+
+
     const [maxTempFooter, setMaxTempFooter] = useState(null);
     const [minTempFooter, setMinTempFooter] = useState(null);
     const [showPdf, setshowPdf] = useState(false);
@@ -453,6 +456,7 @@ const Bulletin = (props: Props) => {
                 // feedback data will already be there no need to construct new one
                 setDailySumamry(bulletinEditData.dailySummaryNe);
                 setRainSummaryPic(bulletinEditData.rainSummaryPictureNe);
+                setPromotionPic(bulletinEditData.advertisementFileNe);
                 setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooterNe);
                 setHilight(bulletinEditData.highlightNe);
             } else {
@@ -465,6 +469,7 @@ const Bulletin = (props: Props) => {
                 setBulletinFeedback({ feedback: bulletinEditData.feedback });
                 setDailySumamry(bulletinEditData.dailySummary);
                 setRainSummaryPic(bulletinEditData.rainSummaryPicture);
+                setPromotionPic(bulletinEditData.advertisementFile);
                 setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooter);
                 setHilight(bulletinEditData.highlight);
             }
@@ -645,7 +650,9 @@ const Bulletin = (props: Props) => {
     const handleRainSummaryPic = (e) => {
         setRainSummaryPic(e);
     };
-
+    const handlePromotionPic = (e) => {
+        setPromotionPic(e);
+    };
 
     const deleteFeedbackChange = (idx) => {
         const n = [...feedback];
@@ -707,6 +714,8 @@ const Bulletin = (props: Props) => {
                     maxTempFooter,
                     minTempFooter,
                     rainSummaryFooter,
+                    advertisementFile: language === 'np' ? null : promotionPic,
+                    advertisementFileNe: language === 'np' ? promotionPic : null,
                 });
             }
             setProgress(progress + 1);
@@ -1046,6 +1055,8 @@ const Bulletin = (props: Props) => {
             handleFooterMin={handleFooterMin}
             handleRainSummaryFooter={handleRainSummaryFooter}
             rainSummaryFooter={rainSummaryFooter}
+            handlePromotionPic={handlePromotionPic}
+            promotionPic={promotionPic}
         />,
         <PDFPreview
             handlePrevBtn={handlePrevBtn}

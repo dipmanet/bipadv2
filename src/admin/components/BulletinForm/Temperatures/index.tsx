@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import FileUploader from 'src/admin/components/FileUploader';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import TemperatureMax from 'src/admin/components/BulletinForm/TemperaturesMax';
@@ -14,6 +18,7 @@ import styles from './styles.scss';
 import {
     bulletinPageSelector, languageSelector,
 } from '#selectors';
+import PromotionImage from '../PromotionImage';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
@@ -26,6 +31,7 @@ interface Props {
 }
 
 const Bulletin = (props: Props) => {
+    const [selectedImageType, setSelectedImageType] = useState(1);
     const {
         minTemp,
         maxTemp,
@@ -43,141 +49,171 @@ const Bulletin = (props: Props) => {
         minTempFooter,
         rainSummaryFooter,
         handleRainSummaryFooter,
+        handlePromotionPic,
+        promotionPic,
         language: { language },
     } = props;
+    console.log('This is selected image type', selectedImageType);
     return (
         <div className={styles.formContainer}>
-            {
-                !hideForm
-                && (
-                    <Translation>
+            <FormControl className={styles.optionButton}>
+                {/* <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel> */}
+                <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    value={selectedImageType}
+                    onChange={e => setSelectedImageType(Number(e.target.value))}
+                >
+                    <FormControlLabel value={1} control={<Radio />} label="DHM Data" />
+                    <FormControlLabel value={2} control={<Radio />} label="Promotion" />
+
+
+                </RadioGroup>
+            </FormControl>
+            {selectedImageType === 1
+                ? (
+                    <>
                         {
-                            t => <p>{t('Please click on the image to select files')}</p>
+                            !hideForm
+                            && (
+                                <Translation>
+                                    {
+                                        t => <p>{t('Please click on the image to select files')}</p>
+                                    }
+                                </Translation>
+                            )
                         }
-                    </Translation>
-                )
-            }
-            {
-                !hideForm
-                && (
+                        {
+                            !hideForm
+                            && (
 
-                    <div className={styles.formItemTextRainSummary}>
-                        <FormControl fullWidth>
-                            <Translation>
-                                {
-                                    t => (
-                                        <textarea
-                                            placeholder={t('Daily Temperature and Rain Summary')}
-                                            value={dailySummary}
-                                            onChange={e => handleDailySummary(e)}
-                                            rows={5}
-                                            className={styles.textArea}
-                                        />
-                                    )
-                                }
-                            </Translation>
+                                <div className={styles.formItemTextRainSummary}>
+                                    <FormControl fullWidth>
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <textarea
+                                                        placeholder={t('Daily Temperature and Rain Summary')}
+                                                        value={dailySummary}
+                                                        onChange={e => handleDailySummary(e)}
+                                                        rows={5}
+                                                        className={styles.textArea}
+                                                    />
+                                                )
+                                            }
+                                        </Translation>
 
-                        </FormControl>
+                                    </FormControl>
 
 
+                                </div>
+                            )}
+                        <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
+                            <RainSummaryPic
+                                rainSummaryPic={rainSummaryPic}
+                                handleRainSummaryPic={handleRainSummaryPic}
+                                hideForm={hideForm}
+                                rainSummaryFooter={rainSummaryFooter}
+                            />
+                            {
+                                !hideForm
+                                && (
+
+                                    <div className={styles.formItemTextFull}>
+                                        <FormControl fullWidth>
+                                            <Translation>
+                                                {
+                                                    t => (
+                                                        <textarea
+                                                            placeholder={t('Daily Rainfall Map Description')}
+                                                            value={rainSummaryFooter}
+                                                            onChange={e => handleRainSummaryFooter(e)}
+                                                            rows={5}
+                                                            className={styles.textArea}
+                                                        />
+                                                    )
+                                                }
+                                            </Translation>
+                                        </FormControl>
+
+
+                                    </div>
+                                )}
+                        </div>
+                        <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
+                            <TemperatureMax
+                                maxTemp={maxTemp}
+                                handleMaxTemp={handleMaxTemp}
+                                hideForm={hideForm}
+                                maxTempFooter={maxTempFooter}
+                            />
+                            {
+                                !hideForm
+                                && (
+
+                                    <div className={styles.formItemText}>
+                                        <FormControl fullWidth>
+                                            <Translation>
+                                                {
+                                                    t => (
+                                                        <textarea
+                                                            placeholder={t('Daily Max Temperature Map Description')}
+                                                            value={maxTempFooter}
+                                                            onChange={e => handleFooterMax(e)}
+                                                            rows={5}
+                                                            className={styles.textArea}
+                                                        />
+                                                    )
+                                                }
+                                            </Translation>
+
+                                        </FormControl>
+
+
+                                    </div>
+                                )}
+                            <TemperatureMin
+                                minTemp={minTemp}
+                                handleMinTemp={handleMinTemp}
+                                hideForm={hideForm}
+                                minTempFooter={minTempFooter}
+                            />
+                            {
+                                !hideForm
+                                && (
+
+                                    <div className={styles.formItemText}>
+                                        <FormControl fullWidth>
+                                            <Translation>
+                                                {
+                                                    t => (
+                                                        <textarea
+                                                            placeholder={t('Daily Min Temperature Map Description')}
+                                                            value={minTempFooter}
+                                                            onChange={e => handleFooterMin(e)}
+                                                            rows={5}
+                                                            className={styles.textArea}
+                                                        />
+                                                    )
+                                                }
+                                            </Translation>
+                                        </FormControl>
+
+
+                                    </div>
+                                )}
+                        </div>
+                    </>
+                ) : (
+                    <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
+                        <PromotionImage
+                            rainSummaryPic={promotionPic}
+                            handleRainSummaryPic={handlePromotionPic}
+
+                        />
                     </div>
                 )}
-            <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
-                <RainSummaryPic
-                    rainSummaryPic={rainSummaryPic}
-                    handleRainSummaryPic={handleRainSummaryPic}
-                    hideForm={hideForm}
-                    rainSummaryFooter={rainSummaryFooter}
-                />
-                {
-                    !hideForm
-                    && (
-
-                        <div className={styles.formItemTextFull}>
-                            <FormControl fullWidth>
-                                <Translation>
-                                    {
-                                        t => (
-                                            <textarea
-                                                placeholder={t('Daily Rainfall Map Description')}
-                                                value={rainSummaryFooter}
-                                                onChange={e => handleRainSummaryFooter(e)}
-                                                rows={5}
-                                                className={styles.textArea}
-                                            />
-                                        )
-                                    }
-                                </Translation>
-                            </FormControl>
-
-
-                        </div>
-                    )}
-            </div>
-            <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
-                <TemperatureMax
-                    maxTemp={maxTemp}
-                    handleMaxTemp={handleMaxTemp}
-                    hideForm={hideForm}
-                    maxTempFooter={maxTempFooter}
-                />
-                {
-                    !hideForm
-                    && (
-
-                        <div className={styles.formItemText}>
-                            <FormControl fullWidth>
-                                <Translation>
-                                    {
-                                        t => (
-                                            <textarea
-                                                placeholder={t('Daily Max Temperature Map Description')}
-                                                value={maxTempFooter}
-                                                onChange={e => handleFooterMax(e)}
-                                                rows={5}
-                                                className={styles.textArea}
-                                            />
-                                        )
-                                    }
-                                </Translation>
-
-                            </FormControl>
-
-
-                        </div>
-                    )}
-                <TemperatureMin
-                    minTemp={minTemp}
-                    handleMinTemp={handleMinTemp}
-                    hideForm={hideForm}
-                    minTempFooter={minTempFooter}
-                />
-                {
-                    !hideForm
-                    && (
-
-                        <div className={styles.formItemText}>
-                            <FormControl fullWidth>
-                                <Translation>
-                                    {
-                                        t => (
-                                            <textarea
-                                                placeholder={t('Daily Min Temperature Map Description')}
-                                                value={minTempFooter}
-                                                onChange={e => handleFooterMin(e)}
-                                                rows={5}
-                                                className={styles.textArea}
-                                            />
-                                        )
-                                    }
-                                </Translation>
-                            </FormControl>
-
-
-                        </div>
-                    )}
-            </div>
-
 
         </div>
     );

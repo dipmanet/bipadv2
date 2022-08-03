@@ -536,6 +536,8 @@ const state: PageState = {
         maxTempFooter: null,
         minTempFooter: null,
         rainSummaryFooter: null,
+        advertisementFileNe: null,
+        advertisementFile: null,
         dailySummary: '',
         feedback: [],
         province: 3,
