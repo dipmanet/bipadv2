@@ -7,7 +7,7 @@ import styles from './styles.scss';
 import { lossMetrics } from '#utils/domain';
 import DataCount from '../DataCount';
 
-const Dropdown = (data) => {
+const Dropdown = ({ data, setVAlueOnClick }) => {
     const [optionValue, setOptionValue] = useState({ name: '', key: '' });
     const [showOption, setShowOption] = useState(false);
     const optionShowRef = useRef(null);
@@ -37,9 +37,10 @@ const Dropdown = (data) => {
         setShowOption(state => !state);
     };
 
-    const onOptionClick = (key: string, name: string) => {
+    const onOptionClick = (key: string, name: string, index: number) => {
         setOptionValue({ name, key });
         setShowOption(false);
+        setVAlueOnClick({ value: key, index });
     };
 
     return (
@@ -74,10 +75,10 @@ const Dropdown = (data) => {
                         <div
                             className={styles.optionDiv}
                         >
-                            {lossMetrics.map(item => (
+                            {lossMetrics.map((item, index) => (
                                 <div
                                     className={styles.optionField}
-                                    onClick={() => onOptionClick(item.key, item.label)}
+                                    onClick={() => onOptionClick(item.key, item.label, index)}
                                     key={item.key}
                                 >
                                     <Icon

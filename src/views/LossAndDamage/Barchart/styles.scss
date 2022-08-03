@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    margin-top: 15px;
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        border-top: 1px solid #ccc;
+
+
+        .firstDiv {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            .text {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .download-button {
+                padding: 5px;
+            }
+        }
+
+        .barChart {
+            width:100%;
+            justify-self: flex-start;
+        }
+
+    }
+
+}

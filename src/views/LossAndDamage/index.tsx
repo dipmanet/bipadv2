@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { compose } from 'redux';
@@ -65,7 +66,8 @@ import {
 import styles from './styles.scss';
 import Overview from './Overview';
 import Dropdown from './DropDown';
-import DataCount from './DataCount';
+import BarChartVisual from './Barchart';
+import AreaChartVisual from './AreaChart';
 
 const ModalButton = modalize(Button);
 
@@ -196,6 +198,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         submittedStartDate: encodeDate(DEFAULT_START_DATE),
         submittedEndDate: encodeDate(DEFAULT_END_DATE),
         Null_check_estimatedLoss: false,
+        valueOnclick: { value: 'count', index: 0 },
     }
 
     private handleSaveClick = () => {
@@ -362,6 +365,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             submittedStartDate,
             submittedEndDate,
             Null_check_estimatedLoss,
+            valueOnclick,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -375,6 +379,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regions,
         );
         const chartData = this.getDataAggregatedByYear(filteredData);
+
+        const setVAlueOnClick = (dat) => {
+            this.setState({ valueOnclick: dat });
+        };
 
         return (
             <>
@@ -479,9 +487,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     )}
                                 />
                             </div>
-                            <Dropdown data={filteredData} />
+                            <Dropdown data={filteredData} setVAlueOnClick={setVAlueOnClick} />
+                            <BarChartVisual filter={regionFilter} data={filteredData} valueOnclick={valueOnclick} />
+                            <AreaChart />
 
-                            <div className={styles.mainContent}>
+                            {/* <div className={styles.mainContent}>
                                 <LossDetails
                                     className={styles.lossDetails}
                                     data={filteredData}
@@ -574,7 +584,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </>
                     )}
                     mainContent={(
