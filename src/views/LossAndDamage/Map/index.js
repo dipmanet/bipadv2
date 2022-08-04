@@ -12,7 +12,6 @@ import { lossMetrics } from '#utils/domain';
 import styles from './styles.scss';
 import Legend from '../Legend';
 
-
 const colorGrade = [
     '#ffe5d4',
     '#f9d0b8',

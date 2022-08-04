@@ -15,6 +15,8 @@ import {
 } from '#selectors';
 
 import Map from '../Map';
+import DamageLossTooltip from '../DamageLossTooltip';
+
 // import LeftPane from './LeftPane';
 
 import {
@@ -96,6 +98,7 @@ class Overview extends React.PureComponent {
             hazardTypes,
             startDate,
             endDate,
+            currentSelection,
         } = this.props;
         const {
             selectedMetricKey = 'count',
@@ -137,19 +140,23 @@ class Overview extends React.PureComponent {
         }
 
         return (
-            <Map
-                geoareas={geoareas}
-                mapping={mapping}
-                maxValue={maxValue}
-                sourceKey="loss-and-damage-overview"
+            <>
+                <DamageLossTooltip currentSelection={currentSelection} />
+                <Map
+                    geoareas={geoareas}
+                    mapping={mapping}
+                    maxValue={maxValue}
+                    sourceKey="loss-and-damage-overview"
 
-                metric={selectedMetric.metricFn}
-                metricName={selectedMetric.label}
-                metricKey={selectedMetric.key}
-                onMetricChange={(m) => {
-                    this.setState({ selectedMetricKey: m });
-                }}
-            />
+                    metric={selectedMetric.metricFn}
+                    metricName={selectedMetric.label}
+                    metricKey={selectedMetric.key}
+                    onMetricChange={(m) => {
+                        this.setState({ selectedMetricKey: m });
+                    }}
+                />
+            </>
+
         );
     }
 }

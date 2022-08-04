@@ -68,6 +68,7 @@ import Overview from './Overview';
 import Dropdown from './DropDown';
 import BarChartVisual from './Barchart';
 import AreaChartVisual from './AreaChart';
+import HazardWise from './HazardWise';
 
 const ModalButton = modalize(Button);
 
@@ -515,6 +516,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 <AreaChartVisual
                                     selectOption={selectOption}
                                 />
+                                <HazardWise
+                                    selectOption={selectOption}
+                                    data={filteredData}
+                                />
                             </div>
 
 
@@ -619,6 +624,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             lossAndDamageList={filteredData}
                             startDate={submittedStartDate}
                             endDate={submittedEndDate}
+                            currentSelection={selectOption.name}
                         />
                     )}
                 />
