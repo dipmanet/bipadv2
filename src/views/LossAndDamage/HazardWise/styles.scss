@@ -3,15 +3,17 @@
     flex-direction: column;
     width: 95%;
 
+    .hazardText {
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
     .hazardHead {
         display: flex;
         justify-content: space-between;
 
-        .hazardText {
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 600;
-        }
+
 
         .downloadButton {
             padding: 5px;

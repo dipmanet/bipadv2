@@ -62,7 +62,7 @@ const BarChartVisual = ({ filter, data, valueOnclick }) => {
                 {
                     provinceWiseData
                     && (
-                        <ResponsiveContainer width="100%" height={250}>
+                        <ResponsiveContainer width="100%" height={200}>
                             <BarChart
                                 data={provinceWiseData}
                                 margin={{

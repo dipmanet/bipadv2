@@ -75,7 +75,7 @@ const AreaChartVisual = (props) => {
                 <ResponsiveContainer width="100%" height={200}>
                     <AreaChart
                         width={500}
-                        height={400}
+                        height={200}
                         data={data}
                         margin={{
                             top: 5,

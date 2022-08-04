@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 import React from 'react';
 import { ResponsiveContainer, Treemap } from 'recharts';
@@ -7,36 +8,26 @@ import styles from './styles.scss';
 const HazardWise = (props) => {
     const { selectOption, data } = props;
 
-    const barColors = ['#d3e878', '#00a811', '#e9e1d8', '#0b71bd', '#E2CF45', 'grey', 'green'];
+    const barColors = ['#d3e878', '#00a811', '#e9e1d8', '#0b71bd', '#E2CF45', 'grey',
+        'green', 'black', 'blue', 'red', 'yellow', 'white', 'cyan', 'purple',
+        'indigo', 'gray', 'violet', 'white'];
 
-    const datas = [
-        { name: 'CartesianAxes', size: 67 },
-        { name: 'TooltipControl', size: 8435 },
-        { name: 'NodeSprite', size: 1938 },
-        { name: 'TooltipEvent', size: 3701 },
-        { name: 'LegendRange', size: 10530 },
-    ];
+    const key = [...new Set([...data.map(item => item.hazardInfo.title)])];
 
-    const provinceData = data.filter(item => item.province === 4);
-    const hazardData = provinceData.map(item => ({
-        name: item.hazardInfo.title,
-        size: item.hazardInfo.id,
-    }));
+    const hazardData = [];
 
-    const hazardTypes = [...new Set([...hazardData.map(i => i.name)])];
-
-    const testData = [];
-
-    for (let i = 0; i < hazardTypes.length; i++) {
-        const totalData = hazardData.filter(dat => dat.name === hazardTypes[i]);
-        const totalSum = totalData.map(idata => idata.size).reduce((a, b) => a + b);
-        testData.push({ name: hazardTypes[i], size: totalSum });
+    for (let i = 0; i < key.length; i++) {
+        const dataAccordingHazard = data.filter(item => item.hazardInfo.title === key[i]);
+        const hazards = dataAccordingHazard.map(item => item.hazardInfo.id).reduce((a, b) => a + b);
+        hazardData.push({ name: key[i], value: hazards });
     }
 
-    console.log(testData, 'data');
+    console.log(hazardData, 'province');
+
 
     const CustomizedContent = (prop: any) => {
-        const { root, depth, x, y, width, height, index, colors, name, size } = prop;
+        const { root, depth, x, y, width, height, index, colors, name, value } = prop;
+
 
         return (
             <g>
@@ -62,7 +53,7 @@ const HazardWise = (props) => {
                                     textAnchor="middle"
                                     fill="white"
                                     stroke="white"
-                                    fontSize={size < 10 ? 10 : 14}
+                                    fontSize={value < 10 ? 10 : 14}
                                     fontWeight={300}
                                 >
                                     {name}
@@ -76,8 +67,7 @@ const HazardWise = (props) => {
                                     fontSize={18}
                                     fontWeight={300}
                                 >
-                                    {size}
-                                    %
+                                    {value}
                                 </text>
                             </>
                         )
@@ -107,20 +97,22 @@ const HazardWise = (props) => {
                 />
             </div>
 
-            <ResponsiveContainer height={400}>
-                <Treemap
-                    width={400}
-                    height={200}
-                    data={datas}
-                    dataKey="size"
-                    stroke="#FFFFFF"
-                    fill={barColors.map(item => item)[1]}
-                    content={<CustomizedContent colors={barColors} />}
-                />
-            </ResponsiveContainer>
+            {hazardData.length > 0 && (
+                <ResponsiveContainer height={400}>
+                    <Treemap
+                        width={400}
+                        height={200}
+                        data={hazardData}
+                        dataKey="value"
+                        stroke="#FFFFFF"
+                        fill={barColors.map(item => item)[1]}
+                        content={<CustomizedContent colors={barColors} />}
+                    />
+                </ResponsiveContainer>
+            )}
 
             <p className={styles.hazardText}>
-                Data source:nepal police,drr portal
+                Data source : nepal police,drr portal
             </p>
         </div>
     );

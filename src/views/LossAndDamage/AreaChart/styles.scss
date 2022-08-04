@@ -6,35 +6,35 @@
 //     position: relative;
 //     margin-top: 15px;
 
-    .wrapper {
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    border-top: 1px solid #ccc;
+
+
+    .firstDiv {
         display: flex;
-        flex-direction: column;
-        width: 95%;
-        border-top: 1px solid #ccc;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
 
-
-        .firstDiv {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-
-            .text {
-                text-transform:uppercase;
-                font-size: 14px;
-                font-weight: 600;
-            }
-
-            .download-button {
-                padding: 5px;
-            }
+        .text {
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .areaChart {
-            width:100%;
-            justify-self: flex-start;
+        .download-button {
+            padding: 5px;
         }
-
     }
+
+    .areaChart {
+        width: 100%;
+        justify-self: flex-start;
+    }
+
+}
 
 // }
