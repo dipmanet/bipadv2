@@ -128,8 +128,8 @@ class Overview extends React.PureComponent {
         if (setDamageAndLoss) {
             setDamageAndLoss((prevState) => {
                 if (prevState.mainModule !== selectedMetric.label
-                || prevState.startDate !== startDate
-                || prevState.endDate !== endDate) {
+                    || prevState.startDate !== startDate
+                    || prevState.endDate !== endDate) {
                     return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
                 }
                 return prevState;

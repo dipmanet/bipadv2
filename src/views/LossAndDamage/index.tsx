@@ -198,6 +198,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         submittedStartDate: encodeDate(DEFAULT_START_DATE),
         submittedEndDate: encodeDate(DEFAULT_END_DATE),
         Null_check_estimatedLoss: false,
+        selectOption: { name: '', key: '' },
         valueOnclick: { value: 'count', index: 0 },
     }
 
@@ -366,6 +367,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             submittedEndDate,
             Null_check_estimatedLoss,
             valueOnclick,
+            selectOption,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -384,6 +386,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             this.setState({ valueOnclick: dat });
         };
 
+        const setSelectOption = (name, key) => {
+            this.setState({ selectOption: { name, key } });
+        };
+
         return (
             <>
                 <Loading pending={pending} />
@@ -392,7 +398,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
-                            <div className={styles.dataDetails}>
+                            {/* <div className={styles.dataDetails}>
                                 <div className={styles.dateDetails}>
                                     <div className={styles.infoIconContainer}>
                                         <Icon
@@ -486,10 +492,31 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     )}
                                 />
+                            </div> */}
+                            <div className={styles.container}>
+
+                                <div className={styles.showheader}>
+                                    <span className={styles.textHead}>Showing</span>
+                                    <span className={styles.tableData}>View tabular data</span>
+
+                                </div>
+
+                                <Dropdown
+                                    data={filteredData}
+                                    setVAlueOnClick={setVAlueOnClick}
+                                    selectOption={selectOption}
+                                    setSelectOption={setSelectOption}
+                                />
+                                <BarChartVisual
+                                    filter={regionFilter}
+                                    data={filteredData}
+                                    valueOnclick={valueOnclick}
+                                />
+                                <AreaChartVisual
+                                    selectOption={selectOption}
+                                />
                             </div>
-                            <Dropdown data={filteredData} setVAlueOnClick={setVAlueOnClick} />
-                            <BarChartVisual filter={regionFilter} data={filteredData} valueOnclick={valueOnclick} />
-                            <AreaChart />
+
 
                             {/* <div className={styles.mainContent}>
                                 <LossDetails

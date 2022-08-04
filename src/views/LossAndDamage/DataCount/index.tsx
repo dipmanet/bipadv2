@@ -10,18 +10,18 @@ const DataCount = (props) => {
     const dataValue = nullCheck(nullCondition, data, key);
     return (
 
-        <div className={styles.container}>
-            <div className={styles.wrapper}>
-                <p className={styles.alertText}>
-                    {
-                        `Total number of ${name}`
-                    }
-                </p>
-                <span className={styles.alertValue}>
-                    {dataValue}
-                </span>
-            </div>
+        // <div className={styles.container}>
+        <div className={styles.wrapper}>
+            <p className={styles.alertText}>
+                {
+                    `Total number of ${name}`
+                }
+            </p>
+            <span className={styles.alertValue}>
+                {dataValue}
+            </span>
         </div>
+        /* </div> */
     );
 };
 

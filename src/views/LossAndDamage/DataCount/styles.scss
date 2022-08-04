@@ -1,13 +1,14 @@
-.container {
-    margin-top: 8px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+// .container {
+//     margin-top: 8px;
+//     width: 100%;
+//     display: flex;
+//     justify-content: center;
 
     .wrapper {
         width: 95%;
         display: flex;
         justify-content: space-between;
+        padding: 15px 0;
     }
 
     .alertText {
@@ -27,4 +28,4 @@
         font-size: 16px;
         font-weight: 500;
     }
-}
+// }

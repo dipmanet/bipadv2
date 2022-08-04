@@ -1,10 +1,10 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    position: relative;
-    margin-top: 15px;
+// .container {
+//     display: flex;
+//     flex-direction: column;
+//     width: 100%;
+//     align-items: center;
+//     position: relative;
+//     margin-top: 15px;
 
     .wrapper {
         display: flex;
@@ -20,6 +20,7 @@
             width: 100%;
 
             .text {
+                text-transform:uppercase;
                 font-size: 14px;
                 font-weight: 600;
             }
@@ -36,4 +37,4 @@
 
     }
 
-}
+// }

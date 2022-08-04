@@ -10,6 +10,7 @@ import ChoroplethMap from '#components/ChoroplethMap';
 import { lossMetrics } from '#utils/domain';
 
 import styles from './styles.scss';
+import Legend from '../Legend';
 
 
 const colorGrade = [
@@ -97,7 +98,9 @@ export default class LossAndDamageMap extends React.PureComponent {
                         isTimeline && styles.timeline,
                     )}
                 >
-                    <SegmentInput
+                    <Legend />
+
+                    {/* <SegmentInput
                         options={lossMetrics}
                         keySelector={d => d.key}
                         labelSelector={d => d.label}
@@ -105,7 +108,8 @@ export default class LossAndDamageMap extends React.PureComponent {
                         onChange={onMetricChange}
                         showLabel={false}
                         showHintAndError={false}
-                    />
+                    /> */}
+
                     {/*
                     <h5 className={styles.heading}>
                         {metricName}
@@ -123,8 +127,9 @@ export default class LossAndDamageMap extends React.PureComponent {
                         />
                     </div>
                     */}
-                    <div className={styles.scale}>
-                        { color.map((c, i) => {
+
+                    {/* <div className={styles.scale}>
+                        {color.map((c, i) => {
                             if (i % 2 === 0) {
                                 return null;
                             }
@@ -140,12 +145,13 @@ export default class LossAndDamageMap extends React.PureComponent {
                                         }}
                                     />
                                     <div className={styles.value}>
-                                        { Math.round(color[i - 1]) }
+                                        {Math.round(color[i - 1])}
                                     </div>
                                 </div>
                             );
                         })}
-                    </div>
+                    </div> */}
+
                 </div>
                 <ChoroplethMap
                     sourceKey={sourceKey}

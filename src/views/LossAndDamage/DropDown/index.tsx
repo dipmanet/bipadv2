@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -7,16 +8,16 @@ import styles from './styles.scss';
 import { lossMetrics } from '#utils/domain';
 import DataCount from '../DataCount';
 
-const Dropdown = ({ data, setVAlueOnClick }) => {
-    const [optionValue, setOptionValue] = useState({ name: '', key: '' });
+const Dropdown = (props) => {
     const [showOption, setShowOption] = useState(false);
     const optionShowRef = useRef(null);
+    const { data, setVAlueOnClick, setSelectOption, selectOption } = props;
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
-        if (optionValue.name === '' || optionValue.key === '') {
-            setOptionValue({ name: lossMetrics[0].label, key: lossMetrics[0].key });
+        if (selectOption.name === '' || selectOption.key === '') {
+            setSelectOption(lossMetrics[0].label, lossMetrics[0].key);
         }
-    }, [optionValue]);
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -38,7 +39,7 @@ const Dropdown = ({ data, setVAlueOnClick }) => {
     };
 
     const onOptionClick = (key: string, name: string, index: number) => {
-        setOptionValue({ name, key });
+        setSelectOption(name, key);
         setShowOption(false);
         setVAlueOnClick({ value: key, index });
     };
@@ -62,7 +63,7 @@ const Dropdown = ({ data, setVAlueOnClick }) => {
                         >
                             <p className={styles.selectItem}>
                                 {
-                                    optionValue.name
+                                    selectOption.name
                                 }
 
                             </p>
@@ -92,7 +93,7 @@ const Dropdown = ({ data, setVAlueOnClick }) => {
                     )
                 }
             </div>
-            <DataCount data={data} value={optionValue} />
+            <DataCount data={data} value={selectOption} />
         </>
 
     );

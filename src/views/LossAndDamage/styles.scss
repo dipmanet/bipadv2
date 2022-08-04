@@ -4,6 +4,34 @@
     background-color: var(--color-foreground);
     overflow-y: auto;
 
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        margin-top: 15px;
+
+    .showheader{
+        display:flex;
+        margin-bottom:10px;
+        width: 90%;
+        justify-content:space-between;
+        align-items:center;
+
+        .textHead{
+            text-transform:capitalize;
+            font-size:16px;
+            font-weight:600;
+        }
+
+        .tableData{
+            text-transform:capitalize;
+            font-size:14px;
+            font-weight:600;
+        }
+    }
+}
+
     .data-details {
         flex-shrink: 0;
         background-color: var(--color-foreground-alt);

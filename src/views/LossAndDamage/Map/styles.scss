@@ -1,9 +1,10 @@
 .legend {
-    border: var(--width-separator-thin) solid var(--color-separator);
-    border-radius: var(--radius-border-pane);
-    background-color: var(--color-foreground);
-    padding: var(--spacing-medium);
-    width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 128px);
+    // border: var(--width-separator-thin) solid var(--color-separator);
+    // border-radius: var(--radius-border-pane);
+    // background-color: var(--color-foreground);
+    // padding: var(--spacing-medium);
+    // width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 110px);
+    width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 80px);
 
     .heading {
         padding-bottom: var(--spacing-medium);
