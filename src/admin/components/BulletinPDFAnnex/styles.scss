@@ -36,11 +36,16 @@
 
             }
 
-            td,
+            td {
+                height: 20px;
+                border: 1px solid rgb(107, 106, 106);
+                padding: 2px 8px;
+            }
+
             th {
                 height: 20px;
                 border: 1px solid rgb(107, 106, 106);
-                padding: 2px;
+                padding: 8px 10px;
             }
 
             width: 100%;
@@ -70,12 +75,18 @@
             width: 190mm;
         }
 
-        td,
+        td {
+            white-space: nowrap;
+            text-align: left;
+            border: 1px solid rgb(190, 188, 188);
+            padding: 2px 8px;
+        }
+
         th {
             white-space: nowrap;
-            text-align: center;
+            text-align: left;
             border: 1px solid rgb(190, 188, 188);
-            padding: 2px;
+            padding: 8px 10px;
         }
 
         tr:first-child th:first-child {
@@ -100,10 +111,18 @@
             width: 190mm;
         }
 
-        td,
+        td {
+
+            border: 1px solid rgb(107, 106, 106);
+            padding: 2px 8px;
+            text-align: left;
+
+        }
+
         th {
             border: 1px solid rgb(107, 106, 106);
-            padding: 2px;
+            padding: 8px 10px;
+            text-align: left;
         }
     }
 }

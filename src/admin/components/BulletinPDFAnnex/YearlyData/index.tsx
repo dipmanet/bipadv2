@@ -367,14 +367,15 @@ const YearlyData = (props: Props) => {
                                             </td>
                                             <td>
                                                 {
-                                                    summaryData[hwL].injured.toLocaleString()
+                                                    summaryData[hwL].missing.toLocaleString()
                                                 }
                                             </td>
                                             <td>
                                                 {
-                                                    summaryData[hwL].missing.toLocaleString()
+                                                    summaryData[hwL].injured.toLocaleString()
                                                 }
                                             </td>
+
                                             <td>
                                                 {
                                                     summaryData[hwL].familiesAffected.toLocaleString()
@@ -412,14 +413,15 @@ const YearlyData = (props: Props) => {
                                 </td>
                                 <td>
                                     {
-                                        cumulative.injured.toLocaleString()
+                                        cumulative.missing.toLocaleString()
                                     }
                                 </td>
                                 <td>
                                     {
-                                        cumulative.missing.toLocaleString()
+                                        cumulative.injured.toLocaleString()
                                     }
                                 </td>
+
                                 <td>
                                     {
                                         cumulative.familiesAffected.toLocaleString()
