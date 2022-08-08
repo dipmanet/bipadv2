@@ -277,6 +277,9 @@ const Bulletin = (props: Props) => {
     const [incidentFetchCondition, setIncidentFetchCondition] = useState(true);
 
     const [selectedTemperatureImageType, setSelectedTemperatureImageType] = useState(null);
+
+    const [tempIncidentData, setTempIncidentData] = useState(incidentSummary);
+
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -454,7 +457,7 @@ const Bulletin = (props: Props) => {
             setvaccineStat(bulletinEditData.vaccineStat);
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
             finalFeedbackFromEdit();
-
+            setTempIncidentData(bulletinEditData.incidentSummary);
             if (bulletinEditData.language === 'nepali') {
                 setAddedData(bulletinEditData.addedHazardsNe);
                 setHazardwise(bulletinEditData.hazardWiseLoss);
@@ -516,7 +519,9 @@ const Bulletin = (props: Props) => {
             // eslint-disable-next-line no-param-reassign
             deferedState[field] = e;
         });
+        console.log('This incident field', field);
         setIncidentData(newState);
+        setTempIncidentData(newState);
     };
 
     const handlePeopleLossChange = (e, field, subfield) => {
@@ -532,9 +537,23 @@ const Bulletin = (props: Props) => {
         const newSubData = { ...newFieldData, [subfield]: e };
         setHazardwise({ ...newData, [field]: newSubData });
     };
-
+    console.log('This is final incident data', incidentData);
+    console.log('tempIncidentData', tempIncidentData);
     // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
+        console.log('This is incident data', incidentData);
+        console.log('This is temp incident', tempIncidentData);
+        if (subfield === 'deaths') {
+            const totalDeath = tempIncidentData.numberOfDeath + Number(e);
+            setIncidentData({ ...incidentData, numberOfDeath: totalDeath });
+        }
+        // if (subfield === 'deaths') {
+        //     const totalDeath = incidentData.numberOfDeath + Number(e);
+        //     setIncidentData({ ...incidentData, [incidentData.numberOfDeath]: totalDeath });
+        // }
+        console.log('This field', field);
+        console.log('This subfield', subfield);
+        console.log('This that e', typeof e);
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
@@ -803,6 +822,15 @@ const Bulletin = (props: Props) => {
         if (lossData && lossData.length > 0) {
             const summary = calculateSummary(lossData);
             setIncidentData({
+                numberOfIncidents: summary.count,
+                numberOfDeath: summary.peopleDeathCount,
+                numberOfMissing: summary.peopleMissingCount,
+                numberOfInjured: summary.peopleInjuredCount,
+                estimatedLoss: summary.estimatedLoss,
+                roadBlock: summary.infrastructureDestroyedRoadCount,
+                cattleLoss: summary.livestockDestroyedCount,
+            });
+            setTempIncidentData({
                 numberOfIncidents: summary.count,
                 numberOfDeath: summary.peopleDeathCount,
                 numberOfMissing: summary.peopleMissingCount,
@@ -1156,7 +1184,7 @@ const Bulletin = (props: Props) => {
                                 type="button"
                                 onClick={handleNextBtn}
                                 className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
-                            // disabled={loading}
+                                disabled={loading}
                             >
                                 Next
                             </button>

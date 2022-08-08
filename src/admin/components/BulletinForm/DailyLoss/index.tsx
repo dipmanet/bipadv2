@@ -190,6 +190,7 @@ const Bulletin = (props: Props) => {
 
     const getRegionValue = (distCoordinate) => {
         const { provinceId, districtId, municipalityId } = distCoordinate;
+        console.log('This is data', addedHazardProvinceId);
         // setAddedHazardProvinceId(provinceId);
         if (provinceId && districtId && municipalityId) {
             return { adminLevel: 3, geoarea: municipalityId };
@@ -450,11 +451,11 @@ const Bulletin = (props: Props) => {
                                 </MenuItem>
 
                             </Select>
-                            {filterDataTypeError ? (
+                            {/* {filterDataTypeError ? (
                                 <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>
                                     {language === 'np' ? 'कृपया मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
                                 </FormHelperText>
-                            ) : ''}
+                            ) : ''} */}
                         </FormControl>
                     </div>
                 </div>
@@ -824,11 +825,11 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                {filterDataTypeError ? (
+                {/* {filterDataTypeError ? (
                     <FormHelperText style={{ color: '#f44336', marginLeft: '14px', marginTop: '20px', fontSize: '16px' }}>
                         {language === 'np' ? 'कृपया माथि मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
                     </FormHelperText>
-                ) : ''}
+                ) : ''} */}
             </div>
 
         </>
