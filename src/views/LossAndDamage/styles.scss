@@ -11,26 +11,30 @@
         align-items: center;
         margin-top: 15px;
 
-    .showheader{
-        display:flex;
-        margin-bottom:10px;
-        width: 90%;
-        justify-content:space-between;
-        align-items:center;
+        .showheader {
+            display: flex;
+            margin-bottom: 10px;
+            width: 90%;
+            justify-content: space-between;
+            align-items: center;
 
-        .textHead{
-            text-transform:capitalize;
-            font-size:16px;
-            font-weight:600;
-        }
+            .textHead {
+                text-transform: capitalize;
+                font-size: 16px;
+                font-weight: 600;
+            }
 
-        .tableData{
-            text-transform:capitalize;
-            font-size:14px;
-            font-weight:600;
+            .tableData {
+                text-transform: capitalize;
+                font-size: 14px;
+                font-weight: 600;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
     }
-}
 
     .data-details {
         flex-shrink: 0;
@@ -71,10 +75,10 @@
                 color: white;
                 font-weight: var(--font-size-medium);
                 cursor: pointer;
-                    
-                    &:hover {
-                            font-weight: bold;
-                    }
+
+                &:hover {
+                    font-weight: bold;
+                }
             }
         }
 

@@ -1,0 +1,85 @@
+@import '~base-scss/base';
+
+
+// .numeral {
+//     display: block;
+//     padding: $spacing-small;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     white-space: nowrap;
+// }
+
+.header {
+    display: flex;
+    border: 1px solid green;
+    width: 50vw;
+    height: 12vh;
+    justify-content: space-between;
+    align-items: flex-end;
+    overflow: hidden;
+
+    .headerItem {
+        padding: 1.25rem 0.625rem 1.25rem 0px;
+        margin: 0px 0.625rem 0px 0px;
+        display: flex;
+        font-size: 0.875rem;
+        text-align: center;
+        border: 1px solid red;
+        color: #85888a;
+        font-weight: 600;
+        width: auto;
+        text-transform: uppercase;
+    }
+}
+
+.bodyheader {
+    display: flex;
+    border: 1px solid blue;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    height: 5vh;
+
+    .bodyHeaderItem {
+        width: 200px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+}
+
+.bodyContainer {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blue;
+    align-items: center;
+    width: 90%;
+    height: 5vh;
+
+    .bodyWrapper {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+
+        .bodyItem {
+            width: 200px;
+            font-size: 0.75rem;
+        }
+    }
+
+}
+
+.loss-and-damage-table-modal {
+    width: 80vw;
+    height: 80vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+
+        .table {
+            flex-grow: 1;
+        }
+    }
+}

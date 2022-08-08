@@ -69,6 +69,7 @@ import Dropdown from './DropDown';
 import BarChartVisual from './Barchart';
 import AreaChartVisual from './AreaChart';
 import HazardWise from './HazardWise';
+import DataTable from './DataTable';
 
 const ModalButton = modalize(Button);
 
@@ -498,7 +499,24 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
                                 <div className={styles.showheader}>
                                     <span className={styles.textHead}>Showing</span>
-                                    <span className={styles.tableData}>View tabular data</span>
+                                    <span className={styles.tableData}>
+                                        View tabular data
+                                        <ModalButton
+                                            title="Show data in tabular format"
+                                            className={styles.showTableButton}
+                                            iconName="table"
+                                            transparent
+                                            modal={(
+                                                <DataTable
+                                                    incidentList={filteredData}
+                                                />
+                                                // <IncidentTableModal
+                                                //     incidentList={filteredData}
+                                                // />
+                                            )}
+                                        />
+
+                                    </span>
 
                                 </div>
 
