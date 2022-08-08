@@ -110,6 +110,8 @@ const Bulletin = (props: Props) => {
         handleSameHazardRemove,
     } = props;
 
+
+    const [addedHazardProvinceId, setAddedHazardProvinceId] = useState(null);
     const [hazard, setHazard] = useState(null);
     const [hazardIncidents, setHazardIncidents] = useState();
     const [hazardDeaths, setHazardDeaths] = useState();
@@ -188,6 +190,7 @@ const Bulletin = (props: Props) => {
 
     const getRegionValue = (distCoordinate) => {
         const { provinceId, districtId, municipalityId } = distCoordinate;
+        // setAddedHazardProvinceId(provinceId);
         if (provinceId && districtId && municipalityId) {
             return { adminLevel: 3, geoarea: municipalityId };
         } if (provinceId && districtId && !municipalityId) {
@@ -270,6 +273,7 @@ const Bulletin = (props: Props) => {
         setEndingTime(e.target.value);
         setFilterDateType('');
     };
+    console.log('This is added hazard field', addedHazardFields);
     return (
         <>
             {loading

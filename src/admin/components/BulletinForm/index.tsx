@@ -12,6 +12,7 @@ import {
     isDefined,
     _cs,
 } from '@togglecorp/fujs';
+import Loader from 'react-loader';
 import {
     sum,
 } from '#utils/common';
@@ -51,7 +52,6 @@ import {
     vaccineStat,
     covidProvinceWiseTotal,
 } from './formFields';
-
 import styles from './styles.scss';
 import { Menu } from '../ProgressMenu/utils';
 
@@ -193,6 +193,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         onSuccess: ({ response, params }) => {
             if (params) {
                 params.setCovidQurantine(response.results);
+                params.setLoading(false);
             }
         },
     },
@@ -310,8 +311,16 @@ const Bulletin = (props: Props) => {
     const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
 
     covidNationalInfo.setDefaultParams({ setCovidNational, dateAltTo });
-    covidQuarantine.setDefaultParams({ setCovidQurantine });
+    covidQuarantine.setDefaultParams({ setCovidQurantine, setLoading });
     sitRepQuery.setDefaultParams({ setSitRep });
+
+
+    const handleRefreshCovidData = () => {
+        console.log('Entered here', loading);
+        setLoading(true);
+        covidNationalInfo.do({ setCovidNational, dateAltTo });
+        covidQuarantine.do({ setCovidQurantine, setLoading });
+    };
 
     const resetFeedback = () => {
         setBulletinFeedback({ feedback: {} });
@@ -670,10 +679,12 @@ const Bulletin = (props: Props) => {
 
 
     const handleNextBtn = () => {
-        if (!filterDateType) {
-            setFilterDataTypeError(true);
-            return null;
-        } if (progress < Menu.bulletinProgressMenu.length - 1) {
+        // if (!filterDateType) {
+        //     setFilterDataTypeError(true);
+        //     return null;
+        // }
+
+        if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
                 setBulletinFeedback({ feedback: duplicateFeedbackField });
                 setBulletinLoss({
@@ -1030,6 +1041,7 @@ const Bulletin = (props: Props) => {
             handleVaccineStat={handleVaccineStat}
             handleprovincewiseTotal={handleprovincewiseTotal}
             dateAlt={dateAlt}
+            handleRefreshCovidData={handleRefreshCovidData}
         />,
         <Response
             handleFeedbackChange={handleFeedbackChange}
@@ -1097,11 +1109,24 @@ const Bulletin = (props: Props) => {
         // }
         />,
     ];
-
+    console.log('This is loading', loading);
 
     return (
 
         <div className={_cs(styles.mainSection, language === 'np' ? styles.formContainerNepali : styles.formContainerEnglish)}>
+            {loading
+                ? (
+                    <Loader options={{
+                        position: 'fixed',
+                        top: '48%',
+                        right: 0,
+                        bottom: 0,
+                        left: '48%',
+                        background: 'gray',
+                        zIndex: 9999,
+                    }}
+                    />
+                ) : ''}
             <div className={styles.leftMenuSection}>
                 <ProgressMenu
                     menuKey="bulletinProgressMenu"
@@ -1131,7 +1156,7 @@ const Bulletin = (props: Props) => {
                                 type="button"
                                 onClick={handleNextBtn}
                                 className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
-                                disabled={loading}
+                            // disabled={loading}
                             >
                                 Next
                             </button>

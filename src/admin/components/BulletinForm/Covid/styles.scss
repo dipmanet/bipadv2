@@ -1,54 +1,72 @@
-.formContainer{
+.formContainer {
     width: 100%;
     padding: 40px;
     margin-bottom: 100px;
     background-color: white;
-.formSubContainer{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 0;
-    .formItem{
-        border: 1px solid #cecccc;
+
+    .nextBtn {
+        margin-left: 10px;
+        background: #003572;
+        border: none;
+        padding: 8px 12px;
         border-radius: 3px;
-        padding: 0 0 10px 10px;
-        margin-top: 12px;
-        display: flex !important;
-        align-items: center;
-        // bottom: 10px;
-        background-color: #f3f3f3;
-        height: 65px;
-        width: 100%;
+        color: rgba(255, 255, 255, 0.95);
+        cursor: pointer;
+        filter: saturate(100%);
+    }
+
+    .formSubContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 0;
+
+        .formItem {
+            border: 1px solid #cecccc;
+            border-radius: 3px;
+            padding: 0 0 10px 10px;
+            margin-top: 12px;
+            display: flex !important;
+            align-items: center;
+            // bottom: 10px;
+            background-color: #f3f3f3;
+            height: 65px;
+            width: 100%;
         }
-    .formItemHalf{
-       @extend .formItem;
-       width: 49% !important;
+
+        .formItemHalf {
+            @extend .formItem;
+            width: 49% !important;
         }
-    .formItemThird{
-       @extend .formItem;
-       width:
-        30% !important;
+
+        .formItemThird {
+            @extend .formItem;
+            width:
+                30% !important;
         }
-        h3{
-            color:#707070;
+
+        h3 {
+            color: #707070;
             font-size: 16px;
             font-weight: 400;
             margin: 10px 0 0 0;
             width: 100%;
         }
-       
-}
-h2{
-    color: #003572;
-    font-size: 22px;
-    margin-bottom: 50px;
-    margin: 50px 0 20px 0;
-}
-h3{
-    color:#707070;
-    margin: 50px 0 20px 0;
-    font-size: 16px;
-    font-weight: 400;
-}
+
+    }
+
+    h2 {
+        color: #003572;
+        font-size: 22px;
+        margin-bottom: 50px;
+        margin: 50px 0 20px 0;
+    }
+
+    h3 {
+        color: #707070;
+        margin: 50px 0 20px 0;
+        font-size: 16px;
+        font-weight: 400;
+    }
 
 }

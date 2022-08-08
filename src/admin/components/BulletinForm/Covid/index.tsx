@@ -34,6 +34,7 @@ const Bulletin = (props: Props) => {
         handleCovid24hrStat,
         handleVaccineStat,
         handleprovincewiseTotal,
+        handleRefreshCovidData,
         language: { language },
     } = props;
 
@@ -51,8 +52,15 @@ const Bulletin = (props: Props) => {
                         t => <h3>{t('COVID-19 details of the last 24 hrs')}</h3>
                     }
                 </Translation>
+                <button
+                    type="button"
+                    onClick={handleRefreshCovidData}
+                    className={styles.nextBtn}
+                >
+                    Refresh
+                </button>
                 <div className={styles.formSubContainer}>
-                    { Object.keys(covid24hrsStat).map((field, idx) => (
+                    {Object.keys(covid24hrsStat).map((field, idx) => (
 
                         <div className={idx > 0 ? styles.formItemHalf : styles.formItem}>
                             <FormControl fullWidth>
@@ -84,7 +92,7 @@ const Bulletin = (props: Props) => {
                     }
                 </Translation>
                 <div className={styles.formSubContainer}>
-                    { Object.keys(covidTotalStat).map((field, idx) => (
+                    {Object.keys(covidTotalStat).map((field, idx) => (
 
                         <div className={styles.formItemHalf}>
                             <FormControl fullWidth>
@@ -146,7 +154,7 @@ const Bulletin = (props: Props) => {
                     }
                 </Translation>
                 <div className={styles.formSubContainer}>
-                    { Object.keys(covidProvinceWiseTotal).map(field => (
+                    {Object.keys(covidProvinceWiseTotal).map(field => (
                         <>
                             <h3>
                                 {' '}
@@ -156,7 +164,7 @@ const Bulletin = (props: Props) => {
                                 }
 
                             </h3>
-                            { Object.keys(covidProvinceWiseTotal[field]).map(subField => (
+                            {Object.keys(covidProvinceWiseTotal[field]).map(subField => (
                                 <div className={styles.formItemThird}>
                                     <FormControl fullWidth>
                                         <InputLabel>
