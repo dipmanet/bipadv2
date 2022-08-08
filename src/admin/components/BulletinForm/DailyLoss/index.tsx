@@ -180,6 +180,7 @@ const Bulletin = (props: Props) => {
         }
     };
     const handleHazardRemoveItem = (removeHazard, id) => {
+        console.log('This is hazard', removeHazard);
         if (removeHazard) {
             handleSameHazardRemove(removeHazard, id);
         }
@@ -274,6 +275,8 @@ const Bulletin = (props: Props) => {
         setEndingTime(e.target.value);
         setFilterDateType('');
     };
+    const test = Object.values(addedHazardFields);
+    console.log('This is test', test);
     console.log('This is added hazard field', addedHazardFields);
     return (
         <>

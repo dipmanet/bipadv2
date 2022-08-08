@@ -277,8 +277,9 @@ const Bulletin = (props: Props) => {
     const [incidentFetchCondition, setIncidentFetchCondition] = useState(true);
 
     const [selectedTemperatureImageType, setSelectedTemperatureImageType] = useState(null);
-
     const [tempIncidentData, setTempIncidentData] = useState(incidentSummary);
+    const [tempIncidentDisable, setTempIncidentDisable] = useState(false);
+
 
     const countId = useRef(0);
     const {
@@ -433,6 +434,14 @@ const Bulletin = (props: Props) => {
         }
     }, [filterDateType]);
     useEffect(() => {
+        if (!tempIncidentDisable) {
+            if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+                setTempIncidentData(bulletinEditData.incidentSummary);
+                setTempIncidentDisable(true);
+            }
+        }
+    }, [bulletinEditData]);
+    useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
             const finalFeedbackFromEdit = () => {
                 if (bulletinEditData.language === 'nepali') {
@@ -456,8 +465,8 @@ const Bulletin = (props: Props) => {
             setcovidTotalStat(bulletinEditData.covidTotalStat);
             setvaccineStat(bulletinEditData.vaccineStat);
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
+
             finalFeedbackFromEdit();
-            setTempIncidentData(bulletinEditData.incidentSummary);
             if (bulletinEditData.language === 'nepali') {
                 setAddedData(bulletinEditData.addedHazardsNe);
                 setHazardwise(bulletinEditData.hazardWiseLoss);
@@ -538,22 +547,12 @@ const Bulletin = (props: Props) => {
         setHazardwise({ ...newData, [field]: newSubData });
     };
     console.log('This is final incident data', incidentData);
-    console.log('tempIncidentData', tempIncidentData);
+
     // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
         console.log('This is incident data', incidentData);
-        console.log('This is temp incident', tempIncidentData);
-        if (subfield === 'deaths') {
-            const totalDeath = tempIncidentData.numberOfDeath + Number(e);
-            setIncidentData({ ...incidentData, numberOfDeath: totalDeath });
-        }
-        // if (subfield === 'deaths') {
-        //     const totalDeath = incidentData.numberOfDeath + Number(e);
-        //     setIncidentData({ ...incidentData, [incidentData.numberOfDeath]: totalDeath });
-        // }
-        console.log('This field', field);
-        console.log('This subfield', subfield);
-        console.log('This that e', typeof e);
+
+
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
@@ -695,7 +694,53 @@ const Bulletin = (props: Props) => {
             setActive(progress - 1);
         }
     };
+    console.log('This is temp incident', tempIncidentData);
+    useEffect(() => {
+        const addedHazardFieldCollection = Object.values(addedHazardFields);
+        console.log('This is data', addedHazardFieldCollection);
+        if (addedHazardFieldCollection.length) {
+            const totalDeath = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const totalMissing = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const totalInjured = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+            const totalIncident = addedHazardFieldCollection.length;
+            const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
 
+
+            const totalIncidentUpdated = totalIncident + numberOfIncidents;
+            const totalDeathUpdated = totalDeath + numberOfDeath;
+            const totalMissingUpdated = totalMissing + numberOfMissing;
+            const totalInjuredUpdated = totalInjured + numberOfInjured;
+            setIncidentData({
+                ...incidentData,
+                numberOfDeath: totalDeathUpdated,
+                numberOfIncidents: totalIncidentUpdated,
+                numberOfInjured: totalInjuredUpdated,
+                numberOfMissing: totalMissingUpdated,
+            });
+            // setTempIncidentData({
+            //     ...incidentData,
+            //     numberOfDeath: totalDeathUpdated,
+            //     numberOfIncidents: totalIncidentUpdated,
+            //     numberOfInjured: totalInjuredUpdated,
+            //     numberOfMissing: totalMissingUpdated,
+            // });
+        } else {
+            const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
+
+
+            const totalIncidentUpdated = numberOfIncidents;
+            const totalDeathUpdated = numberOfDeath;
+            const totalMissingUpdated = numberOfMissing;
+            const totalInjuredUpdated = numberOfInjured;
+            setIncidentData({
+                ...incidentData,
+                numberOfDeath: totalDeathUpdated,
+                numberOfIncidents: totalIncidentUpdated,
+                numberOfInjured: totalInjuredUpdated,
+                numberOfMissing: totalMissingUpdated,
+            });
+        }
+    }, [addedHazardFields]);
 
     const handleNextBtn = () => {
         // if (!filterDateType) {
@@ -724,6 +769,7 @@ const Bulletin = (props: Props) => {
             }
 
             if (progress === 1) {
+                console.log('This is province ddata');
                 setBulletinCovid({
                     covid24hrsStat: covid24hrsStatData,
                     covidProvinceWiseTotal: covidProvinceWiseData,
@@ -817,6 +863,20 @@ const Bulletin = (props: Props) => {
         setBulletinEditData({});
         setBulletinFeedback({ feedback: {} });
     }, []);
+    useEffect(() => {
+        if (lossData && lossData.length > 0) {
+            const summary = calculateSummary(lossData);
+            setTempIncidentData({
+                numberOfIncidents: summary.count,
+                numberOfDeath: summary.peopleDeathCount,
+                numberOfMissing: summary.peopleMissingCount,
+                numberOfInjured: summary.peopleInjuredCount,
+                estimatedLoss: summary.estimatedLoss,
+                roadBlock: summary.infrastructureDestroyedRoadCount,
+                cattleLoss: summary.livestockDestroyedCount,
+            });
+        }
+    }, [lossData]);
     // eslint-disable-next-line consistent-return
     useEffect(() => {
         if (lossData && lossData.length > 0) {
@@ -830,15 +890,7 @@ const Bulletin = (props: Props) => {
                 roadBlock: summary.infrastructureDestroyedRoadCount,
                 cattleLoss: summary.livestockDestroyedCount,
             });
-            setTempIncidentData({
-                numberOfIncidents: summary.count,
-                numberOfDeath: summary.peopleDeathCount,
-                numberOfMissing: summary.peopleMissingCount,
-                numberOfInjured: summary.peopleInjuredCount,
-                estimatedLoss: summary.estimatedLoss,
-                roadBlock: summary.infrastructureDestroyedRoadCount,
-                cattleLoss: summary.livestockDestroyedCount,
-            });
+
             setgenderWiseLoss({
                 male: summary.peopleDeathMaleCount,
                 female: summary.peopleDeathFemaleCount,
