@@ -22,7 +22,7 @@ import DateOutput from '#components/DateOutput';
 import IncidentFeedbacksModal from '#components/IncidentFeedbacksModal';
 import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
 
-import { getYesterday } from '#utils/common';
+import { convertDateAccToLanguage, getYesterday } from '#utils/common';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
 import { languageSelector, sourcesSelector } from '#selectors';
@@ -268,7 +268,8 @@ class IncidentItem extends React.PureComponent {
                         </h3>
                         <DateOutput
                             className={styles.date}
-                            value={incidentOn}
+                            value={convertDateAccToLanguage(new Date(incidentOn)
+                                .toLocaleDateString(), language)}
                             language={language}
                         />
                     </header>

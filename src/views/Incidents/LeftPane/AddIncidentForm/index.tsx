@@ -126,7 +126,7 @@ interface State {
 type ReduxProps = OwnProps;
 type Props = NewProps<ReduxProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidentRequest: {
         url: ({ props: { incidentServerId } }) => (incidentServerId
             ? `/incident/${incidentServerId}/` : '/incident/'),
@@ -229,9 +229,9 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         this.tabs = (language: string) => ({
             general: language === 'en' ? 'General' : 'सामान्य',
             loss: language === 'en' ? 'Loss' : 'घाटा',
-            peopleLoss: language === 'en' ? 'People Loss' : 'मान्छे हानि',
-            familyLoss: language === 'en' ? 'Family Loss' : 'पारिवारिक हानि',
-            livestockLoss: language === 'en' ? 'Livestock Loss' : 'पशुधन हानि',
+            peopleLoss: language === 'en' ? 'People Loss' : 'मानवीय क्षेति',
+            familyLoss: language === 'en' ? 'Family Loss' : 'पारिवारिक क्षेति',
+            livestockLoss: language === 'en' ? 'Livestock Loss' : 'पशु चौपाया क्षेति',
         });
 
         const {
@@ -564,7 +564,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                                         transparent
                                         iconName="close"
                                         onClick={closeModal}
-                                        title="Close Modal"
+                                        title={t('Close Modal')}
 
                                         confirmationMessage={t('Are you sure you want to close the form?')}
                                     />

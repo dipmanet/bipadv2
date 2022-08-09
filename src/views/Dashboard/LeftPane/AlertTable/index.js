@@ -101,7 +101,7 @@ class AlertTable extends React.PureComponent {
             },
             {
                 key: 'expireOn',
-                value: { title: language === 'en' ? 'Expires on' : 'म्याद सकिने' },
+                value: { title: language === 'en' ? 'Expires on' : 'अलर्ट जारी रहेको समय' },
                 comparator: (a, b, d) => compareDate(a.expireOn, b.expireOn, d),
 
                 cellRenderer: TableDateCell,
