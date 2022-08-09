@@ -354,7 +354,7 @@ class IncidentItem extends React.PureComponent {
                                         <>
                                             <TextOutput
                                                 label={t('Source')}
-                                                value={sources[source]}
+                                                value={t(sources[source])}
                                                 alwaysVisible
                                                 className={styles.source}
                                             />

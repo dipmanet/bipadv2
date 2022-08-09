@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
     translation: {
+        nepal_police: 'nepal_police',
         'Name and contact number of technical staff': 'Name and contact number of technical staff',
         Scale: 'Scale',
         'Total capacity of the open space.': 'Total capacity of the open space.',
@@ -927,6 +929,7 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        nepal_police: 'नेपाल_प्रहरी',
         'Name and contact number of technical staff': 'प्राविधिक कर्मचारीहरूको नाम र सम्पर्क नम्बर',
         Scale: 'मापन',
         'Total capacity of the open space.': 'खुल्ला ठाउँ (OpenSpace) को कुल क्षमता',
