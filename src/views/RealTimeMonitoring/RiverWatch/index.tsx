@@ -2,6 +2,7 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
 import { Translation } from 'react-i18next';
@@ -34,7 +35,7 @@ interface Props {
     closeModal?: () => void;
 }
 
-interface RealTimeRiver extends RealTimeRiverOld{
+interface RealTimeRiver extends RealTimeRiverOld {
     stationSeriesId?: number;
 }
 
@@ -150,7 +151,7 @@ class RiverWatch extends React.PureComponent<Props> {
                         <Modal
                             // closeOnEscape
                             // onClose={closeModal}
-                            className={styles.riverWatchModal}
+                            className={_cs(styles.riverWatchModal, styles.languageFont)}
                         >
                             <ModalHeader
                                 title={t('River Watch')}
