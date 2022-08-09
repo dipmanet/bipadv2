@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-indent-props */
@@ -11,6 +12,7 @@ import { _cs } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Button from '#rsca/Button';
 import Bbox from '#resources/icons/bbox.svg';
 import SortableListView from '#rscv/SortableListView';
@@ -21,6 +23,7 @@ import OpacityInput from '#components/OpacityInput';
 
 import styles from './styles.scss';
 import { MapChildContext } from '#re-map/context';
+import { languageSelector } from '#selectors';
 
 interface Props {
     className?: string;
@@ -30,14 +33,20 @@ interface State {
     showOpacityInput: boolean;
     showLegend: boolean;
 }
-const ActiveLayer = ({
-    className,
-    layer,
-    onRemoveButtonClick,
-    onOpacityChange,
-    showLegend,
-    showOpacityInput,
-}) => {
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+const ActiveLayer = (
+    {
+        className,
+        layer,
+        onRemoveButtonClick,
+        onOpacityChange,
+        showLegend,
+        showOpacityInput,
+
+    }, language,
+) => {
     const { map } = useContext(MapChildContext);
 
     const zoomToBbox = () => {
@@ -50,7 +59,15 @@ const ActiveLayer = ({
         <div className={styles.activeLayer}>
             <header className={styles.header}>
                 <h4 className={styles.heading}>
-                    {layer.fullName || layer.title}
+                    {/* {layer.fullName || layer.title} */}
+                    {language === 'en' ? layer.fullName
+                        ? layer.fullName
+                        : layer.title
+                        : layer.fullName
+                            ? layer.fullName
+                            : layer.titleNe
+                    }
+
                 </h4>
                 <Button
                     transparent
@@ -84,6 +101,7 @@ const ActiveLayer = ({
                 {showLegend && (
                     <LayerLegend
                         layer={layer}
+                        language={language}
                     />
                 )}
             </div>
@@ -140,7 +158,7 @@ class ActiveLayers extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const { className } = this.props;
+        const { className, language: { language } } = this.props;
         const {
             activeLayers,
         } = this.context;
@@ -193,7 +211,7 @@ class ActiveLayers extends React.PureComponent<Props, State> {
                                 className={styles.content}
                                 itemClassName={styles.activeLayerContainer}
                                 data={data}
-                                renderer={ActiveLayer}
+                                renderer={d => ActiveLayer(d, language)}
                                 rendererParams={this.getRendererParams}
                                 keySelector={d => String(d.id)}
                                 onChange={this.handleChange}
@@ -209,4 +227,4 @@ class ActiveLayers extends React.PureComponent<Props, State> {
 
 ActiveLayers.contextType = RiskInfoLayerContext;
 
-export default ActiveLayers;
+export default connect(mapStateToProps)(ActiveLayers);

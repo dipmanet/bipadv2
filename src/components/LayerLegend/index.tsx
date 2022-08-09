@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent */
@@ -170,6 +171,7 @@ const LayerLegend = (props: Props) => {
     const {
         className,
         layer,
+        language,
     } = props;
 
     if (!layer) {
@@ -180,7 +182,17 @@ const LayerLegend = (props: Props) => {
         <div className={_cs(className, styles.legend, 'map-legend-container')}>
             <header className={styles.header}>
                 <h5 className={styles.heading}>
-                    {layer.legendTitle || 'Legend'}
+                    {/* {layer.legendTitle || 'Legend'} */}
+                    {language === 'en' ? layer.legendTitle
+                        ? layer.legendTitle
+                        : 'Legend'
+                        : layer.legendTitleNe
+                            ? layer.legendTitleNe
+                            : layer.legendTitle
+                                ? layer.legendTitle
+                                : 'Legend'
+                    }
+
                 </h5>
             </header>
             {layer.type === 'raster' && (

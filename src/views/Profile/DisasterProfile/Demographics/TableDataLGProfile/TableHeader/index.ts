@@ -251,7 +251,7 @@ export const TableHeader = () => (
             },
             {
                 category: 'Buildings by Type of Superstructure',
-                categoryNe: 'सुपरस्ट्रक्चरको प्रकार अनुसार भवनहरू',
+                categoryNe: 'सुपरस्ट्रक्चरको आधारमा भवनका प्रकार ',
 
                 subCategory: ['Adobe/Mud Construction', 'Bamboo', 'Timber', 'Cement Mortar - Brick',
                     'Cement Mortar - Stone', 'Mud Mortar - Brick',

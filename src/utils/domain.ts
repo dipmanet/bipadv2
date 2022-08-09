@@ -1642,13 +1642,13 @@ export const LGProfileMigrationData = (lgProfileData, summationLGProfileMigratio
         },
         {
             key: 'notPresentInsideNepal',
-            label: language === 'en' ? 'Not present,inside Nepal' : 'उपस्‍थित छेैन नेपाल भित्र',
+            label: language === 'en' ? 'Not present,inside Nepal' : 'नेपाल भित्र, उपस्‍थित छेैन ',
             value: lgProfileData.migration.notPresentInsideNepal ? lgProfileData.migration.notPresentInsideNepal : 0,
             percentage: lgProfileData.migration.notPresentInsideNepal ? (lgProfileData.migration.notPresentInsideNepal / summationLGProfileMigration) * 100 : 0,
         },
         {
             key: 'notPresentOutsideNepal',
-            label: language === 'en' ? 'Not Present,Outside Nepal' : 'उपस्‍थित छेैन नेपाल बाहिर',
+            label: language === 'en' ? 'Not Present,Outside Nepal' : 'नेपाल बाहिर,उपस्‍थित छेैन ',
             value: lgProfileData.migration.notPresentOutsideNepal ? lgProfileData.migration.notPresentOutsideNepal : 0,
             percentage: lgProfileData.migration.notPresentOutsideNepal ? (lgProfileData.migration.notPresentOutsideNepal / summationLGProfileMigration) * 100 : 0,
         },
@@ -1678,19 +1678,19 @@ export const LGProfileEducationLevelData = (lgProfileData, SummationLGProfileEdu
         },
         {
             key: 'slcOrEquivalent',
-            label: language === 'en' ? 'SLC or equivalent' : 'एसएलसी वा समकक्ष',
+            label: language === 'en' ? 'SLC or equivalent' : 'एसएलसी वा सो सरह',
             value: lgProfileData.educationLevel.slcOrEquivalent ? lgProfileData.educationLevel.slcOrEquivalent : 0,
             percentage: lgProfileData.educationLevel.slcOrEquivalent ? (lgProfileData.educationLevel.slcOrEquivalent / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'intermediateOrEquivalent',
-            label: language === 'en' ? 'Intermediate or equivalent' : 'मध्यवर्ती वा समकक्ष',
+            label: language === 'en' ? 'Intermediate or equivalent' : 'मध्यामिक वा सो सरह',
             value: lgProfileData.educationLevel.intermediateOrEquivalent ? lgProfileData.educationLevel.intermediateOrEquivalent : 0,
             percentage: lgProfileData.educationLevel.intermediateOrEquivalent ? (lgProfileData.educationLevel.intermediateOrEquivalent / SummationLGProfileEducationLevel) * 100 : 0,
         },
         {
             key: 'bachelorOrEquivalent',
-            label: language === 'en' ? 'Bachelor or Equivalent' : 'स्नातक वा समकक्ष',
+            label: language === 'en' ? 'Bachelor or Equivalent' : 'स्नातक वा सो सरह',
             value: lgProfileData.educationLevel.bachelorOrEquivalent ? lgProfileData.educationLevel.bachelorOrEquivalent : 0,
             percentage: lgProfileData.educationLevel.bachelorOrEquivalent ? (lgProfileData.educationLevel.bachelorOrEquivalent / SummationLGProfileEducationLevel) * 100 : 0,
         },

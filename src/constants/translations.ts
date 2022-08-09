@@ -938,7 +938,7 @@ export const npTranslation = {
         'Major Agricultural products': 'प्रमुख कृषि उत्पादनहरू',
         'Physical Structure of House': 'घरको भौतिक संरचना',
         'Majority of building type': 'भवन प्रकार को बहुमत',
-        'Building by Type of Superstructure': 'सुपरस्ट्रक्चर को प्रकार द्वारा निर्माण',
+        'Building by Type of Superstructure': 'सुपरस्ट्रक्चरको आधारमा भवनका प्रकार',
         'Majority of building': 'भवनको बहुमत',
         'Buildings by Type of Foundation': 'फाउन्डेशनको प्रकार अनुसार भवनहरू',
 
@@ -1051,7 +1051,7 @@ export const npTranslation = {
 
         'Climate change': 'जलवायु परिवर्तन',
         Layers: 'तहहरू',
-        'Show visualizations': 'भिजुअलाइजेशन हेर्नुहोस',
+        'Show visualizations': 'Visualizations हेर्नुहोस',
         DATASET: 'डाटासेट',
         VISUALIZATION: 'भिजुअलाइजेशन',
         'Layer details': 'तह विवरण',

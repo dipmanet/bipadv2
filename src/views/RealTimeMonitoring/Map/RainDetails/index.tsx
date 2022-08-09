@@ -113,7 +113,7 @@ class RainDetails extends React.PureComponent<Props> {
             },
             {
                 key: 'value',
-                label: language === 'en' ? 'VALUE (mm)' : 'VALUE (मिमी)',
+                label: language === 'en' ? 'VALUE (mm)' : 'मान (मिमी)',
                 order: 2,
                 modifier: row => `${row.value || '-'}`,
             },

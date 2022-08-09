@@ -102,7 +102,13 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                 </div>
                 {data.shortDescription && (
                     <div className={_cs('layer-selection-item-short-description', styles.shortDescription)}>
-                        {data.shortDescription}
+                        {language === 'en'
+                            ? data.shortDescription
+                            : data.shortDescriptionNe === undefined
+                                ? data.shortDescription
+                                : data.shortDescriptionNe
+
+                        }
                     </div>
                 )}
             </div>

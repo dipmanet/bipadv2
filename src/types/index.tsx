@@ -180,10 +180,14 @@ export interface VulnerabilityType {
     id: string;
     indicatorType: 'positive' | 'negative';
     shortDescription?: string;
+    shortDescriptionNe?: string;
+    legendTitle?: string;
+    legendTitleNe?: string;
     children: VulnerabilityType[];
     isParent?: boolean;
-    valueType: 'index' | 'count';
+    valueType?: 'index' | 'count';
     title: string;
+    titleNe?: string;
     suffix?: string;
     iconName?: string;
 }
