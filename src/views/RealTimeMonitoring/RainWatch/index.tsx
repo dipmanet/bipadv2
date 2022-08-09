@@ -2,6 +2,7 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
 import { Translation } from 'react-i18next';
@@ -191,7 +192,7 @@ class RainWatch extends React.PureComponent<Props> {
                         <Modal
                             // closeOnEscape
                             // onClose={closeModal}
-                            className={styles.rainWatchModal}
+                            className={_cs(styles.rainWatchModal, styles.languageFont)}
                         >
 
                             <ModalHeader
