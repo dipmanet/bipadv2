@@ -134,6 +134,7 @@ class MiniEarthquake extends React.PureComponent<Props> {
                         modal={(
                             <Earthquake
                                 realTimeEarthquake={realTimeEarthquake}
+                                language={language}
                             />
                         )}
                     />

@@ -157,7 +157,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                 return (average && average.value) ? (
                     <div className={className}>
                         {average.value}
-                        mm
+                        {language === 'en' ? 'mm' : 'मिमि'}
                     </div>
                 ) : undefined;
             },
