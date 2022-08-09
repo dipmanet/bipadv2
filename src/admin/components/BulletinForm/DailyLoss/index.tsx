@@ -180,7 +180,6 @@ const Bulletin = (props: Props) => {
         }
     };
     const handleHazardRemoveItem = (removeHazard, id) => {
-        console.log('This is hazard', removeHazard);
         if (removeHazard) {
             handleSameHazardRemove(removeHazard, id);
         }
@@ -191,7 +190,6 @@ const Bulletin = (props: Props) => {
 
     const getRegionValue = (distCoordinate) => {
         const { provinceId, districtId, municipalityId } = distCoordinate;
-        console.log('This is data', addedHazardProvinceId);
         // setAddedHazardProvinceId(provinceId);
         if (provinceId && districtId && municipalityId) {
             return { adminLevel: 3, geoarea: municipalityId };
@@ -275,9 +273,6 @@ const Bulletin = (props: Props) => {
         setEndingTime(e.target.value);
         setFilterDateType('');
     };
-    const test = Object.values(addedHazardFields);
-    console.log('This is test', test);
-    console.log('This is added hazard field', addedHazardFields);
     return (
         <>
             {loading

@@ -278,6 +278,7 @@ const Bulletin = (props: Props) => {
 
     const [selectedTemperatureImageType, setSelectedTemperatureImageType] = useState(null);
     const [tempIncidentData, setTempIncidentData] = useState(incidentSummary);
+    const [tempPeopleLossData, setTempPeopleLoss] = useState(peopleLoss);
     const [tempIncidentDisable, setTempIncidentDisable] = useState(false);
 
 
@@ -320,7 +321,6 @@ const Bulletin = (props: Props) => {
 
 
     const handleRefreshCovidData = () => {
-        console.log('Entered here', loading);
         setLoading(true);
         covidNationalInfo.do({ setCovidNational, dateAltTo });
         covidQuarantine.do({ setCovidQurantine, setLoading });
@@ -438,6 +438,7 @@ const Bulletin = (props: Props) => {
             if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
                 setTempIncidentData(bulletinEditData.incidentSummary);
                 setTempIncidentDisable(true);
+                setTempPeopleLoss(bulletinEditData.peopleLoss);
             }
         }
     }, [bulletinEditData]);
@@ -526,9 +527,8 @@ const Bulletin = (props: Props) => {
     const handleIncidentChange = (e, field) => {
         const newState = produce(incidentData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState[field] = e;
+            deferedState[field] = Number(e);
         });
-        console.log('This incident field', field);
         setIncidentData(newState);
         setTempIncidentData(newState);
     };
@@ -536,8 +536,9 @@ const Bulletin = (props: Props) => {
     const handlePeopleLossChange = (e, field, subfield) => {
         const newData = { ...peopleLossData };
         const newFieldData = newData[field];
-        const newSubData = { ...newFieldData, [subfield]: e.target.value };
+        const newSubData = { ...newFieldData, [subfield]: Number(e.target.value) };
         setPeopleLoss({ ...newData, [field]: newSubData });
+        setTempPeopleLoss({ ...newData, [field]: newSubData });
     };
 
     const handlehazardwiseLoss = (e, field, subfield) => {
@@ -546,13 +547,9 @@ const Bulletin = (props: Props) => {
         const newSubData = { ...newFieldData, [subfield]: e };
         setHazardwise({ ...newData, [field]: newSubData });
     };
-    console.log('This is final incident data', incidentData);
 
     // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
-        console.log('This is incident data', incidentData);
-
-
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
@@ -694,18 +691,96 @@ const Bulletin = (props: Props) => {
             setActive(progress - 1);
         }
     };
-    console.log('This is temp incident', tempIncidentData);
+
     useEffect(() => {
         const addedHazardFieldCollection = Object.values(addedHazardFields);
-        console.log('This is data', addedHazardFieldCollection);
         if (addedHazardFieldCollection.length) {
+            const p1Data = addedHazardFieldCollection.filter(i => i.provinceId === 1);
+            const p1DataDeath = p1Data.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const p1DataMissing = p1Data.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const p1DataInjured = p1Data.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+            const madheshProv = addedHazardFieldCollection.filter(i => i.provinceId === 2);
+            const madheshProvDeath = madheshProv.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const madheshProvMissing = madheshProv.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const madheshProvInjured = madheshProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+
+            const bagmatiProv = addedHazardFieldCollection.filter(i => i.provinceId === 3);
+            const bagmatiProvDeath = bagmatiProv.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const bagmatiProvMissing = bagmatiProv.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const bagmatiProvInjured = bagmatiProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+
+
+            const gandakiProv = addedHazardFieldCollection.filter(i => i.provinceId === 4);
+            const gandakiProvDeath = gandakiProv.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const gandakiProvMissing = gandakiProv.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const gandakiProvInjured = gandakiProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+
+            const lumbiniProv = addedHazardFieldCollection.filter(i => i.provinceId === 5);
+            const lumbiniProvDeath = lumbiniProv.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const lumbiniProvMissing = lumbiniProv.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const lumbiniProvInjured = lumbiniProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+
+            const karnaliProv = addedHazardFieldCollection.filter(i => i.provinceId === 6);
+            const karnaliProvDeath = karnaliProv.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const karnaliProvMissing = karnaliProv.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const karnaliProvInjured = karnaliProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+
+            const sudurPaschimProv = addedHazardFieldCollection.filter(i => i.provinceId === 7);
+            const sudurPaschimProvDeath = sudurPaschimProv.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+            const sudurPaschimProvMissing = sudurPaschimProv.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+            const sudurPaschimProvInjured = sudurPaschimProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+
+
             const totalDeath = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
             const totalMissing = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
             const totalInjured = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
             const totalIncident = addedHazardFieldCollection.length;
             const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
+            const provincialLevelData = {
+                bagmati: {
+                    death: bagmatiProvDeath + tempPeopleLossData.bagmati.death,
+                    missing: bagmatiProvMissing + tempPeopleLossData.bagmati.missing,
+                    injured: bagmatiProvInjured + tempPeopleLossData.bagmati.injured,
 
+                },
+                gandaki: {
+                    death: gandakiProvDeath + tempPeopleLossData.gandaki.death,
+                    missing: gandakiProvMissing + tempPeopleLossData.gandaki.missing,
+                    injured: gandakiProvInjured + tempPeopleLossData.gandaki.injured,
 
+                },
+                karnali: {
+                    death: karnaliProvDeath + tempPeopleLossData.karnali.death,
+                    missing: karnaliProvMissing + tempPeopleLossData.karnali.missing,
+                    injured: karnaliProvInjured + tempPeopleLossData.karnali.injured,
+
+                },
+                lumbini: {
+                    death: lumbiniProvDeath + tempPeopleLossData.lumbini.death,
+                    missing: lumbiniProvMissing + tempPeopleLossData.lumbini.missing,
+                    injured: lumbiniProvInjured + tempPeopleLossData.lumbini.injured,
+
+                },
+                p1: {
+                    death: p1DataDeath + tempPeopleLossData.p1.death,
+                    missing: p1DataMissing + tempPeopleLossData.p1.missing,
+                    injured: p1DataInjured + tempPeopleLossData.p1.injured,
+
+                },
+                p2: {
+                    death: madheshProvDeath + tempPeopleLossData.p2.death,
+                    missing: madheshProvMissing + tempPeopleLossData.p2.missing,
+                    injured: madheshProvInjured + tempPeopleLossData.p2.injured,
+
+                },
+                sudurpaschim: {
+                    death: sudurPaschimProvDeath + tempPeopleLossData.sudurpaschim.death,
+                    missing: sudurPaschimProvMissing + tempPeopleLossData.sudurpaschim.missing,
+                    injured: sudurPaschimProvInjured + tempPeopleLossData.sudurpaschim.injured,
+                },
+
+            };
+            setPeopleLoss(provincialLevelData);
             const totalIncidentUpdated = totalIncident + numberOfIncidents;
             const totalDeathUpdated = totalDeath + numberOfDeath;
             const totalMissingUpdated = totalMissing + numberOfMissing;
@@ -717,17 +792,53 @@ const Bulletin = (props: Props) => {
                 numberOfInjured: totalInjuredUpdated,
                 numberOfMissing: totalMissingUpdated,
             });
-            // setTempIncidentData({
-            //     ...incidentData,
-            //     numberOfDeath: totalDeathUpdated,
-            //     numberOfIncidents: totalIncidentUpdated,
-            //     numberOfInjured: totalInjuredUpdated,
-            //     numberOfMissing: totalMissingUpdated,
-            // });
         } else {
             const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
+            const provincialLevelData = {
+                bagmati: {
+                    death: tempPeopleLossData.bagmati.death,
+                    missing: tempPeopleLossData.bagmati.missing,
+                    injured: tempPeopleLossData.bagmati.injured,
 
+                },
+                gandaki: {
+                    death: tempPeopleLossData.gandaki.death,
+                    missing: tempPeopleLossData.gandaki.missing,
+                    injured: tempPeopleLossData.gandaki.injured,
 
+                },
+                karnali: {
+                    death: tempPeopleLossData.karnali.death,
+                    missing: tempPeopleLossData.karnali.missing,
+                    injured: tempPeopleLossData.karnali.injured,
+
+                },
+                lumbini: {
+                    death: tempPeopleLossData.lumbini.death,
+                    missing: tempPeopleLossData.lumbini.missing,
+                    injured: tempPeopleLossData.lumbini.injured,
+
+                },
+                p1: {
+                    death: tempPeopleLossData.p1.death,
+                    missing: tempPeopleLossData.p1.missing,
+                    injured: tempPeopleLossData.p1.injured,
+
+                },
+                p2: {
+                    death: tempPeopleLossData.p2.death,
+                    missing: tempPeopleLossData.p2.missing,
+                    injured: tempPeopleLossData.p2.injured,
+
+                },
+                sudurpaschim: {
+                    death: tempPeopleLossData.sudurpaschim.death,
+                    missing: tempPeopleLossData.sudurpaschim.missing,
+                    injured: tempPeopleLossData.sudurpaschim.injured,
+                },
+
+            };
+            setPeopleLoss(provincialLevelData);
             const totalIncidentUpdated = numberOfIncidents;
             const totalDeathUpdated = numberOfDeath;
             const totalMissingUpdated = numberOfMissing;
@@ -769,7 +880,6 @@ const Bulletin = (props: Props) => {
             }
 
             if (progress === 1) {
-                console.log('This is province ddata');
                 setBulletinCovid({
                     covid24hrsStat: covid24hrsStatData,
                     covidProvinceWiseTotal: covidProvinceWiseData,
@@ -874,6 +984,50 @@ const Bulletin = (props: Props) => {
                 estimatedLoss: summary.estimatedLoss,
                 roadBlock: summary.infrastructureDestroyedRoadCount,
                 cattleLoss: summary.livestockDestroyedCount,
+            });
+            const p1Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 1);
+            const p2Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 2);
+            const p3Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 3);
+            const p4Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 4);
+            const p5Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 5);
+            const p6Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 6);
+            const p7Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 7);
+            setTempPeopleLoss({
+                p1: {
+                    death: calculateSummaryProvince(p1Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p1Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p1Data).peopleInjuredCount,
+                },
+                p2: {
+                    death: calculateSummaryProvince(p2Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p2Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p2Data).peopleInjuredCount,
+                },
+                bagmati: {
+                    death: calculateSummaryProvince(p3Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p3Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p3Data).peopleInjuredCount,
+                },
+                gandaki: {
+                    death: calculateSummaryProvince(p4Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p4Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p4Data).peopleInjuredCount,
+                },
+                lumbini: {
+                    death: calculateSummaryProvince(p5Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p5Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p5Data).peopleInjuredCount,
+                },
+                karnali: {
+                    death: calculateSummaryProvince(p6Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p6Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p6Data).peopleInjuredCount,
+                },
+                sudurpaschim: {
+                    death: calculateSummaryProvince(p7Data).peopleDeathCount,
+                    missing: calculateSummaryProvince(p7Data).peopleMissingCount,
+                    injured: calculateSummaryProvince(p7Data).peopleInjuredCount,
+                },
             });
         }
     }, [lossData]);
@@ -1189,7 +1343,6 @@ const Bulletin = (props: Props) => {
         // }
         />,
     ];
-    console.log('This is loading', loading);
 
     return (
 
