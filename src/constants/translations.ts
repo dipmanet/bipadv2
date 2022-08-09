@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        'Event On': 'Event On',
+        'Air Quality Index': 'Air Quality Index',
         'Social Security': 'Social Security',
         'Number of households': 'Number of households',
         Occupation: 'Occupation',
@@ -922,6 +924,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Event On': 'घटना घटेको मिति',
+        'Air Quality Index': 'वायु गुणस्तर सूचकांक',
         'Social Security': 'सामाजिक सुरक्षा',
         'Number of households': 'घरपरिवारको संख्या',
         Occupation: 'पेशा',
