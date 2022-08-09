@@ -122,6 +122,7 @@ class Minifire extends React.PureComponent<Props> {
                         modal={(
                             <Fire
                                 realTimeFire={realTimeFire}
+                                language={language}
                             />
                         )}
                     />
