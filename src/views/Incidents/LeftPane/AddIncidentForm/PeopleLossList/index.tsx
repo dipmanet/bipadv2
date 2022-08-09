@@ -74,7 +74,7 @@ const keySelector = (d: PageType.Field) => d.id;
 
 type Props = NewProps<OwnProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     listRequest: {
         url: '/loss-people/',
         query: ({ props: { lossServerId } }) => ({
@@ -132,7 +132,7 @@ class PeopleLossList extends React.PureComponent<Props, State> {
             },
             {
                 key: 'disability',
-                label: language === 'en' ? 'Disability' : 'असक्षमता',
+                label: language === 'en' ? 'Disability' : 'अपाङ्गता',
                 order: 4,
                 modifier: row => (isTruthy(row.disability) ? String(row.disability) : 'N/A'),
             },

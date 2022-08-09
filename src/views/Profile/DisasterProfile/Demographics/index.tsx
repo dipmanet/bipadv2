@@ -1656,7 +1656,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                         {
                                                                                             language === 'en'
                                                                                                 ? 'Population by Disability'
-                                                                                                : 'असक्षमता द्वारा जनसंख्या'
+                                                                                                : 'अपाङ्गता द्वारा जनसंख्या'
                                                                                         }
 
                                                                                     </h3>

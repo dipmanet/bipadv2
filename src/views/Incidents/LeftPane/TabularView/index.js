@@ -212,7 +212,7 @@ class TabularView extends React.PureComponent {
             },
             {
                 key: 'loss.peopleDeathDisabledCount',
-                value: { title: language === 'en' ? 'Disabled - People Death' : 'अशक्त - मनिस मृत्यु' },
+                value: { title: language === 'en' ? 'Disabled - People Death' : 'अपाङ्गता - मनिस मृत्यु' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleDeathDisabledCount'),
             },
@@ -242,7 +242,7 @@ class TabularView extends React.PureComponent {
             },
             {
                 key: 'loss.peopleMissingDisabledCount',
-                value: { title: language === 'en' ? 'Disabled - People Missing' : 'असक्षम - मनिस हराइरहेको' },
+                value: { title: language === 'en' ? 'Disabled - People Missing' : 'अपाङ्गता - मनिस हराइरहेको' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleMissingDisabledCount'),
             },
@@ -272,7 +272,7 @@ class TabularView extends React.PureComponent {
             },
             {
                 key: 'loss.peopleInjuredDisabledCount',
-                value: { title: language === 'en' ? 'Disabled - People Injured' : 'अशक्त - घाइते व्यक्तिहरू' },
+                value: { title: language === 'en' ? 'Disabled - People Injured' : 'अपाङ्गता - घाइते व्यक्तिहरू' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredDisabledCount'),
             },

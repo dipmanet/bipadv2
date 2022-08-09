@@ -82,7 +82,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                     return (waterLevel) ? (
                         <div className={className}>
                             {waterLevel.toFixed(3)}
-                            m
+                            {language === 'en' ? 'm' : 'मि'}
                         </div>
                     ) : undefined;
                 },
@@ -122,7 +122,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: language === 'en' ? 'Status' : 'स्थिति',
                 order: 6,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),
