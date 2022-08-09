@@ -19,6 +19,7 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loss from '#components/Loss';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const emptyObject = {};
 const emptyList = [];
@@ -117,7 +118,8 @@ class IncidentInfo extends React.PureComponent {
                                 </h3>
                                 <DateOutput
                                     className={styles.incidentDate}
-                                    value={incidentOn}
+                                    value={convertDateAccToLanguage(new Date(incidentOn)
+                                        .toLocaleDateString(), language)}
                                     language={language}
                                 />
                             </header>
