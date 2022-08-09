@@ -2,8 +2,10 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -20,6 +22,7 @@ import {
 } from '#utils/table';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 // original interface does not have all the properties so extended
 interface RealTimePollutionExtended extends RealTimePollution {
@@ -28,6 +31,7 @@ interface RealTimePollutionExtended extends RealTimePollution {
     createdOn?: string;
     aqiColor?: string;
     modifiedOn?: string;
+    language?: string;
 }
 interface Props {
     realTimePollution: RealTimePollutionExtended[];
@@ -46,10 +50,10 @@ class Pollution extends React.PureComponent<Props> {
         super(props);
 
         // TODO: add OandM by to riverWatch
-        this.pollutionHeader = [
+        this.pollutionHeader = language => ([
             {
                 key: 'name',
-                label: 'Location',
+                label: language === 'en' ? 'Location' : 'स्थान',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.name, b.name),
@@ -60,19 +64,21 @@ class Pollution extends React.PureComponent<Props> {
             },
             {
                 key: 'modifiedOn',
-                label: 'Date',
+                label: language === 'en' ? 'Date' : 'मिति',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
                 modifier: (row: RealTimePollutionExtended) => {
                     const { dateTime } = row;
                     // parsing date to appropiate format
-                    return (dateTime) ? dateTime.substring(0, dateTime.indexOf('T')) : undefined;
+                    return (dateTime)
+                        ? convertDateAccToLanguage(dateTime.substring(0, dateTime.indexOf('T')), language)
+                        : undefined;
                 },
             },
             {
                 key: 'time',
-                label: 'Time',
+                label: language === 'en' ? 'Time' : 'समय',
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
@@ -87,7 +93,7 @@ class Pollution extends React.PureComponent<Props> {
             },
             {
                 key: 'aqi',
-                label: 'AQI',
+                label: language === 'en' ? 'AQI' : 'AQI',
                 order: 4,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.aqi, b.aqi),
@@ -98,7 +104,7 @@ class Pollution extends React.PureComponent<Props> {
                     return (aqi) ? `${aqi.toFixed(2)}` : undefined;
                 },
             },
-        ];
+        ]);
     }
 
     private getClassName = (row: RealTimePollutionExtended) => {
@@ -131,48 +137,57 @@ class Pollution extends React.PureComponent<Props> {
         const {
             realTimePollution,
             closeModal,
+            language,
         } = this.props;
+        const pollutionHeader = this.pollutionHeader(language);
         const formattedTableData = convertNormalTableToCsv(realTimePollution,
-            this.pollutionHeader);
+            pollutionHeader);
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={closeModal}
-                className={styles.pollutionModal}
-            >
-                <ModalHeader
-                    title="Pollution"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    <Table
-                        rowClassNameSelector={this.getClassName}
-                        className={styles.pollutionTable}
-                        data={realTimePollution}
-                        headers={this.pollutionHeader}
-                        keySelector={pollutionSelector}
-                        defaultSort={defaultSort}
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <DangerButton onClick={closeModal}>
-                        Close
-                    </DangerButton>
-                    <DownloadButton
-                        value={formattedTableData}
-                        name="Pollution.csv"
-                    >
-                        Download
-                    </DownloadButton>
-                </ModalFooter>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={closeModal}
+                            className={_cs(styles.pollutionModal, styles.languageFont)}
+                        >
+                            <ModalHeader
+                                title={t('Pollution')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                <Table
+                                    rowClassNameSelector={this.getClassName}
+                                    className={styles.pollutionTable}
+                                    data={realTimePollution}
+                                    headers={pollutionHeader}
+                                    keySelector={pollutionSelector}
+                                    defaultSort={defaultSort}
+                                />
+                            </ModalBody>
+                            <ModalFooter>
+                                <DangerButton onClick={closeModal}>
+                                    {t('Close')}
+                                </DangerButton>
+                                <DownloadButton
+                                    value={formattedTableData}
+                                    name="Pollution.csv"
+                                >
+                                    {t('Download')}
+                                </DownloadButton>
+                            </ModalFooter>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

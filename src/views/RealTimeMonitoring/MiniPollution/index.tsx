@@ -204,6 +204,7 @@ class MiniPollution extends React.PureComponent<Props> {
                         modal={(
                             <Pollution
                                 realTimePollution={realTimePollution}
+                                language={language}
                             />
                         )}
                     />
