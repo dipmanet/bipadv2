@@ -168,7 +168,9 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasOpenSpace"
-                            label={t('Does the facility have open space?')}
+                            label={language === 'en'
+                                ? 'Does the facility have open space?'
+                                : 'के विद्यालयमा खुल्ला ठाउँ (OpenSpace) छ? '}
                             options={booleanConditionNe}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
@@ -179,13 +181,15 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             && (
                                 <TextInput
                                     faramElementName="areaOfOpenSpace"
-                                    label={t('Area of Open Space (Sq.Km) ')}
+                                    label={t('Area of Open Space (Sq.Km)')}
                                 />
                             )}
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
-                            label={t('Does the facility have disabled friendly infrastructure?')}
+                            label={language === 'en'
+                                ? 'Does the facility have disabled friendly infrastructure?'
+                                : 'के विद्यालयमा अपांग मैत्री पूर्वाधार निर्माण गरिएका छन्? '}
                             options={booleanConditionNe}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
@@ -223,7 +227,9 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             && (
                                 <TextInput
                                     faramElementName="specifyCommittee"
-                                    label={t('Disaster Management committee or related Clubs')}
+                                    label={language === 'en'
+                                        ? 'Disaster Management committee or related Clubs'
+                                        : 'यदी, गर्छ भने, यहाँ उल्लेख गर्नुहोस्र ।'}
                                 />
                             )}
                         <SelectInput
@@ -240,7 +246,9 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             && (
                                 <TextInput
                                     faramElementName="specifyAwarenessProgram"
-                                    label={t('Name of Disaster related awareness and training program conducted within the school.')}
+                                    label={language === 'en'
+                                        ? 'Name of Disaster related awareness and training program conducted within the school.'
+                                        : 'यदी, गर्छ भने, यहाँ उल्लेख गर्नुहोस्र ।'}
                                 />
                             )}
                         <SelectInput
@@ -258,7 +266,9 @@ const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
                             && (
                                 <TextInput
                                     faramElementName="specifyDisasterEducation"
-                                    label={t('Disaster related education provided by school')}
+                                    label={language === 'en'
+                                        ? 'Disaster related education provided by school'
+                                        : 'यदी, गर्छ भने, यहाँ उल्लेख गर्नुहोस्र ।'}
                                 />
                             )}
                         <SelectInput

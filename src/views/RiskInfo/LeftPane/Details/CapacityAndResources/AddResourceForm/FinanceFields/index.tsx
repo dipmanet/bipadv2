@@ -154,7 +154,9 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             && (
                                 <TextInput
                                     faramElementName="specifyInfrastructure"
-                                    label={t('Please specify,Disable friendly infrastructures')}
+                                    label={language === 'en'
+                                        ? 'Please specify,Disable friendly infrastructures'
+                                        : 'यदी, छ भने, यहाँ उल्लेख गर्नुहोस्र ।'}
                                 />
                             )}
 

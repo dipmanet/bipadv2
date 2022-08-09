@@ -1929,7 +1929,7 @@ export const capacityResource = [
             {
                 id: 1,
                 name: 'Preprimary',
-                nameNe: 'पूर्वप्राथमिक',
+                nameNe: 'पूर्व-प्राथमिक',
                 type: 'Preprimary',
             },
             {
@@ -1941,7 +1941,7 @@ export const capacityResource = [
             {
                 id: 3,
                 name: 'High School',
-                nameNe: 'उच्च विद्यालय',
+                nameNe: 'उच्च माध्यमिक विद्यालय',
                 type: 'High School',
             },
             {

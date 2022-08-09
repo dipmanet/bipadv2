@@ -118,7 +118,9 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         />
                         <NumberInput
                             faramElementName="bedCount"
-                            label={t('Number of available bed ')}
+                            label={language === 'en'
+                                ? 'Number of available bed '
+                                : 'उपलब्ध बेड संख्या'}
                         />
 
                         <NumberInput
@@ -751,7 +753,9 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasDisableFriendlyInfrastructure"
-                            label={t('Does the facility have disabled friendly infrastructure?')}
+                            label={language === 'en'
+                                ? 'Does the facility have disabled friendly infrastructure?'
+                                : 'के स्वास्थ्य संस्थाको भवन आपंग मैत्री छ? '}
                             options={booleanCondition}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
@@ -803,11 +807,14 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                                 <>
                                     <TextInput
                                         faramElementName="focalPersonName"
-                                        label={t('Disaster Focal Person Name')}
+                                        label={language === 'en'
+                                            ? 'Disaster Focal Person Name' : 'फोकल व्यक्तिको नाम'}
                                     />
                                     <TextInput
                                         faramElementName="focalPersonPhoneNumber"
-                                        label={t('Focal Person Contact Number')}
+                                        label={language === 'en'
+                                            ? 'Focal Person Contact Number'
+                                            : 'फोकल व्यक्तिको फोन न'}
                                     />
                                 </>
                             )}
@@ -815,7 +822,9 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasOpenSpace"
-                            label={t('Does the institution has open space?')}
+                            label={language === 'en'
+                                ? 'Does the institution has open space?'
+                                : 'के स्वास्थ्य संस्थामा खुल्ला ठाउँ (OpenSpace) छ? '}
                             options={booleanCondition}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
@@ -826,13 +835,17 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             && (
                                 <TextInput
                                     faramElementName="areaOfOpenSpace"
-                                    label={t('Area of Open Space (Sq.Km)')}
+                                    label={language === 'en'
+                                        ? 'Area of Open Space (Sq.Km)'
+                                        : 'खुल्ला ठाउँ (OpenSpace) क्षेत्रफल कति छ? '}
                                 />
                             )}
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasMedicineStorageSpace"
-                            label={t('Does the institution has medical storage space?')}
+                            label={language === 'en'
+                                ? 'Does the institution has medical storage space?'
+                                : 'चिकित्सा भण्डारण ठाउँ'}
                             options={booleanCondition}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
@@ -842,7 +855,8 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                             faramElementName="hasBackupElectricity"
-                            label={t('Does the institution have electricity backup?')}
+                            label={language === 'en'
+                                ? 'Does the institution have electricity backup?' : 'बिधुत आपूर्तिकोब्याकअप छ? '}
                             options={booleanCondition}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
@@ -863,7 +877,9 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                         />
                         <TextInput
                             faramElementName="remarksOnOpeningHours"
-                            label={t('Remarks on Opening Hours')}
+                            label={language === 'en'
+                                ? 'Remarks on Opening Hours'
+                                : 'खुल्ने समयमा टिप्पणी भए '}
                         />
                         <h1>{t('CONTACT')}</h1>
                         <TextInput

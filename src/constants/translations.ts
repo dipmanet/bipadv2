@@ -1,5 +1,9 @@
 export const enTranslation = {
     translation: {
+        'Name and contact number of technical staff': 'Name and contact number of technical staff',
+        Scale: 'Scale',
+        'Total capacity of the open space.': 'Total capacity of the open space.',
+        'Number of total employee trained in disaster management': 'Number of total employee trained in disaster management',
         'Event On': 'Event On',
         'Air Quality Index': 'Air Quality Index',
         'Social Security': 'Social Security',
@@ -514,7 +518,6 @@ export const enTranslation = {
 
         'Focal Person Contact Number': 'Focal Person Contact Number',
         'Does the institution has open space?': 'Does the institution has open space?',
-        'Area of Open Space (Sq.Km)': 'Area of Open Space (Sq.Km)',
         'Does the institution has medical storage space?': 'Does the institution has medical storage space?',
         'Does the institution have electricity backup?': 'Does the institution have electricity backup?',
         'OPENING HOUR': 'OPENING HOUR',
@@ -552,7 +555,7 @@ export const enTranslation = {
         'Is the school designed following building codes?': 'Is the school designed following building codes?',
         'Remarks on Building Code': 'Remarks on Building Code',
         'Does the facility have open space?': 'Does the facility have open space?',
-        'Area of Open Space (Sq.Km) ': 'Area of Open Space (Sq.Km) ',
+        'Area of Open Space (Sq.Km) ': 'Area of Open Space (Sq.Km)',
         'Does the facility have evacuation route?': 'Does the facility have evacuation route?',
         'Does the school have disaster committee or/and other related clubs?': 'Does the school have disaster committee or/and other related clubs?',
         'Disaster Management committee or related Clubs': 'Disaster Management committee or related Clubs',
@@ -924,6 +927,10 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Name and contact number of technical staff': 'प्राविधिक कर्मचारीहरूको नाम र सम्पर्क नम्बर',
+        Scale: 'मापन',
+        'Total capacity of the open space.': 'खुल्ला ठाउँ (OpenSpace) को कुल क्षमता',
+        'Number of total employee trained in disaster management': 'विपद् व्यवस्थापनमा तालिम प्राप्‍त कुल कर्मचारीको संख्या',
         'Event On': 'घटना घटेको मिति',
         'Air Quality Index': 'वायु गुणस्तर सूचकांक',
         'Social Security': 'सामाजिक सुरक्षा',
@@ -1211,7 +1218,7 @@ export const npTranslation = {
         'Driver’s Alternative Number': 'चालकको वैकल्पिक नम्बर',
         'Condition of Fire fighting apparatus': 'आगो निभाउने उपकरणको स्थिति',
 
-        'Select either you are entering the details of vehicle center such as bus parks and stops or vehicle committee.': 'Select either you are entering the details of vehicle center such as bus parks and stops or vehicle committee.',
+        'Select either you are entering the details of vehicle center such as bus parks and stops or vehicle committee.': 'तपाईंले बस पार्क र स्टपहरू वा सवारी समिति जस्ता सवारी साधन केन्द्रको विवरणहरू प्रविष्ट गरिरहनुभएको छ कि त चयन गर्नुहोस्।',
         'Number of transportation facilities': 'यातायत साधनको संख्या',
         'Are disable friendly vehicle available?': 'अपांग मैत्री यातायतको साधन उपलब्ध छ? ',
         'Is the building designed following building code?': 'के भवन निर्माण building  code  अनुसार डिजाइन गरिएको हो?',
@@ -1270,7 +1277,7 @@ export const npTranslation = {
         'Name of the tower (Radio tower)': 'टावरको नाम (रेडियो टावर)',
         'Average coverage radius in km': 'औसत कभरेज Radius (KM)',
         'Frequency in megahertz': 'मेगाहेर्ट्जमा frequency ',
-        'Does the facility have internet service available?': 'Does the facility have internet service available?',
+        'Does the facility have internet service available?': 'के इन्टरनेट सेवा उपलब्ध छ?',
 
         'Does the facility have electricity facility?': 'के बिधुतको सुविधा उपलब्ध छ?',
         'If other facilities are available, please specify.': 'अन्य सुविधा उपलब्ध छ भने,कृपया उल्‍लेख गर्नुहोस‍ ।',
@@ -1436,10 +1443,9 @@ export const npTranslation = {
 
         'Focal Person Contact Number': 'Focal Person Contact Number',
         'Does the institution has open space?': 'Does the institution has open space?',
-        'Area of Open Space (Sq.Km)': 'खुल्ला ठाउँ (OpenSpace) क्षेत्रफल कति छ? ',
         'Does the institution has medical storage space?': 'Does the institution has medical storage space?',
         'Does the institution have electricity backup?': 'Does the institution have electricity backup?',
-        'Remarks on Opening Hours': 'Remarks on Opening Hours',
+        'Remarks on Opening Hours': 'खुल्ने समयमा टिप्पणी भए ',
 
 
         'Operator Type': 'अपरेटरको प्रकार',
@@ -1472,7 +1478,7 @@ export const npTranslation = {
         'Is the school designed following building codes?': 'के विद्यालय building code पालना गरि निर्माण गरिएको हो? ',
         'Remarks on Building Code': 'भवन संहिता मा टिप्पणी',
         'Does the facility have open space?': 'के भवनमा खुल्ला ठाउँ (OpenSpace) छ?',
-        'Area of Open Space (Sq.Km) ': 'यदी छ भने, खुल्ला ठाउँको क्षेत्रफल कति छ?',
+        'Area of Open Space (Sq.Km)': 'यदी छ भने, खुल्ला ठाउँको क्षेत्रफल कति छ?',
         'Does the facility have disabled friendly infrastructure?': 'के भवनमा अपांग मैत्री पूर्वाधार निर्माण गरिएका छन्?',
         'Disable Friendly Infrastructures': 'यदी, छ भने, यहाँ उल्लेख गर्नुहोस्र ।',
         'Does the facility have evacuation route?': 'के भवनमा evacuation route छ?',

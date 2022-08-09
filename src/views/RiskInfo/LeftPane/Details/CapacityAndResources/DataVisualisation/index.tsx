@@ -378,7 +378,7 @@ const visualizationKeyValues = [
                 labelNe: 'शिक्षा संस्था',
                 key: 'type',
                 values: ['Preprimary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
-                valuesNe: ['पूर्वप्राथमिक', 'आधारभूत शिक्षा', 'उच्च विद्यालय', 'कलेज', 'विश्वविद्यालय', 'परम्परागत शिक्षा', 'पुस्तकालय', 'अन्य'],
+                valuesNe: ['पूर्व-प्राथमिक', 'आधारभूत शिक्षा', 'उच्च माध्यमिक विद्यालय', 'कलेज', 'विश्वविद्यालय', 'परम्परागत शिक्षा', 'पुस्तकालय', 'अन्य'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
@@ -389,7 +389,7 @@ const visualizationKeyValues = [
             },
             {
                 label: 'Operator Type',
-                labelNe: 'अपरेटर प्रकार',
+                labelNe: 'अपरेटरको प्रकार',
                 key: 'operatorType',
                 values: ['Government', 'Private', 'Community', 'Other'],
                 valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],

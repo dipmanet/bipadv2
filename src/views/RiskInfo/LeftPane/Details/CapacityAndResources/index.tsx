@@ -2514,7 +2514,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                                 <AccentModalButton
                                                                     iconName="add"
-                                                                    title="Add New Resource"
+                                                                    title={t('Add New Resource')}
                                                                     transparent
                                                                     onClick={this.resourceAdd}
 

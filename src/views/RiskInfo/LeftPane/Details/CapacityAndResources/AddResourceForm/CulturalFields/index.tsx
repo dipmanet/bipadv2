@@ -61,7 +61,7 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
                                 <>
                                     <TextInput
                                         faramElementName="areaOfOpenSpace"
-                                        label={t('Area of open space (Sq.Km)')}
+                                        label={t('Area of Open Space (Sq.Km)')}
                                     />
                                     <NumberInput
                                         faramElementName="capacityOfOpenSpace"

@@ -1026,7 +1026,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                         label={(faramValues.resourceType
                                             === 'health') ? t('Facility Type') : faramValues.resourceType
                                                 === 'electricity' ? (language === 'en' ? 'Component' : 'प्रकार') : faramValues.resourceType
-                                                    === 'watersupply' ? 'Scale' : t('Type')}
+                                                    === 'watersupply' ? t('Scale') : t('Type')}
                                         autoFocus
                                         optionsClassName={styles.optionsClassName}
                                         iconName={'capResAddFormDropdown'}

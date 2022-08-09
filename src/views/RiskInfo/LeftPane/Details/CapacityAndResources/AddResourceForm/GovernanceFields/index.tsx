@@ -150,7 +150,7 @@ const GovernanceFields: FunctionComponent<Props> = ({
                     {faramValues.hasDisableFriendlyInfrastructure && (
                         <TextInput
                             faramElementName="specifyInfrastructure"
-                            label={t('Please specify,Disable Friendly Infrastructures')}
+                            label={t('Please specify,Disable friendly infrastructures')}
                         />
                     )}
 
