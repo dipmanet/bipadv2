@@ -19,14 +19,15 @@ const SummaryItem = (props: Props) => {
         },
     } = props;
 
+    console.log('data', props.data);
+
+
     return (
         <div className={_cs(className, styles.summary)}>
-            <Numeral
-                className={styles.value}
-                normal
-                value={value}
-                precision={2}
-            />
+            <h2 className={styles.streamValue}>
+                {' '}
+                {value && !Number.isNaN(value) && value.toFixed(2)}
+            </h2>
             <div className={styles.label}>
                 {label}
             </div>

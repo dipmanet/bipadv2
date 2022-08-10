@@ -3,10 +3,10 @@ import { FaramInputElement } from '@togglecorp/faram';
 import { connect } from 'react-redux';
 import SelectInput from '#rsci/SelectInput';
 
-import styles from './styles.scss';
 
 import { RainStation } from '#types';
 import { rainFiltersSelector } from '#selectors';
+import styles from './styles.scss';
 
 interface Props {
     onChange: Function;
@@ -37,16 +37,18 @@ const StationSelector = (props: Props) => {
     const { onChange: onChangeFromProps,
         stations: mystationsFromProps,
         rainFilters,
-        value: { id } } = props;
+        value } = props;
 
-    const [selectedStation, setSelectedStation] = useState(id);
+    const [selectedStation, setSelectedStation] = useState(value
+        && Object.keys(value).length > 0 && value.id);
 
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
-        const station = mystationsFromProps.filter(s => s.id === stationId)[0];
+        const station = mystationsFromProps
+            && mystationsFromProps.filter(s => s.id === stationId)[0];
         onChangeFromProps(station || {});
     };
-    const sortedStations = mystationsFromProps.sort(compare);
+    const sortedStations = mystationsFromProps && mystationsFromProps.sort(compare);
     if (!sortedStations || sortedStations.length < 1) {
         return (
             <div className={styles.stationSelector}>

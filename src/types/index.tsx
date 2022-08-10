@@ -52,6 +52,15 @@ export interface FiltersElement {
     region: RegionValueElement;
     dataDateRange: DataDateRangeValueElement;
 }
+export interface RiverFiltersElement {
+    hazard: HazardElement['id'][];
+    region: RegionValueElement;
+    dataDateRange: DataDateRangeValueElement;
+    rainBasin: { id: number; title: string };
+    rainStation: {};
+    riverBasin: { id: number; title: string };
+    riverStation: {};
+}
 
 export interface DAEarthquakeFiltersElement {
     region: RegionValueElement;
@@ -178,8 +187,8 @@ export interface RiverStation {
     province: number;
 }
 
-export interface AlertElement extends Alert {}
-export interface EventElement extends Event {}
+export interface AlertElement extends Alert { }
+export interface EventElement extends Event { }
 
 export interface SourceElement extends Source { }
 

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 import SelectInput from '#rsci/SelectInput';
 
+import { RiverStation } from '#types';
 import styles from './styles.scss';
 
-import { RiverStation } from '#types';
 
 interface Props {
     onChange: Function;
@@ -27,14 +27,16 @@ const compare = (a: RiverStation, b: RiverStation) => {
 };
 
 const StationSelector = (props: Props) => {
-    const { onChange: onChangeFromProps, stations: stationsFromProps, value: { id } } = props;
-    const [selectedStation, setSelectedStation] = useState(id);
+    const { onChange: onChangeFromProps, stations: stationsFromProps, value } = props;
+    const [selectedStation, setSelectedStation] = useState(value
+        && Object.keys(value).length > 0
+        && value.id);
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
-        const station = stationsFromProps.filter(s => s.id === stationId)[0];
+        const station = stationsFromProps && stationsFromProps.filter(s => s.id === stationId)[0];
         onChangeFromProps(station || {});
     };
-    const sortedStations = stationsFromProps.sort(compare);
+    const sortedStations = stationsFromProps && stationsFromProps.sort(compare);
     if (!sortedStations || sortedStations.length < 1) {
         return (
             <div className={styles.stationSelector}>

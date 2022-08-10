@@ -51,7 +51,7 @@ const handleSaveClick = (downloadId?: string) => {
 // };
 
 const getPeriod = (periodCode: string) => {
-    const periods: {[key: string]: string} = {
+    const periods: { [key: string]: string } = {
         minute: 'Minute wise',
         hourly: 'Hourly average',
         daily: 'Daily average',
@@ -127,54 +127,59 @@ const Graph = (props: Props) => {
                     <div
                         className={styles.chart}
                     >
-                        <ResponsiveContainer className={styles.container}>
-                            <LineChart
-                                data={filterWiseChartData}
-                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="label" />
-                                <YAxis domain={
-                                    [0,
-                                        dataMax => (dataMax
-                                            > (dangerLevel || warningLevel || 0)
-                                            ? dataMax : dangerLevel || warningLevel),
-                                    ]}
-                                />
-                                <Tooltip
-                                    content={<CustomTooltip periodCode={periodCode} />}
-                                />
-                                <Legend />
-                                {isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Water Level (m)" dataKey="waterLevelAvg" stroke="green" />}
-                                {!isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Min Water Level (m)" dataKey="waterLevelMin" stroke="blue" />}
-                                {!isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Max Water Level (m)" dataKey="waterLevelMax" stroke="red" />}
-                                {!isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Average Water Level (m)" dataKey="waterLevelAvg" stroke="green" />}
-                                <ReferenceLine
-                                    y={warningLevel}
-                                    stroke="yellow"
-                                    strokeWidth={2}
-                                    isFront
-                                    strokeDasharray="3 2"
-                                    alwaysShow
-                                >
-                                    <Label value="Warning Level" position="insideTopLeft" />
-                                </ReferenceLine>
-                                <ReferenceLine
-                                    y={dangerLevel}
-                                    stroke="red"
-                                    strokeWidth={2}
-                                    isFront
-                                    strokeDasharray="3 2"
-                                    alwaysShow
-                                >
-                                    <Label value="Danger Level" position="insideTopLeft" />
-                                </ReferenceLine>
-                            </LineChart>
-                        </ResponsiveContainer>
+                        {filterWiseChartData && filterWiseChartData.length > 0
+                            && (
+                                <ResponsiveContainer className={styles.container}>
+                                    <LineChart
+                                        data={filterWiseChartData}
+                                        margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="label" />
+                                        <YAxis domain={
+                                            [0,
+                                                dataMax => (dataMax
+                                                    > (dangerLevel || warningLevel || 0)
+                                                    ? dataMax : dangerLevel || warningLevel),
+                                            ]}
+                                        />
+                                        <Tooltip
+                                            content={<CustomTooltip periodCode={periodCode} />}
+                                        />
+                                        <Legend />
+                                        {isMinuteSelected
+                                            && <Line type="monotone" dot={false} name="Water Level (m)" dataKey="waterLevelAvg" stroke="green" />}
+                                        {!isMinuteSelected
+                                            && <Line type="monotone" dot={false} name="Min Water Level (m)" dataKey="waterLevelMin" stroke="blue" />}
+                                        {!isMinuteSelected
+                                            && <Line type="monotone" dot={false} name="Max Water Level (m)" dataKey="waterLevelMax" stroke="red" />}
+                                        {!isMinuteSelected
+                                            && <Line type="monotone" dot={false} name="Average Water Level (m)" dataKey="waterLevelAvg" stroke="green" />}
+                                        <ReferenceLine
+                                            y={warningLevel}
+                                            stroke="yellow"
+                                            strokeWidth={2}
+                                            isFront
+                                            strokeDasharray="3 2"
+                                            alwaysShow
+                                        >
+                                            <Label value="Warning Level" position="insideTopLeft" />
+                                        </ReferenceLine>
+                                        <ReferenceLine
+                                            y={dangerLevel}
+                                            stroke="red"
+                                            strokeWidth={2}
+                                            isFront
+                                            strokeDasharray="3 2"
+                                            alwaysShow
+                                        >
+                                            <Label value="Danger Level" position="insideTopLeft" />
+                                        </ReferenceLine>
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            )
+                        }
+
                     </div>
                 </div>
             </div>

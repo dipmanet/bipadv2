@@ -119,7 +119,7 @@ class Minifire extends React.PureComponent<Props> {
                         data={realTimeFire}
                         headers={this.fireHeader}
                         keySelector={fireKeySelector}
-                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHover={(id: number) => onHazardHover(id, 'real-time-fire-points')}
                         onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />

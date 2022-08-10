@@ -6,7 +6,6 @@ import {
     compareString,
     compareNumber,
 } from '@togglecorp/fujs';
-import { FaramValues, ChartData } from '../types';
 import { getDate, getTimeWithIndictor, getDateWithRange } from '#views/DataArchive/utils';
 import {
     convertNormalTableToCsv,
@@ -14,6 +13,7 @@ import {
 import Table from '#rscv/Table';
 import DownloadButton from '#components/DownloadButton';
 import Icon from '#rscg/Icon';
+import { FaramValues, ChartData } from '../types';
 
 import NoData from '../NoData';
 import styles from './styles.scss';
@@ -50,7 +50,7 @@ const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
 };
 
 const getPeriod = (periodCode: string) => {
-    const periods: {[key: string]: string} = {
+    const periods: { [key: string]: string } = {
         hourly: 'Hourly',
         daily: 'Daily',
         monthly: 'Monthly',
@@ -59,7 +59,7 @@ const getPeriod = (periodCode: string) => {
 };
 
 const getinterval = (intervalCode: string) => {
-    const intervals: {[key: string]: string} = {
+    const intervals: { [key: string]: string } = {
         oneHour: '1HR',
         threeHour: '3HR',
         sixHour: '6HR',
@@ -77,16 +77,19 @@ const generateFileName = (
     // const interval = getinterval(intervalCode);
     const period = getPeriod(periodCode);
     const name = `DataArchiveRain_${period}_Readings_${stationName}`;
-    return name.replace(/ /g, '_');
+    if (name && name[period]) {
+        return name[period].replace(/ /g, '_');
+    }
+    return '';
 };
 
-
+const intervalCode = 'anyInterval';
 const TableView = (props: Props) => {
     const {
         filterValues: {
             dataDateRange: { startDate, endDate },
             period: { periodCode },
-            interval: { intervalCode },
+            // interval: { intervalCode },
         },
         filterWiseChartData: data = [],
         isInitial,
@@ -154,7 +157,7 @@ const TableView = (props: Props) => {
                 // props.handleTableData(monthlyCumulativeCrtData);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cumulativeData]);
 
     const rainHourlyHeader = [

@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { FaramInputElement } from '@togglecorp/faram';
 import SelectInput from '#rsci/SelectInput';
 import { dataArchiveRiverListSelector } from '#selectors';
+import { RainStation } from '#types';
 import styles from './styles.scss';
 
-import { RainStation } from '#types';
 
 interface Props {
     onChange: Function;
@@ -48,9 +48,11 @@ const mapStateToProps = (state: AppState) => ({
 
 const BasinSelector = (props: Props) => {
     const { onChange: onChangeFromProps,
-        value: { id } } = props;
+        value } = props;
 
-    const [selectedBasin, setSelectedBasin] = useState(id);
+
+    const [selectedBasin, setSelectedBasin] = useState(value
+        && Object.keys(value).length > 0 && value.id);
 
     const handleBasinChange = (basinId: number) => {
         setSelectedBasin(basinId);

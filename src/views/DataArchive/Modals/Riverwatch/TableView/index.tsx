@@ -45,12 +45,15 @@ const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
 const generateFileName = (period: string, stationName: string) => {
     const preText = 'DataArchiveRiver';
     const postText = `${stationName}`;
-    const name: {[key: string]: string} = {
+    const name: { [key: string]: string } = {
         minute: `${preText}_MinutewiseReadings_${postText}`,
         hourly: `${preText}_HourlyReadings_${postText}`,
         daily: `${preText}_DailyReadings_${postText}`,
     };
-    return name[period].replace(/ /g, '_');
+    if (name && name[period]) {
+        return name[period].replace(/ /g, '_');
+    }
+    return '';
 };
 
 const TableView = (props: Props) => {

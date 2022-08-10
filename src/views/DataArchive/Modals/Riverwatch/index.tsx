@@ -9,25 +9,8 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
-import MiniMap from './MiniMap';
-import Details from './Details';
-import Filters from './Filters';
-import Graph from './Graph';
-import TableView from './TableView';
-
 import { Geometry } from '#views/DataArchive/types';
-import { ArchiveRiver, FaramValues } from './types';
-import {
-    riverToGeojson,
-    parsePeriod,
-    getChartData,
-    arraySorter,
-    isEqualObject,
-} from './utils';
 import osmStyle from '#mapStyles/rasterStyle';
-
-import styles from './styles.scss';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -37,8 +20,25 @@ import {
 } from '#request';
 import { AppState } from '#store/types';
 import { mapStyleSelector } from '#selectors';
+import MiniMap from './MiniMap';
+import Details from './Details';
+import Filters from './Filters';
+import Graph from './Graph';
+import TableView from './TableView';
 
-interface Params {}
+import { ArchiveRiver, FaramValues } from './types';
+import {
+    riverToGeojson,
+    parsePeriod,
+    getChartData,
+    arraySorter,
+    isEqualObject,
+} from './utils';
+
+import styles from './styles.scss';
+
+
+interface Params { }
 
 interface OwnProps {
     handleModalClose: () => void;
@@ -93,6 +93,9 @@ const RiverModal = (props: Props) => {
         geometry,
         stationId,
         handleModalClose } = props;
+
+    console.log('stationData', stationData);
+
     let riverDetails: ArchiveRiver = emptyObject;
     if (!pending && response) {
         const results = response as ArchiveRiver;

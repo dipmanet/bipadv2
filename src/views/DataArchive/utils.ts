@@ -1,7 +1,7 @@
 import * as PageType from '#store/atom/page/types';
-import { DatePeriod } from './types';
 import { DARainFiltersElement, DARiverFiltersElement } from '#types';
 import { pastDaysToDateRange } from '#utils/transformations';
+import { DatePeriod } from './types';
 
 type GroupKey = 'pTitle' | 'dTitle' | 'mTitle';
 type Filters = DARainFiltersElement | DARiverFiltersElement;
@@ -12,7 +12,6 @@ const groupBy = (data: [], key: GroupKey) => data.reduce((storage, item) => {
     storage[group].push(item);
     return storage;
 }, {});
-
 
 export const setRegionTitle = (data: []) => {
     const dataWithRegionTitle = JSON.parse(JSON.stringify(data));
@@ -54,7 +53,7 @@ export const getDate = (dateValue: string) => {
 
 export const getTime = (dateValue: string) => {
     const timeWithSeconds = dateValue.split('T')[1].split('.')[0];
-    const [hour, minutes, seconds] = timeWithSeconds.split(':');
+    const [hour, minutes, seconds] = timeWithSeconds && timeWithSeconds.split(':');
     const time = `${hour}:${minutes}`;
     return time;
 };
@@ -67,8 +66,9 @@ export const getTimeWithIndictor = (dateValue: string) => {
     return timeWithIndicator;
 };
 
-
-export const getIndividualAverages = (averages: PageType.WaterLevelAverage[]) => {
+export const getIndividualAverages = (
+    averages: PageType.WaterLevelAverage[],
+) => {
     let oneHour;
     let threeHour;
     let sixHour;
@@ -102,8 +102,19 @@ export const getIndividualAverages = (averages: PageType.WaterLevelAverage[]) =>
 };
 
 export const getMonthName = (date: string) => {
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December',
+    const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
     ];
 
     const d = new Date(date);
@@ -140,7 +151,9 @@ export const getDateDiff = (startDate: string = '', endDate: string = '') => {
 
 export const getYYYYMMDD = (date: Date) => {
     const d = new Date(date);
-    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0];
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+        .toISOString()
+        .split('T')[0];
 };
 
 export const getDatesFromFilters = (filters: Filters) => {

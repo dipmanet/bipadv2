@@ -1,6 +1,9 @@
 .summary {
     padding: var(--spacing-small) var(--spacing-large);
-
+  .streamValue{
+    font-size: 16px;
+    font-weight: 500;
+    }
     .value {
         font-size: var(--font-size-large);
     }

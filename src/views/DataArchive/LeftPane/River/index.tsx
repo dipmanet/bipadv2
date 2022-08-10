@@ -8,11 +8,6 @@ import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArc
 import { groupList } from '#utils/common';
 import { getDatesFromFilters } from '#views/DataArchive/utils';
 
-import TopBar from './TopBar';
-import Header from './Header';
-import Note from './Note';
-import RiverGroup from './RiverGroup';
-import RiverItem from './RiverItem';
 
 import Message from '#rscv/Message';
 
@@ -47,6 +42,11 @@ import { TitleContext, DataArchive } from '#components/TitleContext';
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
+import RiverItem from './RiverItem';
+import RiverGroup from './RiverGroup';
+import Note from './Note';
+import Header from './Header';
+import TopBar from './TopBar';
 
 import styles from './styles.scss';
 
@@ -76,13 +76,14 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     ),
 });
 
-interface Params {}
-interface OwnProps {}
+interface Params { }
+interface OwnProps { }
 
-interface State {}
+interface State { }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
+
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     dataArchiveRiverRequest: {
@@ -118,8 +119,10 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             interface Response { results: PageType.DataArchiveRiver[] }
             const { results: dataArchiveRiverList = [] } = response as Response;
             if (params.basinFilter !== undefined) {
-                setDataArchiveRiverList({ dataArchiveRiverList:
-                    dataArchiveRiverList.filter(item => item.basin === params.basinFilter) });
+                setDataArchiveRiverList({
+                    dataArchiveRiverList:
+                        dataArchiveRiverList.filter(item => item.basin === params.basinFilter),
+                });
             } else {
                 setDataArchiveRiverList({ dataArchiveRiverList });
             }
@@ -143,11 +146,15 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             const { results: dataArchiveRiverStations = [] } = response as Response;
 
             if (params.stationFilter !== undefined) {
-                setDataArchiveRiverStations({ dataArchiveRiverStations:
-                    dataArchiveRiverStations.filter(item => item.id === params.stationFilter) });
+                setDataArchiveRiverStations({
+                    dataArchiveRiverStations:
+                        dataArchiveRiverStations.filter(item => item.id === params.stationFilter),
+                });
             } else if (params.basinFilter !== undefined) {
-                setDataArchiveRiverStations({ dataArchiveRiverStations:
-                    dataArchiveRiverStations.filter(item => item.basin === params.basinFilter) });
+                setDataArchiveRiverStations({
+                    dataArchiveRiverStations:
+                        dataArchiveRiverStations.filter(item => item.basin === params.basinFilter),
+                });
             } else {
                 setDataArchiveRiverStations({ dataArchiveRiverStations });
             }
@@ -193,9 +200,9 @@ const River = (props: Props) => {
     if (setDataArchive) {
         setDataArchive((prevState: DataArchive) => {
             if (prevState.mainModule !== 'River'
-            || prevState.location !== location
-            || prevState.startDate !== startDate
-            || prevState.endDate !== endDate) {
+                || prevState.location !== location
+                || prevState.startDate !== startDate
+                || prevState.endDate !== endDate) {
                 return { ...prevState, mainModule: 'River', location, startDate, endDate };
             }
             return prevState;
@@ -246,10 +253,10 @@ const River = (props: Props) => {
                     {!pending && <Note />}
                 </div>
                 <div className={styles.basin}>
-                    { (riverFilters.basin.title) ? `Selected basin: ${riverFilters.basin.title}` : ''}
+                    {(riverFilters.basin.title) ? `Selected basin: ${riverFilters.basin.title}` : ''}
                 </div>
             </div>
-            { groupedRiverList.map((group) => {
+            {groupedRiverList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {
                     return (
