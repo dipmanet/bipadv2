@@ -97,7 +97,7 @@ const riverStationToGeojson = (riverStation) => {
                     description: river.description,
                     basin: river.basin,
                     status: river.status,
-                    steady: river.steady,
+                    steady: river.steady ? river.steady : 'STEADY',
                 },
             })),
     };

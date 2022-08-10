@@ -17,6 +17,7 @@ import {
     userSelector,
 } from '#selectors';
 import { AppState } from '#types';
+import { User } from '#store/atom/auth/types';
 
 type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 
@@ -24,6 +25,7 @@ interface Props {
     handleMiniOptionsClick: Function;
     handleOptionClick: Function;
     chosenOption: Options;
+    user: User;
 }
 const mapStateToProps = (state: AppState) => ({
     user: userSelector(state),
@@ -39,18 +41,24 @@ const mapStateToProps = (state: AppState) => ({
 
 const MiniOption = (props: Props) => {
     const { handleMiniOptionsClick, handleOptionClick, chosenOption, user } = props;
-    const rainPermisssion = checkPermission(user, 'view_rain', 'realtime');
-    const riverPermission = checkPermission(user, 'view_river', 'realtime');
+    // const rainPermission = checkPermission(user, 'view_rain', 'realtime');
+    // const riverPermission = checkPermission(user, 'view_river', 'realtime');
 
     const miniOptions = [
         { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
         { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
     ];
 
-    if (rainPermisssion) {
+    // if (rainPermission) {
+    //     miniOptions.push({ id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon });
+    // }
+    // if (riverPermission) {
+    //     miniOptions.push({ id: 'river', option: 'River', alt: 'River', icon: RiverIcon });
+    // }
+    if (user) {
         miniOptions.push({ id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon });
     }
-    if (riverPermission) {
+    if (user) {
         miniOptions.push({ id: 'river', option: 'River', alt: 'River', icon: RiverIcon });
     }
     return (
