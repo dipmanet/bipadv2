@@ -95,6 +95,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     eventList: eventListSelector(state),
     sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
+
 });
 
 const schema = {
@@ -149,6 +150,7 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
         },
         extras: { hasFile: true },
     },
+
 };
 
 class CitizenReportFormModal extends React.PureComponent<Props, State> {
@@ -190,7 +192,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
             hazard,
             description,
             recaptcha,
-
+            incident: null,
             point: JSON.stringify(point),
             ward: wards[0],
             image,
@@ -213,7 +215,9 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                 citizenReportPostRequest: {
                     pending,
                 },
+
             },
+
         } = this.props;
 
         const {
@@ -224,7 +228,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addCitizenReportFormModal, className)}
-                // onClose={closeModal}
+            // onClose={closeModal}
             >
                 <Faram
                     className={styles.form}
