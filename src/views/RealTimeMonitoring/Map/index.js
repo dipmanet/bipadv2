@@ -1,12 +1,13 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
+import { connect } from 'react-redux';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import MapState from '#re-map/MapSource/MapState';
-
 import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
@@ -17,6 +18,7 @@ import {
     getMapPaddings,
 } from '#constants';
 import {
+    getRasterTile,
     earthquakeToGeojson,
     riverToGeojson,
     rainToGeojson,
@@ -30,6 +32,7 @@ import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
+import { realTimeDurationSelector } from '#selectors';
 
 const noop = () => {};
 
@@ -51,7 +54,12 @@ const GIS_URL = [
     '&outputFormat=application/json',
 ].join('');
 
-export default class RealTimeMap extends React.PureComponent {
+
+const mapStateToProps = state => ({
+    duration: realTimeDurationSelector(state),
+});
+
+class RealTimeMap extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -60,6 +68,8 @@ export default class RealTimeMap extends React.PureComponent {
             riverTitle: undefined,
             streamflowId: undefined,
             gis: undefined,
+            rainId: undefined,
+            riverId: undefined,
         };
     }
 
@@ -102,21 +112,24 @@ export default class RealTimeMap extends React.PureComponent {
     });
 
     handleRainClick = (feature) => {
-        const { properties: { title } } = feature;
+        const { properties: { title, rainId } } = feature;
         this.setState({
             rainTitle: title,
             riverTitle: undefined,
             streamflowId: undefined,
+            rainId,
+
         });
         return true;
     }
 
     handleRiverClick = (feature) => {
-        const { properties: { title } } = feature;
+        const { properties: { title, riverId } } = feature;
         this.setState({
             riverTitle: title,
             streamflowId: undefined,
             rainTitle: undefined,
+            riverId,
         });
         return true;
     }
@@ -302,21 +315,354 @@ export default class RealTimeMap extends React.PureComponent {
 
     handleStreamflowClick = (feature) => {
         const { properties: { comid } } = feature;
-        // console.warn('feature', feature);
         this.setState({
             streamflowId: comid,
         });
     }
 
     handleHazardEnter = (feature) => {
-        const { id } = feature;
+        const { id, source } = feature;
         const { onHazardHover } = this.props;
-        onHazardHover(id);
+        onHazardHover(id, source);
     }
 
     handleHazardLeave = () => {
         const { onHazardHover } = this.props;
         onHazardHover();
+    }
+
+    getRainPointCircle = (duration) => {
+        if (duration === 1) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'one']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'one'], 0], '#BFBFBF',
+                    ['<', ['get', 'one'], 0.5], '#798590',
+                    ['<', ['get', 'one'], 10], '#569ED4',
+                    ['<', ['get', 'one'], 20], '#5D9E52',
+                    ['<', ['get', 'one'], 40], '#F8D054',
+                    ['<', ['get', 'one'], 50], '#F3A53A',
+                    ['>', ['get', 'one'], 50], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'one']], 'number'], 10,
+                    ['==', ['get', 'one'], 0], 10,
+                    ['>', ['get', 'one'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                1,
+                ],
+                'circle-opacity': 0.9,
+            };
+        }
+        if (duration === 3) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'three']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'three'], 0], '#BFBFBF',
+                    ['<', ['get', 'three'], 0.5], '#798590',
+                    ['<', ['get', 'three'], 20], '#569ED4',
+                    ['<', ['get', 'three'], 40], '#5D9E52',
+                    ['<', ['get', 'three'], 60], '#F8D054',
+                    ['<', ['get', 'three'], 80], '#F3A53A',
+                    ['>', ['get', 'three'], 80], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'three']], 'number'], 10,
+                    ['==', ['get', 'three'], 0], 10,
+                    ['>', ['get', 'three'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                1,
+                ],
+                'circle-opacity': 0.9,
+            };
+        }
+        if (duration === 6) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'six']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'six'], 0], '#BFBFBF',
+                    ['<', ['get', 'six'], 0.5], '#798590',
+                    ['<', ['get', 'six'], 40], '#569ED4',
+                    ['<', ['get', 'six'], 60], '#5D9E52',
+                    ['<', ['get', 'six'], 80], '#F8D054',
+                    ['<', ['get', 'six'], 80], '#F3A53A',
+                    ['>', ['get', 'six'], 100], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'six']], 'number'], 10,
+                    ['==', ['get', 'six'], 0], 10,
+                    ['>', ['get', 'six'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                1,
+                ],
+                'circle-opacity': 0.9,
+            };
+        }
+        if (duration === 12) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'twelve']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'twelve'], 0], '#BFBFBF',
+                    ['<', ['get', 'twelve'], 0.5], '#798590',
+                    ['<', ['get', 'twelve'], 60], '#569ED4',
+                    ['<', ['get', 'twelve'], 80], '#5D9E52',
+                    ['<', ['get', 'twelve'], 100], '#F8D054',
+                    ['<', ['get', 'twelve'], 100], '#F3A53A',
+                    ['>', ['get', 'twelve'], 120], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'twelve']], 'number'], 10,
+                    ['==', ['get', 'twelve'], 0], 10,
+                    ['>', ['get', 'twelve'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                1,
+                ],
+                'circle-opacity': 0.9,
+            };
+        }
+
+        return {
+            'circle-color': [
+                'case',
+                ['!=', ['typeof', ['get', 'twentyfour']], 'number'], '#BFBFBF',
+                ['==', ['get', 'twentyfour'], 0], '#BFBFBF',
+                ['<', ['get', 'twentyfour'], 0.5], '#798590',
+                ['<', ['get', 'twentyfour'], 80], '#569ED4',
+                ['<', ['get', 'twentyfour'], 100], '#5D9E52',
+                ['<', ['get', 'twentyfour'], 120], '#F8D054',
+                ['<', ['get', 'twentyfour'], 140], '#F3A53A',
+                ['>', ['get', 'twentyfour'], 140], '#BA2719',
+                '#ECECEC',
+            ],
+            'circle-radius': ['case',
+                ['!=', ['typeof', ['get', 'twentyfour']], 'number'], 10,
+                ['==', ['get', 'twentyfour'], 0], 10,
+                ['>', ['get', 'twentyfour'], 0], 16, 10,
+            ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case', ['all',
+                ['boolean', ['feature-state', 'hover'], false],
+                ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+            ],
+            3,
+            1,
+            ],
+            'circle-opacity': 0.9,
+        };
+    }
+
+    getRainPointCircleDim = (duration) => {
+        if (duration === 1) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'one']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'one'], 0], '#BFBFBF',
+                    ['<', ['get', 'one'], 0.5], '#798590',
+                    ['<', ['get', 'one'], 10], '#569ED4',
+                    ['<', ['get', 'one'], 20], '#5D9E52',
+                    ['<', ['get', 'one'], 40], '#F8D054',
+                    ['<', ['get', 'one'], 50], '#F3A53A',
+                    ['>', ['get', 'one'], 50], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'one']], 'number'], 10,
+                    ['==', ['get', 'one'], 0], 10,
+                    ['>', ['get', 'one'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                0,
+                ],
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
+            };
+        }
+        if (duration === 3) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'three']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'three'], 0], '#BFBFBF',
+                    ['<', ['get', 'three'], 0.5], '#798590',
+                    ['<', ['get', 'three'], 20], '#569ED4',
+                    ['<', ['get', 'three'], 40], '#5D9E52',
+                    ['<', ['get', 'three'], 60], '#F8D054',
+                    ['<', ['get', 'three'], 80], '#F3A53A',
+                    ['>', ['get', 'three'], 80], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'three']], 'number'], 10,
+                    ['==', ['get', 'three'], 0], 10,
+                    ['>', ['get', 'three'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                0,
+                ],
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
+            };
+        }
+        if (duration === 6) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'six']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'six'], 0], '#BFBFBF',
+                    ['<', ['get', 'six'], 0.5], '#798590',
+                    ['<', ['get', 'six'], 40], '#569ED4',
+                    ['<', ['get', 'six'], 60], '#5D9E52',
+                    ['<', ['get', 'six'], 80], '#F8D054',
+                    ['<', ['get', 'six'], 80], '#F3A53A',
+                    ['>', ['get', 'six'], 100], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'six']], 'number'], 10,
+                    ['==', ['get', 'six'], 0], 10,
+                    ['>', ['get', 'six'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                0,
+                ],
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
+            };
+        }
+        if (duration === 12) {
+            return {
+                'circle-color': [
+                    'case',
+                    ['!=', ['typeof', ['get', 'twelve']], 'number'], '#BFBFBF',
+                    ['==', ['get', 'twelve'], 0], '#BFBFBF',
+                    ['<', ['get', 'twelve'], 0.5], '#798590',
+                    ['<', ['get', 'twelve'], 60], '#569ED4',
+                    ['<', ['get', 'twelve'], 80], '#5D9E52',
+                    ['<', ['get', 'twelve'], 100], '#F8D054',
+                    ['<', ['get', 'twelve'], 100], '#F3A53A',
+                    ['>', ['get', 'twelve'], 120], '#BA2719',
+                    '#ECECEC',
+                ],
+                'circle-radius': ['case',
+                    ['!=', ['typeof', ['get', 'twelve']], 'number'], 10,
+                    ['==', ['get', 'twelve'], 0], 10,
+                    ['>', ['get', 'twelve'], 0], 16, 10,
+                ],
+                'circle-stroke-color': '#000000',
+                'circle-stroke-width': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                3,
+                0,
+                ],
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
+            };
+        }
+
+        return {
+            'circle-color': [
+                'case',
+                ['!=', ['typeof', ['get', 'twentyfour']], 'number'], '#BFBFBF',
+                ['==', ['get', 'twentyfour'], 0], '#BFBFBF',
+                ['<', ['get', 'twentyfour'], 0.5], '#798590',
+                ['<', ['get', 'twentyfour'], 80], '#569ED4',
+                ['<', ['get', 'twentyfour'], 100], '#5D9E52',
+                ['<', ['get', 'twentyfour'], 120], '#F8D054',
+                ['<', ['get', 'twentyfour'], 140], '#F3A53A',
+                ['>', ['get', 'twentyfour'], 140], '#BA2719',
+                '#ECECEC',
+            ],
+            'circle-radius': ['case',
+                ['!=', ['typeof', ['get', 'twentyfour']], 'number'], 10,
+                ['==', ['get', 'twentyfour'], 0], 10,
+                ['>', ['get', 'twentyfour'], 0], 16, 10,
+            ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case', ['all',
+                ['boolean', ['feature-state', 'hover'], false],
+                ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+            ],
+            3,
+            0,
+            ],
+            'circle-opacity': ['case', ['all',
+                ['boolean', ['feature-state', 'hover'], false],
+                ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+            ],
+            1,
+            0.3,
+            ],
+        };
     }
 
     render() {
@@ -338,6 +684,7 @@ export default class RealTimeMap extends React.PureComponent {
             onHazardHover,
             hazardHoveredAttribute,
             isHovered,
+            duration,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -361,7 +708,9 @@ export default class RealTimeMap extends React.PureComponent {
             riverTitle,
             rainTitle,
             streamflowId,
+            rainId,
             gis,
+            riverId,
         } = this.state;
 
         const tooltipOptions = {
@@ -461,44 +810,24 @@ export default class RealTimeMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'line',
                                 paint: {
-                                    'line-color': '#004d40',
-                                    'line-width': 1,
+                                    'line-color': 'purple',
+                                    'line-width': 1.5,
+                                    'line-dasharray': [1, 2],
                                 },
                             }}
                         />
                     </MapSource>
+
                 )}
                 <MapSource
                     sourceKey="real-time-rain-points"
                     sourceOptions={{ type: 'geojson' }}
                     geoJson={rainFeatureCollection}
                     supportHover
+                    generateId
                 >
                     { showRain && (
                         <>
-                            <MapLayer
-                                layerKey="real-time-rain-circle"
-                                onClick={this.handleRainClick}
-                                layerOptions={{
-                                    type: 'circle',
-                                    // paint: mapStyles.rainPoint.paint,
-                                    paint: isHovered
-                                        ? mapStyles.rainPoint.circleDim
-                                        : mapStyles.rainPoint.circle,
-                                }}
-                                onMouseEnter={this.handleHazardEnter}
-                                onMouseLeave={this.handleHazardLeave}
-                            />
-                            {/* the layer below is to render traingles for rain */}
-                            {/* <MapLayer
-                                layerKey="real-time-rain-triangle"
-                                onClick={this.handleRainClick}
-                                layerOptions={{
-                                    type: 'symbol',
-                                    layout: mapStyles.rainSymbol.layout,
-                                    paint: mapStyles.rainSymbol.paint,
-                                }}
-                            /> */}
                             <MapLayer
                                 layerKey="real-time-rain-symbol"
                                 layerOptions={{
@@ -509,36 +838,133 @@ export default class RealTimeMap extends React.PureComponent {
                                     },
                                 }}
                             />
+
+                            <MapLayer
+                                layerKey="real-time-rain-circle"
+                                onClick={this.handleRainClick}
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: isHovered
+                                        ? this.getRainPointCircleDim(duration)
+                                        : this.getRainPointCircle(duration),
+                                }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
+                            />
+                            {
+                                duration === 24
+                                && (
+                                    <MapLayer
+                                        layerKey="real-time-rain-text"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            layout: mapStyles.rain24Text.layout,
+                                            paint: mapStyles.rain24Text.paint,
+                                        }}
+                                    />
+                                )
+                            }
+                            {
+                                duration === 12 && (
+                                    <MapLayer
+                                        layerKey="real-time-rain-twelve-text"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            layout: mapStyles.rain12Text.layout,
+                                            paint: mapStyles.rain12Text.paint,
+                                        }}
+                                    />
+                                )
+                            }
+                            {
+                                duration === 6
+                                    && (
+                                        <MapLayer
+                                            layerKey="real-time-rain-six-text"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                layout: mapStyles.rain6Text.layout,
+                                                paint: mapStyles.rain6Text.paint,
+                                            }}
+                                        />
+                                    )
+                            }
+                            {
+                                duration === 3
+                                    && (
+                                        <MapLayer
+                                            layerKey="real-time-rain-three-text"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                layout: mapStyles.rain3Text.layout,
+                                                paint: mapStyles.rain3Text.paint,
+                                            }}
+                                        />
+                                    )
+                            }
+                            {
+                                duration === 1
+                                    && (
+                                        <MapLayer
+                                            layerKey="real-time-rain-one-text"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                layout: mapStyles.rain1Text.layout,
+                                                paint: mapStyles.rain1Text.paint,
+                                            }}
+                                        />
+                                    )
+                            }
+                            {/* <MapLayer
+                                layerKey="real-time-rain-circle"
+                                onClick={this.handleRainClick}
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: isHovered
+                                        ? mapStyles.rainPoint.circleDim
+                                        : mapStyles.rainPoint.circle,
+                                }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
+                            /> */}
+                            {/* This layer below is to render traingles for rain */}
+                            {/* <MapLayer
+                                layerKey="real-time-rain-triangle"
+                                onClick={this.handleRainClick}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: mapStyles.rainSymbol.layout,
+                                    paint: mapStyles.rainSymbol.paint,
+                                }}
+                            /> */}
+
                         </>
                     )}
-                    <MapState
-                        attributes={hazardHoveredAttribute}
-                        attributeKey="hover"
-                    />
+                    { hazardHoveredAttribute
+                    && (
+                        <MapState
+                            attributes={hazardHoveredAttribute}
+                            attributeKey="hover"
+                        />
+                    )
+                    }
+
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-river-points"
                     sourceOptions={{ type: 'geojson' }}
                     geoJson={riverFeatureCollection}
                     supportHover
+                    generateId
                 >
                     { showRiver && (
                         <>
-                            {/* <MapLayer
-                                layerKey="real-time-river-circle"
-                                onClick={this.handleRiverClick}
-                                layerOptions={{
-                                    type: 'circle',
-                                    paint: mapStyles.riverPoint.paint,
-                                }}
-                            /> */}
                             <MapLayer
                                 layerKey="real-time-river-custom"
                                 onClick={this.handleRiverClick}
                                 layerOptions={{
                                     type: 'symbol',
                                     layout: mapStyles.riverPoint.layout,
-                                    // paint: mapStyles.riverPoint.paint,
                                     paint: isHovered
                                         ? mapStyles.riverPoint.textDim
                                         : mapStyles.riverPoint.text,
@@ -556,18 +982,32 @@ export default class RealTimeMap extends React.PureComponent {
                                     },
                                 }}
                             />
+                            <MapLayer
+                                layerKey="real-time-river-text"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: mapStyles.riverText.layout,
+                                    paint: mapStyles.riverText.paint,
+                                }}
+                            />
+
                         </>
                     )}
-                    <MapState
-                        attributes={hazardHoveredAttribute}
-                        attributeKey="hover"
-                    />
+                    {hazardHoveredAttribute
+                    && (
+                        <MapState
+                            attributes={hazardHoveredAttribute}
+                            attributeKey="hover"
+                        />
+                    )
+                    }
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-earthquake-points"
                     sourceOptions={{ type: 'geojson' }}
                     geoJson={earthquakeFeatureCollection}
                     supportHover
+                    generateId
                 >
                     { showEarthquake && (
                         <React.Fragment>
@@ -607,16 +1047,24 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </React.Fragment>
                     )}
-                    <MapState
-                        attributes={hazardHoveredAttribute}
-                        attributeKey="hover"
-                    />
+                    {/* {
+                        hovered == true &&
+                    } */}
+                    {hazardHoveredAttribute
+                    && (
+                        <MapState
+                            attributes={hazardHoveredAttribute}
+                            attributeKey="hover"
+                        />
+                    )
+                    }
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-fire-points"
                     geoJson={fireFeatureCollection}
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
+                    generateId
                 >
                     { showFire && (
                         <>
@@ -646,16 +1094,21 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </>
                     )}
-                    <MapState
-                        attributes={hazardHoveredAttribute}
-                        attributeKey="hover"
-                    />
+                    {hazardHoveredAttribute
+                    && (
+                        <MapState
+                            attributes={hazardHoveredAttribute}
+                            attributeKey="hover"
+                        />
+                    )
+                    }
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-pollution-points"
                     geoJson={pollutionFeatureCollection}
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
+                    generateId
                 >
                     { showPollution && (
                         <React.Fragment>
@@ -669,6 +1122,7 @@ export default class RealTimeMap extends React.PureComponent {
                                     paint: isHovered
                                         ? mapStyles.pollutionPoint.circleDim
                                         : mapStyles.pollutionPoint.circle,
+
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
@@ -694,20 +1148,26 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </React.Fragment>
                     )}
-                    <MapState
-                        attributes={hazardHoveredAttribute}
-                        attributeKey="hover"
-                    />
+                    {hazardHoveredAttribute
+                    && (
+                        <MapState
+                            attributes={hazardHoveredAttribute}
+                            attributeKey="hover"
+                        />
+                    )
+                    }
                 </MapSource>
                 {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
+                        id={riverId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
                 {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        id={rainId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
@@ -721,3 +1181,6 @@ export default class RealTimeMap extends React.PureComponent {
         );
     }
 }
+
+export default
+connect(mapStateToProps)(RealTimeMap);
