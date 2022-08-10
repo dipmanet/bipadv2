@@ -1,5 +1,3 @@
-import Rainstation from '#resources/icons/rainstation.svg';
-
 const iconNames = {
     // alert: 'ion-md-alert',
     alert: 'ion-android-alert',
