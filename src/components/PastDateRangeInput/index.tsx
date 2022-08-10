@@ -4,6 +4,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import DateInput from '#rsci/DateInput';
 import RadioInput from '#components/RadioInput';
+import Icon from '#rscg/Icon';
 import PageContext from '#components/PageContext';
 
 import styles from './styles.scss';
@@ -80,6 +81,7 @@ interface Props {
     className?: string;
     onChange: (value: InputValue) => void;
     value: InputValue;
+    error?: string;
 }
 
 class PastDateRangeInput extends React.PureComponent<Props> {
@@ -137,6 +139,7 @@ class PastDateRangeInput extends React.PureComponent<Props> {
         const {
             className,
             value,
+            error,
         } = this.props;
         const { activeRouteDetails: { name: activePage } } = this.context;
 
@@ -166,6 +169,15 @@ class PastDateRangeInput extends React.PureComponent<Props> {
                             onChange={this.handleEndDateInputChange}
                             value={value.endDate}
                         />
+                    </div>
+                )}
+                {error && (
+                    <div className={styles.error}>
+                        <Icon
+                            className={styles.infoIcon}
+                            name="info"
+                        />
+                        {error}
                     </div>
                 )}
             </div>

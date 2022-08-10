@@ -1,0 +1,41 @@
+.filters{
+    padding: var(--spacing-large);
+    .header {
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-large);
+        color: #666;
+    }
+    .submit-button {
+        padding: var(--spacing-small) var(--spacing-medium);
+        background-color: #E35163;
+        display: inline-block;
+        font-weight: normal;
+        color: white;
+        cursor: pointer;
+        
+        &:hover {
+            font-weight: bold;
+        }
+    }
+    .selectors {
+        display: grid;
+        grid-gap: var(--spacing-medium);
+        .title {
+            font-weight: bold;
+            font-size: var(--font-size-medium-alt);
+            color: #666;
+        }
+        .date {
+
+        }
+
+        .intervals {
+
+        }
+
+        .period {
+
+        }
+    }
+}
+

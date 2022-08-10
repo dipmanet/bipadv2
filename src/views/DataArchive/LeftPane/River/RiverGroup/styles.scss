@@ -1,0 +1,48 @@
+.river-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-bottom: 1px solid rgba($color: grey, $alpha: 0.5);
+    min-height: 72px;
+    
+    // cursor: pointer;
+    
+    &:hover {
+        background-color: #f6f6f6;
+    }
+    
+    .title {
+        font-size: var(--font-size-medium-alt); 
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--spacing-small);
+    }
+    
+    .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .count {
+            color: rgba($color: grey, $alpha: 0.8);
+            text-align: center;
+            font-weight: bold;
+            font-size: var(--font-size-medium-alt); 
+        }
+
+        .chevron {
+            border-radius: 50%;
+            border: none !important;
+            font-size: 1rem;
+            background-color: inherit !important;
+            &:hover {
+                background-color: inherit !important;
+            }
+        }
+    }
+}
+
+.child {
+    .wrapper {
+        border-left: 7px solid var(--color-accent);
+    }
+}

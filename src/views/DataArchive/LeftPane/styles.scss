@@ -1,0 +1,13 @@
+.left-pane {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: var(--color-foreground);
+    overflow: auto;
+    height: 100%;
+
+    .content {
+        flex: 1;
+        overflow: auto;
+    }
+}
