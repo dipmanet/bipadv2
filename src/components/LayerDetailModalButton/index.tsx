@@ -171,11 +171,13 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                     );
                 }
 
-                const groups = language === 'en'
-                    ? layer.metadata.value
-                    : layer.metadata.valueNe === undefined
-                        ? layer.metadata.value
-                        : layer.metadata.valueNe;
+                // const groups = language === 'en'
+                //     ? layer.metadata.value
+                //     : layer.metadata.valueNe === undefined
+                //         ? layer.metadata.value
+                //         : layer.metadata.valueNe;
+
+                const groups = layer.metadata.value;
 
                 const orderedKeyList = Object.keys(groups);
                 return (

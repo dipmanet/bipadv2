@@ -1921,7 +1921,7 @@ export const capacityResource = [
     {
         id: 1,
         name: 'Education',
-        nameNe: 'शिक्षा',
+        nameNe: 'शैक्षिक संस्था',
         resourceType: 'education',
         attribute: 'type',
         level: 1,
@@ -1979,7 +1979,7 @@ export const capacityResource = [
     {
         id: 2,
         name: 'Health',
-        nameNe: 'स्वास्थ्य',
+        nameNe: 'स्वास्थ्य संस्था',
         resourceType: 'health',
         attribute: 'type',
         level: 1,
@@ -2047,13 +2047,13 @@ export const capacityResource = [
             {
                 id: 19,
                 name: 'Health Post',
-                nameNe: 'स्वास्थ्य पोस्ट',
+                nameNe: 'स्वास्थ्य चौकी ',
                 type: 'Health Post',
             },
             {
                 id: 20,
                 name: 'District Clinic (Including Institutional)',
-                nameNe: 'जिल्ला क्लिनिक (संस्थागत सहित)',
+                nameNe: 'जिल्ला क्लिनिक ',
                 type: 'District Clinic (Including Institutional)',
 
             },
@@ -2109,7 +2109,7 @@ export const capacityResource = [
             {
                 id: 28,
                 name: 'Rehabilitation',
-                nameNe: 'पुनर्स्थापना',
+                nameNe: 'पुनर्स्थापना केन्द्र',
                 type: 'Rehabilitation',
 
             },
@@ -2179,7 +2179,7 @@ export const capacityResource = [
             {
                 id: 38,
                 name: 'Tertiary Hospital',
-                nameNe: 'तेस्रो अस्पताल',
+                nameNe: 'Tertiary अस्पताल',
                 type: 'Tertiary Hospital',
 
             },
@@ -2223,7 +2223,7 @@ export const capacityResource = [
     {
         id: 3,
         name: 'Banking & Finance',
-        nameNe: 'बैंकिङ र वित्त',
+        nameNe: 'बैंकिङ तथा  वित्त संस्था ',
         resourceType: 'finance',
         attribute: 'type',
         level: 1,
@@ -2231,19 +2231,19 @@ export const capacityResource = [
             {
                 id: 44,
                 name: 'Commercial',
-                nameNe: 'व्यापारिक',
+                nameNe: 'वाणिज्यि बैंक',
                 type: 'Commercial',
             },
             {
                 id: 45,
                 name: 'Micro Credit Development',
-                nameNe: 'माइक्रो क्रेडिट विकास',
+                nameNe: 'माइक्रो क्रेडिट विकास बैंक',
                 type: 'Micro Credit Development',
             },
             {
                 id: 46,
                 name: 'Finance',
-                nameNe: 'वित्त',
+                nameNe: 'वित्त संस्था ',
                 type: 'Finance',
             },
             {
@@ -2255,7 +2255,7 @@ export const capacityResource = [
             {
                 id: 48,
                 name: 'Cooperative',
-                nameNe: 'सहकारी',
+                nameNe: 'सहकारीसंस्था ',
                 type: 'Cooperative',
             },
             {
@@ -2276,7 +2276,7 @@ export const capacityResource = [
     {
         id: 4,
         name: 'Communication',
-        nameNe: 'सञ्चार',
+        nameNe: 'सञ्चार सुबिधा ',
         resourceType: 'communication',
         attribute: 'type',
         level: 1,
@@ -2302,7 +2302,7 @@ export const capacityResource = [
             {
                 id: 54,
                 name: 'Phone Service',
-                nameNe: 'फोन सेवा',
+                nameNe: 'मोबाइल फोन',
                 type: 'Phone Service',
             },
             {
@@ -2329,7 +2329,7 @@ export const capacityResource = [
     {
         id: 5,
         name: 'Governance',
-        nameNe: 'शासन',
+        nameNe: 'संस्थागत विवरण',
         resourceType: 'governance',
         attribute: 'type',
         level: 1,
@@ -2337,7 +2337,7 @@ export const capacityResource = [
             {
                 id: 58,
                 name: 'Government',
-                nameNe: 'सरकार',
+                nameNe: 'सरकारी',
                 type: 'Government',
             },
             {
@@ -2355,7 +2355,7 @@ export const capacityResource = [
             {
                 id: 61,
                 name: 'CSO',
-                nameNe: 'सिएसवो',
+                nameNe: 'सामुदायीक संस्था',
                 type: 'CSO',
             },
             {
@@ -2370,7 +2370,7 @@ export const capacityResource = [
     {
         id: 6,
         name: 'Hotel & Restaurant',
-        nameNe: 'होटल र रेस्टुरेन्ट',
+        nameNe: 'होटल तथा रेस्टुरेन्ट',
         resourceType: 'hotelandrestaurant',
         level: 1,
         attribute: 'type',
@@ -2412,7 +2412,7 @@ export const capacityResource = [
     {
         id: 7,
         name: 'Culture',
-        nameNe: 'संस्कृति',
+        nameNe: 'धार्मिक स्थान',
         resourceType: 'cultural',
         attribute: 'religion',
         level: 1,
@@ -2420,19 +2420,19 @@ export const capacityResource = [
             {
                 id: 68,
                 name: 'Hindu',
-                nameNe: 'हिन्दू',
+                nameNe: 'हिन्दू धर्म',
                 type: 'Hindu',
             },
             {
                 id: 69,
                 name: 'Islam',
-                nameNe: 'इस्लाम',
+                nameNe: 'इस्लाम धर्म',
                 type: 'Islam',
             },
             {
                 id: 70,
                 name: 'Christian',
-                nameNe: 'क्रिस्चियन',
+                nameNe: 'क्रिस्चियन धर्म',
                 type: 'Christian',
             },
             {
@@ -2450,13 +2450,13 @@ export const capacityResource = [
             {
                 id: 73,
                 name: 'Sikhism',
-                nameNe: 'सिख',
+                nameNe: 'सिख धर्म',
                 type: 'Sikhism',
             },
             {
                 id: 74,
                 name: 'Judaism',
-                nameNe: 'यहूदी',
+                nameNe: 'यहूदी धर्म',
                 type: 'Judaism',
             },
             {
@@ -2485,7 +2485,7 @@ export const capacityResource = [
             {
                 id: 77,
                 name: 'Micro Industry',
-                nameNe: 'सूक्ष्म उद्योग',
+                nameNe: 'माइक्रो उद्योग',
                 type: 'Micro Industry',
             },
             {
@@ -2549,7 +2549,7 @@ export const capacityResource = [
             {
                 id: 85,
                 name: 'Suspension Bridge',
-                nameNe: 'भ्कुण्डीएको पुल',
+                nameNe: 'सस्पेंशन पुल',
                 type: 'Suspension',
             },
             {
@@ -2683,7 +2683,7 @@ export const capacityResource = [
     {
         id: 14,
         name: 'Electricity',
-        nameNe: 'बिजुली',
+        nameNe: 'ऊर्जा सेवा',
         resourceType: 'electricity',
         attribute: 'components',
         level: 1,
@@ -2697,7 +2697,7 @@ export const capacityResource = [
             {
                 id: 101,
                 name: 'Substation',
-                nameNe: 'सबस्टेशन',
+                nameNe: 'सब स्टेशन',
                 type: 'Substation',
             },
             {
@@ -2709,7 +2709,7 @@ export const capacityResource = [
             {
                 id: 103,
                 name: 'Transmission Pole',
-                nameNe: 'प्रसारण पोल',
+                nameNe: 'प्रसारण लाइन',
                 type: 'Transmission Pole',
             },
             {
@@ -2805,7 +2805,7 @@ export const capacityResource = [
     {
         id: 17,
         name: 'Water Supply Infrastructure',
-        nameNe: 'पानी आपूर्ति पूर्वाधार',
+        nameNe: 'पानी आपूर्ति आयोजना',
         resourceType: 'watersupply',
         attribute: 'scale',
         level: 1,
@@ -2813,19 +2813,19 @@ export const capacityResource = [
             {
                 id: 108,
                 name: 'Small',
-                nameNe: 'सानो',
+                nameNe: 'सानो आयोजना ',
                 type: 'Small',
             },
             {
                 id: 109,
                 name: 'Medium',
-                nameNe: 'मध्यम',
+                nameNe: 'मध्यम आयोजन ',
                 type: 'Medium',
             },
             {
                 id: 110,
                 name: 'Large',
-                nameNe: 'ठूलो',
+                nameNe: 'ठूला आयोजन',
                 type: 'Large',
             },
 
@@ -2835,7 +2835,7 @@ export const capacityResource = [
     {
         id: 24,
         name: 'Roadway',
-        nameNe: 'बाटो',
+        nameNe: 'स्थलमार्ग सुबिधा',
         resourceType: 'roadway',
         level: 1,
         attribute: 'kindOfVehicle',
@@ -2849,7 +2849,7 @@ export const capacityResource = [
             {
                 id: 92,
                 name: 'Micro',
-                nameNe: 'माइक्रो',
+                nameNe: 'माइक्रो  बस',
                 type: 'Micro',
             },
             {
@@ -2899,7 +2899,7 @@ export const capacityResource = [
     {
         id: 26,
         name: 'Airway',
-        nameNe: 'वायुमार्ग',
+        nameNe: 'हवाई सुबिधा',
         resourceType: 'airway',
         level: 1,
         attribute: 'type',
@@ -2907,13 +2907,13 @@ export const capacityResource = [
             {
                 id: 98,
                 name: 'National',
-                nameNe: 'राष्ट्रिय',
+                nameNe: 'राष्ट्रिय हवाई सुबिधा',
                 type: 'National',
             },
             {
                 id: 99,
                 name: 'International',
-                nameNe: 'अन्तर्राष्ट्रिय',
+                nameNe: 'अन्तर्राष्ट्रिय हवाई सुबिधा',
                 type: 'International',
             },
 
@@ -2923,7 +2923,7 @@ export const capacityResource = [
     {
         id: 28,
         name: 'Fire Fighting Apparatus',
-        nameNe: 'आगो नियनत्रण उपकरण',
+        nameNe: 'अग्नी नियनत्रण उपकरण',
         resourceType: 'firefightingapparatus',
         attribute: 'typeOfApparatus',
         level: 1,
@@ -3014,7 +3014,7 @@ export const capacityResource = [
     {
         id: 20,
         name: 'Humanitarian Open Space',
-        nameNe: 'मानवीय खुला ठाउँ',
+        nameNe: 'मानवीय खुल्ला स्थान',
         resourceType: 'openspace',
         attribute: '',
         level: 1,
@@ -3023,7 +3023,7 @@ export const capacityResource = [
     {
         id: 21,
         name: 'Community Space',
-        nameNe: 'सामुदायिक ठाउँ',
+        nameNe: 'सामुदायिक खुल्ला स्थान',
         resourceType: 'communityspace',
         attribute: '',
         level: 1,
@@ -3032,7 +3032,7 @@ export const capacityResource = [
     {
         id: 22,
         name: 'Evacuation Centre',
-        nameNe: 'निकासी केन्द्र',
+        nameNe: 'आपतकालीन सेल्टर',
         resourceType: 'evacuationcentre',
         attribute: '',
         level: 1,

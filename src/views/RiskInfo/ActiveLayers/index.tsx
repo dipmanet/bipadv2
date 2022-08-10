@@ -49,6 +49,26 @@ const ActiveLayer = (
 ) => {
     const { map } = useContext(MapChildContext);
 
+    const layerCheck = (layers) => {
+        if (language === 'en') {
+            if (layers.fullName) {
+                return layers.fullName;
+            }
+
+            return layers.title;
+        }
+
+        if (layers.fullName) {
+            return layers.fullName;
+        }
+
+        if (layers.titleNe) {
+            return layers.titleNe;
+        }
+
+        return layers.title;
+    };
+
     const zoomToBbox = () => {
         if (map) {
             if (!layer && !layer.bbox) return;
@@ -60,13 +80,7 @@ const ActiveLayer = (
             <header className={styles.header}>
                 <h4 className={styles.heading}>
                     {/* {layer.fullName || layer.title} */}
-                    {language === 'en' ? layer.fullName
-                        ? layer.fullName
-                        : layer.title
-                        : layer.fullName
-                            ? layer.fullName
-                            : layer.titleNe
-                    }
+                    {layerCheck(layer)}
 
                 </h4>
                 <Button
