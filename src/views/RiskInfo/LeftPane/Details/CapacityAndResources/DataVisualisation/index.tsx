@@ -20,6 +20,8 @@ import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Too
 import html2canvas from 'html2canvas';
 import JsPDF from 'jspdf';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 
 import ModalHeader from '#rscv/Modal/Header';
@@ -28,22 +30,22 @@ import ModalBody from '#rscv/Modal/Body';
 
 
 import FullStepwiseRegionSelectInput, {
-	RegionValuesAlt,
+    RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
-import { districtsSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
+import { districtsSelector, languageSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
 
 import {
-	createRequestClient,
-	NewProps,
-	ClientAttributes,
-	methods,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
 } from '#request';
 
 import { MultiResponse } from '#store/atom/response/types';
 import {
-	Contact,
-	Organization,
-	Training as ContactTraining,
+    Contact,
+    Organization,
+    Training as ContactTraining,
 } from '#store/atom/page/types';
 import DangerButton from '#rsca/Button/DangerButton';
 
@@ -79,252 +81,252 @@ import BarChartVisualization from './BarChart';
 
 
 const getLocationDetails = (point: unknown) => {
-	const geoJson = {
-		type: 'FeatureCollection',
-		features: [
-			{
-				type: 'Feature',
-				geometry: point,
-			},
-		],
-	};
+    const geoJson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: point,
+            },
+        ],
+    };
 
-	return ({
-		geoJson,
-	});
+    return ({
+        geoJson,
+    });
 };
 
 interface OwnProps {
-	contactId?: Contact['id'];
-	details?: Contact;
-	onEditSuccess?: (contactId: Contact['id'], contact: Contact) => void;
-	onAddSuccess?: (contact: Contact) => void;
-	closeModal?: () => void;
+    contactId?: Contact['id'];
+    details?: Contact;
+    onEditSuccess?: (contactId: Contact['id'], contact: Contact) => void;
+    onAddSuccess?: (contact: Contact) => void;
+    closeModal?: () => void;
 }
 
 // TODO: Write appropriate types
 interface FaramValues {
-	name?: string | null;
-	position?: string | null;
-	email?: string | null;
-	image?: File | null;
-	workNumber?: string | null;
-	mobileNumber?: string | null;
-	isDrrFocalPerson?: boolean | null;
-	organization?: number | null;
-	committee?: Contact['committee'] | null;
-	stepwiseRegion?: RegionValuesAlt | null;
-	communityAddress?: string | null;
-	location?: ReturnType<typeof getLocationDetails> | null;
+    name?: string | null;
+    position?: string | null;
+    email?: string | null;
+    image?: File | null;
+    workNumber?: string | null;
+    mobileNumber?: string | null;
+    isDrrFocalPerson?: boolean | null;
+    organization?: number | null;
+    committee?: Contact['committee'] | null;
+    stepwiseRegion?: RegionValuesAlt | null;
+    communityAddress?: string | null;
+    location?: ReturnType<typeof getLocationDetails> | null;
 }
 
 interface FaramErrors {
 }
 
 interface State {
-	faramValues: FaramValues;
-	faramErrors: FaramErrors;
-	pristine: boolean;
-	organizationList?: Organization[];
+    faramValues: FaramValues;
+    faramErrors: FaramErrors;
+    pristine: boolean;
+    organizationList?: Organization[];
 }
 
 interface Params {
-	body?: FaramValues;
-	setPristine?: (pristine: boolean) => void;
-	setOrganizationList?: (organizationList: Organization[]) => void;
-	setFaramErrors?: (error: object) => void;
+    body?: FaramValues;
+    setPristine?: (pristine: boolean) => void;
+    setOrganizationList?: (organizationList: Organization[]) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 type Props = NewProps<OwnProps, Params>;
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
-	municipalityContactEditRequest: {
-		url: ({ props }) => `/municipality-contact/${props.contactId}/`,
-		method: methods.PATCH,
-		body: ({ params }) => params && params.body,
-		query: {
-			expand: ['trainings', 'organization'],
-		},
-		onSuccess: ({ response, props, params }) => {
-			const editedContact = response as Contact;
-			const {
-				contactId,
-				onEditSuccess,
-			} = props;
-			if (onEditSuccess && contactId) {
-				onEditSuccess(contactId, editedContact);
-			}
-			if (params && params.setPristine) {
-				params.setPristine(true);
-			}
-		},
-		onFailure: ({ error, params }) => {
-			if (params && params.setFaramErrors) {
-				// TODO: handle error
-				console.warn('failure', error);
-				params.setFaramErrors({
-					$internal: ['Some problem occurred'],
-				});
-			}
-		},
-		onFatal: ({ params }) => {
-			if (params && params.setFaramErrors) {
-				params.setFaramErrors({
-					$internal: ['Some problem occurred'],
-				});
-			}
-		},
-		extras: { hasFile: true },
-	},
-	municipalityContactAddRequest: {
-		url: '/municipality-contact/',
-		method: methods.POST,
-		body: ({ params }) => params && params.body,
-		query: {
-			expand: ['trainings', 'organization'],
-		},
-		onSuccess: ({ response, props }) => {
-			const editedContact = response as Contact;
-			const { onAddSuccess, closeModal } = props;
-			if (onAddSuccess) {
-				onAddSuccess(editedContact);
-			}
-			if (closeModal) {
-				closeModal();
-			}
-		},
-		onFailure: ({ error, params }) => {
-			if (params && params.setFaramErrors) {
-				// TODO: handle error
-				console.warn('failure', error);
-				params.setFaramErrors({
-					$internal: ['Some problem occurred'],
-				});
-			}
-		},
-		onFatal: ({ params }) => {
-			if (params && params.setFaramErrors) {
-				params.setFaramErrors({
-					$internal: ['Some problem occurred'],
-				});
-			}
-		},
-		extras: { hasFile: true },
-	},
-	organizationGetRequest: {
-		url: '/organization/',
-		method: methods.GET,
-		onMount: true,
-		onSuccess: ({ response, params }) => {
-			const organizationList = response as MultiResponse<Organization>;
+    municipalityContactEditRequest: {
+        url: ({ props }) => `/municipality-contact/${props.contactId}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        query: {
+            expand: ['trainings', 'organization'],
+        },
+        onSuccess: ({ response, props, params }) => {
+            const editedContact = response as Contact;
+            const {
+                contactId,
+                onEditSuccess,
+            } = props;
+            if (onEditSuccess && contactId) {
+                onEditSuccess(contactId, editedContact);
+            }
+            if (params && params.setPristine) {
+                params.setPristine(true);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        extras: { hasFile: true },
+    },
+    municipalityContactAddRequest: {
+        url: '/municipality-contact/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        query: {
+            expand: ['trainings', 'organization'],
+        },
+        onSuccess: ({ response, props }) => {
+            const editedContact = response as Contact;
+            const { onAddSuccess, closeModal } = props;
+            if (onAddSuccess) {
+                onAddSuccess(editedContact);
+            }
+            if (closeModal) {
+                closeModal();
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        extras: { hasFile: true },
+    },
+    organizationGetRequest: {
+        url: '/organization/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            const organizationList = response as MultiResponse<Organization>;
 
-			if (params && params.setOrganizationList) {
-				params.setOrganizationList(organizationList.results);
-			}
-		},
-	},
+            if (params && params.setOrganizationList) {
+                params.setOrganizationList(organizationList.results);
+            }
+        },
+    },
 };
 const sidepanelLogo = [
-	{
-		name: 'Education',
-		image: education,
-	},
-	{
-		name: 'Banking & Finance',
-		image: finance,
-	},
-	{
-		name: 'Culture',
-		image: cultural,
-	},
-	{
-		name: 'Hotel & Restaurant',
-		image: hotelandrestaurant,
-	},
-	{
-		name: 'Governance',
-		image: governance,
-	},
-	{
-		name: 'Health',
-		image: health,
-	},
-	{
-		name: 'Transportation',
-		image: transportation,
-	},
-	{
-		name: 'Airway',
-		image: airway,
-	},
-	{
-		name: 'Waterway',
-		image: waterway,
-	},
-	{
-		name: 'Roadway',
-		image: roadway,
-	},
-	{
-		name: 'Industry',
-		image: industry,
-	},
-	{
-		name: 'Communication',
-		image: communication,
-	},
-	{
-		name: 'Bridge',
-		image: bridge,
-	},
-	{
-		name: 'Roadway',
-		image: bridge,
-	},
-	{
-		name: 'Waterway',
-		image: bridge,
-	},
-	{
-		name: 'Airway',
-		image: bridge,
-	},
-	{
-		name: 'Helipad',
-		image: helipad,
-	},
-	{
-		name: 'Electricity',
-		image: electricity,
-	},
-	{
-		name: 'Fire Fighting Apparatus',
-		image: firefightingApp,
-	},
-	{
-		name: 'Fire Engine',
-		image: firefightingApp,
-	},
-	{
-		name: 'Sanitation Service',
-		image: sanitationService,
-	},
-	{
-		name: 'Water Supply Infrastructure',
-		image: watersupply,
-	},
-	{
-		name: 'Humanitarian Open Space',
-		image: openspace,
-	},
-	{
-		name: 'Community Space',
-		image: openspace,
-	},
-	{
-		name: 'Evacuation Centre',
-		image: evacuationCentre,
-	},
+    {
+        name: 'Education',
+        image: education,
+    },
+    {
+        name: 'Banking & Finance',
+        image: finance,
+    },
+    {
+        name: 'Culture',
+        image: cultural,
+    },
+    {
+        name: 'Hotel & Restaurant',
+        image: hotelandrestaurant,
+    },
+    {
+        name: 'Governance',
+        image: governance,
+    },
+    {
+        name: 'Health',
+        image: health,
+    },
+    {
+        name: 'Transportation',
+        image: transportation,
+    },
+    {
+        name: 'Airway',
+        image: airway,
+    },
+    {
+        name: 'Waterway',
+        image: waterway,
+    },
+    {
+        name: 'Roadway',
+        image: roadway,
+    },
+    {
+        name: 'Industry',
+        image: industry,
+    },
+    {
+        name: 'Communication',
+        image: communication,
+    },
+    {
+        name: 'Bridge',
+        image: bridge,
+    },
+    {
+        name: 'Roadway',
+        image: bridge,
+    },
+    {
+        name: 'Waterway',
+        image: bridge,
+    },
+    {
+        name: 'Airway',
+        image: bridge,
+    },
+    {
+        name: 'Helipad',
+        image: helipad,
+    },
+    {
+        name: 'Electricity',
+        image: electricity,
+    },
+    {
+        name: 'Fire Fighting Apparatus',
+        image: firefightingApp,
+    },
+    {
+        name: 'Fire Engine',
+        image: firefightingApp,
+    },
+    {
+        name: 'Sanitation Service',
+        image: sanitationService,
+    },
+    {
+        name: 'Water Supply Infrastructure',
+        image: watersupply,
+    },
+    {
+        name: 'Humanitarian Open Space',
+        image: openspace,
+    },
+    {
+        name: 'Community Space',
+        image: openspace,
+    },
+    {
+        name: 'Evacuation Centre',
+        image: evacuationCentre,
+    },
 ];
 // const data = [
 //     {
@@ -366,1548 +368,1723 @@ const sidepanelLogo = [
 
 // ];
 const visualizationKeyValues = [
-	{
-		resourceType: 'education',
-		visualizationHeading: 'Education Institution',
-		chartDataType: [
-			{
-				label: 'Education Institution Types',
-				key: 'type',
-				values: ['Preprimary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Education Institutions',
-				visualizationWordEnd: '',
-
-
-			},
-			{
-				label: 'Operator Type',
-				key: 'operatorType',
-				values: ['Government', 'Private', 'Community', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Education Institutions are ',
-				visualizationWordEnd: ' Run',
-			},
-
-			{
-				label: 'Education Institution With',
-				key: ['hasOpenSpace', 'hasEvacuationRoute', 'hasHealthCenterPsychoCounseling'],
-				values: ['Open space', 'Evacuation route available', 'Health center/psycho counseling'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: '',
-				visualizationWordEnd: ' are Available ',
-
-			},
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Number of Students',
-				key: ['noOfMaleStudent', 'noOfFemaleStudent', 'noOfOtherStudent'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Students ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Differently-abled Students',
-				key: ['noOfDifferentlyAbledMaleStudents', 'noOfDifferentlyAbledFemaleStudents', 'noOfDifferentlyAbledOtherStudents'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Students ',
-				visualizationWordEnd: '',
-
-			},
-		],
-	},
-
-	{
-		resourceType: 'finance',
-		visualizationHeading: 'Banking and Finance Institution',
-		chartDataType: [
-			{
-				label: 'Banking & Financial Institution Types',
-				key: 'type',
-				values: ['Commercial', 'Micro Credit Development', 'Finance', 'Development Bank', 'Cooperative', 'Money Exchange', 'ATM'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Banking and Financial Institutions ',
-				visualizationWordEnd: '',
-
-
-			},
-			{
-				label: 'Operator Type',
-				key: 'operatorType',
-				values: ['Government', 'Private', 'Community', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Banking and Financial Institutions are ',
-				visualizationWordEnd: ' Run',
-
-
-			},
-			// {
-			//     label: 'Services Available',
-			//     key: ['bank', 'moneyExchange', 'atm', 'hasOtherServices'],
-			//     values: ['Bank', 'Money Exchange', 'ATM', 'Other Services'],
-			//     isBoolean: true,
-			//     visualizationKey: 'highestValue',
-			//     visualizationWordStart: 'Banking and Financial institutions are ',
-			//     visualizationWordEnd: 'run',
-
-			// },
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'communication',
-		visualizationHeading: 'Communication Institution',
-		chartDataType: [
-			{
-				label: 'Communication Facility Types',
-				key: 'type',
-				values: ['FM Radio', 'TV Station', 'Newspapers', 'Phone Service', 'Cable', 'Online Media', 'Internet Service Provider'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Communication Facilities ',
-				visualizationWordEnd: '',
-
-
-			},
-			{
-				label: 'Operator Type',
-				key: 'operatorType',
-				values: ['Government', 'Private', 'Community', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Communication Facilities are ',
-				visualizationWordEnd: ' Run',
-
-
-			},
-
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Disaster Management',
-				key: 'hasEvacuationRoute',
-				values: ['Evacuation route'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Institution have Evacuation Route ',
-				visualizationWordEnd: '',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'governance',
-		visualizationHeading: 'Government Institution',
-		chartDataType: [
-			{
-				label: 'Government Institution Types',
-				key: 'type',
-				values: ['Government', 'INGO', 'NGO', 'CSO', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Governance Institutions ',
-				visualizationWordEnd: '',
-
-
-			},
-			{
-				label: 'Operator Type',
-				key: 'operatorType',
-				values: ['Government', 'Private', 'Community', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Institutions are ',
-				visualizationWordEnd: ' Run',
-			},
-			// {
-			//     label: 'Helipad ',
-			//     key: 'hasHelipad',
-			//     values: ['Helipad '],
-			//     isBoolean: true,
-			//     visualizationKey: 'total',
-			//     visualizationWordStart: 'Number of governance institutions ',
-			//     visualizationWordEnd: '',
-
-			// },
-			// {
-			//     label: 'Open Space ',
-			//     key: 'hasOpenSpace',
-			//     values: ['Open Space '],
-			//     isBoolean: true,
-
-			// },
-
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Governance Institutions with ',
-				key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute', 'hasDisasterMgmtUnit'],
-				values: ['Helipad', 'Open space', 'Evacuation route', 'Have disaster management unit'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Governance Institutions with ',
-				visualizationWordEnd: ' available',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'hotelandrestaurant',
-		visualizationHeading: 'Hotel & Restaurant',
-		chartDataType: [
-			{
-				label: 'Hospitality',
-				key: 'type',
-				values: ['Hotel', 'Restaurant', 'Lodge', 'Resort', 'Homestay'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Hotel and Restaurants ',
-				visualizationWordEnd: '',
-			},
-
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Hotel and Restaurants With',
-				key: ['noOfRoom', 'noOfBed'],
-				values: ['Rooms Available', 'Beds Available'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: '',
-				visualizationWordEnd: '',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'cultural',
-		visualizationHeading: 'Cultural Sites',
-		chartDataType: [
-			{
-				label: 'Cultural Site Types',
-				key: 'religion',
-				values: ['Hindu', 'Islam', 'Christian', 'Buddhist', 'Kirat', 'Sikhism', 'Judaism', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Cultural Sites ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Cultural Site With ',
-				key: ['hasOpenSpace', 'drinkingWater', 'toilet', 'hasWashFacility', 'hasSleepingFacility', 'hasElectricity'],
-				values: ['Open Space', 'Drinking Water', 'Toilet', 'WASH facilities', 'Sleeping facilities', 'Electricity facilities'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Cultural Sites with ',
-				visualizationWordEnd: ' Available',
-
-			},
-
-
-			// {
-			//     label: 'Open Space ',
-			//     key: 'hasOpenSpace',
-			//     values: ['Open Space '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Drinking Water Available ',
-			//     key: 'drinkingWater',
-			//     values: ['Drinking Water '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Toilet Available ',
-			//     key: 'toilet',
-			//     values: ['Toilet '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Wash Facility Available ',
-			//     key: 'hasWashFacility',
-			//     values: ['Wash Facility '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Sleeping Facility Available ',
-			//     key: 'hasSleepingFacility',
-			//     values: ['Sleeping Facility '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Electricity Facility Available ',
-			//     key: 'hasElectricity',
-			//     values: ['Electricity Facility '],
-			//     isBoolean: true,
-
-			// },
-
-
-		],
-	},
-	{
-		resourceType: 'industry',
-		visualizationHeading: 'Industries',
-		chartDataType: [
-			{
-				label: 'Industry Types',
-				key: 'subtype',
-				values: ['Cottage Industry', 'Micro Industry', 'Small Industry', 'Medium Industry', 'Large Industry', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Industries ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Operator Type',
-				key: 'operatorType',
-				values: ['Government', 'Private', 'Community', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Industries are ',
-				visualizationWordEnd: ' Run',
-			},
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Industries with  ',
-				key: 'hasEvacuationRoute',
-				values: ['Evacuation route'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Industries have Evacuation Route ',
-				visualizationWordEnd: '',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'bridge',
-		visualizationHeading: 'Bridges',
-		chartDataType: [
-			{
-				label: 'Bridge Types',
-				key: 'type',
-				values: ['Arch Bridge', 'Beam Bridge', 'Cantilever Bridge', 'Wooden Bridge', 'Suspension Bridge', 'Cable-stayed Bridge', 'Culvert Bridge', 'Bailey Bridge', 'Truss Bridge', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Bridges ',
-				visualizationWordEnd: '',
-			},
-
-			// {
-			//     label: 'Operator Type',
-			//     key: 'operatorType',
-			//     values: ['Government', 'Private', 'Community', 'Other'],
-			//     isBoolean: false,
-			//     showFalseValue: false,
-			// },
-			{
-				label: 'Motorable Bridge ',
-				key: ['isMotorable'],
-				values: ['Motorable Bridge'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Motorable Bridges ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Condition of the Bridge',
-				key: 'condition',
-				values: ['Good', 'Bad'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Bridges in ',
-				visualizationWordEnd: ' Condition',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'electricity',
-		visualizationHeading: 'Electricity',
-		chartDataType: [
-			{
-				label: 'Hydropower/Components',
-				key: 'components',
-				values: ['Hydropower', 'Substation', 'Dam', 'Transmission Pole', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: '',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Status',
-				key: 'status',
-				values: ['Operational ', 'Under construction', 'Survey'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Hydropower/Components are ',
-				visualizationWordEnd: '',
-
-			},
-		],
-	},
-	{
-		resourceType: 'sanitation',
-		visualizationHeading: 'Sanitation Service',
-		chartDataType: [
-			{
-				label: 'Sanitation Infrastructure Types',
-				key: 'type',
-				values: ['Landfill', 'Dumping Site', 'Public Toilet'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Sanitation Infrastructures',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Permanent Infrastructures',
-				key: 'type',
-				values: ['Landfill', 'Dumping Site'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: '',
-				visualizationWordEnd: ' are Permanent',
-			},
-			{
-				label: 'Public Toilets',
-				key: ['noOfMaleToilets', 'noOfFemaleToilets', 'noOfCommonToilets'],
-				values: ['Male Toilet', 'Female Toilet', 'Common Toilet'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Public Toilets Available',
-				visualizationWordEnd: '',
-
-			},
-			// {
-			//     label: 'Permanent Landfill',
-			//     key: ['isPermanent'],
-			//     values: ['Permanent Landfill '],
-			//     isBoolean: true,
-
-			// },
-
-		],
-	},
-	{
-		resourceType: 'openspace',
-		visualizationHeading: 'Open Space',
-		chartDataType: [
-
-			{
-				label: 'Open Space Area Details(Sq Km)',
-				key: ['totalArea', 'usableArea', 'usableAreaSecond'],
-				values: ['Total Area', 'Usable Area', 'Alternate Usable Area'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of sanitation infrastructures',
-				visualizationWordEnd: '',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'communityspace',
-		visualizationHeading: 'Community Space',
-		chartDataType: [
-
-			// {
-			//     label: 'Community Space Area Details(Sq Km)',
-			//     key: ['capacity'],
-			//     values: ['Capacity of Community Space'],
-			//     isBoolean: false,
-			//     visualizationKey: 'total',
-			//     visualizationWordStart: 'Number of sanitation infrastructures',
-			//     visualizationWordEnd: '',
-
-			// },
-			{
-				label: 'Number of Community Spaces',
-				key: 'resourceType',
-				values: ['communityspace'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Community Spaces',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Community Space With',
-				key: ['usedAsHelipad', 'isDrinkingWaterAvailable', 'isToiletAvailable'],
-				values: ['Emergency Landing', 'Drinking water facility', 'Toilet'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Community Space with ',
-				visualizationWordEnd: '',
-			},
-
-
-		],
-	},
-
-	{
-		resourceType: 'watersupply',
-		visualizationHeading: 'Water Supply Infrastructure',
-		chartDataType: [
-			{
-				label: 'Water Supply Infrastructure Scales',
-				key: 'scale',
-				values: ['Small', 'Medium', 'Large'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Water Supply Infrastructures',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Operator Type',
-				key: 'operatorType',
-				values: ['Government', 'Private', 'Community', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Water supply Infrastructures are ',
-				visualizationWordEnd: ' Run',
-			},
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Water Supply Infrastructure',
-				key: 'isWaterSupplyOperational',
-				values: ['Operational', 'Not operational'],
-				isBoolean: true,
-				showFalseValue: true,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Water supply Infrastructures are ',
-				visualizationWordEnd: '',
-			},
-			// {
-			//     label: 'Technical Staff',
-			//     key: ['hasTechnicalStaff'],
-			//     values: ['Technical Staff '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Operational Water Supply Infrastructure',
-			//     key: ['isWaterSupplyOperational'],
-			//     values: ['Operational Water Supply Infrastructure '],
-			//     isBoolean: true,
-
-			// },
-
-
-		],
-	},
-	{
-		resourceType: 'roadway',
-		visualizationHeading: 'Roadways',
-		chartDataType: [
-			{
-				label: 'Vehicle Types',
-				key: 'kindOfVehicle',
-				values: ['Bus', 'Micro', 'Van', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Vehicles',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees',
-				visualizationWordEnd: '',
-			},
-		],
-	},
-	{
-		resourceType: 'helipad',
-		visualizationHeading: 'Helipad',
-		chartDataType: [
-			{
-				label: 'Helipad',
-				key: 'ownership',
-				values: ['Civil Aviation Authority of Nepal', 'Nepal Army', 'Nepal Police', 'Armed Police Force', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Helipad',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Surface Type of Helipad',
-				key: 'surfaceType',
-				values: ['Concrete', 'Grass land', 'Dirt surface', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Helipads have ',
-				visualizationWordEnd: ' Surface',
-			},
-
-			{
-				label: 'Helipad with ',
-				key: ['hasRoadAccess', 'storageFacilityAvailable', 'internetFacilityAvailable', 'windDirectionIndicatorAvailable', 'heliMarkerAvailable', 'nightLightingAvailable'],
-				values: ['Road access', 'Storage facility', 'Internet service', 'Wind direction indicator', 'Heli marker', 'Night lighting'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Helipads have ',
-				visualizationWordEnd: '',
-			},
-
-
-			{
-				label: 'Condition of Helipad',
-				key: 'helipadCondition',
-				values: ['Operational', 'Need Repair', 'Not in working condition'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Helipads are ',
-				visualizationWordEnd: '',
-			},
-
-			// {
-			//     label: 'Wind Direction Indicator Available',
-			//     key: 'windDirectionIndicatorAvailable',
-			//     values: ['Wind Direction Indicator Available'],
-			//     isBoolean: true,
-			// },
-			// {
-			//     label: 'Heli Marker Available ',
-			//     key: 'heliMarkerAvailable',
-			//     values: ['Heli Marker Available '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Night Lighting Available',
-			//     key: 'nightLightingAvailable',
-			//     values: ['Night Lighting Available'],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Number of Employees',
-			//     key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-			//     values: ['Male', 'Female', 'Other'],
-			//     isBoolean: false,
-
-			// },
-
-			// {
-			//     label: 'Employees with Disability',
-			//     key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-			//     values: ['Male', 'Female', 'Other'],
-			//     isBoolean: false,
-
-			// },
-
-		],
-	},
-	{
-		resourceType: 'waterway',
-		visualizationHeading: 'Waterway',
-		chartDataType: [
-			{
-				label: 'Waterway Types',
-				key: 'type',
-				values: ['General Boat', 'Electrical Boat', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Waterways ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Condition of Boat',
-				key: 'condition',
-				values: ['Good', 'Bad'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Waterways in ',
-				visualizationWordEnd: ' Condition ',
-			},
-
-		],
-	},
-	{
-		resourceType: 'airway',
-		visualizationHeading: 'Airway',
-		chartDataType: [
-			{
-				label: 'Airway Types',
-				key: 'type',
-				values: ['National', 'International'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Airways ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Airways with  ',
-				key: ['hasEvacuationRoute', 'hasHumanitarianStagingArea'],
-				values: ['Evacuation route', 'Humanitarian staging area'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Airways with ',
-				visualizationWordEnd: '',
-
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'fireengine',
-		visualizationHeading: 'Fire Engine',
-		chartDataType: [
-			{
-				label: 'Condition of fire engine',
-				key: 'condition',
-				values: ['Operational', 'Need Repair', 'Not in working condition'],
-				isBoolean: false,
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'firefightingapparatus',
-		visualizationHeading: 'Fire Fighting Apparatus',
-		chartDataType: [
-			{
-				label: 'Fire Fighting Apparatus Types',
-				key: 'typeOfApparatus',
-				values: ['Fire Engine', 'Fire Bike', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Fire Fighting Apparatus ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Condition of fire fighting apparatus',
-				key: 'condition',
-				values: ['Operational', 'Need Repair', 'Not in working condition'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Fire Fighting Apparatus are ',
-				visualizationWordEnd: '',
-			},
-			{
-				label: 'Operator Type of fire fighting apparatus',
-				key: 'operatorType',
-				values: ['Private', 'Government', 'Community'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Fire Fighting Apparatus are ',
-				visualizationWordEnd: ' Run',
-			},
-
-
-		],
-	},
-	{
-		resourceType: 'evacuationcentre',
-		visualizationHeading: 'Evacuation Center',
-		chartDataType: [
-			{
-				label: 'Evacuation Centers',
-				key: 'operatedBy',
-				values: ['Government', 'INGO', 'NGO', 'CSO'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Evacuation Centers ',
-				visualizationWordEnd: '',
-
-
-			},
-			{
-				label: 'Structure',
-				key: 'structure',
-				values: ['Single story', 'Multiple story'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Evacuation Centers are ',
-				visualizationWordEnd: '',
-
-
-			},
-			{
-				label: 'Capacity of Evacuation Center',
-				key: ['capacity'],
-				values: ['Capacity'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Maximum Capacity  ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Evacuation Center With  ',
-				key: ['hasEvacuationRoute', 'hasDrinkingWater', 'hasToilet', 'hasHandWashingFacility', 'hasFoodPreparationFacility', 'hasSleepingFacility'],
-				values: ['Evacuation Route', 'Drinking Water', 'Toilet', 'Wash Facility', 'Food Preparation Facility', 'Sleeping Facility'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: '',
-				visualizationWordEnd: ' are Available ',
-
-			},
-
-
-			// {
-			//     label: 'Drinking Water Available ',
-			//     key: 'hasDrinkingWater',
-			//     values: ['Drinking Water '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Toilet Available ',
-			//     key: 'hasToilet',
-			//     values: ['Toilet '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Wash Facility Available ',
-			//     key: 'hasHandWashingFacility',
-			//     values: ['Wash Facility '],
-			//     isBoolean: true,
-
-			// },
-			// {
-			//     label: 'Sleeping Facility Available ',
-			//     key: 'hasSleepingFacility',
-			//     values: ['Sleeping Facility '],
-			//     isBoolean: true,
-
-			// },
-
-
-		],
-	},
-	{
-		resourceType: 'health',
-		visualizationHeading: 'Health Institution Category',
-		chartDataType: [
-
-			{
-				label: 'Health Infrastructure Types',
-				key: 'type',
-				values: ['Specialized Hospital', 'Center Hospital', 'Teaching Hospital',
-					'Regional Hospital', 'Sub Regional Hospital', 'Zonal Hospital',
-					'District Hospital', 'Basic Hospital', 'General Hospital', 'Primary Health Care Center',
-					'Health Post', 'District Clinic (Including Institutional)', 'Urban Health Center', 'Community Health Unit',
-					'Poly Clinic', 'Clinic', 'Dental Clinic', 'Diagnostic Center', 'Nursing Home', 'Rehabilitation', 'Ayurveda Hospital',
-					'Zonal Ayurveda Aushadhalaya', 'District Ayurveda Health Center',
-					'Ayurveda Aushadhalaya', 'Homeopathy Hospital', 'Unani Hospital', 'Primary Hospital',
-					'Secondary A Hospital', 'Secondary B Hospital', 'Tertiary Hospital', 'Super Specialized Hospital',
-					'Basic Health Care Center', 'Veterinary', 'Pathology', 'Pharmacy', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Health Infrastructures ',
-				visualizationWordEnd: '',
-			},
-
-			// {
-			//     label: 'Services Available',
-			//     key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
-			//         'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
-			//         'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
-			//         'hasLaboratoryService', 'hasVolunteerCounselingTest', 'hasPmtct', 'hasAntiRetroViralTreatment', 'hasDental',
-			//         'hasInPatient', 'hasRadiology'],
-			//     values: ['Child Immunization', 'TD Vaccination', 'IMNCI',
-			//         'Growth Monitoring', 'Safe Motherhood', 'Family Planning', 'OPD', 'Treatment of Tuberculosis',
-			//         'Treatment of MDR tuberculosis', 'Treatment of Leprosy',
-			//         'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
-			//         'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
-			//         'Dental', 'Inpatient', 'Radiology'],
-			//     isBoolean: false,
-			//     showFalseValue: false,
-			//     visualizationKey: 'highestValue',
-			//     visualizationWordStart: '',
-			//     visualizationWordEnd: ' Available',
-
-			// },
-			{
-				label: 'Services Available',
-				key: ['hasAmbulanceService', 'hasPharmacy', 'hasCovidClinicService', 'hasEmergencyServices', 'hasOperatingTheatre', 'hasBloodDonation'],
-				values: ['Ambulance service', 'Pharmacy', 'COVID clinic service', 'Emergency service', 'Operating theatre', 'Blood donation'],
-				isBoolean: true,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: '',
-				visualizationWordEnd: ' Available',
-
-			},
-
-
-			// {
-			//     label: 'Surgical Service',
-			//     key: ['hasCaesarianSection', 'hasGastrointestinal', 'hasTraumaSurgery', 'hasCardiacSurgery',
-			//         'hasNeuroSurgery', 'hasPlasticSurgery'],
-			//     values: ['Caesarian Section', 'Gastro Intestinal', 'Trauma Surgery', 'Cardiac Surgery', 'Neuro Surgery', 'Plastic Surgery'],
-			//     isBoolean: false,
-
-			// },
-			// {
-			//     label: 'Specialized Service',
-			//     key: ['hasIcu', 'hasCcu', 'hasNicu', 'hasMicu', 'hasSncu', 'hasPicu'],
-			//     values: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
-			//     isBoolean: false,
-
-			// },
-			{
-				label: 'Bed Count',
-				key: ['hospitalBedCount', 'icuBedCount', 'ventilatorBedCount'],
-				values: ['Hospital Bed', 'ICU Bed', 'Ventilator Bed'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Beds ',
-				visualizationWordEnd: '',
-
-			},
-			// {
-			//     label: 'Helipad Available',
-			//     key: ['hasHelipad'],
-			//     values: ['Helipad Available'],
-			//     isBoolean: false,
-
-			// },
-			// {
-			//     label: 'Open Space Available',
-			//     key: ['hasOpenSpace'],
-			//     values: ['Open Space Available'],
-			//     isBoolean: false,
-
-			// },
-			{
-				label: 'Number of Employees',
-				key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Number of Employees ',
-				visualizationWordEnd: '',
-
-			},
-
-			{
-				label: 'Differently-abled Employees',
-				key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
-				values: ['Male', 'Female', 'Other'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'total',
-				visualizationWordStart: 'Differently-abled Employees ',
-				visualizationWordEnd: '',
-
-			},
-			{
-				label: 'Health Infrastructures with ',
-				key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute'],
-				values: ['Helipad', 'Open space', 'Evacuation route'],
-				isBoolean: false,
-				showFalseValue: false,
-				visualizationKey: 'highestValue',
-				visualizationWordStart: 'Health Infrastructures with ',
-				visualizationWordEnd: ' available',
-
-			},
-
-
-		],
-	},
+    {
+        resourceType: 'education',
+        visualizationHeading: 'Education Institution',
+        visualizationHeadingNe: 'शिक्षा संस्था',
+        chartDataType: [
+            {
+                label: 'Education Institution Types',
+                labelNe: 'शिक्षा संस्था',
+                key: 'type',
+                values: ['Preprimary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
+                valuesNe: ['पूर्व-प्राथमिक', 'आधारभूत शिक्षा', 'उच्च माध्यमिक विद्यालय', 'कलेज', 'विश्वविद्यालय', 'परम्परागत शिक्षा', 'पुस्तकालय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Education Institutions',
+                visualizationWordEnd: '',
+
+
+            },
+            {
+                label: 'Operator Type',
+                labelNe: 'अपरेटरको प्रकार',
+                key: 'operatorType',
+                values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Education Institutions are ',
+                visualizationWordEnd: ' Run',
+            },
+
+            {
+                label: 'Education Institution With',
+                labelNe: 'शैक्षिक संस्था संग',
+                key: ['hasOpenSpace', 'hasEvacuationRoute', 'hasHealthCenterPsychoCounseling'],
+                values: ['Open space', 'Evacuation route available', 'Health center/psycho counseling'],
+                valuesNe: ['खुला ठाउँ', 'निकासी मार्ग उपलब्ध', 'स्वास्थ्य केन्द्र/साइको काउन्सिलिङ'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Available ',
+
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Number of Students',
+                labelNe: 'विद्यार्थी संख्या',
+                key: ['noOfMaleStudent', 'noOfFemaleStudent', 'noOfOtherStudent'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Students ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Differently-abled Students',
+                labelNe: 'फरक क्षमता भएका विद्यार्थीहरू',
+                key: ['noOfDifferentlyAbledMaleStudents', 'noOfDifferentlyAbledFemaleStudents', 'noOfDifferentlyAbledOtherStudents'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Students ',
+                visualizationWordEnd: '',
+
+            },
+        ],
+    },
+
+    {
+        resourceType: 'finance',
+        visualizationHeading: 'Banking and Finance Institution',
+        visualizationHeadingNe: 'बैंकिङ र वित्त संस्था',
+        chartDataType: [
+            {
+                label: 'Banking & Financial Institution Types',
+                labelNe: 'बैंकिङ र वित्तीय संस्थाहरू',
+                key: 'type',
+                values: ['Commercial', 'Micro Credit Development', 'Finance', 'Development Bank', 'Cooperative', 'Money Exchange', 'ATM'],
+                valuesNe: ['वाणिज्य', 'माइक्रो क्रेडिट विकास', 'वित्त', 'विकास बैंक', 'सहकारी', 'मनी एक्सचेन्ज', 'एटीएम'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Banking and Financial Institutions ',
+                visualizationWordEnd: '',
+
+
+            },
+            {
+                label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
+                key: 'operatorType',
+                values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Banking and Financial Institutions are ',
+                visualizationWordEnd: ' Run',
+
+
+            },
+            // {
+            //     label: 'Services Available',
+            //     labelNe: 'उपलब्ध सेवाहरू',
+            //     key: ['bank', 'moneyExchange', 'atm', 'hasOtherServices'],
+            //     values: ['Bank', 'Money Exchange', 'ATM', 'Other Services'],
+            //     valuesNe: ['बैंक', 'मनी एक्सचेन्ज', 'एटीएम', 'अन्य सेवाहरू'],
+            //     isBoolean: true,
+            //     visualizationKey: 'highestValue',
+            //     visualizationWordStart: 'Banking and Financial institutions are ',
+            //     visualizationWordEnd: 'run',
+
+            // },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'communication',
+        visualizationHeading: 'Communication Institution',
+        visualizationHeadingNe: 'सञ्चार संस्था',
+        chartDataType: [
+            {
+                label: 'Communication Facility Types',
+                labelNe: 'सञ्चार संस्थाका प्रकारहरू',
+                key: 'type',
+                values: ['FM Radio', 'TV Station', 'Newspapers', 'Phone Service', 'Cable', 'Online Media', 'Internet Service Provider'],
+                valuesNe: ['एफएम रेडियो', 'टिभी स्टेशन', 'न्युजपेपर', 'फोन सेवा', 'केबल', 'अनलाइन मिडिया', 'इन्टरनेट सेवा प्रदायक'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Communication Facilities ',
+                visualizationWordEnd: '',
+
+
+            },
+            {
+                label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
+                key: 'operatorType',
+                values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Communication Facilities are ',
+                visualizationWordEnd: ' Run',
+
+
+            },
+
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Disaster Management',
+                labelNe: 'विपद् व्यवस्थापन',
+                key: 'hasEvacuationRoute',
+                values: ['Evacuation route'],
+                valuesNe: ['निकासी मार्ग'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Institution have Evacuation Route ',
+                visualizationWordEnd: '',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'governance',
+        visualizationHeading: 'Government Institution',
+        visualizationHeadingNe: 'सरकारी संस्था',
+        chartDataType: [
+            {
+                label: 'Government Institution Types',
+                labelNe: 'सरकारी संस्थाका प्रकारहरू',
+                key: 'type',
+                values: ['Government', 'INGO', 'NGO', 'CSO', 'Other'],
+                valuesNe: ['सरकार', 'अन्तर्राष्ट्रिय गैर सरकारी संस्था', 'गैर सरकारी संस्था', 'सिएसवो', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Governance Institutions ',
+                visualizationWordEnd: '',
+
+
+            },
+            {
+                label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
+                key: 'operatorType',
+                values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Institutions are ',
+                visualizationWordEnd: ' Run',
+            },
+            // {
+            //     label: 'Helipad ',
+            //     labelNe: 'हेलिप्याड',
+            //     key: 'hasHelipad',
+            //     values: ['Helipad '],
+            //     valuesNe: ['हेलिप्याड'],
+            //     isBoolean: true,
+            //     visualizationKey: 'total',
+            //     visualizationWordStart: 'Number of governance institutions ',
+            //     visualizationWordEnd: '',
+
+            // },
+            // {
+            //     label: 'Open Space ',
+            //     labelNe: 'खुल्‍ला ठाउँ',
+            //     key: 'hasOpenSpace',
+            //     values: ['Open Space '],
+            //     valuesNe: ['खुल्‍ला ठाउँ'],
+            //     isBoolean: true,
+
+            // },
+
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Governance Institutions with ',
+                labelNe: 'सुशासन संस्थाहरु संग',
+                key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute', 'hasDisasterMgmtUnit'],
+                values: ['Helipad', 'Open space', 'Evacuation route', 'Have disaster management unit'],
+                valuesNe: ['हेलिप्याड', 'खुला ठाउँ', 'निकासी मार्ग', 'विपद् व्यवस्थापन इकाई छ'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Governance Institutions with ',
+                visualizationWordEnd: ' available',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'hotelandrestaurant',
+        visualizationHeading: 'Hotel & Restaurant',
+        visualizationHeadingNe: 'होटल र रेस्टुरेन्ट',
+        chartDataType: [
+            {
+                label: 'Hospitality',
+                labelNe: 'आतिथ्य',
+                key: 'type',
+                values: ['Hotel', 'Restaurant', 'Lodge', 'Resort', 'Homestay'],
+                valuesNe: ['होटेल', 'रेष्टुरेन्ट', 'लज', 'रिसोर्ट', 'होमस्टे'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Hotel and Restaurants ',
+                visualizationWordEnd: '',
+            },
+
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारीहरूको संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Hotel and Restaurants With',
+                labelNe: 'होटल र रेस्टुरेन्ट संग',
+                key: ['noOfRoom', 'noOfBed'],
+                values: ['Rooms Available', 'Beds Available'],
+                valuesNe: ['कोठा उपलब्ध छ', 'बेडहरू उपलब्ध छन्'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: '',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'cultural',
+        visualizationHeading: 'Cultural Sites',
+        visualizationHeadingNe: 'सांस्कृतिक साइटहरू',
+        chartDataType: [
+            {
+                label: 'Cultural Site Types',
+                labelNe: 'सांस्कृतिक साइट प्रकारहरू',
+                key: 'religion',
+                values: ['Hindu', 'Islam', 'Christian', 'Buddhist', 'Kirat', 'Sikhism', 'Judaism', 'Other'],
+                valuesNe: ['हिन्दू', 'इस्लाम', 'क्रिस्चियन', 'बौद्ध', 'किरात', 'सिख', 'यहूदी', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Cultural Sites ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Cultural Site With ',
+                labelNe: 'सांस्कृतिक साइट संग',
+                key: ['hasOpenSpace', 'drinkingWater', 'toilet', 'hasWashFacility', 'hasSleepingFacility', 'hasElectricity'],
+                values: ['Open Space', 'Drinking Water', 'Toilet', 'WASH facilities', 'Sleeping facilities', 'Electricity facilities'],
+                valuesNe: ['खुला ठाउँ', 'पिउने पानी', 'शौचालय', 'धुने सुविधा', 'सुत्ने सुविधा', 'बिजुली सुविधा'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Cultural Sites with ',
+                visualizationWordEnd: ' Available',
+
+            },
+
+
+            // {
+            //     label: 'Open Space ',
+            //     key: 'hasOpenSpace',
+            //     values: ['Open Space '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Drinking Water Available ',
+            //     key: 'drinkingWater',
+            //     values: ['Drinking Water '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Toilet Available ',
+            //     key: 'toilet',
+            //     values: ['Toilet '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Wash Facility Available ',
+            //     key: 'hasWashFacility',
+            //     values: ['Wash Facility '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Sleeping Facility Available ',
+            //     key: 'hasSleepingFacility',
+            //     values: ['Sleeping Facility '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Electricity Facility Available ',
+            //     key: 'hasElectricity',
+            //     values: ['Electricity Facility '],
+            //     isBoolean: true,
+
+            // },
+
+
+        ],
+    },
+    {
+        resourceType: 'industry',
+        visualizationHeading: 'Industries',
+        visualizationHeadingNe: 'उद्योगहरू',
+        chartDataType: [
+            {
+                label: 'Industry Types',
+                labelNe: 'उद्योगका प्रकारहरू',
+                key: 'subtype',
+                values: ['Cottage Industry', 'Micro Industry', 'Small Industry', 'Medium Industry', 'Large Industry', 'Other'],
+                valuesNe: ['घरेलु उद्योग', 'सूक्ष्म उद्योग', 'साना उद्योग', 'मध्यम उद्योग', 'ठूला उद्योग', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Industries ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
+                key: 'operatorType',
+                values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Industries are ',
+                visualizationWordEnd: ' Run',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Industries with  ',
+                labelNe: 'उद्योगहरु संग ',
+                key: 'hasEvacuationRoute',
+                values: ['Evacuation route'],
+                valuesNe: ['निकासी मार्ग'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Industries have Evacuation Route ',
+                visualizationWordEnd: '',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'bridge',
+        visualizationHeading: 'Bridges',
+        visualizationHeadingNe: 'पुलहरू',
+        chartDataType: [
+            {
+                label: 'Bridge Types',
+                labelNe: 'पुलका प्रकार',
+                key: 'type',
+                values: ['Arch Bridge', 'Beam Bridge', 'Cantilever Bridge', 'Wooden Bridge', 'Suspension Bridge', 'Cable-stayed Bridge', 'Culvert Bridge', 'Bailey Bridge', 'Truss Bridge', 'Other'],
+                valuesNe: ['आर्क पुल', 'बीम पुल', 'केन्टिलिभर पुल', 'काठे पुल', 'सस्पेन्सन पुल', 'केबल-स्टेड पुल', 'कलभर्ट पुल', 'बेली पुल', 'ट्रस पुल', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Bridges ',
+                visualizationWordEnd: '',
+            },
+
+            // {
+            //     label: 'Operator Type',
+            //     key: 'operatorType',
+            //     values: ['Government', 'Private', 'Community', 'Other'],
+            //     isBoolean: false,
+            //     showFalseValue: false,
+            // },
+            {
+                label: 'Motorable Bridge ',
+                labelNe: ['मोटरेबल ब्रिज'],
+                key: ['isMotorable'],
+                values: ['Motorable Bridge'],
+                valuesNe: ['मोटरेबल ब्रिज'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Motorable Bridges ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Condition of the Bridge',
+                labelNe: 'पुलको अवस्था',
+                key: 'condition',
+                values: ['Good', 'Bad'],
+                valuesNe: ['राम्रो', 'नराम्रो'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Bridges in ',
+                visualizationWordEnd: ' Condition',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'electricity',
+        visualizationHeading: 'Electricity',
+        visualizationHeadingNe: 'बिजुली',
+        chartDataType: [
+            {
+                label: 'Hydropower/Components',
+                labelNe: 'जलविद्युत/कम्पोनेन्टहरू',
+                key: 'components',
+                values: ['Hydropower', 'Substation', 'Dam', 'Transmission Pole', 'Other'],
+                valuesNe: ['जलविद्युत', 'सबस्टेशन', 'बाँध', 'ट्रान्समिशन पोल', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Status',
+                labelNe: 'स्थिति',
+                key: 'status',
+                values: ['Operational ', 'Under construction', 'Survey'],
+                valuesNe: ['कार्यात्मक', 'निर्माणाधीन', 'सर्वेक्षण'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Hydropower/Components are ',
+                visualizationWordEnd: '',
+
+            },
+        ],
+    },
+    {
+        resourceType: 'sanitation',
+        visualizationHeading: 'Sanitation Service',
+        visualizationHeadingNe: 'सरसफाई सेवा',
+        chartDataType: [
+            {
+                label: 'Sanitation Infrastructure Types',
+                labelNe: 'सरसफाई पूर्वाधारको प्रकार',
+                key: 'type',
+                values: ['Landfill', 'Dumping Site', 'Public Toilet'],
+                valuesNe: ['ल्याण्डफिल', 'डम्पिङ साइट', 'सार्वजनिक शौचालय'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Sanitation Infrastructures',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Permanent Infrastructures',
+                labelNe: 'स्थायी पूर्वाधारहरू',
+                key: 'type',
+                values: ['Landfill', 'Dumping Site'],
+                valuesNe: ['ल्याण्डफिल', 'डम्पिङ साइट'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Permanent',
+            },
+            {
+                label: 'Public Toilets',
+                labelNe: 'सार्वजनिक शौचालय',
+                key: ['noOfMaleToilets', 'noOfFemaleToilets', 'noOfCommonToilets'],
+                values: ['Male Toilet', 'Female Toilet', 'Common Toilet'],
+                valuesNe: ['पुरुष शौचालय', 'महिला शौचालय', 'सामान्य शौचालय'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Public Toilets Available',
+                visualizationWordEnd: '',
+
+            },
+            // {
+            //     label: 'Permanent Landfill',
+            //     key: ['isPermanent'],
+            //     values: ['Permanent Landfill '],
+            //     isBoolean: true,
+
+            // },
+
+        ],
+    },
+    {
+        resourceType: 'openspace',
+        visualizationHeading: 'Open Space',
+        visualizationHeadingNe: 'खुल्‍ला ठाउँ',
+        chartDataType: [
+
+            {
+                label: 'Open Space Area Details(Sq Km)',
+                labelNe: 'खुला क्षेत्र विवरण (वर्ग किलोमिटर)',
+                key: ['totalArea', 'usableArea', 'usableAreaSecond'],
+                values: ['Total Area', 'Usable Area', 'Alternate Usable Area'],
+                valuesNe: ['कुल क्षेत्र', 'प्रयोगयोग्य क्षेत्र', 'वैकल्पिक प्रयोगयोग्य क्षेत्र'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of sanitation infrastructures',
+                visualizationWordEnd: '',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'communityspace',
+        visualizationHeading: 'Community Space',
+        visualizationHeadingNe: 'सामुदायिक ठाउँ',
+        chartDataType: [
+
+            // {
+            //     label: 'Community Space Area Details(Sq Km)',
+            //     key: ['capacity'],
+            //     values: ['Capacity of Community Space'],
+            //     isBoolean: false,
+            //     visualizationKey: 'total',
+            //     visualizationWordStart: 'Number of sanitation infrastructures',
+            //     visualizationWordEnd: '',
+
+            // },
+            {
+                label: 'Number of Community Spaces',
+                labelNe: 'सामुदायिक स्थानहरूको संख्या',
+                key: 'resourceType',
+                values: ['communityspace'],
+                valuesNe: ['सामुदायिक स्थान'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Community Spaces',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Community Space With',
+                labelNe: 'सामुदायिक ठाउँ संग',
+                key: ['usedAsHelipad', 'isDrinkingWaterAvailable', 'isToiletAvailable'],
+                values: ['Emergency Landing', 'Drinking water facility', 'Toilet'],
+                valuesNe: ['इमर्जेन्सी ल्यान्डिङ', 'पिउने पानीको सुविधा', 'शौचालय'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Community Space with ',
+                visualizationWordEnd: '',
+            },
+
+
+        ],
+    },
+
+    {
+        resourceType: 'watersupply',
+        visualizationHeading: 'Water Supply Infrastructure',
+        visualizationHeadingNe: 'पानी आपूर्ति पूर्वाधार',
+        chartDataType: [
+            {
+                label: 'Water Supply Infrastructure Scales',
+                labelNe: 'पानी आपूर्ति पूर्वाधार स्केल',
+                key: 'scale',
+                values: ['Small', 'Medium', 'Large'],
+                valuesNe: ['सानो', 'मध्यम', 'ठूलो'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Water Supply Infrastructures',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Operator Type',
+                labelNe: 'अपरेटर प्रकार',
+                key: 'operatorType',
+                values: ['Government', 'Private', 'Community', 'Other'],
+                valuesNe: ['सरकारी', 'निजी', 'समुदाय', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordEnd: ' Run',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Water Supply Infrastructure',
+                labelNe: 'पानी आपूर्ति पूर्वाधार',
+                key: 'isWaterSupplyOperational',
+                values: ['Operational', 'Not operational'],
+                valuesNe: ['परिचालन', 'परिचालन छैन'],
+                isBoolean: true,
+                showFalseValue: true,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordEnd: '',
+            },
+            // {
+            //     label: 'Technical Staff',
+            //     key: ['hasTechnicalStaff'],
+            //     values: ['Technical Staff '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Operational Water Supply Infrastructure',
+            //     key: ['isWaterSupplyOperational'],
+            //     values: ['Operational Water Supply Infrastructure '],
+            //     isBoolean: true,
+
+            // },
+
+
+        ],
+    },
+    {
+        resourceType: 'roadway',
+        visualizationHeading: 'Roadways',
+        visualizationHeadingNe: 'सडक मार्गहरू',
+        chartDataType: [
+            {
+                label: 'Vehicle Types',
+                labelNe: 'गाडीका प्रकार',
+                key: 'kindOfVehicle',
+                values: ['Bus', 'Micro', 'Van', 'Other'],
+                valuesNe: ['बस', 'माइक्रो', 'भ्यान', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Vehicles',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees',
+                visualizationWordEnd: '',
+            },
+        ],
+    },
+    {
+        resourceType: 'helipad',
+        visualizationHeading: 'Helipad',
+        visualizationHeadingNe: 'हेलिप्याड',
+        chartDataType: [
+            {
+                label: 'Helipad',
+                labelNe: 'हेलिप्याड',
+                key: 'ownership',
+                values: ['Civil Aviation Authority of Nepal', 'Nepal Army', 'Nepal Police', 'Armed Police Force', 'Other'],
+                valuesNe: ['नेपाल नागरिक उड्डयन प्राधिकरण', 'नेपाली सेना', 'नेपाल प्रहरी', 'सशस्त्र प्रहरी बल', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Helipad',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Surface Type of Helipad',
+                labelNe: 'हेलिप्याडको सतह प्रकार',
+                key: 'surfaceType',
+                values: ['Concrete', 'Grass land', 'Dirt surface', 'Other'],
+                valuesNe: ['कंक्रिट', 'घाँस जग्गा', 'माटो सतह', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Helipads have ',
+                visualizationWordEnd: ' Surface',
+            },
+
+            {
+                label: 'Helipad with ',
+                labelNe: 'हेलिप्याड संग',
+                key: ['hasRoadAccess', 'storageFacilityAvailable', 'internetFacilityAvailable', 'windDirectionIndicatorAvailable', 'heliMarkerAvailable', 'nightLightingAvailable'],
+                values: ['Road access', 'Storage facility', 'Internet service', 'Wind direction indicator', 'Heli marker', 'Night lighting'],
+                valuesNe: ['सडक पहुँच', 'भण्डारण सुविधा', 'इन्टरनेट सेवा', 'हावाको दिशा सूचक', 'हेली मार्कर', 'रात्रि प्रकाश'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Helipads have ',
+                visualizationWordEnd: '',
+            },
+
+
+            {
+                label: 'Condition of Helipad',
+                labelNe: 'हेलिप्याडको अवस्था',
+                key: 'helipadCondition',
+                values: ['Operational', 'Need Repair', 'Not in working condition'],
+                valuesNe: ['अपरेशनल', 'रिपेयर आवश्यक छ', 'काम गर्ने अवस्थामा छैन'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Helipads are ',
+                visualizationWordEnd: '',
+            },
+
+            // {
+            //     label: 'Wind Direction Indicator Available',
+            //     key: 'windDirectionIndicatorAvailable',
+            //     values: ['Wind Direction Indicator Available'],
+            //     isBoolean: true,
+            // },
+            // {
+            //     label: 'Heli Marker Available ',
+            //     key: 'heliMarkerAvailable',
+            //     values: ['Heli Marker Available '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Night Lighting Available',
+            //     key: 'nightLightingAvailable',
+            //     values: ['Night Lighting Available'],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Number of Employees',
+            //     key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+            //     values: ['Male', 'Female', 'Other'],
+            //     isBoolean: false,
+
+            // },
+
+            // {
+            //     label: 'Employees with Disability',
+            //     key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+            //     values: ['Male', 'Female', 'Other'],
+            //     isBoolean: false,
+
+            // },
+
+        ],
+    },
+    {
+        resourceType: 'waterway',
+        visualizationHeading: 'Waterway',
+        visualizationHeadingNe: 'जलमार्ग',
+        chartDataType: [
+            {
+                label: 'Waterway Types',
+                labelNe: 'जलमार्गका प्रकार',
+                key: 'type',
+                values: ['General Boat', 'Electrical Boat', 'Other'],
+                valuesNe: ['सामान्य डुङ्गा', 'विद्युतीय डुङ्गा', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Waterways ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Condition of Boat',
+                labelNe: 'डुङ्गाको अवस्था',
+                key: 'condition',
+                values: ['Good', 'Bad'],
+                valuesNe: ['राम्रो', 'नराम्रो'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Waterways in ',
+                visualizationWordEnd: ' Condition ',
+            },
+
+        ],
+    },
+    {
+        resourceType: 'airway',
+        visualizationHeading: 'Airway',
+        visualizationHeadingNe: 'वायुमार्ग',
+        chartDataType: [
+            {
+                label: 'Airway Types',
+                labelNe: 'वायुमार्गका प्रकारहरू',
+                key: 'type',
+                values: ['National', 'International'],
+                valuesNe: ['राष्ट्रिय', 'अन्तर्राष्ट्रिय'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Airways ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Airways with  ',
+                labelNe: 'वायुमार्ग संग',
+                key: ['hasEvacuationRoute', 'hasHumanitarianStagingArea'],
+                values: ['Evacuation route', 'Humanitarian staging area'],
+                valuesNe: ['निकासी मार्ग', 'मानवीय मञ्चन क्षेत्र'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Airways with ',
+                visualizationWordEnd: '',
+
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'fireengine',
+        visualizationHeading: 'Fire Engine',
+        visualizationHeadingNe: 'दमकल',
+        chartDataType: [
+            {
+                label: 'Condition of fire engine',
+                labelNe: 'दमकलको अवस्था',
+                key: 'condition',
+                values: ['Operational', 'Need Repair', 'Not in working condition'],
+                valuesNe: ['सञ्चालन', 'मरम्मत आवश्यक', 'काम गर्ने अवस्थामा छैन'],
+                isBoolean: false,
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'firefightingapparatus',
+        visualizationHeading: 'Fire Fighting Apparatus',
+        visualizationHeadingNe: 'आगो नियनत्रण उपकरण',
+        chartDataType: [
+            {
+                label: 'Fire Fighting Apparatus Types',
+                labelNe: 'फायर फाइटिंग उपकरणको प्रकार',
+                key: 'typeOfApparatus',
+                values: ['Fire Engine', 'Fire Bike', 'Other'],
+                valuesNe: ['दमकल', 'फायर बाइक', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Fire Fighting Apparatus ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Condition of fire fighting apparatus',
+                labelNe: 'फायर फाइटिंग उपकरणको अवस्था',
+                key: 'condition',
+                values: ['Operational', 'Need Repair', 'Not in working condition'],
+                valuesNe: ['कार्यात्मक', 'मरम्मत आवश्यक छ', 'काम गर्ने अवस्थामा छैन'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordEnd: '',
+            },
+            {
+                label: 'Operator Type of fire fighting apparatus',
+                labelNe: 'आगो नियन्त्रक उपकरणको अपरेटर प्रकार',
+                key: 'operatorType',
+                values: ['Private', 'Government', 'Community'],
+                valuesNe: ['निजी', 'सरकारी', 'समुदाय'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordEnd: ' Run',
+            },
+
+
+        ],
+    },
+    {
+        resourceType: 'evacuationcentre',
+        visualizationHeading: 'Evacuation Center',
+        visualizationHeadingNe: 'निकासी केन्द्र',
+        chartDataType: [
+            {
+                label: 'Evacuation Centers',
+                labelNe: 'निकासी केन्द्रहरू',
+                key: 'operatedBy',
+                values: ['Government', 'INGO', 'NGO', 'CSO'],
+                valuesNe: ['सरकार', 'अन्तर्राष्ट्रिय गैर सरकारी संस्था', 'गैर सरकारी संस्था', 'सिएसवो'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Evacuation Centers ',
+                visualizationWordEnd: '',
+
+
+            },
+            {
+                label: 'Structure',
+                labelNe: 'संरचना',
+                key: 'structure',
+                values: ['Single story', 'Multiple story'],
+                valuesNe: ['एक तले', 'बहु तले'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Evacuation Centers are ',
+                visualizationWordEnd: '',
+
+
+            },
+            {
+                label: 'Capacity of Evacuation Center',
+                labelNe: 'निकासी केन्द्रको क्षमता',
+                key: ['capacity'],
+                values: ['Capacity'],
+                valuesNe: ['क्षमता'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Maximum Capacity  ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Evacuation Center With  ',
+                labelNe: 'निकासी केन्द्र संग',
+                key: ['hasEvacuationRoute', 'hasDrinkingWater', 'hasToilet', 'hasHandWashingFacility', 'hasFoodPreparationFacility', 'hasSleepingFacility'],
+                values: ['Evacuation Route', 'Drinking Water', 'Toilet', 'Wash Facility', 'Food Preparation Facility', 'Sleeping Facility'],
+                valuesNe: ['निकासी मार्ग', 'पिउने पानी', 'शौचालय', 'धुने सुविधा', 'खाना तयारी सुविधा', 'सुत्ने सुविधा'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Available ',
+
+            },
+
+
+            // {
+            //     label: 'Drinking Water Available ',
+            //     key: 'hasDrinkingWater',
+            //     values: ['Drinking Water '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Toilet Available ',
+            //     key: 'hasToilet',
+            //     values: ['Toilet '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Wash Facility Available ',
+            //     key: 'hasHandWashingFacility',
+            //     values: ['Wash Facility '],
+            //     isBoolean: true,
+
+            // },
+            // {
+            //     label: 'Sleeping Facility Available ',
+            //     key: 'hasSleepingFacility',
+            //     values: ['Sleeping Facility '],
+            //     isBoolean: true,
+
+            // },
+
+
+        ],
+    },
+    {
+        resourceType: 'health',
+        visualizationHeading: 'Health Institution Category',
+        visualizationHeadingNe: 'स्वास्थ्य संस्था श्रेणी',
+        chartDataType: [
+
+            {
+                label: 'Health Infrastructure Types',
+                key: 'type',
+                values: ['Specialized Hospital', 'Center Hospital', 'Teaching Hospital',
+                    'Regional Hospital', 'Sub Regional Hospital', 'Zonal Hospital',
+                    'District Hospital', 'Basic Hospital', 'General Hospital', 'Primary Health Care Center',
+                    'Health Post', 'District Clinic (Including Institutional)', 'Urban Health Center', 'Community Health Unit',
+                    'Poly Clinic', 'Clinic', 'Dental Clinic', 'Diagnostic Center', 'Nursing Home', 'Rehabilitation', 'Ayurveda Hospital',
+                    'Zonal Ayurveda Aushadhalaya', 'District Ayurveda Health Center',
+                    'Ayurveda Aushadhalaya', 'Homeopathy Hospital', 'Unani Hospital', 'Primary Hospital',
+                    'Secondary A Hospital', 'Secondary B Hospital', 'Tertiary Hospital', 'Super Specialized Hospital',
+                    'Basic Health Care Center', 'Veterinary', 'Pathology', 'Pharmacy', 'Other'],
+                valuesNe: ['विशेष अस्पताल', 'केन्द्र अस्पताल', 'शिक्षण अस्पताल',
+                    'क्षेत्रीय अस्पताल', 'उपक्षेत्रीय अस्पताल', 'अञ्चल अस्पताल',
+                    'जिल्ला अस्पताल', 'आधारभूत अस्पताल', 'सामान्य अस्पताल', 'प्राथमिक स्वास्थ्य सेवा केन्द्र',
+                    'स्वास्थ्य पोस्ट', 'जिल्ला क्लिनिक (संस्थागत सहित)', 'शहरी स्वास्थ्य केन्द्र', 'सामुदायिक स्वास्थ्य इकाई',
+                    'पोली क्लिनिक', 'क्लिनिक', 'डेन्टल क्लिनिक', 'डायग्नोस्टिक सेन्टर', 'नर्सिङ होम', 'पुनर्वास', 'आयुर्वेद अस्पताल',
+                    'क्षेत्रीय आयुर्वेद औषधालय', 'जिला आयुर्वेद स्वास्थ्य केन्द्र',
+                    'आयुर्वेद औषधालय', 'होमियोप्याथी अस्पताल', 'युनानी अस्पताल', 'प्राथमिक अस्पताल',
+                    'सेकेन्डरी ए अस्पताल', 'सेकेन्डरी बी अस्पताल', 'टर्टियरी अस्पताल', 'सुपर स्पेशलाइज्ड अस्पताल',
+                    'आधारभूत स्वास्थ्य सेवा केन्द्र', 'भेटेनरी', 'प्याथोलोजी', 'फार्मेसी', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Health Infrastructures ',
+                visualizationWordEnd: '',
+            },
+
+            // {
+            //     label: 'Services Available',
+            //     key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
+            //         'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
+            //         'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
+            //         'hasLaboratoryService', 'hasVolunteerCounselingTest', 'hasPmtct', 'hasAntiRetroViralTreatment', 'hasDental',
+            //         'hasInPatient', 'hasRadiology'],
+            //     values: ['Child Immunization', 'TD Vaccination', 'IMNCI',
+            //         'Growth Monitoring', 'Safe Motherhood', 'Family Planning', 'OPD', 'Treatment of Tuberculosis',
+            //         'Treatment of MDR tuberculosis', 'Treatment of Leprosy',
+            //         'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
+            //         'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
+            //         'Dental', 'Inpatient', 'Radiology'],
+            //     isBoolean: false,
+            //     showFalseValue: false,
+            //     visualizationKey: 'highestValue',
+            //     visualizationWordStart: '',
+            //     visualizationWordEnd: ' Available',
+
+            // },
+            {
+                label: 'Services Available',
+                labelNe: 'उपलब्ध सेवाहरू',
+                key: ['hasAmbulanceService', 'hasPharmacy', 'hasCovidClinicService', 'hasEmergencyServices', 'hasOperatingTheatre', 'hasBloodDonation'],
+                values: ['Ambulance service', 'Pharmacy', 'COVID clinic service', 'Emergency service', 'Operating theatre', 'Blood donation'],
+                valuesNe: ['एम्बुलेन्स सेवा', 'फार्मेसी', 'कोभिड क्लिनिक सेवा', 'आकस्मिक सेवा', 'अपरेटिङ थिएटर', 'रक्तदान'],
+                isBoolean: true,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: '',
+                visualizationWordEnd: ' Available',
+
+            },
+
+
+            // {
+            //     label: 'Surgical Service',
+            //     key: ['hasCaesarianSection', 'hasGastrointestinal', 'hasTraumaSurgery', 'hasCardiacSurgery',
+            //         'hasNeuroSurgery', 'hasPlasticSurgery'],
+            //     values: ['Caesarian Section', 'Gastro Intestinal', 'Trauma Surgery', 'Cardiac Surgery', 'Neuro Surgery', 'Plastic Surgery'],
+            //     isBoolean: false,
+
+            // },
+            // {
+            //     label: 'Specialized Service',
+            //     key: ['hasIcu', 'hasCcu', 'hasNicu', 'hasMicu', 'hasSncu', 'hasPicu'],
+            //     values: ['ICU', 'CCU', 'NICU', 'MICU', 'SNCU', 'PICU'],
+            //     isBoolean: false,
+
+            // },
+            {
+                label: 'Bed Count',
+                labelNe: 'बेड गणना',
+                key: ['hospitalBedCount', 'icuBedCount', 'ventilatorBedCount'],
+                values: ['Hospital Bed', 'ICU Bed', 'Ventilator Bed'],
+                valuesNe: ['हस्पिटल बेड', 'आईसीयू बेड', 'भेन्टिलेटर बेड'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Beds ',
+                visualizationWordEnd: '',
+
+            },
+            // {
+            //     label: 'Helipad Available',
+            //     key: ['hasHelipad'],
+            //     values: ['Helipad Available'],
+            //     isBoolean: false,
+
+            // },
+            // {
+            //     label: 'Open Space Available',
+            //     key: ['hasOpenSpace'],
+            //     values: ['Open Space Available'],
+            //     isBoolean: false,
+
+            // },
+            {
+                label: 'Number of Employees',
+                labelNe: 'कर्मचारी संख्या',
+                key: ['noOfMaleEmployee', 'noOfFemaleEmployee', 'noOfOtherEmployee'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Number of Employees ',
+                visualizationWordEnd: '',
+
+            },
+
+            {
+                label: 'Differently-abled Employees',
+                labelNe: 'फरक क्षमता भएका कर्मचारीहरू',
+                key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
+                values: ['Male', 'Female', 'Other'],
+                valuesNe: ['पुरुष', 'महिला', 'अन्य'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'total',
+                visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordEnd: '',
+
+            },
+            {
+                label: 'Health Infrastructures with ',
+                labelNe: 'स्वास्थ्य पूर्वाधारहरु संग',
+                key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute'],
+                values: ['Helipad', 'Open space', 'Evacuation route'],
+                valuesNe: ['हेलिप्याड', 'ओपन स्पेस'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Health Infrastructures with ',
+                visualizationWordEnd: ' available',
+
+            },
+
+
+        ],
+    },
 
 ];
-const CustomizedLabel = (props) => {
-	const { x, y, stroke, value } = props;
 
-	return (
-		<text x={x} y={y} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">{value}</text>
-	);
+
+const CustomizedLabel = (props) => {
+    const { x, y, stroke, value } = props;
+
+    return (
+        <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">{value}</text>
+    );
 };
 const mapStateToProps = (state, props) => ({
-	provinces: provincesSelector(state),
-	districts: districtsSelector(state),
-	municipalities: municipalitiesSelector(state),
-	wards: wardsSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    language: languageSelector(state),
 
 
 });
 class DataVisualisation extends React.PureComponent<Props, State> {
-	public constructor(props: Props) {
-		super(props);
+    public constructor(props: Props) {
+        super(props);
 
 
-		this.state = {
+        this.state = {
 
-			selectedResourceData: [],
-			GraphVisualizationData: [],
-			isValueCalculated: false,
-			isDataSetClicked: false,
-			allDataNullConditionCheck: false,
-			downloadButtonClicked: false,
+            selectedResourceData: [],
+            GraphVisualizationData: [],
+            isValueCalculated: false,
+            isDataSetClicked: false,
+            allDataNullConditionCheck: false,
 
-		};
-	}
+        };
+    }
 
-	public async componentDidMount(prevProps, prevState) {
-		const { resourceCollection, resourceType, pendingAPICall } = this.props;
-		const { isValueCalculated } = this.state;
-		if (!pendingAPICall) {
-			const resourceDataList = resourceCollection[resourceType];
+    public async componentDidMount(prevProps, prevState) {
+        const { resourceCollection, resourceType, pendingAPICall } = this.props;
+        const { isValueCalculated } = this.state;
 
-			this.setState({
-				selectedResourceData: resourceDataList,
-			});
-			const GraphVisualizationData = await visualizationKeyValues
-				.filter(item => item.resourceType === resourceType)[0].chartDataType
-				.map((datakey) => {
-					const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-						datakey.isBoolean, datakey.values, datakey.showFalseValue);
-					return datam;
-				});
-			const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + (curValue.value ? curValue.value : 0), 0);
+        const resourceDataList = resourceCollection[resourceType];
 
-			if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
-				this.setState({ isValueCalculated: true });
-			}
-			if (calculatedSum > 0) {
-				this.setState({ isValueCalculated: true });
-			}
-			if (prevState) {
-				if (prevState.isValueCalculated !== isValueCalculated) {
-					this.setState({ GraphVisualizationData });
-				}
-			}
-		}
-	}
+        this.setState({
+            selectedResourceData: resourceDataList,
+        });
+        const GraphVisualizationData = await visualizationKeyValues
+            .filter(item => item.resourceType === resourceType)[0].chartDataType
+            .map((datakey) => {
+                const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
+                    datakey.isBoolean, datakey.values, datakey.valuesNe);
+                return datam;
+            });
+        const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
 
-	public async componentDidUpdate(prevProps, prevState) {
-		const { resourceCollection, resourceType, pendingAPICall } = this.props;
-		const { isValueCalculated } = this.state;
-		if (!pendingAPICall) {
-			const resourceDataList = resourceCollection[resourceType];
+        if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
+            this.setState({ isValueCalculated: true });
+        }
+        if (calculatedSum > 0) {
+            this.setState({ isValueCalculated: true });
+        }
+        if (prevState) {
+            if (prevState.isValueCalculated !== isValueCalculated) {
+                this.setState({ GraphVisualizationData });
+            }
+        }
+    }
 
-			this.setState({
-				selectedResourceData: resourceDataList,
-			});
-			const GraphVisualizationData = await visualizationKeyValues
-				.filter(item => item.resourceType === resourceType)[0].chartDataType
-				.map((datakey) => {
-					const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-						datakey.isBoolean, datakey.values, datakey.showFalseValue);
-					return datam;
-				});
-			let nullDataCheck = null;
-			const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + (curValue.value ? curValue.value : 0), 0);
-			nullDataCheck = calculatedSum || null;
+    public async componentDidUpdate(prevProps, prevState) {
+        const { resourceCollection, resourceType, pendingAPICall } = this.props;
+        const { isValueCalculated } = this.state;
 
-			if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
-				this.setState({
-					isValueCalculated: true,
-					allDataNullConditionCheck: true,
-				});
-			}
-			if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
-				this.setState({ isValueCalculated: true });
-			}
-			if ((calculatedSum > 0)) {
-				this.setState({ isValueCalculated: true });
-			}
-			if (prevState.isValueCalculated !== isValueCalculated) {
-				this.setState({ GraphVisualizationData });
-			}
-		}
-	}
+        const resourceDataList = resourceCollection[resourceType];
 
-	private getResourceDataForVisualization = (resourceType, key, isBoolean, label, showFalseValue) => {
-		const { selectedResourceData } = this.state;
-		let filteredResourceChartDataType;
-		let calculatedValueData;
-		let filterDataForCalculation;
-		let filterDataForFalseValue;
-		if (typeof key === 'string') {
-			filteredResourceChartDataType = visualizationKeyValues
-				.filter(item => item.resourceType === resourceType)[0].chartDataType
-				.filter(dat => dat.key === key)[0].values;
-			calculatedValueData = filteredResourceChartDataType.map((item, i) => {
-				filterDataForCalculation = selectedResourceData.filter(d => d[key] === item);
+        this.setState({
+            selectedResourceData: resourceDataList,
+        });
 
-				if (isBoolean) {
-					filterDataForCalculation = selectedResourceData.filter(d => d[key] === true);
-				}
-				if (isBoolean && showFalseValue) {
-					filterDataForFalseValue = selectedResourceData.filter(d => d[key] === false);
-				}
-				const obj = {};
-				obj.label = item;
-				obj.value = item === 'Not operational' ? filterDataForFalseValue.length : filterDataForCalculation.length;
-				obj.color = '#1A70AC';
-				// obj[`${item}`] = filterDataForCalculation.length;
-				return obj;
-			});
-		}
-		if (typeof key === 'object') {
-			filteredResourceChartDataType = key;
-			calculatedValueData = filteredResourceChartDataType.map((item, i) => {
-				// const isOtherItemDefined = filteredResourceChartDataType[filteredResourceChartDataType.length - 1];
+        const GraphVisualizationData = await visualizationKeyValues
+            .filter(item => item.resourceType === resourceType)[0].chartDataType
+            .map((datakey) => {
+                const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
+                    datakey.isBoolean, datakey.values, datakey.valuesNe);
+                return datam;
+            });
+        let nullDataCheck = null;
+        const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+        nullDataCheck = calculatedSum || null;
 
-				// const filterDataForStringValue = selectedResourceData.filter(itm => itm[isOtherItemDefined] !== null);
-				// if(filterDataForStringValue){
-				//     filterDataForCalculation=filterDataForStringValue.length
-				// }else{
+        if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
+            this.setState({
+                isValueCalculated: true,
+                allDataNullConditionCheck: true,
+            });
+        }
+        if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
+            this.setState({ isValueCalculated: true });
+        }
+        if ((calculatedSum > 0)) {
+            this.setState({ isValueCalculated: true });
+        }
+        if (prevState.isValueCalculated !== isValueCalculated) {
+            this.setState({ GraphVisualizationData });
+        }
+    }
 
-				// }
-
-				// console.log('filterDataForStringValue', filterDataForStringValue);
-				filterDataForCalculation = selectedResourceData
-					.reduce((acc, curValue) => acc + (curValue[item] ? curValue[item] : 0), 0);
-				const obj = {};
-				obj.label = label[i];
-				obj.value = filterDataForCalculation;
-				obj.color = '#1A70AC';
-				// obj[`${label[i]}`] = filterDataForCalculation;
-				return obj;
-			});
-		}
-		const dataDisplayFromHighestValue = calculatedValueData.sort((a, b) => b.value - a.value);
+    private getResourceDataForVisualization = (resourceType, key, isBoolean, label, labelNe) => {
+        const { selectedResourceData } = this.state;
 
 
-		return dataDisplayFromHighestValue;
-	}
+        const { language: { language } } = this.props;
+        let filteredResourceChartDataType;
+        let calculatedValueData;
+        let filterDataForCalculation;
 
-	private HighValuePercentageCalculation = (value) => {
-		const { resourceType } = this.props;
-		const labelName = visualizationKeyValues
-			.filter(item => item.resourceType === resourceType)[0].chartDataType;
-		const HighestValue = value.map((item, i) => {
-			const highValueObject = item.reduce((a, b) => (a.value > b.value ? a : b));
+        const filterLabelAccToLang = (data, keyMain) => {
+            if (data.length > 0) {
+                const actData = data.filter(item => item.resourceType === resourceType)[0].chartDataType;
+                const chartData = actData.filter(dat => dat.key === key)[0];
+                return chartData[keyMain];
+            }
+            return [];
+        };
 
-			const totalSum = item.reduce((a, b) => a + (b.value ? b.value : 0), 0);
+        let nepaliKeyVal = {};
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < visualizationKeyValues.length; index++) {
+            const chartData = visualizationKeyValues[index].chartDataType;
+            // eslint-disable-next-line no-plusplus
+            for (let jindex = 0; jindex < chartData.length; jindex++) {
+                const engVal = chartData[jindex].values;
+                const nepaliVal = chartData[jindex].valuesNe;
+                if (!nepaliVal) {
+                    // eslint-disable-next-line no-continue
+                    continue;
+                }
+                // eslint-disable-next-line no-plusplus
+                for (let k = 0; k < engVal.length; k++) {
+                    const indiVidualData = engVal[k];
+                    const indiVidualDataNep = nepaliVal[k];
+                    nepaliKeyVal[indiVidualDataNep] = indiVidualData;
+                }
+            }
+        }
 
+        if (typeof key === 'string') {
+            const keyMain = language === 'en' ? 'values' : 'valuesNe';
+            filteredResourceChartDataType = filterLabelAccToLang(visualizationKeyValues, keyMain);
 
-			const highValuePercentage = totalSum === 0 ? 0 : ((highValueObject.value / totalSum) * 100).toFixed(2);
+            calculatedValueData = filteredResourceChartDataType.map((item, i) => {
+                filterDataForCalculation = selectedResourceData.filter(d => d[key] === (language === 'en' ? item : nepaliKeyVal[item]));
 
-			const subCategoryName = labelName[i].label;
-			const { visualizationKey, visualizationWordStart, visualizationWordEnd } = labelName[i];
-			const displayingValueinVisualization = visualizationKey === 'total' ? totalSum : highValueObject.value;
-			const displayVisualizationWord = visualizationKey === 'total'
-				? `${visualizationWordStart}${visualizationWordEnd ? `${visualizationWordEnd}` : ''}`
-				: `${visualizationWordStart}` + `${highValueObject.label}` + `${visualizationWordEnd}`;
-			return ({
-				category: subCategoryName,
-				subCategoryName: highValueObject.label,
-				highValuePercentage,
-				totalSum,
-				highestValue: highValueObject.value,
-				visualizationKey,
-				displayingValueinVisualization,
-				displayVisualizationWord,
-			});
-		});
-		return HighestValue;
-	}
+                if (isBoolean) {
+                    filterDataForCalculation = selectedResourceData.filter(d => d[key] === true);
+                }
 
-	private handleSaveClick = (id) => {
-		// const myElements = document.getElementById('realMap123');
-		//     console.log('My final element', myElements);
-		//     myElements.style.setProperty('height', 'unset', 'important');
-		//     myElements.style.setProperty('width', 'unset', 'important');
-		//     myElements.style.setProperty('position', 'unset', 'important');
-		//     myElements.style.setProperty('top', 'unset', 'important');
-		//     myElements.style.setProperty('background-color', 'transparent', 'important');
-		//     myElements.style.setProperty('flex-grow', '1', 'important');
+                const obj = {};
+                obj.label = item;
+                obj.value = filterDataForCalculation.length;
+                obj.color = '#1A70AC';
 
-		if (id === 'overallDownload') {
-			this.setState({ downloadButtonClicked: true });
-			const myElements = document.getElementById('1');
-			myElements.style.setProperty('display', 'none', 'important');
-			// const data = document.getElementsByClassName('test');
-			// data.style.setProperty('display', 'none', 'important');
-			// const test = document.getElementsByClassName('test');
+                // obj[`${item}`] = filterDataForCalculation.length;
+                return obj;
+            });
+        }
+        if (typeof key === 'object') {
+            filteredResourceChartDataType = key;
+            calculatedValueData = filteredResourceChartDataType.map((item, i) => {
+                // const isOtherItemDefined = filteredResourceChartDataType[filteredResourceChartDataType.length - 1];
 
-			// document.getElementsByClassName('test')[0].style.display = 'none';
-			let downloadBtnElements = document.getElementsByClassName('test');
+                // const filterDataForStringValue = selectedResourceData.filter(itm => itm[isOtherItemDefined] !== null);
+                // if(filterDataForStringValue){
+                //     filterDataForCalculation=filterDataForStringValue.length
+                // }else{
 
-			for (let i = 0; i < downloadBtnElements.length; i++) {
-				downloadBtnElements[i].style.display = 'none';
-			}
+                // }
 
-			const divToDisplay = document.getElementById('overallDownload');
-			const pdf = new JsPDF('p', 'mm', 'a4');
-			pdf.page = 1;
-
-			html2canvas(divToDisplay).then((canvas) => {
-				const divImage = canvas.toDataURL('image/png');
-				const imgWidth = 200;
-				const pageHeight = 297;
-				const imgHeight = (canvas.height * imgWidth / canvas.width);
-				let heightLeft = imgHeight;
-				function footer() {
-					pdf.text(150, 285, `page ${pdf.page}`); // print number bottom right
-					pdf.page++;
-				}
-				let position = 10;
-				pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight, '', 'FAST');
-				heightLeft -= pageHeight;
-
-				while (heightLeft >= 0) {
-					position = heightLeft - imgHeight;
-					footer();
-					pdf.addPage();
-					pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight);
-					heightLeft -= pageHeight;
-				}
-				pdf.save('Report.pdf');
-
-				myElements.style.setProperty('display', 'flex', 'important');
-
-				for (let i = 0; i < downloadBtnElements.length; i++) {
-					downloadBtnElements[i].style.display = 'flex';
-				}
-				this.setState({ downloadButtonClicked: false });
-				// data.style.setProperty('display', 'unset', 'important');
-			});
-		} else {
-			saveChart(id, id);
-		}
-
-		// saveChart("hazardSeverity", "hazardSeverity");
-	};
-
-	public render() {
-		const { closeVisualization, checkedCategory,
-			resourceType, level, lvl2catName, typeName,
-			resourceCollection, selectedCategoryName,
-			wards, provinces, districts, municipalities, pendingAPICall, ErrorData } = this.props;
-		const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck, downloadButtonClicked } = this.state;
+                // console.log('filterDataForStringValue', filterDataForStringValue);
+                filterDataForCalculation = selectedResourceData
+                    .reduce((acc, curValue) => acc + curValue[item] || 0, 0);
+                const obj = {};
+                obj.label = language === 'en' ? label[i] : labelNe[i];
+                obj.value = filterDataForCalculation;
+                obj.color = '#1A70AC';
+                // obj[`${label[i]}`] = filterDataForCalculation;
+                return obj;
+            });
+        }
 
 
-		const labelName = visualizationKeyValues
-			.filter(item => item.resourceType === resourceType)[0].chartDataType;
+        return calculatedValueData;
+    }
 
-		const HighValuePercentageCalculation = this.HighValuePercentageCalculation(GraphVisualizationData);
+    private HighValuePercentageCalculation = (value) => {
+        const { resourceType, language: { language } } = this.props;
+        const labelName = visualizationKeyValues
+            .filter(item => item.resourceType === resourceType)[0].chartDataType;
+        const HighestValue = value.map((item, i) => {
+            const highValueObject = item.reduce((a, b) => (a.value > b.value ? a : b));
 
-		const { visualizationHeading } = visualizationKeyValues
-			.filter(item => item.resourceType === resourceType)[0];
+            // console.log(value, 'obj');
 
-		const selectedImage = sidepanelLogo.filter(data => data.name === selectedCategoryName)[0].image;
+            const totalSum = item.reduce((a, b) => a + b.value || 0, 0);
 
 
-		const updatedSelectedResource = selectedResourceData.map((item) => {
-			const wardExist = wards.find(w => w.id === item.ward);
+            const highValuePercentage = totalSum === 0 ? 0 : ((highValueObject.value / totalSum) * 100).toFixed(2);
+            const subCategoryName = language === 'en' ? labelName[i].label : labelName[i].labelNe;
 
-			const provinceId = (wardExist) ? wardExist.province : '';
-			const provinceName = provinceId ? (provinces.find(p => p.id === provinceId).title_en) : '';
-			const districtId = wardExist ? wardExist.district : '';
-			const districtName = districtId ? districts.find(d => d.id === districtId).title_en : '';
-			const municipalityId = wardExist ? wardExist.municipality : '';
-			const municipalityName = municipalityId ? municipalities.find(m => m.id === municipalityId).title_en : '';
-			const wardNumber = wardExist ? wardExist.title : '';
+            // console.log(highValueObject, 'sub cat');
 
-			return (
-				{
-					...item,
-					province: provinceName,
-					district: districtName,
-					municipality: municipalityName,
-					wardNumber,
-				}
-			);
-		});
-		return (
-			<Modal className={
-				styles.contactFormModal
+            return ({
+                category: subCategoryName,
+                subCategoryName: highValueObject.label,
+                highValuePercentage,
+            });
+        });
+        return HighestValue;
+    }
 
-			}
-			>
-				{/* <ModalHeader
+    private handleSaveClick = (id) => {
+        if (id === 'overallDownload') {
+            const divToDisplay = document.getElementById('overallDownload');
+            const pdf = new JsPDF('p', 'mm', 'a4');
+            html2canvas(divToDisplay).then((canvas) => {
+                const divImage = canvas.toDataURL('image/png');
+                const imgWidth = 210;
+                const pageHeight = 297;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                pdf.save('Report.pdf');
+            });
+        } else {
+            saveChart(id, id);
+        }
+
+        // saveChart("hazardSeverity", "hazardSeverity");
+    };
+
+    public render() {
+        const { closeVisualization, checkedCategory,
+            resourceType, level, lvl2catName, typeName, resourceCollection, selectedCategoryName, wards, provinces, districts, municipalities, pendingAPICall,
+            language: { language } } = this.props;
+        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
+
+        const labelName = visualizationKeyValues
+            .filter(item => item.resourceType === resourceType)[0].chartDataType;
+
+        const HighValuePercentageCalculation = this.HighValuePercentageCalculation(GraphVisualizationData);
+        const { visualizationHeading, visualizationHeadingNe } = visualizationKeyValues
+            .filter(item => item.resourceType === resourceType)[0];
+
+        const selectedImage = sidepanelLogo.filter(data => data.name === selectedCategoryName)[0].image;
+
+
+        const updatedSelectedResource = selectedResourceData.map((item) => {
+            const wardExist = wards.find(w => w.id === item.ward);
+
+            const provinceId = (wardExist) ? wardExist.province : '';
+            const provinceName = provinceId ? (provinces.find(p => p.id === provinceId).title_en) : '';
+            const districtId = wardExist ? wardExist.district : '';
+            const districtName = districtId ? districts.find(d => d.id === districtId).title_en : '';
+            const municipalityId = wardExist ? wardExist.municipality : '';
+            const municipalityName = municipalityId ? municipalities.find(m => m.id === municipalityId).title_en : '';
+            const wardNumber = wardExist ? wardExist.title : '';
+
+            return (
+                {
+                    ...item,
+                    province: provinceName,
+                    district: districtName,
+                    municipality: municipalityName,
+                    wardNumber,
+                }
+            );
+        });
+
+        return (
+            <Modal className={
+                styles.contactFormModal
+
+            }
+            >
+
+                {/* <ModalHeader
                     // title={'Add Contact'}
                     rightComponent={(
                         <DangerButton
@@ -1918,165 +2095,240 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                         />
                     )}
                 /> */}
-				<ModalBody className={styles.modalBody}>
+                <Translation>
+                    {
+                        t => (
+                            <ModalBody className={_cs(styles.modalBody, language === 'np' && styles.languageFont)}>
+                                {
+                                    isValueCalculated
+                                        ? (
+                                            <div>
+                                                <div className={styles.header}>
+                                                    <div className={styles.headingCategories}>
+                                                        <div
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onKeyDown={undefined}
+                                                            className={!isDataSetClicked ? styles.visualization : ''}
+                                                            onClick={() => this.setState({ isDataSetClicked: false })}
+                                                        >
+                                                            <h2>{t('VISUALIZATION')}</h2>
+                                                        </div>
+                                                        <div
+                                                            style={{ marginLeft: '30px' }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            className={isDataSetClicked ? styles.visualization : ''}
+                                                            onKeyDown={undefined}
+                                                            onClick={() => this.setState({ isDataSetClicked: true })}
+                                                        >
+                                                            <h2>{t('DATASET')}</h2>
+                                                        </div>
 
-					{!pendingAPICall && isValueCalculated
-						? (
-							<div>
-								<div className={styles.header}>
-									<div className={styles.headingCategories}>
-										<div
-											role="button"
-											tabIndex={0}
-											onKeyDown={undefined}
-											className={!isDataSetClicked ? styles.visualization : ''}
-											onClick={() => this.setState({ isDataSetClicked: false })}
-										>
-											<h2>VISUALIZATION</h2>
-										</div>
-										<div
-											style={{ marginLeft: '30px' }}
-											role="button"
-											tabIndex={0}
-											className={isDataSetClicked ? styles.visualization : ''}
-											onKeyDown={undefined}
-											onClick={() => this.setState({ isDataSetClicked: true })}
-										>
-											<h2>DATASET</h2>
-										</div>
+                                                    </div>
 
-									</div>
+                                                    <DangerButton
+                                                        transparent
+                                                        iconName="close"
+                                                        onClick={() => {
+                                                            this.setState({ allDataNullConditionCheck: false });
+                                                            closeVisualization(false,
+                                                                checkedCategory, resourceType, level, lvl2catName, typeName);
+                                                        }
+                                                        }
+                                                        title="Close Modal"
+                                                        className={styles.closeButton}
+                                                    />
+                                                    {' '}
 
-									<DangerButton
-										transparent
-										iconName="close"
-										onClick={() => {
-											this.setState({ allDataNullConditionCheck: false });
-											closeVisualization(false,
-												checkedCategory, resourceType, level, lvl2catName, typeName);
-										}
-										}
-										title="Close Modal"
-										className={styles.closeButton}
-									/>
-									{' '}
+                                                </div>
+                                                <div className={styles.categoryName}>
+                                                    <div className={styles.categoryLogo}>
+                                                        <ScalableVectorGraphics
+                                                            className={styles.categoryLogoIcon}
 
-								</div>
-								<div id="overallDownload">
-									<div className={styles.categoryName}>
-										{/* <div className={styles.categoryLogo} id="categorySelectedList">
-											<ScalableVectorGraphics
-												className={styles.categoryLogoIcon}
+                                                            src={selectedImage}
+                                                        />
+                                                        <h3>
+                                                            {language === 'en'
+                                                                ? visualizationHeading
+                                                                : visualizationHeadingNe
+                                                            }
 
-												src={selectedImage}
-											/>
-											<h3>{visualizationHeading}</h3>
-										</div>
-										{downloadButtonClicked ? (
-											<div style={{ position: 'relative' }}>
-												<LoadingAnimation className={styles.loaderDownload} />
-												<p>Downloading...</p>
-												{' '}
-											</div>
-										) : ''}
-										<div
-											id="1"
-											style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-											role="button"
-											tabIndex={0}
-											// eslint-disable-next-line max-len
-											onClick={() => this.handleSaveClick('overallDownload')}
-											onKeyDown={undefined}
-										>
-											<h4>DOWNLOAD</h4>
-											{' '}
-											<Button
-												title="Download Chart"
-												className={styles.chartDownload}
-												transparent
-												// onClick={() => this.handleSaveClick('overallDownload')}
-												iconName="download"
-											/>
-
-										</div> */}
-									</div>
-									{ErrorData ? <h2 style={{ textAlign: 'center' }}>{ErrorData}</h2> : isDataSetClicked
-										? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
-										: (
-											<div>
-												{GraphVisualizationData && GraphVisualizationData.map((item, i) => (
-													HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
-														: (
-															<div key={item.label}>
-																<div className={styles.barChartSection}>
-
-																	<div className={styles.percentageValue}>
-																		{/* <h1>Education Institution</h1> */}
-																		<h1>
-																			{HighValuePercentageCalculation[i].displayingValueinVisualization}
-
-																		</h1>
-
-																		<span>
-
-																			{HighValuePercentageCalculation[i].displayVisualizationWord}
-																		</span>
-
-																	</div>
+                                                        </h3>
+                                                    </div>
+                                                    {/* <div
+                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+            // eslint-disable-next-line max-len
+                onClick={() => this.handleSaveClick('overallDownload')}
+                onKeyDown={undefined}
 
 
-																	<div style={{ flex: '4' }} key={item.label}>
+            >
+                <h4>DOWNLOAD</h4>
+                {' '}
+                <Button
+                    title="Download Chart"
+                    className={styles.chartDownload}
+                    transparent
+                    // onClick={() => this.handleSaveClick('overallDownload')}
+                    iconName="download"
+                />
 
-																		<div className={styles.graphicalVisualization}>
+            </div> */}
+                                                </div>
+                                                {isDataSetClicked
+                                                    ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
+                                                    : (
+                                                        <div id="overallDownload">
+                                                            {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
+                                                                HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
+                                                                    : (
+                                                                        <div key={item.label}>
+                                                                            <div className={styles.barChartSection}>
 
-																			{/* <div style={{ display: 'flex',
-                                                                            justifyContent: 'flex-end',
-                                                                    fontSize: '25px' }}
-                                                                /> */}
-																			<div id={labelName[i].label}>
-																				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-																					<h3>{labelName[i].label}</h3>
-																					<div className="test">
-																						<Button
-																							title="Download Chart"
-																							className={styles.chartDownload}
-																							transparent
-																							onClick={() => this.handleSaveClick(labelName[i].label)}
-																							iconName="download"
-																						/>
-																					</div>
-																				</div>
-																				<BarChartVisualization item={item} />
-																			</div>
+                                                                                <div className={styles.percentageValue}>
+                                                                                    {/* <h1>Education Institution</h1> */}
+                                                                                    <h1>
+                                                                                        {HighValuePercentageCalculation[i].highValuePercentage}
+                                                                                        %
+                                                                                    </h1>
 
-																		</div>
+                                                                                    {HighValuePercentageCalculation[i].category !== HighValuePercentageCalculation[i].subCategoryName ? (
+                                                                                        <>
 
-																	</div>
+                                                                                            {
+                                                                                                language === 'en'
+                                                                                                    ? (
+                                                                                                        <span>
+                                                                                                            {HighValuePercentageCalculation[i].category}
+                                                                                                            {' '}
+                                                                                                            are
+                                                                                                            {' '}
+                                                                                                            {HighValuePercentageCalculation[i].subCategoryName}
+                                                                                                            {' '}
+                                                                                                        </span>
+                                                                                                    )
+                                                                                                    : (
+                                                                                                        <span>
+                                                                                                            {HighValuePercentageCalculation[i].category}
+                                                                                                            {' '}
+                                                                                                            {HighValuePercentageCalculation[i].subCategoryName}
+                                                                                                            {' '}
+                                                                                                            छन
+                                                                                                        </span>
+                                                                                                    )
+
+                                                                                            }
 
 
-																</div>
-															</div>
-														)
+                                                                                        </>
+                                                                                    ) : (
 
-												))}
-												{!pendingAPICall && (resourceCollection[resourceType]).length === 0
-													? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-													: ''}
-												{/* {allDataNullConditionCheck
-                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                : ''} */}
-											</div>
-										)}
-								</div>
-							</div>
-						) : <LoadingAnimation className={styles.loader} />
+                                                                                        language === 'en'
+                                                                                            ? (
+                                                                                                <span>
+                                                                                                    {' '}
+                                                                                                    {HighValuePercentageCalculation[i].category}
+                                                                                                    {''}
+                                                                                                    are available
 
-					}
+                                                                                                </span>
+                                                                                            )
+                                                                                            : (
+                                                                                                <span>
+                                                                                                    {' '}
+                                                                                                    {HighValuePercentageCalculation[i].category}
+                                                                                                    {''}
+                                                                                                    उपलब्ध छन
+                                                                                                </span>
+                                                                                            )
 
-				</ModalBody>
-			</Modal>
-		);
-	}
+                                                                                    )}
+
+                                                                                </div>
+
+
+                                                                                <div style={{ flex: '4' }} key={item.label}>
+
+                                                                                    <div className={styles.graphicalVisualization}>
+
+                                                                                        {/* <div style={{ display: 'flex',
+                                                                        justifyContent: 'flex-end',
+                                                                fontSize: '25px' }}
+                                                            /> */}
+                                                                                        <div id={labelName[i].label}>
+                                                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                                <h3>
+                                                                                                    {
+                                                                                                        language === 'en'
+                                                                                                            ? labelName[i].label
+                                                                                                            : labelName[i].labelNe}
+
+                                                                                                </h3>
+                                                                                                <Button
+                                                                                                    title="Download Chart"
+                                                                                                    className={styles.chartDownload}
+                                                                                                    transparent
+                                                                                                    onClick={() => this.handleSaveClick(labelName[i].label)}
+                                                                                                    iconName="download"
+                                                                                                />
+                                                                                            </div>
+                                                                                            <BarChartVisualization item={item} />
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+
+                                                            ))}
+                                                            {!pendingAPICall && (resourceCollection[resourceType]).length === 0
+                                                                ? (
+                                                                    <h2 style={{ textAlign: 'center' }}>
+                                                                        {
+                                                                            language === 'en'
+                                                                                ? 'No Data Available for Visualization'
+                                                                                : 'भिजुअलाइजेसनको लागि कुनै डाटा उपलब्ध छैन'
+
+                                                                        }
+                                                                    </h2>
+                                                                )
+                                                                : ''}
+                                                            {allDataNullConditionCheck
+                                                                ? (
+                                                                    <h2 style={{ textAlign: 'center' }}>
+                                                                        {
+                                                                            language === 'en'
+                                                                                ? 'No Data Available for Visualization'
+                                                                                : 'भिजुअलाइजेसनको लागि कुनै डाटा उपलब्ध छैन'
+
+                                                                        }
+                                                                    </h2>
+                                                                )
+                                                                : ''}
+                                                        </div>
+                                                    )}
+                                            </div>
+                                        ) : <LoadingAnimation className={styles.loader} />
+
+                                }
+
+                            </ModalBody>
+                        )
+                    }
+                </Translation>
+
+
+            </Modal>
+        );
+    }
 }
 
 // export default createRequestClient(requests)(DataVisualisation);

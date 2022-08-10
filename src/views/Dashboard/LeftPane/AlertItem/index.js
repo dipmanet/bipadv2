@@ -1,25 +1,37 @@
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import alertIcon from '#resources/icons/Alert.svg';
 
-import { getYesterday } from '#utils/common';
+import { convertDateAccToLanguage, convertTimeAccToLanguage, getYesterday } from '#utils/common';
 // import DateOutput from '#components/DateOutput';
 import Cloak from '#components/Cloak';
 import Icon from '#rscg/Icon';
+import {
+    languageSelector,
+} from '#selectors';
 
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    language: { language: 'en' },
+
 };
 
 const defaultProps = {
     className: undefined,
+    language: { language: 'en' },
 };
 
 const isRecent = (date, recentDay) => {
@@ -35,7 +47,11 @@ const emptyReferenceData = {
     },
 };
 
-export default class AlertItem extends React.PureComponent {
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+class AlertItem extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
@@ -87,13 +103,40 @@ export default class AlertItem extends React.PureComponent {
         }
     }
 
-    parseTitle= (title, referenceData) => {
+    parseTitle = (title, referenceData, titleNe) => {
         const {
             fields:
             { title: referenceDataTitle },
         } = referenceData;
+
+        const {
+            language: { language },
+        } = this.props;
+        // if(language === 'en'){
         if (title.toUpperCase().trim() === 'FLOOD') {
-            return `Flood at ${referenceDataTitle}`;
+            return (
+                `
+            ${<div>
+                    <Translation>
+                        {
+                            t => <p>{t('Flood at')}</p>
+                        }
+                    </Translation>
+                    <Translation>
+                        {
+                            t => <p>{t(`${referenceDataTitle}`)}</p>
+                        }
+                    </Translation>
+                    <Translation>
+                        {
+                            t => <p>{t('Ma')}</p>
+                        }
+                    </Translation>
+                </div>
+                }
+                `
+
+            );
         }
         if (title.toUpperCase().trim() === 'HEAVY RAINFALL') {
             return `Heavy Rainfall at ${referenceDataTitle}`;
@@ -106,12 +149,33 @@ export default class AlertItem extends React.PureComponent {
                 fields:
                 { address: epicenter },
             } = referenceData;
-            return `Earthquake at ${epicenter}`;
+            return `
+            ${<div>
+                    <Translation>
+                        {
+                            t => <p>{t('Earthquake at')}</p>
+                        }
+                    </Translation>
+                    <Translation>
+                        {
+                            t => <p>{t('Ma')}</p>
+                        }
+                    </Translation>
+                </div>
+                }
+            ${epicenter}
+            
+            `;
         }
         if (title.toUpperCase().trim() === 'ENVIRONMENTAL POLLUTION') {
             return `Environmental pollution at ${referenceDataTitle}`;
         }
-        return title;
+
+
+        // eslint-disable-next-line no-nested-ternary
+        return language === 'en' ? title
+            : titleNe === undefined || null
+                ? title : titleNe;
     }
 
     render() {
@@ -121,10 +185,12 @@ export default class AlertItem extends React.PureComponent {
             hazardTypes,
             recentDay,
             isHovered,
+            language: { language },
         } = this.props;
 
         const {
             title,
+            titleNe,
             hazard,
             startedOn,
             // createdOn,
@@ -132,15 +198,25 @@ export default class AlertItem extends React.PureComponent {
         } = alert;
         const alertReferenceData = referenceData ? JSON.parse(referenceData) : emptyReferenceData;
 
-        const parsedTitle = this.parseTitle(title, alertReferenceData);
+        const parsedTitle = this.parseTitle(title, alertReferenceData, titleNe);
         const time = startedOn ? startedOn.split('T')[1] : 'NA';
         const hour = time.split(':')[0];
         const minutes = time.split(':')[1];
         let timeIndicator;
+
+
         if (hour + minutes <= 1200) {
-            timeIndicator = 'AM';
+            if (language === 'en') {
+                timeIndicator = 'AM';
+            } else {
+                timeIndicator = 'बजे';
+            }
         } else if ((hour + minutes) > 1200 && (hour + minutes) <= 2359) {
-            timeIndicator = 'PM';
+            if (language === 'en') {
+                timeIndicator = 'PM';
+            } else {
+                timeIndicator = 'बजे';
+            }
         } else {
             timeIndicator = '';
         }
@@ -176,19 +252,32 @@ export default class AlertItem extends React.PureComponent {
                                 onClick={this.handleEditButtonClick}
                                 iconName="edit"
                             >
-                                Edit
+                                <Translation>
+                                    {
+                                        t => <span>{t('Edit')}</span>
+                                    }
+                                </Translation>
                             </Button>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_alert}>
-                            <DangerConfirmButton
-                                iconName="delete"
-                                transparent
-                                className={styles.deleteButton}
-                                onClick={this.handleDeleteButtonClick}
-                                confirmationMessage="Are you sure to delete the Alert?"
-                            >
-                                Delete
-                            </DangerConfirmButton>
+                            <Translation>
+                                {
+                                    t => (
+                                        <DangerConfirmButton
+                                            iconName="delete"
+                                            transparent
+                                            className={styles.deleteButton}
+                                            onClick={this.handleDeleteButtonClick}
+                                            confirmationMessage={t('Are you sure to delete the Alert?')}
+                                        >
+
+                                            <span>{t('Delete')}</span>
+
+                                        </DangerConfirmButton>
+                                    )
+
+                                }
+                            </Translation>
                         </Cloak>
                     </div>
                     <div className={styles.bottom}>
@@ -207,7 +296,7 @@ export default class AlertItem extends React.PureComponent {
                                 </div>
 
                                 <div className={styles.dateValue}>
-                                    {startedOn.split('T')[0]}
+                                    {convertDateAccToLanguage(startedOn.split('T')[0], language)}
                                 </div>
                             </div>
 
@@ -231,3 +320,5 @@ export default class AlertItem extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps, undefined)(AlertItem);

@@ -13,6 +13,7 @@ import { Region, Status } from './types';
 
 const emptyList: unknown[] = [];
 
+
 const dashboardPageSelector = ({ page }: AppState) => page.dashboardPage;
 
 
@@ -28,6 +29,7 @@ const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => p
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
 
+export const languageSelector = ({ page }: AppState) => page.language;
 // ibf
 export const ibfPageSelector = ({ page }: AppState) => page.ibfPage;
 //  Epidemics

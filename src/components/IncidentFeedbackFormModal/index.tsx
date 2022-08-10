@@ -2,6 +2,7 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Faram, { emailCondition, requiredCondition } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -148,68 +149,75 @@ class IncidentFeedbackFormModal extends React.PureComponent<Props, State> {
                 className={_cs(styles.addIncidentFeedbackFormModal, className)}
                 // onClose={closeModal}
             >
-                <Faram
-                    className={styles.form}
-                    schema={schema}
-                    onChange={this.handleFaramChange}
-                    value={faramValues}
-                    error={faramErrors}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    disabled={pending}
-                >
-                    <ModalHeader
-                        className={styles.header}
-                        title="Leave Feedback"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody className={styles.body}>
-                        <NonFieldErrors faramElement />
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="name"
-                            label="Name"
-                            autoFocus
-                        />
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="email"
-                            label="Email"
-                        />
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="mobileNumber"
-                            label="Mobile number"
-                        />
-                        <TextArea
-                            className={styles.input}
-                            faramElementName="comment"
-                            label="Comment"
-                        />
-                        <ReCaptcha
-                            faramElementName="recaptcha"
-                            siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
+                <Translation>
+                    {
+                        t => (
+                            <Faram
+                                className={styles.form}
+                                schema={schema}
+                                onChange={this.handleFaramChange}
+                                value={faramValues}
+                                error={faramErrors}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                disabled={pending}
+                            >
+                                <ModalHeader
+                                    className={styles.header}
+                                    title={t('Leave Feedback')}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal}
+                                            title="Close Modal"
+                                        />
+                                    )}
+                                />
+                                <ModalBody className={styles.body}>
+                                    <NonFieldErrors faramElement />
+                                    <TextInput
+                                        className={styles.input}
+                                        faramElementName="name"
+                                        label={t('Name')}
+                                        autoFocus
+                                    />
+                                    <TextInput
+                                        className={styles.input}
+                                        faramElementName="email"
+                                        label={t('Email')}
+                                    />
+                                    <TextInput
+                                        className={styles.input}
+                                        faramElementName="mobileNumber"
+                                        label={t('Mobile number')}
+                                    />
+                                    <TextArea
+                                        className={styles.input}
+                                        faramElementName="comment"
+                                        label={t('Comment')}
+                                    />
+                                    <ReCaptcha
+                                        faramElementName="recaptcha"
+                                        siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        )
+                    }
+                </Translation>
+
             </Modal>
         );
     }

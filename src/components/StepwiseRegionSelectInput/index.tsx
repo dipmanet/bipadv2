@@ -4,7 +4,7 @@ import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
-
+import { Translation } from 'react-i18next';
 import SelectInput from '#rsci/SelectInput';
 
 import {
@@ -13,6 +13,7 @@ import {
     provincesSelector,
     selectedProvinceIdSelector,
     wardsSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -28,12 +29,14 @@ import {
 import { AppState } from '#store/types';
 
 import styles from './styles.scss';
+import { Language } from '#store/atom/page/types';
 
 interface PropsFromState {
     provinceList: ProvinceElement[];
     districtList: DistrictElement[];
     municipalityList: MunicipalityElement[];
     wardList: WardElement[];
+    language: Language;
 }
 
 interface PropsFromDispatch {
@@ -67,6 +70,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districtList: districtsSelector(state),
     municipalityList: municipalitiesSelector(state),
     wardList: wardsSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -77,7 +81,7 @@ const emptyMunicipalityOptions: MunicipalityElement[] = [];
 const emptyWardOptions: WardElement[] = [];
 
 const regionKeySelector = (r: RegionElement) => r.id;
-const regionLabelSelector = (r: RegionElement) => r.title;
+
 
 class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -115,6 +119,15 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             });
         }
     }
+
+    private regionLabelSelector = (r: RegionElement) => {
+        const { language: { language } } = this.props;
+        if (language === 'en') {
+            return r.title;
+        }
+        return r.title_ne;
+    }
+
 
     private getRegionsFromValue = memoize((
         value: Region | undefined,
@@ -338,59 +351,89 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         const shouldDisableDistrictInput = disabled || !selectedProvinceId;
         const shouldDisableMunicipalityInput = disabled || !selectedDistrictId;
         const shouldDisableWardInput = disabled || !selectedMunicipalityId;
+        console.log('provinceOptions', provinceOptions);
 
         return (
             <div className={_cs(className, styles.stepwiseRegionSelectInput)}>
-                <SelectInput
-                    className={_cs(provinceInputClassName, styles.provinceInput)}
-                    label="Province"
-                    options={provinceOptions}
-                    keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
-                    value={selectedProvinceId}
-                    onChange={this.handleProvinceChange}
-                    disabled={shouldDisableProvinceInput}
-                    showHintAndError={showHintAndError}
-                    placeholder="All provinces"
-                    autoFocus={autoFocus}
-                />
-                <SelectInput
-                    className={_cs(districtInputClassName, styles.districtInput)}
-                    label="District"
-                    options={districtOptions}
-                    keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
-                    value={selectedDistrictId}
-                    onChange={this.handleDistrictChange}
-                    disabled={shouldDisableDistrictInput}
-                    showHintAndError={showHintAndError}
-                    placeholder="All districts"
-                />
-                <SelectInput
-                    className={_cs(municipalityInputClassName, styles.municipalityInput)}
-                    label="Municipality"
-                    options={municipalityOptions}
-                    keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
-                    value={selectedMunicipalityId}
-                    onChange={this.handleMunicipalityChange}
-                    disabled={shouldDisableMunicipalityInput}
-                    showHintAndError={showHintAndError}
-                    placeholder="All municipalities"
-                />
+                <Translation>
+                    {
+                        t => (
+                            <SelectInput
+                                className={_cs(provinceInputClassName, styles.provinceInput)}
+                                label={t('Province')}
+                                options={provinceOptions}
+                                keySelector={regionKeySelector}
+                                labelSelector={this.regionLabelSelector}
+                                value={selectedProvinceId}
+                                onChange={this.handleProvinceChange}
+                                disabled={shouldDisableProvinceInput}
+                                showHintAndError={showHintAndError}
+                                placeholder={t('All provinces')}
+                                autoFocus={autoFocus}
+                            />
+                        )
+                    }
+                </Translation>
+                <Translation>
+                    {
+                        t => (
+                            <SelectInput
+                                className={_cs(districtInputClassName, styles.districtInput)}
+                                label={t('District')}
+                                options={districtOptions}
+                                keySelector={regionKeySelector}
+                                labelSelector={this.regionLabelSelector}
+                                value={selectedDistrictId}
+                                onChange={this.handleDistrictChange}
+                                disabled={shouldDisableDistrictInput}
+                                showHintAndError={showHintAndError}
+                                placeholder={t('All districts')}
+                            />
+                        )
+                    }
+                </Translation>
+                <Translation>
+                    {
+                        t => (
+                            <SelectInput
+                                className={
+                                    _cs(municipalityInputClassName, styles.municipalityInput)
+                                }
+                                label={t('Municipality')}
+                                options={municipalityOptions}
+                                keySelector={regionKeySelector}
+                                labelSelector={this.regionLabelSelector}
+                                value={selectedMunicipalityId}
+                                onChange={this.handleMunicipalityChange}
+                                disabled={shouldDisableMunicipalityInput}
+                                showHintAndError={showHintAndError}
+                                placeholder={t('All municipalities')}
+                            />
+                        )
+                    }
+                </Translation>
+
+
                 {!wardsHidden && (
-                    <SelectInput
-                        className={_cs(wardInputClassName, styles.wardInput)}
-                        label="Ward"
-                        options={wardOptions}
-                        keySelector={regionKeySelector}
-                        labelSelector={regionLabelSelector}
-                        value={selectedWardId}
-                        onChange={this.handleWardChange}
-                        disabled={shouldDisableWardInput}
-                        showHintAndError={showHintAndError}
-                        placeholder="All wards"
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <SelectInput
+                                    className={_cs(wardInputClassName, styles.wardInput)}
+                                    label={t('Ward')}
+                                    options={wardOptions}
+                                    keySelector={regionKeySelector}
+                                    labelSelector={this.regionLabelSelector}
+                                    value={selectedWardId}
+                                    onChange={this.handleWardChange}
+                                    disabled={shouldDisableWardInput}
+                                    showHintAndError={showHintAndError}
+                                    placeholder={t('All wards')}
+                                />
+                            )
+                        }
+                    </Translation>
+
                 )}
             </div>
         );

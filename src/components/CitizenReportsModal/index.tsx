@@ -3,6 +3,7 @@ import { _cs, Obj } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
 
+import { Translation } from 'react-i18next';
 import ListView from '#rscv/List/ListView';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
@@ -154,29 +155,36 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
         const { citizenReports } = this.state;
 
         return (
-            <Modal className={_cs(styles.citizenReportsModal, className)}>
-                <ModalHeader
-                    title="Citizen Reports"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody}>
-                    <ListView
-                        className={styles.citizenReportList}
-                        data={citizenReports}
-                        keySelector={keySelector}
-                        renderer={CitizenReportItem}
-                        rendererParams={this.rendererParams}
-                        pending={pending}
-                    />
-                </ModalBody>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={_cs(styles.citizenReportsModal, className)}>
+                            <ModalHeader
+                                title={t('Citizen Reports')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.modalBody}>
+                                <ListView
+                                    className={styles.citizenReportList}
+                                    data={citizenReports}
+                                    keySelector={keySelector}
+                                    renderer={CitizenReportItem}
+                                    rendererParams={this.rendererParams}
+                                    pending={pending}
+                                />
+                            </ModalBody>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

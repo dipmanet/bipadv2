@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import VirtualizedListView from '#rscv/VirtualizedListView';
 
 import IncidentItem from '../IncidentItem';
@@ -25,9 +26,17 @@ const defaultProps = {
 const incidentKeySelector = d => d.id;
 
 const EmptyComponent = () => (
-    <div className={styles.incidentEmpty}>
-        There are no incidents at the moment.
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.incidentEmpty}>
+
+                    {t('There are no incidents at the moment.')}
+                </div>
+
+            )
+        }
+    </Translation>
 );
 
 export default class IncidentListView extends React.PureComponent {

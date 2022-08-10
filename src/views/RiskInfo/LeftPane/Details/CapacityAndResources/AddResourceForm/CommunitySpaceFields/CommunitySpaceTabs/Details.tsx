@@ -1,4 +1,6 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import styles from '../../OpenspaceFields/AddOpenspaceTabs/styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
@@ -7,6 +9,8 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+
+import { languageSelector } from '#selectors';
 
 interface Props {
     handleTabClick: (tab: string) => void;
@@ -32,7 +36,9 @@ interface FaramValues {
 interface FaramErrors {
 }
 
-
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     getDetailsRequest: {
         url: ({ params: { resourceId } }) => `/communityspace-detail/?community_space=${resourceId}`,
@@ -190,34 +196,13 @@ class Details extends React.PureComponent<Props, State> {
             layerName,
             workspace } = this.state;
         return (
-            <React.Fragment>
+            <Translation>
                 {
-                    resourceId === undefined
-                    && (
-                        <div
-                            className={styles.detailsInputGroup}
-                            style={{
-                                marginTop: '12px',
-                                marginBottom: '12px',
-                            }}
-                        >
-                            <span className={styles.detailsLabel}>
-                                Add shape file(.zip extension)
-                            </span>
-                            <input
-                                name="shapeFile"
-                                onChange={e => this.handleImageChange(e)}
-                                type="file"
-                                accept=".zip,.rar,.7zip"
-                            />
-                        </div>
-                    )
-                }
-
-
-                {
-                    objectId || resourceId ? (
+                    t => (
                         <React.Fragment>
+                            {
+                                resourceId === undefined
+                        && (
                             <div
                                 className={styles.detailsInputGroup}
                                 style={{
@@ -225,75 +210,103 @@ class Details extends React.PureComponent<Props, State> {
                                     marginBottom: '12px',
                                 }}
                             >
-                                <span className={styles.detailsLabel}>Geoserver URL</span>
+                                <span className={styles.detailsLabel}>
+                                    {t('Add shape file(.zip extension)')}
+                                </span>
                                 <input
-                                    value={geoserverUrl}
-                                    className={styles.detailsInput}
-                                    name="geoserverUrl"
-                                    onChange={e => this.handleChange(e)}
-                                />
-                            </div>
-                            <div className={styles.detailsInputGroup}>
-                                <span className={styles.detailsLabel}>Layer Name</span>
-                                <input
-                                    value={layerName}
-                                    className={styles.detailsInput}
-                                    name="layerName"
-                                    onChange={e => this.handleChange(e)}
-                                />
-                            </div>
-                            <div className={styles.detailsInputGroup}>
-                                <span className={styles.detailsLabel}>Workspace</span>
-                                <input
-                                    value={workspace}
-                                    className={styles.detailsInput}
-                                    name="workspace"
-                                    onChange={e => this.handleChange(e)}
-                                />
-                            </div>
-                            <div
-                                className={styles.detailsInputGroup}
-                                style={{
-                                    marginTop: '12px',
-                                    marginBottom: '12px',
-                                }}
-                            >
-                                <span className={styles.detailsLabel}>Upload cover image:</span>
-                                <input
-                                    className={styles.detailsInput}
-                                    name="coverImage"
+                                    name="shapeFile"
+                                    onChange={e => this.handleImageChange(e)}
                                     type="file"
-                                    onChange={e => this.handleChange(e)}
+                                    accept=".zip,.rar,.7zip"
                                 />
+                            </div>
+                        )
+                            }
+
+
+                            {
+                                objectId || resourceId ? (
+                                    <React.Fragment>
+                                        <div
+                                            className={styles.detailsInputGroup}
+                                            style={{
+                                                marginTop: '12px',
+                                                marginBottom: '12px',
+                                            }}
+                                        >
+                                            <span className={styles.detailsLabel}>{t('Geoserver URL')}</span>
+                                            <input
+                                                value={geoserverUrl}
+                                                className={styles.detailsInput}
+                                                name="geoserverUrl"
+                                                onChange={e => this.handleChange(e)}
+                                            />
+                                        </div>
+                                        <div className={styles.detailsInputGroup}>
+                                            <span className={styles.detailsLabel}>{t('Layer Name')}</span>
+                                            <input
+                                                value={layerName}
+                                                className={styles.detailsInput}
+                                                name="layerName"
+                                                onChange={e => this.handleChange(e)}
+                                            />
+                                        </div>
+                                        <div className={styles.detailsInputGroup}>
+                                            <span className={styles.detailsLabel}>{t('Workspace')}</span>
+                                            <input
+                                                value={workspace}
+                                                className={styles.detailsInput}
+                                                name="workspace"
+                                                onChange={e => this.handleChange(e)}
+                                            />
+                                        </div>
+                                        <div
+                                            className={styles.detailsInputGroup}
+                                            style={{
+                                                marginTop: '12px',
+                                                marginBottom: '12px',
+                                            }}
+                                        >
+                                            <span className={styles.detailsLabel}>{t('Upload cover image:')}</span>
+                                            <input
+                                                className={styles.detailsInput}
+                                                name="coverImage"
+                                                type="file"
+                                                onChange={e => this.handleChange(e)}
+                                            />
+                                        </div>
+                                    </React.Fragment>
+                                ) : <span>{t('Shapefile needs to be uploaded first..')}</span>
+                            }
+                            {
+                                openspacePostError && (
+                                    <NonFieldErrors
+                                        faramElement
+                                        errors={['Some error occured!']}
+                                    />
+                                )
+                            }
+
+
+                            <div className={styles.submitButn}>
+                                {/* <PrimaryButton
+                            disabled
+                        >
+                            Back
+                        </PrimaryButton> */}
+                                <PrimaryButton
+                                    onClick={() => this.submitDetails()}
+                                >
+                                    {t('Save and Continue')}
+                                </PrimaryButton>
                             </div>
                         </React.Fragment>
-                    ) : <span>Shapefile needs to be uploaded first..</span>
-                }
-                {
-                    openspacePostError && (
-                        <NonFieldErrors
-                            faramElement
-                            errors={['Some error occured!']}
-                        />
                     )
                 }
+            </Translation>
 
-
-                <div className={styles.submitButn}>
-                    {/* <PrimaryButton
-                        disabled
-                    >
-                        Back
-                    </PrimaryButton> */}
-                    <PrimaryButton
-                        onClick={() => this.submitDetails()}
-                    >
-                        Save and Continue
-                    </PrimaryButton>
-                </div>
-            </React.Fragment>
         );
     }
 }
 
-export default createRequestClient(requests)(Details);
+export default connect(mapStateToProps)(createRequestClient(requests)(Details));

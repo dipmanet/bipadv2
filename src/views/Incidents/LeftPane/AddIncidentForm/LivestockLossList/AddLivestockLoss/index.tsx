@@ -4,6 +4,8 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import {
     createRequestClient,
     NewProps,
@@ -33,7 +35,11 @@ import Cloak from '#components/Cloak';
 
 import styles from './styles.scss';
 import { MultiResponse } from '#store/atom/response/types';
+import { languageSelector } from '#selectors';
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 interface FaramValues {
 }
 
@@ -72,7 +78,7 @@ interface LivestockType extends Field{
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
-const labelSelector = (d: Field) => d.title;
+const labelSelector = (d: Field, language) => (language === 'en' ? d.title : d.titleNe);
 const keySelector = (d: Field) => d.id;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -127,10 +133,12 @@ const livestockLossStatus: Status [] = [
     {
         id: 1,
         title: 'destroyed',
+        titleNe: 'नष्‍ट भएको',
     },
     {
         id: 1,
         title: 'affected',
+        titleNe: 'प्रभावित भएको',
     },
 ];
 
@@ -212,6 +220,7 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -222,85 +231,94 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={className}>
-                <ModalHeader
-                    title="Add Family Loss"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddLivestockLoss.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                >
-                    <ModalBody className={styles.modalBody}>
-                        <NonFieldErrors faramElement />
-                        {pending && <LoadingAnimation />}
-                        <TextInput
-                            faramElementName="title"
-                            label="Title"
-                            autoFocus
-                        />
-                        <SelectInput
-                            faramElementName="type"
-                            label="Type"
-                            options={livestockTypes}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                        />
-                        <SelectInput
-                            faramElementName="status"
-                            label="Status"
-                            options={livestockLossStatus}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                        />
-                        <NumberInput
-                            faramElementName="count"
-                            label="Count"
-                        />
-                        <NumberInput
-                            faramElementName="economicLoss"
-                            label="Economic Loss"
-                        />
-                        <Cloak hiddenIf={p => !p.verify_livestock}>
-                            <>
-                                <Checkbox
-                                    faramElementName="verified"
-                                    label="Verified"
-                                />
-                                <TextInput
-                                    faramElementName="verificationMessage"
-                                    label="Verification Message"
-                                />
-                            </>
-                        </Cloak>
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={className}>
+                            <ModalHeader
+                                title={t('Add Family Loss')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddLivestockLoss.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                            >
+                                <ModalBody className={styles.modalBody}>
+                                    <NonFieldErrors faramElement />
+                                    {pending && <LoadingAnimation />}
+                                    <TextInput
+                                        faramElementName="title"
+                                        label={t('Title')}
+                                        autoFocus
+                                    />
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="type"
+                                        label={t('Type')}
+                                        options={livestockTypes}
+                                        keySelector={keySelector}
+                                        labelSelector={d => labelSelector(d, language)}
+                                    />
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="status"
+                                        label={t('Status')}
+                                        options={livestockLossStatus}
+                                        keySelector={labelSelector}
+                                        labelSelector={labelSelector}
+                                    />
+                                    <NumberInput
+                                        faramElementName="count"
+                                        label={t('Count')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="economicLoss"
+                                        label={t('Economic Loss')}
+                                    />
+                                    <Cloak hiddenIf={p => !p.verify_livestock}>
+                                        <>
+                                            <Checkbox
+                                                faramElementName="verified"
+                                                label={t('Verified')}
+                                            />
+                                            <TextInput
+                                                faramElementName="verificationMessage"
+                                                label={t('Verification Message')}
+                                            />
+                                        </>
+                                    </Cloak>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default createRequestClient(requests)(AddLivestockLoss);
+export default connect(mapStateToProps)(createRequestClient(requests)(AddLivestockLoss));

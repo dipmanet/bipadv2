@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs, compareNumber } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import { hazardIcons } from '#resources/data';
 import MultiListSelection from '#components/MultiListSelection';
 import PageContext from '#components/PageContext';
-
 import {
     hazardTypeListSelector,
     hazardTypesSelector,
+    languageSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -25,15 +26,15 @@ const defaultProps = {
     className: '',
 };
 
-const hazardTypeLabelSelector = d => d.title;
+
 const hazardTypeTitleSelector = d => d.description;
 const hazardTypeKeySelector = d => d.id;
 const hazardTypeIconSelector = d => d.icon || hazardIcons.unknown;
 const hazardTypeOrderSelector = d => d.order;
 
 // const compareHazard = (a, b) => compareString(
-//     hazardTypeLabelSelector(a),
-//     hazardTypeLabelSelector(b),
+//     this.hazardTypeLabelSelector(a),
+//     this.hazardTypeLabelSelector(b),
 // );
 
 const compareHazard = (a, b) => compareNumber(
@@ -54,6 +55,15 @@ class HazardSelectionInput extends React.PureComponent {
         this.artificialInputValue = [];
         this.naturalInputValue = [];
     }
+
+    hazardTypeLabelSelector = (d) => {
+        const { language: { language } } = this.props;
+
+        if (language === 'en') {
+            return d.title;
+        }
+        return d.titleNe;
+    };
 
     getGroupedHazardTypeValues = (hazardTypeValues = []) => {
         const { hazardTypes } = this.props;
@@ -125,11 +135,12 @@ class HazardSelectionInput extends React.PureComponent {
             value,
         } = this.props;
 
+
         const dashboardHazadTypeList = hazardTypeList.filter(item => item.title === 'Flood'
-        || item.title === 'Forest Fire'
-        || item.title === 'Heavy Rainfall'
-        || item.title === 'Environmental pollution'
-        || item.title === 'Earthquake');
+            || item.title === 'Forest Fire'
+            || item.title === 'Heavy Rainfall'
+            || item.title === 'Environmental pollution'
+            || item.title === 'Earthquake');
 
         let groupedHazardTypes;
         let groupedValues;
@@ -142,47 +153,67 @@ class HazardSelectionInput extends React.PureComponent {
             groupedHazardTypes = this.getGroupedHazardTypes(hazardTypeList);
             groupedValues = this.getGroupedHazardTypeValues(value);
         }
+        const withoutFire = [...groupedHazardTypes.natural].filter(item => item.title !== 'Fire');
 
         return (
             <div className={_cs(className, styles.hazardSelectionInput)}>
                 {activePage === 'dashboard' ? (
-                    <MultiListSelection
-                        className={styles.naturalHazardSelectionInput}
-                        titleSelector={hazardTypeTitleSelector}
-                        keySelector={hazardTypeKeySelector}
-                        labelSelector={hazardTypeLabelSelector}
-                        iconSelector={hazardTypeIconSelector}
-                        label="Natural"
-                        options={groupedHazardTypes.natural}
-                        value={groupedValues.natural}
-                        onChange={this.handleNaturalInputChange}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <MultiListSelection
+                                    className={styles.naturalHazardSelectionInput}
+                                    titleSelector={hazardTypeTitleSelector}
+                                    keySelector={hazardTypeKeySelector}
+                                    labelSelector={this.hazardTypeLabelSelector}
+                                    iconSelector={hazardTypeIconSelector}
+                                    label={t('Natural')}
+                                    options={withoutFire}
+                                    value={groupedValues.natural}
+                                    onChange={this.handleNaturalInputChange}
+                                />
+                            )
+                        }
+                    </Translation>
                 ) : (
-                    <MultiListSelection
-                        className={styles.naturalHazardSelectionInput}
-                        titleSelector={hazardTypeTitleSelector}
-                        keySelector={hazardTypeKeySelector}
-                        labelSelector={hazardTypeLabelSelector}
-                        iconSelector={hazardTypeIconSelector}
-                        label="Natural"
-                        options={groupedHazardTypes.natural}
-                        value={groupedValues.natural}
-                        onChange={this.handleNaturalInputChange}
-                    />
+                    <Translation>
+                        {
+                            t => (
+
+                                <MultiListSelection
+                                    className={styles.naturalHazardSelectionInput}
+                                    titleSelector={hazardTypeTitleSelector}
+                                    keySelector={hazardTypeKeySelector}
+                                    labelSelector={this.hazardTypeLabelSelector}
+                                    iconSelector={hazardTypeIconSelector}
+                                    label={t('Natural')}
+                                    options={groupedHazardTypes.natural}
+                                    value={groupedValues.natural}
+                                    onChange={this.handleNaturalInputChange}
+                                />
+                            )
+                        }
+                    </Translation>
                 )
 
                 }
+                <Translation>
+                    {
+                        t => (
+                            <MultiListSelection
+                                className={styles.artificialHazardSelectionInput}
+                                keySelector={hazardTypeKeySelector}
+                                labelSelector={this.hazardTypeLabelSelector}
+                                iconSelector={hazardTypeIconSelector}
+                                label={t('Non-natural')}
+                                options={groupedHazardTypes.artificial}
+                                value={groupedValues.artificial}
+                                onChange={this.handleArtificialInputChange}
+                            />
 
-                <MultiListSelection
-                    className={styles.artificialHazardSelectionInput}
-                    keySelector={hazardTypeKeySelector}
-                    labelSelector={hazardTypeLabelSelector}
-                    iconSelector={hazardTypeIconSelector}
-                    label="Non-natural"
-                    options={groupedHazardTypes.artificial}
-                    value={groupedValues.artificial}
-                    onChange={this.handleArtificialInputChange}
-                />
+                        )
+                    }
+                </Translation>
             </div>
         );
     }
@@ -191,6 +222,7 @@ class HazardSelectionInput extends React.PureComponent {
 const mapStateToProps = state => ({
     hazardTypeList: hazardTypeListSelector(state),
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 export default FaramInputElement(connect(

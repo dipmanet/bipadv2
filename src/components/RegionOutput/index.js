@@ -85,7 +85,7 @@ export default class RegionOutput extends React.PureComponent {
         if (!geoArea) {
             // const adminLevelLabel = adminLevelLabelSelector(adminLevelItem);
             // return <div>{adminLevelLabel}</div>;
-            return <div className={className}>National</div>;
+            return <div className={className}>राष्ट्रिय</div>;
         }
         const name = geoareaLabelSelector(geoArea);
 

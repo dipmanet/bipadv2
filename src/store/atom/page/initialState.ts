@@ -74,18 +74,22 @@ const state: PageState = {
         {
             id: 0,
             title: 'national',
+            titleNe: 'राष्ट्रिय',
         },
         {
             id: 1,
             title: 'province',
+            titleNe: 'प्रदेश',
         },
         {
             id: 2,
             title: 'district',
+            titleNe: 'जिल्‍ला',
         },
         {
             id: 3,
             title: 'municipality',
+            titleNe: 'नगरपालिका',
         },
     ],
 
@@ -105,71 +109,85 @@ const state: PageState = {
             id: 1,
             title: 'education',
             label: 'Education',
+            labelNe: 'शिक्षा',
         },
         {
             id: 2,
             title: 'health',
             label: 'Health',
+            labelNe: 'स्वास्थ्य',
         },
         {
             id: 3,
             title: 'finance',
             label: 'Banking & Finance',
+            labelNe: 'बैंकिङ र वित्त',
         },
         {
             id: 4,
             title: 'governance',
             label: 'Governance',
+            labelNe: 'सुशासन',
         },
         {
             id: 5,
             title: 'hotelandrestaurant',
             label: 'Hotel & Restaurant',
+            labelNe: 'होटल र रेस्टुरेन्ट',
         },
         {
             id: 6,
             title: 'cultural',
             label: 'Culture',
+            labelNe: 'संस्कृति',
         },
         {
             id: 7,
             title: 'industry',
             label: 'Industry',
+            labelNe: 'उद्योग',
         },
         {
             id: 8,
             title: 'communication',
             label: 'Communication',
+            labelNe: 'सञ्चार',
         },
         {
             id: 9,
             title: 'helipad',
             label: 'Helipad',
+            labelNe: 'हेलिप्याड',
         },
         {
             id: 10,
             title: 'bridge',
             label: 'Bridge',
+            labelNe: 'पुल',
         },
         {
             id: 11,
             title: 'electricity',
             label: 'Electricity',
+            labelNe: 'बिजुली',
         },
         {
             id: 12,
             title: 'sanitation',
             label: 'Sanitation',
+            labelNe: 'सरसफाई',
         },
         {
             id: 13,
             title: 'watersupply',
             label: 'Water Supply',
+            labelNe: 'पानी आपूर्ति',
         },
         {
             id: 14,
             title: 'airway',
             label: 'Airway',
+            labelNe: 'वायुमार्ग',
         },
         {
             id: 15,
@@ -180,6 +198,7 @@ const state: PageState = {
             id: 16,
             title: 'roadway',
             label: 'Roadway',
+            labelNe: 'बाटो',
         },
         // {
         //     id: 17,
@@ -190,21 +209,25 @@ const state: PageState = {
             id: 21,
             title: 'firefightingapparatus',
             label: 'Firefighting apparatus ',
+            labelNe: 'फायर फाइटिंग उपकरण',
         },
         {
             id: 18,
             title: 'evacuationcentre',
             label: 'Evacuation Center',
+            labelNe: 'निकासी केन्द्र',
         },
         {
             id: 19,
             title: 'openspace',
             label: 'Humanitarian Open Space',
+            labelNe: 'मानवीय खुला ठाउँ',
         },
         {
             id: 20,
             title: 'communityspace',
             label: 'Community Space',
+            labelNe: 'सामुदायिक ठाउँ',
         },
     ],
     carKeys: [],
@@ -250,14 +273,14 @@ const state: PageState = {
         realTimeFireList: [],
         realTimePollutionList: [],
         realTimeSourceList: [
-            { id: 3, title: 'Rain' },
-            { id: 2, title: 'River' },
+            { id: 3, title: 'Rain', titleNe: 'वर्षा' },
+            { id: 2, title: 'River', titleNe: 'नदी' },
         ],
         otherSourceList: [
-            { id: 1, title: 'Earthquake' },
-            { id: 5, title: 'Air pollution' },
-            { id: 4, title: 'Forest Fire' },
-            { id: 6, title: 'Streamflow' },
+            { id: 1, title: 'Earthquake', titleNe: 'भूकम्प' },
+            { id: 5, title: 'Air pollution', titleNe: 'वायु प्रदूषण' },
+            { id: 4, title: 'Forest Fire', titleNe: 'वन डढेँलो' },
+            { id: 6, title: 'Streamflow', titleNe: 'नदीको बहाब' },
         ],
         filters: {
             faramValues: {
@@ -318,6 +341,9 @@ const state: PageState = {
             faramErrors: {},
             pristine: true,
         },
+    },
+    language: {
+        language: 'en',
     },
     generalData: {
         reportTitle: '',
@@ -466,7 +492,7 @@ const state: PageState = {
                 deaths: 0,
                 incidents: 0,
             },
-            डढेलो: {
+            'वन डढेँलो': {
                 deaths: 0,
                 incidents: 0,
             },

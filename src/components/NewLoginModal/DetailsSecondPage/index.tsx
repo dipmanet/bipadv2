@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
 
@@ -97,98 +98,105 @@ const DetailsSecondPage = (props: Props) => {
     const handleDetails = () => updatePage('detailsFirstPage');
 
     return (
-        <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.welcomeBack}>
-                <h1>Welcome Back</h1>
-                <p>
-                    To login to BIPAD Portal, please use your credentials.
-                </p>
-                <div className={styles.loginBtn}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.newsignIn}
-                        onClick={handleCancelBtn}
-                    >
-                        Sign in
-                    </PrimaryButton>
-                </div>
-            </div>
-
-            <div className={styles.detailsFormContainer}>
-                <div className={styles.closeBtn}>
-                    <DangerButton className={styles.dangerbtn} onClick={closeModal}>
-                        <Icon
-                            name="times"
-                            className={styles.closeIcon}
-                        />
-                    </DangerButton>
-                </div>
-                <div className={styles.formContainer}>
-                    <h2>Please attach the official letter</h2>
-                    <div className={styles.newSignupForm}>
-                        {showErr && fileErr ? (
-                            <span className={styles.fileError}>
-                                Please choose a valid letter file
-                                (.jpg, .jpeg, .pdf, .doc, .docx, .png)
-                            </span>
-                        ) : ''}
-                        <div className={styles.inputfileContainer}>
-                            <FileUploader
-                                onFileSelectSuccess={setSelectedFile}
-                                onFileSelectError={({ error }) => setUploadError(error)}
-                            />
+        <Translation>
+            {
+                t => (
+                    <div className={styles.mainPageDetailsContainer}>
+                        <div className={styles.welcomeBack}>
+                            <h1>{t('Welcome Back')}</h1>
+                            <p>
+                                {t('To login to BIPAD Portal, please use your credentials.')}
+                            </p>
+                            <div className={styles.loginBtn}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.newsignIn}
+                                    onClick={handleCancelBtn}
+                                >
+                                    {t('Sign in')}
+                                </PrimaryButton>
+                            </div>
                         </div>
-                        <div className={styles.officialLetterLink}>
-                            <a href={sampleLetterURL}>Download a sample letter</a>
+
+                        <div className={styles.detailsFormContainer}>
+                            <div className={styles.closeBtn}>
+                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                    <Icon
+                                        name="times"
+                                        className={styles.closeIcon}
+                                    />
+                                </DangerButton>
+                            </div>
+                            <div className={styles.formContainer}>
+                                <h2>{t('Please attach the official letter')}</h2>
+                                <div className={styles.newSignupForm}>
+                                    {showErr && fileErr ? (
+                                        <span className={styles.fileError}>
+                                            {t(`Please choose a valid letter file
+                                        (.jpg, .jpeg, .pdf, .doc, .docx, .png)`)}
+                                        </span>
+                                    ) : ''}
+                                    <div className={styles.inputfileContainer}>
+                                        <FileUploader
+                                            onFileSelectSuccess={setSelectedFile}
+                                            onFileSelectError={({ error }) => setUploadError(error)}
+                                        />
+                                    </div>
+                                    <div className={styles.officialLetterLink}>
+                                        <a href={sampleLetterURL}>{t('Download a sample letter')}</a>
+                                    </div>
+                                    <ReCaptcha
+                                        faramElementName="recaptcha"
+                                        siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                        onChange={handleCaptchaChange}
+
+                                    />
+                                    {uploaderr && showErr
+                                        ? (
+                                            <span className={styles.captchaErr}>
+                                                {t('Please select the checkbox to submit')}
+                                            </span>
+                                        ) : ''
+                                    }
+                                    {serverErrorMsg && showErr
+                                        ? (
+                                            <span className={styles.captchaErr}>
+                                                {serverErrorMsg}
+                                            </span>
+                                        ) : ''
+                                    }
+                                    {serverErrorMsg ? (
+                                        <span className={styles.captchaErr}>
+                                            {serverErrorMsg}
+                                        </span>
+                                    ) : ''}
+
+                                </div>
+                            </div>
+                            <div className={styles.cancelAgreeBtns}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={handleDetails}
+                                >
+                                    {t('Back')}
+                                </PrimaryButton>
+                                <PrimaryButton
+                                    type="button"
+                                    pending={pending}
+                                    className={disabled ? styles.disabled : styles.agreeBtn}
+                                    onClick={handleSubmit}
+                                    disabled={disabled}
+                                >
+                                    {t('Submit')}
+                                </PrimaryButton>
+                            </div>
                         </div>
-                        <ReCaptcha
-                            faramElementName="recaptcha"
-                            siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                            onChange={handleCaptchaChange}
-
-                        />
-                        {uploaderr && showErr
-                            ? (
-                                <span className={styles.captchaErr}>
-                                    Please select the checkbox to submit
-                                </span>
-                            ) : ''
-                        }
-                        {serverErrorMsg && showErr
-                            ? (
-                                <span className={styles.captchaErr}>
-                                    {serverErrorMsg}
-                                </span>
-                            ) : ''
-                        }
-                        {serverErrorMsg ? (
-                            <span className={styles.captchaErr}>
-                                {serverErrorMsg}
-                            </span>
-                        ) : ''}
-
                     </div>
-                </div>
-                <div className={styles.cancelAgreeBtns}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.cancelBtn}
-                        onClick={handleDetails}
-                    >
-                        Back
-                    </PrimaryButton>
-                    <PrimaryButton
-                        type="button"
-                        pending={pending}
-                        className={disabled ? styles.disabled : styles.agreeBtn}
-                        onClick={handleSubmit}
-                        disabled={disabled}
-                    >
-                        Submit
-                    </PrimaryButton>
-                </div>
-            </div>
-        </div>
+                )
+            }
+        </Translation>
+
     );
 };
 

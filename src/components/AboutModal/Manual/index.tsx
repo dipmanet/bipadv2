@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import List from '#rscv/List';
 import {
@@ -125,9 +126,16 @@ class Manual extends React.PureComponent<Props> {
                 <div
                     className={styles.message}
                 >
-                    <Message>
-                        No Publications to display
-                    </Message>
+                    <Translation>
+                        {
+                            t => (
+                                <Message>
+                                    {t('No Publications to display')}
+                                </Message>
+                            )
+                        }
+                    </Translation>
+
                 </div>
             );
         }

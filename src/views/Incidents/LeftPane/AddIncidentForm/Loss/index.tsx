@@ -5,6 +5,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import LoadingAnimation from '#rscv/LoadingAnimation';
@@ -213,38 +214,45 @@ class AddLoss extends React.PureComponent<Props, State> {
         const pending = lossEditPending || lossGetPending;
 
         return (
-            <Faram
-                className={_cs(className, styles.lossForm)}
-                onChange={this.handleFaramChange}
-                onValidationFailure={this.handleFaramValidationFailure}
-                onValidationSuccess={this.handleFaramValidationSuccess}
-                schema={AddLoss.schema}
-                value={faramValues}
-                error={faramErrors}
-            >
-                {pending && <LoadingAnimation />}
-                <ModalBody className={styles.body}>
-                    <NonFieldErrors faramElement />
-                    <TextArea
-                        faramElementName="description"
-                        label="Description"
-                        autoFocus
-                    />
-                    <NumberInput
-                        faramElementName="estimatedLoss"
-                        label="Estimated loss"
-                    />
-                </ModalBody>
-                <ModalFooter className={styles.footer}>
-                    <PrimaryButton
-                        type="submit"
-                        pending={lossEditPending || incidentPending}
-                        disabled={pristine}
-                    >
-                        Save
-                    </PrimaryButton>
-                </ModalFooter>
-            </Faram>
+            <Translation>
+                {
+                    t => (
+                        <Faram
+                            className={_cs(className, styles.lossForm)}
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramValidationFailure}
+                            onValidationSuccess={this.handleFaramValidationSuccess}
+                            schema={AddLoss.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                        >
+                            {pending && <LoadingAnimation />}
+                            <ModalBody className={styles.body}>
+                                <NonFieldErrors faramElement />
+                                <TextArea
+                                    faramElementName="description"
+                                    label={t('Description')}
+                                    autoFocus
+                                />
+                                <NumberInput
+                                    faramElementName="estimatedLoss"
+                                    label={t('Estimated loss')}
+                                />
+                            </ModalBody>
+                            <ModalFooter className={styles.footer}>
+                                <PrimaryButton
+                                    type="submit"
+                                    pending={lossEditPending || incidentPending}
+                                    disabled={pristine}
+                                >
+                                    {t('Save')}
+                                </PrimaryButton>
+                            </ModalFooter>
+                        </Faram>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

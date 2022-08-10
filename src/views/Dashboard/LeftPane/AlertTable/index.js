@@ -9,6 +9,8 @@ import {
     compareBoolean,
 } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import NormalTaebul from '#rscv/Taebul';
 import Sortable from '#rscv/Taebul/Sortable';
 import ColumnWidth from '#rscv/Taebul/ColumnWidth';
@@ -22,6 +24,12 @@ import {
 } from '#utils/table';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+
+});
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
@@ -38,7 +46,7 @@ const defaultProps = {
 };
 
 // eslint-disable-next-line react/no-multi-comp
-export default class AlertTable extends React.PureComponent {
+class AlertTable extends React.PureComponent {
     static tableKeySelector = data => data.id;
 
     static propTypes = propTypes;
@@ -50,11 +58,12 @@ export default class AlertTable extends React.PureComponent {
         super(props);
 
         const getHazardTitle = ({ hazardInfo: { title } = {} }) => title;
+        const { language: { language } } = this.props;
 
         this.columns = prepareColumns([
             {
                 key: 'verified',
-                value: { title: 'Verified' },
+                value: { title: language === 'en' ? 'Verified' : 'प्रमाणित' },
 
                 comparator: (a, b, d) => compareBoolean(a.verified, b.verified, d),
 
@@ -62,37 +71,37 @@ export default class AlertTable extends React.PureComponent {
             },
             {
                 key: 'title',
-                value: { title: 'Title' },
+                value: { title: language === 'en' ? 'Title' : 'शीर्षक' },
 
                 comparator: (a, b, d) => compareString(a.title, b.title, d),
             },
             {
                 key: 'description',
-                value: { title: 'Description' },
+                value: { title: language === 'en' ? 'Description' : 'विवरण' },
                 comparator: (a, b, d) => compareString(a.description, b.description, d),
             },
             {
                 key: 'source',
-                value: { title: 'Source' },
+                value: { title: language === 'en' ? 'Source' : 'स्रोत' },
                 comparator: (a, b, d) => compareString(a.source, b.source, d),
             },
             {
                 key: 'hazardInfo',
-                value: { title: 'Hazard' },
+                value: { title: language === 'en' ? 'Hazard' : 'प्रकोप' },
                 comparator: (a, b, d) => compareString(getHazardTitle(a), getHazardTitle(b), d),
 
                 transformer: getHazardTitle,
             },
             {
                 key: 'createdOn',
-                value: { title: 'Started on' },
+                value: { title: language === 'en' ? 'Started on' : 'सुरु भएको' },
                 comparator: (a, b, d) => compareDate(a.createdOn, b.createdOn, d),
 
                 cellRenderer: TableDateCell,
             },
             {
                 key: 'expireOn',
-                value: { title: 'Expires on' },
+                value: { title: language === 'en' ? 'Expires on' : 'अलर्ट जारी रहेको समय' },
                 comparator: (a, b, d) => compareDate(a.expireOn, b.expireOn, d),
 
                 cellRenderer: TableDateCell,
@@ -136,14 +145,22 @@ export default class AlertTable extends React.PureComponent {
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>
-                    <DownloadButton
-                        value={alertListForExport}
-                        name="alerts"
-                    >
-                        Download csv
-                    </DownloadButton>
+                    <Translation>
+                        {
+                            t => (
+                                <DownloadButton
+                                    value={alertListForExport}
+                                    name="alerts"
+                                >
+                                    {t('Download csv')}
+                                </DownloadButton>
+                            )
+                        }
+                    </Translation>
+
                 </div>
             </div>
         );
     }
 }
+export default connect(mapStateToProps)(AlertTable);

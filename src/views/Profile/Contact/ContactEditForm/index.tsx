@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import {
     _cs,
@@ -8,7 +9,10 @@ import Faram, {
     requiredCondition,
     emailCondition,
 } from '@togglecorp/faram';
-
+import * as ReachRouter from '@reach/router';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ModalHeader from '#rscv/Modal/Header';
@@ -27,12 +31,15 @@ import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
 
+import { palikaRedirectSelector, languageSelector } from '#selectors';
+import { setPalikaRedirectAction } from '#actionCreators';
 
 import {
     createRequestClient,
     NewProps,
     ClientAttributes,
     methods,
+    createConnectedRequestCoordinator,
 } from '#request';
 
 import { MultiResponse } from '#store/atom/response/types';
@@ -50,6 +57,16 @@ import {
 
 import ContactTrainingList from './ContactTrainingList';
 import styles from './styles.scss';
+
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    palikaRedirect: palikaRedirectSelector(state),
+    language: languageSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+});
 
 const StepwiseRegionSelectInput = FaramInputElement(FullStepwiseRegionSelectInput);
 
@@ -274,6 +291,23 @@ class ContactForm extends React.PureComponent<Props, State> {
         },
     }
 
+    private handleDRRMRedirect = () => {
+        const {
+            palikaRedirect,
+            setPalikaRedirect,
+
+        } = this.props;
+        const { redirectTo } = palikaRedirect;
+        if (palikaRedirect.showForm) {
+            setPalikaRedirect({
+                showForm: false,
+                redirectTo,
+            });
+            ReachRouter.navigate('/drrm-report/',
+                { state: { showForm: true }, replace: true });
+        }
+    }
+
     private setPristine = (pristine: boolean) => {
         this.setState({ pristine });
     }
@@ -385,6 +419,8 @@ class ContactForm extends React.PureComponent<Props, State> {
                 municipalityContactAddRequest: { pending: contactAddPending },
             },
             details,
+            language: { language },
+            palikaRedirect,
         } = this.props;
 
         const {
@@ -395,154 +431,196 @@ class ContactForm extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal
-                className={_cs(
-                    styles.contactFormModal,
-                    isDefined(contactId) && styles.largeModal,
-                )}
-            >
-                <ModalHeader
-                    title={isDefined(contactId) ? 'Edit Contact' : 'Add Contact'}
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody}>
-                    {organizationPending && <LoadingAnimation />}
-                    <Faram
-                        className={styles.form}
-                        onChange={this.handleFaramChange}
-                        onValidationFailure={this.handleFaramValidationFailure}
-                        onValidationSuccess={this.handleFaramValidationSuccess}
-                        schema={ContactForm.schema}
-                        value={faramValues}
-                        error={faramErrors}
-                        disabled={organizationPending || contactEditPending || contactAddPending}
-                    >
-                        <NonFieldErrors faramElementName />
-                        <div className={styles.inputsContainer}>
-                            <NonFieldErrors faramElement />
-                            <TextInput
-                                faramElementName="name"
-                                label="Name"
-                                placeholder="Hari"
-                                autoFocus
-                            />
-                            <TextInput
-                                faramElementName="position"
-                                label="Position"
-                                placeholder="Officer"
-                            />
-                            <TextInput
-                                faramElementName="email"
-                                label="Email"
-                                placeholder="ram@neoc.gov.np"
-                            />
-                        </div>
-                        <div className={styles.inputsContainer}>
-                            <div className={styles.imageContainer}>
-                                {details && details.image ? (
-                                    <>
-                                        <div>
-                                            Previous Image
-                                        </div>
-                                        <img
-                                            className={styles.image}
-                                            src={details.image}
-                                            alt="profile"
-                                        />
-                                    </>
-                                ) : (
-                                    <div className={styles.noImageMessage}>
-                                        <Message>
-                                            No Image Available
-                                        </Message>
-                                    </div>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            className={_cs(
+                                styles.contactFormModal,
+                                isDefined(contactId) && styles.largeModal,
+                                language === 'np' && styles.languageFont,
+                            )}
+                        >
+                            <ModalHeader
+                                title={isDefined(contactId) ? t('Edit Contact') : t('Add Contact')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
                                 )}
-                                <RawFileInput
-                                    faramElementName="image"
-                                    showStatus
-                                    accept="image/*"
+                            />
+                            <ModalBody className={styles.modalBody}>
+                                {organizationPending && <LoadingAnimation />}
+                                <Faram
+                                    className={styles.form}
+                                    onChange={this.handleFaramChange}
+                                    onValidationFailure={this.handleFaramValidationFailure}
+                                    onValidationSuccess={this.handleFaramValidationSuccess}
+                                    schema={ContactForm.schema}
+                                    value={faramValues}
+                                    error={faramErrors}
+                                    disabled={
+                                        organizationPending
+                                        || contactEditPending
+                                        || contactAddPending
+                                    }
                                 >
-                                    Upload Image
-                                </RawFileInput>
-                            </div>
-                            <div className={styles.verticalInputsContainer}>
-                                <TextInput
-                                    faramElementName="workNumber"
-                                    type="number"
-                                    label="Work Number"
-                                />
-                                <TextInput
-                                    faramElementName="mobileNumber"
-                                    type="number"
-                                    label="Mobile Number"
-                                />
-                                <Checkbox
-                                    className={styles.checkbox}
-                                    faramElementName="isDrrFocalPerson"
-                                    label="Is DRR Focal Person"
-                                />
-                                <SelectInput
-                                    faramElementName="organization"
-                                    label="Organization"
-                                    options={organizationList}
-                                    keySelector={organizationKeySelector}
-                                    labelSelector={organizationLabelSelector}
-                                />
-                                <SelectInput
-                                    faramElementName="committee"
-                                    label="Committee"
-                                    options={committeeValueList}
-                                    keySelector={committeeKeySelector}
-                                    labelSelector={committeeLabelSelector}
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.inputsContainer}>
-                            <TextInput
-                                faramElementName="communityAddress"
-                                label="Community Address"
-                            />
-                            <StepwiseRegionSelectInput
-                                className={styles.stepwiseInput}
-                                faramElementName="stepwiseRegion"
-                                showHintAndError
-                            />
-                        </div>
-                        <div className={styles.inputsContainer}>
-                            <LocationInput
-                                className={styles.locationInput}
-                                faramElementName="location"
-                            />
-                        </div>
-                        <div className={styles.actionButtons}>
-                            <PrimaryButton
-                                disabled={pristine}
-                                className={styles.button}
-                                pending={contactEditPending || contactAddPending}
-                                type="submit"
-                            >
-                                Save
-                            </PrimaryButton>
-                        </div>
-                    </Faram>
-                    {isDefined(contactId) && (
-                        <ContactTrainingList
-                            className={styles.trainingList}
-                            contactId={contactId}
-                            onListChange={this.handleContactTrainingListChange}
-                        />
-                    )}
-                </ModalBody>
-            </Modal>
+                                    <NonFieldErrors faramElementName />
+                                    <div className={styles.inputsContainer}>
+                                        <NonFieldErrors faramElement />
+                                        <TextInput
+                                            faramElementName="name"
+                                            label={t('Name')}
+                                            placeholder="Hari"
+                                            autoFocus
+                                        />
+                                        <TextInput
+                                            faramElementName="position"
+                                            label={t('Position')}
+                                            placeholder="Officer"
+                                        />
+                                        <TextInput
+                                            faramElementName="email"
+                                            label={t('Email')}
+                                            placeholder="ram@neoc.gov.np"
+                                        />
+                                    </div>
+                                    <div className={styles.inputsContainer}>
+                                        <div className={styles.imageContainer}>
+                                            {details && details.image ? (
+                                                <>
+                                                    <div>
+                                                        {t('Previous Image')}
+                                                    </div>
+                                                    <img
+                                                        className={styles.image}
+                                                        src={details.image}
+                                                        alt="profile"
+                                                    />
+                                                </>
+                                            ) : (
+                                                <div className={styles.noImageMessage}>
+                                                    <Message>
+                                                        {t('No Image Available')}
+                                                    </Message>
+                                                </div>
+                                            )}
+                                            <RawFileInput
+                                                faramElementName="image"
+                                                showStatus
+                                                accept="image/*"
+                                                language={language}
+                                            >
+                                                {t('Upload Image')}
+                                            </RawFileInput>
+                                        </div>
+                                        <div className={styles.verticalInputsContainer}>
+                                            <TextInput
+                                                faramElementName="workNumber"
+                                                type="number"
+                                                label={t('Work Number')}
+                                            />
+                                            <TextInput
+                                                faramElementName="mobileNumber"
+                                                type="number"
+                                                label={t('Mobile Number')}
+                                            />
+                                            <Checkbox
+                                                className={styles.checkbox}
+                                                faramElementName="isDrrFocalPerson"
+                                                label={t('Is DRR Focal Person')}
+                                            />
+                                            <SelectInput
+                                                faramElementName="organization"
+                                                label={t('Organization')}
+                                                options={organizationList}
+                                                keySelector={organizationKeySelector}
+                                                labelSelector={organizationLabelSelector}
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                            />
+                                            <SelectInput
+                                                faramElementName="committee"
+                                                label={t('Committee')}
+                                                options={committeeValueList}
+                                                keySelector={committeeKeySelector}
+                                                labelSelector={committeeLabelSelector}
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={styles.inputsContainer}>
+                                        <TextInput
+                                            faramElementName="communityAddress"
+                                            label={t('Community Address')}
+                                        />
+                                        <StepwiseRegionSelectInput
+                                            className={styles.stepwiseInput}
+                                            faramElementName="stepwiseRegion"
+                                            showHintAndError
+                                            wardsHidden
+                                        />
+                                    </div>
+                                    <div className={styles.inputsContainer}>
+                                        <LocationInput
+                                            className={styles.locationInput}
+                                            faramElementName="location"
+
+                                        />
+                                    </div>
+                                    <div className={styles.actionButtons}>
+                                        {
+                                            palikaRedirect.showForm
+                                            && palikaRedirect.showModal === 'contact'
+                                            && (
+                                                <PrimaryButton
+                                                    // disabled={pristine}
+                                                    className={styles.button}
+                                                    // pending={contactEditPending || contactAddPending}
+                                                    type="button"
+                                                    onClick={this.handleDRRMRedirect}
+                                                >
+                                                    {t('Close and Return to DRRM Report')}
+                                                </PrimaryButton>
+                                            )
+                                        }
+                                        <PrimaryButton
+                                            disabled={pristine}
+                                            className={styles.button}
+                                            pending={contactEditPending || contactAddPending}
+                                            type="submit"
+                                        >
+                                            {t('Save')}
+                                        </PrimaryButton>
+                                    </div>
+                                </Faram>
+                                {isDefined(contactId) && (
+                                    <ContactTrainingList
+                                        className={styles.trainingList}
+                                        contactId={contactId}
+                                        onListChange={this.handleContactTrainingListChange}
+                                        language={language}
+                                    />
+                                )}
+                            </ModalBody>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default createRequestClient(requests)(ContactForm);
+// export default createRequestClient(requests)(ContactForm);
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            ContactForm,
+        ),
+    ),
+);

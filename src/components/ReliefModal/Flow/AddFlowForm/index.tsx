@@ -5,6 +5,7 @@ import Redux, {
 import { connect } from 'react-redux';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import TextInput from '#rsci/TextInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -41,6 +42,7 @@ import {
 
 import {
     eventListSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -110,6 +112,7 @@ type Props = NewProps<PropsWithRedux, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     eventList: eventListSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -299,6 +302,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                     pending: fiscalYearsGetPending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -319,118 +323,131 @@ class AddFlowForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal>
-                { pending && <LoadingAnimation />}
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={this.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    disabled={pending}
-                >
-                    <ModalHeader
-                        title="Add Flow"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody>
-                        <NonFieldErrors faramElement />
-                        <TextInput
-                            autoFocus
-                            faramElementName="description"
-                            label="Description"
-                        />
-                        <div className={styles.organizationContainer}>
-                            <SelectInput
-                                className={styles.input}
-                                faramElementName="receiverOrganization"
-                                label="Receiver Organization"
-                                options={organizationList}
-                                keySelector={organizationKeySelector}
-                                labelSelector={organizationLabelSelector}
-                                autoFocus
-                            />
-                            <ModalButton
-                                className={styles.button}
-                                modal={(
-                                    <AddOrganizationModal
-                                        onOrganizationAdd={this.handleOrganizationAdd}
+                {pending && <LoadingAnimation />}
+                <Translation>
+                    {
+                        t => (
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={this.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                                disabled={pending}
+                            >
+                                <ModalHeader
+                                    title={t('Add Flow')}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal}
+                                            title={t('Close Modal')}
+                                        />
+                                    )}
+                                />
+                                <ModalBody>
+                                    <NonFieldErrors faramElement />
+                                    <TextInput
+                                        autoFocus
+                                        faramElementName="description"
+                                        label={t('Description')}
                                     />
-                                )}
-                                iconName="add"
-                                transparent
-                            />
-                        </div>
-                        <div className={styles.organizationContainer}>
-                            <SelectInput
-                                className={styles.input}
-                                faramElementName="providerOrganization"
-                                label="Provider Organization"
-                                options={organizationList}
-                                keySelector={organizationKeySelector}
-                                labelSelector={organizationLabelSelector}
-                            />
-                            <ModalButton
-                                className={styles.button}
-                                modal={(
-                                    <AddOrganizationModal
-                                        onOrganizationAdd={this.handleOrganizationAdd}
+                                    <div className={styles.organizationContainer}>
+                                        <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                            className={styles.input}
+                                            faramElementName="receiverOrganization"
+                                            label={t('Receiver Organization')}
+                                            options={organizationList}
+                                            keySelector={organizationKeySelector}
+                                            labelSelector={organizationLabelSelector}
+                                            autoFocus
+                                        />
+                                        <ModalButton
+                                            className={styles.button}
+                                            modal={(
+                                                <AddOrganizationModal
+                                                    onOrganizationAdd={this.handleOrganizationAdd}
+                                                />
+                                            )}
+                                            iconName="add"
+                                            transparent
+                                        />
+                                    </div>
+                                    <div className={styles.organizationContainer}>
+                                        <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                            className={styles.input}
+                                            faramElementName="providerOrganization"
+                                            label={t('Provider Organization')}
+                                            options={organizationList}
+                                            keySelector={organizationKeySelector}
+                                            labelSelector={organizationLabelSelector}
+                                        />
+                                        <ModalButton
+                                            className={styles.button}
+                                            modal={(
+                                                <AddOrganizationModal
+                                                    onOrganizationAdd={this.handleOrganizationAdd}
+                                                />
+                                            )}
+                                            iconName="add"
+                                            transparent
+                                        />
+                                    </div>
+                                    <NumberInput
+                                        faramElementName="amount"
+                                        label={t('Amount')}
                                     />
-                                )}
-                                iconName="add"
-                                transparent
-                            />
-                        </div>
-                        <NumberInput
-                            faramElementName="amount"
-                            label="Amount"
-                        />
-                        <SelectInput
-                            faramElementName="type"
-                            label="Type"
-                            options={typeList}
-                            keySelector={typeKeySelector}
-                            labelSelector={typeLabelSelector}
-                        />
-                        <SelectInput
-                            faramElementName="event"
-                            label="Event"
-                            options={eventList}
-                            keySelector={eventKeySelector}
-                            labelSelector={eventLabelSelector}
-                        />
-                        <SelectInput
-                            faramElementName="fiscalYear"
-                            label="Fiscal Year"
-                            options={fiscalYearOptions}
-                            keySelector={fiscalYearKeySelector}
-                            labelSelector={fiscalYearLabelSelector}
-                        />
-                        <DateInput
-                            faramElementName="date"
-                            label="Date"
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            pending={addReliefPending}
-                            disabled={pristine || pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="type"
+                                        label={t('Type')}
+                                        options={typeList}
+                                        keySelector={typeKeySelector}
+                                        labelSelector={typeLabelSelector}
+                                    />
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="event"
+                                        label={t('Event')}
+                                        options={eventList}
+                                        keySelector={eventKeySelector}
+                                        labelSelector={eventLabelSelector}
+                                    />
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="fiscalYear"
+                                        label={t('Fiscal Year')}
+                                        options={fiscalYearOptions}
+                                        keySelector={fiscalYearKeySelector}
+                                        labelSelector={fiscalYearLabelSelector}
+                                    />
+                                    <DateInput
+                                        faramElementName="date"
+                                        label={t('Date')}
+                                        language={language}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={addReliefPending}
+                                        disabled={pristine || pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        )
+                    }
+                </Translation>
+
             </Modal>
         );
     }

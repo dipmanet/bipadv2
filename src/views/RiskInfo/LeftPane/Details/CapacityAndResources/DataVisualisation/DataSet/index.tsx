@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import DataTable from 'react-data-table-component';
 import styled, { keyframes } from 'styled-components';
 import { CsvBuilder } from 'filefy';
-import { districtsSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
+import { districtsSelector, languageSelector, municipalitiesSelector, provincesSelector, wardsSelector } from '#selectors';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { resourceHeader } from './TableHeader';
@@ -31,15 +31,22 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
+    language: languageSelector(state),
 
 
 });
 
 
-const CustomLoader = () => (
+const CustomLoader = language => (
     <div style={{ padding: '24px' }}>
         <Spinner />
-        <div>Loading Data,Please Wait...</div>
+        <div>
+            {
+                language.language === 'en'
+                    ? 'Loading Data,Please Wait...'
+                    : 'डाटा लोड गर्दै, कृपया पर्खनुहोस्...'
+            }
+        </div>
     </div>
 );
 const rotate360 = keyframes`
@@ -108,24 +115,28 @@ const DownloadButton = styled(Button)`
       `;
 
 
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
+const FilterComponent = ({ filterText, onFilter, onClear, language }) => (
     <>
         <TextField
             id="search"
             type="text"
-            placeholder="Search By Title"
+            placeholder={language === 'en' ? 'Search By Title' : 'शीर्षक द्वारा खोज्‍नुहोस'}
             aria-label="Search Input"
             value={filterText}
             onChange={onFilter}
         />
         <ClearButton type="button" onClick={onClear}>
-            Clear
+            {
+                language === 'en'
+                    ? 'Clear'
+                    : 'खाली गर्नुहोस्'
+            }
         </ClearButton>
     </>
 );
 
 
-const TableData = ({ selectedResourceData, resourceType }) => {
+const TableData = ({ selectedResourceData, resourceType, language: { language } }) => {
     const [pending, setPending] = React.useState(true);
     const [rows, setRows] = React.useState([]);
     const [filterText, setFilterText] = React.useState('');
@@ -133,9 +144,10 @@ const TableData = ({ selectedResourceData, resourceType }) => {
     const filteredItems = selectedResourceData.filter(
         item => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()),
     );
+
     const tableHeader = resourceHeader.find(data => data.resourceType === resourceType).data;
     const columns = tableHeader.map(item => ({
-        name: item.value,
+        name: language === 'en' ? item.value : item.valueNe,
         id: item.value === 'Title' ? 'title' : '',
         selector: item.key === 'title' ? row => row[item.key] : row => ((item.key === 'point1') ? row.point ? row.point.coordinates[1] : '' : (item.key === 'point2') ? row.point ? row.point.coordinates[0] : '' : row[item.key] ? typeof (row[item.key]) === 'boolean' ? row[item.key] === true ? 'Yes' : 'No' : row[item.key] : row[item.key] === false ? 'No' : row[item.key]),
         sortable: true,
@@ -160,7 +172,6 @@ const TableData = ({ selectedResourceData, resourceType }) => {
 
     }));
 
-
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
             if (filterText) {
@@ -170,9 +181,13 @@ const TableData = ({ selectedResourceData, resourceType }) => {
         };
 
         return (
-            <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+            <FilterComponent
+                onFilter={e => setFilterText(e.target.value)}
+                onClear={handleClear}
+                filterText={filterText}
+                language={language} />
         );
-    }, [filterText, resetPaginationToggle]);
+    }, [filterText, language, resetPaginationToggle]);
 
 
     const handleDownload = useCallback((datas) => {
@@ -190,7 +205,15 @@ const TableData = ({ selectedResourceData, resourceType }) => {
             .exportFile();
     });
 
-    const Export = ({ onExport }) => <button className={styles.downloadButton} type="button" onClick={e => onExport(e.target.value)}>Download</button>;
+    const Export = ({ onExport }) => (
+        <button className={styles.downloadButton} type="button" onClick={e => onExport(e.target.value)}>
+            {
+                language === 'en'
+                    ? 'Download'
+                    : 'डाउनलोड गर्नुहोस्'
+            }
+        </button>
+    );
     // const Export = ({ onExport }) => <DownloadButton onClick={e => onExport(e.target.value)}>Download</DownloadButton>;
 
 
@@ -269,7 +292,7 @@ const TableData = ({ selectedResourceData, resourceType }) => {
             },
         },
     };
-    console.log('This is filtered data', filteredItems);
+
     return (
         <div className={styles.dataTable}>
 
@@ -288,7 +311,7 @@ const TableData = ({ selectedResourceData, resourceType }) => {
                 // pointerOnHover
                 actions={actionsMemo}
                 progressPending={pending}
-                progressComponent={<CustomLoader />}
+                progressComponent={<CustomLoader language={language} />}
                 subHeader
                 subHeaderWrap
 

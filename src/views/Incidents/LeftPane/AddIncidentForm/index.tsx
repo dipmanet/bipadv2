@@ -10,6 +10,8 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import ScrollTabs from '#rscv/ScrollTabs';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import MultiViewContainer from '#rscv/MultiViewContainer';
@@ -34,6 +36,12 @@ import PeopleLossList from './PeopleLossList';
 import FamiliesLossList from './FamiliesLossList';
 import LivestockLossList from './LivestockLossList';
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+import { AppState } from '#types';
+
+const mapStateToProps = (state: AppState) => ({
+    language: languageSelector(state),
+});
 
 interface Tabs {
     general: string;
@@ -118,7 +126,7 @@ interface State {
 type ReduxProps = OwnProps;
 type Props = NewProps<ReduxProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidentRequest: {
         url: ({ props: { incidentServerId } }) => (incidentServerId
             ? `/incident/${incidentServerId}/` : '/incident/'),
@@ -154,7 +162,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
-const getLocationDetails = (incidentDetails) => {
+const getLocationDetails = (incidentDetails: {}) => {
     const {
         wards = [],
         point,
@@ -186,7 +194,7 @@ const getLocationDetails = (incidentDetails) => {
             adminLevel: 3,
             ward,
         },
-        wards: wards.map(w => w.id),
+        wards: wards.map((w: { id: any }) => w.id),
     });
 };
 
@@ -218,13 +226,13 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
-        this.tabs = {
-            general: 'General',
-            loss: 'Loss',
-            peopleLoss: 'People Loss',
-            familyLoss: 'Family Loss',
-            livestockLoss: 'Livestock Loss',
-        };
+        this.tabs = (language: string) => ({
+            general: language === 'en' ? 'General' : 'सामान्य',
+            loss: language === 'en' ? 'Loss' : 'घाटा',
+            peopleLoss: language === 'en' ? 'People Loss' : 'मानवीय क्षेति',
+            familyLoss: language === 'en' ? 'Family Loss' : 'पारिवारिक क्षेति',
+            livestockLoss: language === 'en' ? 'Livestock Loss' : 'पशु चौपाया क्षेति',
+        });
 
         const {
             incidentDetails = {},
@@ -292,30 +300,37 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     } = this.props;
 
                     return (
-                        <Cloak hiddenIf={isIncidentHidden}>
-                            <Faram
-                                className={styles.generalInputs}
-                                onChange={this.handleFaramChange}
-                                onValidationFailure={this.handleFaramValidationFailure}
-                                onValidationSuccess={this.handleFaramValidationSuccess}
-                                schema={AddIncidentForm.schema}
-                                value={faramValues}
-                                error={faramErrors}
-                            >
-                                <ModalBody className={styles.body}>
-                                    <GeneralDetails />
-                                </ModalBody>
-                                <ModalFooter className={styles.footer}>
-                                    <PrimaryButton
-                                        type="submit"
-                                        pending={incidentPending}
-                                        disabled={pristine}
-                                    >
-                                        Save
-                                    </PrimaryButton>
-                                </ModalFooter>
-                            </Faram>
-                        </Cloak>
+                        <Translation>
+                            {
+                                t => (
+                                    <Cloak hiddenIf={isIncidentHidden}>
+                                        <Faram
+                                            className={styles.generalInputs}
+                                            onChange={this.handleFaramChange}
+                                            onValidationFailure={this.handleFaramValidationFailure}
+                                            onValidationSuccess={this.handleFaramValidationSuccess}
+                                            schema={AddIncidentForm.schema}
+                                            value={faramValues}
+                                            error={faramErrors}
+                                        >
+                                            <ModalBody className={styles.body}>
+                                                <GeneralDetails />
+                                            </ModalBody>
+                                            <ModalFooter className={styles.footer}>
+                                                <PrimaryButton
+                                                    type="submit"
+                                                    pending={incidentPending}
+                                                    disabled={pristine}
+                                                >
+                                                    {t('Save')}
+                                                </PrimaryButton>
+                                            </ModalFooter>
+                                        </Faram>
+                                    </Cloak>
+                                )
+                            }
+                        </Translation>
+
                     );
                 },
             },
@@ -461,7 +476,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             ...others
         } = faramValues;
 
-        const getRegion = (region) => {
+        const getRegion = (region: object) => {
             const regionTypeMap = {
                 1: 'province',
                 2: 'district',
@@ -482,7 +497,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             reportedOn = new Date(`${reportedOnDate}T${reportedOnTime}`).toISOString();
         }
         const point = location.geoJson.features[0].geometry;
-        const wards = location.wards;
+        const { wards } = location;
 
         const {
             regionType,
@@ -522,6 +537,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     pending: incidentPending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const { currentView } = this.state;
@@ -534,38 +550,45 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         ];
 
         return (
-            <Modal
-                className={_cs(styles.addIncidentFormModal, className)}
-                // onClose={closeModal}
-            >
-                <ModalHeader
-                    title="Add / edit incident"
-                    rightComponent={(
-                        <DangerConfirmButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            className={_cs(styles.addIncidentFormModal, className,
+                                language === 'np' && styles.languageFont)}
+                        >
+                            <ModalHeader
+                                title={t('Add / edit incident')}
+                                rightComponent={(
+                                    <DangerConfirmButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
 
-                            confirmationMessage="Are you sure you want to close the form?"
-                        />
-                    )}
-                />
-                {incidentPending && <LoadingAnimation />}
-                <ScrollTabs
-                    className={styles.tabs}
-                    tabs={this.tabs}
-                    onClick={this.handleTabClick}
-                    active={currentView}
-                    disabledTabs={disabledTabs}
-                />
-                <MultiViewContainer
-                    views={this.views}
-                    active={currentView}
-                />
-            </Modal>
+                                        confirmationMessage={t('Are you sure you want to close the form?')}
+                                    />
+                                )}
+                            />
+                            {incidentPending && <LoadingAnimation />}
+                            <ScrollTabs
+                                className={styles.tabs}
+                                tabs={this.tabs(language)}
+                                onClick={this.handleTabClick}
+                                active={currentView}
+                                disabledTabs={disabledTabs}
+                            />
+                            <MultiViewContainer
+                                views={this.views}
+                                active={currentView}
+                            />
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default compose(createRequestClient(requests))(AddIncidentForm);
+export default connect(mapStateToProps)(compose(createRequestClient(requests))(AddIncidentForm));

@@ -8,6 +8,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -26,6 +27,7 @@ import LocationInput from '#components/LocationInput';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import {
+    convertDateAccToLanguage,
     encodeDate,
     encodeTime,
 } from '#utils/common';
@@ -43,6 +45,7 @@ import {
     eventListSelector,
     sourceOptionsSelector,
     hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 import { KeyLabel } from '#types';
 
@@ -111,6 +114,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     sourceOptions: sourceOptionsSelector(state),
     eventList: eventListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 const hazardKeySelector = (d: PageType.HazardType) => d.id;
@@ -121,7 +125,7 @@ const labelSelector = (d: KeyLabel) => d.label;
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     addAlertRequest: {
         url: '/alert/',
         method: methods.POST,
@@ -354,7 +358,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         const startedOn = startedOnDate && startedOnTime ? new Date(`${startedOnDate}T${startedOnTime}`).toISOString() : undefined;
         const expireOn = expireOnDate && expireOnTime ? new Date(`${expireOnDate}T${expireOnTime}`).toISOString() : undefined;
         const point = location.geoJson.features[0].geometry;
-        const wards = location.wards;
+        const { wards } = location;
         const {
             regionType,
             regionId,
@@ -417,6 +421,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     pending: editAlertRequestPending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -424,134 +429,156 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             faramValues,
             faramErrors,
         } = this.state;
-
+        const { startedOnDate, expireOnDate } = faramValues;
         const pending = addAlertRequestPending || editAlertRequestPending;
 
         return (
+
             <Modal
-                className={_cs(styles.addAlertFormModal, className)}
+                className={_cs(styles.addAlertFormModal, className,
+                    language === 'np' && styles.languageFont)}
                 onClose={onCloseButtonClick}
-                // closeOnEscape
+            // closeOnEscape
             >
-                <Faram
-                    className={styles.addAlertForm}
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddAlertForm.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    disbled={pending}
-                >
-                    <ModalHeader
-                        title="Add / edit alert"
-                        rightComponent={(
-                            <DangerConfirmButton
-                                transparent
-                                iconName="close"
-                                onClick={onCloseButtonClick}
-                                title="Close Modal"
+                <Translation>
+                    {
+                        t => (
 
-                                confirmationMessage="Are you sure you want to close the form?"
-                                disabled={pending}
-                            />
-                        )}
-                    />
-                    <ModalBody className={styles.body}>
-                        <div className={styles.generalInputs}>
-                            <NonFieldErrors faramElement />
-                            <TextArea
-                                className={styles.descriptionInput}
-                                faramElementName="description"
-                                label="Description"
-                                persistantHintAndError={false}
-                                autoFocus
-                            />
-                            <div className={styles.inputRow}>
-                                <SelectInput
-                                    className={styles.hazardInput}
-                                    faramElementName="hazard"
-                                    options={hazardList}
-                                    keySelector={hazardKeySelector}
-                                    labelSelector={hazardLabelSelector}
-                                    label="Hazard"
-                                />
-                                <SelectInput
-                                    className={styles.sourceInput}
-                                    faramElementName="source"
-                                    options={sourceOptions}
-                                    keySelector={keySelector}
-                                    labelSelector={labelSelector}
-                                    label="Source"
-                                />
-                                <SelectInput
-                                    className={styles.eventInput}
-                                    faramElementName="event"
-                                    options={eventList}
-                                    keySelector={keySelector}
-                                    labelSelector={labelSelector}
-                                    label="Event"
-                                />
-                            </div>
-                            <div className={styles.dateTimeInputs}>
-                                <div className={styles.startedOnInputs}>
-                                    <DateInput
-                                        className={styles.startedOnDate}
-                                        faramElementName="startedOnDate"
-                                        label="Started on"
-                                    />
-                                    <TimeInput
-                                        className={styles.startedOnTime}
-                                        faramElementName="startedOnTime"
-                                    />
-                                </div>
-                                <div className={styles.expiresOnInputs}>
-                                    <DateInput
-                                        label="Expires on"
-                                        faramElementName="expireOnDate"
-                                    />
-                                    <TimeInput
-                                        className={styles.startedOnTime}
-                                        faramElementName="expireOnTime"
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.checkboxes}>
-                                <Checkbox
-                                    className={styles.isPublicSelectionCheckbox}
-                                    label="Public"
-                                    faramElementName="public"
-                                />
-                                <Checkbox
-                                    className={styles.isVerifiedSelectionCheckbox}
-                                    label="Verified"
-                                    faramElementName="verified"
-                                />
-                            </div>
-                        </div>
-                        <LocationInput
-                            className={styles.locationInput}
-                            faramElementName="location"
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerConfirmButton
-                            onClick={onCloseButtonClick}
+                            <Faram
+                                className={styles.addAlertForm}
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddAlertForm.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                                disbled={pending}
+                            >
+                                <ModalHeader
+                                    title={t('Add / edit alert')}
+                                    rightComponent={(
+                                        <DangerConfirmButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={onCloseButtonClick}
+                                            title={t('Close Modal')}
 
-                            confirmationMessage="Are you sure you want to close the form?"
-                            disabled={pending}
-                        >
-                            Close
-                        </DangerConfirmButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
+                                            confirmationMessage={t('Are you sure you want to close the form?')}
+                                            disabled={pending}
+                                        />
+                                    )}
+                                />
+                                <ModalBody className={styles.body}>
+                                    <div className={styles.generalInputs}>
+                                        <NonFieldErrors faramElement />
+                                        <TextArea
+                                            className={styles.descriptionInput}
+                                            faramElementName="description"
+                                            label={t('Description')}
+                                            persistantHintAndError={false}
+                                            autoFocus
+                                        />
+                                        <div className={styles.inputRow}>
+                                            <SelectInput
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                                className={styles.hazardInput}
+                                                faramElementName="hazard"
+                                                options={hazardList}
+                                                keySelector={hazardKeySelector}
+                                                labelSelector={hazardLabelSelector}
+                                                label={t('Hazard')}
+                                            />
+                                            <SelectInput
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                                className={styles.sourceInput}
+                                                faramElementName="source"
+                                                options={sourceOptions}
+                                                keySelector={keySelector}
+                                                labelSelector={labelSelector}
+                                                label={t('Source')}
+                                            />
+                                            <SelectInput
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                                className={styles.eventInput}
+                                                faramElementName="event"
+                                                options={eventList}
+                                                keySelector={keySelector}
+                                                labelSelector={labelSelector}
+                                                label={t('Event')}
+                                            />
+                                        </div>
+                                        <div className={styles.dateTimeInputs}>
+                                            <div className={styles.startedOnInputs}>
+                                                <DateInput
+                                                    className={'startDateInput'}
+                                                    faramElementName="startedOnDate"
+                                                    label={t('Started on')}
+                                                    language={language}
+                                                    value={convertDateAccToLanguage(
+                                                        startedOnDate,
+                                                        language,
+                                                    )}
+                                                />
+                                                <TimeInput
+                                                    className={styles.startedOnTime}
+                                                    faramElementName="startedOnTime"
+                                                />
+                                            </div>
+                                            <div className={styles.expiresOnInputs}>
+                                                <DateInput
+                                                    label={t('Expires on')}
+                                                    faramElementName="expireOnDate"
+                                                    language={language}
+                                                    className={'endDateInput'}
+                                                    value={convertDateAccToLanguage(
+                                                        expireOnDate,
+                                                        language,
+                                                    )}
+                                                />
+                                                <TimeInput
+                                                    className={styles.startedOnTime}
+                                                    faramElementName="expireOnTime"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className={styles.checkboxes}>
+                                            <Checkbox
+                                                className={styles.isPublicSelectionCheckbox}
+                                                label={t('Public')}
+                                                faramElementName="public"
+                                            />
+                                            <Checkbox
+                                                className={styles.isVerifiedSelectionCheckbox}
+                                                label={t('Verified')}
+                                                faramElementName="verified"
+                                            />
+                                        </div>
+                                    </div>
+                                    <LocationInput
+                                        className={styles.locationInput}
+                                        faramElementName="location"
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerConfirmButton
+                                        onClick={onCloseButtonClick}
+                                        confirmationMessage={t('Are you sure you want to close the form?')}
+                                        disabled={pending}
+                                    >
+                                        {t('Close')}
+                                    </DangerConfirmButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        )
+                    }
+                </Translation>
             </Modal>
         );
     }

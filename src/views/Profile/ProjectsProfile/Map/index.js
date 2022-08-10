@@ -2,6 +2,7 @@ import React from 'react';
 import memoize from 'memoize-one';
 import { _cs, mapToList, isNotDefined } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
 
 import ChoroplethMap from '#components/ChoroplethMap';
@@ -47,6 +48,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
         );
 
         const mapping = {};
+
         projects.forEach((project) => {
             const values = project[accessor];
             Object.keys(values).forEach((id) => {
@@ -63,7 +65,12 @@ export default class ProjectsProfileMap extends React.PureComponent {
 
         return mapToList(
             selectedRegion,
-            (_, key) => ({ id: key, value: mapping[key] || 0 }),
+            (_, key) => ({
+                id: key,
+                value: regionLevel === 3
+                    ? projects.length
+                    : mapping[key] || 0,
+            }),
         );
     });
 
@@ -75,13 +82,11 @@ export default class ProjectsProfileMap extends React.PureComponent {
             regions,
             regionLevel,
         } = this.props;
-
         const mapState = this.generateMapState(projects, regionLevel, regions);
         const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         const colorPaint = this.generatePaint(color);
-
         return (
             <React.Fragment>
                 <div
@@ -90,9 +95,16 @@ export default class ProjectsProfileMap extends React.PureComponent {
                         leftPaneExpanded && styles.leftPaneExpanded,
                     )}
                 >
-                    <h5 className={styles.heading}>
-                        No. of projects
-                    </h5>
+                    <Translation>
+                        {
+                            t => (
+                                <h5 className={styles.heading}>
+                                    {t('No. of projects')}
+                                </h5>
+                            )
+                        }
+                    </Translation>
+
                     <div className={styles.range}>
                         <Numeral
                             className={styles.min}
@@ -106,7 +118,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
                         />
                     </div>
                     <div className={styles.scale}>
-                        { colorGrade.map(c => (
+                        {colorGrade.map(c => (
                             <div
                                 key={c}
                                 className={styles.colorUnit}

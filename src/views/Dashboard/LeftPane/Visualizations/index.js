@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { Translation } from 'react-i18next';
 
 import {
     ResponsiveContainer,
@@ -14,6 +16,8 @@ import {
     Legend,
 } from 'recharts';
 
+import { npTranslation } from '#constants/translations';
+
 import {
     groupList,
     saveChart,
@@ -23,30 +27,32 @@ import Message from '#rscv/Message';
 
 import styles from './styles.scss';
 
+import {
+    languageSelector,
+} from '#selectors';
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 const propTypes = {
     className: PropTypes.string,
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    language: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
     alertList: [],
+    language: { language: 'en' },
 };
 
-const CustomLabel = (props) => {
-    const { value } = props;
-
-    return (
-        <div>
-            {`Value: ${value}`}
-        </div>
-    );
-};
-
-export default class Visualization extends React.PureComponent {
+class Visualization extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
+
 
     handleSaveClick = () => {
         saveChart('hazardSummary', 'hazardSummary');
@@ -54,16 +60,24 @@ export default class Visualization extends React.PureComponent {
     }
 
     getHazardSummary = memoize((alertList) => {
-        const { hazardTypes } = this.props;
+        const { hazardTypes, language: { language } } = this.props;
 
         const freqCount = groupList(
             alertList.filter(i => i.hazard),
             alert => alert.hazard,
         );
-
+        if (language === 'en') {
+            return freqCount.map(h => (
+                {
+                    label: (hazardTypes[h.key] || {}).title,
+                    value: h.value.length,
+                    color: (hazardTypes[h.key] || {}).color,
+                }
+            )).sort((a, b) => (a.value - b.value));
+        }
         return freqCount.map(h => (
             {
-                label: (hazardTypes[h.key] || {}).title,
+                label: (hazardTypes[h.key] || {}).titleNe,
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
             }
@@ -84,11 +98,39 @@ export default class Visualization extends React.PureComponent {
         )).sort((a, b) => (b.value - a.value));
     });
 
+    getLabel = index => npTranslation.translation.hazardSummary[index].label;
+
+    getTrans = (hazardData) => {
+        const arr = hazardData.map((i, idx) => ({
+            ...i,
+            तथ्या्क: i.value,
+            label: this.getLabel(idx),
+        }));
+        return arr;
+    }
+
+    customTooltip = ({ active, payload, label }) => {
+        const { language: { language } } = this.props;
+
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <p>{language === 'np' && `तथ्या्क: ${payload[0].payload.value}`}</p>
+                    <p>{language === 'en' && `value: ${payload[0].payload.value}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
+
     render() {
         const {
             className,
             alertList,
             hazardTypes,
+            language: { language },
         } = this.props;
 
         const hazardSummary = this.getHazardSummary(alertList);
@@ -100,7 +142,11 @@ export default class Visualization extends React.PureComponent {
                     className={styles.message}
                 >
                     <Message>
-                            No Alerts in the Selected Time Period
+                        <Translation>
+                            {
+                                t => <span>{t('No Alerts in the Selected Time Period')}</span>
+                            }
+                        </Translation>
                     </Message>
                 </div>
             );
@@ -115,13 +161,19 @@ export default class Visualization extends React.PureComponent {
             return hs;
         });
 
+
         const ChartView = () => (
             <div
                 className={styles.hazardStatisticsChart}
             >
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Hazard Occurence Statistics
+                        <Translation>
+                            {
+                                t => <span>{t('Hazard Occurence Statistics')}</span>
+                            }
+                        </Translation>
+
                     </h4>
                     <Button
                         title="Download Chart"
@@ -141,18 +193,29 @@ export default class Visualization extends React.PureComponent {
                             data={hazardSummary}
                             margin={{ top: 20, right: 10, left: 10, bottom: 5 }}
                         >
-                            <YAxis dataKey="label" type="category" />
+                            <YAxis
+                                dataKey="label"
+                                type="category"
+                            />
                             <XAxis
                                 dataKey="value"
                                 type="number"
                             />
-                            <Tooltip cursor={false} />
+                            <Tooltip
+                                content={this.customTooltip}
+                                cursor={false}
+                            />
                             <Legend
                                 verticalAlign="bottom"
                                 height={36}
                                 align="center"
                                 iconSize={0}
-                                formatter={() => '  No. of Events  '}
+                                formatter={() => {
+                                    if (language === 'en') {
+                                        return ('No. of Events');
+                                    }
+                                    return ('घटना संख्या');
+                                }}
                             />
                             <Bar
                                 dataKey="value"
@@ -181,14 +244,24 @@ export default class Visualization extends React.PureComponent {
                 <div className={styles.alertSummary}>
                     <header className={styles.header}>
                         <h3 className={styles.heading}>
-                            Number of Alerts
+
+                            <Translation>
+                                {
+                                    t => <span>{t('Number of Alerts')}</span>
+                                }
+                            </Translation>
                         </h3>
                     </header>
                     <div className={styles.content}>
-                        {hazardSummary.map(s => (
+                        {hazardSummary.map((s, idx) => (
                             <div key={s.label} className={styles.summaryItem}>
                                 <div className={styles.label}>
-                                    {s.label}
+                                    <Translation>
+                                        {
+                                            t => <span>{t(s.label)}</span>
+                                        }
+                                    </Translation>
+
                                 </div>
                                 <div className={styles.value}>
                                     {s.value}
@@ -238,3 +311,5 @@ export default class Visualization extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps, undefined)(Visualization);

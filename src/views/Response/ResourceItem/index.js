@@ -1,7 +1,10 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import DistanceOutput from '#components/DistanceOutput';
 
 import { iconNames } from '#constants';
@@ -10,6 +13,7 @@ import TextOutput from '#components/TextOutput';
 import resourceAttributes from '../resourceAttributes';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 const propTypes = {
     className: PropTypes.string,
@@ -33,8 +37,10 @@ const defaultProps = {
 
 const emptyObject = {};
 
-
-export default class ResourceItem extends React.PureComponent {
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+class ResourceItem extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -59,7 +65,7 @@ export default class ResourceItem extends React.PureComponent {
                         />
                     ))}
                 </div>
-                { inventories.length > 0 && (
+                {inventories.length > 0 && (
                     <React.Fragment>
                         <hr />
                         <div className={styles.hr} />
@@ -85,6 +91,7 @@ export default class ResourceItem extends React.PureComponent {
         const {
             className,
             title,
+            titleNe,
             distance,
             contactNumber = 'N/A',
             showDetails,
@@ -93,43 +100,56 @@ export default class ResourceItem extends React.PureComponent {
             point: {
                 coordinates,
             } = emptyObject,
+            language: { language },
         } = this.props;
 
         const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
 
         return (
-            <div className={_cs(styles.resource, className)}>
-                <h4 className={styles.heading}>
-                    { title }
-                </h4>
-                <div className={styles.basicInformation}>
-                    <DistanceOutput
-                        className={styles.distance}
-                        value={distance / 1000}
-                    />
-                    <TextOutput
-                        className={styles.contactNumber}
-                        label={iconNames.telephone}
-                        value={contactNumber}
-                        iconLabel
-                    />
-                </div>
+            <Translation>
                 {
-                    googleLink && (
-                        <div className={styles.googleLinkContainer}>
-                            <a
-                                className={styles.link}
-                                href={googleLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Get direction
-                            </a>
+                    t => (
+                        <div className={_cs(styles.resource, className)}>
+                            <h4 className={styles.heading}>
+                                {language === 'en'
+                                    ? title
+                                    : titleNe === undefined
+                                        ? title : titleNe}
+                            </h4>
+                            <div className={styles.basicInformation}>
+                                <DistanceOutput
+                                    className={styles.distance}
+                                    value={distance / 1000}
+                                />
+                                <TextOutput
+                                    className={styles.contactNumber}
+                                    label={iconNames.telephone}
+                                    value={contactNumber}
+                                    iconLabel
+                                />
+                            </div>
+                            {
+                                googleLink && (
+                                    <div className={styles.googleLinkContainer}>
+                                        <a
+                                            className={styles.link}
+                                            href={googleLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {t('Get direction')}
+                                        </a>
+                                    </div>
+                                )
+                            }
+                            {showDetails && this.renderDetails()}
                         </div>
                     )
                 }
-                { showDetails && this.renderDetails() }
-            </div>
+            </Translation>
+
         );
     }
 }
+
+export default connect(mapStateToProps)(ResourceItem);

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
@@ -33,6 +34,7 @@ import {
     showDistrictSelector,
     showMunicipalitySelector,
     showWardSelector,
+    languageSelector,
 } from '#selectors';
 
 const propTypes = {
@@ -93,6 +95,7 @@ const mapStateToProps = (state, props) => ({
     showDistrict: showDistrictSelector(state, props),
     showMunicipality: showMunicipalitySelector(state, props),
     showWard: showWardSelector(state, props),
+    language: languageSelector(state),
 });
 
 const visibleLayout = {
@@ -135,6 +138,7 @@ class CommonMap extends React.PureComponent {
             showMunicipality: showMunicipalityFromProps,
             showWard: showWardFromProps,
             children,
+            language: { language },
         } = this.props;
 
         const isForced = showProvinceFromProps
@@ -253,7 +257,12 @@ class CommonMap extends React.PureComponent {
                             'source-layer': mapSources.nepalCentroid.layers.province,
                             type: 'symbol',
                             paint: mapStyles.provinceLabel.paint,
-                            layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
+                            layout: showProvinceLabel
+                                ? (language === 'en'
+                                    ? mapStyles.provinceLabel.layout
+                                    : mapStyles.provinceLabelNep.layout
+                                )
+                                : noneLayout,
                             filter: provinceFilter,
                         }}
                     />
@@ -263,7 +272,11 @@ class CommonMap extends React.PureComponent {
                             'source-layer': mapSources.nepalCentroid.layers.district,
                             type: 'symbol',
                             paint: mapStyles.districtLabel.paint,
-                            layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
+                            layout: showDistrictLabel
+                                ? (language === 'en'
+                                    ? mapStyles.districtLabel.layout
+                                    : mapStyles.districtLabelNep.layout
+                                ) : noneLayout,
                             filter: districtFilter,
                         }}
                     />
@@ -274,7 +287,10 @@ class CommonMap extends React.PureComponent {
                             type: 'symbol',
                             paint: mapStyles.municipalityLabel.paint,
                             layout: showMunicipalityLabel
-                                ? mapStyles.municipalityLabel.layout
+                                ? (language === 'en'
+                                    ? mapStyles.municipalityLabel.layout
+                                    : mapStyles.municipalityLabelNep.layout
+                                )
                                 : noneLayout,
                             filter: municipalityFilter,
                         }}
@@ -285,7 +301,11 @@ class CommonMap extends React.PureComponent {
                             'source-layer': mapSources.nepalCentroid.layers.ward,
                             type: 'symbol',
                             paint: mapStyles.wardLabel.paint,
-                            layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
+                            layout: showWardLabel
+                                ? (language === 'en'
+                                    ? mapStyles.wardLabel.layout
+                                    : mapStyles.wardLabelNep.layout)
+                                : noneLayout,
                             filter: wardFilter,
                         }}
                     />

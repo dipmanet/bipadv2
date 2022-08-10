@@ -2,9 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { _cs, isFalsy } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
 import { iconNames } from '#constants';
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 const propTypes = {
     className: PropTypes.string,
 };
@@ -13,7 +18,7 @@ const defaultProps = {
     className: '',
 };
 
-export default class DistanceOutput extends React.PureComponent {
+class DistanceOutput extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -22,10 +27,11 @@ export default class DistanceOutput extends React.PureComponent {
         const {
             className: classNameFromProps,
             value: valueFromProps,
+            language: { language },
         } = this.props;
 
         let amount = valueFromProps;
-        let unit = 'Km';
+        let unit = language === 'en' ? 'Km' : 'कि.मि.';
 
         if (isFalsy(valueFromProps)) {
             return null;
@@ -33,7 +39,7 @@ export default class DistanceOutput extends React.PureComponent {
 
         if (amount < 1) {
             amount *= 1000;
-            unit = 'm';
+            unit = language === 'en' ? 'm' : 'मि.';
         }
 
         return (
@@ -57,3 +63,5 @@ export default class DistanceOutput extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(DistanceOutput);

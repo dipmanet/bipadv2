@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
@@ -31,7 +33,14 @@ import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
 
-const noop = () => {};
+import { languageSelector } from '#selectors';
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+const noop = () => { };
 
 const RealTimeTooltip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -51,7 +60,7 @@ const GIS_URL = [
     '&outputFormat=application/json',
 ].join('');
 
-export default class RealTimeMap extends React.PureComponent {
+class RealTimeMap extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -214,91 +223,124 @@ export default class RealTimeMap extends React.PureComponent {
         });
     }
 
-    earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
-        <div className={styles.tooltip}>
-            <h3>
-                {address}
-            </h3>
-            <TextOutput
-                label="Description"
-                value={description}
-            />
-            <TextOutput
-                label="Event On"
-                value={(
-                    <FormattedDate
-                        value={eventOn}
-                        mode="yyyy-MM-dd hh:mm"
-                    />
-                )}
-            />
-            <TextOutput
-                label="Magnitude"
-                value={magnitude}
-                isNumericValue
-                precision={1}
-            />
-        </div>
-    )
+    earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => {
+        const { language: { language } } = this.props;
+        return (
+            <Translation>
+                {
+                    t => (
+                        <div className={styles.tooltip}>
+                            <h3>
+                                {address}
+                            </h3>
+                            <TextOutput
+                                label={t('Description')}
+                                value={description}
+                            />
+                            <TextOutput
+                                label={t('Event On')}
+                                value={(
+                                    <FormattedDate
+                                        value={eventOn}
+                                        mode="yyyy-MM-dd hh:mm"
+                                        language={language}
+                                    />
+                                )}
+                            />
+                            <TextOutput
+                                label={t('Magnitude')}
+                                value={magnitude}
+                                isNumericValue
+                                precision={1}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
 
-    fireTooltipRenderer = ({ brightness, confidence, eventOn, landCover }) => (
-        <div className={styles.tooltip}>
-            <TextOutput
-                label="Brightness"
-                value={brightness}
-                isNumericValue
-                precision={2}
-            />
-            <TextOutput
-                label="Confidence"
-                value={confidence}
-                isNumericValue
-                precision={2}
-            />
-            <TextOutput
-                label="Event On"
-                value={(
-                    <FormattedDate
-                        value={eventOn}
-                        mode="yyyy-MM-dd hh:mm"
-                    />
-                )}
-            />
-            <TextOutput
-                label="Land Cover"
-                value={landCover}
-            />
-        </div>
-    )
+        );
+    }
 
-    pollutionTooltipRenderer = ({ dateTime, title, aqi, aqiColor, description }) => (
-        <div className={styles.tooltip}>
-            <h3>
-                {title}
-            </h3>
-            <div className={styles.aqi}>
-                <div>
-                    Air Quality Index
-                </div>
-                <div style={{ backgroundColor: `${aqiColor}` }}>
-                    {aqi}
-                </div>
-            </div>
-            <TextOutput
-                label="Description"
-                value={description}
-            />
-            <TextOutput
-                label="Measured On"
-                value={(
-                    <FormattedDate
-                        value={dateTime}
-                        mode="yyyy-MM-dd hh:mm"
-                    />
-                )}
-            />
-        </div>
-    )
+    fireTooltipRenderer = ({ brightness, confidence, eventOn, landCover }) => {
+        const { language: { language } } = this.props;
+        return (
+            <Translation>
+                {
+                    t => (
+                        <div className={styles.tooltip}>
+                            <TextOutput
+                                label={t('Brightness')}
+                                value={brightness}
+                                isNumericValue
+                                precision={2}
+                            />
+                            <TextOutput
+                                label={t('Confidence')}
+                                value={confidence}
+                                isNumericValue
+                                precision={2}
+                            />
+                            <TextOutput
+                                label={t('Event On')}
+                                value={(
+                                    <FormattedDate
+                                        value={eventOn}
+                                        mode="yyyy-MM-dd hh:mm"
+                                        language={language}
+                                    />
+                                )}
+                            />
+                            <TextOutput
+                                label={t('Land Cover')}
+                                value={landCover}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
+
+        );
+    }
+
+    pollutionTooltipRenderer = ({ dateTime, title, aqi, aqiColor, description }) => {
+        const { language: { language } } = this.props;
+        return (
+            <Translation>
+                {
+                    t => (
+                        <div className={styles.tooltip}>
+                            <h3>
+                                {title}
+                            </h3>
+                            <div className={styles.aqi}>
+                                <div>
+                                    {t('Air Quality Index')}
+                                </div>
+                                <div style={{ backgroundColor: `${aqiColor}` }}>
+                                    {aqi}
+                                </div>
+                            </div>
+                            <TextOutput
+                                label={t('Description')}
+                                value={description}
+                            />
+                            <TextOutput
+                                label={t('Measured On')}
+                                value={(
+                                    <FormattedDate
+                                        value={dateTime}
+                                        mode="yyyy-MM-dd hh:mm"
+                                        language={language}
+                                    />
+                                )}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
+
+        );
+    }
 
     handleStreamflowClick = (feature) => {
         const { properties: { comid } } = feature;
@@ -338,6 +380,7 @@ export default class RealTimeMap extends React.PureComponent {
             onHazardHover,
             hazardHoveredAttribute,
             isHovered,
+            language: { language },
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -403,7 +446,7 @@ export default class RealTimeMap extends React.PureComponent {
                     name="forest-fire"
                 />
                 */}
-                { showStreamflow && (
+                {showStreamflow && (
                     <MapSource
                         sourceKey="streamflow-source"
                         sourceOptions={{
@@ -437,7 +480,7 @@ export default class RealTimeMap extends React.PureComponent {
                         />
                     </MapSource>
                 )}
-                { coordinates && (
+                {coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
                         tooltipOptions={tooltipOptions}
@@ -474,7 +517,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={rainFeatureCollection}
                     supportHover
                 >
-                    { showRain && (
+                    {showRain && (
                         <>
                             <MapLayer
                                 layerKey="real-time-rain-circle"
@@ -522,7 +565,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={riverFeatureCollection}
                     supportHover
                 >
-                    { showRiver && (
+                    {showRiver && (
                         <>
                             {/* <MapLayer
                                 layerKey="real-time-river-circle"
@@ -569,7 +612,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={earthquakeFeatureCollection}
                     supportHover
                 >
-                    { showEarthquake && (
+                    {showEarthquake && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-earthquake-points-fill"
@@ -618,7 +661,7 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
-                    { showFire && (
+                    {showFire && (
                         <>
                             <MapLayer
                                 layerKey="real-time-fire-points-cirle"
@@ -657,7 +700,7 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
-                    { showPollution && (
+                    {showPollution && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-pollution-points-fill"
@@ -702,18 +745,21 @@ export default class RealTimeMap extends React.PureComponent {
                 {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
+                        language={language}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
                 {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        language={language}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
-                { streamflowId && (
+                {streamflowId && (
                     <StreamflowDetails
                         id={streamflowId}
+                        language={language}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
@@ -721,3 +767,5 @@ export default class RealTimeMap extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(RealTimeMap);

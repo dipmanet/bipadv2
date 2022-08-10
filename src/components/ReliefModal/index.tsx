@@ -1,6 +1,8 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
@@ -12,6 +14,13 @@ import Flow from './Flow';
 import Release from './Release';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+
+});
 
 interface Tabs {
     flows: string;
@@ -36,9 +45,11 @@ class ReliefModal extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
+        const { language: { language } } = this.props;
         this.tabs = {
-            flows: 'Flows',
-            releases: 'Releases',
+            flows: language === 'en' ? 'Flows' : 'प्रवाहहरु',
+            releases: language === 'en' ? 'Releases' : 'रिलीजहरू',
+
         };
 
         this.views = {
@@ -73,36 +84,42 @@ class ReliefModal extends React.PureComponent<Props, State> {
         const { currentView } = this.state;
 
         return (
-            <Modal
-                className={_cs(styles.reliefModal, className)}
-                // onClose={closeModal}
-            >
-                <ModalHeader
-                    title="Relief"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody}>
-                    <ScrollTabs
-                        className={styles.tabs}
-                        tabs={this.tabs}
-                        onClick={this.handleTabClick}
-                        active={currentView}
-                    />
-                    <MultiViewContainer
-                        views={this.views}
-                        active={currentView}
-                    />
-                </ModalBody>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            className={_cs(styles.reliefModal, className)}
+                        >
+                            <ModalHeader
+                                title={t('Relief')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.modalBody}>
+                                <ScrollTabs
+                                    className={styles.tabs}
+                                    tabs={this.tabs}
+                                    onClick={this.handleTabClick}
+                                    active={currentView}
+                                />
+                                <MultiViewContainer
+                                    views={this.views}
+                                    active={currentView}
+                                />
+                            </ModalBody>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default ReliefModal;
+export default connect(mapStateToProps)(ReliefModal);

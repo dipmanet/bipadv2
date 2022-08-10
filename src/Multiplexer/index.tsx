@@ -14,8 +14,12 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
+import i18n from 'i18next';
+import { initReactI18next, Translation } from 'react-i18next';
+
 import { bbox, point, buffer } from '@turf/turf';
 import mapboxgl from 'mapbox-gl';
+import { enTranslation, npTranslation } from '#constants/translations';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
@@ -31,7 +35,9 @@ import {
     RegionValueElement,
     Layer,
     FiltersElement,
+    Language,
 } from '#types';
+
 
 import {
     District,
@@ -60,55 +66,73 @@ import {
     municipalitiesSelector,
     provincesSelector,
     filtersSelector,
+    languageSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
     setFiltersAction,
+    setLanguageAction,
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
-import errorBound from '../errorBound';
-import helmetify from '../helmetify';
 import { getFeatureInfo } from '#utils/domain';
-import styles from './styles.scss';
+import LanguageToggle from '#components/LanguageToggle';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
     ClientAttributes,
     methods,
 } from '#request';
+import ZoomToolBar from '#components/ZoomToolBar';
+import errorBound from '../errorBound';
+import helmetify from '../helmetify';
+import styles from './styles.scss';
+
 import DownloadButtonOption from './DownloadButtonOption';
 
-import ZoomToolBar from '#components/ZoomToolBar';
 
 function reloadPage() {
     window.location.reload(false);
 }
 
 const ErrorInPage = () => (
-    <div className={styles.errorInPage}>
-        Some problem occurred.
-        <DangerButton
-            transparent
-            onClick={reloadPage}
-        >
-            Reload
-        </DangerButton>
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.errorInPage}>
+                    {t('Some problem occurred.')}
+                    <DangerButton
+                        transparent
+                        onClick={reloadPage}
+                    >
+                        {t('Reload')}
+                    </DangerButton>
+                </div>
+            )
+        }
+    </Translation>
 );
 
 const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
-    <div className={styles.retryableErrorInPage}>
-        Some problem occurred.
-        <DangerButton
-            onClick={retry}
-            transparent
-        >
-            Reload
-        </DangerButton>
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.retryableErrorInPage}>
+                    {t('Some problem occurred.')}
+                    <DangerButton
+                        onClick={retry}
+                        transparent
+                    >
+                        {t('Reload')}
+                    </DangerButton>
+                </div>
+            )
+
+        }
+    </Translation>
+
 );
 
 
@@ -129,12 +153,20 @@ const LoadingPage = ({ error, retry }: LoadOptions) => {
         );
     }
     return (
-        <Loading
-            text="Loading Page"
-            pending
-        />
+        <Translation>
+            {
+                t => (
+                    <Loading
+                        text={t('Loading Page')}
+                        pending
+                    />
+                )
+            }
+        </Translation>
+
     );
 };
+
 
 const routes = routeSettings.map(({ load, ...settings }) => {
     const Com = authRoute<typeof settings>()(
@@ -147,7 +179,6 @@ const routes = routeSettings.map(({ load, ...settings }) => {
     );
 
     const Component = errorBound<typeof settings>(ErrorInPage)(Com);
-
     return (
         <Component
             key={settings.name}
@@ -200,6 +231,7 @@ interface OwnProps {
     hasError: boolean;
     mapStyle: string;
     boundingClientRect?: BoundingClientRect;
+    language: Language;
 }
 
 interface PropsFromState {
@@ -208,6 +240,7 @@ interface PropsFromState {
     provinces: Province[];
     municipalities: Municipality[];
     filters: FiltersElement;
+    language: Language;
     // hazardList: HazardType[];
 }
 
@@ -215,6 +248,7 @@ interface PropsFromDispatch {
     setInitialPopupHidden: typeof setInitialPopupHiddenAction;
     setRegion: typeof setRegionAction;
     setFilters: typeof setFiltersAction;
+    setLanguage: typeof setLanguageAction;
 }
 
 interface Coords {
@@ -226,7 +260,9 @@ interface Coords {
 
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
+
 const mapStateToProps = (state: AppState): PropsFromState => ({
+    language: languageSelector(state),
     user: userSelector(state),
     filters: filtersSelector(state),
     districts: districtsSelector(state),
@@ -236,6 +272,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setLanguage: params => dispatch(setLanguageAction(params)),
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
     setFilters: params => dispatch(setFiltersAction(params)),
@@ -277,6 +314,7 @@ const getMatchingRegion = (
 
     return undefined;
 };
+
 
 const layerNameMap = {
     raster: 'raster-layer',
@@ -356,8 +394,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
             isTilesLoaded: false,
             toggleAnimationMapDownloadButton: false,
             elementStatus: false,
+            showLanguageToolbar: false,
         };
     }
+
 
     public componentDidMount() {
         // NOTE: this means everything has loaded before mounting this page,
@@ -375,12 +415,23 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (!pending) {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
+        // debug true for development
+        i18n.use(initReactI18next).init({
+            lng: 'en',
+            debug: false,
+            fallbackLng: 'en',
+            resources: {
+                en: enTranslation,
+                np: npTranslation,
+            },
+        });
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const {
             pending: oldPending,
         } = this.props;
+
 
         const {
             pending: newPending,
@@ -398,10 +449,26 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentDidUpdate() {
-        const { boundingClientRect } = this.props;
-
+    public componentDidUpdate(prevProps) {
+        const { boundingClientRect, setLanguage } = this.props;
+        const { showLanguageToolbar } = this.state;
         this.setLeftPanelWidth(boundingClientRect);
+        const { language: { language } } = this.props;
+        if (prevProps.language !== language) {
+            i18n.changeLanguage(language);
+        }
+        if (language === 'np' && !showLanguageToolbar) {
+            setLanguage({ language: 'en' });
+        }
+
+        // Km to nepali translation//
+        // const x = document.getElementsByClassName('mapboxgl-ctrl mapboxgl-ctrl-scale')[0];
+
+        // if (language === 'np' && x && x.innerHTML.includes('km')) {
+        //     x.innerHTML = x.innerHTML.replaceAll('km', 'किमि');
+        // } else if (language === 'en' && x && x.innerHTML.includes('किमि')) {
+        //     x.innerHTML = x.innerHTML.replaceAll('किमि', 'km');
+        // }
     }
 
     private handlemapClickedResponse = (data) => {
@@ -499,10 +566,17 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
         if (pending) {
             return (
-                <Loading
-                    text="Loading Resources"
-                    pending
-                />
+                <Translation>
+                    {
+                        t => (
+                            <Loading
+                                text={t('Loading Resources')}
+                                pending
+                            />
+                        )
+                    }
+                </Translation>
+
             );
         }
         return (
@@ -712,6 +786,64 @@ class Multiplexer extends React.PureComponent<Props, State> {
         municipalities: Municipality[],
     ) => {
         if (!selectedRegion || !selectedRegion.adminLevel) {
+            return (
+                <Translation>
+                    {
+                        t => <span>{t('National')}</span>
+                    }
+                </Translation>
+            );
+        }
+
+        const adminLevels: {
+            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
+        } = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regionList = adminLevels[selectedRegion.adminLevel];
+        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+        const { language: { language } } = this.props;
+        if (currentRegion && language === 'en') {
+            return (
+                <Translation>
+                    {
+                        t => (
+                            `${currentRegion.title} ${t(currentRegion.type)}`
+
+                        )
+                    }
+                </Translation>
+
+
+            );
+        }
+
+        if (currentRegion && language === 'np') {
+            return (
+                <Translation>
+                    {
+                        t => (
+                            `${currentRegion.title_ne} ${t(currentRegion.type)}`
+
+                        )
+                    }
+                </Translation>
+            );
+        }
+
+        return 'Unknown';
+    }
+
+    private getRegionDetails = (
+        selectedRegion: RegionValueElement,
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+    ) => {
+        if (!selectedRegion || !selectedRegion.adminLevel) {
             return 'National';
         }
 
@@ -727,7 +859,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
 
         if (currentRegion) {
-            return currentRegion.title;
+            return currentRegion;
         }
 
         return 'Unknown';
@@ -987,37 +1119,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ toggleAnimationMapDownloadButton: boolean });
     }
 
-    private clickHandler=(data) => {
-        const { activeRouteDetails } = this.context;
-        this.setState({ mapDataOnClick: data });
-        this.setState({ tooltipClicked: true });
-        this.setState({
-            tooltipLatlng: data.lngLat,
-        });
-    }
+    private handleModalLanguage = () => {
+        console.log('working from multiplexer');
 
-    private closeTooltip=(data) => {
-        this.setState({ tooltipLatlng: data });
-    }
+        // const RequiredRoutes = [
+        //     'Situation Report', 'Relief', 'Reported incidents',
+        //     'Report an incident', 'Feedback & Support', 'About Us', 'Login'];
 
-    private handleLandslidePolygonImageMap=(data) => {
-        this.setState({
-            landslidePolygonImagemap: data,
-        });
-    }
-
-    private handlelandslidePolygonChoroplethMapData=(data) => {
-        this.setState({
-            landslidePolygonChoroplethMapData: data,
-        });
-    }
-
-    private setClimateChangeSelectedDistrict=(data) => {
-        const { id, properties: { title } } = data;
-
-        this.setState({
-            climateChangeSelectedDistrict: { id, title },
-        });
+        // if (RequiredRoutes.includes(identity)) {
+        //     console.log(identity, 'included');
+        // }
     }
 
     public render() {
@@ -1027,8 +1138,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
-        // hazardList,
+            language: { language },
+            // hazardList,
+            // hazardList,
         } = this.props;
+
 
         const {
             leftContent,
@@ -1070,6 +1184,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             checkFullScreenStatus,
             isTilesLoaded,
             toggleAnimationMapDownloadButton,
+            showLanguageToolbar,
         } = this.state;
 
 
@@ -1137,6 +1252,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
         );
 
+
         const resetLocation = () => {
             // if (this.state.geoLocationStatus && this.geoLocationRef.current) {
             const dotElement = document.querySelector('.mapboxgl-user-location-dot');
@@ -1195,8 +1311,17 @@ class Multiplexer extends React.PureComponent<Props, State> {
             this.setState({ lattitude: val });
         };
         const queryStringParams = window.location.href.split('#/')[1];
+
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
+        const Routes = ['dashboard', '', 'profile', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
+        const queryStringParamsTranlation = window.location.href.split('/')[3];
+
+        if (Routes.includes(queryStringParamsTranlation)) {
+            this.setState({ showLanguageToolbar: true });
+        } else {
+            this.setState({ showLanguageToolbar: false });
+        }
 
         return (
             <PageContext.Provider value={pageProps}>
@@ -1205,11 +1330,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         styles.multiplexer,
                         leftContainerHidden && styles.leftContainerHidden,
                         mapDownloadPending && styles.downloadingMap,
+                        language === 'np' && styles.languageFont,
                     )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
+                                    activeRouteName={activeRouteName}
+                                    hideMap={hideMap}
+                                    toggleLeftPaneButtonStretched={toggleLeftPaneButtonStretched}
                                     handleTilesLoad={this.handleTilesLoad}
                                     isTilesLoaded={isTilesLoaded}
                                     mapStyle={mapStyle}
@@ -1359,6 +1488,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             </div>
                                         )}
                                     </main>
+
                                     {(rightContent || !hideFilters) && (
                                         <aside className={styles.right}>
                                             {rightContent && (
@@ -1370,7 +1500,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 >
                                                     {rightContent}
                                                 </div>
+
                                             )}
+                                            {showLanguageToolbar && <LanguageToggle />}
+
                                             {!hideFilter && (
                                                 <Filters
                                                     className={styles.filters}
@@ -1388,9 +1521,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     )}
                                     {this.renderRoutes()}
                                     <MapOrder ordering={orderedLayers} />
+
                                 </Map>
                             </RiskInfoLayerContext.Provider>
                         </div>
+
                         <Navbar className={styles.navbar} />
                     </div>
                 </TitleContextProvider>

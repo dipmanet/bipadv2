@@ -1,9 +1,300 @@
 .left-pane {
+  .icon {
+    height: 15px;
+    opacity: 0.9;
+  }
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
     overflow: auto;
-
+    .col1Div{
+      margin-left: 20px;
+      margin-right: 10px;
+      margin-bottom: 20px;
+      z-index: 1;
+      border: 1px solid #e1e1e1;
+      cursor: pointer;
+      .tooltiptext{
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        // top: 10px;
+        // left: 175px;
+        white-space: normal;
+      }
+      .categoryName{
+        cursor: pointer;
+        margin-left: 2px;
+        
+        &:hover {
+       
+          .tableTooltip {
+            visibility: visible;
+          }
+      }
+                }
+      .hideDiv{
+       
+        height: 0px;
+        transition:height 0.5s;
+        p{
+          opacity: 0;
+          transition: opacity 1s;
+          padding: 10px;
+        }
+      }
+      .description{
+        border-top: 1px solid #e1e1e1;
+        padding: 10px;
+        p{
+          opacity: 1;
+          transition: opacity 2.5s;
+        
+        }
+        height: 80px;
+        transition:height 0.5s ;
+      }
+  
+    }
+    .col2Div{
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 20px;
+      z-index: 1;
+      border: 1px solid #e1e1e1;
+      cursor: pointer;
+      min-height: 160px;
+      .tooltiptext{
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        // top: 10px;
+        // left: 175px;
+        white-space: normal;
+      }
+      .categoryName{
+        cursor: pointer;
+        margin-left: 2px;
+        &:hover {
+       
+          .tableTooltip {
+            visibility: visible;
+          }
+      }
+                }
+      .hideDiv{
+       
+        height: 0px;
+        transition:height 0.5s;
+        p{
+          opacity: 0;
+          transition: opacity 1s;
+          padding: 10px;
+        }
+      }
+      .description{
+        border-top: 1px solid #e1e1e1;
+        padding: 10px;
+        p{
+          opacity: 1;
+          transition: opacity 2.5s;
+         
+        }
+        height: 80px;
+        transition:height 0.5s ;
+      }
+    }
+    .col3Div{
+      margin-left: 10px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      z-index: 1;
+      border: 1px solid #e1e1e1;
+      cursor: pointer;
+      min-height: 160px;
+      .tooltiptext{
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        // top: 10px;
+        // left: 175px;
+        white-space: normal;
+      }
+      .categoryName{
+       cursor: pointer;
+       margin-left: 2px;
+        &:hover {
+   
+      .tableTooltip {
+        visibility: visible;
+      }
+      }
+            }
+           
+      .hideDiv{
+       
+        height: 0px;
+        transition:height 0.5s;
+        p{
+          opacity: 0;
+          transition: opacity 1s;
+          padding: 10px;
+        }
+      }
+      .description{
+        border-top: 1px solid #e1e1e1;
+        padding: 10px;
+        p{
+          opacity: 1;
+          transition: opacity 2.5s;
+         
+        }
+        height: 80px;
+        transition:height 0.5s ;
+      }
+    }
+    .contacts {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        .tableTooltip{
+          background-color: black;
+          position: absolute;
+          z-index: 1;
+          top: 30px;
+          visibility: hidden;
+          max-width: 120px;
+          white-space: normal;
+          padding: 10px;
+          border-radius: 15px;
+    
+        }
+        .tableCategory{
+          cursor: pointer;
+          &:hover {
+          .tableTooltip {
+            visibility: visible;
+          }
+        }
+        }
+        .documentRenderer{
+          padding: 0px;
+        }
+        #pol{
+          background-color: #E9E9E9;
+          border: 1px solid #EDEDED;
+          position: absolute;
+          left: -100px;
+        z-index: 1;
+        }
+        td,
+        th {
+          //   border: 1px solid #ddd;
+          padding: 8px;
+          font-weight: bold;
+        }
+        // td {
+        //   word-break: break-word;
+        // }
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+    
+        // tr:hover {
+        //   background-color: #ddd;
+        // }
+    
+        th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #dddddd;
+          // color: black;
+          font-size: 14px;
+        }
+        .actionButtons {
+          display: flex;
+          .editButton {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 99;
+        border-bottom: 1px solid #e1e1e1;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        padding: var(--spacing-medium);
+        justify-content: space-between;
+        // border-bottom: 1px solid #e1e1e1;
+        margin-bottom: 20px;
+        #edit{
+          visibility: visible;
+        }
+        #delete{
+          visibility: visible;
+        }
+        .SelectTableButton {
+          border: none !important;
+          background: none;
+          cursor: pointer;
+          .iconDataView {
+            height: 20px;
+            width: 20px;
+          }
+        }
+        .search {
+          height: 40px;
+          margin-left: 10px;
+          background-image: url("../../../../resources/icons/search-contact.svg");
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: -8px;
+          background-size: 50px 20px;
+          text-indent: 30px;
+          border: none;
+          background-color: #f2f2f2;
+          /* Extra Styling */
+          padding: 5px 3px;
+          transition: 0.3s;
+          // input:focus {
+          //   background-image: none;
+          //   text-indent: 0px;
+          // }
+        }
+        .search::placeholder {
+          font-weight: bold;
+        }
+        .search:focus-visible {
+          outline: none;
+        }
+        .heading {
+          flex-grow: 1;
+        }
+      }
     .visualizations {
         display: flex;
         flex-direction: column;
@@ -41,6 +332,7 @@
                     font-size: var(--font-size-small);
                 }
             }
+            
         }
     }
 

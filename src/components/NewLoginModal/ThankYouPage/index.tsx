@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
 
@@ -44,52 +45,56 @@ const DetailsSecondPage = (props: Props) => {
     const handleCancelBtn = () => updatePage('loginPage');
 
     return (
-        <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.welcomeBack}>
-                <h1>Welcome Back</h1>
-                <p>
-                     To login to BIPAD Portal, please use your credentials.
-                </p>
-                <div className={styles.loginBtn}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.newsignIn}
-                        onClick={handleCancelBtn}
-                    >
-                        Sign in
-                    </PrimaryButton>
-                </div>
+        <Translation>
+            {
+                t => (
+                    <div className={styles.mainPageDetailsContainer}>
+                        <div className={styles.welcomeBack}>
+                            <h1>{t('Welcome Back')}</h1>
+                            <p>
+                                {t('To login to BIPAD Portal, please use your credentials.')}
+                            </p>
+                            <div className={styles.loginBtn}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.newsignIn}
+                                    onClick={handleCancelBtn}
+                                >
+                                    {t('Sign in')}
+                                </PrimaryButton>
+                            </div>
 
-            </div>
+                        </div>
 
-            <div className={styles.detailsFormContainer}>
+                        <div className={styles.detailsFormContainer}>
 
-                <h1>Thank you</h1>
-                <p>
-                    For requesting the login credential. Following the submission,
-                    you will receive a confirmation email with a confirmation code.
-                    Our technical team will review your details and provide you a username and
-                    password.
-                </p>
-                {/* <p>
+                            <h1>{t('Thank you')}</h1>
+                            <p>
+                                {t('For requesting the login credential.Following the submission, you will receive a confirmation email with a confirmation code.Our technical team will review your details and provide you a username and password.')}
+                            </p>
+                            {/* <p>
                     Please check your email for submission confirmation.
                     Our technical team will review your details and provide
                     you with a username and password.
                 </p> */}
-                <div className={styles.cancelAgreeBtns}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.agreeBtn}
-                        onClick={closeModal}
-                    >
-                        Close
-                    </PrimaryButton>
+                            <div className={styles.cancelAgreeBtns}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.agreeBtn}
+                                    onClick={closeModal}
+                                >
+                                    {t('Close')}
+                                </PrimaryButton>
 
-                </div>
+                            </div>
 
 
-            </div>
-        </div>
+                        </div>
+                    </div>
+                )
+            }
+        </Translation>
+
     );
 };
 

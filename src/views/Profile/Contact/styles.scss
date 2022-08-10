@@ -1,17 +1,266 @@
+@media only screen and (min-width: 2160px) {
+    .column {
+        margin-left: 12px !important;
+        margin-right: 12px !important;
+    }
+}
+
+
+
 .left {
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
+    overflow-y: hidden;
+    overflow-x: hidden;
 
     .header {
         display: flex;
         align-items: center;
         flex-shrink: 0;
         padding: var(--spacing-medium);
+        justify-content: space-between;
+        border-bottom: 1px solid #e1e1e1;
+        margin-bottom: 20px;
 
+        .SelectTableButton {
+            border: none !important;
+            background: none;
+            cursor: pointer;
+
+            .iconDataView {
+                height: 20px;
+                width: 20px;
+            }
+        }
+
+        .search {
+            height: 40px;
+            margin-left: 10px;
+            background-image: url("../../../resources/icons/search-contact.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: -8px;
+            background-size: 50px 20px;
+            text-indent: 30px;
+            border: none;
+            background-color: #f2f2f2;
+            /* Extra Styling */
+            padding: 5px 3px;
+            transition: 0.3s;
+            // width: 25%;
+            width: 50%;
+
+        }
+
+        .search::placeholder {
+            font-weight: bold;
+        }
+
+        .search:focus-visible {
+            outline: none;
+        }
+
+        // .search:focus {
+        //   background-image: none;
+        //   text-indent: 0px;
+        // }
         .heading {
             flex-grow: 1;
         }
+    }
+
+    .tabular-view {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .table-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
+
+            .alerts-table {
+                flex-grow: 1;
+
+                .head {
+                    background-color: red;
+                    padding: 10px;
+                }
+            }
+        }
+
+        .download-link-container {
+            flex-shrink: 0;
+            padding: 10px;
+        }
+    }
+
+    .visualizationIcon {
+        font-size: 14px;
+    }
+
+    .contacts {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+
+        td,
+        th {
+            //   border: 1px solid #ddd;
+            padding: 8px;
+            font-weight: bold;
+        }
+
+        // td {
+        //   word-break: break-word;
+        // }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        // tr:hover {
+        //   background-color: #ddd;
+        // }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #dddddd;
+            // color: black;
+            font-size: 14px;
+        }
+
+        .actionButtons {
+            display: flex;
+
+
+            .editButton {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .column {
+        float: left;
+        width: 31%;
+        padding: 10px;
+        padding-left: 0px;
+        padding-right: 0px;
+        // height: 300px; /* Should be removed. Only for demonstration */
+        border: 1px solid #e1e1e1;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 20px;
+        padding-bottom: 0px;
+        // height: 220px;
+        cursor: pointer;
+
+        .contactImageProfile {
+            display: flex;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 10px;
+            align-items: flex-start;
+            height: 70px;
+        }
+
+        .contactNameDetails {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            // margin-left: auto;
+            // margin-right: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .contactPhoneDetails {
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contactEmailDetails {
+            display: flex;
+            padding-left: 10px;
+            padding-right: 10px;
+            justify-content: space-between;
+            align-items: center;
+            height: 30px;
+        }
+
+        .contactDetailsFooter {
+
+            background-color: #efefef;
+            border-top: 1px solid #e1e1e1;
+            position: relative;
+
+            // display: flex;
+            min-height: 80px;
+
+            .editDeleteButtn {
+
+                position: absolute;
+                bottom: 0;
+            }
+
+            .footerContent {
+                border: 1px solid #a6cfe3;
+                border-radius: 15px;
+                padding: 5px;
+                margin: 5px;
+                font-size: 9px;
+                color: #a6cfe3;
+                font-weight: bold;
+            }
+
+            p {
+                // margin-bottom: 0px;
+                color: black;
+            }
+        }
+    }
+
+    .active {
+        // border: 1px solid #a6cfe3;
+        // background-color: #3889f2;
+        // opacity: 0.99;
+        box-shadow: 5px 5px 5px #888888;
+        background-color: #f2f2f2;
+    }
+
+    .row {
+        // margin-left: 10px;
+        // margin-right: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 100%;
+
+        .icon {
+            height: 15px;
+        }
+
+        .image {
+            height: 50px;
+            border-radius: 25px;
+            width: 50px;
+            object-fit: cover;
+
+        }
+    }
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
     }
 
     .contact-details-list {

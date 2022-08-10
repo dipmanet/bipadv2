@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Legend from '#rscz/Legend';
 import legendItems from './legendItems';
 
@@ -107,7 +108,13 @@ const CapacityAndResourcesLegend = (props: Props) => {
                 />
             )}
             <div className={_cs(styles.wrapper, 'map-legend-container')}>
-                <div className={styles.title}>Capacity and Resources</div>
+                <Translation>
+                    {
+                        t => (
+                            <div className={styles.title}>{t('Capacity and Resources')}</div>
+                        )
+                    }
+                </Translation>
                 <Legend
                     className={styles.legend}
                     // data={capacityAndResourcesLegendItems}

@@ -1,4 +1,12 @@
 /* eslint-disable react/no-did-update-set-state */
+/* eslint-disable no-tabs */
+/* eslint-disable no-shadow */
+/* eslint-disable max-len */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import Redux, { compose } from 'redux';
@@ -6,6 +14,8 @@ import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
 import Faram from '@togglecorp/faram';
 import memoize from 'memoize-one';
+import { Translation } from 'react-i18next';
+import { BSToAD } from 'bikram-sambat-js';
 import PageContext from '#components/PageContext';
 
 import Button from '#rsca/Button';
@@ -29,6 +39,7 @@ import {
     carKeysSelector,
     userSelector,
     projectsProfileFiltersSelector,
+    languageSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -39,6 +50,7 @@ import PastDateRangeInput from '#components/PastDateRangeInput';
 import { getAuthState } from '#utils/session';
 import { colorScheme } from '#constants';
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 
 interface ComponentProps {
@@ -73,6 +85,7 @@ const mapStateToProps = (state: AppState) => ({
     carKeys: carKeysSelector(state),
     user: userSelector(state),
     projectFilters: projectsProfileFiltersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -253,24 +266,23 @@ class Filters extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const {
             filters: faramValues,
-            municipalities,
-            districts,
-            provinces,
         } = this.props;
 
         this.setState({ faramValues });
     }
 
-    public UNSAFE_componentWillReceiveProps(nextProps) {
+    public UNSAFE_componentWillReceiveProps() {
         const {
             filters: faramValues,
             municipalities,
             districts,
             provinces,
         } = this.props;
+
         const {
             locRecv,
         } = this.state;
+
         this.setState({ faramValues });
 
         if (
@@ -537,13 +549,14 @@ class Filters extends React.PureComponent<Props, State> {
         if (!disableSubmitButton) {
             this.setState({ disableSubmitButton: true });
             setFilters({ filters: faramValues });
-            // if (faramValues) {
-            //     setFilters({ filters: faramValues });
-            // }
-            // else {
-            //     setFilters({ filters: propFilters });
-            // }
         }
+
+        // if (faramValues) {
+        //     setFilters({ filters: faramValues });
+        // }
+        // else {
+        //     setFilters({ filters: propFilters });
+        // }
 
         const { activeRouteDetails } = this.context;
 
@@ -567,12 +580,13 @@ class Filters extends React.PureComponent<Props, State> {
             hideLocationFilter,
             hideHazardFilter,
             hideDataRangeFilter,
+            language,
         ): { [key in TabKey]?: string; } => {
             const tabs = {
-                location: 'Location',
-                hazard: 'Hazard',
-                dataRange: 'Data range',
-                others: 'Project',
+                location: language === 'en' ? 'Location' : 'स्थान',
+                hazard: language === 'en' ? 'Hazard' : 'प्रकोप',
+                dataRange: language === 'en' ? 'Data range' : 'डाटाको समय',
+                others: language === 'en' ? 'Project' : 'परियोजना',
             };
 
             if (!extraContent) {
@@ -605,6 +619,7 @@ class Filters extends React.PureComponent<Props, State> {
             hideLocationFilter,
             user,
             projectFilters,
+            language: { language },
         } = this.props;
 
         const { faramValues: fv, disableSubmitButton } = this.state;
@@ -613,6 +628,7 @@ class Filters extends React.PureComponent<Props, State> {
             hideLocationFilter,
             hideHazardFilter,
             hideDataRangeFilter,
+            language,
         );
 
         // if (user && Object.keys(user.profile).length > 0) {
@@ -643,17 +659,26 @@ class Filters extends React.PureComponent<Props, State> {
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
                     <h3 className={styles.heading}>
-                        Filters
+                        <Translation>
+                            {
+                                t => <span>{t('Filters')}</span>
+                            }
+                        </Translation>
                     </h3>
-
-                    <Button
-                        className={styles.resetFiltersButton}
-                        title="Reset filters"
-                        onClick={this.handleResetFiltersButtonClick}
-                        iconName="refresh"
-                        transparent
-                        disabled={!validActiveView}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <Button
+                                    className={styles.resetFiltersButton}
+                                    title={t('Reset filters')}
+                                    onClick={this.handleResetFiltersButtonClick}
+                                    iconName="refresh"
+                                    transparent
+                                    disabled={!validActiveView}
+                                />
+                            )
+                        }
+                    </Translation>
 
                 </header>
                 <div className={styles.content}>
@@ -674,9 +699,14 @@ class Filters extends React.PureComponent<Props, State> {
                     >
                         {validActiveView && (
                             <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    {tabs[validActiveView]}
-                                </h3>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <h3 className={styles.heading}>
+                                                {t(`${tabs[validActiveView]}`)}
+                                            </h3>
+                                        )}
+                                </Translation>
                                 <Button
                                     className={styles.closeButton}
                                     transparent
@@ -696,7 +726,11 @@ class Filters extends React.PureComponent<Props, State> {
                             className={styles.submitButton}
                             role="presentation"
                         >
-                            Submit
+                            <Translation>
+                                {
+                                    t => <span>{t('Submit')}</span>
+                                }
+                            </Translation>
                         </div>
                     )}
                 </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import {
+    _cs,
     compareDate,
     getDate,
     listToGroupList,
@@ -8,6 +9,7 @@ import {
     isDefined,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Message from '#rscv/Message';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
@@ -34,7 +36,7 @@ import {
 
 import styles from './styles.scss';
 
-interface Params {}
+interface Params { }
 interface OwnProps {
     handleModalClose: () => void;
     title: string;
@@ -45,6 +47,7 @@ interface LegendItem {
     key: string;
     label: string;
     color: string;
+    language: string;
 }
 const RiverEmptyComponent = () => (
     <Message>
@@ -52,11 +55,17 @@ const RiverEmptyComponent = () => (
     </Message>
 );
 
-const riverLegendData: LegendItem[] = [
-    { key: 'waterLevel', label: 'Water Level', color: '#4daf4a' },
-    { key: 'warningLevel', label: 'Warning Level', color: '#377eb8' },
-    { key: 'dangerLevel', label: 'Danger Level', color: '#e41a1c' },
-];
+const RiverEmptyComponentNe = () => (
+    <Message>
+        डाटा हाल उपलब्ध छैन
+    </Message>
+);
+
+const riverLegendData: LegendItem[] = language => ([
+    { key: 'waterLevel', label: language === 'en' ? 'Water Level' : 'पानीको तह', color: '#4daf4a' },
+    { key: 'warningLevel', label: language === 'en' ? 'Warning Level' : 'चेतावनी स्तर', color: '#377eb8' },
+    { key: 'dangerLevel', label: language === 'en' ? 'Danger Level' : 'खतरा स्तर', color: '#e41a1c' },
+]);
 
 const labelSelector = (d: LegendItem) => d.label;
 const keySelector = (d: LegendItem) => d.label;
@@ -84,31 +93,34 @@ class RiverDetails extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
 
+        const { language } = this.props;
+
         this.riverHeader = [
             {
                 key: 'waterLevelOn',
-                label: 'Date',
+                label: language === 'en' ? 'Date' : 'मिति',
                 order: 1,
                 modifier: row => (
                     <FormattedDate
                         value={row.waterLevelOn}
+                        language={language}
                         mode="yyyy-MM-dd hh:mm aaa"
                     />
                 ),
             },
             {
                 key: 'waterLevel',
-                label: 'Water Level',
+                label: language === 'en' ? 'Water Level' : 'पानीको तह',
                 order: 2,
             },
             {
                 key: 'warningLevel',
-                label: 'Warning Level',
+                label: language === 'en' ? 'Warning Level' : 'चेतावनी स्तर',
                 order: 3,
             },
             {
                 key: 'dangerLevel',
-                label: 'Danger Level',
+                label: language === 'en' ? 'Danger Level' : 'खतरा स्तर',
                 order: 4,
             },
         ];
@@ -191,7 +203,7 @@ class RiverDetails extends React.PureComponent<Props> {
         }, initialChartData);
         const { waterLevelOn, ...others } = data;
         const series = Object.entries(others).map(([key, value]) => {
-            const legendItem = riverLegendData.find(rl => rl.key === key);
+            const legendItem = riverLegendData().find(rl => rl.key === key);
             const color = legendItem ? legendItem.color : '#4daf4a';
 
             return ({
@@ -215,6 +227,7 @@ class RiverDetails extends React.PureComponent<Props> {
             },
             title = '',
             handleModalClose,
+            language,
         } = this.props;
 
         let riverDetails: RealTimeRiverDetails[] = [];
@@ -232,157 +245,167 @@ class RiverDetails extends React.PureComponent<Props> {
         const hourlyRiverChartData = this.getHourlyChartData(hourlyRiverDetails);
 
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={handleModalClose}
-                className={styles.riverDetailModal}
-            >
-                <ModalHeader
-                    title={title}
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={handleModalClose}
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    { pending && <LoadingAnimation /> }
-                    { latestRiverDetail && (
-                        <div className={styles.riverDetails}>
-                            <div className={styles.top}>
-                                {latestRiverDetail.image ? (
-                                    <Image
-                                        className={styles.image}
-                                        src={latestRiverDetail.image}
-                                        alt="image"
-                                        zoomable
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={handleModalClose}
+                            className={_cs(styles.riverDetailModal, language === 'np' && styles.languageFont)}
+                        >
+                            <ModalHeader
+                                title={title}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={handleModalClose}
                                     />
-                                ) : (
-                                    <div className={styles.noImage}>
-                                        Image not available
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                {pending && <LoadingAnimation />}
+                                {latestRiverDetail && (
+                                    <div className={styles.riverDetails}>
+                                        <div className={styles.top}>
+                                            {latestRiverDetail.image ? (
+                                                <Image
+                                                    className={styles.image}
+                                                    src={latestRiverDetail.image}
+                                                    alt="image"
+                                                    zoomable
+                                                />
+                                            ) : (
+                                                <div className={styles.noImage}>
+                                                    {t('Image not available')}
+                                                </div>
+                                            )}
+                                            <div className={styles.details}>
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Description')}
+                                                    value={latestRiverDetail.description}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Basin')}
+                                                    value={latestRiverDetail.basin}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Status')}
+                                                    value={latestRiverDetail.status}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Latitude')}
+                                                    value={latestRiverDetail.point.coordinates[1]}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Longitude')}
+                                                    value={latestRiverDetail.point.coordinates[0]}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Flow')}
+                                                    value={latestRiverDetail.steady}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Elevation')}
+                                                    value={latestRiverDetail.elevation}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Water Level')}
+                                                    value={latestRiverDetail.waterLevel}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Danger Level')}
+                                                    value={latestRiverDetail.dangerLevel}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Warning Level')}
+                                                    value={latestRiverDetail.warningLevel}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Measured On')}
+                                                    value={(
+                                                        <FormattedDate
+                                                            value={latestRiverDetail.waterLevelOn}
+                                                            mode="yyyy-MM-dd, hh:mm:aaa"
+                                                            language={language}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className={styles.bottom}>
+                                            <div className={styles.hourlyWaterLevel}>
+                                                <header className={styles.header}>
+                                                    <h4 className={styles.heading}>
+                                                        {t('Hourly Water Level')}
+                                                    </h4>
+                                                </header>
+                                                <Table
+                                                    className={styles.content}
+                                                    data={hourlyRiverDetails}
+                                                    headers={this.riverHeader}
+                                                    keySelector={riverKeySelector}
+                                                    emptyComponent={language === 'en'
+                                                        ? RiverEmptyComponent
+                                                        : RiverEmptyComponentNe}
+                                                />
+                                            </div>
+                                            <div className={styles.waterLevelChartContainer}>
+                                                <MultiLineChart
+                                                    className={styles.riverChart}
+                                                    data={hourlyRiverChartData}
+                                                />
+                                                <Legend
+                                                    className={styles.riverChartLegend}
+                                                    colorSelector={colorSelector}
+                                                    data={riverLegendData(language)}
+                                                    keySelector={keySelector}
+                                                    labelSelector={labelSelector}
+                                                    itemClassName={styles.legendItem}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
-                                <div className={styles.details}>
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Description"
-                                        value={latestRiverDetail.description}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Basin"
-                                        value={latestRiverDetail.basin}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Status"
-                                        value={latestRiverDetail.status}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Latitude"
-                                        value={latestRiverDetail.point.coordinates[1]}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Longitude"
-                                        value={latestRiverDetail.point.coordinates[0]}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Flow"
-                                        value={latestRiverDetail.steady}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Elevation"
-                                        value={latestRiverDetail.elevation}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Water Level"
-                                        value={latestRiverDetail.waterLevel}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Danger Level"
-                                        value={latestRiverDetail.dangerLevel}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Warning Level"
-                                        value={latestRiverDetail.warningLevel}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Measured On"
-                                        value={(
-                                            <FormattedDate
-                                                value={latestRiverDetail.waterLevelOn}
-                                                mode="yyyy-MM-dd, hh:mm:aaa"
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.bottom}>
-                                <div className={styles.hourlyWaterLevel}>
-                                    <header className={styles.header}>
-                                        <h4 className={styles.heading}>
-                                            Hourly Water Level
-                                        </h4>
-                                    </header>
-                                    <Table
-                                        className={styles.content}
-                                        data={hourlyRiverDetails}
-                                        headers={this.riverHeader}
-                                        keySelector={riverKeySelector}
-                                        emptyComponent={RiverEmptyComponent}
-                                    />
-                                </div>
-                                <div className={styles.waterLevelChartContainer}>
-                                    <MultiLineChart
-                                        className={styles.riverChart}
-                                        data={hourlyRiverChartData}
-                                    />
-                                    <Legend
-                                        className={styles.riverChartLegend}
-                                        colorSelector={colorSelector}
-                                        data={riverLegendData}
-                                        keySelector={keySelector}
-                                        labelSelector={labelSelector}
-                                        itemClassName={styles.legendItem}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </ModalBody>
-            </Modal>
+                            </ModalBody>
+                        </Modal>
+
+                    )
+                }
+            </Translation>
         );
     }
 }

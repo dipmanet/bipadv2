@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import SelectInput from '#rsci/SelectInput';
 import MultiSelectInput from '#rsci/MultiSelectInput';
 
@@ -13,6 +14,7 @@ import {
     setProjectsProfileFiltersAction,
 } from '#actionCreators';
 import {
+    languageSelector,
     projectsProfileFiltersSelector,
 } from '#selectors';
 
@@ -30,6 +32,7 @@ const defaultProps = {
 
 const mapStateToProps = state => ({
     filters: projectsProfileFiltersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -103,6 +106,7 @@ class ProjectsProfileFilter extends React.PureComponent {
         });
     }
 
+
     render() {
         const {
             className,
@@ -119,42 +123,57 @@ class ProjectsProfileFilter extends React.PureComponent {
             elementsOptions,
             organizationOptions,
             // projectStatusOptions = [],
+            showFilterOnly,
+            getSelectedOption,
+            language: { language },
         } = this.props;
-
         return (
-            <Faram
-                className={_cs(className, styles.filterForm)}
-                onChange={this.handleFaramChange}
-                onValidationFailure={this.handleFaramFailure}
-                schema={ProjectsProfileFilter.schema}
-                value={faramValues}
-                error={faramErrors}
-            >
-                <SelectInput
-                    faramElementName="priority"
-                    label="priority area"
-                    options={priorityOptions}
-                    keySelector={ndrrsapKeySelector}
-                    labelSelector={ndrrsapLabelSelector}
-                    // autoFocus
-                />
-                <SelectInput
-                    faramElementName="subPriority"
-                    label="priority action"
-                    disabled={!faramValues.priority}
-                    options={subPriorityOptions}
-                    keySelector={ndrrsapKeySelector}
-                    labelSelector={ndrrsapLabelSelector}
-                />
-                <SelectInput
-                    faramElementName="activity"
-                    label="activities"
-                    disabled={!faramValues.subPriority}
-                    options={activityOptions}
-                    keySelector={ndrrsapKeySelector}
-                    labelSelector={ndrrsapLabelSelector}
-                />
-                {/* <MultiSelectInput
+            <Translation>
+                {
+                    t => (
+                        <Faram
+                            className={_cs(className, styles.filterForm)}
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramFailure}
+                            schema={ProjectsProfileFilter.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                        >
+                            <SelectInput
+                                faramElementName="priority"
+                                label={t('priority area')}
+                                options={priorityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
+                                getSelectedOption={getSelectedOption}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                            // autoFocus
+                            />
+                            <SelectInput
+                                faramElementName="subPriority"
+                                label={t('priority action')}
+                                disabled={!faramValues.priority}
+                                options={subPriorityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
+                                getSelectedOption={getSelectedOption}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                            />
+                            <SelectInput
+                                faramElementName="activity"
+                                label={t('activities')}
+                                disabled={!faramValues.subPriority}
+                                options={activityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
+                                getSelectedOption={getSelectedOption}
+                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+
+                            />
+                            {/* <MultiSelectInput
                     label="drr cycles"
                     faramElementName="drrCycles"
                     keySelector={drrCyclesKeySelector}
@@ -168,14 +187,32 @@ class ProjectsProfileFilter extends React.PureComponent {
                     keySelector={elementsKeySelector}
                     labelSelector={elementsLabelSelector}
                 /> */}
-                <MultiSelectInput
+                            {!showFilterOnly
+                                && (
+                                    <MultiSelectInput
+                                        label={t('Organization')}
+                                        faramElementName="organizations"
+                                        options={organizationOptions}
+                                        keySelector={organizationKeySelector}
+                                        labelSelector={organizationLabelSelector}
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+
+                                    />
+                                )
+                            }
+                            {/* <MultiSelectInput
                     label="organization"
                     faramElementName="organizations"
                     options={organizationOptions}
                     keySelector={organizationKeySelector}
                     labelSelector={organizationLabelSelector}
-                />
-            </Faram>
+                /> */}
+
+                        </Faram>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Router } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import { routeSettings, iconNames } from '#constants';
 import RegionOutput from '#components/RegionOutput';
 
@@ -40,9 +41,16 @@ export default class Logo extends React.PureComponent<Props, State> {
             <div className={_cs(styles.logo, className)}>
                 <div className={styles.brandName}>
                     <div className={styles.left} />
-                    <div className={styles.right}>
-                        Bipad
-                    </div>
+                    <Translation>
+                        {
+                            t => (
+                                <div className={styles.right}>
+                                    {t('Bipad')}
+                                </div>
+                            )
+                        }
+                    </Translation>
+
                 </div>
                 <RegionOutput
                     className={styles.region}

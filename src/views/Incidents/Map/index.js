@@ -20,6 +20,7 @@ import {
     municipalitiesMapSelector,
     wardsMapSelector,
     userSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -85,6 +86,7 @@ const mapStateToProps = state => ({
     municipalitiesMap: municipalitiesMapSelector(state),
     wardsMap: wardsMapSelector(state),
     user: userSelector(state),
+    language: languageSelector(state),
 });
 
 const visibleLayout = {
@@ -249,6 +251,7 @@ class IncidentMap extends React.PureComponent {
             },
             sourceKey,
             isProviceOnlyMap,
+            language: { language },
         } = this.props;
 
         const icons = unique(
@@ -351,7 +354,7 @@ class IncidentMap extends React.PureComponent {
                         }}
                     />
                     */}
-                    { incidentLngLat && (
+                    {incidentLngLat && (
                         <MapTooltip
                             coordinates={incidentLngLat}
                             tooltipOptions={tooltipOptions}
@@ -369,6 +372,7 @@ class IncidentMap extends React.PureComponent {
                                 onEditIncident={this.handleEditIncidentClick}
                                 onDeleteIncident={this.handleIncidentDelete}
                                 incidentDeletePending={incidentDeletePending}
+                                language={language}
                             />
                         </MapTooltip>
                     )}

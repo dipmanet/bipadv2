@@ -15,6 +15,7 @@ import Faram from '@togglecorp/faram';
 import * as ReachRouter from '@reach/router';
 
 import { parseUrlParams } from '@togglecorp/react-rest-request';
+import { Translation } from 'react-i18next';
 import LocationInput from '#components/LocationInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
@@ -42,6 +43,7 @@ import {
     resourceTypeListSelector,
     palikaRedirectSelector,
     wardsSelector,
+    languageSelector,
 } from '#selectors';
 import {
     setPalikaRedirectAction,
@@ -152,11 +154,12 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     enumOptions: enumOptionsSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     wards: wardsSelector(state),
+    language: languageSelector(state),
 });
 
 const labelSelector = (d: PageType.Field) => d.title;
 const typeSelector = (d: PageType.Field) => d.type;
-const selectLabel = (d: PageType.Field) => d.label;
+const selectLabel = (d: PageType.Field, language: string) => (language === 'en' ? d.label : d.labelNe);
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     addResourcePostRequest: {
@@ -920,6 +923,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             },
             palikaRedirect,
             handleClearDataAfterAddition,
+            language: { language },
         } = this.props;
 
         const {
@@ -953,174 +957,187 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         ];
         return (
 
-            <>
-                <Loading pending={addResourcePending} text={'Submitting Data Please Wait !!'} />
-                <Faram
-                    className={styles.form}
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={schema}
-                    value={faramValues}
-                    error={faramErrors}
-                >
 
-                    <NonFieldErrors faramElement />
-
-                    <SelectInput
-                        addResourceDropdown={'capResAddFormDropdown'}
-                        faramElementName="resourceType"
-                        options={resourceTypeList}
-                        keySelector={labelSelector}
-                        labelSelector={selectLabel}
-                        label="Resource Type"
-                        autoFocus
-                        disabled={isDefined(resourceId)}
-                        className={styles.resourceType}
-                        optionsClassName={styles.optionsClassName}
-                        iconName={'capResAddFormDropdown'}
-
-
-                    />
-                    {(faramValues.resourceType !== ('sanitation' || 'watersupply' || 'openspace' || 'helipad' || 'bridge' || 'electricity')) && <h1>INSTITUTION DETAILS</h1>}
-                    {(faramValues.resourceType === ('roadway' || 'helipad' || 'waterway' || 'bridge' || 'airway')) && <h1>GENERAL DETAILS</h1>}
-                    <TextInput
-                        faramElementName="title"
-                        label="Name"
-                    />
-                    {faramValues.resourceType === 'industry'
-                        && (
-                            <SelectInput
-                                addResourceDropdown={'capResAddFormDropdown'}
-                                faramElementName={'type'}
-                                options={industryTypeField}
-                                keySelector={typeSelector}
-                                labelSelector={typeSelector}
-                                label={'Type'}
-                                autoFocus
-                                optionsClassName={styles.optionsClassName}
-                                iconName={'capResAddFormDropdown'}
-                            />
-                        )
-
-                    }
-
-                    {selectedAttribute.length && selectedType && selectedType.length ? (
-                        <SelectInput
-                            addResourceDropdown={'capResAddFormDropdown'}
-                            faramElementName={selectedAttribute[0]}
-                            options={selectedType}
-                            keySelector={typeSelector}
-                            labelSelector={typeSelector}
-                            label={(faramValues.resourceType
-                                === 'health') ? 'Facility Type' : faramValues.resourceType
-                                    === 'electricity' ? 'Component' : faramValues.resourceType
-                                        === 'watersupply' ? 'Scale' : 'Type'}
-                            autoFocus
-                            optionsClassName={styles.optionsClassName}
-                            iconName={'capResAddFormDropdown'}
-                        />
-                    ) : ''
-                    }
-
-                    {faramValues.type === 'Other'
-                        && (
-                            <TextInput
-                                faramElementName="otherType"
-                                label="If type is not mentioned above (other), name it here"
-                            />
-
-                        )
-                    }
-                    {faramValues.components === 'Other'
-                        && (
-                            <TextInput
-                                faramElementName="otherComponents"
-                                label="If component is not mentioned above (other), name it here"
-                            />
-
-                        )
-                    }
-                    {faramValues.type === 'Fire Engine'
-                        ? (
-                            <NumberInput
-                                faramElementName="numberOfFireEngine"
-                                label="Number of Fire Engine"
-                            />
-                        ) : ''
-                    }
-                    {faramValues.type === 'Fire Bike'
-                        ? (
-                            <NumberInput
-                                faramElementName="numberOfFireBike"
-                                label="Number of Fire Bike"
-                            />
-                        ) : ''
-                    }
-                    {faramValues.type === 'Other'
-                        ? (
-                            <NumberInput
-                                faramElementName="numberOfOtherApparatus"
-                                label="Number of Other Apparatus"
-                            />
-                        ) : ''
-                    }
-                    {
-                        resourceType && (
-                            <>
-                                <ExtraFields
-                                    title={resourceType}
-                                    resourceEnums={resourceEnums}
-                                    resourceId={resourceId}
-                                    faramValues={faramValues}
-                                    closeModal={closeModal}
-                                    addResourcePostRequest={addResourcePostRequest}
-                                    iconName={'capResAddFormDropdown'}
-                                    LoadingSuccessHalt={this.LoadingSuccessHalt}
-                                    addResourcePending={addResourcePending}
-                                    faramValueSetNull={this.faramValueSetNull}
-                                    optionsClassName={styles.optionsClassName}
-                                    handleFaramValidationFailure={this.handleFaramValidationFailure}
-                                    handleClearDataAfterAddition={handleClearDataAfterAddition}
-                                />
-                                {((faramValues.resourceType === 'communityspace') || (faramValues.resourceType === 'openspace'))
-
-                                    ? (
-                                        ''
-                                    ) : (
-                                        <LocationInput
-                                            // className={styles.locationInput}
-                                            faramElementName="location"
-                                            classCategory={styles.locationInput}
-                                            category={'capacityResource'}
-                                        />
-                                    )}
-                            </>
-                        )
-                    }
-
-                    {/* </ModalBody> */}
-                    {
-                        !hideButtons && (
-                            // <ModalFooter className={styles.footer}>
-                            //     <DangerButton onClick={closeModal}>
-                            // Close
-                            //     </DangerButton>
-                            <div className={pristine
-                                ? styles.submitButnDisabled : styles.submitButn}
+            <Translation>
+                {
+                    t => (
+                        <>
+                            <Loading pending={addResourcePending} text={'Submitting Data Please Wait !!'} />
+                            <Faram
+                                className={styles.form}
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={schema}
+                                value={faramValues}
+                                error={faramErrors}
                             >
-                                <PrimaryButton
-                                    type="submit"
-                                    disabled={pristine}
-                                    pending={addResourcePending || editResourcePending}
-                                >
-                                    Submit Changes
-                                </PrimaryButton>
-                            </div>
-                            // </ModalFooter>
-                        )}
-                </Faram>
-            </>
+
+                                <NonFieldErrors faramElement />
+
+                                <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                    addResourceDropdown={'capResAddFormDropdown'}
+                                    faramElementName="resourceType"
+                                    options={resourceTypeList}
+                                    keySelector={labelSelector}
+                                    labelSelector={d => selectLabel(d, language)}
+                                    label={t('Resource Type')}
+                                    autoFocus
+                                    disabled={isDefined(resourceId)}
+                                    className={styles.resourceType}
+                                    optionsClassName={styles.optionsClassName}
+                                    iconName={'capResAddFormDropdown'}
+
+
+                                />
+                                {(faramValues.resourceType !== ('sanitation' || 'watersupply' || 'openspace' || 'helipad' || 'bridge' || 'electricity')) && <h1>{t('INSTITUTION DETAILS')}</h1>}
+                                {(faramValues.resourceType === ('roadway' || 'helipad' || 'waterway' || 'bridge' || 'airway')) && <h1>{t('GENERAL DETAILS')}</h1>}
+                                <TextInput
+                                    faramElementName="title"
+                                    label={t('Name')}
+                                />
+                                {faramValues.resourceType === 'industry'
+                                    && (
+                                        <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                            addResourceDropdown={'capResAddFormDropdown'}
+                                            faramElementName="type"
+                                            options={industryTypeField}
+                                            keySelector={typeSelector}
+                                            labelSelector={typeSelector}
+                                            label={t('Type')}
+                                            autoFocus
+                                            optionsClassName={styles.optionsClassName}
+                                            iconName={'capResAddFormDropdown'}
+                                        />
+                                    )
+
+                                }
+
+                                {selectedAttribute.length && selectedType && selectedType.length ? (
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        addResourceDropdown={'capResAddFormDropdown'}
+                                        faramElementName={selectedAttribute[0]}
+                                        options={selectedType}
+                                        keySelector={typeSelector}
+                                        labelSelector={typeSelector}
+                                        label={(faramValues.resourceType
+                                            === 'health') ? t('Facility Type') : faramValues.resourceType
+                                                === 'electricity' ? (language === 'en' ? 'Component' : 'प्रकार') : faramValues.resourceType
+                                                    === 'watersupply' ? t('Scale') : t('Type')}
+                                        autoFocus
+                                        optionsClassName={styles.optionsClassName}
+                                        iconName={'capResAddFormDropdown'}
+
+                                    />
+                                ) : ''
+                                }
+
+                                {faramValues.type === 'Other'
+                                    && (
+                                        <TextInput
+                                            faramElementName="otherType"
+                                            label="If type is not mentioned above (other), name it here"
+                                        />
+
+                                    )
+                                }
+                                {faramValues.components === 'Other'
+                                    && (
+                                        <TextInput
+                                            faramElementName="otherComponents"
+                                            label="If component is not mentioned above (other), name it here"
+                                        />
+
+                                    )
+                                }
+                                {faramValues.type === 'Fire Engine'
+                                    ? (
+                                        <NumberInput
+                                            faramElementName="numberOfFireEngine"
+                                            label="Number of Fire Engine"
+                                        />
+                                    ) : ''
+                                }
+                                {faramValues.type === 'Fire Bike'
+                                    ? (
+                                        <NumberInput
+                                            faramElementName="numberOfFireBike"
+                                            label="Number of Fire Bike"
+                                        />
+                                    ) : ''
+                                }
+                                {faramValues.type === 'Other'
+                                    ? (
+                                        <NumberInput
+                                            faramElementName="numberOfOtherApparatus"
+                                            label="Number of Other Apparatus"
+                                        />
+                                    ) : ''
+                                }
+                                {
+                                    resourceType && (
+                                        <>
+                                            <ExtraFields
+                                                title={resourceType}
+                                                resourceEnums={resourceEnums}
+                                                resourceId={resourceId}
+                                                faramValues={faramValues}
+                                                closeModal={closeModal}
+                                                addResourcePostRequest={addResourcePostRequest}
+                                                iconName={'capResAddFormDropdown'}
+                                                LoadingSuccessHalt={this.LoadingSuccessHalt}
+                                                addResourcePending={addResourcePending}
+                                                faramValueSetNull={this.faramValueSetNull}
+                                                optionsClassName={styles.optionsClassName}
+                                                handleFaramValidationFailure={this.handleFaramValidationFailure}
+                                                handleClearDataAfterAddition={handleClearDataAfterAddition}
+                                            />
+                                            {((faramValues.resourceType === 'communityspace') || (faramValues.resourceType === 'openspace'))
+
+                                                ? (
+                                                    ''
+                                                ) : (
+                                                    <LocationInput
+                                                        // className={styles.locationInput}
+                                                        faramElementName="location"
+                                                        classCategory={styles.locationInput}
+                                                        category={'capacityResource'}
+                                                    />
+                                                )}
+                                        </>
+                                    )
+                                }
+
+                                {/* </ModalBody> */}
+                                {
+                                    !hideButtons && (
+                                        // <ModalFooter className={styles.footer}>
+                                        //     <DangerButton onClick={closeModal}>
+                                        // Close
+                                        //     </DangerButton>
+                                        <div className={pristine
+                                            ? styles.submitButnDisabled : styles.submitButn}
+                                        >
+                                            <PrimaryButton
+                                                type="submit"
+                                                disabled={pristine}
+                                                pending={addResourcePending || editResourcePending}
+                                            >
+                                                {t('Submit Changes')}
+                                            </PrimaryButton>
+                                        </div>
+                                        // </ModalFooter>
+                                    )}
+                            </Faram>
+                        </>
+
+                    )
+                }
+            </Translation>
+
         );
     }
 }

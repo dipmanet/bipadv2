@@ -51,10 +51,10 @@ const Detail = (p: {
     return (
         <div className={_cs(styles.detail, className)}>
             <div className={styles.label}>
-                { label }
+                {label}
             </div>
             <div className={styles.value}>
-                { value }
+                {value}
             </div>
         </div>
     );
@@ -75,7 +75,7 @@ const IconDetail = (p: {
         <div className={_cs(styles.iconDetail, className)}>
             <div className={_cs(styles.icon, iconName)} />
             <div className={styles.value}>
-                { value }
+                {value}
             </div>
         </div>
     );
@@ -89,7 +89,7 @@ interface OwnProps {
     municipalityList: Municipality[];
 }
 
-interface Params {}
+interface Params { }
 
 type Props = NewProps<OwnProps, Params>;
 
@@ -165,8 +165,6 @@ const ContactItem = (props: Props) => {
         [trainings],
     );
     const filterPermissionGranted = checkSameRegionPermission(user, region);
-
-
     const confirmationMessage = `Are you sure you want to remove the contact ${name}?`;
     return (
         <div
@@ -175,96 +173,6 @@ const ContactItem = (props: Props) => {
                 isDrrFocalPerson && styles.focalPerson,
             )}
         >
-            <div className={styles.personalDetails}>
-                <div className={styles.displayImageContainer}>
-                    { image ? (
-                        <img
-                            className={styles.image}
-                            src={image}
-                            alt="img"
-                        />
-                    ) : (
-                        <span
-                            className={_cs(
-                                styles.icon,
-                                iconNames.user,
-                            )}
-                        />
-                    )}
-                </div>
-                <div className={styles.right}>
-                    <h4 className={styles.name}>
-                        { name }
-                        { isDrrFocalPerson && (
-                            <span
-                                className={_cs(
-                                    styles.focalPersonIcon,
-                                    iconNames.star,
-                                )}
-                                title="DRR focal person"
-                            />
-                        )}
-                    </h4>
-                    <IconDetail
-                        iconName={iconNames.telephone}
-                        value={mobileNumber || 'Not available'}
-                    />
-                    <IconDetail
-                        iconName={iconNames.email}
-                        value={email || 'Not available'}
-                    />
-                </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                    <Detail
-                        label="Municipality"
-                        value={municipalities[municipality]}
-                    />
-                    <Detail
-                        label="Organization"
-                        value={(organization ? organization.title : undefined) || '-'}
-                    />
-                    <Detail
-                        label="Comittee"
-                        value={committeeValues[committee] || '-'}
-                    />
-                    <Detail
-                        className={styles.position}
-                        label="Position"
-                        value={position}
-                    />
-                    <Detail
-                        label="Training"
-                        value={trainingValueString}
-                    />
-                </div>
-                <Cloak hiddenIf={p => !p.change_contact}>
-                    {contactLoading ? <Loader type="Oval" color="#E35163" height={30} width={30} />
-                        : filterPermissionGranted ? (
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-
-                                {contact.indexValue !== 0
-                        && (
-                            <button style={{ height: 'fit-content', background: 'none', border: 'none', cursor: 'pointer' }} type="submit" onClick={() => onContactSortUp(contact)}>
-                                <Icon
-                                    name={'sortUp'}
-                                    className={styles.sortDown}
-                                />
-                            </button>
-                        )}
-                                {filteredContactListLastIndex !== contact.indexValue && (
-                                    <button style={{ height: 'fit-content', background: 'none', border: 'none', cursor: 'pointer' }} type="submit" onClick={() => onContactSortDown(contact)}>
-                                        <Icon
-                                            name={'sortDown'}
-                                            className={styles.sortDown}
-                                        />
-                                    </button>
-                                )}
-                            </div>
-                        ) : ''}
-                </Cloak>
-            </div>
             {filterPermissionGranted
                 ? (
                     <div className={styles.actionButtons}>
@@ -281,7 +189,7 @@ const ContactItem = (props: Props) => {
                                     />
                                 )}
                             >
-                        Edit
+                                Edit
                             </ModalButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_contact}>
@@ -293,7 +201,7 @@ const ContactItem = (props: Props) => {
                                 onClick={handleContactDelete}
                                 transparent
                             >
-                        Delete
+                                Delete
                             </DangerConfirmButton>
                         </Cloak>
                     </div>

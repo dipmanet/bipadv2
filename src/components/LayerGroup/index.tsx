@@ -1,6 +1,8 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
 import Button from '#rsca/Button';
 
 import DefaultLayerSelection from '#components/LayerSelection';
@@ -8,6 +10,7 @@ import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import { LayerHierarchy } from '#types';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 interface Props {
     className?: string;
@@ -20,6 +23,9 @@ interface State {
     isContentShown: boolean;
 }
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 class LayerGroup extends React.PureComponent<Props, State> {
     public state = {
         isContentShown: false,
@@ -36,6 +42,7 @@ class LayerGroup extends React.PureComponent<Props, State> {
             className,
             layerSelection: LayerSelection = DefaultLayerSelection,
             layerSelectionItem,
+            language: { language },
         } = this.props;
 
         const { isContentShown } = this.state;
@@ -59,9 +66,16 @@ class LayerGroup extends React.PureComponent<Props, State> {
                 >
                     <header className={styles.header}>
                         <h3 className={styles.title}>
-                            { data.title }
+                            {
+                                language === 'en'
+                                    ? data.title
+                                    : data.titleNe === undefined
+                                        ? data.title
+                                        : data.titleNe
+
+                            }
                         </h3>
-                        { (data.longDescription || data.metadata) && (
+                        {(data.longDescription || data.metadata) && (
                             <div className={styles.actions}>
                                 <LayerDetailModalButton
                                     layer={data}
@@ -85,13 +99,20 @@ class LayerGroup extends React.PureComponent<Props, State> {
                             onClick={this.handleShowContentButtonClick}
                         />
                     </header>
-                    { data.shortDescription && (
+                    {data.shortDescription && (
                         <div className={styles.shortDescription}>
-                            { data.shortDescription }
+                            {
+                                language === 'en'
+                                    ? data.shortDescription
+                                    : data.shortDescriptionNe === undefined
+                                        ? data.shortDescription
+                                        : data.shortDescriptionNe
+
+                            }
                         </div>
                     )}
                 </div>
-                { isContentShown && (
+                {isContentShown && (
                     <div className={styles.content}>
                         {data.children.length !== 0 && (
                             <LayerSelection
@@ -106,4 +127,4 @@ class LayerGroup extends React.PureComponent<Props, State> {
     }
 }
 
-export default LayerGroup;
+export default connect(mapStateToProps)(LayerGroup);

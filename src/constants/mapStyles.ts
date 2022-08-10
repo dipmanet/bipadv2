@@ -115,6 +115,23 @@ export default {
             'text-anchor': 'center',
         },
     },
+
+    provinceLabelNep: {
+        paint: {
+            'text-color': '#002121',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-font': ['Preeti Bold'],
+            'text-field': ['get', 'title_ne'],
+            'text-size': 18,
+            'text-transform': 'none',
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
     districtLabel: {
         paint: {
             'text-color': '#00695c',
@@ -126,6 +143,21 @@ export default {
             'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 11,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    districtLabelNep: {
+        paint: {
+            'text-color': '#00695c',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-font': ['Preeti Bold'],
+            'text-field': ['get', 'title_ne'],
+            'text-size': 17,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -145,6 +177,21 @@ export default {
             'text-anchor': 'center',
         },
     },
+    municipalityLabelNep: {
+        paint: {
+            'text-color': '#00695c',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-font': ['Preeti Bold'],
+            'text-field': ['get', 'title_ne'],
+            'text-size': 14,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
     wardLabel: {
         paint: {
             'text-color': '#1c9688',
@@ -160,7 +207,21 @@ export default {
             'text-anchor': 'center',
         },
     },
-
+    wardLabelNep: {
+        paint: {
+            'text-color': '#1c9688',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-font': ['Kalimati Regular'],
+            'text-field': ['get', 'title'],
+            'text-size': 10,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
     alertPoint: {
         circle: {
             'circle-color': ['get', 'hazardColor'],

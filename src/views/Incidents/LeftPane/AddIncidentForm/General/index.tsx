@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { Translation } from 'react-i18next';
 import Cloak from '#components/Cloak';
 import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
@@ -21,6 +22,7 @@ import {
     eventListSelector,
     sourceListSelector,
     hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -40,6 +42,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     eventList: eventListSelector(state),
     sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 const keySelector = (d: PageType.Field) => d.id;
@@ -55,107 +58,120 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             sourceList,
             className,
             pending,
+            language: { language },
         } = this.props;
 
         return (
-            <div className={_cs(styles.general, className)}>
-                {pending && <LoadingAnimation />}
-                <NonFieldErrors faramElement />
-                <TextArea
-                    className={styles.input}
-                    faramElementName="description"
-                    label="Description"
-                    autoFocus
-                />
-                <TextArea
-                    className={styles.input}
-                    faramElementName="cause"
-                    label="Cause"
-                />
-                <div className={styles.inputGroup}>
-                    <SelectInput
-                        className={styles.input}
-                        faramElementName="hazard"
-                        options={hazardList}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        label="Hazard"
-                    />
-                    <SelectInput
-                        className={styles.input}
-                        faramElementName="source"
-                        options={sourceList}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        label="Source"
-                    />
-                    <SelectInput
-                        className={styles.input}
-                        faramElementName="event"
-                        options={eventList}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        label="Event"
-                    />
-                </div>
-                <div className={styles.inputGroup}>
-                    <DateInput
-                        label="Incident on"
-                        className={styles.input}
-                        faramElementName="incidentOnDate"
-                    />
-                    <TimeInput
-                        className={styles.input}
-                        faramElementName="incidentOnTime"
-                    />
-                    <DateInput
-                        className={styles.input}
-                        label="Reported on"
-                        faramElementName="reportedOnDate"
-                    />
-                    <TimeInput
-                        className={styles.input}
-                        faramElementName="reportedOnTime"
-                    />
-                </div>
-                <div className={styles.inputGroup}>
-                    <Cloak hiddenIf={p => !p.approve_incident}>
-                        <Checkbox
-                            className={styles.input}
-                            label="Approved"
-                            faramElementName="approved"
-                        />
-                    </Cloak>
-                    <Cloak hiddenIf={p => !p.verify_incident}>
-                        <Checkbox
-                            className={styles.input}
-                            label="Verified"
-                            faramElementName="verified"
-                        />
-                    </Cloak>
-                    <Checkbox
-                        className={styles.input}
-                        label="Need Followup"
-                        faramElementName="needFollowup"
-                    />
-                </div>
-                <TextInput
-                    className={styles.input}
-                    faramElementName="streetAddress"
-                    label="Street Address"
-                />
-                <LocationInput
-                    className={_cs(styles.locationInput, styles.input)}
-                    faramElementName="location"
-                />
-                <Cloak hiddenIf={p => !p.verify_incident}>
-                    <TextArea
-                        className={styles.input}
-                        faramElementName="verificationMessage"
-                        label="Verification Message"
-                    />
-                </Cloak>
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(styles.general, className)}>
+                            {pending && <LoadingAnimation />}
+                            <NonFieldErrors faramElement />
+                            <TextArea
+                                className={styles.input}
+                                faramElementName="description"
+                                label={t('Description')}
+                                autoFocus
+                            />
+                            <TextArea
+                                className={styles.input}
+                                faramElementName="cause"
+                                label={t('Cause')}
+                            />
+                            <div className={styles.inputGroup}>
+                                <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                    className={styles.input}
+                                    faramElementName="hazard"
+                                    options={hazardList}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    label={t('Hazard')}
+                                />
+                                <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                    className={styles.input}
+                                    faramElementName="source"
+                                    options={sourceList}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    label={t('Source')}
+                                />
+                                <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                    className={styles.input}
+                                    faramElementName="event"
+                                    options={eventList}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    label={t('Event')}
+                                />
+                            </div>
+                            <div className={styles.inputGroup}>
+                                <DateInput
+                                    label={t('Incident on')}
+                                    className={styles.input}
+                                    faramElementName="incidentOnDate"
+                                    language={language}
+                                />
+                                <TimeInput
+                                    className={styles.input}
+                                    faramElementName="incidentOnTime"
+                                />
+                                <DateInput
+                                    className={styles.input}
+                                    label={t('Reported on')}
+                                    faramElementName="reportedOnDate"
+                                    language={language}
+                                />
+                                <TimeInput
+                                    className={styles.input}
+                                    faramElementName="reportedOnTime"
+                                />
+                            </div>
+                            <div className={styles.inputGroup}>
+                                <Cloak hiddenIf={p => !p.approve_incident}>
+                                    <Checkbox
+                                        className={styles.input}
+                                        label={t('Approved')}
+                                        faramElementName="approved"
+                                    />
+                                </Cloak>
+                                <Cloak hiddenIf={p => !p.verify_incident}>
+                                    <Checkbox
+                                        className={styles.input}
+                                        label={t('Verified')}
+                                        faramElementName="verified"
+                                    />
+                                </Cloak>
+                                <Checkbox
+                                    className={styles.input}
+                                    label={t('Need Followup')}
+                                    faramElementName="needFollowup"
+                                />
+                            </div>
+                            <TextInput
+                                className={styles.input}
+                                faramElementName="streetAddress"
+                                label={t('Street Address')}
+                            />
+                            <LocationInput
+                                className={_cs(styles.locationInput, styles.input)}
+                                faramElementName="location"
+                            />
+                            <Cloak hiddenIf={p => !p.verify_incident}>
+                                <TextArea
+                                    className={styles.input}
+                                    faramElementName="verificationMessage"
+                                    label={t('Verification Message')}
+                                />
+                            </Cloak>
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
