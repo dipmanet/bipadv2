@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
     translation: {
+        'Published by': 'Published by',
+        'Published on': 'Published on',
         'BELOW WARNING LEVEL': 'BELOW WARNING LEVEL',
         'ABOVE WARNING LEVEL': 'ABOVE WARNING LEVEL',
         'ABOVE DANGER LEVEL': 'ABOVE DANGER LEVEL',
@@ -932,6 +934,8 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'Published by': 'प्रकाशक',
+        'Published on': 'प्रकाशन मिति',
         'BELOW WARNING LEVEL': 'चेतावनी तह भन्दा तल',
         'ABOVE WARNING LEVEL': 'चेतावनी तह भन्दा माथि',
         'ABOVE DANGER LEVEL': 'खतरा तह भन्दा माथि',
@@ -1006,9 +1010,9 @@ export const npTranslation = {
         'SEARCH BY POSITION': 'पद अनुसार खोज्नुहोस्',
         'Add Contact': 'सम्पर्क थप्नुहोस्',
         Committe: 'समिति',
-        Action: 'कार्य',
+        Action: 'एक्सन',
         Position: 'पद',
-        'No Training Attained': 'कुनै तालिम प्राप्‍त भएको छैन',
+        'No Training Attained': 'कुनै तालिम प्राप्‍त नगरेको',
         'Contact Personals': 'सम्पर्क व्यक्तिहरू',
         Budget: 'बजेट',
         'SEARCH BY TITLE': 'शीर्षक द्वारा खोज्नुहोस्',

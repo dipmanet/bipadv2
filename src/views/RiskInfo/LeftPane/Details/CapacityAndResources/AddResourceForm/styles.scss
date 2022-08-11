@@ -30,66 +30,72 @@
 // }
 
 .resourceType {
-  .option {
-    button {
-      font-size: 20px !important;
+    .option {
+        button {
+            font-size: 20px !important;
+        }
     }
-  }
 }
-.optionsClassName {
-  font-size: 18px !important;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
 
-  .locationInput {
+.optionsClassName {
+    font-size: 18px !important;
+}
+
+.form {
     display: flex;
     flex-direction: column;
-  }
-  .submitButnDisabled {
-    width: 100%;
-    margin-top: 10px;
-    button {
-      filter: saturate(100%);
-      background-color: #f6f6f4 !important;
-      color: #a9a9a9 !important;
-      width: 100% !important;
-      height: 50px;
-      font-size: 14px;
-    }
-  }
-  .submitButn {
-    width: 100%;
-    margin-top: 10px;
+    height: 100%;
+    overflow-y: auto;
 
-    button {
-      filter: saturate(100%);
-      background-color: #1a70ac !important;
-      color: white !important;
-      width: 100% !important;
-      height: 50px;
-      font-size: 14px;
+    .locationInput {
+        display: flex;
+        flex-direction: column;
     }
-  }
-  .dateInput {
-    display: flex;
-  }
+
+    .submitButnDisabled {
+        width: 100%;
+        margin-top: 10px;
+
+        button {
+            filter: saturate(100%);
+            background-color: #f6f6f4 !important;
+            color: #a9a9a9 !important;
+            width: 100% !important;
+            height: 50px;
+            font-size: 14px;
+        }
+    }
+
+    .submitButn {
+        width: 100%;
+        margin-top: 10px;
+
+        button {
+            filter: saturate(100%);
+            background-color: #1a70ac !important;
+            color: white !important;
+            width: 100% !important;
+            height: 50px;
+            font-size: 14px;
+        }
+    }
+
+    .dateInput {
+        display: flex;
+    }
 }
 
 .header {
-  flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 .modal-body {
-  flex-grow: 1;
-  overflow-y: auto;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .footer {
-  flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 // .location-input {

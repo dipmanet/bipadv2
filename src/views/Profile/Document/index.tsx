@@ -1119,8 +1119,10 @@ class Document extends React.PureComponent<Props, State> {
             <Translation>
                 {
                     t => (
-                        <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
-                            <table className={styles.contacts}>
+                        <div
+                            style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}
+                        >
+                            <table className={_cs(styles.contacts, language === 'np' && styles.languageFont)}>
                                 <thead>
                                     <tr style={{ position: 'sticky', top: '0', zIndex: '2' }}>
                                         <th>{t('S/N')}</th>

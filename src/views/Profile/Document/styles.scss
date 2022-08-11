@@ -1,558 +1,634 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    unicode-range: U+30-39;
+    size-adjust: 85%;
+
+
+}
+
+.languageFont {
+    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
+
 .icon {
-  height: 15px;
-  opacity: 0.9;
+    height: 15px;
+    opacity: 0.9;
 }
-.iconTitle{
-  height: 60px;
+
+.iconTitle {
+    height: 60px;
 }
+
 .image {
-  height: 50px;
-  border-radius: 25px;
+    height: 50px;
+    border-radius: 25px;
 }
+
 .documents {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--color-foreground);
-  .col1Div{
-    margin-left: 20px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    z-index: 1;
-    border: 1px solid #e1e1e1;
-    cursor: pointer;
-    .tooltiptext{
-      visibility: hidden;
-      width: 120px;
-      background-color: black;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px 0;
-      position: absolute;
-      z-index: 1;
-      // top: 10px;
-      // left: 175px;
-      white-space: normal;
-    }
-    .categoryName{
-      cursor: pointer;
-      margin-left: 2px;
-      
-      &:hover {
-     
-        .tableTooltip {
-          visibility: visible;
-        }
-    }
-              }
-    .hideDiv{
-     
-      height: 0px;
-      transition:height 0.5s;
-      p{
-        opacity: 0;
-        transition: opacity 1s;
-        padding: 10px;
-      }
-    }
-    .description{
-      border-top: 1px solid #e1e1e1;
-      padding: 10px;
-      p{
-        opacity: 1;
-        transition: opacity 2.5s;
-      
-      }
-      height: 80px;
-      overflow-y: auto;
-      transition:height 0.5s ;
-    }
-
-  }
-  .extraMargin{
-    margin-top: 60px;
-    transition: margin-top 0.5s;
-  }
-  .normalMargin{
-    margin-top: 0px;
-    transition: margin-top 0.5s;
-  }
-  .col2Div{
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    z-index: 1;
-    border: 1px solid #e1e1e1;
-    cursor: pointer;
-    min-height: 160px;
-    .tooltiptext{
-      visibility: hidden;
-      width: 120px;
-      background-color: black;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px 0;
-      position: absolute;
-      z-index: 1;
-      // top: 10px;
-      // left: 175px;
-      white-space: normal;
-    }
-    .categoryName{
-      cursor: pointer;
-      margin-left: 2px;
-      &:hover {
-     
-        .tableTooltip {
-          visibility: visible;
-        }
-    }
-              }
-    .hideDiv{
-     
-      height: 0px;
-      transition:height 0.5s;
-      p{
-        opacity: 0;
-        transition: opacity 1s;
-        padding: 10px;
-      }
-    }
-    .description{
-      border-top: 1px solid #e1e1e1;
-      padding: 10px;
-      p{
-        opacity: 1;
-        transition: opacity 2.5s;
-       
-      }
-      overflow-y: scroll;
-      height: 80px;
-      transition:height 0.5s ;
-    }
-  }
-  .col3Div{
-    margin-left: 10px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    z-index: 1;
-    border: 1px solid #e1e1e1;
-    cursor: pointer;
-    min-height: 160px;
-    .tooltiptext{
-      visibility: hidden;
-      width: 120px;
-      background-color: black;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px 0;
-      position: absolute;
-      z-index: 1;
-      // top: 10px;
-      // left: 175px;
-      white-space: normal;
-    }
-    .categoryName{
-     cursor: pointer;
-     margin-left: 2px;
-      &:hover {
- 
-    .tableTooltip {
-      visibility: visible;
-    }
-    }
-          }
-         
-    .hideDiv{
-     
-      height: 0px;
-      transition:height 0.5s;
-      p{
-        opacity: 0;
-        transition: opacity 1s;
-        padding: 10px;
-      }
-    }
-    .description{
-      border-top: 1px solid #e1e1e1;
-      padding: 10px;
-      p{
-        opacity: 1;
-        transition: opacity 2.5s;
-       
-      }
-      height: 80px;
-      overflow-y: auto;
-      transition:height 0.5s ;
-    }
-  }
-  .footer{
-    position: relative;
     display: flex;
-    justify-content: space-between;
-    // margin-top: 20px;
-    border-top:1px solid #e1e1e1;
-    padding: 10px;
-    align-items: center;
-   
-     .editButtonListView {
-      font-size: 20px;
-      padding-left: 0px;
-      padding-right: 0px;
-      margin-left: 5px;
-      margin-right: 5px;
-    }
-    .deleteButtonListView {
-      font-size: 20px;
-      padding-left: 0px;
-      padding-right: 0px;
-    }
-    .tableTooltip{
-      background-color: black;
-      position: absolute;
-      z-index: 1;
-      top: 30px;
-      visibility: hidden;
-      max-width: 120px;
-      white-space: normal;
-      padding: 10px;
-      border-radius: 15px;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+
+    .col1Div {
+        margin-left: 20px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+        z-index: 1;
+        border: 1px solid #e1e1e1;
+        cursor: pointer;
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            // top: 10px;
+            // left: 175px;
+            white-space: normal;
+        }
+
+        .categoryName {
+            cursor: pointer;
+            margin-left: 2px;
+
+            &:hover {
+
+                .tableTooltip {
+                    visibility: visible;
+                }
+            }
+        }
+
+        .hideDiv {
+
+            height: 0px;
+            transition: height 0.5s;
+
+            p {
+                opacity: 0;
+                transition: opacity 1s;
+                padding: 10px;
+            }
+        }
+
+        .description {
+            border-top: 1px solid #e1e1e1;
+            padding: 10px;
+
+            p {
+                opacity: 1;
+                transition: opacity 2.5s;
+
+            }
+
+            height: 80px;
+            overflow-y: auto;
+            transition:height 0.5s;
+        }
 
     }
-  }
-  .row {
-    // margin-left: 10px;
-    // margin-right: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 100%;
-    .column {
-      float: left;
-      width: 30%;
-      padding: 10px;
-      padding-left: 0px;
-      padding-right: 0px;
-      // height: 300px; /* Should be removed. Only for demonstration */
-      border: 1px solid #e1e1e1;
-      margin-left: 10px;
-      margin-right: 10px;
-      margin-bottom: 20px;
-      padding-bottom: 0px;
-      // height: 220px;
-      cursor: pointer;
 
-      .contactImageProfile {
+    .extraMargin {
+        margin-top: 60px;
+        transition: margin-top 0.5s;
+    }
+
+    .normalMargin {
+        margin-top: 0px;
+        transition: margin-top 0.5s;
+    }
+
+    .col2Div {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+        z-index: 1;
+        border: 1px solid #e1e1e1;
+        cursor: pointer;
+        min-height: 160px;
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            // top: 10px;
+            // left: 175px;
+            white-space: normal;
+        }
+
+        .categoryName {
+            cursor: pointer;
+            margin-left: 2px;
+
+            &:hover {
+
+                .tableTooltip {
+                    visibility: visible;
+                }
+            }
+        }
+
+        .hideDiv {
+
+            height: 0px;
+            transition: height 0.5s;
+
+            p {
+                opacity: 0;
+                transition: opacity 1s;
+                padding: 10px;
+            }
+        }
+
+        .description {
+            border-top: 1px solid #e1e1e1;
+            padding: 10px;
+
+            p {
+                opacity: 1;
+                transition: opacity 2.5s;
+
+            }
+
+            overflow-y: scroll;
+            height: 80px;
+            transition:height 0.5s;
+        }
+    }
+
+    .col3Div {
+        margin-left: 10px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        z-index: 1;
+        border: 1px solid #e1e1e1;
+        cursor: pointer;
+        min-height: 160px;
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            // top: 10px;
+            // left: 175px;
+            white-space: normal;
+        }
+
+        .categoryName {
+            cursor: pointer;
+            margin-left: 2px;
+
+            &:hover {
+
+                .tableTooltip {
+                    visibility: visible;
+                }
+            }
+        }
+
+        .hideDiv {
+
+            height: 0px;
+            transition: height 0.5s;
+
+            p {
+                opacity: 0;
+                transition: opacity 1s;
+                padding: 10px;
+            }
+        }
+
+        .description {
+            border-top: 1px solid #e1e1e1;
+            padding: 10px;
+
+            p {
+                opacity: 1;
+                transition: opacity 2.5s;
+
+            }
+
+            height: 80px;
+            overflow-y: auto;
+            transition:height 0.5s;
+        }
+    }
+
+    .footer {
+        position: relative;
         display: flex;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin-bottom: 10px;
-        align-items: flex-start;
-        height: 70px;
-      }
-      .contactNameDetails {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        // margin-left: auto;
-        // margin-right: auto;
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-      .contactPhoneDetails {
-        display: flex;
-        align-items: center;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin-bottom: 10px;
         justify-content: space-between;
-        align-items: center;
-      }
-      .contactEmailDetails {
-        display: flex;
-        padding-left: 10px;
-        padding-right: 10px;
-        justify-content: space-between;
-        align-items: center;
-        height: 30px;
-      }
-      .contactDetailsFooter {
-        // background-color: #efefef;
-        background-color: #efefef;
+        // margin-top: 20px;
         border-top: 1px solid #e1e1e1;
-        // margin-top: 10px;
-        // margin-bottom: 10px;
-        display: flex;
-        .footerContent {
-          border: 1px solid #a6cfe3;
-          border-radius: 15px;
-          padding: 5px;
-          margin: 5px;
-          font-size: 9px;
-          color: #a6cfe3;
-          font-weight: bold;
-        }
-        p {
-          // margin-bottom: 0px;
-          color: black;
-        }
-      }
-    }
-  }
-  .active {
-    // border: 1px solid #a6cfe3;
-    // background-color: #3889f2;
-    // opacity: 0.99;
-    box-shadow: 5px 5px 5px #888888;
-    // background-color: #f2f2f2;
-  height: 300px;
-  }
-  
-  .contacts {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-    .editButtonListView {
-      font-size: 20px;
-      padding-left: 0px;
-      padding-right: 0px;
-      margin-left: 5px;
-      margin-right: 5px;
-    }
-    .deleteButtonListView {
-      font-size: 20px;
-      padding-left: 0px;
-      padding-right: 0px;
-    }
-    .tableTooltip{
-      background-color: black;
-      position: absolute;
-      z-index: 1;
-      top: 30px;
-      visibility: hidden;
-      max-width: 120px;
-      white-space: normal;
-      padding: 10px;
-      border-radius: 15px;
+        padding: 10px;
+        align-items: center;
 
+        .editButtonListView {
+            font-size: 20px;
+            padding-left: 0px;
+            padding-right: 0px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .deleteButtonListView {
+            font-size: 20px;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        .tableTooltip {
+            background-color: black;
+            position: absolute;
+            z-index: 1;
+            top: 30px;
+            visibility: hidden;
+            max-width: 120px;
+            white-space: normal;
+            padding: 10px;
+            border-radius: 15px;
+
+        }
     }
-    .tableCategory{
-      cursor: pointer;
-      &:hover {
-      .tableTooltip {
+
+    .row {
+        // margin-left: 10px;
+        // margin-right: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 100%;
+
+        .column {
+            float: left;
+            width: 30%;
+            padding: 10px;
+            padding-left: 0px;
+            padding-right: 0px;
+            // height: 300px; /* Should be removed. Only for demonstration */
+            border: 1px solid #e1e1e1;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 0px;
+            // height: 220px;
+            cursor: pointer;
+
+            .contactImageProfile {
+                display: flex;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-bottom: 10px;
+                align-items: flex-start;
+                height: 70px;
+            }
+
+            .contactNameDetails {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                // margin-left: auto;
+                // margin-right: auto;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .contactPhoneDetails {
+                display: flex;
+                align-items: center;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-bottom: 10px;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .contactEmailDetails {
+                display: flex;
+                padding-left: 10px;
+                padding-right: 10px;
+                justify-content: space-between;
+                align-items: center;
+                height: 30px;
+            }
+
+            .contactDetailsFooter {
+                // background-color: #efefef;
+                background-color: #efefef;
+                border-top: 1px solid #e1e1e1;
+                // margin-top: 10px;
+                // margin-bottom: 10px;
+                display: flex;
+
+                .footerContent {
+                    border: 1px solid #a6cfe3;
+                    border-radius: 15px;
+                    padding: 5px;
+                    margin: 5px;
+                    font-size: 9px;
+                    color: #a6cfe3;
+                    font-weight: bold;
+                }
+
+                p {
+                    // margin-bottom: 0px;
+                    color: black;
+                }
+            }
+        }
+    }
+
+    .active {
+        // border: 1px solid #a6cfe3;
+        // background-color: #3889f2;
+        // opacity: 0.99;
+        box-shadow: 5px 5px 5px #888888;
+        // background-color: #f2f2f2;
+        height: 300px;
+    }
+
+    .contacts {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+
+        .editButtonListView {
+            font-size: 20px;
+            padding-left: 0px;
+            padding-right: 0px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .deleteButtonListView {
+            font-size: 20px;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        .tableTooltip {
+            background-color: black;
+            position: absolute;
+            z-index: 1;
+            top: 30px;
+            visibility: hidden;
+            max-width: 120px;
+            white-space: normal;
+            padding: 10px;
+            border-radius: 15px;
+
+        }
+
+        .tableCategory {
+            cursor: pointer;
+
+            &:hover {
+                .tableTooltip {
+                    visibility: visible;
+                }
+            }
+        }
+
+        .documentRenderer {
+            padding: 0px;
+        }
+
+        #pol {
+            background-color: #E9E9E9;
+            border: 1px solid #EDEDED;
+            position: absolute;
+            left: -100px;
+            z-index: 1;
+        }
+
+        td,
+        th {
+            //   border: 1px solid #ddd;
+            padding: 8px;
+            font-weight: bold;
+        }
+
+        // td {
+        //   word-break: break-word;
+        // }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        // tr:hover {
+        //   background-color: #ddd;
+        // }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #dddddd;
+            // color: black;
+            font-size: 14px;
+        }
+
+        .actionButtons {
+            display: flex;
+
+            .editButton {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    #head {
         visibility: visible;
-      }
-    }
-    }
-    .documentRenderer{
-      padding: 0px;
-    }
-    #pol{
-      background-color: #E9E9E9;
-      border: 1px solid #EDEDED;
-      position: absolute;
-      left: -100px;
-    z-index: 1;
-    }
-    td,
-    th {
-      //   border: 1px solid #ddd;
-      padding: 8px;
-      font-weight: bold;
-    }
-    // td {
-    //   word-break: break-word;
-    // }
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
+        margin-bottom: 0px;
+
     }
 
-    // tr:hover {
-    //   background-color: #ddd;
-    // }
-
-    th {
-      padding-top: 12px;
-      padding-bottom: 12px;
-      text-align: left;
-      background-color: #dddddd;
-      // color: black;
-      font-size: 14px;
-    }
-    .actionButtons {
-      display: flex;
-      .editButton {
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 99;
+        border-bottom: 1px solid #e1e1e1;
         display: flex;
         align-items: center;
-      }
-    }
-  }
-  #head{
-    visibility: visible;
-    margin-bottom: 0px;
+        flex-shrink: 0;
+        padding: var(--spacing-medium);
+        justify-content: space-between;
+        // border-bottom: 1px solid #e1e1e1;
+        margin-bottom: 20px;
 
-  }
-  .header {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 99;
-    border-bottom: 1px solid #e1e1e1;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    padding: var(--spacing-medium);
-    justify-content: space-between;
-    // border-bottom: 1px solid #e1e1e1;
-    margin-bottom: 20px;
-    #edit{
-      visibility: visible;
-    }
-    #delete{
-      visibility: visible;
-    }
-    .SelectTableButton {
-      border: none !important;
-      background: none;
-      cursor: pointer;
-      .iconDataView {
-        height: 20px;
-        width: 20px;
-      }
-    }
-    .search {
-      height: 40px;
-      margin-left: 10px;
-      background-image: url("../../../resources/icons/search-contact.svg");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: -8px;
-      background-size: 50px 20px;
-      text-indent: 30px;
-      border: none;
-      background-color: #f2f2f2;
-      /* Extra Styling */
-      padding: 5px 3px;
-      transition: 0.3s;
-      // width: 25%;
-     
-    }
-    .search::placeholder {
-      font-weight: bold;
-    }
-    .search:focus-visible {
-      outline: none;
-    }
-    .heading {
-      flex-grow: 1;
-    }
-  }
+        #edit {
+            visibility: visible;
+        }
 
-  .filters {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: calc(var(--spacing-medium) - var(--spacing-small));
+        #delete {
+            visibility: visible;
+        }
 
-    .region-select-input,
-    .category-select-input {
-      margin: var(--spacing-small);
+        .SelectTableButton {
+            border: none !important;
+            background: none;
+            cursor: pointer;
+
+            .iconDataView {
+                height: 20px;
+                width: 20px;
+            }
+        }
+
+        .search {
+            height: 40px;
+            margin-left: 10px;
+            background-image: url("../../../resources/icons/search-contact.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: -8px;
+            background-size: 50px 20px;
+            text-indent: 30px;
+            border: none;
+            background-color: #f2f2f2;
+            /* Extra Styling */
+            padding: 5px 3px;
+            transition: 0.3s;
+            // width: 25%;
+
+        }
+
+        .search::placeholder {
+            font-weight: bold;
+        }
+
+        .search:focus-visible {
+            outline: none;
+        }
+
+        .heading {
+            flex-grow: 1;
+        }
     }
-  }
 
-  .content {
-    flex-grow: 1;
-    
-  }
+    .filters {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+        .region-select-input,
+        .category-select-input {
+            margin: var(--spacing-small);
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+
+    }
 }
 
 .document-details {
-  display: flex;
-  padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
+    display: flex;
+    padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
 
-  .document-icon {
-    flex-shrink: 0;
-    padding: var(--spacing-small) var(--spacing-medium);
-
-    .svg {
-      width: 48px;
-      height: 48px;
-    }
-  }
-
-  .details {
-    flex-grow: 1;
-
-    .header {
-      display: flex;
-      align-items: center;
-
-      .heading {
-        flex-grow: 1;
-        padding: var(--spacing-extra-small) var(--spacing-medium);
-      }
-
-      .actions {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
+    .document-icon {
         flex-shrink: 0;
-        padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
+        padding: var(--spacing-small) var(--spacing-medium);
 
-        .edit-button {
-          flex-shrink: 0;
-          padding: var(--spacing-extra-small) var(--spacing-small);
-          font-size: var(--font-size-medium);
+        .svg {
+            width: 48px;
+            height: 48px;
         }
-
-        .delete-button {
-          flex-shrink: 0;
-          padding: var(--spacing-extra-small) var(--spacing-small);
-          font-size: var(--font-size-medium);
-        }
-
-        .download-link {
-          display: flex;
-          align-items: center;
-          color: var(--color-accent);
-
-          .download-icon {
-            margin: var(--spacing-extra-small) var(--spacing-extra-small-alt);
-          }
-
-          .text {
-            padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
-            text-transform: uppercase;
-            font-weight: var(--font-weight-bold);
-          }
-        }
-      }
     }
-  }
 
-  &:hover {
-    background-color: var(--color-background-hover);
-  }
+    .details {
+        flex-grow: 1;
+
+        .header {
+            display: flex;
+            align-items: center;
+
+            .heading {
+                flex-grow: 1;
+                padding: var(--spacing-extra-small) var(--spacing-medium);
+            }
+
+            .actions {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                flex-shrink: 0;
+                padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
+
+                .edit-button {
+                    flex-shrink: 0;
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                    font-size: var(--font-size-medium);
+                }
+
+                .delete-button {
+                    flex-shrink: 0;
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                    font-size: var(--font-size-medium);
+                }
+
+                .download-link {
+                    display: flex;
+                    align-items: center;
+                    color: var(--color-accent);
+
+                    .download-icon {
+                        margin: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                    }
+
+                    .text {
+                        padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                        text-transform: uppercase;
+                        font-weight: var(--font-weight-bold);
+                    }
+                }
+            }
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
 }
 
 .detail-item {
-  display: flex;
-  align-items: center;
-  padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
+    display: flex;
+    align-items: center;
+    padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
 
-  .label {
-    padding: 0 var(--spacing-small);
-    color: var(--color-text-label);
-    font-size: var(--font-size-small);
-    font-weight: var(--font-weight-bold);
+    .label {
+        padding: 0 var(--spacing-small);
+        color: var(--color-text-label);
+        font-size: var(--font-size-small);
+        font-weight: var(--font-weight-bold);
 
-    &:after {
-      content: ":";
+        &:after {
+            content: ":";
+        }
     }
-  }
 
-  .value {
-    padding: 0 var(--spacing-small);
-  }
+    .value {
+        padding: 0 var(--spacing-small);
+    }
 }
