@@ -716,7 +716,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('specialization')}
                         />
                         <DateInput
-                            className="startDateInput"
+                            className={'startDateInput'}
                             faramElementName="registrationEstDate"
                             label={t('Registration/Est. Date')}
                             inputFieldClassName={styles.dateInput}
@@ -724,7 +724,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
 
                         />
                         <DateInput
-                            className="endDateInput"
+                            className={'endDateInput'}
                             faramElementName="lastRenewalDate"
                             label={t('Last Renewal Date')}
                             inputFieldClassName={styles.dateInput}
@@ -732,7 +732,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
 
                         />
                         <DateInput
-                            className="startDateInput"
+                            className={'startEndDateInput'}
                             faramElementName="dateOfValidity"
                             label={t('Date of Validity')}
                             inputFieldClassName={styles.dateInput}
