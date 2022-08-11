@@ -234,12 +234,12 @@ const NepDataProfile = (props) => {
                                    number of disaster incidents, people deaths due to disaster
                                    incidents, estimated economic loss, hazard calendar, seasonal
                                    hazards, and most recurrent disasters.`
-                                        : `Nep Dat Profile ले राष्ट्रिय, प्रादेशिक जिल्ला र नगरपालिका स्तरहरूमा चयन गरिएको समय सीमामा विपद् रिपोर्टहरू उत्पन्न गर्दछ।
-                                        ।प्रतिवेदन अंग्रेजी र नेपाली दुवै संस्करणमा तयार पारिएको छ
+                                        : `Nep Dat Profile ले राष्ट्रिय, प्रादेशिक जिल्ला र नगरपालिका स्तरहरूमा चयन गरिएको समय सीमामा विपद् प्रतिवेदनहरु प्रकाशन गर्दछ।
+                                        प्रतिवेदन अंग्रेजी र नेपाली दुवै संस्करणमा तयार पारिएको छ
                                         ।BIPAD पोर्टल र DRR पोर्टलमा उपलब्ध तथ्याङ्कहरू प्रयोग गरी, विपद् घटनाहरूको सङ्ख्या,
                                          विपद् घटनाहरूबाट हुने मानिसहरूको मृत्यु, अनुमानित आर्थिक क्षति,
                                         जोखिम क्यालेन्डर, मौसमी प्रकोपहरू,
-                                           र धेरैजसो दोहोरिने प्रकोपहरूको सन्दर्भमा तथ्याङ्क प्रस्तुत गर्न विश्लेषण गरिन्छ।`
+                                           र धेरैजसो दोहोरिने प्रकोपहरूको सन्दर्भमा तथ्याङ्क विश्लेषण गरिन्छ।`
 
                                 }
 
@@ -250,7 +250,7 @@ const NepDataProfile = (props) => {
                                 {
                                     language === 'en'
                                         ? 'Provide following details to generate profile'
-                                        : 'प्रोफाइल उत्पन्‍न गर्न निम्न विवरणहरू प्रदान गर्नुहोस्'
+                                        : 'प्रोफाइल प्रकाशन गर्न निम्न विवरणहरू भर्नुहोस्'
                                 }
 
                             </h2>
@@ -264,7 +264,7 @@ const NepDataProfile = (props) => {
                                 value={selectedReportType}
                                 onChange={handleChangeReportType}
                                 options={reportType}
-                                placeholder={language === 'en' ? 'Select Report Type' : 'रिपोर्ट प्रकार चयन गर्नुहोस्'}
+                                placeholder={language === 'en' ? 'Select Report Type' : 'प्रतिवेदनको प्रकार चयन गर्नुहोस्'}
                             />
 
                         </div>

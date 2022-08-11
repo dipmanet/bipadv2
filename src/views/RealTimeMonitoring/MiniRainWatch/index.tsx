@@ -6,6 +6,7 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
 import Table from '#rscv/Table';
@@ -208,6 +209,20 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             order: 6,
             sortable: true,
             comparator: (a, b) => compareString(a.status, b.status),
+            modifier: (row: RealTimeRain) => {
+                const { status } = row;
+                if (status) {
+                    return (
+                        <div>
+                            <Translation>
+                                {
+                                    t => t(status)
+                                }
+                            </Translation>
+                        </div>
+                    );
+                } return undefined;
+            },
         },
     ]);
 

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
     translation: {
+        'BELOW WARNING LEVEL': 'BELOW WARNING LEVEL',
+        'ABOVE WARNING LEVEL': 'ABOVE WARNING LEVEL',
+        'ABOVE DANGER LEVEL': 'ABOVE DANGER LEVEL',
         nepal_police: 'nepal_police',
         'Name and contact number of technical staff': 'Name and contact number of technical staff',
         Scale: 'Scale',
@@ -929,6 +932,9 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        'BELOW WARNING LEVEL': 'चेतावनी तह भन्दा तल',
+        'ABOVE WARNING LEVEL': 'चेतावनी तह भन्दा माथि',
+        'ABOVE DANGER LEVEL': 'खतरा तह भन्दा माथि',
         nepal_police: 'नेपाल_प्रहरी',
         'Name and contact number of technical staff': 'प्राविधिक कर्मचारीहरूको नाम र सम्पर्क नम्बर',
         Scale: 'मापन',
@@ -974,7 +980,7 @@ export const npTranslation = {
         'Number of Stories': 'तलाको संख्या',
 
         Language: 'भाषा',
-        'GENERATE REPORT': 'रिपोर्ट उत्पन्‍न गर्नुहोस्',
+        'GENERATE REPORT': 'प्रतिवेदन प्रकाशन गर्न यहाँ क्‍लिक गर्नुहोस्।',
         'Select Date': 'मिति चयन गर्नुहोस्',
         About: 'बारे',
         'Report Type': 'रिपोर्ट प्रकार',
@@ -1539,7 +1545,7 @@ export const npTranslation = {
         'New Flow': 'नयाँ प्रवाह',
         'Close Modal': 'मोडल बन्‍द गर्नुहोस',
         Documents: 'कागजात',
-        'New document': 'नयाँ कागजात',
+        'New document': 'नयाँ कागजात थप्न',
         'Nothing to show.': 'देखाउन को लागी केहि छैन।',
         Category: 'श्रेणी',
         'Date of publication': 'प्रकाशन मिति',
@@ -1697,7 +1703,7 @@ export const npTranslation = {
         Alerts: 'सतर्कता',
         Events: 'घटना संख्या',
         Visualizations: 'Visualizations',
-        'New alert': 'नयाँ चेतावनी',
+        'New alert': 'नयाँ चेतावनी थप्न',
         'New event': 'नया घटना थप्न',
         'Flood at': 'बाढी',
         Ma: 'मा',
@@ -1847,7 +1853,7 @@ export const npTranslation = {
         SelectMessage: 'कृपया तुलना सुरु गर्न स्थानहरू चयन गर्नुहोस्',
         'Estimated Monetary Loss': 'अनुमानित आर्थिक क्षेति (रु )',
         'Death toll by disaster': 'प्रकोपबाट मृत्यु हुनेको संख्या',
-        'Estimated economic loss by disaster': 'विपद बाट अनुमानित आर्थिक क्षेति',
+        'Estimated economic loss by disaster': 'विपद् बाट अनुमानित आर्थिक क्षेति',
         'Realtime layers': 'वास्तविक समय तहहरू',
         'Others layers': 'अन्य तहहरू',
         Rain: 'वर्षा',

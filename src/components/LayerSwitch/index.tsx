@@ -57,7 +57,8 @@ const mapStyles = (language: string) => ([
         style: `${process.env.REACT_APP_MAP_STYLE_LIGHT}`,
         color: '#cdcdcd',
         title: 'Mapbox Light',
-        description: 'Mapbox Light is map view designed to provide geographic context while highlighting the data on your dashboard, data visualization, or data overlay.',
+        description: language === 'en' ? 'Mapbox Light is map view designed to provide geographic context while highlighting the data on your dashboard, data visualization, or data overlay.'
+            : 'Mapbox light ड्यासबोर्ड, डेटा भिजुअलाइजेशन, वा डेटा ओभरलेमा डेटा हाइलाइट गर्दा भौगोलिक सन्दर्भ प्रदान गर्न डिजाइन गरिएको नक्सा हो।',
         icon: MapboxLightIcon,
     },
     {

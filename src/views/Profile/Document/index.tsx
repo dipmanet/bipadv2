@@ -1093,7 +1093,7 @@ class Document extends React.PureComponent<Props, State> {
             documentDeleteRequest: {
                 pending,
             },
-        } } = this.props;
+        }, language: { language } } = this.props;
         const splitingValue = searchKeyword ? sortData : expandedDocuments;
         const handleEditDeleteOption = (e) => {
             if (e.target.id === 'popup-edit' || e.target.id === 'popup-delete') {
@@ -1116,120 +1116,123 @@ class Document extends React.PureComponent<Props, State> {
         const filterPermissionGranted = checkSameRegionPermission(user, region);
 
         return (
-            <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
-                <table className={styles.contacts}>
-                    <thead>
-                        <tr style={{ position: 'sticky', top: '0', zIndex: '2' }}>
-                            <th>S/N</th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Name
-                                    {this.SortButton('title')}
-                                </div>
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Category
-                                    {this.SortButton('categoryName')}
-                                </div>
-                            </th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Region
-                                    {this.SortButton('region')}
-                                </div>
-                            </th>
-                            {/* <th>Organization</th> */}
-                            <th>Published by</th>
-                            <th>
-                                <div style={{ display: 'flex' }}>
-                                    Published on
-                                    {this.SortButton('publishedDate')}
-                                </div>
-                            </th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {searchActivated ? (
-                            !splitingValue.length ? (
-                                <tr>
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td>No Data Available</td>
-                                    <td />
-                                    <td />
-                                    <td />
-                                </tr>
-                            ) : (
-                                splitingValue.map((item, i) => (
-                                    <tr key={item.id}>
-                                        <td>{i + 1}</td>
-                                        <td>{item.title}</td>
-                                        <td style={{ position: 'relative' }}>
-                                            {/* <div className={styles.tableCategory} style={this.colourForCategory(item.categoryName)}>
+            <Translation>
+                {
+                    t => (
+                        <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
+                            <table className={styles.contacts}>
+                                <thead>
+                                    <tr style={{ position: 'sticky', top: '0', zIndex: '2' }}>
+                                        <th>{t('S/N')}</th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Name')}
+                                                {this.SortButton('title')}
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Category')}
+                                                {this.SortButton('categoryName')}
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Region')}
+                                                {this.SortButton('region')}
+                                            </div>
+                                        </th>
+                                        {/* <th>Organization</th> */}
+                                        <th>{t('Published by')}</th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Published on')}
+                                                {this.SortButton('publishedDate')}
+                                            </div>
+                                        </th>
+                                        <th>{t('Action')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {searchActivated ? (
+                                        !splitingValue.length ? (
+                                            <tr>
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td>{t('No Data Available')}</td>
+                                                <td />
+                                                <td />
+                                                <td />
+                                            </tr>
+                                        ) : (
+                                            splitingValue.map((item, i) => (
+                                                <tr key={item.id}>
+                                                    <td>{i + 1}</td>
+                                                    <td>{item.title}</td>
+                                                    <td style={{ position: 'relative' }}>
+                                                        {/* <div className={styles.tableCategory} style={this.colourForCategory(item.categoryName)}>
 												{item.categoryName}
 												<div className={styles.tableTooltip}>
 													{item.categoryName}
 
 												</div>
 											</div> */}
-                                            {item.categoryName}
-                                        </td>
-                                        <td>{item.region}</td>
-                                        <td>{item.publishedBy ? item.publishedBy : '-'}</td>
-                                        <td>{item.publishedDate}</td>
-                                        <td>
+                                                        {item.categoryName}
+                                                    </td>
+                                                    <td>{item.region}</td>
+                                                    <td>{item.publishedBy ? item.publishedBy : '-'}</td>
+                                                    <td>{convertDateAccToLanguage(item.publishedDate, language)}</td>
+                                                    <td>
 
-                                            <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-                                                <a
-                                                    className={styles.downloadLink}
-                                                    href={item.file}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    title="Download"
-                                                    style={{ marginRight: '5px' }}
-                                                >
-                                                    <ScalableVectorGraphics
-                                                        className={styles.icon}
-                                                        src={DownloadIcon}
-                                                    />
-                                                </a>
-                                                {filterPermissionGranted
-                                                    ? (
-                                                        <>
-                                                            {' '}
-                                                            <Cloak hiddenIf={p => !p.change_document}>
-                                                                <ModalButton
-                                                                    id="popup-edit"
-                                                                    className={styles.editButtonListView}
-                                                                    iconName="edit"
-                                                                    transparent
-                                                                    title="Edit"
-                                                                    modal={
-                                                                        <AddDocumentForm value={item} onUpdate={this.handleUpdate} />
-                                                                    }
-                                                                    disabled={pending}
+                                                        <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+                                                            <a
+                                                                className={styles.downloadLink}
+                                                                href={item.file}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                title="Download"
+                                                                style={{ marginRight: '5px' }}
+                                                            >
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.icon}
+                                                                    src={DownloadIcon}
                                                                 />
-                                                            </Cloak>
-                                                            <Cloak hiddenIf={p => !p.delete_document}>
-                                                                <DangerConfirmButton
-                                                                    id="popup-delete"
-                                                                    className={styles.deleteButtonListView}
-                                                                    confirmationMessage="Are you sure you want to delete this document?"
-                                                                    disabled={pending}
-                                                                    iconName="delete"
-                                                                    onClick={() => this.handleDelete(item.id)}
-                                                                    transparent
-                                                                    title="Delete"
-                                                                />
-                                                            </Cloak>
+                                                            </a>
+                                                            {filterPermissionGranted
+                                                                ? (
+                                                                    <>
+                                                                        {' '}
+                                                                        <Cloak hiddenIf={p => !p.change_document}>
+                                                                            <ModalButton
+                                                                                id="popup-edit"
+                                                                                className={styles.editButtonListView}
+                                                                                iconName="edit"
+                                                                                transparent
+                                                                                title="Edit"
+                                                                                modal={
+                                                                                    <AddDocumentForm value={item} onUpdate={this.handleUpdate} />
+                                                                                }
+                                                                                disabled={pending}
+                                                                            />
+                                                                        </Cloak>
+                                                                        <Cloak hiddenIf={p => !p.delete_document}>
+                                                                            <DangerConfirmButton
+                                                                                id="popup-delete"
+                                                                                className={styles.deleteButtonListView}
+                                                                                confirmationMessage={t('"Are you sure you want to delete this document?"')}
+                                                                                disabled={pending}
+                                                                                iconName="delete"
+                                                                                onClick={() => this.handleDelete(item.id)}
+                                                                                transparent
+                                                                                title={t('Delete')}
+                                                                            />
+                                                                        </Cloak>
 
-                                                        </>
-                                                    )
-                                                    : ''}
-                                                {/* {filterPermissionGranted
+                                                                    </>
+                                                                )
+                                                                : ''}
+                                                            {/* {filterPermissionGranted
 													? (
 														<button
 															type="button"
@@ -1261,83 +1264,83 @@ class Document extends React.PureComponent<Props, State> {
 													) : ''} */}
 
 
-                                            </div>
-                                        </td>
+                                                        </div>
+                                                    </td>
 
-                                    </tr>
-                                ))
-                            )
-                        ) : splitingValue.length ? (
-                            splitingValue.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.title}</td>
-                                    <td style={{ position: 'relative' }}>
-                                        {/* <div className={styles.tableCategory} style={this.colourForCategory(item.categoryName)}>
+                                                </tr>
+                                            ))
+                                        )
+                                    ) : splitingValue.length ? (
+                                        splitingValue.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.title}</td>
+                                                <td style={{ position: 'relative' }}>
+                                                    {/* <div className={styles.tableCategory} style={this.colourForCategory(item.categoryName)}>
 											{item.categoryName}
 											<div className={styles.tableTooltip}>
 												{item.categoryName}
 
 											</div>
 										</div> */}
-                                        {item.categoryName}
-                                    </td>
-                                    <td>{item.region}</td>
-                                    <td>{item.publishedBy ? item.publishedBy : '-'}</td>
-                                    <td>{item.publishedDate}</td>
-                                    <td>
+                                                    {item.categoryName}
+                                                </td>
+                                                <td>{item.region}</td>
+                                                <td>{item.publishedBy ? item.publishedBy : '-'}</td>
+                                                <td>{convertDateAccToLanguage(item.publishedDate, language)}</td>
+                                                <td>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
 
-                                            <a
-                                                className={styles.downloadLink}
-                                                href={item.file}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                title="Download"
-                                                style={{ marginRight: '5px' }}
-                                            >
-                                                <ScalableVectorGraphics
-                                                    className={styles.icon}
-                                                    src={DownloadIcon}
-                                                />
-                                            </a>
-
-                                            {filterPermissionGranted
-                                                ? (
-                                                    <>
-                                                        {' '}
-                                                        <Cloak hiddenIf={p => !p.change_document}>
-                                                            <ModalButton
-                                                                id="popup-edit"
-                                                                className={styles.editButtonListView}
-                                                                iconName="edit"
-                                                                transparent
-                                                                title="Edit"
-                                                                modal={
-                                                                    <AddDocumentForm value={item} onUpdate={this.handleUpdate} />
-                                                                }
-                                                                disabled={pending}
+                                                        <a
+                                                            className={styles.downloadLink}
+                                                            href={item.file}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            title="Download"
+                                                            style={{ marginRight: '5px' }}
+                                                        >
+                                                            <ScalableVectorGraphics
+                                                                className={styles.icon}
+                                                                src={DownloadIcon}
                                                             />
-                                                        </Cloak>
-                                                        <Cloak hiddenIf={p => !p.delete_document}>
-                                                            <DangerConfirmButton
-                                                                id="popup-delete"
-                                                                className={styles.deleteButtonListView}
-                                                                confirmationMessage="Are you sure you want to delete this document?"
-                                                                disabled={pending}
-                                                                iconName="delete"
-                                                                onClick={() => this.handleDelete(item.id)}
-                                                                transparent
-                                                                title="Delete"
-                                                            />
-                                                        </Cloak>
+                                                        </a>
 
-                                                    </>
-                                                )
-                                                : ''}
+                                                        {filterPermissionGranted
+                                                            ? (
+                                                                <>
+                                                                    {' '}
+                                                                    <Cloak hiddenIf={p => !p.change_document}>
+                                                                        <ModalButton
+                                                                            id="popup-edit"
+                                                                            className={styles.editButtonListView}
+                                                                            iconName="edit"
+                                                                            transparent
+                                                                            title={t('Edit')}
+                                                                            modal={
+                                                                                <AddDocumentForm value={item} onUpdate={this.handleUpdate} />
+                                                                            }
+                                                                            disabled={pending}
+                                                                        />
+                                                                    </Cloak>
+                                                                    <Cloak hiddenIf={p => !p.delete_document}>
+                                                                        <DangerConfirmButton
+                                                                            id="popup-delete"
+                                                                            className={styles.deleteButtonListView}
+                                                                            confirmationMessage={t('Are you sure you want to delete this document?')}
+                                                                            disabled={pending}
+                                                                            iconName="delete"
+                                                                            onClick={() => this.handleDelete(item.id)}
+                                                                            transparent
+                                                                            title={t('Delete')}
+                                                                        />
+                                                                    </Cloak>
 
-                                            {/* {filterPermissionGranted
+                                                                </>
+                                                            )
+                                                            : ''}
+
+                                                        {/* {filterPermissionGranted
 												? (
 													<button
 														type="button"
@@ -1367,25 +1370,29 @@ class Document extends React.PureComponent<Props, State> {
 														/>
 													</div>
 												) : ''} */}
-                                        </div>
-                                    </td>
+                                                    </div>
+                                                </td>
 
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td />
-                                <td />
-                                <td />
-                                <td>No Data Available</td>
-                                <td />
-                                <td />
-                                <td />
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td>{t('No Data Available')}</td>
+                                            <td />
+                                            <td />
+                                            <td />
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     };
 

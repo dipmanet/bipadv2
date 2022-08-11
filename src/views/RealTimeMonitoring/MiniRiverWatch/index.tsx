@@ -6,6 +6,7 @@ import {
 } from '@togglecorp/fujs';
 
 import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
 import Table from '#rscv/Table';
@@ -126,6 +127,20 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                 order: 6,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),
+                modifier: (row: RealTimeRiver) => {
+                    const { status } = row;
+                    if (status) {
+                        return (
+                            <div>
+                                <Translation>
+                                    {
+                                        t => t(status)
+                                    }
+                                </Translation>
+                            </div>
+                        );
+                    } return undefined;
+                },
             },
         ]);
     }
