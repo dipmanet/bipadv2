@@ -144,11 +144,12 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                         <div
                             className={styles.content}
                             dangerouslySetInnerHTML={{
-                                __html: language === 'en'
-                                    ? layer.longDescription
-                                    : layer.longDescriptionNe === undefined
-                                        ? layer.longDescription
-                                        : layer.longDescriptionNe,
+                                // __html: language === 'en'
+                                //     ? layer.longDescription
+                                //     : layer.longDescriptionNe === undefined
+                                //         ? layer.longDescription
+                                //         : layer.longDescriptionNe,
+                                __html: layer.longDescription,
                             }}
                         />
                     </div>
@@ -178,7 +179,6 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                 //         : layer.metadata.valueNe;
 
                 const groups = layer.metadata.value;
-
                 const orderedKeyList = Object.keys(groups);
                 return (
                     <div className={styles.metadata}>

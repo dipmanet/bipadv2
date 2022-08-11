@@ -2542,7 +2542,7 @@ class Demographics extends React.PureComponent<Props> {
                                                             onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
                                                             onKeyDown={undefined}
                                                         >
-                                                            <h2>{t('Household')}</h2>
+                                                            <h2>{language === 'en' ? 'Household' : 'घरायसी विवरण'}</h2>
                                                         </div>
 
                                                     </div>
@@ -2833,7 +2833,10 @@ class Demographics extends React.PureComponent<Props> {
                                                             onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
                                                             onKeyDown={undefined}
                                                         >
-                                                            <h2>{t('Household')}</h2>
+                                                            <h2>
+                                                                {language === 'en'
+                                                                    ? 'Household' : 'घरायसी विवरण'}
+                                                            </h2>
                                                         </div>
 
                                                     </div>

@@ -120,6 +120,7 @@ const WaterSupplyInfrastructureFields:
                                 label={t('When system was build?')}
                                 inputFieldClassName={styles.dateInput}
                                 language={language}
+                                className={'startDateInput'}
                             />
 
 

@@ -50,6 +50,7 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                 t => (
                     <>
                         <DateInput
+                            className={'startDateInput'}
                             faramElementName="dateOfOperation"
                             label={t('From When was the bridge operational?')}
                             inputFieldClassName={styles.dateInput}

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable no-return-assign */
@@ -75,6 +76,7 @@ import Loading from '#components/Loading';
 import FireEngineFields from './FireEngineFields';
 import EvacuationCentreFields from './EvacuationCentreFields';
 import NumberInput from '#rsci/NumberInput';
+import { convertDateAccToLanguage } from '#utils/common';
 
 
 const getLocationDetails = (point: unknown, ward?: number) => {
@@ -743,7 +745,23 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         this.setState({ addResourcePending: false });
     }
 
+    private handleDateConversion = (faramValues: any) => {
+        const dateChangingParameters = ['tankBuildDate', 'dateOfOperation',
+            'registrationEstDate', 'lastRenewalDate',
+            'dateOfValidity', 'operatingDate'];
+        const { language: { language } } = this.props;
+
+        const dateChangedParameters = dateChangingParameters.map((item) => {
+            const date = convertDateAccToLanguage(faramValues[item], language, true);
+            faramValues[item] = date;
+            return null;
+        });
+
+        return dateChangedParameters;
+    }
+
     private handleFaramValidationSuccess = (_: FaramValues, faramValues: FaramValues) => {
+        this.handleDateConversion(faramValues);
         const {
             location,
             ...others
