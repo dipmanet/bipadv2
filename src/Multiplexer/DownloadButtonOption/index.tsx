@@ -350,11 +350,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                     <div>
                                                         <form className={styles.dropdown}>
                                                             <label htmlFor="Custom">
-                                                                Custom:
+                                                                {t('Custom')}
+                                                                :
                                                             </label>
                                                             <select name="custom" id="custom" onClick={this.handleCustomPageCategory}>
-                                                                <option value>Page Type</option>
-                                                                <option value={false}>Resolution Type</option>
+                                                                <option value>{t('Page Type')}</option>
+                                                                <option value={false}>{t('Resolution Type')}</option>
 
                                                             </select>
 
@@ -366,7 +367,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                         <div>
                                                             <form className={styles.pageType}>
                                                                 <label htmlFor="Custom">
-                                                                    Select Page Type :
+                                                                    {t('Select Page Type')}
+                                                                    {' '}
+                                                                    :
                                                                 </label>
                                                                 <div>
                                                                     <Button
@@ -449,7 +452,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                         <div>
                                                             <form className={styles.pageType}>
                                                                 <label htmlFor="Custom">
-                                                                    Resolution :
+                                                                    {t('Resolution')}
+                                                                    {' '}
+                                                                    :
                                                                 </label>
 
                                                                 <div>
@@ -481,7 +486,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
                                                             </form>
                                                             {(height > 499 && height < 5001) && (width > 499 && width < 5001) ? ''
-                                                                : <h5 style={{ textAlign: 'right', marginRight: '10px', color: '#E35163' }}>Max value 5000 & Min value 500</h5>
+                                                                : <h5 style={{ textAlign: 'right', marginRight: '10px', color: '#E35163' }}>{t('Max value 5000 & Min value 500')}</h5>
                                                             }
 
                                                         </div>
@@ -493,7 +498,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             <div>
                                                                 <form className={styles.pageType}>
                                                                     <label htmlFor="Custom">
-                                                                        Orientation :
+                                                                        {t('Orientation')}
+                                                                        {' '}
+                                                                        :
                                                                     </label>
                                                                     <div>
                                                                         <Button
@@ -510,7 +517,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                                 });
                                                                             }}
                                                                         >
-                                                                            Landscape
+                                                                            {t('Landscape')}
                                                                         </Button>
                                                                         <Button
                                                                             className={_cs(mapOrientation === 'portrait' ? (styles.active) : (styles.pageSizeButton))}
@@ -525,7 +532,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                                 });
                                                                             }}
                                                                         >
-                                                                            Portrait
+                                                                            {t('Portrait')}
                                                                         </Button>
 
                                                                     </div>
@@ -537,7 +544,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                     <div>
                                                         <form className={styles.pageType}>
                                                             <label htmlFor="Custom">
-                                                                File format :
+                                                                {t('File format')}
+                                                                {' '}
+                                                                :
                                                             </label>
                                                             <div>
                                                                 <Button
@@ -582,7 +591,10 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             <div style={{ position: 'relative' }}>
                                                                 <LoadingAnimation className={styles.loader} />
                                                                 {' '}
-                                                                <p style={{ marginLeft: '20px' }}> Loading...</p>
+                                                                <p style={{ marginLeft: '20px' }}>
+                                                                    {' '}
+                                                                    {t('Loading...')}
+                                                                </p>
                                                             </div>
                                                         )
                                                             : (
@@ -603,7 +615,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                     }
                                                                     activeLayers={activeLayers}
                                                                     resolution={resolution}
-                                                                    buttonText="Download"
+                                                                    buttonText={t('Download')}
                                                                     selectedFileFormat={selectedFileFormat}
                                                                     selectedPageType={selectedPageType}
                                                                     showPageType={showPageType}
@@ -618,7 +630,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             className={styles.cancelButton}
                                                             onClick={this.handleCancelButton}
                                                         >
-                                                            Cancel
+                                                            {t('Cancel')}
                                                         </Button>
                                                     </div>
                                                 </>

@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
     translation: {
+        Orientation: 'Orientation',
+        'Max value 5000 & Min value 500': 'Max value 5000 & Min value 500',
+        'File format': 'File format',
+        Resolution: 'Resolution',
+        'Resolution Type': 'Resolution Type',
+        'Page Type': 'Page Type',
+        Custom: 'Custom',
+        'Select Page Type': 'Select Page Type',
         'Published by': 'Published by',
         'Published on': 'Published on',
         'BELOW WARNING LEVEL': 'BELOW WARNING LEVEL',
@@ -934,6 +942,14 @@ export const enTranslation = {
 export const npTranslation = {
 
     translation: {
+        Orientation: 'Orientation',
+        'Max value 5000 & Min value 500': 'अधिकतम मान ५००० र न्यूनतम मान ५००',
+        'File format': 'फाइलको ढाँचा',
+        Resolution: 'Resolution',
+        'Resolution Type': 'Resolution को प्रकार',
+        'Page Type': 'पृष्ठको प्रकार',
+        Custom: 'कस्‍टम',
+        'Select Page Type': 'पृष्ठ प्रकार चयन गर्नुहोस्',
         'Published by': 'प्रकाशक',
         'Published on': 'प्रकाशन मिति',
         'BELOW WARNING LEVEL': 'चेतावनी तह भन्दा तल',
