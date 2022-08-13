@@ -2223,7 +2223,7 @@ export const capacityResource = [
     {
         id: 3,
         name: 'Banking & Finance',
-        nameNe: 'बैंकिङ तथा  वित्त संस्था ',
+        nameNe: 'बैंकिङ तथा वित्त संस्था ',
         resourceType: 'finance',
         attribute: 'type',
         level: 1,
@@ -2276,7 +2276,7 @@ export const capacityResource = [
     {
         id: 4,
         name: 'Communication',
-        nameNe: 'सञ्चार सुबिधा ',
+        nameNe: 'सञ्चार सुबिधा',
         resourceType: 'communication',
         attribute: 'type',
         level: 1,

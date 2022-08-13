@@ -72,7 +72,16 @@ const RiverTooltip = (
                     </div>
                 </div>
                 <div className={styles.station}>
-                    <div className={styles.title}>Station Name:</div>
+                    <Translation>
+                        {
+                            t => (
+                                <div className={styles.title}>
+                                    {t('Station Name')}
+                                    :
+                                </div>
+                            )
+                        }
+                    </Translation>
                     <div className={styles.value}>
                         {headerTitle
                             || (
