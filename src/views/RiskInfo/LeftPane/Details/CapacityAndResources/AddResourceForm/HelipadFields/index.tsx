@@ -59,6 +59,7 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
                             inputFieldClassName={styles.dateInput}
                             language={language}
                             className={'startDateInput'}
+                            optimizePosition
                         />
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}

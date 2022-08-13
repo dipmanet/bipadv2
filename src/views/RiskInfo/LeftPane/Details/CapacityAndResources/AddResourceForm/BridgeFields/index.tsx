@@ -55,6 +55,7 @@ const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
                             label={t('From When was the bridge operational?')}
                             inputFieldClassName={styles.dateInput}
                             language={language}
+                            optimizePosition
                         />
                         <SelectInput
                             placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}

@@ -721,6 +721,7 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('Registration/Est. Date')}
                             inputFieldClassName={styles.dateInput}
                             language={language}
+                            optimizePosition
 
                         />
                         <DateInput
@@ -729,6 +730,8 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('Last Renewal Date')}
                             inputFieldClassName={styles.dateInput}
                             language={language}
+                            optimizePosition
+
 
                         />
                         <DateInput
@@ -737,6 +740,8 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                             label={t('Date of Validity')}
                             inputFieldClassName={styles.dateInput}
                             language={language}
+                            optimizePosition
+
 
                         />
                         {/* <Checkbox

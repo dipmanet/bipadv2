@@ -121,6 +121,7 @@ const WaterSupplyInfrastructureFields:
                                 inputFieldClassName={styles.dateInput}
                                 language={language}
                                 className={'startDateInput'}
+                                optimizePosition
                             />
 
 
