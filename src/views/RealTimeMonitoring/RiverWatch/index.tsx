@@ -117,6 +117,20 @@ class RiverWatch extends React.PureComponent<Props> {
                 order: 9,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),
+                modifier: (row) => {
+                    const { status } = row;
+                    if (status) {
+                        return (
+                            <div>
+                                <Translation>
+                                    {
+                                        t => t(status)
+                                    }
+                                </Translation>
+                            </div>
+                        );
+                    } return undefined;
+                },
             },
         ];
     }
