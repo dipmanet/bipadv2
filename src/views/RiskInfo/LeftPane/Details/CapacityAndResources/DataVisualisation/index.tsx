@@ -414,7 +414,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
+                visualizationWordStartNe: '',
                 visualizationWordEnd: ' are Available ',
+                visualizationWordEndNe: ' are Available ',
 
             },
             {
@@ -427,7 +429,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -440,7 +444,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -453,7 +459,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Students ',
+                visualizationWordStartNe: 'Number of Students ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Differently-abled Students',
@@ -465,7 +473,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Students ',
+                visualizationWordStartNe: 'Differently-abled Students ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
         ],
@@ -486,7 +496,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Banking and Financial Institutions ',
+                visualizationWordStartNe: 'Number of Banking and Financial Institutions ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
 
             },
@@ -500,7 +512,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Banking and Financial Institutions are ',
+                visualizationWordStartNe: 'Banking and Financial Institutions are ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: ' Run',
 
 
             },
@@ -526,7 +540,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -540,7 +556,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -562,7 +580,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Communication Facilities ',
+                visualizationWordStartNe: 'Number of Communication Facilities ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
 
             },
@@ -576,7 +596,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Communication Facilities are ',
+                visualizationWordStartNe: 'Communication Facilities are ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: ' Run',
 
 
             },
@@ -591,7 +613,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -605,7 +629,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -618,7 +644,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Institution have Evacuation Route ',
+                visualizationWordStartNe: 'Institution have Evacuation Route ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -640,7 +668,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Governance Institutions ',
+                visualizationWordStartNe: 'Number of Governance Institutions ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
 
             },
@@ -654,7 +684,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Institutions are ',
+                visualizationWordStartNe: 'Institutions are ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: ' Run',
             },
             // {
             //     label: 'Helipad ',
@@ -688,7 +720,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -702,7 +736,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -715,7 +751,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Governance Institutions with ',
+                visualizationWordStartNe: 'Governance Institutions with ',
                 visualizationWordEnd: ' available',
+                visualizationWordEndNe: ' available',
 
             },
 
@@ -737,7 +775,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Hotel and Restaurants ',
+                visualizationWordStartNe: 'Number of Hotel and Restaurants ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
 
             {
@@ -750,7 +790,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -764,7 +806,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -777,7 +821,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
+                visualizationWordStartNe: '',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -799,7 +845,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Cultural Sites ',
+                visualizationWordStartNe: 'Number of Cultural Sites ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Cultural Site With ',
@@ -811,7 +859,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Cultural Sites with ',
+                visualizationWordStartNe: 'Cultural Sites with ',
                 visualizationWordEnd: ' Available',
+                visualizationWordEndNe: ' Available',
 
             },
 
@@ -877,7 +927,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Industries ',
+                visualizationWordStartNe: 'Number of Industries ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Operator Type',
@@ -889,7 +941,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Industries are ',
+                visualizationWordStartNe: 'Industries are ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: ' Run',
             },
             {
                 label: 'Number of Employees',
@@ -901,7 +955,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -915,7 +971,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -928,7 +986,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Industries have Evacuation Route ',
+                visualizationWordStartNe: 'Industries have Evacuation Route ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -950,7 +1010,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Bridges ',
+                visualizationWordStartNe: 'Number of Bridges ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
 
             // {
@@ -970,7 +1032,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Motorable Bridges ',
+                visualizationWordStartNe: 'Number of Motorable Bridges ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -983,7 +1047,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Bridges in ',
+                visualizationWordStartNe: 'Bridges in ',
                 visualizationWordEnd: ' Condition',
+                visualizationWordEndNe: ' Condition',
 
             },
 
@@ -1005,7 +1071,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
+                visualizationWordStartNe: '',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Status',
@@ -1017,7 +1085,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Hydropower/Components are ',
+                visualizationWordStartNe: 'Hydropower/Components are ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
         ],
@@ -1037,7 +1107,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Sanitation Infrastructures',
+                visualizationWordStartNe: 'Number of Sanitation Infrastructures',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Permanent Infrastructures',
@@ -1049,7 +1121,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
+                visualizationWordStartNe: '',
                 visualizationWordEnd: ' are Permanent',
+                visualizationWordEndNe: ' are Permanent',
             },
             {
                 label: 'Public Toilets',
@@ -1061,7 +1135,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Public Toilets Available',
+                visualizationWordStartNe: 'Public Toilets Available',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             // {
@@ -1090,7 +1166,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of sanitation infrastructures',
+                visualizationWordStartNe: 'Number of sanitation infrastructures',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -1123,7 +1201,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Community Spaces',
+                visualizationWordStartNe: 'Number of Community Spaces',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Community Space With',
@@ -1135,7 +1215,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Community Space with ',
+                visualizationWordStartNe: 'Community Space with ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
 
 
@@ -1157,7 +1239,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Water Supply Infrastructures',
+                visualizationWordStartNe: 'Number of Water Supply Infrastructures',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Operator Type',
@@ -1169,7 +1253,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordStartNe: 'Water supply Infrastructures are ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: ' Run',
             },
             {
                 label: 'Number of Employees',
@@ -1181,7 +1267,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees',
+                visualizationWordStartNe: 'Number of Employees',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -1195,7 +1283,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees',
+                visualizationWordStartNe: 'Differently-abled Employees',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -1208,7 +1298,9 @@ const visualizationKeyValues = [
                 showFalseValue: true,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordStartNe: 'Water supply Infrastructures are ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             // {
             //     label: 'Technical Staff',
@@ -1243,7 +1335,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Vehicles',
+                visualizationWordStartNe: 'Number of Vehicles',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Number of Employees',
@@ -1255,7 +1349,10 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees',
+                visualizationWordStartNe: 'Number of Employees',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
+
 
             },
             {
@@ -1268,7 +1365,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees',
+                visualizationWordStartNe: 'Differently-abled Employees',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
         ],
     },
@@ -1287,7 +1386,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Helipad',
+                visualizationWordStartNe: 'Number of Helipad',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Surface Type of Helipad',
@@ -1299,7 +1400,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Helipads have ',
+                visualizationWordStartNe: 'Helipads have ',
                 visualizationWordEnd: ' Surface',
+                visualizationWordEndNe: ' Surface',
             },
 
             {
@@ -1312,7 +1415,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Helipads have ',
+                visualizationWordStartNe: 'Helipads have ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
 
 
@@ -1326,7 +1431,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Helipads are ',
+                visualizationWordStartNe: 'Helipads are ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
 
             // {
@@ -1382,7 +1489,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Waterways ',
+                visualizationWordStartNe: 'Number of Waterways ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Number of Employees',
@@ -1394,7 +1503,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -1408,7 +1519,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled employees ',
+                visualizationWordStartNe: 'Differently-abled employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -1421,7 +1534,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Waterways in ',
+                visualizationWordStartNe: 'Waterways in ',
                 visualizationWordEnd: ' Condition ',
+                visualizationWordEndNe: ' Condition ',
             },
 
         ],
@@ -1441,7 +1556,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Airways ',
+                visualizationWordStartNe: 'Number of Airways ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Number of Employees',
@@ -1453,7 +1570,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -1466,7 +1585,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -1479,7 +1600,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Airways with ',
+                visualizationWordStartNe: 'Airways with ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -1518,7 +1641,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Fire Fighting Apparatus ',
+                visualizationWordStartNe: 'Number of Fire Fighting Apparatus ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Condition of fire fighting apparatus',
@@ -1530,7 +1655,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordStartNe: 'Fire Fighting Apparatus are ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
             {
                 label: 'Operator Type of fire fighting apparatus',
@@ -1542,7 +1669,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordStartNe: 'Fire Fighting Apparatus are ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: ' Run',
             },
 
 
@@ -1563,7 +1692,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Evacuation Centers ',
+                visualizationWordStartNe: 'Number of Evacuation Centers ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
 
             },
@@ -1577,7 +1708,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Evacuation Centers are ',
+                visualizationWordStartNe: 'Evacuation Centers are ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
 
             },
@@ -1591,7 +1724,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Maximum Capacity  ',
+                visualizationWordStartNe: 'Maximum Capacity  ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -1604,7 +1739,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
+                visualizationWordStartNe: '',
                 visualizationWordEnd: ' are Available ',
+                visualizationWordEndNe: ' are Available ',
 
             },
 
@@ -1672,7 +1809,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Health Infrastructures ',
+                visualizationWordStartNe: 'Number of Health Infrastructures ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
             },
 
             // {
@@ -1705,7 +1844,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
+                visualizationWordStartNe: '',
                 visualizationWordEnd: ' Available',
+                visualizationWordEndNe: ' Available',
 
             },
 
@@ -1735,7 +1876,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Beds ',
+                visualizationWordStartNe: 'Number of Beds ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             // {
@@ -1762,7 +1905,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Employees ',
+                visualizationWordStartNe: 'Number of Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
 
@@ -1776,7 +1921,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Differently-abled Employees ',
+                visualizationWordStartNe: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
             },
             {
@@ -1789,7 +1936,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Health Infrastructures with ',
+                visualizationWordStartNe: 'Health Infrastructures with ',
                 visualizationWordEnd: ' available',
+                visualizationWordEndNe: ' available',
 
             },
 
