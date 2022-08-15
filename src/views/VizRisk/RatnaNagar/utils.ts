@@ -239,3 +239,19 @@ export const layoutSwitch = (layer) => {
             return null;
     }
 };
+
+export const generateSelectFieldValues = (inputObject: any = {}) => {
+    const resultArr = [];
+    if (Object.keys(inputObject).length > 0) {
+        const allKeys = Object.keys(inputObject);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [index, data] of allKeys.entries()) {
+            const requiredObj = {
+                optionTitle: allKeys[index],
+                optionValues: inputObject[allKeys[index]],
+            };
+            resultArr.push(requiredObj);
+        }
+    }
+    return resultArr;
+};

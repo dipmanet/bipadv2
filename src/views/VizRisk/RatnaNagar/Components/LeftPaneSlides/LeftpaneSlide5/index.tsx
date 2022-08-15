@@ -18,13 +18,17 @@ const LeftpaneSlide6 = () => {
         keyValueHtmlData,
         householdData,
         householdChartData,
+        setSelectFieldValue,
+
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData['Flood Hazard'];
 
-    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
-
-    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Select');
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Flood return period');
     const [curerntChartData, setCurerntChartData] = useState([]);
+    useEffect(() => {
+        setSelectFieldValue('Flood return period');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
@@ -54,6 +58,12 @@ const LeftpaneSlide6 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
+    const selectFieldValues = [
+        {
+            optionTitle: '',
+            optionValues: exposureChartData && Object.keys(exposureChartData),
+        },
+    ];
     return (
         <div className={styles.vrSideBar}>
             <div className="mainTitleDiv">

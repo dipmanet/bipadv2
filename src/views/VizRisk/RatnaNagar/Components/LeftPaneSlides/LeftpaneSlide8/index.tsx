@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
+    generateSelectFieldValues,
     getHouseHoldDataColor,
     getHouseHoldDataStatus,
     percentageCalculator,
@@ -12,19 +13,24 @@ import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
 import RangeStatusLegend from '../../Legends/RangeStatusLegend';
+import { staticSelectFieldValues } from '#views/VizRisk/RatnaNagar/expressions';
 
 const LeftpaneSlide8 = () => {
     const {
         keyValueHtmlData,
         householdData,
         householdChartData,
+        setSelectFieldValue,
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData['Adaptive Capacity'];
 
-    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Hold Insurance Policy');
 
-    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Select');
     const [curerntChartData, setCurerntChartData] = useState([]);
+    useEffect(() => {
+        setSelectFieldValue('Hold Insurance Policy');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
@@ -48,6 +54,7 @@ const LeftpaneSlide8 = () => {
     const averageExposureScore: any = ((mainData.reduce(
         (total: number, singleData: number) => total + singleData,
     )) / householdData.length / 10).toFixed(1);
+    const selectFieldValues = generateSelectFieldValues(staticSelectFieldValues['Adaptive Capacity']);
 
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);

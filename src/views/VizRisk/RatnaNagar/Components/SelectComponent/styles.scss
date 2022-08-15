@@ -1,110 +1,55 @@
-// .selectComponent {
-//     margin: 30px -8px;
-
-//     .mainSelect {
-//         width: 100%;
-//         background-color: #143044;
-//         color: white;
-//         outline: none;
-//         padding: 10px;
-//         border: 1px solid #a8fffb;
-//         border-radius: 2px;
-//         cursor: pointer;
-
-//         .mainOptions {
-//             cursor: pointer;
-//         }
-//     }
-// }
 .selectContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
     position: relative;
+    border: 1px solid white;
+    margin: 25px 0px;
+    cursor: pointer;
 
     .mainDiv {
         display: flex;
         flex-direction: row;
         align-items: center;
-        width: 95%;
+        width: 100%;
+        border-bottom: 1px solid white;
 
-        .selectDiv {
+        .selectField {
             display: flex;
+            width: 98%;
             flex-direction: row;
+            padding: 0;
             align-items: center;
-            width: 100%;
-            background-color: #f4f4f4;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 10px;
+            justify-content: space-between;
 
-            .icon {
-                cursor: pointer;
-                padding: var(--spacing-small) var(--spacing-medium-alt);
-                font-size: var(--font-size-extra-large);
+            .selectItem {
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 0 !important;
+                margin: 8px !important;
             }
 
-            .selectField {
-                display: flex;
-                width: 92%;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-
-                .selectItem {
-                    color: black;
-                    font-size: 14px;
-                    font-weight: 600;
-                }
-
-                .selectIcon {
-                    justify-self: flex-end;
-                    width: 20px;
-                    height: 20px;
-                    background-image: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.127L12 18.127L20 10.127H4Z" fill="black"/></svg>');
-                    background-repeat: no-repeat;
-                    background-position-y: 50%;
-                    background-position-x: 98%;
-                    color: black;
-                }
-
+            .selectIcon {
+                justify-self: flex-end;
+                width: 20px;
+                height: 20px;
+                background-image: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.127L12 18.127L20 10.127H4Z" fill="black"/></svg>');
+                background-repeat: no-repeat;
+                background-position-y: 50%;
+                background-position-x: 98%;
+                color: black;
             }
+
         }
+
 
     }
 
-    .optionDiv {
-        position: absolute;
-        background-color: white;
-        top: 3.8rem;
-        z-index: 999;
-        width: 95%;
-        border-radius: 10px;
-        margin-top: 3px;
-        padding-bottom: 15px;
-        cursor: pointer;
-        // box-shadow: 2px 2px 0.5px gray;
-        border: 1px solid gray;
-
-        .optionField {
-            display: flex;
-            align-items: center;
-            width: auto;
-            height: 40px;
-        }
-
-        .icon {
-            padding-left: 10px;
-            cursor: pointer;
-            padding: var(--spacing-small) var(--spacing-medium-alt);
-            font-size: var(--font-size-extra-large);
-        }
-
-        .optionName {
-            color: black;
-            font-size: 14px;
-        }
-
+    .mainOptionDiv {
+        width: 98%;
+        height: 400px;
+        overflow-y: scroll;
     }
 }

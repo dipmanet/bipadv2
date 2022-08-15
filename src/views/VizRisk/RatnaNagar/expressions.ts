@@ -49,7 +49,7 @@ export const SlideTitle = [
 ];
 
 
-export const selectFieldValues = {
+export const staticSelectFieldValues = {
     Sensitivity: {
         'Social Condition': [
             'Number of Dependent Population (Children <15 and Elderly (Age >=60 years)',

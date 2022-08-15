@@ -20,14 +20,17 @@ const LeftpaneSlide4 = () => {
         keyValueHtmlData,
         householdData,
         householdChartData,
+        setSelectFieldValue,
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData.Exposure;
 
-    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
-
-    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Select');
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Building Type');
     const [curerntChartData, setCurerntChartData] = useState([]);
 
+    useEffect(() => {
+        setSelectFieldValue('Building Type');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
 
@@ -52,6 +55,12 @@ const LeftpaneSlide4 = () => {
         (total: number, singleData: number) => total + singleData,
     )) / householdData.length / 10).toFixed(1);
 
+    const selectFieldValues = [
+        {
+            optionTitle: '',
+            optionValues: exposureChartData && Object.keys(exposureChartData),
+        },
+    ];
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 

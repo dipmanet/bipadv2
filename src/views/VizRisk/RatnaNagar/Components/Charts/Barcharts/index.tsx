@@ -41,15 +41,24 @@ const CommonBarChart = (props: Props) => {
 
     return (
         <div className={styles.mainBarChart}>
-            <h3 className={styles.barTitle}>
-                Current Selected Chart Value:
-                {
-                    requiredQuery && !!currentHeaderVal
-                        && Object.values(requiredQuery[currentHeaderVal])[0]
-                        ? Object.values(requiredQuery[currentHeaderVal])[0]
-                        : ' Please Select Value'
-                }
-            </h3>
+            <div className={styles.infoReset}>
+                <h3 className={styles.barTitle}>
+                    Current Selected Chart Value:
+                    {
+                        requiredQuery && !!currentHeaderVal
+                            && Object.values(requiredQuery[currentHeaderVal])[0]
+                            ? Object.values(requiredQuery[currentHeaderVal])[0]
+                            : ' Please Select Value'
+                    }
+                </h3>
+                <button
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setCurrentRechartsItem('')}
+                    type="submit"
+                >
+                    Reset
+                </button>
+            </div>
             <h3 className={styles.barTitle}>
                 {barTitle === 'Flood return period'
                     ? 'Number of households likely to be inundated' : barTitle}

@@ -1,62 +1,28 @@
-// import React, { useContext } from 'react';
-// import { MainPageDataContext } from '../../context';
-// import styles from './styles.scss';
-
-// const SelectComponent = (props) => {
-//     const { selectFieldValues, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
-//     const {
-//         setSelectFieldValue,
-//     } = useContext(MainPageDataContext);
-//     return (
-//         <div className={styles.selectComponent}>
-//             <select
-//                 className={styles.mainSelect}
-//                 value={selctFieldCurrentValue}
-//                 onChange={(e) => {
-//                     setSelctFieldCurrentValue(e.target.value);
-//                     setSelectFieldValue(e.target.value);
-//                 }}
-//             >
-//                 <option value="Select" defaultValue={'Select'} disabled>Select</option>
-//                 {
-//                     selectFieldValues.map(item => (
-//                         <option
-//                             className={styles.mainOptions}
-//                             key={`select-${item}`}
-//                             value={item}
-//                         >
-//                             {item}
-
-//                         </option>
-//                     ))
-//                 }
-//             </select>
-//         </div>
-//     );
-// };
-// export default SelectComponent;
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 import { MainPageDataContext } from '../../context';
+import SelectOptions from './Options';
 
-const SelectComponent = (props) => {
+interface Props {
+    selectFieldValues: {
+        optionTitle: string;
+        optionValues: string[];
+    }[];
+    selctFieldCurrentValue: string;
+    setSelctFieldCurrentValue: any;
+}
+const SelectComponent = (props: Props) => {
     const [showOption, setShowOption] = useState(false);
     const optionShowRef = useRef(null);
     const {
         setSelectFieldValue,
     } = useContext(MainPageDataContext);
-    const { selectFieldValues, selctFieldCurrentValue, setSelctFieldCurrentValue } = props;
-    // eslint-disable-next-line no-unused-expressions
-    // useEffect(() => {
-    //     if (selectOption.name === '' || selectOption.key === '') {
-    //         setSelectOption(lossMetrics[0].label, lossMetrics[0].key);
-    //     }
-    // }, []);
+    const { selectFieldValues,
+        selctFieldCurrentValue,
+        setSelctFieldCurrentValue } = props;
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -78,6 +44,7 @@ const SelectComponent = (props) => {
     };
 
     const onOptionClick = (itemVal: string) => {
+        setShowOption(false);
         setSelctFieldCurrentValue(itemVal);
         setSelectFieldValue(itemVal);
     };
@@ -90,36 +57,33 @@ const SelectComponent = (props) => {
                 ref={optionShowRef}
             >
                 <div className={styles.mainDiv}>
-                    <div className={styles.selectDiv}>
-                        <div
-                            className={styles.selectField}
-                            onClick={onSelectClick}
-                        >
-                            <p className={styles.selectItem}>
-                                {
-                                    selctFieldCurrentValue
-                                }
+                    <div
+                        className={styles.selectField}
+                        onClick={onSelectClick}
+                    >
+                        <p className={styles.selectItem}>
+                            {
+                                selctFieldCurrentValue
+                            }
 
-                            </p>
-                            <div className={styles.selectIcon} />
-                        </div>
+                        </p>
+                        <div className={styles.selectIcon} />
                     </div>
                 </div>
                 {
                     showOption && (
-                        <div
-                            className={styles.optionDiv}
-                        >
-                            {selectFieldValues.map(item => (
-                                <div
-                                    className={styles.optionField}
-                                    onClick={() => onOptionClick(item)}
-                                    key={item}
-                                >
-                                    <p className={styles.optionName}>{item}</p>
-                                </div>
-                            ))}
+                        <div className={styles.mainOptionDiv}>
+                            {
+                                selectFieldValues.map(item => (
+                                    <SelectOptions
+                                        optionTitle={item.optionTitle}
+                                        optionValues={item.optionValues}
+                                        onOptionClick={onOptionClick}
+                                    />
+                                ))
+                            }
                         </div>
+
                     )
                 }
             </div>

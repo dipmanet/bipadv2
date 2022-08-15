@@ -1,0 +1,38 @@
+.optionDiv {
+    // position: relative;
+    background-color: #0c2432;
+    top: 40px;
+    z-index: 999;
+    width: 98%;
+    border-radius: 1px;
+    cursor: pointer;
+    border-top: none;
+    border: 1px solid white;
+    margin: 5px;
+
+    // border-top: none;
+    .optionField {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        height: 40px;
+        cursor: pointer;
+        background-color: #0c2432;
+        filter: saturate(100%);
+        outline: none;
+        border: none;
+
+        &:hover {
+            background-color: #00000070;
+        }
+    }
+
+    .optionName {
+        width: 100%;
+        padding: 0px !important;
+        margin: 0px !important;
+        color: white;
+        font-size: 14px;
+    }
+
+}
