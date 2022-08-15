@@ -261,6 +261,13 @@ const Ratnanagar = (props: any) => {
     };
 
 
+    const requiredQuery = {
+        [currentHeaderVal]: {
+            [selectFieldValue]: currentRechartsItem,
+        },
+    };
+
+
     const contextValues = {
         mainKey,
         suffix,
@@ -274,6 +281,7 @@ const Ratnanagar = (props: any) => {
         keyValueHtmlData,
         keyValueJsonData,
         householdChartData,
+        currentHeaderVal,
         setCurrentHeaderVal,
         householdData,
         rangeValues,
@@ -282,6 +290,8 @@ const Ratnanagar = (props: any) => {
         handleRangeLegendClick,
         handleReset,
         setCurrentRechartsItem,
+        requiredQuery,
+        selectFieldValue,
         setSelectFieldValue,
     };
 
@@ -298,11 +308,6 @@ const Ratnanagar = (props: any) => {
         zIndex: 250,
     };
 
-    const requiredQuery = {
-        [currentHeaderVal]: {
-            [selectFieldValue]: currentRechartsItem,
-        },
-    };
 
     useEffect(() => {
         if (currentHeaderVal && selectFieldValue) {
@@ -310,8 +315,6 @@ const Ratnanagar = (props: any) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentRechartsItem]);
-
-    console.log('requiredQuery', requiredQuery);
 
 
     return (

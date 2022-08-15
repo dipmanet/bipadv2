@@ -47,6 +47,7 @@ interface MainPageData {
     keyValueHtmlData: [];
     householdChartData: [];
     rangeValues: number[];
+    currentHeaderVal: string;
     handleRangeLegendClick: (item: any) => undefined;
     handleReset: (item: any) => undefined;
     setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,6 +72,7 @@ const initialMainPageData: MainPageData = {
     setPostionsPerPage: () => undefined,
     onButtonClick: () => undefined,
     keyValueJsonData: [],
+    currentHeaderVal: '',
     setCurrentHeaderVal: () => undefined,
     keyValueHtmlData: [],
     householdData: [],

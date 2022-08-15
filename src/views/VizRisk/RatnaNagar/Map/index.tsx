@@ -1,3 +1,8 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-plusplus */
+/* eslint-disable indent */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
@@ -69,6 +74,9 @@ const Map = (props: any) => {
         keyValueJsonData,
         householdData,
         rangeValues,
+        currentHeaderVal,
+        selectFieldValue,
+        requiredQuery,
     } = useContext(MainPageDataContext);
 
     const [opacityFlood, setOpacityFlood] = useState(0.25);
@@ -192,6 +200,9 @@ const Map = (props: any) => {
     const handleRadioButton = (layerName: string) => {
         setCurrentOsmLayer(layerName);
     };
+
+    console.log('map requiredQuery', requiredQuery);
+
 
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
@@ -546,6 +557,7 @@ const Map = (props: any) => {
         }
         return null;
     };
+    console.log('hpuseholdata', householdData);
 
     useEffect(() => {
         const switchFloodRasters = (floodlayer: string) => {
@@ -662,6 +674,7 @@ const Map = (props: any) => {
         }
     }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
 
+    const sideEffect = !!currentHeaderVal && !!selectFieldValue && requiredQuery[currentHeaderVal][selectFieldValue];
 
     useEffect(() => {
         if (popupRef.current) {
@@ -684,19 +697,51 @@ const Map = (props: any) => {
             filteredDataByRange.push(...filteredData);
         }
 
+        const filterdDataFromChart: any = [];
+
+        for (const [index, data] of householdData.entries()) {
+            const eachData = householdData[index];
+            if (eachData && !!currentHeaderVal && !!selectFieldValue
+                && eachData.filteredMetadata && eachData.filteredMetadata[currentHeaderVal]
+                && eachData.filteredMetadata[currentHeaderVal] && Object.keys(eachData.filteredMetadata[currentHeaderVal])
+                    .includes(Object.keys(requiredQuery[currentHeaderVal])[0])
+                && eachData.filteredMetadata[currentHeaderVal][selectFieldValue] === requiredQuery[currentHeaderVal][selectFieldValue]
+            ) {
+                filterdDataFromChart.push(eachData);
+            }
+        }
+        const filterdDataFromChartWithRange: any = [];
+
+        if (sideEffect && rangeValues.length > 0 && filterdDataFromChart.length > 0) {
+            for (let index = 0; index < rangeValues.length; index++) {
+                if (index % 2 !== 0) {
+                    // eslint-disable-next-line no-continue
+                    continue;
+                }
+                const filteredData = filterdDataFromChart.filter(
+                    item => (item[getCurrentType(leftElement)] / 10)
+                        >= rangeValues[index] && (item[getCurrentType(leftElement)] / 10)
+                        <= rangeValues[index + 1],
+                );
+                filterdDataFromChartWithRange.push(...filteredData);
+            }
+        }
+
         const geoJsonMain = {
             type: 'FeatureCollection',
-            features: (rangeValues && rangeValues.length > 0 ? filteredDataByRange : householdData).map(item => ({
-                type: 'Feature',
-                id: item.id,
-                geometry: item.point,
-                properties: {
-                    name: getCurrentType(leftElement),
-                    value: item[getCurrentType(leftElement)] / 10,
-                    color: getHouseHoldDataColor(item[getCurrentType(leftElement)] / 10),
-                    status: getHouseHoldDataStatus(item[getCurrentType(leftElement)] / 10),
-                },
-            })),
+            features: (sideEffect && filterdDataFromChart.length > 0 && rangeValues.length === 0 ? filterdDataFromChart : sideEffect && filterdDataFromChart.length > 0
+                && rangeValues.length > 0 ? filterdDataFromChartWithRange
+                : rangeValues && rangeValues.length > 0 ? filteredDataByRange : householdData).map(item => ({
+                    type: 'Feature',
+                    id: item.id,
+                    geometry: item.point,
+                    properties: {
+                        name: getCurrentType(leftElement),
+                        value: item[getCurrentType(leftElement)] / 10,
+                        color: getHouseHoldDataColor(item[getCurrentType(leftElement)] / 10),
+                        status: getHouseHoldDataStatus(item[getCurrentType(leftElement)] / 10),
+                    },
+                })),
         };
 
         const popupMain = (e) => {
@@ -769,7 +814,7 @@ const Map = (props: any) => {
             }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [leftElement, rangeValues]);
+    }, [leftElement, sideEffect, rangeValues]);
 
     const mapValue = {
         map: map.current,

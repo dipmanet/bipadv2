@@ -33,7 +33,7 @@ function LeftPane5(props: Props) {
             setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page6ScrolltopValue: scrollTop });
             setPostionsPerPage({ ...postionsPerPage, page6PositionValue: Math.max(1 - percentage, 0) });
         };
-        setCurrentHeaderVal('Flood Innundation');
+        setCurrentHeaderVal('Flood Hazard');
         updateHeight();
         if (articleRef.current) {
             articleRef.current.addEventListener('scroll', updateHeight);
