@@ -383,7 +383,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'total',
                 visualizationWordStart: 'Number of Education Institutions',
+                visualizationWordStartNe: 'वटा शैक्षिक संस्थाको संख्या छन्',
                 visualizationWordEnd: '',
+                visualizationWordEndNe: '',
 
 
             },
@@ -397,7 +399,9 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Education Institutions are ',
+                visualizationWordStartNe: 'शैक्षिक संस्थाहरु ',
                 visualizationWordEnd: ' Run',
+                visualizationWordEndNe: 'छन्',
             },
 
             {
@@ -1795,7 +1799,6 @@ const visualizationKeyValues = [
 
 ];
 
-
 const CustomizedLabel = (props) => {
     const { x, y, stroke, value } = props;
 
@@ -1824,6 +1827,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             isValueCalculated: false,
             isDataSetClicked: false,
             allDataNullConditionCheck: false,
+            downloadButtonClicked: false,
 
         };
     }
@@ -1831,30 +1835,31 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     public async componentDidMount(prevProps, prevState) {
         const { resourceCollection, resourceType, pendingAPICall } = this.props;
         const { isValueCalculated } = this.state;
+        if (!pendingAPICall) {
+            const resourceDataList = resourceCollection[resourceType];
 
-        const resourceDataList = resourceCollection[resourceType];
-
-        this.setState({
-            selectedResourceData: resourceDataList,
-        });
-        const GraphVisualizationData = await visualizationKeyValues
-            .filter(item => item.resourceType === resourceType)[0].chartDataType
-            .map((datakey) => {
-                const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-                    datakey.isBoolean, datakey.values, datakey.valuesNe);
-                return datam;
+            this.setState({
+                selectedResourceData: resourceDataList,
             });
-        const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+            const GraphVisualizationData = await visualizationKeyValues
+                .filter(item => item.resourceType === resourceType)[0].chartDataType
+                .map((datakey) => {
+                    const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
+                        datakey.isBoolean, datakey.values, datakey.valuesNe, datakey.showFalseValue);
+                    return datam;
+                });
+            const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + (curValue.value ? curValue.value : 0), 0);
 
-        if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
-            this.setState({ isValueCalculated: true });
-        }
-        if (calculatedSum > 0) {
-            this.setState({ isValueCalculated: true });
-        }
-        if (prevState) {
-            if (prevState.isValueCalculated !== isValueCalculated) {
-                this.setState({ GraphVisualizationData });
+            if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
+                this.setState({ isValueCalculated: true });
+            }
+            if (calculatedSum > 0) {
+                this.setState({ isValueCalculated: true });
+            }
+            if (prevState) {
+                if (prevState.isValueCalculated !== isValueCalculated) {
+                    this.setState({ GraphVisualizationData });
+                }
             }
         }
     }
@@ -1862,49 +1867,48 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     public async componentDidUpdate(prevProps, prevState) {
         const { resourceCollection, resourceType, pendingAPICall } = this.props;
         const { isValueCalculated } = this.state;
+        if (!pendingAPICall) {
+            const resourceDataList = resourceCollection[resourceType];
 
-        const resourceDataList = resourceCollection[resourceType];
-
-        this.setState({
-            selectedResourceData: resourceDataList,
-        });
-
-        const GraphVisualizationData = await visualizationKeyValues
-            .filter(item => item.resourceType === resourceType)[0].chartDataType
-            .map((datakey) => {
-                const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-                    datakey.isBoolean, datakey.values, datakey.valuesNe);
-                return datam;
-            });
-        let nullDataCheck = null;
-        const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
-        nullDataCheck = calculatedSum || null;
-
-        if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
             this.setState({
-                isValueCalculated: true,
-                allDataNullConditionCheck: true,
+                selectedResourceData: resourceDataList,
             });
-        }
-        if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
-            this.setState({ isValueCalculated: true });
-        }
-        if ((calculatedSum > 0)) {
-            this.setState({ isValueCalculated: true });
-        }
-        if (prevState.isValueCalculated !== isValueCalculated) {
-            this.setState({ GraphVisualizationData });
+            const GraphVisualizationData = await visualizationKeyValues
+                .filter(item => item.resourceType === resourceType)[0].chartDataType
+                .map((datakey) => {
+                    const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
+                        datakey.isBoolean, datakey.values, datakey.valuesNe, datakey.showFalseValue);
+                    return datam;
+                });
+            let nullDataCheck = null;
+            const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + (curValue.value ? curValue.value : 0), 0);
+            nullDataCheck = calculatedSum || null;
+
+            if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
+                this.setState({
+                    isValueCalculated: true,
+                    allDataNullConditionCheck: true,
+                });
+            }
+            if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
+                this.setState({ isValueCalculated: true });
+            }
+            if ((calculatedSum > 0)) {
+                this.setState({ isValueCalculated: true });
+            }
+            if (prevState.isValueCalculated !== isValueCalculated) {
+                this.setState({ GraphVisualizationData });
+            }
         }
     }
 
-    private getResourceDataForVisualization = (resourceType, key, isBoolean, label, labelNe) => {
+    private getResourceDataForVisualization = (resourceType, key, isBoolean, label, labelNe, showFalseValue) => {
         const { selectedResourceData } = this.state;
-
-
         const { language: { language } } = this.props;
         let filteredResourceChartDataType;
         let calculatedValueData;
         let filterDataForCalculation;
+        let filterDataForFalseValue;
 
         const filterLabelAccToLang = (data, keyMain) => {
             if (data.length > 0) {
@@ -1939,19 +1943,18 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         if (typeof key === 'string') {
             const keyMain = language === 'en' ? 'values' : 'valuesNe';
             filteredResourceChartDataType = filterLabelAccToLang(visualizationKeyValues, keyMain);
-
             calculatedValueData = filteredResourceChartDataType.map((item, i) => {
                 filterDataForCalculation = selectedResourceData.filter(d => d[key] === (language === 'en' ? item : nepaliKeyVal[item]));
-
                 if (isBoolean) {
-                    filterDataForCalculation = selectedResourceData.filter(d => d[key] === true);
+                    filterDataForCalculation = selectedResourceData.filter(d => d[key] === (language === 'en' ? item : nepaliKeyVal[item]));
                 }
-
+                if (isBoolean && showFalseValue) {
+                    filterDataForFalseValue = selectedResourceData.filter(d => d[key] === false);
+                }
                 const obj = {};
                 obj.label = item;
-                obj.value = filterDataForCalculation.length;
+                obj.value = item === 'Not operational' ? filterDataForFalseValue.length : filterDataForCalculation.length;
                 obj.color = '#1A70AC';
-
                 // obj[`${item}`] = filterDataForCalculation.length;
                 return obj;
             });
@@ -1970,7 +1973,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                 // console.log('filterDataForStringValue', filterDataForStringValue);
                 filterDataForCalculation = selectedResourceData
-                    .reduce((acc, curValue) => acc + curValue[item] || 0, 0);
+                    .reduce((acc, curValue) => acc + (curValue[item] ? curValue[item] : 0), 0);
                 const obj = {};
                 obj.label = language === 'en' ? label[i] : labelNe[i];
                 obj.value = filterDataForCalculation;
@@ -1979,9 +1982,10 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 return obj;
             });
         }
+        const dataDisplayFromHighestValue = calculatedValueData.sort((a, b) => b.value - a.value);
 
 
-        return calculatedValueData;
+        return dataDisplayFromHighestValue;
     }
 
     private HighValuePercentageCalculation = (value) => {
@@ -1990,47 +1994,90 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             .filter(item => item.resourceType === resourceType)[0].chartDataType;
         const HighestValue = value.map((item, i) => {
             const highValueObject = item.reduce((a, b) => (a.value > b.value ? a : b));
-
-            // console.log(value, 'obj');
-
-            const totalSum = item.reduce((a, b) => a + b.value || 0, 0);
-
-
+            const totalSum = item.reduce((a, b) => a + (b.value ? b.value : 0), 0);
             const highValuePercentage = totalSum === 0 ? 0 : ((highValueObject.value / totalSum) * 100).toFixed(2);
-            const subCategoryName = language === 'en' ? labelName[i].label : labelName[i].labelNe;
 
-            // console.log(highValueObject, 'sub cat');
+            const subCategoryName = language === 'en' ? labelName[i].label : labelName[i].labelNe;
+            const { visualizationKey, visualizationWordStart, visualizationWordEnd } = labelName[i];
+            const displayingValueinVisualization = visualizationKey === 'total' ? totalSum : highValueObject.value;
+            const displayVisualizationWord = visualizationKey === 'total'
+                ? `${visualizationWordStart}${visualizationWordEnd ? `${visualizationWordEnd}` : ''}`
+                : `${visualizationWordStart}` + `${highValueObject.label}` + `${visualizationWordEnd}`;
+            console.log('start: ', visualizationWordStart, 'label: ', highValueObject.label, 'end:', visualizationWordEnd, 'test');
 
             return ({
                 category: subCategoryName,
                 subCategoryName: highValueObject.label,
                 highValuePercentage,
+                totalSum,
+                highestValue: highValueObject.value,
+                visualizationKey,
+                displayingValueinVisualization,
+                displayVisualizationWord,
             });
         });
         return HighestValue;
     }
 
     private handleSaveClick = (id) => {
+        // const myElements = document.getElementById('realMap123');
+        //     console.log('My final element', myElements);
+        //     myElements.style.setProperty('height', 'unset', 'important');
+        //     myElements.style.setProperty('width', 'unset', 'important');
+        //     myElements.style.setProperty('position', 'unset', 'important');
+        //     myElements.style.setProperty('top', 'unset', 'important');
+        //     myElements.style.setProperty('background-color', 'transparent', 'important');
+        //     myElements.style.setProperty('flex-grow', '1', 'important');
+
         if (id === 'overallDownload') {
+            this.setState({ downloadButtonClicked: true });
+            const myElements = document.getElementById('1');
+            myElements.style.setProperty('display', 'none', 'important');
+            // const data = document.getElementsByClassName('test');
+            // data.style.setProperty('display', 'none', 'important');
+            // const test = document.getElementsByClassName('test');
+
+            // document.getElementsByClassName('test')[0].style.display = 'none';
+            let downloadBtnElements = document.getElementsByClassName('test');
+
+            for (let i = 0; i < downloadBtnElements.length; i++) {
+                downloadBtnElements[i].style.display = 'none';
+            }
+
             const divToDisplay = document.getElementById('overallDownload');
             const pdf = new JsPDF('p', 'mm', 'a4');
+            pdf.page = 1;
+
             html2canvas(divToDisplay).then((canvas) => {
                 const divImage = canvas.toDataURL('image/png');
-                const imgWidth = 210;
+                const imgWidth = 200;
                 const pageHeight = 297;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const imgHeight = (canvas.height * imgWidth / canvas.width);
                 let heightLeft = imgHeight;
-                let position = 0;
-                pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                function footer() {
+                    pdf.text(150, 285, `page ${pdf.page}`); // print number bottom right
+                    pdf.page++;
+                }
+                let position = 10;
+                pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight, '', 'FAST');
                 heightLeft -= pageHeight;
 
                 while (heightLeft >= 0) {
                     position = heightLeft - imgHeight;
+                    footer();
                     pdf.addPage();
-                    pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight);
+                    pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                 }
                 pdf.save('Report.pdf');
+
+                myElements.style.setProperty('display', 'flex', 'important');
+
+                for (let i = 0; i < downloadBtnElements.length; i++) {
+                    downloadBtnElements[i].style.display = 'flex';
+                }
+                this.setState({ downloadButtonClicked: false });
+                // data.style.setProperty('display', 'unset', 'important');
             });
         } else {
             saveChart(id, id);
@@ -2041,14 +2088,18 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
     public render() {
         const { closeVisualization, checkedCategory,
-            resourceType, level, lvl2catName, typeName, resourceCollection, selectedCategoryName, wards, provinces, districts, municipalities, pendingAPICall,
+            resourceType, level, lvl2catName, typeName,
+            resourceCollection, selectedCategoryName,
+            wards, provinces, districts, municipalities, pendingAPICall, ErrorData,
             language: { language } } = this.props;
-        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
+        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck, downloadButtonClicked } = this.state;
+
 
         const labelName = visualizationKeyValues
             .filter(item => item.resourceType === resourceType)[0].chartDataType;
 
         const HighValuePercentageCalculation = this.HighValuePercentageCalculation(GraphVisualizationData);
+
         const { visualizationHeading, visualizationHeadingNe } = visualizationKeyValues
             .filter(item => item.resourceType === resourceType)[0];
 
@@ -2076,14 +2127,12 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
-
         return (
             <Modal className={
                 styles.contactFormModal
 
             }
             >
-
                 {/* <ModalHeader
                     // title={'Add Contact'}
                     rightComponent={(
@@ -2098,91 +2147,95 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 <Translation>
                     {
                         t => (
-                            <ModalBody className={_cs(styles.modalBody, language === 'np' && styles.languageFont)}>
-                                {
-                                    isValueCalculated
-                                        ? (
-                                            <div>
-                                                <div className={styles.header}>
-                                                    <div className={styles.headingCategories}>
-                                                        <div
-                                                            role="button"
-                                                            tabIndex={0}
-                                                            onKeyDown={undefined}
-                                                            className={!isDataSetClicked ? styles.visualization : ''}
-                                                            onClick={() => this.setState({ isDataSetClicked: false })}
-                                                        >
-                                                            <h2>{t('VISUALIZATION')}</h2>
-                                                        </div>
-                                                        <div
-                                                            style={{ marginLeft: '30px' }}
-                                                            role="button"
-                                                            tabIndex={0}
-                                                            className={isDataSetClicked ? styles.visualization : ''}
-                                                            onKeyDown={undefined}
-                                                            onClick={() => this.setState({ isDataSetClicked: true })}
-                                                        >
-                                                            <h2>{t('DATASET')}</h2>
-                                                        </div>
 
+                            <ModalBody className={_cs(styles.modalBody,
+                                language === 'np' && styles.languageFont)}
+                            >
+
+                                {!pendingAPICall && isValueCalculated
+                                    ? (
+                                        <div>
+                                            <div className={styles.header}>
+                                                <div className={styles.headingCategories}>
+                                                    <div
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        onKeyDown={undefined}
+                                                        className={!isDataSetClicked ? styles.visualization : ''}
+                                                        onClick={() => this.setState({ isDataSetClicked: false })}
+                                                    >
+                                                        <h2>{t('VISUALIZATION')}</h2>
+                                                    </div>
+                                                    <div
+                                                        style={{ marginLeft: '30px' }}
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        className={isDataSetClicked ? styles.visualization : ''}
+                                                        onKeyDown={undefined}
+                                                        onClick={() => this.setState({ isDataSetClicked: true })}
+                                                    >
+                                                        <h2>{t('DATASET')}</h2>
                                                     </div>
 
-                                                    <DangerButton
-                                                        transparent
-                                                        iconName="close"
-                                                        onClick={() => {
-                                                            this.setState({ allDataNullConditionCheck: false });
-                                                            closeVisualization(false,
-                                                                checkedCategory, resourceType, level, lvl2catName, typeName);
-                                                        }
-                                                        }
-                                                        title="Close Modal"
-                                                        className={styles.closeButton}
-                                                    />
-                                                    {' '}
-
                                                 </div>
+
+                                                <DangerButton
+                                                    transparent
+                                                    iconName="close"
+                                                    onClick={() => {
+                                                        this.setState({ allDataNullConditionCheck: false });
+                                                        closeVisualization(false,
+                                                            checkedCategory, resourceType, level, lvl2catName, typeName);
+                                                    }
+                                                    }
+                                                    title={t('Close Modal')}
+                                                    className={styles.closeButton}
+                                                />
+                                                {' '}
+
+                                            </div>
+                                            <div id="overallDownload">
                                                 <div className={styles.categoryName}>
-                                                    <div className={styles.categoryLogo}>
-                                                        <ScalableVectorGraphics
-                                                            className={styles.categoryLogoIcon}
+                                                    {/* <div className={styles.categoryLogo} id="categorySelectedList">
+											<ScalableVectorGraphics
+												className={styles.categoryLogoIcon}
 
-                                                            src={selectedImage}
-                                                        />
-                                                        <h3>
-                                                            {language === 'en'
-                                                                ? visualizationHeading
-                                                                : visualizationHeadingNe
-                                                            }
+												src={selectedImage}
+											/>
+											<h3>{visualizationHeading}</h3>
+										</div>
+										{downloadButtonClicked ? (
+											<div style={{ position: 'relative' }}>
+												<LoadingAnimation className={styles.loaderDownload} />
+												<p>Downloading...</p>
+												{' '}
+											</div>
+										) : ''}
+										<div
+											id="1"
+											style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+											role="button"
+											tabIndex={0}
+											// eslint-disable-next-line max-len
+											onClick={() => this.handleSaveClick('overallDownload')}
+											onKeyDown={undefined}
+										>
+											<h4>DOWNLOAD</h4>
+											{' '}
+											<Button
+												title="Download Chart"
+												className={styles.chartDownload}
+												transparent
+												// onClick={() => this.handleSaveClick('overallDownload')}
+												iconName="download"
+											/>
 
-                                                        </h3>
-                                                    </div>
-                                                    {/* <div
-                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                role="button"
-                tabIndex={0}
-            // eslint-disable-next-line max-len
-                onClick={() => this.handleSaveClick('overallDownload')}
-                onKeyDown={undefined}
-
-
-            >
-                <h4>DOWNLOAD</h4>
-                {' '}
-                <Button
-                    title="Download Chart"
-                    className={styles.chartDownload}
-                    transparent
-                    // onClick={() => this.handleSaveClick('overallDownload')}
-                    iconName="download"
-                />
-
-            </div> */}
+										</div> */}
                                                 </div>
-                                                {isDataSetClicked
+                                                {ErrorData ? <h2 style={{ textAlign: 'center' }}>{ErrorData}</h2> : isDataSetClicked
                                                     ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
                                                     : (
-                                                        <div id="overallDownload">
+                                                        <div>
                                                             {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
                                                                 HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
                                                                     : (
@@ -2192,61 +2245,14 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                                                                 <div className={styles.percentageValue}>
                                                                                     {/* <h1>Education Institution</h1> */}
                                                                                     <h1>
-                                                                                        {HighValuePercentageCalculation[i].highValuePercentage}
-                                                                                        %
+                                                                                        {HighValuePercentageCalculation[i].displayingValueinVisualization}
+
                                                                                     </h1>
 
-                                                                                    {HighValuePercentageCalculation[i].category !== HighValuePercentageCalculation[i].subCategoryName ? (
-                                                                                        <>
+                                                                                    <span>
 
-                                                                                            {
-                                                                                                language === 'en'
-                                                                                                    ? (
-                                                                                                        <span>
-                                                                                                            {HighValuePercentageCalculation[i].category}
-                                                                                                            {' '}
-                                                                                                            are
-                                                                                                            {' '}
-                                                                                                            {HighValuePercentageCalculation[i].subCategoryName}
-                                                                                                            {' '}
-                                                                                                        </span>
-                                                                                                    )
-                                                                                                    : (
-                                                                                                        <span>
-                                                                                                            {HighValuePercentageCalculation[i].category}
-                                                                                                            {' '}
-                                                                                                            {HighValuePercentageCalculation[i].subCategoryName}
-                                                                                                            {' '}
-                                                                                                            छन
-                                                                                                        </span>
-                                                                                                    )
-
-                                                                                            }
-
-
-                                                                                        </>
-                                                                                    ) : (
-
-                                                                                        language === 'en'
-                                                                                            ? (
-                                                                                                <span>
-                                                                                                    {' '}
-                                                                                                    {HighValuePercentageCalculation[i].category}
-                                                                                                    {''}
-                                                                                                    are available
-
-                                                                                                </span>
-                                                                                            )
-                                                                                            : (
-                                                                                                <span>
-                                                                                                    {' '}
-                                                                                                    {HighValuePercentageCalculation[i].category}
-                                                                                                    {''}
-                                                                                                    उपलब्ध छन
-                                                                                                </span>
-                                                                                            )
-
-                                                                                    )}
+                                                                                        {HighValuePercentageCalculation[i].displayVisualizationWord}
+                                                                                    </span>
 
                                                                                 </div>
 
@@ -2256,25 +2262,28 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                                                                     <div className={styles.graphicalVisualization}>
 
                                                                                         {/* <div style={{ display: 'flex',
-                                                                        justifyContent: 'flex-end',
-                                                                fontSize: '25px' }}
-                                                            /> */}
+                                                                            justifyContent: 'flex-end',
+                                                                    fontSize: '25px' }}
+                                                                /> */}
                                                                                         <div id={labelName[i].label}>
                                                                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                                                 <h3>
+                                                                                                    {' '}
                                                                                                     {
                                                                                                         language === 'en'
                                                                                                             ? labelName[i].label
-                                                                                                            : labelName[i].labelNe}
-
+                                                                                                            : labelName[i].labelNe
+                                                                                                    }
                                                                                                 </h3>
-                                                                                                <Button
-                                                                                                    title="Download Chart"
-                                                                                                    className={styles.chartDownload}
-                                                                                                    transparent
-                                                                                                    onClick={() => this.handleSaveClick(labelName[i].label)}
-                                                                                                    iconName="download"
-                                                                                                />
+                                                                                                <div className="test">
+                                                                                                    <Button
+                                                                                                        title={t('Download Chart')}
+                                                                                                        className={styles.chartDownload}
+                                                                                                        transparent
+                                                                                                        onClick={() => this.handleSaveClick(labelName[i].label)}
+                                                                                                        iconName="download"
+                                                                                                    />
+                                                                                                </div>
                                                                                             </div>
                                                                                             <BarChartVisualization item={item} />
                                                                                         </div>
@@ -2300,23 +2309,16 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                                                         }
                                                                     </h2>
                                                                 )
-                                                                : ''}
-                                                            {allDataNullConditionCheck
-                                                                ? (
-                                                                    <h2 style={{ textAlign: 'center' }}>
-                                                                        {
-                                                                            language === 'en'
-                                                                                ? 'No Data Available for Visualization'
-                                                                                : 'भिजुअलाइजेसनको लागि कुनै डाटा उपलब्ध छैन'
 
-                                                                        }
-                                                                    </h2>
-                                                                )
                                                                 : ''}
+                                                            {/* {allDataNullConditionCheck
+                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                : ''} */}
                                                         </div>
                                                     )}
                                             </div>
-                                        ) : <LoadingAnimation className={styles.loader} />
+                                        </div>
+                                    ) : <LoadingAnimation className={styles.loader} />
 
                                 }
 
@@ -2324,7 +2326,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                         )
                     }
                 </Translation>
-
 
             </Modal>
         );
