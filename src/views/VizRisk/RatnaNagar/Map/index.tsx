@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-nested-ternary */
@@ -632,6 +633,8 @@ const Map = (props: any) => {
     }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
 
     const sideEffect = !!currentHeaderVal && !!selectFieldValue && requiredQuery[currentHeaderVal][selectFieldValue];
+    console.log('sideEffect', sideEffect);
+
 
     useEffect(() => {
         if (popupRef.current) {
@@ -661,12 +664,13 @@ const Map = (props: any) => {
                 filteredMetadata: any;
             } = householdData[index];
             // Ensuring every data is avaialable before filtering
-            if (eachData && !!currentHeaderVal && !!selectFieldValue
+            const checkRightCondition = eachData && !!currentHeaderVal && !!selectFieldValue
                 && eachData.filteredMetadata && eachData.filteredMetadata[currentHeaderVal]
                 && eachData.filteredMetadata[currentHeaderVal]
                 && Object.keys(eachData.filteredMetadata[currentHeaderVal]).includes(Object.keys(requiredQuery[currentHeaderVal])[0])
-                && eachData.filteredMetadata[currentHeaderVal][selectFieldValue] === sideEffect
-            ) {
+                && eachData.filteredMetadata[currentHeaderVal][selectFieldValue] === sideEffect;
+
+            if (checkRightCondition) {
                 filterdDataFromChart.push(eachData);
             }
         }
@@ -687,14 +691,35 @@ const Map = (props: any) => {
             }
         }
 
+        const dataForFloodReturnPeriod: any = [];
+        if (sideEffect && leftElement === 5) {
+            for (const [index, data] of householdData.entries()) {
+                const eachData: {
+                    filteredMetadata: any;
+                } = householdData[index];
+                // Ensuring every data is avaialable before filtering
+                const checkFeildVal = eachData.filteredMetadata && eachData.filteredMetadata[currentHeaderVal]
+                    && eachData.filteredMetadata[currentHeaderVal][selectFieldValue];
+                if (sideEffect === '5 years' && checkFeildVal === '5 years') {
+                    dataForFloodReturnPeriod.push(eachData);
+                }
+                if (sideEffect === '20 years' && (checkFeildVal === '20 years' || checkFeildVal === '5 years')) {
+                    dataForFloodReturnPeriod.push(eachData);
+                }
+            }
+        }
+
         const checkDataForGeoJson = () => {
             switch (true) {
+                case leftElement === 5 && dataForFloodReturnPeriod.length > 0:
+                    return dataForFloodReturnPeriod;
+
                 case sideEffect && filterdDataFromChart.length > 0
-                    && rangeValues.length === 0:
+                    && rangeValues.length === 0 && leftElement !== 5:
                     return filterdDataFromChart;
 
                 case sideEffect && filterdDataFromChart.length > 0
-                    && rangeValues.length > 0:
+                    && rangeValues.length > 0 && leftElement !== 5:
                     return filterdDataFromChartWithRange;
 
                 case rangeValues && rangeValues.length > 0:
@@ -706,6 +731,7 @@ const Map = (props: any) => {
         };
 
         const requiredGeoJsonDataArr = checkDataForGeoJson();
+
 
         const geoJsonMain = {
             type: 'FeatureCollection',
