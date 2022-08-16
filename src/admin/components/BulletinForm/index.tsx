@@ -861,7 +861,8 @@ const Bulletin = (props: Props) => {
 
         if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
-                setBulletinFeedback({ feedback: duplicateFeedbackField });
+                const feedbackDuplicateData = Object.keys(duplicateFeedbackField).length;
+                setBulletinFeedback({ feedback: feedbackDuplicateData > 0 ? duplicateFeedbackField : feedback });
                 setBulletinLoss({
                     incidentSummary: incidentData,
                     peopleLoss: peopleLossData,
