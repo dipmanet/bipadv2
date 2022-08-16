@@ -33,7 +33,7 @@ const StackChart = (props: Props) => {
                     <Legend iconType="circle" margin={{ top: 0, left: 0, right: 10, bottom: -10 }} align="left" />
                     <Bar dataKey={dataArr.dataKeyName[0]} fill="#e75d4f" stackId="a" radius={[4, 0, 0, 4]} />
                     <Bar dataKey={dataArr.dataKeyName[1]} fill="#e79546" stackId="a" />
-                    <Bar dataKey={dataArr.dataKeyName[2]} fill="#2af5ac" stackId="a" />
+                    <Bar dataKey={dataArr.dataKeyName[2]} fill="yellow" stackId="a" />
                     <Bar dataKey={dataArr.dataKeyName[3]} fill="#45c4fe" stackId="a" />
                     <Bar dataKey={dataArr.dataKeyName[4]} fill="#457ded" stackId="a" radius={[0, 4, 4, 0]} />
                     <Tooltip cursor={{ fill: '#00000050' }} />

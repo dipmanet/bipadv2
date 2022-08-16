@@ -28,11 +28,16 @@ const LeftpaneSlide6 = () => {
         setSelectFieldValue('Flood return period');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const filterChartSelectedData = (currentChartSelectedData: any) => {
+        const filterData = currentChartSelectedData.filter((data: any) => !data.name.toLowerCase().includes('total_population'));
+        return filterData;
+    };
+
 
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
-
-        setCurerntChartData(currentChartSelectedData);
+        const filteredData = filterChartSelectedData(currentChartSelectedData);
+        setCurerntChartData(filteredData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selctFieldCurrentValue]);
 

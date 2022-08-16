@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-trailing-spaces */
 import React from 'react';
 import {
     CartesianGrid,
@@ -239,10 +241,8 @@ class Rajapur extends React.PureComponent<Props, State> {
                 </p>
                 <h2>Climate</h2>
                 <p>
-                    Tikapur Municipality is located in the Kailali district of
-                    Sudurpaschim province. Tikapur municipality has a total area
-                    of 118 sq. km and is situated at an elevation of 145m to 161m
-                    AMSL.
+                    Tikapur experiences a lower tropical climate. Summer starts from March
+                    and lasts till June. Winter begins in November and lasts till February. Tikapur faces heavy downpours during the monsoon, from June to October.
 
                 </p>
                 <div className={styles.iconRow}>
