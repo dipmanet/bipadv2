@@ -48,6 +48,8 @@ interface MainPageData {
     householdChartData: [];
     rangeValues: number[];
     currentHeaderVal: string;
+    selectFieldValue: string;
+    requiredQuery: any;
     handleRangeLegendClick: (item: any) => undefined;
     handleReset: (item: any) => undefined;
     setNavIdleStatus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -78,7 +80,9 @@ const initialMainPageData: MainPageData = {
     householdData: [],
     navIdleStatus: false,
     rangeValues: [],
+    selectFieldValue: '',
     householdChartData: [],
+    requiredQuery: {},
     handleRangeLegendClick: () => undefined,
     handleReset: () => undefined,
     setNavIdleStatus: () => undefined,

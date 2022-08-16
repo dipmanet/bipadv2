@@ -127,3 +127,15 @@ export const staticSelectFieldValues = {
         ],
     },
 };
+
+
+export const floodHazardLayersArr = [{
+    year: '5',
+    layerName: 'Ratnanagar_FD_1in5',
+}, {
+    year: '20',
+    layerName: 'Ratnanagar_FD_1in20',
+}, {
+    year: '100',
+    layerName: 'Ratnanagar_FD_1in100',
+}];

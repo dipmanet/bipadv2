@@ -1,14 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
-/* eslint-disable indent */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { getGeoJSONPH, getHillShadeLayer } from '#views/VizRisk/Butwal/utils';
+import { getGeoJSONPH } from '#views/VizRisk/Butwal/utils';
 import mapSources from '#constants/mapSources';
 import { wardsSelector } from '#selectors';
 import { AppState } from '#types';
@@ -34,6 +32,7 @@ import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
 import InnundationLegend from '../Components/Legends/InnundationLegend';
 import mapImages from './MapImages';
 import RadioButton from '../Components/RadioButton';
+import { floodHazardLayersArr } from '../expressions';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -61,10 +60,8 @@ const Map = (props: any) => {
         floodLayer,
         setFloodLayer,
         setNavIdleStatus,
-        children,
-        currentRechartsItem } = props;
+        children } = props;
 
-    const [currentOsmLayer, setCurrentOsmLayer] = useState<string>('Satellite Layer');
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapZoomEffect = useRef<any | undefined>(null);
@@ -79,8 +76,8 @@ const Map = (props: any) => {
         requiredQuery,
     } = useContext(MainPageDataContext);
 
-    const [opacityFlood, setOpacityFlood] = useState(0.25);
-    const [innundationOpacity, setInnundationOpacity] = useState(0.5);
+    const [opacityFlood, setOpacityFlood] = useState<number | string>(0.25);
+    const [innundationOpacity, setInnundationOpacity] = useState<number | string>(0.5);
 
     const demographicsData = keyValueJsonData && keyValueJsonData.length > 0 && keyValueJsonData.filter(
         (item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007',
@@ -98,51 +95,51 @@ const Map = (props: any) => {
 
     const populationStepColor = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
-    const totalPopulationByWard = demographicsData && demographicsData.map(item => (
+    const totalPopulationByWard = demographicsData && demographicsData.map((item: { name: any; MalePop: any; FemalePop: any }) => (
         { ward: item.name, totalpop: item.MalePop + item.FemalePop }));
 
-    const arrayValue = totalPopulationByWard && totalPopulationByWard.map(item => item.totalpop);
+    const arrayValue = totalPopulationByWard && totalPopulationByWard.map((item: { totalpop: any }) => item.totalpop);
 
     const mainArray = Array.from({ length: arrayValue.length }, (v, i) => i + 1);
     const divider = arrayValue && Math.ceil(arrayValue.length / 5);
 
     if (arrayValue) {
-        arrayValue.sort((a, b) => a - b);
+        arrayValue.sort((a: number, b: number) => a - b);
     }
     const dividedSpecificData = arrayValue && new Array(Math.ceil(arrayValue.length / divider))
         .fill()
         .map(_ => arrayValue.splice(0, divider));
     const intervals: number[] = [];
 
-    const nonEmptyData = dividedSpecificData && dividedSpecificData.filter(r => r.length > 0);
+    const nonEmptyData = dividedSpecificData && dividedSpecificData.filter((r: string | any[]) => r.length > 0);
 
     if (nonEmptyData) {
-        nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+        nonEmptyData.map((d: any) => intervals.push(Math.max(...d) === 0
             ? Math.max(...d) + 1 : Math.max(...d)));
     }
 
     const getColor = (wardId: string | number) => {
         const colorCondition1 = totalPopulationByWard.filter(
-            item => item.totalpop <= intervals[0],
+            (item: { totalpop: number }) => item.totalpop <= intervals[0],
         );
         const colorCondition2 = totalPopulationByWard.filter(
-            item => item.totalpop >= intervals[0] && item.totalpop <= intervals[1],
+            (item: { totalpop: number }) => item.totalpop >= intervals[0] && item.totalpop <= intervals[1],
         );
         const colorCondition3 = totalPopulationByWard.filter(
-            item => item.totalpop >= intervals[1] && item.totalpop <= intervals[2],
+            (item: { totalpop: number }) => item.totalpop >= intervals[1] && item.totalpop <= intervals[2],
         );
         const colorCondition4 = totalPopulationByWard.filter(
-            item => item.totalpop >= intervals[2] && item.totalpop <= intervals[3],
+            (item: { totalpop: number }) => item.totalpop >= intervals[2] && item.totalpop <= intervals[3],
         );
         const colorCondition5 = totalPopulationByWard.filter(
-            item => item.totalpop >= intervals[3],
+            (item: { totalpop: number }) => item.totalpop >= intervals[3],
         );
 
-        const filteredWards1 = colorCondition1.map(item => item.ward);
-        const filteredWards2 = colorCondition2.map(item => item.ward);
-        const filteredWards3 = colorCondition3.map(item => item.ward);
-        const filteredWards4 = colorCondition4.map(item => item.ward);
-        const filteredWards5 = colorCondition5.map(item => item.ward);
+        const filteredWards1 = colorCondition1.map((item: { ward: string | number }) => item.ward);
+        const filteredWards2 = colorCondition2.map((item: { ward: string | number }) => item.ward);
+        const filteredWards3 = colorCondition3.map((item: { ward: string | number }) => item.ward);
+        const filteredWards4 = colorCondition4.map((item: { ward: string | number }) => item.ward);
+        const filteredWards5 = colorCondition5.map((item: { ward: string | number }) => item.ward);
 
         if (filteredWards1.includes(`Ward ${wardId}`)) {
             return populationStepColor[0];
@@ -186,24 +183,6 @@ const Map = (props: any) => {
         };
     };
 
-    const floodHazardLayersArr = [{
-        year: '5',
-        layerName: 'Ratnanagar_FD_1in5',
-    }, {
-        year: '20',
-        layerName: 'Ratnanagar_FD_1in20',
-    }, {
-        year: '100',
-        layerName: 'Ratnanagar_FD_1in100',
-    }];
-
-    const handleRadioButton = (layerName: string) => {
-        setCurrentOsmLayer(layerName);
-    };
-
-    console.log('map requiredQuery', requiredQuery);
-
-
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -212,7 +191,7 @@ const Map = (props: any) => {
         }
         // if (map.current) { return noop; }
 
-        const mapping = wards.filter(item => item.municipality === municipalityId).map(item => ({
+        const mapping = wards.filter((item: { municipality: any }) => item.municipality === municipalityId).map((item: { title: any }) => ({
             ...item,
             value: Number(item.title),
         }));
@@ -266,30 +245,6 @@ const Map = (props: any) => {
                 closeOnClick: false,
                 className: 'popup',
             });
-            // setciCategoryCritical(ciCategory)
-
-            /**
-             * Satellite layer
-             */
-
-            // multihazardMap.addSource('satelliteImage', {
-            //     type: 'raster',
-            //     tiles: [getHillShadeLayer('Ratnanagar_Satellite')],
-            //     tileSize: 256,
-            // });
-            // multihazardMap.addLayer(
-            //     {
-            //         id: 'satelliteImageLayer',
-            //         type: 'raster',
-            //         source: 'satelliteImage',
-            //         layout: {
-            //             visibility: 'none',
-            //         },
-            //         paint: {
-            //             'raster-opacity': 1,
-            //         },
-            //     },
-            // );
 
             mapImages.forEach((img) => {
                 if (map.current) {
@@ -412,7 +367,7 @@ const Map = (props: any) => {
                 },
                 filter: getWardFilter(3, 35, municipalityId, wards),
             }, 'wardgeo');
-            mapping.forEach((attribute) => {
+            mapping.forEach((attribute: { id: any; value: any }) => {
                 multihazardMap.setFeatureState(
                     {
                         id: attribute.id,
@@ -429,7 +384,7 @@ const Map = (props: any) => {
 
                     const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
                     const wardno = e.features[0].properties && e.features[0].properties.title;
-                    const details = demographicsData.filter(item => item.name === `Ward ${wardno}`);
+                    const details = demographicsData.filter((item: { name: string }) => item.name === `Ward ${wardno}`);
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
@@ -536,7 +491,7 @@ const Map = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleFloodChange = (e) => {
+    const handleFloodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const opacity = e.target.value;
         setOpacityFlood(opacity);
         floodHazardLayersArr.map((l) => {
@@ -548,7 +503,7 @@ const Map = (props: any) => {
         });
     };
 
-    const handleInnundationChange = (e) => {
+    const handleInnundationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const opacity = e.target.value;
         setInnundationOpacity(opacity);
         if (map.current) {
@@ -700,12 +655,15 @@ const Map = (props: any) => {
         const filterdDataFromChart: any = [];
 
         for (const [index, data] of householdData.entries()) {
-            const eachData = householdData[index];
+            const eachData: {
+                filteredMetadata: any;
+            } = householdData[index];
+            // Ensuring every data is avaialable before filtering
             if (eachData && !!currentHeaderVal && !!selectFieldValue
                 && eachData.filteredMetadata && eachData.filteredMetadata[currentHeaderVal]
-                && eachData.filteredMetadata[currentHeaderVal] && Object.keys(eachData.filteredMetadata[currentHeaderVal])
-                    .includes(Object.keys(requiredQuery[currentHeaderVal])[0])
-                && eachData.filteredMetadata[currentHeaderVal][selectFieldValue] === requiredQuery[currentHeaderVal][selectFieldValue]
+                && eachData.filteredMetadata[currentHeaderVal]
+                && Object.keys(eachData.filteredMetadata[currentHeaderVal]).includes(Object.keys(requiredQuery[currentHeaderVal])[0])
+                && eachData.filteredMetadata[currentHeaderVal][selectFieldValue] === sideEffect
             ) {
                 filterdDataFromChart.push(eachData);
             }
@@ -719,7 +677,7 @@ const Map = (props: any) => {
                     continue;
                 }
                 const filteredData = filterdDataFromChart.filter(
-                    item => (item[getCurrentType(leftElement)] / 10)
+                    (item: { [x: string]: number }) => (item[getCurrentType(leftElement)] / 10)
                         >= rangeValues[index] && (item[getCurrentType(leftElement)] / 10)
                         <= rangeValues[index + 1],
                 );
@@ -727,24 +685,42 @@ const Map = (props: any) => {
             }
         }
 
-        const geoJsonMain = {
-            type: 'FeatureCollection',
-            features: (sideEffect && filterdDataFromChart.length > 0 && rangeValues.length === 0 ? filterdDataFromChart : sideEffect && filterdDataFromChart.length > 0
-                && rangeValues.length > 0 ? filterdDataFromChartWithRange
-                : rangeValues && rangeValues.length > 0 ? filteredDataByRange : householdData).map(item => ({
-                    type: 'Feature',
-                    id: item.id,
-                    geometry: item.point,
-                    properties: {
-                        name: getCurrentType(leftElement),
-                        value: item[getCurrentType(leftElement)] / 10,
-                        color: getHouseHoldDataColor(item[getCurrentType(leftElement)] / 10),
-                        status: getHouseHoldDataStatus(item[getCurrentType(leftElement)] / 10),
-                    },
-                })),
+        const checkDataForGeoJson = () => {
+            switch (true) {
+                case sideEffect && filterdDataFromChart.length > 0
+                    && rangeValues.length === 0:
+                    return filterdDataFromChart;
+
+                case sideEffect && filterdDataFromChart.length > 0
+                    && rangeValues.length > 0:
+                    return filterdDataFromChartWithRange;
+
+                case rangeValues && rangeValues.length > 0:
+                    return filteredDataByRange;
+
+                default:
+                    return householdData;
+            }
         };
 
-        const popupMain = (e) => {
+        const requiredGeoJsonDataArr = checkDataForGeoJson();
+
+        const geoJsonMain = {
+            type: 'FeatureCollection',
+            features: requiredGeoJsonDataArr.map((item: { [x: string]: number; id: any; point: any }) => ({
+                type: 'Feature',
+                id: item.id,
+                geometry: item.point,
+                properties: {
+                    name: getCurrentType(leftElement),
+                    value: item[getCurrentType(leftElement)] / 10,
+                    color: getHouseHoldDataColor(item[getCurrentType(leftElement)] / 10),
+                    status: getHouseHoldDataStatus(item[getCurrentType(leftElement)] / 10),
+                },
+            })),
+        };
+
+        const popupMain = (e: { lngLat: any; features?: any }) => {
             if (popupRef.current) {
                 popupRef.current.off();
                 popupRef.current.remove();
@@ -805,8 +781,6 @@ const Map = (props: any) => {
 
 
             map.current.on('click', 'household-point', popupMain);
-            // map.current.moveLayer('satelliteImageLayer', 'household-point');
-            // map.current.moveLayer('satelliteImageLayer', `raster-flood-${floodLayer}`);
         }
         return () => {
             if (map && map.current) {
@@ -845,10 +819,6 @@ const Map = (props: any) => {
                             rangeNames={rangeNames}
                             setRangeNames={setRangeNames}
                         />
-                        {/* <RadioButton
-                        currentOsmLayer={currentOsmLayer}
-                        handleRadioButton={handleRadioButton}
-                    /> */}
                     </>
                 )
                 }

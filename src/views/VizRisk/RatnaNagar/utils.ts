@@ -1,5 +1,4 @@
 import mapboxgl from 'mapbox-gl';
-import { Ref } from 'react';
 
 export const findOcc = (arr: [], key: string) => {
     const arr2: [] = [];
@@ -205,7 +204,7 @@ export const hideMapLayers = (layerName: string,
 };
 
 
-export const layoutSwitch = (layer) => {
+export const layoutSwitch = (layer: string) => {
     switch (layer) {
         case 'education':
             return 'education';

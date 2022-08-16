@@ -45,18 +45,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/keyvalue-html/',
         method: methods.GET,
         query: ({ params }) => ({
-            municipality: params.municipalityId,
+            municipality: params && params.municipalityId,
             limit: -1,
         }),
 
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.HtmlData[] }
+            interface Response { results: [] }
             const { results: htmlData = [] } = response as Response;
-            params.setKeyValueHtmlData(htmlData);
-            // params.setPending(false);
+            if (params) {
+                params.setKeyValueHtmlData(htmlData);
+            }
         },
         onMount: false,
-        // extras: { schemaName: 'htmlResponse' },
     },
 
     jsonDataRequest: {
@@ -64,20 +64,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
-            municipality: params.municipalityId,
+            municipality: params && params.municipalityId,
             limit: -1,
 
         }),
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.Incident[] }
+            interface Response { results: [] }
             const { results: jsonData = [] } = response as Response;
             if (params) {
                 params.setKeyValueJsonData(jsonData);
             }
-            // params.setPending(false);
         },
         onMount: false,
-        // extras: { schemaName: 'jsonResponse' },
     },
 
     houseHoldDataRequest: {
@@ -89,7 +87,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
         }),
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.Incident[] }
+            interface Response { results: [] }
             const { results: jsonData = [] } = response as Response;
             if (params) {
                 params.setHouseholdData(jsonData);
@@ -122,8 +120,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             // municipality: params && params.municipalityId,
         }),
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.Incident[] }
-            const { aggrigated: chartData } = response as Response;
+            interface Response { results: [] }
+            const { aggrigated: chartData } = response as any;
             if (params) {
                 params.setHouseholdChartData(chartData);
             }

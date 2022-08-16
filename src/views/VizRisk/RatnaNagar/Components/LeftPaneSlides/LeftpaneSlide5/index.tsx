@@ -11,7 +11,6 @@ import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
-import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
 const LeftpaneSlide6 = () => {
     const {
