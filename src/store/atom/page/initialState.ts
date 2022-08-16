@@ -98,7 +98,7 @@ const state: PageState = {
     riverStations: [],
     documentCategoryList: [],
 
-    selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
+    selectedMapStyle: 'mapbox://styles/yilab/ckb7jq0gk08gx1io0xanwesfp',
     hazardTypes: {},
     resourceTypeList: [
         {
