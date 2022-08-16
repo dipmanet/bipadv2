@@ -1329,12 +1329,19 @@
     math.gl "^3.5.7"
     mjolnir.js "^2.5.0"
 
-"@deck.gl/extensions@8.7.8", "@deck.gl/extensions@^8.4.20":
+"@deck.gl/extensions@8.7.8":
   version "8.7.8"
   resolved "https://registry.yarnpkg.com/@deck.gl/extensions/-/extensions-8.7.8.tgz#daa15f2e361855b8ba6aa7d874e0684ff62f6a57"
   integrity sha512-/u5GeBMx6EPOL0LrSA6KAVT3fshkyVT6CGAPx7gA0nBRIpZgv0ViodHBcjl607CcoyQx+WnXJTBG+M7Xs+Po2w==
   dependencies:
     "@luma.gl/shadertools" "^8.5.10"
+
+"@deck.gl/extensions@^8.8.2":
+  version "8.8.2"
+  resolved "https://registry.yarnpkg.com/@deck.gl/extensions/-/extensions-8.8.2.tgz#67b2985f82b44f57a5735991df1875d87b429393"
+  integrity sha512-ryP7GwoPV/g2sCfMrYsTmunnbl5jci+T4sUntKH1Zix+57Gu8+4MU/KOEUTE7RfZfy5SiaDGvBuomEhh1o6wog==
+  dependencies:
+    "@luma.gl/shadertools" "^8.5.14"
 
 "@deck.gl/geo-layers@8.7.8":
   version "8.7.8"
@@ -1888,6 +1895,14 @@
   version "8.5.10"
   resolved "https://registry.yarnpkg.com/@luma.gl/shadertools/-/shadertools-8.5.10.tgz#37a22f99298f917a2bddf4452f04eaec7066bf27"
   integrity sha512-Va/e7fHFI7ZWu03obtNlXN7noIUF1u9U3Pm6PVqeVi3Z24yWl/pFbb5/O1gn66LQZF6fpwoLGN7m4NGk2YyHyA==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@math.gl/core" "^3.5.0"
+
+"@luma.gl/shadertools@^8.5.14":
+  version "8.5.14"
+  resolved "https://registry.yarnpkg.com/@luma.gl/shadertools/-/shadertools-8.5.14.tgz#dce11869c4e45744fc6d0326a72f1b1522cdf9ad"
+  integrity sha512-vq0XzMYzGM/A/usNvCzfWJw+ycN2vzqN4AtgrejrOrYu+6yP8LmfRp/iAxjhFkukCPgs03tUFYSlkY7I6HIVtw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@math.gl/core" "^3.5.0"

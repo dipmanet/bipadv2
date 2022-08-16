@@ -11,25 +11,33 @@ import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
-import RangeStatusLegend from '../../Legends/RangeStatusLegend';
 
 const LeftpaneSlide6 = () => {
     const {
         keyValueHtmlData,
         householdData,
         householdChartData,
+        setSelectFieldValue,
+
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData['Flood Hazard'];
 
-    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
-
-    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState(selectFieldValues[0]);
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Flood return period');
     const [curerntChartData, setCurerntChartData] = useState([]);
+    useEffect(() => {
+        setSelectFieldValue('Flood return period');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    const filterChartSelectedData = (currentChartSelectedData: any) => {
+        const filterData = currentChartSelectedData.filter((data: any) => !data.name.toLowerCase().includes('total_population'));
+        return filterData;
+    };
+
 
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
-
-        setCurerntChartData(currentChartSelectedData);
+        const filteredData = filterChartSelectedData(currentChartSelectedData);
+        setCurerntChartData(filteredData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selctFieldCurrentValue]);
 
@@ -54,6 +62,12 @@ const LeftpaneSlide6 = () => {
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
 
+    const selectFieldValues = [
+        {
+            optionTitle: '',
+            optionValues: exposureChartData && Object.keys(exposureChartData),
+        },
+    ];
     return (
         <div className={styles.vrSideBar}>
             <div className="mainTitleDiv">
@@ -88,7 +102,16 @@ const LeftpaneSlide6 = () => {
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
             {' '}
-            <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
+            {
+                curerntChartData && curerntChartData.length > 0
+                && (
+                    <CommonBarChart
+                        barTitle={selctFieldCurrentValue}
+                        barData={curerntChartData}
+                    />
+                )
+            }
+
         </div>
     );
 };

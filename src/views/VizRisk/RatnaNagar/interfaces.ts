@@ -29,6 +29,9 @@ export interface PostionInitialValues {
 
 export interface Params {
     setKeyValueJsonData: React.Dispatch<React.SetStateAction<never[]>>;
+    setKeyValueHtmlData: React.Dispatch<React.SetStateAction<never[]>>;
+    setHouseholdData: React.Dispatch<React.SetStateAction<never[]>>;
+    setHouseholdChartData: React.Dispatch<React.SetStateAction<never[]>>;
     municipalityId: number;
     setcIData: any;
 }

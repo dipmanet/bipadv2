@@ -45,18 +45,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/keyvalue-html/',
         method: methods.GET,
         query: ({ params }) => ({
-            municipality: params.municipalityId,
+            municipality: params && params.municipalityId,
             limit: -1,
         }),
 
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.HtmlData[] }
+            interface Response { results: [] }
             const { results: htmlData = [] } = response as Response;
-            params.setKeyValueHtmlData(htmlData);
-            // params.setPending(false);
+            if (params) {
+                params.setKeyValueHtmlData(htmlData);
+            }
         },
         onMount: false,
-        // extras: { schemaName: 'htmlResponse' },
     },
 
     jsonDataRequest: {
@@ -64,20 +64,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
-            municipality: params.municipalityId,
+            municipality: params && params.municipalityId,
             limit: -1,
 
         }),
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.Incident[] }
+            interface Response { results: [] }
             const { results: jsonData = [] } = response as Response;
             if (params) {
                 params.setKeyValueJsonData(jsonData);
             }
-            // params.setPending(false);
         },
         onMount: false,
-        // extras: { schemaName: 'jsonResponse' },
     },
 
     houseHoldDataRequest: {
@@ -89,7 +87,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
         }),
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.Incident[] }
+            interface Response { results: [] }
             const { results: jsonData = [] } = response as Response;
             if (params) {
                 params.setHouseholdData(jsonData);
@@ -122,8 +120,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             // municipality: params && params.municipalityId,
         }),
         onSuccess: ({ params, response }) => {
-            interface Response { results: PageTypes.Incident[] }
-            const { aggrigated: chartData } = response as Response;
+            interface Response { results: [] }
+            const { aggrigated: chartData } = response as any;
             if (params) {
                 params.setHouseholdChartData(chartData);
             }
@@ -147,6 +145,8 @@ const Ratnanagar = (props: any) => {
     const [currentHeaderVal, setCurrentHeaderVal] = useState('');
     const [navIdleStatus, setNavIdleStatus] = useState(false);
     const [floodLayer, setFloodLayer] = useState(5);
+    const [currentRechartsItem, setCurrentRechartsItem] = useState('');
+    const [selectFieldValue, setSelectFieldValue] = useState('');
     const mapRef = useRef<mapboxgl.Map>();
 
     /**
@@ -259,6 +259,13 @@ const Ratnanagar = (props: any) => {
     };
 
 
+    const requiredQuery = {
+        [currentHeaderVal]: {
+            [selectFieldValue]: currentRechartsItem,
+        },
+    };
+
+
     const contextValues = {
         mainKey,
         suffix,
@@ -272,6 +279,7 @@ const Ratnanagar = (props: any) => {
         keyValueHtmlData,
         keyValueJsonData,
         householdChartData,
+        currentHeaderVal,
         setCurrentHeaderVal,
         householdData,
         rangeValues,
@@ -279,6 +287,10 @@ const Ratnanagar = (props: any) => {
         setNavIdleStatus,
         handleRangeLegendClick,
         handleReset,
+        setCurrentRechartsItem,
+        requiredQuery,
+        selectFieldValue,
+        setSelectFieldValue,
     };
 
     const mapValue = {
@@ -293,6 +305,15 @@ const Ratnanagar = (props: any) => {
         height: '100vh',
         zIndex: 250,
     };
+
+
+    useEffect(() => {
+        if (currentHeaderVal && selectFieldValue) {
+            console.log('we are changing');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentRechartsItem]);
+
 
     return (
         <>
@@ -327,6 +348,7 @@ const Ratnanagar = (props: any) => {
                                                     setRangeNames={setRangeNames}
                                                     floodLayer={floodLayer}
                                                     setFloodLayer={setFloodLayer}
+                                                    currentRechartsItem={currentRechartsItem}
 
                                                 />
                                                 <LeftTopBar currentHeaderVal={currentHeaderVal} />

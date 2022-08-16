@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import {
+    generateSelectFieldValues,
     getHouseHoldDataColor,
     getHouseHoldDataStatus,
     percentageCalculator,
@@ -12,19 +13,24 @@ import Factors from '../../Factors';
 import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
 import RangeStatusLegend from '../../Legends/RangeStatusLegend';
+import { staticSelectFieldValues } from '#views/VizRisk/RatnaNagar/expressions';
 
 const LeftpaneSlide7 = () => {
     const {
         keyValueHtmlData,
         householdData,
         householdChartData,
+        setSelectFieldValue,
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData.Sensitivity;
 
-    const selectFieldValues = exposureChartData && Object.keys(exposureChartData);
-
-    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState(selectFieldValues[0]);
+    const [selctFieldCurrentValue, setSelctFieldCurrentValue] = useState('Ethnicity');
     const [curerntChartData, setCurerntChartData] = useState([]);
+
+    useEffect(() => {
+        setSelectFieldValue('Ethnicity');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const currentChartSelectedData = exposureChartData[selctFieldCurrentValue];
@@ -53,6 +59,8 @@ const LeftpaneSlide7 = () => {
 
     const scoreStatus = getHouseHoldDataStatus(averageExposureScore);
     const color = getHouseHoldDataColor(averageExposureScore);
+
+    const selectFieldValues = generateSelectFieldValues(staticSelectFieldValues.Sensitivity);
 
     return (
         <div className={styles.vrSideBar}>
@@ -89,7 +97,15 @@ const LeftpaneSlide7 = () => {
                 setSelctFieldCurrentValue={setSelctFieldCurrentValue}
             />
             {' '}
-            <CommonBarChart barTitle={selctFieldCurrentValue} barData={curerntChartData} />
+            {
+                curerntChartData && curerntChartData.length > 0
+                && (
+                    <CommonBarChart
+                        barTitle={selctFieldCurrentValue}
+                        barData={curerntChartData}
+                    />
+                )
+            }
         </div>
     );
 };

@@ -30,9 +30,9 @@ export default {
         {
             name: 'Educational Institutions', Total: 12,
         },
-        {
-            name: 'Safe Shelter ', Total: 2,
-        },
+        // {
+        //     name: 'Safe Shelter ', Total: 2,
+        // },
 
 
     ],

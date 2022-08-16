@@ -6,7 +6,7 @@ const LandCoverLegends = () => (
     <>
 
         <div className={styles.mainDivLand}>
-            <p className={styles.landcoverIconContainer}>
+            {/* <p className={styles.landcoverIconContainer}>
                 <span>
 
                     <Hexagon
@@ -21,8 +21,8 @@ const LandCoverLegends = () => (
                 </span>
                 Buildings
 
-            </p>
-            <p className={styles.landcoverIconContainer}>
+            </p> */}
+            {/* <p className={styles.landcoverIconContainer}>
                 <span>
                     <Hexagon
                         style={{
@@ -36,7 +36,7 @@ const LandCoverLegends = () => (
 
                 </span>
                 Water Bodies
-            </p>
+            </p> */}
 
 
             <div className={styles.landcoverIconContainer}>
@@ -51,7 +51,7 @@ const LandCoverLegends = () => (
             </div>
 
 
-            <p className={styles.landcoverIconContainer}>
+            {/* <p className={styles.landcoverIconContainer}>
                 <Hexagon
                     style={{
                         stroke: '#fff',
@@ -89,7 +89,7 @@ const LandCoverLegends = () => (
                     />
                 </span>
                 Other
-            </p>
+            </p> */}
         </div>
     </>
 );

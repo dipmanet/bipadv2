@@ -33,7 +33,7 @@ function LeftPane6(props: Props) {
             setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page7ScrolltopValue: scrollTop });
             setPostionsPerPage({ ...postionsPerPage, page7PositionValue: Math.max(1 - percentage, 0) });
         };
-        setCurrentHeaderVal('Hazard');
+        setCurrentHeaderVal('Exposure');
         updateHeight();
         if (articleRef.current) {
             articleRef.current.addEventListener('scroll', updateHeight);

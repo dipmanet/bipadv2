@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     Bar,
     BarChart,
@@ -12,6 +12,7 @@ import {
     Label,
     Tooltip,
 } from 'recharts';
+import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import CommonToolTip from '../../Legends/CommonToolTip';
 import styles from './styles.scss';
 
@@ -22,8 +23,42 @@ interface Props {
 
 const CommonBarChart = (props: Props) => {
     const { barTitle, barData } = props;
+    const {
+        requiredQuery,
+        currentHeaderVal,
+        setCurrentRechartsItem,
+    } = useContext(MainPageDataContext);
+
+    const BarWithBorder = (borderHeight: number, borderColor: string) => (propsBar: any) => {
+        const { fill, x, y, width, height } = propsBar;
+        return (
+            <g>
+                <rect x={x} y={y} width={width} height={height} strokeWidth={60} stroke="transparent" fill={fill} />
+                <rect x={x} y={y} width={width + 500} height={borderHeight} strokeWidth={60} stroke="transparent" fill={borderColor} />
+            </g>
+        );
+    };
+
     return (
         <div className={styles.mainBarChart}>
+            <div className={styles.infoReset}>
+                <h3 className={styles.barTitle}>
+                    Current Selected Chart Value:
+                    {
+                        requiredQuery && !!currentHeaderVal
+                            && Object.values(requiredQuery[currentHeaderVal])[0]
+                            ? Object.values(requiredQuery[currentHeaderVal])[0]
+                            : ' Please Select Value'
+                    }
+                </h3>
+                <button
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setCurrentRechartsItem('')}
+                    type="submit"
+                >
+                    Reset
+                </button>
+            </div>
             <h3 className={styles.barTitle}>
                 {barTitle === 'Flood return period'
                     ? 'Number of households likely to be inundated' : barTitle}
@@ -79,9 +114,16 @@ const CommonBarChart = (props: Props) => {
                         content={CommonToolTip}
                     />
                     <Bar
+                        onClick={e => setCurrentRechartsItem((prevState: string) => {
+                            if (prevState === e.name) {
+                                return '';
+                            }
+                            return e.name;
+                        })}
                         dataKey="count"
                         fill="#a8fffb"
                         barSize={15}
+                        shape={BarWithBorder(60, 'transparent')}
                     // tick={{ fill: '#94bdcf' }}
                     />
                 </BarChart>

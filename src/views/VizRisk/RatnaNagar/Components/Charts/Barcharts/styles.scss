@@ -3,6 +3,13 @@
     padding: 3px;
     background-color: #143044;
 
+    .infoReset {
+        width: 95%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .barTitle {
         margin: 25px 12px;
         font-size: 14px;

@@ -11,7 +11,7 @@ import styles from './styles.scss';
 
 import Disclaimer from '../../Components/Disclaimer';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -22,7 +22,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Male Pop
+                    Male Pop
                     <sup>n</sup>
                 </div>
             </div>
@@ -43,7 +43,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendDaily} />
                 <div className={styles.legendText}>
-                       Total Family Count
+                    Total Family Count
                 </div>
             </div>
         </div>
@@ -55,15 +55,15 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                This map allows viewing the population distribution within
-                each ward and helps to locate the region of dense and sparse
-                settlements.
+                    This map allows viewing the population distribution within
+                    each ward and helps to locate the region of dense and sparse
+                    settlements.
                 </p>
                 <p>
-                Dhangadhi Sub-Metropolitan City has a total population of 147,741 with
-                73462 males and 74279 females. The total household number counts to 29143.
-                Ward number 9 has the largest household number of 3105, while ward number
-                19 has the least comprising of only 559 households.
+                    Dhangadhi Sub-Metropolitan City has a total population of 147,741 with
+                    73462 males and 74279 females. The total household number counts to 29143.
+                    Ward number 1 has the largest household number of 3105, while ward number
+                    10 has the least comprising of only 559 households.
                 </p>
 
 
@@ -89,7 +89,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>29,143</div>
                             <div className={styles.iconText}>
-                             Total Family Count
+                                Total Family Count
                             </div>
 
                         </div>
@@ -106,7 +106,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>73,462</div>
                             <div className={styles.iconText}>
-                             Male Population
+                                Male Population
                             </div>
 
                         </div>
@@ -119,7 +119,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>74,279</div>
                             <div className={styles.iconText}>
-                             Female Population
+                                Female Population
                             </div>
 
                         </div>
@@ -132,7 +132,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>0</div>
                             <div className={styles.iconText}>
-                             Other Population
+                                Other Population
                             </div>
 
                         </div>

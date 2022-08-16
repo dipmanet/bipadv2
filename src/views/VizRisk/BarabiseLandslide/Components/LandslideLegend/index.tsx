@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 const LandslideLegend = (props) => {
     const radius = [10, 20, 30, 40];
@@ -17,6 +17,7 @@ const LandslideLegend = (props) => {
                                 <Icon
                                     name="circle"
                                     style={{
+                                        color: '#923f3f',
                                         fontSize: `${r}px`,
                                         marginRight: `${40 - (10 * i)}px`,
                                         marginLeft: `${10 - (r / 3)}px`,

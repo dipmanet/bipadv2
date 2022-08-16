@@ -1,5 +1,4 @@
 import mapboxgl from 'mapbox-gl';
-import { Ref } from 'react';
 
 export const findOcc = (arr: [], key: string) => {
     const arr2: [] = [];
@@ -72,15 +71,15 @@ export const fillPaint = (mainArray: any, getColorFunc: (item: string) => void) 
 
 export const getHouseHoldDataColor = (number: number) => {
     switch (true) {
-        case number >= 0 && number <= 1.9:
+        case number >= 0 && number < 2:
             return '#457ded';
-        case number >= 2 && number <= 3.4:
+        case number >= 2 && number < 3.5:
             return '#45c4fe';
-        case number >= 3.5 && number <= 4.9:
+        case number >= 3.5 && number < 5:
             return 'yellow';
-        case number >= 5 && number <= 6.4:
+        case number >= 5 && number < 6.5:
             return '#e79546';
-        case number > 6.4:
+        case number >= 6.5:
             return '#e75d4f';
         default:
             return 'white';
@@ -89,15 +88,15 @@ export const getHouseHoldDataColor = (number: number) => {
 
 export const getHouseHoldDataStatus = (number: number) => {
     switch (true) {
-        case number >= 0 && number <= 1.9:
+        case number >= 0 && number < 2:
             return 'Very Low';
-        case number >= 2 && number <= 3.4:
+        case number >= 2 && number < 3.5:
             return 'Low';
-        case number >= 3.5 && number <= 4.9:
+        case number >= 3.5 && number < 5:
             return 'Medium';
-        case number >= 5 && number <= 6.4:
+        case number >= 5 && number < 6.5:
             return 'High';
-        case number > 6.4:
+        case number >= 6.5:
             return 'Very High';
         default:
             return 'None';
@@ -205,7 +204,7 @@ export const hideMapLayers = (layerName: string,
 };
 
 
-export const layoutSwitch = (layer) => {
+export const layoutSwitch = (layer: string) => {
     switch (layer) {
         case 'education':
             return 'education';
@@ -238,4 +237,20 @@ export const layoutSwitch = (layer) => {
         default:
             return null;
     }
+};
+
+export const generateSelectFieldValues = (inputObject: any = {}) => {
+    const resultArr = [];
+    if (Object.keys(inputObject).length > 0) {
+        const allKeys = Object.keys(inputObject);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [index, data] of allKeys.entries()) {
+            const requiredObj = {
+                optionTitle: allKeys[index],
+                optionValues: inputObject[allKeys[index]],
+            };
+            resultArr.push(requiredObj);
+        }
+    }
+    return resultArr;
 };
