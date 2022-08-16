@@ -49,7 +49,7 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                 <FormattedDate
                     className={styles.startDate}
                     mode="yyyy-MM-dd"
-                    value={convertDateAccToLanguage(startDate, language)}
+                    value={startDate}
                 />
 
                 {
@@ -71,7 +71,7 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                 <FormattedDate
                     className={styles.endDate}
                     mode="yyyy-MM-dd"
-                    value={convertDateAccToLanguage(endDate, language)}
+                    value={endDate}
                 />
                 {language === 'np'
                     && (
