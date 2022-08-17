@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { populateFormat, breakFormat } from '@togglecorp/fujs';
 import { PageContextProps } from '#components/PageContext';
 import { TitleContextProps } from '#components/TitleContext';
@@ -18,6 +19,7 @@ import {
     vulnerabilityEducation,
 } from './constants';
 import { RealTimeFilters, ActiveLayer } from './types';
+import { convertDateAccToLanguage } from '#utils/common';
 
 let calculatedSourceTitle = '';
 // Util Functions
@@ -39,14 +41,14 @@ const formatDate = (date: Date, mode: string) => (
         })
 );
 
-const getStartAndEndDate = (dataDateRange: DataDateRangeValueElement) => {
+const getStartAndEndDate = (dataDateRange: DataDateRangeValueElement, language) => {
     let startDate;
     let endDate;
     const mode = 'yyyy-MM-dd';
     const { rangeInDays } = dataDateRange;
 
     if (rangeInDays !== 'custom') {
-        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays, language));
     } else {
         ({ startDate, endDate } = dataDateRange);
     }
@@ -68,24 +70,55 @@ const getStartAndEndDate = (dataDateRange: DataDateRangeValueElement) => {
  */
 const damageAndLossTitleParser = (
     event: string,
+    eventNe: string,
     multipleHazards: boolean,
     regionName: string,
     hazardList: number[],
     startDate: string,
     endDate: string,
+    language: string,
 ): string => {
-    const initialString = event === 'estimated Loss (NPR)'
-        ? 'Total'
-        : 'Total number of';
+    const initialStringCheck = (events: string, lang: string) => {
+        if (events === 'estimated Loss (NPR)') {
+            if (lang === 'en') {
+                return 'Total';
+            }
+            return 'को जम्‍मा संख्या';
+        }
+        if (lang === 'en') {
+            return 'Total number of';
+        }
+        return 'को कुल संख्या';
+    };
+    // const initialString = event === 'estimated Loss (NPR)'
+    //     ? 'Total'
+    //     : 'Total number of';
+    const initialString = initialStringCheck(event, language);
     let hazardName = '';
 
     if (!multipleHazards) {
         hazardName = `${getHazard(hazardList[0])[0].title}`;
     }
+    const getHazardCheck = (hazard, lang: string) => {
+        if (hazard) {
+            if (lang === 'en') {
+                return `${initialString} ${event} due to ${hazard} from ${startDate} to ${endDate}, ${regionName}`;
+            }
+            return `${convertDateAccToLanguage(startDate, lang)} देखि ${convertDateAccToLanguage(endDate, lang)} सम्‍मको ${hazard}कारण घटेको ${eventNe} ${initialString}, ${regionName} `;
+        }
 
-    return hazardName
-        ? `${initialString} ${event} due to ${hazardName} from ${startDate} to ${endDate}, ${regionName}`
-        : `${initialString} ${event} from ${startDate} to ${endDate}, ${regionName}`;
+        if (lang === 'en') {
+            return `${initialString} ${event} from ${startDate} to ${endDate}, ${regionName}`;
+        }
+        return `${convertDateAccToLanguage(startDate, lang)} देखि ${convertDateAccToLanguage(endDate, lang)} सम्‍मको ${eventNe} ${initialString} ,${regionName}`;
+    };
+
+    const hazardValue = getHazardCheck(hazardName, language);
+
+    // return hazardName
+    //  ? `${initialString} ${event} due to ${hazardName} from ${startDate} to ${endDate}, ${regionName}`
+    //     : `${initialString} ${event} from ${startDate} to ${endDate}, ${regionName}`;
+    return hazardValue;
 };
 
 const defineSource = (source: string, setSource?: Function) => {
@@ -106,13 +139,15 @@ const setDashBoardTitle = (
     titleContext: TitleContextProps,
     regionName: string,
     dataDateRange: DataDateRangeValueElement,
+    language: string,
 ) => {
     const { dashboard } = titleContext;
-    const [startDate, endDate] = getStartAndEndDate(dataDateRange);
-    const dashboardTitle = `${dashboard} from ${startDate} to ${endDate}`;
+    const [startDate, endDate] = getStartAndEndDate(dataDateRange, language);
+    const dashboardTitle = language === 'en'
+        ? `${dashboard} from ${startDate} to ${endDate}`
+        : `${convertDateAccToLanguage(startDate, language)} देखि ${convertDateAccToLanguage(endDate, language)} सम्‍मको ${dashboard}`;
     return dashboard ? setSimpleTitle(dashboardTitle, regionName) : '';
 };
-
 // Incidents
 /**
  * @param titleContext Context for Titles
@@ -122,10 +157,13 @@ const setIncidentTitle = (
     titleContext: TitleContextProps,
     regionName: string,
     dataDateRange: DataDateRangeValueElement,
+    language: string,
 ) => {
     const { incident } = titleContext;
-    const [startDate, endDate] = getStartAndEndDate(dataDateRange);
-    const incidentTitle = `${incident} from ${startDate} to ${endDate}`;
+    const [startDate, endDate] = getStartAndEndDate(dataDateRange, language);
+    const incidentTitle = language === 'en'
+        ? `${incident} from ${startDate} to ${endDate}`
+        : `${convertDateAccToLanguage(startDate, language)} देखि ${convertDateAccToLanguage(endDate, language)} सम्‍मको ${incident}`;
     return incident ? setSimpleTitle(incidentTitle, regionName) : '';
 };
 
@@ -139,6 +177,7 @@ const setDamageAndLossTitle = (
     titleContext: TitleContextProps,
     hazardList: number[],
     regionName: string,
+    language: string,
 ) => {
     const { damageAndLoss } = titleContext;
     const multipleHazards = hazardList.length > 1 || hazardList.length === 0;
@@ -148,15 +187,17 @@ const setDamageAndLossTitle = (
         const { mainModule, startDate, endDate } = damageAndLoss;
         const capitalizedTitle = mainModule.toUpperCase().trim();
         damageAndLossList.forEach((dll) => {
-            const { key, titlePart } = dll;
+            const { key, titlePart, titlePartNe } = dll;
             if (capitalizedTitle === key) {
                 damageAndLossTitle = damageAndLossTitleParser(
                     titlePart,
+                    titlePartNe,
                     multipleHazards,
                     regionName,
                     hazardList,
                     startDate,
                     endDate,
+                    language,
                 );
             }
         });
@@ -174,6 +215,7 @@ const setRealTimeTitle = (
     titleContext: TitleContextProps,
     realtimeFilters: RealTimeFilters,
     regionName: string,
+    language: string,
 ) => {
     const { realtime, setSource } = titleContext;
     const { faramValues } = realtimeFilters;
@@ -184,7 +226,8 @@ const setRealTimeTitle = (
     let sourceTitle = '';
     if (activeLayers.length !== 1) {
         defineSource('', setSource);
-        return `Realtime, ${regionName}`;
+        const returnText = language === 'en' ? `Realtime, ${regionName}` : `वास्तविक समय, ${regionName}`;
+        return returnText;
     }
 
     realtimeList.forEach((singleRealtime) => {
@@ -216,17 +259,19 @@ const setRealTimeTitle = (
  * @param titleContext Context for Titles
  * @param regionName Location Name
  */
-const setProfileTitle = (titleContext: TitleContextProps, regionName: string) => {
+const setProfileTitle = (titleContext: TitleContextProps, regionName: string, language: string) => {
     const { profile, setSource } = titleContext;
     let profileTitle = '';
     if (profile && profile.mainModule) {
         const { mainModule, subModule } = profile;
         if (mainModule === 'Projects') {
-            return `Number of Projects, ${regionName}`;
+            const projectText = language === 'en' ? `Number of Projects, ${regionName}` : `परियोजनाहरूको संख्या, ${regionName}`;
+            return projectText;
         }
 
         if (mainModule === 'Contacts') {
-            return `Number of DRR focal person, ${regionName}`;
+            const contactText = language === 'en' ? `Number of DRR focal person, ${regionName}` : `DRR फोकल व्यक्तिको संख्या, ${regionName}`;
+            return contactText;
         }
 
         if (mainModule === 'Summary' && subModule) {
@@ -272,8 +317,8 @@ const setRiskInfoHazardTitle = (
 ) => {
     // Risk Info - Hazard
     if (activeLayer.category === 'hazard'
-    && activeLayer.fullName
-    && activeLayer.layername
+        && activeLayer.fullName
+        && activeLayer.layername
     ) {
         const { floodDowri,
             floodMeteor,
@@ -484,6 +529,7 @@ export const getRouteWiseTitleAndSource = (
     },
     riskInfoActiveLayers: any[],
     dataDateRange: DataDateRangeValueElement,
+    language: string,
 ): [string, string] => {
     if (pageContext && pageContext.activeRouteDetails) {
         const { name: routeName } = pageContext.activeRouteDetails;
@@ -492,29 +538,29 @@ export const getRouteWiseTitleAndSource = (
         // Dashboard
         if (routeName === 'dashboard') {
             defineSource('Realtime Module', setSource);
-            title = setDashBoardTitle(titleContext, regionName, dataDateRange);
+            title = setDashBoardTitle(titleContext, regionName, dataDateRange, language);
         }
 
         // Incident
         if (routeName === 'incident') {
             defineSource('Nepal Police, DRR Portal', setSource);
-            title = setIncidentTitle(titleContext, regionName, dataDateRange);
+            title = setIncidentTitle(titleContext, regionName, dataDateRange, language);
         }
 
         // Damage and Loss
         if (routeName === 'lossAndDamage') {
             defineSource('Nepal Police, DRR Portal', setSource);
-            title = setDamageAndLossTitle(titleContext, hazardList, regionName);
+            title = setDamageAndLossTitle(titleContext, hazardList, regionName, language);
         }
 
         // RealTime
         if (routeName === 'realtime') {
-            title = setRealTimeTitle(titleContext, realtimeFilters, regionName);
+            title = setRealTimeTitle(titleContext, realtimeFilters, regionName, language);
         }
 
         // Profile
         if (routeName === 'profile') {
-            title = setProfileTitle(titleContext, regionName);
+            title = setProfileTitle(titleContext, regionName, language);
         }
 
         // Risk Info
