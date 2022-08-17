@@ -61,7 +61,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'lossAndDamage',
         title: 'Damage & Loss',
-        titleNep: 'क्षेति र नोक्सान',
+        titleNep: 'क्षति र नोक्सान',
         path: '/damage-and-loss/',
         load: () => import('../views/LossAndDamage'),
         navbar: true,
