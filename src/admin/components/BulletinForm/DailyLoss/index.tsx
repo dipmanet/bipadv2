@@ -203,7 +203,7 @@ const Bulletin = (props: Props) => {
 
 
     useEffect(() => {
-        if (dateAlt) {
+        if (dateAlt && Object.keys(bulletinEditData).length === 0) {
             const selectedDate = new Date(dateAlt);
             recordSelectedDate(selectedDate);
             handleBulletinDate(dateAlt);
@@ -230,7 +230,7 @@ const Bulletin = (props: Props) => {
         }
     }, [dateAlt, bulletinEditData]);
     useEffect(() => {
-        if (dateAltTo) {
+        if (dateAltTo && Object.keys(bulletinEditData).length === 0) {
             const selectedDate = new Date(dateAltTo);
             recordSelectedDateTo(selectedDate);
             handleDateTo(dateAltTo);
@@ -273,6 +273,8 @@ const Bulletin = (props: Props) => {
         setEndingTime(e.target.value);
         setFilterDateType('');
     };
+
+
     return (
         <>
             {loading
@@ -449,11 +451,11 @@ const Bulletin = (props: Props) => {
                                 </MenuItem>
 
                             </Select>
-                            {/* {filterDataTypeError ? (
+                            {filterDataTypeError ? (
                                 <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>
                                     {language === 'np' ? 'कृपया मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
                                 </FormHelperText>
-                            ) : ''} */}
+                            ) : ''}
                         </FormControl>
                     </div>
                 </div>
@@ -523,7 +525,7 @@ const Bulletin = (props: Props) => {
                                 </InputLabel>
                                 <Input
                                     type="number"
-                                    value={incidentData[field]}
+                                    value={incidentData[field] || 0}
                                     onChange={e => handleIncidentChange(e.target.value, field)}
                                     className={styles.select}
                                     disableUnderline
@@ -823,11 +825,11 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                {/* {filterDataTypeError ? (
+                {filterDataTypeError ? (
                     <FormHelperText style={{ color: '#f44336', marginLeft: '14px', marginTop: '20px', fontSize: '16px' }}>
                         {language === 'np' ? 'कृपया माथि मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
                     </FormHelperText>
-                ) : ''} */}
+                ) : ''}
             </div>
 
         </>

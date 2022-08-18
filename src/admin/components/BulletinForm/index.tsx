@@ -854,10 +854,10 @@ const Bulletin = (props: Props) => {
     }, [addedHazardFields]);
 
     const handleNextBtn = () => {
-        // if (!filterDateType) {
-        //     setFilterDataTypeError(true);
-        //     return null;
-        // }
+        if (!filterDateType) {
+            setFilterDataTypeError(true);
+            return null;
+        }
 
         if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
@@ -1034,7 +1034,7 @@ const Bulletin = (props: Props) => {
     }, [lossData]);
     // eslint-disable-next-line consistent-return
     useEffect(() => {
-        if (lossData && lossData.length > 0) {
+        if (lossData && (lossData.length > 0 || lossData.length === 0)) {
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
