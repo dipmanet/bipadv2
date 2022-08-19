@@ -19,6 +19,7 @@ function LeftPane5(props: Props) {
         onButtonClick,
         setCurrentHeaderVal,
         setNavIdleStatus,
+        setCurrentRechartsItem,
     } = useContext(MainPageDataContext);
 
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -33,6 +34,7 @@ function LeftPane5(props: Props) {
             setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page6ScrolltopValue: scrollTop });
             setPostionsPerPage({ ...postionsPerPage, page6PositionValue: Math.max(1 - percentage, 0) });
         };
+        setCurrentRechartsItem('');
         setCurrentHeaderVal('Flood Hazard');
         updateHeight();
         if (articleRef.current) {

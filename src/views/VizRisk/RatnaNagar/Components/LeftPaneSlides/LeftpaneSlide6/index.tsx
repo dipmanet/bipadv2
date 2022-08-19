@@ -21,6 +21,7 @@ const LeftpaneSlide4 = () => {
         householdData,
         householdChartData,
         setSelectFieldValue,
+        setCurrentRechartsItem,
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData.Exposure;
 

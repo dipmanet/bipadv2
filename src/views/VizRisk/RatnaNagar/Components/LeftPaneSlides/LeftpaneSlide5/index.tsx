@@ -18,7 +18,7 @@ const LeftpaneSlide6 = () => {
         householdData,
         householdChartData,
         setSelectFieldValue,
-
+        setCurrentRechartsItem,
     } = useContext(MainPageDataContext);
     const exposureChartData = householdChartData && householdChartData['Flood Hazard'];
 
@@ -26,6 +26,7 @@ const LeftpaneSlide6 = () => {
     const [curerntChartData, setCurerntChartData] = useState([]);
     useEffect(() => {
         setSelectFieldValue('Flood return period');
+        setCurrentRechartsItem('');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const filterChartSelectedData = (currentChartSelectedData: any) => {

@@ -19,6 +19,7 @@ function LeftPane4(props: Props) {
         onButtonClick,
         setCurrentHeaderVal,
         setNavIdleStatus,
+        setCurrentRechartsItem,
     } = useContext(MainPageDataContext);
 
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -33,6 +34,7 @@ function LeftPane4(props: Props) {
             setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page5ScrolltopValue: scrollTop });
             setPostionsPerPage({ ...postionsPerPage, page5PositionValue: Math.max(1 - percentage, 0) });
         };
+        setCurrentRechartsItem('');
         setCurrentHeaderVal('Exposure');
 
         updateHeight();
