@@ -45,6 +45,7 @@ export default class Loss extends React.PureComponent {
             contentClassName,
             rowClassName,
             loss = emptyObject,
+            language,
         } = this.props;
 
         const {
@@ -71,6 +72,7 @@ export default class Loss extends React.PureComponent {
                                     label={t('People Dead')}
                                     value={peopleDeathCount}
                                     isNumericValue
+                                    language={language}
                                 />
                                 <TextOutput
                                     className={rowClassName}
@@ -79,6 +81,7 @@ export default class Loss extends React.PureComponent {
                                     label={t('Livestock Destroyed')}
                                     value={livestockDestroyedCount}
                                     isNumericValue
+                                    language={language}
                                 />
                                 <TextOutput
                                     className={rowClassName}
@@ -87,6 +90,7 @@ export default class Loss extends React.PureComponent {
                                     label={t('Infrastructures Destroyed')}
                                     value={infrastructureDestroyedCount}
                                     isNumericValue
+                                    language={language}
                                 />
                                 <TextOutput
                                     className={rowClassName}
@@ -95,6 +99,7 @@ export default class Loss extends React.PureComponent {
                                     label={t('Estimated Loss (NRs.)')}
                                     value={estimatedLoss}
                                     isNumericValue
+                                    language={language}
                                 />
                                 <TextOutput
                                     className={rowClassName}
@@ -102,6 +107,7 @@ export default class Loss extends React.PureComponent {
                                     valueClassName={valueClassName}
                                     label={t('Description')}
                                     value={t(description)}
+                                    language={language}
                                 />
                             </div>
                         </div>

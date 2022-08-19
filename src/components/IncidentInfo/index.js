@@ -247,6 +247,7 @@ class IncidentInfo extends React.PureComponent {
                                     labelClassName={styles.label}
                                     valueClassName={styles.value}
                                     loss={loss}
+                                    language={language}
                                 />
                             </div>
                         </div>

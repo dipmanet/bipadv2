@@ -53,7 +53,7 @@ export default class TextOutput extends React.PureComponent {
             labelClassName,
             nullCondition,
             finalData,
-            language,
+            language = 'en',
             ...otherProps
 
         } = this.props;
