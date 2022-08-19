@@ -35,11 +35,12 @@ const mapStateToProps = state => ({
 });
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
-const NumeralCell = ({ value }) => (
+const NumeralCell = ({ value }, language) => (
     <Numeral
         className={styles.numeral}
         value={value}
         precision={0}
+        language={language}
     />
 );
 
@@ -144,135 +145,135 @@ class TabularView extends React.PureComponent {
             {
                 key: 'loss.estimatedLoss',
                 value: { title: language === 'en' ? 'Total estimated loss (NPR)' : 'कुल अनुमानित आर्थिक क्षेति (रु )' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.estimatedLoss'),
             },
             {
                 key: 'loss.agricultureEconomicLoss',
                 value: { title: language === 'en' ? 'Agriculture economic loss (NPR)' : 'कृषि क्षेत्र को कुल आर्थिक क्षेति' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.agricultureEconomicLoss'),
             },
             {
                 key: 'loss.infrastructureEconomicLoss',
                 value: { title: language === 'en' ? 'Infrastructure economic loss (NPR)' : 'भौतिक पूर्वाधारमा आर्थिक क्षति (रु)' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.infrastructureEconomicLoss'),
             },
             {
                 key: 'loss.infrastructureDestroyedCount',
                 value: { title: language === 'en' ? 'Total infrastructure destroyed' : 'कुल पूर्वाधार क्षेति' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedCount'),
             },
             {
                 key: 'loss.infrastructureDestroyedHouseCount',
                 value: { title: language === 'en' ? 'House destroyed' : 'घर भत्‍किएको' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedHouseCount'),
             },
             {
                 key: 'loss.infrastructureAffectedHouseCount',
                 value: { title: language === 'en' ? 'House affected' : 'घर प्रभावित' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.infrastructureAffectedHouseCount'),
             },
 
             {
                 key: 'loss.livestockDestroyedCount',
                 value: { title: language === 'en' ? 'Total livestock destroyed' : 'कुल पशु चौपाया क्षेति' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.livestockDestroyedCount'),
             },
 
             {
                 key: 'loss.peopleDeathCount',
                 value: { title: language === 'en' ? 'Total - People Death' : 'कुल मृत्यु संख्या' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleDeathCount'),
             },
             {
                 key: 'loss.peopleDeathMaleCount',
                 value: { title: language === 'en' ? 'Male - People Death' : 'पुरुष - मनिस मृत्यु' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleDeathMaleCount'),
             },
             {
                 key: 'loss.peopleDeathFemaleCount',
                 value: { title: language === 'en' ? 'Female - People Death' : 'महिला - मनिस मृत्यु' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleDeathFemaleCount'),
             },
             {
                 key: 'loss.peopleDeathUnknownCount',
                 value: { title: language === 'en' ? 'Unknown - People Death' : 'अज्ञात - मनिस मृत्यु' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleDeathUnknownCount'),
             },
             {
                 key: 'loss.peopleDeathDisabledCount',
                 value: { title: language === 'en' ? 'Disabled - People Death' : 'अपाङ्गता - मनिस मृत्यु' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleDeathDisabledCount'),
             },
             {
                 key: 'loss.peopleMissingCount',
                 value: { title: language === 'en' ? 'Total - People Missing' : 'कुल - हराएको मनिस' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleMissingCount'),
             },
             {
                 key: 'loss.peopleMissingMaleCount',
                 value: { title: language === 'en' ? 'Male - People Missing' : 'पुरुष - हराएको मनिस' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleMissingMaleCount'),
             },
             {
                 key: 'loss.peopleMissingFemaleCount',
                 value: { title: language === 'en' ? 'Female - People Missing' : 'महिला - हराएको मनिस' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleMissingFemaleCount'),
             },
             {
                 key: 'loss.peopleMissingUnknownCount',
                 value: { title: language === 'en' ? 'Unknown - People Missing' : 'अज्ञात - मनिस हराइरहेको' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleMissingUnknownCount'),
             },
             {
                 key: 'loss.peopleMissingDisabledCount',
                 value: { title: language === 'en' ? 'Disabled - People Missing' : 'अपाङ्गता - मनिस हराइरहेको' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleMissingDisabledCount'),
             },
             {
                 key: 'loss.peopleInjuredCount',
                 value: { title: language === 'en' ? 'Total - People Injured' : 'कुल - व्यक्ति घाइते' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredCount'),
             },
             {
                 key: 'loss.peopleInjuredMaleCount',
                 value: { title: language === 'en' ? 'Male - People Injured' : 'पुरुष - मानिसहरू घाइते' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredMaleCount'),
             },
             {
                 key: 'loss.peopleInjuredFemaleCount',
                 value: { title: language === 'en' ? 'Female - People Injured' : 'महिला - व्यक्ति घाइते' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredFemaleCount'),
             },
             {
                 key: 'loss.peopleInjuredUnknownCount',
                 value: { title: language === 'en' ? 'Unknown - People Injured' : 'अज्ञात - मानिसहरू घाइते' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredUnknownCount'),
             },
             {
                 key: 'loss.peopleInjuredDisabledCount',
                 value: { title: language === 'en' ? 'Disabled - People Injured' : 'अपाङ्गता - घाइते व्यक्तिहरू' },
-                cellRenderer: NumeralCell,
+                cellRenderer: value => NumeralCell(value, language),
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredDisabledCount'),
             },
         ], styles);
