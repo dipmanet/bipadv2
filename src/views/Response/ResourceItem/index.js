@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
-import { connect } from 'react-redux';
 import DistanceOutput from '#components/DistanceOutput';
 
 import { iconNames } from '#constants';
@@ -13,7 +12,6 @@ import TextOutput from '#components/TextOutput';
 import resourceAttributes from '../resourceAttributes';
 
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
 
 const propTypes = {
     className: PropTypes.string,
@@ -36,11 +34,7 @@ const defaultProps = {
 };
 
 const emptyObject = {};
-
-const mapStateToProps = state => ({
-    language: languageSelector(state),
-});
-class ResourceItem extends React.PureComponent {
+export default class ResourceItem extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -100,7 +94,7 @@ class ResourceItem extends React.PureComponent {
             point: {
                 coordinates,
             } = emptyObject,
-            language: { language },
+            language,
         } = this.props;
 
         const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
@@ -120,6 +114,7 @@ class ResourceItem extends React.PureComponent {
                                 <DistanceOutput
                                     className={styles.distance}
                                     value={distance / 1000}
+                                    language={language}
                                 />
                                 <TextOutput
                                     className={styles.contactNumber}
@@ -151,5 +146,3 @@ class ResourceItem extends React.PureComponent {
         );
     }
 }
-
-export default connect(mapStateToProps)(ResourceItem);

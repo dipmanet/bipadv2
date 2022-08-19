@@ -2,14 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { _cs, isFalsy } from '@togglecorp/fujs';
 
-import { connect } from 'react-redux';
 import { iconNames } from '#constants';
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
 
-const mapStateToProps = state => ({
-    language: languageSelector(state),
-});
 const propTypes = {
     className: PropTypes.string,
 };
@@ -18,7 +13,7 @@ const defaultProps = {
     className: '',
 };
 
-class DistanceOutput extends React.PureComponent {
+export default class DistanceOutput extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -27,7 +22,7 @@ class DistanceOutput extends React.PureComponent {
         const {
             className: classNameFromProps,
             value: valueFromProps,
-            language: { language },
+            language,
         } = this.props;
 
         let amount = valueFromProps;
@@ -53,15 +48,13 @@ class DistanceOutput extends React.PureComponent {
                 />
                 <div className={styles.value}>
                     <div className={styles.amount}>
-                        { amount }
+                        {amount}
                     </div>
                     <div className={styles.unit}>
-                        { unit }
+                        {unit}
                     </div>
                 </div>
             </div>
         );
     }
 }
-
-export default connect(mapStateToProps)(DistanceOutput);
