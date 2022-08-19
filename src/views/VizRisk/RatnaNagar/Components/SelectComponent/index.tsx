@@ -18,6 +18,7 @@ const SelectComponent = (props: Props) => {
     const optionShowRef = useRef(null);
     const {
         setSelectFieldValue,
+        setCurrentRechartsItem,
     } = useContext(MainPageDataContext);
     const { selectFieldValues,
         selctFieldCurrentValue,
@@ -38,6 +39,12 @@ const SelectComponent = (props: Props) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        setCurrentRechartsItem('');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selctFieldCurrentValue]);
+
 
     const onSelectClick = () => {
         setShowOption(state => !state);

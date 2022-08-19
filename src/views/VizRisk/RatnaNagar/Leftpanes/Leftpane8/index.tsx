@@ -21,6 +21,7 @@ function LeftPane8(props: Props) {
         onButtonClick,
         setCurrentHeaderVal,
         setNavIdleStatus,
+        setCurrentRechartsItem,
     } = useContext(MainPageDataContext);
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
@@ -34,6 +35,7 @@ function LeftPane8(props: Props) {
             setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page9ScrolltopValue: scrollTop });
             setPostionsPerPage({ ...postionsPerPage, page9PositionValue: Math.max(1 - percentage, 0) });
         };
+        setCurrentRechartsItem('');
         setCurrentHeaderVal('Adaptive Capacity');
         updateHeight();
         if (articleRef.current) {
