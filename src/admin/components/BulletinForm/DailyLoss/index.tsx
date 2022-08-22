@@ -451,11 +451,11 @@ const Bulletin = (props: Props) => {
                                 </MenuItem>
 
                             </Select>
-                            {filterDataTypeError ? (
+                            {/* {filterDataTypeError ? (
                                 <FormHelperText style={{ color: '#f44336', marginLeft: '14px' }}>
                                     {language === 'np' ? 'कृपया मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
                                 </FormHelperText>
-                            ) : ''}
+                            ) : ''} */}
                         </FormControl>
                     </div>
                 </div>
@@ -825,11 +825,11 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                {filterDataTypeError ? (
+                {/* {filterDataTypeError ? (
                     <FormHelperText style={{ color: '#f44336', marginLeft: '14px', marginTop: '20px', fontSize: '16px' }}>
                         {language === 'np' ? 'कृपया माथि मिति प्रकार फिल्टर प्रविष्ट गर्नुहोस्' : 'Please enter date type filter'}
                     </FormHelperText>
-                ) : ''}
+                ) : ''} */}
             </div>
 
         </>
