@@ -11,7 +11,13 @@ export const vzRiskProvinceData = [
             87.0145939355117,
             27.4631790982775,
         ],
-        center: [],
+        centroid: {
+            type: 'Point',
+            coordinates: [
+                85.68968070300077,
+                26.930519228980092,
+            ],
+        },
         indicator: 14,
     },
     {
@@ -26,7 +32,13 @@ export const vzRiskProvinceData = [
             83.6804351913103,
             30.4472763312289,
         ],
-        center: [],
+        centroid: {
+            type: 'Point',
+            coordinates: [
+                82.28232937335169,
+                29.253508516077503,
+            ],
+        },
         indicator: 14,
     },
 ];
@@ -44,7 +56,13 @@ export const vzRiskMunicipalData = [{
         84.5618032266611,
         27.6813334045862,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            84.51393887409917,
+            27.619152424687197,
+        ],
+    },
     indicator: 6,
 },
 {
@@ -59,13 +77,19 @@ export const vzRiskMunicipalData = [{
         85.9941170808416,
         26.7848666277969,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            85.93437545503625,
+            26.72577239446485,
+        ],
+    },
     indicator: 14,
 
 },
 {
     type: 'municipality-visrisk',
-    name: 'Panchpokhari',
+    name: 'Panchpokhari Thangpal',
     visriskType: 'MultiHazard',
     id: 23010,
     color: 'red',
@@ -75,7 +99,13 @@ export const vzRiskMunicipalData = [{
         85.7369559361708,
         28.1685911209555,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            85.64347922706821,
+            28.013604885888867,
+        ],
+    },
     indicator: 14,
 
 },
@@ -91,7 +121,13 @@ export const vzRiskMunicipalData = [{
         85.9033118606699,
         28.2034609768878,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            85.79108507481781,
+            28.015490220644214,
+        ],
+    },
     indicator: 14,
 
 },
@@ -107,7 +143,13 @@ export const vzRiskMunicipalData = [{
         86.0650467984744,
         28.0534534656021,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            85.93622448197604,
+            27.918085332007227,
+        ],
+    },
     indicator: 12,
 
 },
@@ -123,7 +165,13 @@ export const vzRiskMunicipalData = [{
         86.0261266325697,
         27.9182603482126,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            85.90010912899756,
+            27.821772478807212,
+        ],
+    },
     indicator: 12,
 
 },
@@ -139,7 +187,13 @@ export const vzRiskMunicipalData = [{
         80.7565030582423,
         28.7845848225489,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            80.6547442950228,
+            28.693149812305652,
+        ],
+    },
     indicator: 6,
 
 },
@@ -155,7 +209,13 @@ export const vzRiskMunicipalData = [{
         81.4136017358061,
         28.2868776652896,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            81.34569465152305,
+            28.210927128836925,
+        ],
+    },
     indicator: 6,
 
 },
@@ -171,7 +231,13 @@ export const vzRiskMunicipalData = [{
         81.1679840253952,
         28.5540764029076,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            81.08659888293285,
+            28.485190958758647,
+        ],
+    },
     indicator: 6,
 
 },
@@ -187,7 +253,13 @@ export const vzRiskMunicipalData = [{
         81.2145400783104,
         28.4979876629011,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            81.1375832636602,
+            28.421326829076246,
+        ],
+    },
     indicator: 6,
 
 
@@ -204,7 +276,13 @@ export const vzRiskMunicipalData = [{
         83.5042159105933,
         27.7488997935905,
     ],
-    center: [],
+    centroid: {
+        type: 'Point',
+        coordinates: [
+            83.4331080182878,
+            27.68911130212745,
+        ],
+    },
     indicator: 14,
 
 },

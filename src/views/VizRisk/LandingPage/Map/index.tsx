@@ -10,6 +10,7 @@ import { vzRiskMunicipalData, vzRiskProvinceData } from '../VzRiskData';
 
 import styles from './styles.scss';
 import { checkIndicator, checkType, filterDataWithIndicator, vizRiskType } from '../utils';
+import landingPageMapImages from './mapImage';
 
 const mapStateToProps = (state: AppState) => ({
     provinces: provincesSelector(state),
@@ -51,6 +52,7 @@ const Map = (props: Props) => {
 
     function noop() { }
 
+
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -73,6 +75,7 @@ const Map = (props: Props) => {
 
         const allAvialableVizrisks = [...vzRiskMunicipalData, ...vzRiskProvinceData]
             .map(item => item.id);
+
 
         const bounds = [
             [79.161987, 25.923467], [89.626465, 30.789037],
@@ -101,6 +104,17 @@ const Map = (props: Props) => {
             closeOnClick: false,
             className: 'popup',
         });
+
+        landingPageMapImages.forEach((img) => {
+            landingPageMap.loadImage(
+                img.url,
+                (error: any, image: any) => {
+                    if (error) throw error;
+                    landingPageMap.addImage(img.name, image);
+                },
+            );
+        });
+
         landingPageMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
         landingPageMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -142,6 +156,7 @@ const Map = (props: Props) => {
                     visibility: 'none',
                 },
             });
+
 
             landingPageMap.addLayer({
                 id: 'province-vizrisk-extrusion',
@@ -314,60 +329,7 @@ const Map = (props: Props) => {
                     }
                 }
             });
-            landingPageMap.on('mousemove', 'province-vizrisk', (e) => {
-                landingPageMap.getCanvas().style.cursor = 'pointer';
-                if (e && e.features && e.features[0] && e.features[0].properties) {
-                    const { lngLat } = e;
-                    const coordinates: number[] = [lngLat.lng, lngLat.lat];
-                    const name = e.features[0].properties.title;
-                    const type = e.features[0].state.indicator;
 
-                    popup.setLngLat(coordinates).setHTML(
-                        `<div style="display : flex; flex-direction:column ;
-                        align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
-                        <p style="margin:0px;padding:5px;color:cyan;text-transform: uppercase;font-weight:bold;">${name}</p>
-                        <p style="margin:0px;padding:5px;color:white;font-weight:bold;">${vizRiskType(type)}</p>
-                         </div>
-        `,
-                    ).addTo(landingPageMap);
-                    if (hoverId) {
-                        landingPageMap.setFeatureState(
-                            {
-                                id: hoverId,
-                                source: 'base-outline',
-                                sourceLayer: mapSources.nepal.layers.province,
-                            },
-                            { hover: false },
-                        );
-                    }
-                    hoverId = e.features[0].id;
-                    landingPageMap.setFeatureState(
-                        {
-                            id: hoverId,
-                            source: 'base-outline',
-                            sourceLayer: mapSources.nepal.layers.province,
-
-                        },
-                        { hover: true },
-                    );
-                }
-            });
-            landingPageMap.on('mouseleave', 'province-vizrisk', (e) => {
-                landingPageMap.getCanvas().style.cursor = '';
-                if (hoverId) {
-                    landingPageMap.setFeatureState(
-                        {
-                            source: 'base-outline',
-                            id: hoverId,
-                            sourceLayer: mapSources.nepal.layers.province,
-                        },
-                        { hover: false },
-
-                    );
-                }
-                hoverId = undefined;
-                popup.remove();
-            });
             allData.forEach((attribute: any) => {
                 landingPageMap.setFeatureState({
                     id: attribute.id,
@@ -404,6 +366,143 @@ const Map = (props: Props) => {
                 layout: {
                     visibility: 'visible',
                 },
+            });
+            landingPageMap.addSource('pop-layer-province', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: vzRiskProvinceData.map(item => ({
+                        type: 'Feature',
+                        id: item.id,
+                        geometry: item.centroid,
+                        properties: {
+                            indicator: item.indicator,
+                            name: item.name,
+                        },
+                    })),
+                },
+            });
+
+            landingPageMap.addLayer({
+                id: 'pop-image-layer-province',
+                type: 'symbol',
+                source: 'pop-layer-province',
+                layout: {
+                    'icon-image': [
+                        'case',
+                        ['==', ['get', 'indicator'], 6],
+                        'flood',
+                        ['==', ['get', 'indicator'], 12],
+                        'landslide',
+                        ['==', ['get', 'indicator'], 14],
+                        'multihazard',
+                        'multihazard',
+                    ],
+                    'icon-size': 0.08,
+                    'icon-anchor': 'bottom',
+                    visibility: 'none',
+
+                },
+            });
+            landingPageMap.addSource('pop-layer-municipal', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: vzRiskMunicipalData.map(item => ({
+                        type: 'Feature',
+                        id: item.id,
+                        geometry: item.centroid,
+                        properties: {
+                            indicator: item.indicator,
+                            name: item.name,
+                        },
+                    })),
+                },
+            });
+
+            landingPageMap.addLayer({
+                id: 'pop-image-layer-municipal',
+                type: 'symbol',
+                source: 'pop-layer-municipal',
+                layout: {
+                    'icon-image': [
+                        'case',
+                        ['==', ['get', 'indicator'], 6],
+                        'flood',
+                        ['==', ['get', 'indicator'], 12],
+                        'landslide',
+                        ['==', ['get', 'indicator'], 14],
+                        'multihazard',
+                        'multihazard',
+                    ],
+                    'icon-size': 0.2,
+                    'icon-anchor': 'bottom',
+                    visibility: 'visible',
+
+                },
+            });
+            landingPageMap.on('click', 'pop-image-layer-municipal', (e) => {
+                if (e && e.features && e.features[0]) {
+                    const { name } = e.features[0].properties;
+                    if (allAvialableVizrisks.includes(e.features[0].id)) {
+                        setClickedVizrisk(name);
+                        setShowMenu(false);
+                    }
+                }
+            });
+            landingPageMap.on('mousemove', 'pop-image-layer-municipal', (e) => {
+                landingPageMap.getCanvas().style.cursor = 'pointer';
+                if (e && e.features && e.features[0] && e.features[0].properties) {
+                    const { lngLat } = e;
+                    const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                    const { name } = e.features[0].properties;
+                    const type = e.features[0].properties.indicator;
+
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="display : flex;padding:5px;flex-direction:column;border:1px solid #0180d8;
+                        align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
+                        <p style="margin:0px;padding:5px;color:cyan;text-transform: uppercase;font-weight:bold;">${name}</p>
+                        <p style="margin:0px 15px 8px 15px;padding: 3px 10px;color:white;font-weight:bold;background-color:#0180d8">${vizRiskType(type)}</p>
+                         </div>
+        `,
+                    ).addTo(landingPageMap);
+                    if (hoverId) {
+                        landingPageMap.setFeatureState(
+                            {
+                                id: hoverId,
+                                source: 'base-outline',
+                                sourceLayer: mapSources.nepal.layers.province,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoverId = e.features[0].id;
+                    landingPageMap.setFeatureState(
+                        {
+                            id: hoverId,
+                            source: 'base-outline',
+                            sourceLayer: mapSources.nepal.layers.province,
+
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+            landingPageMap.on('mouseleave', 'pop-image-layer-municipal', (e) => {
+                landingPageMap.getCanvas().style.cursor = '';
+                if (hoverId) {
+                    landingPageMap.setFeatureState(
+                        {
+                            source: 'base-outline',
+                            id: hoverId,
+                            sourceLayer: mapSources.nepal.layers.province,
+                        },
+                        { hover: false },
+
+                    );
+                }
+                hoverId = undefined;
+                popup.remove();
             });
         });
 
