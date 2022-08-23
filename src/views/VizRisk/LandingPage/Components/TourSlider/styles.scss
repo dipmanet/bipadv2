@@ -1,0 +1,86 @@
+.tourWrapper {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(2, 42, 60, 0.7);
+
+    .tourtitle {
+        position: absolute;
+        color: #00ceff;
+        font-size: 40px;
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%, -15%);
+        font-family: 'Times New Roman', Times, serif;
+
+    }
+
+    .tourContainer {
+        position: absolute;
+        left: 50%;
+        max-width: 45%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 28px;
+        text-align: center;
+
+        .tourContents {
+            font-family: 'Times New Roman', Times, serif;
+            color: white;
+        }
+    }
+
+    .tourBottomSetion {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 50%;
+        max-width: 40%;
+        bottom: 15%;
+        transform: translate(-50%, -15%);
+
+        .btnDownArrow {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            filter: saturate(100%);
+
+            .downIcon {
+                color: #00ceff;
+                font-size: 48px;
+                cursor: pointer;
+            }
+
+            .downIconComplete {
+                @extend .downIcon;
+                transform: rotate(180deg);
+
+            }
+        }
+
+
+        .btnSkip {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            filter: saturate(100%);
+            cursor: pointer;
+            text-transform: uppercase;
+            color: white;
+            font-size: 14px;
+            letter-spacing: 0.1cm;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .btnExplore {
+            @extend .btnSkip;
+            letter-spacing: 0.03cm;
+            background-color: #00ceff;
+            border-radius: 20px;
+            color: black;
+            padding: 6px 20px;
+        }
+    }
+}
