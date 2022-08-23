@@ -1,11 +1,41 @@
+/* eslint-disable no-shadow */
+/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import produce from 'immer';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
     _cs,
+    compareDate,
+    compareString,
+    compareBoolean,
     listToMap,
 } from '@togglecorp/fujs';
+import { Item } from 'semantic-ui-react';
+import { Translation } from 'react-i18next';
+import { t } from 'i18next';
+import { MapChildContext } from '#re-map/context';
+import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
+import Icon from '#rscg/Icon';
+import Sortable from '#rscv/Taebul/Sortable';
+import ColumnWidth from '#rscv/Taebul/ColumnWidth';
+import Button from '#rsca/Button';
+import DownloadButton from '#components/DownloadButton';
+import TableDateCell from '#components/TableDateCell';
+import {
+    convertTableToCsv,
+    prepareColumns,
+    defaultState,
+} from '#utils/table';
 
 import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
@@ -15,12 +45,14 @@ import Cloak from '#components/Cloak';
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import ListView from '#rscv/List/ListView';
-
+import Message from '#rscv/Message';
 import {
     regionSelector,
     municipalitiesSelector,
     profileContactFiltersSelector,
+    palikaRedirectSelector,
     userSelector,
+    languageSelector,
 } from '#selectors';
 import {
     AppState,
@@ -30,7 +62,10 @@ import {
     Municipality,
     Region,
 } from '#store/atom/page/types';
-
+import phoneContactLogo from '../../../resources/icons/phone-contact.svg';
+import emailContactLogo from '../../../resources/icons/email-logo.svg';
+import tableView from '../../../resources/icons/list-view.svg';
+import listView from '../../../resources/icons/category-view.svg';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -46,9 +81,13 @@ import ContactItem from './ContactItem';
 import ContactEditForm from './ContactEditForm';
 
 import styles from './styles.scss';
+import Taebul from '#rscv/Taebul';
+import { checkSameRegionPermission } from '#utils/common';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+
 
 const AccentModalButton = modalize(AccentButton);
-
+const ModalButton = modalize(Button);
 interface OwnProps {
     className?: string;
 }
@@ -75,11 +114,13 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalityList: municipalitiesSelector(state),
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+    language: languageSelector(state),
     user: userSelector(state),
 });
 
 const contactKeySelector = (d: Contact) => d.id;
-
+const tableKeySelector = data => data.id;
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     municipalityContactRequest: {
         url: '/municipality-contact/',
@@ -128,6 +169,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             console.warn('failure', error.errorMessage);
         },
     },
+    municipalityContactDeleteRequest: {
+        url: ({ params }) => `/municipality-contact/${params.contactId}/`,
+        method: methods.DELETE,
+        onSuccess: ({ params }) => {
+            if (params.onContactDelete) {
+                params.onContactDelete(params.contactId);
+            }
+        },
+    },
 
 };
 
@@ -138,6 +188,8 @@ interface SelectInputOption {
 // eslint-disable-next-line no-unused-vars
 let filteredContactList = [];
 let filteredContactListLastIndex = null;
+
+
 class ContactPage extends React.PureComponent<Props, State> {
     public static contextType = TitleContext;
 
@@ -157,20 +209,28 @@ class ContactPage extends React.PureComponent<Props, State> {
             changedIndex: null,
             contactLoading: false,
             isSortByOrdering: true,
+            settings: defaultState,
+            sortData: [],
+            enableAscendingSort: null,
+            selectedSortList: '',
+            searchActivated: false,
+            enableListView: true,
+            selectedContactFromLabelListId: null,
+            searchKeyword: '',
 
         };
         const { contactList } = this.state;
         if (!contactList.length) {
             const { user } = this.props;
 
-            // console.log('This is user', user);
+
             if (user) {
                 const { user: { profile: {
                     province,
                     district,
                     municipality,
                 } },
-                region } = this.props;
+                    region } = this.props;
                 municipalityContactRequest.setDefaultParams({
                     setProfileContactList: this.setProfileContactList,
                     province: region.adminLevel === 1 ? region.geoarea : '',
@@ -312,7 +372,13 @@ class ContactPage extends React.PureComponent<Props, State> {
     })
 
     private setProfileContactList = (contactList: Contact[]) => {
-        this.setState({ contactList });
+        this.setState({
+            contactList,
+            sortData: contactList,
+            searchActivated: false,
+            searchKeyword: '',
+            selectedContactFromLabelListId: false,
+        });
     }
 
     private contactRendererParams = (_: string, data: Contact) => ({
@@ -328,7 +394,7 @@ class ContactPage extends React.PureComponent<Props, State> {
 
     })
 
-    private handleContactSortUp=(contactDetail) => {
+    private handleContactSortUp = (contactDetail) => {
         this.setState({
             contactLoading: true,
             isSortByOrdering: false,
@@ -408,14 +474,14 @@ class ContactPage extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleLoader=(data) => {
+    private handleLoader = (data) => {
         this.setState({
             contactLoading: false,
             isSortByOrdering: true,
         });
     }
 
-    private handleContactSortDown=(contactDetail) => {
+    private handleContactSortDown = (contactDetail) => {
         this.setState({
             contactLoading: true,
             isSortByOrdering: false,
@@ -532,11 +598,16 @@ class ContactPage extends React.PureComponent<Props, State> {
         this.setState({ contactList: newContactList });
     }
 
+
     public componentDidUpdate(prevProps, prevState, snapshot) {
         const { region,
             requests: {
                 municipalityContactRequest,
             } } = this.props;
+
+        // if (prevState.sortData !== this.state.sortData) {
+        //     window.scrollTo(0, 0);
+        // }
         if (prevProps.region !== region) {
             municipalityContactRequest.do(
                 {
@@ -547,6 +618,499 @@ class ContactPage extends React.PureComponent<Props, State> {
                 },
             );
         }
+    }
+
+    private handleSettingsChange = (val) => {
+        this.setState({ settings: val });
+    }
+
+
+    private AlertTableEmptyComponent = () => (
+        <Message>
+            <div className={styles.alertEmpty}>
+                There are no alerts at the moment.
+            </div>
+        </Message>
+    );
+
+    private sortButtonDescending = (keyword) => {
+        const { sortData } = this.state;
+        this.setState({ searchActivated: true });
+        let data = [];
+        if (sortData.length) {
+            data = sortData.sort((a, b) => {
+                if (a[keyword] < b[keyword]) return 1;
+                if (a[keyword] > b[keyword]) return -1;
+                return 0;
+            });
+        } else {
+            data = filteredContactList.sort((a, b) => {
+                if (a[keyword] < b[keyword]) return 1;
+                if (a[keyword] > b[keyword]) return -1;
+                return 0;
+            });
+        }
+
+
+        this.setState({
+            sortData: data,
+            sortButtonAscending: false,
+            selectedSortList: keyword,
+        });
+    }
+
+    private sortButtonAscending = (keyword) => {
+        const { sortData } = this.state;
+        this.setState({ searchActivated: true });
+        let data = [];
+        if (sortData.length) {
+            data = sortData.sort((a, b) => {
+                if (a[keyword] < b[keyword]) return -1;
+                if (a[keyword] > b[keyword]) return 1;
+                return 0;
+            });
+        } else {
+            data = filteredContactList.sort((a, b) => {
+                if (a[keyword] < b[keyword]) return -1;
+                if (a[keyword] > b[keyword]) return 1;
+                return 0;
+            });
+        }
+
+        this.setState({
+            sortData: data,
+            sortButtonAscending: true,
+            selectedSortList: keyword,
+        });
+    }
+
+    private handleSearch = (value) => {
+        this.setState({ searchActivated: true, searchKeyword: value });
+
+        if (value === '' || value === null) {
+            this.setState({
+                sortData: filteredContactList,
+            });
+        } else {
+            const filteredData = filteredContactList.filter((item, i) => (
+                item.position.toLowerCase().indexOf(value.toLowerCase()) !== -1
+            ));
+
+            this.setState({ sortData: filteredData });
+        }
+    }
+
+    private SortButton = (
+        tableHeaderName,
+
+    ) => {
+        const { sortButtonAscending, selectedSortList } = this.state;
+
+        return ((sortButtonAscending === undefined ? (
+            <button
+                style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                type="button"
+                onClick={() => this.sortButtonAscending(tableHeaderName)}
+            >
+                <Icon className={styles.visualizationIcon} name="sort" />
+            </button>
+        ) // eslint-disable-next-line no-nested-ternary
+            : selectedSortList === tableHeaderName ? (
+                !sortButtonAscending ? (
+                    <button
+                        type="button"
+                        style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                        onClick={() => this.sortButtonAscending(tableHeaderName)}
+                    >
+                        <Icon className={styles.visualizationIcon} name="sortAscending" />
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                        onClick={() => this.sortButtonDescending(tableHeaderName)}
+                    >
+                        <Icon className={styles.visualizationIcon} name="sortDescending" />
+                    </button>
+                )
+            ) : (
+                <button
+                    style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                    type="button"
+                    onClick={() => this.sortButtonDescending(tableHeaderName)}
+                >
+                    <Icon className={styles.visualizationIcon} name="sort" />
+                </button>
+            )));
+    };
+
+    private editDeleteButton = (contactId, contact) => {
+        const { user, region, requests: {
+            municipalityContactDeleteRequest,
+        },
+            language: { language } } = this.props;
+        const filterPermissionGranted = checkSameRegionPermission(user, region);
+        const { name } = contact;
+
+        const handleContactDetailsDelete = () => {
+            municipalityContactDeleteRequest.do({
+                contactId,
+                onContactDelete: this.handleContactDelete,
+            });
+        };
+
+        const { pending } = municipalityContactDeleteRequest;
+        const confirmationMessage = language === 'en'
+            ? `Are you sure you want to remove the contact ${name}?`
+            : `के तपाइँ निश्चित हुनुहुन्छ कि तपाइँ ${name} लाई हटाउन चाहनुहुन्छ ?`;
+        return (
+            filterPermissionGranted
+                ? (
+                    <Translation>
+                        {
+                            t => (
+                                <>
+                                    <div className={styles.actionButtons}>
+                                        <Cloak hiddenIf={p => !p.change_contact}>
+                                            <ModalButton
+                                                className={styles.editButton}
+                                                iconName="edit"
+                                                transparent
+                                                modal={(
+                                                    <ContactEditForm
+                                                        contactId={contactId}
+                                                        details={contact}
+                                                        onEditSuccess={this.handleContactEdit}
+                                                    />
+                                                )}
+                                            >
+                                                {t('Edit')}
+                                            </ModalButton>
+                                        </Cloak>
+                                        <Cloak hiddenIf={p => !p.delete_contact}>
+                                            <DangerConfirmButton
+                                                className={styles.editButton}
+                                                iconName="delete"
+                                                confirmationMessage={confirmationMessage}
+                                                pending={pending}
+                                                onClick={handleContactDetailsDelete}
+                                                transparent
+                                            >
+                                                {t('Delete')}
+                                            </DangerConfirmButton>
+                                        </Cloak>
+                                    </div>
+                                </>
+                            )
+                        }
+                    </Translation>
+
+                )
+                : ''
+        );
+    }
+
+    private tableComponent = () => {
+        const { isSortByOrdering, contactList,
+            sortData, sortButtonAscending,
+            searchActivated, selectedSortList } = this.state;
+        return (
+            <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
+                <Translation>
+                    {
+                        t => (
+                            <table className={styles.contacts}>
+                                <thead>
+                                    <tr style={{ position: 'sticky', top: '0', zIndex: '1' }}>
+                                        <th>
+                                            {t('S/N')}
+
+
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+
+                                                {t('Name')}
+
+                                                {this.SortButton('name')}
+
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+
+                                                {t('Position')}
+                                                {this.SortButton('position')}
+
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Organization')}
+                                                {this.SortButton('position')}
+
+                                            </div>
+                                        </th>
+                                        {/* <th>Organization</th> */}
+                                        <th>{t('Phone Number')}</th>
+                                        <th>{t('Email')}</th>
+                                        <th>
+                                            <div style={{ display: 'flex' }}>
+                                                {t('Committe')}
+                                                {this.SortButton('committee')}
+                                            </div>
+                                        </th>
+                                        <Cloak hiddenIf={p => !p.add_contact}>
+                                            <th>{t('Action')}</th>
+                                        </Cloak>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {searchActivated ? !sortData.length
+                                        ? (
+                                            <tr>
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td>{t('No Data Available')}</td>
+                                                <td />
+                                                <td />
+                                                <td />
+                                            </tr>
+                                        )
+                                        : sortData.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.name}</td>
+                                                <td>{item.position}</td>
+                                                <td>
+                                                    {item.organization ? item.organization.title : '-'}
+                                                </td>
+                                                <td>{item.mobileNumber}</td>
+                                                <td>{item.email}</td>
+                                                <td>{item.committee}</td>
+                                                <td>{this.editDeleteButton(item.id, item)}</td>
+                                            </tr>
+                                        )) : filteredContactList.length ? filteredContactList.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.name}</td>
+                                                <td>{item.position}</td>
+                                                <td>
+                                                    {item.organization ? item.organization.title : '-'}
+
+                                                </td>
+                                                <td>{item.mobileNumber}</td>
+                                                <td>{item.email}</td>
+                                                <td>{item.committee}</td>
+                                                <td>{this.editDeleteButton(item.id, item)}</td>
+                                            </tr>
+                                        )) : (
+                                        <tr>
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td>{t('No Data Available')}</td>
+                                            <td />
+                                            <td />
+                                            <td />
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )
+                    }
+                </Translation>
+
+            </div>
+        );
+    }
+
+    private trainingTitleName = (title) => {
+        const { language: { language } } = this.props;
+
+        const trainingList = {
+            LSAR: language === 'en' ? 'Lite Search & Rescue' : 'लाइट खोज र उद्धार',
+            rapid_assessment: language === 'en' ? 'Rapid Assessment' : 'द्रुत मूल्याङ्कन',
+            first_aid: language === 'en' ? 'First Aid' : 'प्राथमिक उपचार',
+            fire_fighting: language === 'en' ? 'Fire Fighting' : 'आगो  नियन्‍त्रण',
+        };
+        return trainingList[title];
+    }
+
+    private listComponent = () => {
+        const { sortData, searchActivated, selectedContactFromLabelListId } = this.state;
+        const { language: { language } } = this.props;
+
+        const handleClick = (coordinates, id) => {
+            const { map } = this.context;
+
+
+            this.setState({ selectedContactFromLabelListId: id });
+            map.flyTo({ center: coordinates, zoom: 15 });
+        };
+
+        return (
+
+            <Translation>
+                {
+                    t => (
+                        <div style={{ overflowY: 'scroll' }}>
+                            <div className={styles.row}>
+                                {searchActivated ? !sortData.length
+                                    ? (
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <h2>{t('No Data Availabe')}</h2>
+                                        </div>
+
+                                    )
+                                    : sortData.map((item, i) => (
+
+                                        <div
+                                            key={item.id}
+                                            className={item.id === selectedContactFromLabelListId ? _cs(styles.column, styles.active) : styles.column}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => handleClick(item.point.coordinates, item.id)}
+                                            onKeyDown={undefined}
+                                        >
+                                            <div className={styles.contactImageProfile}>
+                                                <img
+                                                    className={styles.image}
+                                                    src={item.image}
+                                                    alt="profile"
+                                                    loading="lazy"
+                                                />
+                                                <div className={styles.contactNameDetails}>
+                                                    <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
+                                                    <span>
+                                                        {item.position}
+                                                        ,
+                                                        {item.committee}
+                                                    </span>
+
+
+                                                </div>
+                                            </div>
+                                            <div className={styles.contactPhoneDetails}>
+                                                <span style={{ color: 'black' }}>{item.mobileNumber || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={phoneContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactEmailDetails}>
+                                                <span style={{ color: 'black', wordBreak: 'break-word', marginRight: '10px' }}>{item.email || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={emailContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
+                                                <div style={item.trainings.length ? { marginLeft: '10px', marginRight: '10px' }
+                                                    : { marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}
+                                                >
+                                                    <p>
+                                                        {item.trainings.length ? item.trainings.map((data, index) => (
+                                                            <>
+                                                                {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
+                                                                {this.trainingTitleName(data.title)}
+
+                                                                {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
+                                                            </>
+                                                        ))
+                                                            : t('No Training Attained')
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <div className={styles.editDeleteButtn}>
+                                                    {this.editDeleteButton(item.id, item)}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                    )) : filteredContactList.length ? filteredContactList.map((item, i) => (
+
+                                        <div
+                                            key={item.id}
+                                            className={item.id === selectedContactFromLabelListId ? _cs(styles.column, styles.active) : styles.column}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => handleClick(item.point.coordinates, item.id)}
+                                            onKeyDown={undefined}
+                                        >
+                                            <div className={styles.contactImageProfile}>
+                                                <img
+                                                    className={styles.image}
+                                                    src={item.image}
+                                                    alt="profile"
+                                                    loading="lazy"
+                                                />
+                                                <div className={styles.contactNameDetails}>
+                                                    <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
+                                                    <span>
+                                                        {item.position}
+                                                        ,
+                                                        {item.committee}
+                                                    </span>
+
+
+                                                </div>
+                                            </div>
+                                            <div className={styles.contactPhoneDetails}>
+                                                <span style={{ color: 'black' }}>{item.mobileNumber || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={phoneContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactEmailDetails}>
+                                                <span style={{ color: 'black', wordBreak: 'break-word', marginRight: '10px' }}>{item.email || '-'}</span>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.icon}
+                                                    src={emailContactLogo}
+                                                />
+                                            </div>
+                                            <div className={styles.contactDetailsFooter} style={item.trainings.length ? {} : { display: 'flex' }}>
+                                                <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+                                                    <p>
+                                                        {item.trainings.length ? item.trainings.map((data, index) => (
+                                                            <>
+                                                                {(item.trainings.length - 1 === index) && (item.trainings.length !== 1) ? ' & ' : ''}
+                                                                {this.trainingTitleName(data.title)}
+
+                                                                {(item.trainings.length - 1 === index) || (item.trainings.length - 2 === index) ? '' : ','}
+                                                            </>
+                                                        ))
+
+                                                            : t('No Training Attained')
+                                                        }
+                                                    </p>
+                                                    {/* <p>First Aid,Search & Rescue and Drill exercise</p> */}
+                                                </div>
+                                                <div className={styles.editDeleteButtn}>
+                                                    {this.editDeleteButton(item.id, item)}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    )) : (
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <h2>{t('No Data Available')}</h2>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )
+                }
+            </Translation>
+
+        );
     }
 
     public render() {
@@ -564,10 +1128,13 @@ class ContactPage extends React.PureComponent<Props, State> {
                 } = {},
 
             },
+            palikaRedirect,
         } = this.props;
 
         const { setProfile } = this.context;
-        const { isSortByOrdering, contactList } = this.state;
+        const { isSortByOrdering, contactList,
+            sortData, sortButtonAscending,
+            searchActivated, selectedSortList, enableListView, searchKeyword } = this.state;
 
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
@@ -587,14 +1154,16 @@ class ContactPage extends React.PureComponent<Props, State> {
             // const filteredContactListWithoutArrayIndex = contactList;
             filteredContactList = filteredContactListWithoutArrayIndex
                 .map((item, i) => ({ ...item, indexValue: i }));
+
+
             filteredContactListLastIndex = filteredContactList.length - 1;
         }
+
         const pointsGeoJson = this.getPointsGeoJson(filteredContactList, municipalityList);
         const clusteredPointFilter = ['has', 'point_count'];
         const nonClusteredPointFilter = ['!', clusteredPointFilter];
 
         const positionOptions = this.getPositionOptions(contactList);
-
         return (
             <>
                 <Loading pending={pending} />
@@ -634,39 +1203,59 @@ class ContactPage extends React.PureComponent<Props, State> {
                         }}
                     />
                 </MapSource>
-                <div className={_cs(className, styles.left)}>
-                    <header className={styles.header}>
-                        <h2 className={styles.heading}>
-                            Contact personnels
-                        </h2>
-                        <Cloak hiddenIf={p => !p.add_contact}>
-                            <AccentModalButton
-                                className={styles.button}
-                                iconName="add"
-                                transparent
-                                modal={(
-                                    <ContactEditForm
-                                        onAddSuccess={this.handleContactAdd}
-                                    />
-                                )}
-                            >
-                                Add Contact
-                            </AccentModalButton>
-                        </Cloak>
-                    </header>
-                    <ListView
-                        className={styles.contactDetailsList}
-                        data={filteredContactList}
-                        renderer={ContactItem}
-                        rendererParams={this.contactRendererParams}
-                        keySelector={contactKeySelector}
-                    />
-                </div>
+                <Translation>
+                    {
+                        t => (
+                            <div className={_cs(className, styles.left)}>
+                                <header className={styles.header}>
+                                    <input className={styles.search} name="search" type="text" value={searchKeyword} placeholder={t('SEARCH BY POSITION')} onChange={e => this.handleSearch(e.target.value)} />
+
+                                    <div style={{ marginLeft: '10px', marginRight: '10px', display: 'flex' }}>
+                                        <Button
+                                            className={styles.SelectTableButton}
+                                            onClick={() => this.setState({ enableListView: !enableListView })}
+                                            disabled={!filteredContactList.length}
+                                            title={enableListView ? t('Table View') : t('List View')}
+                                        >
+                                            <div key={enableListView}>
+                                                <ScalableVectorGraphcis
+                                                    className={styles.iconDataView}
+                                                    src={enableListView ? tableView : listView}
+                                                />
+                                            </div>
+
+
+                                        </Button>
+
+
+                                        <Cloak hiddenIf={p => !p.add_contact}>
+                                            <AccentModalButton
+                                                className={styles.button}
+                                                iconName="add"
+                                                transparent
+                                                modal={(
+                                                    <ContactEditForm
+                                                        onAddSuccess={this.handleContactAdd}
+                                                    />
+                                                )}
+                                            >
+                                                {t('Add Contact')}
+                                            </AccentModalButton>
+                                        </Cloak>
+                                    </div>
+                                </header>
+                                {enableListView ? this.listComponent() : this.tableComponent()}
+
+                            </div>
+                        )
+                    }
+                </Translation>
+
             </>
         );
     }
 }
-
+ContactPage.contextType = MapChildContext;
 export default connect(mapStateToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(

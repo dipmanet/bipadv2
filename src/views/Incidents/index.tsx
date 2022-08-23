@@ -8,8 +8,8 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import { Translation } from 'react-i18next';
 import Legend from '#rscz/Legend';
-
 import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -31,6 +31,7 @@ import {
     filtersSelector,
     hazardTypesSelector,
     regionsSelector,
+    languageSelector,
 } from '#selectors';
 import { hazardTypesList } from '#utils/domain';
 import {
@@ -90,6 +91,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
     filters: filtersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -157,19 +159,25 @@ const RECENT_DAY = 1;
 
 interface LegendItem {
     label: string;
+    labelNe: string;
     style: string;
     color: string;
     radius?: number;
 }
 
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
-    { label: 'Major (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
-    { label: 'Severe (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
-    { label: 'Catastrophic (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+    { label: 'Minor (0)', labelNe: 'न्यून (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', labelNe: 'प्रमुख (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', labelNe: 'गम्भीर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
 ];
 
-const labelSelector = (d: LegendItem) => d.label;
+const labelSelector = (d: LegendItem, language: string) => {
+    if (language === 'en') {
+        return d.label;
+    }
+    return d.labelNe;
+};
 const keySelector = (d: LegendItem) => d.label;
 const classNameSelector = (d: LegendItem) => d.style;
 const colorSelector = (d: LegendItem) => d.color;
@@ -224,6 +232,7 @@ class Incidents extends React.PureComponent<Props, State> {
             regions,
             hazardTypes,
             filters,
+            language: { language },
         } = this.props;
 
         const { hoveredIncidentId } = this.state;
@@ -268,7 +277,12 @@ class Incidents extends React.PureComponent<Props, State> {
                             <div className={styles.pointSizeLegendContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                        People death count
+                                        <Translation>
+                                            {
+                                                t => <span>{t('People death count')}</span>
+                                            }
+                                        </Translation>
+
                                     </h4>
                                 </header>
                                 <Legend
@@ -279,13 +293,20 @@ class Incidents extends React.PureComponent<Props, State> {
                                     emptyComponent={null}
                                     itemClassName={styles.legendItem}
                                     keySelector={keySelector}
-                                    labelSelector={labelSelector}
+                                    labelSelector={e => labelSelector(e, language)}
                                     symbolClassNameSelector={classNameSelector}
                                 />
                             </div>
                             {filteredHazardTypes.length > 0 && (
                                 <div className={styles.hazardLegend}>
-                                    <div className={styles.legendTitle}>Hazards Legend</div>
+                                    <div className={styles.legendTitle}>
+                                        <Translation>
+                                            {
+                                                t => <span>{t('Hazards Legend')}</span>
+                                            }
+                                        </Translation>
+
+                                    </div>
                                     <HazardsLegend
                                         filteredHazardTypes={filteredHazardTypes}
                                         className={styles.legend}

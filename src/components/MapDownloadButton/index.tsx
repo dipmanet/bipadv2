@@ -30,6 +30,7 @@ import {
     realTimeFiltersSelector,
     layersSelector,
     layerGroupSelector,
+    languageSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
@@ -78,6 +79,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     realtimeFilters: realTimeFiltersSelector(state),
     layers: layersSelector(state),
     layerGroups: layerGroupSelector(state),
+    language: languageSelector(state),
 
 });
 
@@ -161,6 +163,7 @@ const MapDownloadButton = (props: Props) => {
         handleCancelButton,
         mapOrientation,
         handleDisableDownloadButton,
+        language: { language },
         ...otherProps
     } = props;
 
@@ -371,6 +374,7 @@ const MapDownloadButton = (props: Props) => {
                     realtimeFilters,
                     riskInfoActiveLayers,
                     dataDateRange,
+                    language,
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
                 source = specificSource || '';

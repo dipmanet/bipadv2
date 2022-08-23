@@ -15,7 +15,7 @@ import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-import { hazardTypesSelector } from '#selectors';
+import { hazardTypesSelector, languageSelector } from '#selectors';
 
 import {
     incidentPointToGeojson,
@@ -53,6 +53,7 @@ const resourceImages = [
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 const propTypes = {
@@ -132,6 +133,7 @@ class ResponseMap extends React.PureComponent {
             incident,
             resourceList,
             hazards,
+            language: { language },
         } = this.props;
 
         const {
@@ -162,7 +164,7 @@ class ResponseMap extends React.PureComponent {
             <React.Fragment>
                 <ZoomMap
                     bounds={mybox}
-                    // boundsPadding={boundsPadding}
+                // boundsPadding={boundsPadding}
                 />
                 {resourceImages.map(image => (
                     <SVGMapIcon
@@ -195,7 +197,7 @@ class ResponseMap extends React.PureComponent {
                             paint: mapStyles.resourceSymbol.symbol,
                         }}
                     />
-                    { resourceLngLat && resource && (
+                    {resourceLngLat && resource && (
                         <MapTooltip
                             coordinates={resourceLngLat}
                             tooltipOptions={tooltipOptions}
@@ -204,12 +206,13 @@ class ResponseMap extends React.PureComponent {
                             <ResourceItem
                                 {...resource}
                                 showDetails
+                                language={language}
                             />
                         </MapTooltip>
                     )}
                 </MapSource>
 
-                { point && (
+                {point && (
                     <MapSource
                         sourceKey="points"
                         geoJson={this.getPointFeatureCollection(incidentList, hazards)}
@@ -225,7 +228,7 @@ class ResponseMap extends React.PureComponent {
                         />
                     </MapSource>
                 )}
-                { polygon && (
+                {polygon && (
                     <MapSource
                         sourceKey="polygon"
                         sourceOptions={{ type: 'geojson' }}

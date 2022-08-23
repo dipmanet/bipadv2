@@ -7,6 +7,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -22,6 +23,7 @@ import {
     countryListSelector,
     peopleLossStatusListSelector,
     genderListSelector,
+    languageSelector,
 } from '#selectors';
 
 import { AppState } from '#store/types';
@@ -99,6 +101,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     countryList: countryListSelector(state),
     peopleLossStatusList: peopleLossStatusListSelector(state),
     genderList: genderListSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -221,6 +224,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -230,94 +234,104 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={className}>
-                <ModalHeader
-                    title="Add People Loss"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddPeopleLoss.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                >
-                    <ModalBody className={styles.modalBody}>
-                        {pending && <LoadingAnimation />}
-                        <NonFieldErrors faramElement />
-                        <SelectInput
-                            faramElementName="status"
-                            label="Status"
-                            options={peopleLossStatusList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                            autoFocus
-                        />
-                        <TextInput
-                            faramElementName="name"
-                            label="Name"
-                        />
-                        <NumberInput
-                            faramElementName="age"
-                            label="Age"
-                        />
-                        <SelectInput
-                            faramElementName="gender"
-                            label="Gender"
-                            options={genderList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                        />
-                        <Checkbox
-                            faramElementName="belowPoverty"
-                            label="Below Poverty"
-                        />
-                        <NumberInput
-                            faramElementName="count"
-                            label="Count"
-                        />
-                        <Cloak hiddenIf={p => !p.verify_people}>
-                            <>
-                                <Checkbox
-                                    faramElementName="verified"
-                                    label="Verified"
-                                />
-                                <TextInput
-                                    faramElementName="verificationMessage"
-                                    label="Verification Message"
-                                />
-                            </>
-                        </Cloak>
-                        <SelectInput
-                            faramElementName="nationality"
-                            label="Nationality"
-                            options={countryList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={className}>
+                            <ModalHeader
+                                title={t('Add People Loss')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddPeopleLoss.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                            >
+                                <ModalBody className={styles.modalBody}>
+                                    {pending && <LoadingAnimation />}
+                                    <NonFieldErrors faramElement />
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="status"
+                                        label={t('Status')}
+                                        options={peopleLossStatusList}
+                                        keySelector={labelSelector}
+                                        labelSelector={labelSelector}
+                                        autoFocus
+                                    />
+                                    <TextInput
+                                        faramElementName="name"
+                                        label={t('Name')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="age"
+                                        label={t('Age')}
+                                    />
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="gender"
+                                        label={t('Gender')}
+                                        options={genderList}
+                                        keySelector={labelSelector}
+                                        labelSelector={labelSelector}
+                                    />
+                                    <Checkbox
+                                        faramElementName="belowPoverty"
+                                        label={t('Below Poverty')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="count"
+                                        label={t('Count')}
+                                    />
+                                    <Cloak hiddenIf={p => !p.verify_people}>
+                                        <>
+                                            <Checkbox
+                                                faramElementName="verified"
+                                                label={t('Verified')}
+                                            />
+                                            <TextInput
+                                                faramElementName="verificationMessage"
+                                                label={t('Verification Message')}
+                                            />
+                                        </>
+                                    </Cloak>
+                                    <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        faramElementName="nationality"
+                                        label={t('Nationality')}
+                                        options={countryList}
+                                        keySelector={keySelector}
+                                        labelSelector={labelSelector}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

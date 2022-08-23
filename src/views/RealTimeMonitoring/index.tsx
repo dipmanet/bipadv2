@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
@@ -42,6 +44,7 @@ import {
     filtersSelector,
     realTimeDurationSelector,
     riverFiltersSelector,
+    languageSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -124,6 +127,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     duration: realTimeDurationSelector(state),
     riverFilters: riverFiltersSelector(state),
 
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -349,7 +353,11 @@ const itemSelector = (d: { label: string }) => d.label;
 // const iconSelector = (d: { icon: string }) => d.icon;
 const radiusSelector = (d: { radius: number }) => d.radius;
 const legendColorSelector = (d: { color: string }) => d.color;
-const legendLabelSelector = (d: { label: string }) => d.label;
+const legendLabelSelector = (d: {
+    label: string;
+    labelNe: string;
+}, lang) => (lang === 'en' ? d.label : d.labelNe);
+
 const classNameSelector = (d: { style: string }) => d.style;
 
 const emptyHazardHoverAttributeList: MapStateElement[] = [];
@@ -448,6 +456,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
             realTimeRiverList,
             realTimePollutionList,
             duration,
+            language: { language },
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -475,7 +484,11 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 alt="Rain"
                             />
                             <h4 className={styles.heading}>
-                                Rain
+                                <Translation>
+                                    {
+                                        t => <span>{t('Rain')}</span>
+                                    }
+                                </Translation>
                             </h4>
                         </header>
                         {duration === 24
@@ -486,7 +499,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     // iconSelector={iconSelector}
-                                    labelSelector={legendLabelSelector}
+                                    labelSelector={d => legendLabelSelector(d, language)}
                                     symbolClassNameSelector={classNameSelector}
                                     colorSelector={legendColorSelector}
                                     emptyComponent={null}
@@ -501,7 +514,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     // iconSelector={iconSelector}
-                                    labelSelector={legendLabelSelector}
+                                    labelSelector={d => legendLabelSelector(d, language)}
                                     symbolClassNameSelector={classNameSelector}
                                     colorSelector={legendColorSelector}
                                     emptyComponent={null}
@@ -516,7 +529,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     // iconSelector={iconSelector}
-                                    labelSelector={legendLabelSelector}
+                                    labelSelector={d => legendLabelSelector(d, language)}
                                     symbolClassNameSelector={classNameSelector}
                                     colorSelector={legendColorSelector}
                                     emptyComponent={null}
@@ -531,7 +544,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     // iconSelector={iconSelector}
-                                    labelSelector={legendLabelSelector}
+                                    labelSelector={d => legendLabelSelector(d, language)}
                                     symbolClassNameSelector={classNameSelector}
                                     colorSelector={legendColorSelector}
                                     emptyComponent={null}
@@ -546,7 +559,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     // iconSelector={iconSelector}
-                                    labelSelector={legendLabelSelector}
+                                    labelSelector={d => legendLabelSelector(d, language)}
                                     symbolClassNameSelector={classNameSelector}
                                     colorSelector={legendColorSelector}
                                     emptyComponent={null}
@@ -555,7 +568,12 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                         }
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -563,7 +581,11 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Department of Hydrology and Meteorology
+                                <Translation>
+                                    {
+                                        t => <span>{t('Department of Hydrology and Meteorology')}</span>
+                                    }
+                                </Translation>
                             </a>
                         </div>
                     </div>
@@ -577,7 +599,11 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 alt="River"
                             />
                             <h4 className={styles.heading}>
-                                River
+                                <Translation>
+                                    {
+                                        t => <span>{t('River')}</span>
+                                    }
+                                </Translation>
                             </h4>
                         </header>
                         <Legend
@@ -592,14 +618,20 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -607,7 +639,11 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Department of Hydrology and Meteorology
+                                <Translation>
+                                    {
+                                        t => <span>{t('Department of Hydrology and Meteorology')}</span>
+                                    }
+                                </Translation>
                             </a>
                         </div>
                     </div>
@@ -621,7 +657,12 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 alt="Earthquake"
                             />
                             <h4 className={styles.heading}>
-                                Earthquake (Richter Scale (ML))
+                                <Translation>
+                                    {
+                                        t => <span>{t('Earthquake (Richter Scale (ML))')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <Legend
@@ -631,14 +672,22 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                             keySelector={itemSelector}
                             radiusSelector={radiusSelector}
                             // iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
+
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -646,7 +695,12 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Department of Mines and Geology
+                                <Translation>
+                                    {
+                                        t => <span>{t('Department of Mines and Geology')}</span>
+                                    }
+                                </Translation>
+
                             </a>
                         </div>
                     </div>
@@ -665,7 +719,12 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                     2.5
                                 </sub>
                                 ) */}
-                                Pollution (AQI Value)
+
+                                <Translation>
+                                    {
+                                        t => <span>{t('Pollution (AQI Value)')}</span>
+                                    }
+                                </Translation>
                             </h4>
                         </header>
                         <Legend
@@ -678,14 +737,21 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                             }
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -693,7 +759,12 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Ministry of Forests and Environment
+                                <Translation>
+                                    {
+                                        t => <span>{t('Ministry of Forests and Environment')}</span>
+                                    }
+                                </Translation>
+
                             </a>
                         </div>
                     </div>
@@ -706,7 +777,12 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 src={FireIcon}
                             />
                             <h4 className={styles.heading}>
-                                Forest Fire
+                                <Translation>
+                                    {
+                                        t => <span>{t('Forest Fire')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <Legend
@@ -714,14 +790,20 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                             data={forestFireLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={d => legendLabelSelector(d, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -729,13 +811,52 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                International Centre for Integrated Mountain Development
+                                <Translation>
+                                    {
+                                        t => <span>{t('International Centre for Integrated Mountain Development')}</span>
+                                    }
+                                </Translation>
                             </a>
                         </div>
                     </div>
                 )}
                 {showStreamflow && (
-                    <StreamFlowLegend />
+                    <>
+                        <StreamFlowLegend />
+                        <div className={styles.legendContainer}>
+                            <header className={styles.header}>
+                                <svg className={styles.legendIcon}>
+                                    <line x1="0" y1="5" x2="20" y2="5" style={{ stroke: '#7cb5ec', strokeWidth: 5 }} />
+                                </svg>
+                                <h4 className={styles.heading}>
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Streamflow')}</span>
+                                        }
+                                    </Translation>
+
+                                </h4>
+                            </header>
+                            <div className={styles.sourceDetails}>
+                                <div className={styles.label}>
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Source')}</span>
+                                        }
+                                    </Translation>
+                                    :
+                                </div>
+                                <a
+                                    className={styles.link}
+                                    href="http://tethys.icimod.org/apps/ecmwf/#"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    ICIMOD (ecmwf)
+                                </a>
+                            </div>
+                        </div>
+                    </>
                 )}
             </>
         );
@@ -785,7 +906,6 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
         const {
             activeView,
         } = this.state;
-
         const showEarthquake = otherSources && otherSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
@@ -855,153 +975,162 @@ just been deselected */
                     hideDataRangeFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
-                        <>
-                            <header className={styles.header}>
-                                <div className={styles.tabs}>
-                                    {showRain && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'rainwatch' && styles.active)}
-                                            onClick={this.handleRainWatchButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeRainList.length}
+
+                        <Translation>
+                            {
+                                t => (
+                                    <>
+                                        <header className={styles.header}>
+                                            <div className={styles.tabs}>
+                                                {showRain && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'rainwatch' && styles.active)}
+                                                        onClick={this.handleRainWatchButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeRainList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.alertIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                <span>{t('Rain watch')}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showRiver && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'riverwatch' && styles.active)}
+                                                        onClick={this.handleRiverWatchButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeRiverList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                <span>{t('River watch')}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showEarthquake && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'earthquake' && styles.active)}
+                                                        onClick={this.handleEarthquakeButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeEarthquakeList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                {t('Earthquake')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showPollution && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'pollution' && styles.active)}
+                                                        onClick={this.handlePollutionButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimePollutionList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                {t('Pollution')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {showFire && (
+                                                    <div
+                                                        className={_cs(styles.tab, validActiveView === 'fire' && styles.active)}
+                                                        onClick={this.handleFireButtonClick}
+                                                        role="presentation"
+                                                    >
+                                                        <div className={styles.value}>
+                                                            {realTimeFireList.length}
+                                                        </div>
+                                                        <div className={styles.title}>
+                                                            <div
+                                                                className={_cs(styles.icon, styles.eventIcon)}
+                                                            />
+                                                            <div className={styles.text}>
+                                                                {t('Fire')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.alertIcon)}
+                                        </header>
+                                        <div className={styles.content}>
+                                            {validActiveView === 'riverwatch' && (
+                                                <MiniRiverWatch
+                                                    className={styles.riverwatchList}
+                                                    realTimeRiver={realTimeRiverList}
+                                                    onHazardHover={this.onHazardHover}
                                                 />
-                                                <div className={styles.text}>
-                                                    Rain watch
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showRiver && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'riverwatch' && styles.active)}
-                                            onClick={this.handleRiverWatchButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeRiverList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                            )}
+                                            {validActiveView === 'rainwatch' && (
+                                                <MiniRainWatch
+                                                    className={styles.rainwatchList}
+                                                    realTimeRain={realTimeRainList}
+                                                    onHazardHover={this.onHazardHover}
                                                 />
-                                                <div className={styles.text}>
-                                                    River watch
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showEarthquake && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'earthquake' && styles.active)}
-                                            onClick={this.handleEarthquakeButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeEarthquakeList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                            )}
+                                            {validActiveView === 'earthquake' && (
+                                                <MiniEarthquake
+                                                    className={styles.rainwatchList}
+                                                    realTimeEarthquake={realTimeEarthquakeList}
+                                                    onHazardHover={this.onHazardHover}
                                                 />
-                                                <div className={styles.text}>
-                                                    Earthquake
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showPollution && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'pollution' && styles.active)}
-                                            onClick={this.handlePollutionButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimePollutionList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                            )}
+                                            {validActiveView === 'pollution' && (
+                                                <MiniPollution
+                                                    className={styles.rainwatchList}
+                                                    realTimePollution={realTimePollutionList}
+                                                    onHazardHover={this.onHazardHover}
                                                 />
-                                                <div className={styles.text}>
-                                                    Pollution
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {showFire && (
-                                        <div
-                                            className={_cs(styles.tab, validActiveView === 'fire' && styles.active)}
-                                            onClick={this.handleFireButtonClick}
-                                            role="presentation"
-                                        >
-                                            <div className={styles.value}>
-                                                {realTimeFireList.length}
-                                            </div>
-                                            <div className={styles.title}>
-                                                <div
-                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                            )}
+                                            {validActiveView === 'fire' && (
+                                                <MiniFire
+                                                    className={styles.rainwatchList}
+                                                    realTimeFire={realTimeFireList}
+                                                    onHazardHover={this.onHazardHover}
                                                 />
-                                                <div className={styles.text}>
-                                                    Fire
+                                            )}
+                                            {!validActiveView && (
+                                                <div
+                                                    className={styles.message}
+                                                >
+                                                    <Message>
+                                                        Select a category to see details
+                                                    </Message>
                                                 </div>
-                                            </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                            </header>
-                            <div className={styles.content}>
-                                {validActiveView === 'riverwatch' && (
-                                    <MiniRiverWatch
-                                        className={styles.riverwatchList}
-                                        realTimeRiver={realTimeRiverList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'rainwatch' && (
-                                    <MiniRainWatch
-                                        className={styles.rainwatchList}
-                                        realTimeRain={realTimeRainList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'earthquake' && (
-                                    <MiniEarthquake
-                                        className={styles.rainwatchList}
-                                        realTimeEarthquake={realTimeEarthquakeList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'pollution' && (
-                                    <MiniPollution
-                                        className={styles.rainwatchList}
-                                        realTimePollution={realTimePollutionList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {validActiveView === 'fire' && (
-                                    <MiniFire
-                                        className={styles.rainwatchList}
-                                        realTimeFire={realTimeFireList}
-                                        onHazardHover={this.onHazardHover}
-                                    />
-                                )}
-                                {!validActiveView && (
-                                    <div
-                                        className={styles.message}
-                                    >
-                                        <Message>
-                                            Select a category to see details
-                                        </Message>
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                                    </>
+
+                                )
+                            }
+                        </Translation>
+
                     )}
                     rightContentContainerClassName={styles.right}
                     rightContent={(

@@ -5,6 +5,8 @@ import {
     isTruthy,
 } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -25,6 +27,11 @@ import { Header } from '#store/atom/table/types';
 
 import AddPeopleLoss from './AddPeopleLoss';
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const ModalButton = modalize(Button);
 
@@ -67,7 +74,7 @@ const keySelector = (d: PageType.Field) => d.id;
 
 type Props = NewProps<OwnProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     listRequest: {
         url: '/loss-people/',
         query: ({ props: { lossServerId } }) => ({
@@ -100,6 +107,7 @@ class PeopleLossList extends React.PureComponent<Props, State> {
             requests: {
                 listRequest,
             },
+            language: { language },
         } = this.props;
 
         listRequest.setDefaultParams({
@@ -109,39 +117,39 @@ class PeopleLossList extends React.PureComponent<Props, State> {
         this.headers = [
             {
                 key: 'name',
-                label: 'Name',
+                label: language === 'en' ? 'Name' : 'नाम',
                 order: 1,
             },
             {
                 key: 'age',
-                label: 'Age',
+                label: language === 'en' ? 'Age' : 'उमेर',
                 order: 2,
             },
             {
                 key: 'gender',
-                label: 'Gender',
+                label: language === 'en' ? 'Gender' : 'लिङ्ग',
                 order: 3,
             },
             {
                 key: 'disability',
-                label: 'Disability',
+                label: language === 'en' ? 'Disability' : 'अपाङ्गता',
                 order: 4,
                 modifier: row => (isTruthy(row.disability) ? String(row.disability) : 'N/A'),
             },
             {
                 key: 'belowPoverty',
-                label: 'Below Poverty',
+                label: language === 'en' ? 'Below Poverty' : 'गरिबी मुनि',
                 order: 5,
                 modifier: row => (row.belowPoverty ? 'Yes' : 'No'),
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: language === 'en' ? 'Status' : 'स्थिति',
                 order: 6,
             },
             {
                 key: 'actions',
-                label: 'Actions',
+                label: language === 'en' ? 'Actions' : 'कार्यहरू',
                 order: 7,
                 modifier: (row) => {
                     const {
@@ -149,15 +157,22 @@ class PeopleLossList extends React.PureComponent<Props, State> {
                     } = row;
 
                     return (
-                        <div className={styles.actionButton}>
-                            <Cloak hiddenIf={p => !p.delete_people}>
-                                <DangerConfirmButton
-                                    iconName="delete"
-                                    confirmationMessage="Are you sure you want to delete this item?"
-                                    onClick={() => this.handleItemRemove(rowKey)}
-                                />
-                            </Cloak>
-                        </div>
+                        <Translation>
+                            {
+                                t => (
+                                    <div className={styles.actionButton}>
+                                        <Cloak hiddenIf={p => !p.delete_people}>
+                                            <DangerConfirmButton
+                                                iconName="delete"
+                                                confirmationMessage={t('Are you sure you want to delete this item?')}
+                                                onClick={() => this.handleItemRemove(rowKey)}
+                                            />
+                                        </Cloak>
+                                    </div>
+                                )
+                            }
+                        </Translation>
+
                     );
                 },
             },
@@ -224,35 +239,42 @@ class PeopleLossList extends React.PureComponent<Props, State> {
         const pending = listPending || itemRemovePending;
 
         return (
-            <ModalBody className={_cs(styles.listContainer, className)}>
-                {pending && <LoadingAnimation />}
-                <header className={styles.header}>
-                    <div className={styles.heading} />
-                    <Cloak hiddenIf={p => !p.add_people}>
-                        <ModalButton
-                            className={styles.button}
-                            iconName="add"
-                            transparent
-                            modal={(
-                                <AddPeopleLoss
-                                    lossServerId={lossServerId}
-                                    onAddSuccess={this.handleListItemAdd}
-                                />
-                            )}
-                        >
-                            Add People Loss
-                        </ModalButton>
-                    </Cloak>
-                </header>
-                <Table
-                    className={styles.table}
-                    headers={this.headers}
-                    data={list}
-                    keySelector={keySelector}
-                />
-            </ModalBody>
+            <Translation>
+                {
+                    t => (
+                        <ModalBody className={_cs(styles.listContainer, className)}>
+                            {pending && <LoadingAnimation />}
+                            <header className={styles.header}>
+                                <div className={styles.heading} />
+                                <Cloak hiddenIf={p => !p.add_people}>
+                                    <ModalButton
+                                        className={styles.button}
+                                        iconName="add"
+                                        transparent
+                                        modal={(
+                                            <AddPeopleLoss
+                                                lossServerId={lossServerId}
+                                                onAddSuccess={this.handleListItemAdd}
+                                            />
+                                        )}
+                                    >
+                                        {t('Add People Loss')}
+                                    </ModalButton>
+                                </Cloak>
+                            </header>
+                            <Table
+                                className={styles.table}
+                                headers={this.headers}
+                                data={list}
+                                keySelector={keySelector}
+                            />
+                        </ModalBody>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default compose(createRequestClient(requests))(PeopleLossList);
+export default connect(mapStateToProps)(compose(createRequestClient(requests))(PeopleLossList));

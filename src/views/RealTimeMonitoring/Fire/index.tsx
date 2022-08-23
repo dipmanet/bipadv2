@@ -2,8 +2,10 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -20,6 +22,7 @@ import {
 } from '#utils/table';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 interface RealTimeFireExtended extends RealTimeFire {
     title?: string;
@@ -41,10 +44,10 @@ class Fire extends React.PureComponent<Props> {
         super(props);
 
         // TODO: add OandM by to riverWatch
-        this.fireHeader = [
+        this.fireHeader = language => ([
             {
                 key: 'title',
-                label: 'Location',
+                label: language === 'en' ? 'Location' : 'स्‍थान',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.title, b.title),
@@ -55,19 +58,21 @@ class Fire extends React.PureComponent<Props> {
             },
             {
                 key: 'eventOn',
-                label: 'Date',
+                label: language === 'en' ? 'Date' : 'मिति',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.eventOn, b.eventOn),
                 modifier: (row: RealTimeFireExtended) => {
                     const { eventOn } = row;
 
-                    return (eventOn) ? eventOn.substring(0, eventOn.indexOf('T')) : undefined;
+                    return (eventOn)
+                        ? convertDateAccToLanguage(eventOn.substring(0, eventOn.indexOf('T')), language)
+                        : undefined;
                 },
             },
             {
                 key: 'time',
-                label: 'Time',
+                label: language === 'en' ? 'Time' : 'समय',
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimeFire) => {
@@ -79,18 +84,18 @@ class Fire extends React.PureComponent<Props> {
             },
             {
                 key: 'landCover',
-                label: 'Land Cover',
+                label: language === 'en' ? 'Land Cover' : 'भूउपयोग',
                 order: 4,
                 sortable: false,
             },
             {
                 key: 'brightness',
-                label: 'Brightness',
+                label: language === 'en' ? 'Brightness' : 'चमक',
                 order: 5,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.brightness, b.brightness),
             },
-        ];
+        ]);
     }
 
     private fireHeader: Header<RealTimeFireExtended>[];
@@ -101,49 +106,58 @@ class Fire extends React.PureComponent<Props> {
         const {
             realTimeFire,
             closeModal,
+            language,
         } = this.props;
+        const fireHeader = this.fireHeader(language);
 
         const formattedTableData = convertNormalTableToCsv(realTimeFire,
-            this.fireHeader);
+            fireHeader);
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={closeModal}
-                className={styles.fireModal}
-            >
-                <ModalHeader
-                    title="Fire"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    <Table
-                        rowClassNameSelector={this.getClassName}
-                        className={styles.fireTable}
-                        data={realTimeFire}
-                        headers={this.fireHeader}
-                        keySelector={fireSelector}
-                        defaultSort={defaultSort}
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <DangerButton onClick={closeModal}>
-                        Close
-                    </DangerButton>
-                    <DownloadButton
-                        value={formattedTableData}
-                        name="Fire.csv"
-                    >
-                        Download
-                    </DownloadButton>
-                </ModalFooter>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={closeModal}
+                            className={_cs(styles.fireModal, styles.languageFont)}
+                        >
+                            <ModalHeader
+                                title={t('Fire')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                <Table
+                                    rowClassNameSelector={this.getClassName}
+                                    className={styles.fireTable}
+                                    data={realTimeFire}
+                                    headers={fireHeader}
+                                    keySelector={fireSelector}
+                                    defaultSort={defaultSort}
+                                />
+                            </ModalBody>
+                            <ModalFooter>
+                                <DangerButton onClick={closeModal}>
+                                    {t('Close')}
+                                </DangerButton>
+                                <DownloadButton
+                                    value={formattedTableData}
+                                    name="Fire.csv"
+                                >
+                                    {t('Download')}
+                                </DownloadButton>
+                            </ModalFooter>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

@@ -27,6 +27,7 @@ import {
     isDefined,
     mapToList,
 } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 
 import Icon from '#rscg/Icon';
 
@@ -60,6 +61,7 @@ import {
     wardsSelector,
     enumOptionsSelector,
     regionSelector,
+    languageSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -68,7 +70,7 @@ import DangerButton from '#rsca/Button/DangerButton';
 import AccentButton from '#rsca/Button/AccentButton';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import ListView from '#rsu/../v2/View/ListView';
-import { checkSameRegionPermission, checkPermission } from '#utils/common';
+import { checkSameRegionPermission, checkPermission, convertDateAccToLanguage } from '#utils/common';
 import { Draw } from '#re-map/type';
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
@@ -147,6 +149,7 @@ interface ResourceTooltipProps extends PageType.Resource {
     handleShowOpenspaceDetailsClick: () => void;
     handleShowCommunitypaceDetails: () => void;
     authenticated: boolean;
+    language: string;
 }
 
 type toggleValues =
@@ -205,11 +208,11 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         onShowInventoryClick,
         isLoggedInUser,
         wardsRef,
+        language,
         filterPermissionGranted,
         ...resourceDetails } = props;
 
     const { id, point, title, picture, ...resource } = resourceDetails;
-
 
     const data = mapToList(
         resource,
@@ -230,15 +233,15 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
     let filtered = oldfiltered.map((r) => {
         if (r.label === 'ward') {
             return {
-                label: 'ward',
+                label: language === 'en' ? 'ward' : 'वार्ड',
                 value: wardsRef[r.value],
             };
         }
 
         if (r.label === 'lastModifiedDate') {
             return {
-                label: 'lastModifiedDate',
-                value: `${r.value.split('T')[0]}`,
+                label: language === 'en' ? 'lastModifiedDate' : 'पछिल्‍लो परिमार्जित मिति',
+                value: convertDateAccToLanguage(`${r.value.split('T')[0]}`, language),
             };
         }
         return r;
@@ -284,72 +287,81 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
 
     return (
-        <div className={styles.resourceTooltip}>
+        <Translation>
+            {
+                t => (
+                    <div className={styles.resourceTooltip}>
 
-            <h3 className={styles.heading}>
-                {title}
-            </h3>
-            <div className={styles.content}>
-                {picture ? <img src={picture} alt="" style={{ maxHeight: '150px', width: '100%' }} /> : ''}
-                <table>
-                    {filtered.map(item => (
+                        <h3 className={styles.heading}>
+                            {title}
+                        </h3>
+                        <div className={styles.content}>
+                            {picture ? <img src={picture} alt="" style={{ maxHeight: '150px', width: '100%' }} /> : ''}
+                            <table>
+                                {filtered.map(item => (
 
-                        item.value && (item.value !== true) && (item.value !== false)
-                            ? (
-                                <tr key={item.label}>
-                                    <td>{camelCaseToSentence(item.label)}</td>
-                                    <td>{item.value && (typeof (item.value) === 'string') ? camelCaseToSentence(item.value) : item.value}</td>
+                                    item.value && (item.value !== true) && (item.value !== false)
+                                        ? (
+                                            <tr key={item.label}>
+                                                <td>{camelCaseToSentence(item.label)}</td>
+                                                <td>{item.value && (typeof (item.value) === 'string') ? camelCaseToSentence(item.value) : item.value}</td>
 
-                                </tr>
-                            ) : ''
-
-
-                    ))}
+                                            </tr>
+                                        ) : ''
 
 
-                </table>
-            </div>
+                                ))}
 
-            {/* <ListView
+
+                            </table>
+                        </div>
+
+                        {/* <ListView
                 className={styles.content}
                 data={filtered}
                 keySelector={resourceKeySelector}
                 renderer={TextOutput}
                 rendererParams={rendererParams}
             /> */}
-            <div className={styles.actions}>
+                        <div className={styles.actions}>
 
-                {isLoggedInUser && filterPermissionGranted
-                    ? (
-                        <AccentButton
-                            title="Edit"
-                            onClick={onEditClick}
-                            transparent
-                            className={styles.editButton}
-                        >
-                            Edit data
-                        </AccentButton>
-                    ) : ''}
+                            {isLoggedInUser && filterPermissionGranted
+                                ? (
+                                    <AccentButton
+                                        title={t('Edit')}
+                                        onClick={onEditClick}
+                                        transparent
+                                        className={styles.editButton}
+                                    >
+                                        {t('Edit data')}
+                                    </AccentButton>
+                                ) : ''}
 
 
-                <AccentButton
-                    title={
-                        resourceDetails.resourceType === 'openspace'
-                            || resourceDetails.resourceType === 'communityspace'
-                            ? 'View Details'
-                            : 'Inventories'
-                    }
-                    onClick={onShowInventoryClick}
-                    transparent
-                    className={styles.editButton}
-                >
-                    {resourceDetails.resourceType === 'openspace'
-                        || resourceDetails.resourceType === 'communityspace'
-                        ? 'View Details'
-                        : 'Inventories'}
-                </AccentButton>
-            </div>
-        </div>
+                            <AccentButton
+                                title={
+                                    resourceDetails.resourceType === 'openspace'
+                                        || resourceDetails.resourceType === 'communityspace'
+                                        ? t('View Details')
+                                        : t('Inventories')
+                                }
+                                onClick={onShowInventoryClick}
+                                transparent
+                                className={styles.editButton}
+                            >
+                                {resourceDetails.resourceType === 'openspace'
+                                    || resourceDetails.resourceType === 'communityspace'
+                                    ? t('View Details')
+                                    : t('Inventories')
+                                }
+                            </AccentButton>
+                        </div>
+                    </div>
+                )
+            }
+        </Translation>
+
+
     );
 };
 
@@ -461,6 +473,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     user: userSelector(state),
     wards: wardsSelector(state),
     region: regionSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -1191,6 +1204,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             evacuationcentre: [],
         };
         const { resourceType } = resource;
+
         const { [resourceType]: singleResource } = resourceCollection;
 
         const newSingleResource = [
@@ -2339,6 +2353,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             user,
             carKeys,
             palikaRedirect,
+            language: { language },
         } = this.props;
 
 
@@ -2396,6 +2411,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         } = requests;
 
         let resourceDetails: PageType.Resource | undefined;
+
         if (response) {
             resourceDetails = response as PageType.Resource;
         }
@@ -2456,7 +2472,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                     />
                 ) : ''}
-                <div className={_cs(styles.capacityAndResources, className)} id="capacityAndResources">
+                <div
+                    className={_cs(styles.capacityAndResources, className)}
+                    id="capacityAndResources"
+                >
                     {addResource ? (
                         <div className={styles.addResourceForm} style={{ margin: '10px' }}>
                             <AddResourceForm
@@ -2475,78 +2494,85 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     )
                         : (
                             <>
-                                <header className={styles.header}>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <header className={styles.header}>
 
-                                    <div className={styles.actions}>
-                                        {filterPermissionGranted
-                                            ? (
-                                                <Cloak hiddenIf={p => !p.add_resource}>
-                                                    {/* <DangerButton
+                                                <div className={styles.actions}>
+                                                    {filterPermissionGranted
+                                                        ? (
+                                                            <Cloak hiddenIf={p => !p.add_resource}>
+                                                                {/* <DangerButton
 
-                                                        onClick={this.handleResourceAdd}
+                                                            onClick={this.handleResourceAdd}
+                                                            className={styles.clearButton}
+                                                            transparent
+                                                        >
+                                             + Add Resource
+                                                        </DangerButton> */}
+
+                                                                <AccentModalButton
+                                                                    iconName="add"
+                                                                    title={t('Add New Resource')}
+                                                                    transparent
+                                                                    onClick={this.resourceAdd}
+
+                                                                // modal={(
+                                                                //     <AddResourceForm
+                                                                //         onAddSuccess={this.handleResourceAdd}
+                                                                //         onEditSuccess={this.handleResourceEdit}
+                                                                //     />
+                                                                // )}
+                                                                >
+                                                                    {t('Add Resource')}
+                                                                </AccentModalButton>
+                                                            </Cloak>
+                                                        )
+                                                        : ''}
+                                                    <DangerButton
+                                                        // disabled={!activeLayerKey}
+                                                        disabled={!Object.values(activeLayersIndication).some(Boolean)
+                                                            && !activeLayerKey}
+                                                        onClick={this.handleLayerUnselect}
                                                         className={styles.clearButton}
                                                         transparent
                                                     >
-                                         + Add Resource
-                                                    </DangerButton> */}
-
-                                                    <AccentModalButton
-                                                        iconName="add"
-                                                        title="Add New Resource"
-                                                        transparent
-                                                        onClick={this.resourceAdd}
-
-                                                    // modal={(
-                                                    //     <AddResourceForm
-                                                    //         onAddSuccess={this.handleResourceAdd}
-                                                    //         onEditSuccess={this.handleResourceEdit}
-                                                    //     />
-                                                    // )}
-                                                    >
-                                                        Add Resource
-                                                    </AccentModalButton>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        <DangerButton
-                                            // disabled={!activeLayerKey}
-                                            disabled={!Object.values(activeLayersIndication).some(Boolean)
-                                                && !activeLayerKey}
-                                            onClick={this.handleLayerUnselect}
-                                            className={styles.clearButton}
-                                            transparent
-                                        >
-                                            Clear
-                                        </DangerButton>
-                                        {/*
-                                            <SummaryButton
-                                                transparent
-                                                className={styles.summaryButton}
-                                                disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
+                                                        {t('Clear')}
+                                                    </DangerButton>
+                                                    {/*
+                                                <SummaryButton
+                                                    transparent
+                                                    className={styles.summaryButton}
+                                                    disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
+                                                    modal={(
+                                                        <Summary
+                                                            data={polygonResources}
+                                                            resourceType={activeLayerKey}
+                                                        />
+                                                    )}
+                                                >
+                                                    Show summary
+                                                </SummaryButton>
+                                                         */}
+                                                    {/* <TableModalButton
                                                 modal={(
-                                                    <Summary
-                                                        data={polygonResources}
-                                                        resourceType={activeLayerKey}
+                                                    <CapacityResourceTable
+                                                        data={resourceList}
+                                                        name={activeLayerKey}
                                                     />
                                                 )}
-                                            >
-                                                Show summary
-                                            </SummaryButton>
-                                                     */}
-                                        {/* <TableModalButton
-                                            modal={(
-                                                <CapacityResourceTable
-                                                    data={resourceList}
-                                                    name={activeLayerKey}
-                                                />
-                                            )}
-                                            initialShowModal={false}
-                                            iconName="table"
-                                            transparent
-                                            disabled={pending || !activeLayerKey}
-                                        /> */}
-                                    </div>
-                                </header>
+                                                initialShowModal={false}
+                                                iconName="table"
+                                                transparent
+                                                disabled={pending || !activeLayerKey}
+                                            /> */}
+                                                </div>
+                                            </header>
+                                        )
+                                    }
+                                </Translation>
+
                                 {capacityResource.map((item, idx) => (
                                     <div key={item.name}>
                                         <div
@@ -2588,7 +2614,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                         src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
                                                     />
-                                                    <h3 style={{ fontSize: '16px' }}>{item.name}</h3>
+                                                    <h3 style={{ fontSize: '16px' }}>
+                                                        {language === 'en' ? item.name : item.nameNe}
+                                                    </h3>
                                                 </div>
 
 
@@ -2687,7 +2715,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                 <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
                                                                 <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
                                                                     {' '}
-                                                                    <h4>{data.name}</h4>
+                                                                    <h4>{language === 'en' ? data.name : data.nameNe}</h4>
                                                                 </label>
 
                                                             </div>
@@ -2817,6 +2845,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -2892,6 +2921,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -2964,6 +2994,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3038,6 +3069,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3111,6 +3143,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3184,6 +3217,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3257,6 +3291,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3330,6 +3365,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3404,6 +3440,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3476,6 +3513,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3549,6 +3587,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3622,6 +3661,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3694,6 +3734,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3766,6 +3807,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3838,6 +3880,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -3925,6 +3968,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             >
                                                 <ResourceTooltip
                                                     // FIXME: hide tooltip edit if there is no permission
+                                                    language={language}
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
@@ -4016,6 +4060,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             >
                                                 <ResourceTooltip
                                                     // FIXME:hide tooltip edit if there is no permission
+                                                    language={language}
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
@@ -4115,6 +4160,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             >
                                                 <ResourceTooltip
                                                     // FIXME:hide tooltip edit if there is no permission
+                                                    language={language}
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
@@ -4201,6 +4247,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -4276,6 +4323,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -4349,6 +4397,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                                 // FIXME: hide tooltip edit if there is no permission
+                                                language={language}
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}

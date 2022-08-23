@@ -239,11 +239,11 @@ export const HAZARD_LIST: HazardList[] = [
 ];
 
 export const damageAndLossList = [
-    { key: 'INCIDENTS', titlePart: 'incidents' },
-    { key: 'PEOPLE DEATH', titlePart: 'deaths' },
-    { key: 'ESTIMATED LOSS (NPR)', titlePart: 'estimated Loss (NPR)' },
-    { key: 'INFRASTRUCTURE DESTROYED', titlePart: 'infrastructure(s) destroyed' },
-    { key: 'LIVESTOCK DESTROYED', titlePart: 'livestock destroyed' },
+    { key: 'INCIDENTS', titlePart: 'incidents', titlePartNe: 'घटनाहरू' },
+    { key: 'PEOPLE DEATH', titlePart: 'deaths', titlePartNe: 'मृतकहरूको सङ्ख्या' },
+    { key: 'ESTIMATED LOSS (NPR)', titlePart: 'estimated Loss (NPR)', titlePartNe: '' },
+    { key: 'INFRASTRUCTURE DESTROYED', titlePart: 'infrastructure(s) destroyed', titlePartNe: 'पूर्वाधार (हरू) ध्वस्त' },
+    { key: 'LIVESTOCK DESTROYED', titlePart: 'livestock destroyed', titlePartNe: 'livestock destroyed' },
 ];
 
 export const realtimeList = [

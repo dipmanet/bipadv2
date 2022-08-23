@@ -35,8 +35,8 @@
                 background-color: red;
             }
 
-            &:before {
-                content: 'Draw box to zoom into an area';
+            .tooltip {
+                // content: 'Draw box to zoom into an area';
                 visibility: hidden;
                 opacity: 0;
                 width: 250px;
@@ -53,7 +53,7 @@
                 top: 110%;
             }
 
-            &:hover:before {
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
 
@@ -74,8 +74,8 @@
                 background-color: red;
             }
 
-            &:before {
-                content: 'Click to search by lattitude and longitude';
+            .tooltip {
+                // content: 'Click to search by lattitude and longitude';
                 visibility: hidden;
                 opacity: 0;
                 width: 150px;
@@ -92,7 +92,7 @@
                 top: 110%;
             }
 
-            &:hover:before {
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
 
@@ -173,8 +173,8 @@
             cursor: pointer;
 
 
-            &::before {
-                content: 'Click to locate your current area';
+            .tooltip {
+                // content: 'Click to locate your current area';
                 visibility: hidden;
                 opacity: 0;
                 width: 140px;
@@ -184,17 +184,22 @@
                 border-radius: 5px;
                 padding: 5px 0;
                 transition: opacity 0.5s ease-in-out;
-
                 position: absolute;
                 z-index: 1;
                 left: 0;
                 top: 110%;
+
             }
 
-            &:hover:before {
+
+
+
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
             }
+
+
         }
 
         .reloadIcon {
@@ -208,8 +213,8 @@
 
 
 
-            &::before {
-                content: 'Reset the zoom of map to orginal view';
+            .tooltip {
+                // content: 'Reset the zoom of map to orginal view';
                 visibility: hidden;
                 opacity: 0;
                 width: 250px;
@@ -226,7 +231,7 @@
                 top: 110%;
             }
 
-            &:hover:before {
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
             }
@@ -240,8 +245,8 @@
             background-color: transparent !important;
             cursor: pointer;
 
-            &::before {
-                content: 'Click to view map in fullscreen';
+            .tooltip {
+                // content: 'Click to view map in fullscreen';
                 visibility: hidden;
                 opacity: 0;
                 width: 200px;
@@ -258,7 +263,7 @@
                 top: 110%;
             }
 
-            &:hover:before {
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
             }
@@ -355,8 +360,8 @@
 
 
 
-            &::before {
-                content: 'Search';
+            .tooltip {
+                // content: 'Search';
                 visibility: hidden;
                 opacity: 0;
                 width: 100px;
@@ -373,7 +378,7 @@
                 top: 110%;
             }
 
-            &:hover:before {
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
             }
@@ -390,8 +395,8 @@
             cursor: pointer;
 
 
-            &::before {
-                content: 'Please add a value in Lattitude and Longitude fields';
+            .tooltip {
+                // content: 'Please add a value in Lattitude and Longitude fields';
                 visibility: hidden;
                 opacity: 0;
                 width: 200px;
@@ -407,7 +412,7 @@
                 top: 110%;
             }
 
-            &:hover:before {
+            &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
             }

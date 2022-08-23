@@ -4,6 +4,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -180,68 +181,75 @@ class AddOrganization extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={className}>
-                <ModalHeader
-                    title="Add Organization"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddOrganization.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                >
-                    <ModalBody>
-                        {pending && <LoadingAnimation />}
-                        <NonFieldErrors faramElement />
-                        <TextInput
-                            faramElementName="title"
-                            label="Title"
-                        />
-                        <TextInput
-                            faramElementName="shortName"
-                            label="Short Name"
-                        />
-                        <TextInput
-                            faramElementName="longName"
-                            label="Long Name"
-                        />
-                        <NumberInput
-                            faramElementName="incidentVerificationDuration"
-                            label="Incident Verification Duration"
-                        />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                        />
-                        <StepwiseRegionSelectInput
-                            faramElementName="stepwiseRegion"
-                            showHintAndError
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={className}>
+                            <ModalHeader
+                                title={t('Add Organization')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddOrganization.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                            >
+                                <ModalBody>
+                                    {pending && <LoadingAnimation />}
+                                    <NonFieldErrors faramElement />
+                                    <TextInput
+                                        faramElementName="title"
+                                        label={t('Title')}
+                                    />
+                                    <TextInput
+                                        faramElementName="shortName"
+                                        label={t('Short Name')}
+                                    />
+                                    <TextInput
+                                        faramElementName="longName"
+                                        label={t('Long Name')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="incidentVerificationDuration"
+                                        label={t('Incident Verification Duration')}
+                                    />
+                                    <TextArea
+                                        faramElementName="description"
+                                        label={t('Description')}
+                                    />
+                                    <StepwiseRegionSelectInput
+                                        faramElementName="stepwiseRegion"
+                                        showHintAndError
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

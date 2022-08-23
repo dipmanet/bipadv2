@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
+
+import { Translation } from 'react-i18next';
 
 import Message from '#rscv/Message';
 import VirtualizedListView from '#rscv/VirtualizedListView';
@@ -16,7 +19,7 @@ import Button from '#rsca/Button';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { getHazardColor } from '#utils/domain';
-import { groupList } from '#utils/common';
+import { groupList, convertDateAccToLanguage } from '#utils/common';
 import Cloak from '#components/Cloak';
 import DateRangeInfo from '#components/DateRangeInfo';
 
@@ -26,6 +29,8 @@ import Visualizations from './Visualizations';
 import AddAlertForm from './AddAlertForm';
 import AddEventForm from './AddEventForm';
 import AlertTable from './AlertTable';
+import { languageSelector } from '#selectors';
+
 
 import {
     pastDaysToDateRange,
@@ -39,6 +44,7 @@ const propTypes = {
     hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
     dateRange: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    // language: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 const defaultProps = {
     alertList: [],
@@ -46,7 +52,12 @@ const defaultProps = {
     hazardTypes: {},
     dateRange: undefined,
     className: undefined,
+    // language: { language: 'en' },
 };
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const AlertTableModalButton = modalize(Button);
 
@@ -54,9 +65,15 @@ const alertKeySelector = d => d.id;
 const eventKeySelector = d => d.id;
 
 const AlertEmptyComponent = () => (
-    <div className={styles.alertEmpty}>
-        There are no alerts at the moment.
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.alertEmpty}>
+                    {t('There are no alerts at the moment.')}
+                </div>
+            )
+        }
+    </Translation>
 );
 
 const AlertTableEmptyComponent = () => (
@@ -66,26 +83,41 @@ const AlertTableEmptyComponent = () => (
 );
 const EventEmptyComponent = () => (
     <div className={styles.eventEmpty}>
-        There are no major events at the moment.
+        <Translation>
+            {
+                t => <span>{t('There are no major events at the moment.')}</span>
+            }
+        </Translation>
     </div>
 );
+
 
 const AlertTableModal = ({
     closeModal,
     alertList,
+    language,
 }) => (
-    <Modal className={styles.alertTableModal}>
-        <ModalHeader
-            title="Alerts"
-            rightComponent={(
-                <DangerButton
-                    transparent
-                    iconName="close"
-                    onClick={closeModal}
-                    title="Close Modal"
-                />
-            )}
-        />
+    <Modal className={_cs(styles.alertTableModal,
+        language === 'np' && styles.languageFont)}
+    >
+        <Translation>
+            {
+                t => (
+                    <ModalHeader
+                        title={t('Alerts')}
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
+                )
+            }
+        </Translation>
+
         <ModalBody className={styles.body}>
             <AlertTable
                 className={styles.table}
@@ -96,7 +128,15 @@ const AlertTableModal = ({
     </Modal>
 );
 
-export default class LeftPane extends React.PureComponent {
+// const mapStateToProps = state => ({
+//     language: languageSelector(state),
+// });
+// const mapDispatchToProps = dispatch => ({
+//     setLanguage: params => dispatch(setLanguageAction(params)),
+// });
+
+
+class LeftPane extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
@@ -232,8 +272,8 @@ export default class LeftPane extends React.PureComponent {
             eventList,
             hazardTypes,
             dateRange,
+            language: { language },
         } = this.props;
-
         const {
             showAddAlertModal,
             showAddEventModal,
@@ -246,7 +286,7 @@ export default class LeftPane extends React.PureComponent {
         let startDate;
         let endDate;
         if (rangeInDays !== 'custom') {
-            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays, language));
         } else {
             ({ startDate, endDate } = dateRange);
         }
@@ -255,10 +295,14 @@ export default class LeftPane extends React.PureComponent {
             <div className={_cs(className, styles.leftPane)}>
                 <DateRangeInfo
                     className={styles.dateRange}
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={convertDateAccToLanguage(startDate, language)}
+                    endDate={convertDateAccToLanguage(endDate, language)}
                 />
+
+
                 <div className={styles.sourceDetails}>
+
+
                     <div className={styles.infoIconContainer}>
                         <Icon
                             className={styles.infoIcon}
@@ -266,12 +310,21 @@ export default class LeftPane extends React.PureComponent {
                         />
                     </div>
                     <div className={styles.label}>
-                        Data source:
+                        <Translation>
+                            {
+                                t => <span>{t('Data source')}</span>
+                            }
+                        </Translation>
                     </div>
                     <div className={styles.value}>
                         <div className={styles.source}>
                             <div className={styles.text}>
-                                Realtime Module
+                                <Translation>
+                                    {
+                                        t => <span>{t('Realtime Module')}</span>
+                                    }
+                                </Translation>
+
                             </div>
                             {/* <a
                                 className={styles.link}
@@ -294,12 +347,16 @@ export default class LeftPane extends React.PureComponent {
                             role="presentation"
                         >
                             <div className={styles.value}>
-                                { alertList.length }
+                                {alertList.length}
                             </div>
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.alertIcon)} />
                                 <div className={styles.text}>
-                                    Alerts
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Alerts')}</span>
+                                        }
+                                    </Translation>
                                 </div>
                             </div>
                         </div>
@@ -309,12 +366,16 @@ export default class LeftPane extends React.PureComponent {
                             role="presentation"
                         >
                             <div className={styles.value}>
-                                { eventList.length }
+                                {eventList.length}
                             </div>
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.eventIcon)} />
                                 <div className={styles.text}>
-                                    Events
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Events')}</span>
+                                        }
+                                    </Translation>
                                 </div>
                             </div>
                         </div>
@@ -328,12 +389,17 @@ export default class LeftPane extends React.PureComponent {
                                 name="bars"
                             />
                             <div className={styles.text}>
-                                Visualizations
+                                <Translation>
+                                    {
+                                        t => <span>{t('Visualizations')}</span>
+                                    }
+                                </Translation>
+
                             </div>
                         </div>
                     </div>
                     <div className={styles.actions}>
-                        { activeView === 'alerts' && (
+                        {activeView === 'alerts' && (
                             <Cloak hiddenIf={p => !p.add_alert}>
                                 <AccentButton
                                     className={styles.addAlertButton}
@@ -341,11 +407,16 @@ export default class LeftPane extends React.PureComponent {
                                     iconName="add"
                                     transparent
                                 >
-                                    New alert
+                                    <Translation>
+                                        {
+                                            t => <span>{t('New alert')}</span>
+                                        }
+                                    </Translation>
+
                                 </AccentButton>
                             </Cloak>
                         )}
-                        { activeView === 'events' && (
+                        {activeView === 'events' && (
                             <Cloak hiddenIf={p => !p.add_event}>
                                 <AccentButton
                                     className={styles.addEventButton}
@@ -353,7 +424,11 @@ export default class LeftPane extends React.PureComponent {
                                     iconName="add"
                                     transparent
                                 >
-                                    New event
+                                    <Translation>
+                                        {
+                                            t => <span>{t('New event')}</span>
+                                        }
+                                    </Translation>
                                 </AccentButton>
                             </Cloak>
                         )}
@@ -365,20 +440,21 @@ export default class LeftPane extends React.PureComponent {
                             modal={(
                                 <AlertTableModal
                                     alertList={alertList}
+                                    language={language}
                                 />
                             )}
                         />
                     </div>
                 </header>
                 <div className={styles.content}>
-                    { activeView === 'visualizations' && (
+                    {activeView === 'visualizations' && (
                         <Visualizations
                             hazardTypes={hazardTypes}
                             className={styles.alertVisualizations}
                             alertList={alertList}
                         />
                     )}
-                    { activeView === 'alerts' && (
+                    {activeView === 'alerts' && (
                         <div className={styles.alertList}>
                             <VirtualizedListView
                                 className={styles.content}
@@ -390,7 +466,7 @@ export default class LeftPane extends React.PureComponent {
                             />
                         </div>
                     )}
-                    { activeView === 'events' && (
+                    {activeView === 'events' && (
                         <div className={styles.eventList}>
                             <VirtualizedListView
                                 className={styles.content}
@@ -403,14 +479,14 @@ export default class LeftPane extends React.PureComponent {
                         </div>
                     )}
                 </div>
-                { showAddAlertModal && (
+                {showAddAlertModal && (
                     <AddAlertForm
                         data={alertToEdit}
                         onCloseButtonClick={this.handleAddAlertModalCloseButtonClick}
                         onRequestSuccess={this.handleAlertFormRequestSuccess}
                     />
                 )}
-                { showAddEventModal && (
+                {showAddEventModal && (
                     <AddEventForm
                         data={eventToEdit}
                         onCloseButtonClick={this.handleAddEventModalCloseButtonClick}
@@ -421,3 +497,4 @@ export default class LeftPane extends React.PureComponent {
         );
     }
 }
+export default connect(mapStateToProps)(LeftPane);

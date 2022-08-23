@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
 
 import SegmentInput from '#rsci/SegmentInput';
@@ -97,15 +98,21 @@ export default class LossAndDamageMap extends React.PureComponent {
                         isTimeline && styles.timeline,
                     )}
                 >
-                    <SegmentInput
-                        options={lossMetrics}
-                        keySelector={d => d.key}
-                        labelSelector={d => d.label}
-                        value={metricKey}
-                        onChange={onMetricChange}
-                        showLabel={false}
-                        showHintAndError={false}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <SegmentInput
+                                    options={lossMetrics}
+                                    keySelector={d => d.key}
+                                    labelSelector={d => t(d.label)}
+                                    value={metricKey}
+                                    onChange={onMetricChange}
+                                    showLabel={false}
+                                    showHintAndError={false}
+                                />
+                            )}
+                    </Translation>
+
                     {/*
                     <h5 className={styles.heading}>
                         {metricName}
@@ -124,7 +131,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                     </div>
                     */}
                     <div className={styles.scale}>
-                        { color.map((c, i) => {
+                        {color.map((c, i) => {
                             if (i % 2 === 0) {
                                 return null;
                             }
@@ -140,7 +147,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                                         }}
                                     />
                                     <div className={styles.value}>
-                                        { Math.round(color[i - 1]) }
+                                        {Math.round(color[i - 1])}
                                     </div>
                                 </div>
                             );

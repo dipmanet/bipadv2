@@ -21,6 +21,7 @@ import {
     PieChart,
     LabelList,
 } from 'recharts';
+import { Translation } from 'react-i18next';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import LoadingAnimation from '#rscv/LoadingAnimation';
@@ -46,13 +47,13 @@ import {
     mapStyleSelector,
     hazardTypesSelector,
     regionsSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
     createRequestClient,
     methods,
 } from '#request';
-
 import Table from './Table';
 import styles from './styles.scss';
 
@@ -137,6 +138,7 @@ const mapStateToProps = state => ({
     regions: regionsSelector(state),
     hazardTypes: hazardTypesSelector(state),
     mapStyle: mapStyleSelector(state),
+    language: languageSelector(state),
 });
 
 class SituationReport extends React.PureComponent {
@@ -215,36 +217,37 @@ class SituationReport extends React.PureComponent {
     })
 
     getDataForPieCharts = memoize((aggregatedStat) => {
+        const { language: { language } } = this.props;
         const peopleLossPieData = [
             {
-                name: 'Death',
+                name: language === 'en' ? 'Death' : 'मृत्यु',
                 value: aggregatedStat.peopleDeathCount,
             },
             {
-                name: 'Injured',
+                name: language === 'en' ? 'Injured' : 'घाइते',
                 value: aggregatedStat.peopleInjuredCount,
             },
             {
-                name: 'Missing',
+                name: language === 'en' ? 'Missing' : 'हराइरहेको',
                 value: aggregatedStat.peopleMissingCount,
             },
             {
-                name: 'Affected',
+                name: language === 'en' ? 'Affected' : 'प्रभावित',
                 value: aggregatedStat.peopleAffectedCount,
             },
         ];
 
         const familyLossPieData = [
             {
-                name: 'Relocated',
+                name: language === 'en' ? 'Relocated' : 'स्थानान्तरण गरिएको',
                 value: aggregatedStat.familyRelocatedCount,
             },
             {
-                name: 'Affected',
+                name: language === 'en' ? 'Affected' : 'प्रभावित',
                 value: aggregatedStat.familyAffectedCount,
             },
             {
-                name: 'Evacuated',
+                name: language === 'en' ? 'Evacuated' : 'खाली गरिएको',
                 value: aggregatedStat.familyEvacuatedCount,
             },
         ];
@@ -300,9 +303,16 @@ class SituationReport extends React.PureComponent {
         if (!selectedReportDetails) {
             return (
                 <div className={_cs(className, styles.situationReport)}>
-                    <Message>
-                        Please selected a situation report
-                    </Message>
+                    <Translation>
+                        {
+                            t => (
+                                <Message>
+                                    {t('Please select a situation report')}
+                                </Message>
+                            )
+                        }
+                    </Translation>
+
                 </div>
             );
         }
@@ -320,9 +330,16 @@ class SituationReport extends React.PureComponent {
         if (incidents.length < 1) {
             return (
                 <div className={_cs(className, styles.situationReport)}>
-                    <Message>
-                        There are no incidents in this situation report
-                    </Message>
+                    <Translation>
+                        {
+                            t => (
+                                <Message>
+                                    {t('There are no incidents in this situation report')}
+                                </Message>
+                            )
+                        }
+                    </Translation>
+
                 </div>
             );
         }
@@ -338,7 +355,6 @@ class SituationReport extends React.PureComponent {
             minCasuality,
             maxCasuality,
         } = this.generateOverallDataset(sanitizedIncidents);
-
         const colorPaint = this.generatePaint(colorGrade, minCasuality, maxCasuality);
         const hazardSummary = this.getHazardSummary(sanitizedIncidents);
         const {
@@ -349,22 +365,44 @@ class SituationReport extends React.PureComponent {
         return (
             <div className={_cs(styles.situationReport, className)}>
                 <div className={styles.downloadButtonContainer}>
-                    <Button
-                        className={styles.downloadButton}
-                        onClick={this.handleDownloadClick}
-                        iconName="download"
-                    >
-                        Download
-                    </Button>
+                    <Translation>
+                        {
+                            t => (
+                                <Button
+                                    className={styles.downloadButton}
+                                    onClick={this.handleDownloadClick}
+                                    iconName="download"
+                                >
+
+                                    {t('Download')}
+                                </Button>
+                            )
+                        }
+                    </Translation>
+
                 </div>
                 <div className={styles.situationReportFull}>
                     <header className={styles.header}>
-                        <h2>Incident Situation Report</h2>
+                        <Translation>
+                            {
+                                t => (
+                                    <h2>{t('Incident Situation Report')}</h2>
+
+                                )
+                            }
+                        </Translation>
                     </header>
                     <div className={styles.map}>
-                        <h3 className={styles.mapHeading}>
-                            Incident Statistics
-                        </h3>
+                        <Translation>
+                            {
+                                t => (
+                                    <h3 className={styles.mapHeading}>
+                                        {t('Incident Statistics')}
+                                    </h3>
+                                )
+                            }
+                        </Translation>
+
                         <Map
                             mapStyle={mapStyle}
                             mapOptions={{
@@ -382,7 +420,14 @@ class SituationReport extends React.PureComponent {
                                 isProviceOnlyMap
                             />
                             <div className={styles.legend}>
-                                <div className={styles.legendTitle}>Hazards Legend</div>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <div className={styles.legendTitle}>{t('Hazards Legend')}</div>
+
+                                        )
+                                    }
+                                </Translation>
                                 <HazardsLegend
                                     filteredHazardTypes={filteredHazardTypes}
                                     className={styles.hazardLegend}
@@ -392,7 +437,14 @@ class SituationReport extends React.PureComponent {
                         </Map>
                     </div>
                     <div className={styles.vizContainer}>
-                        <h3 className={styles.heading}>Disaster Summary</h3>
+                        <Translation>
+                            {
+                                t => (
+                                    <h3 className={styles.heading}>{t('Disaster Summary')}</h3>
+
+                                )
+                            }
+                        </Translation>
                         <div style={{ height: hazardSummary.length * 32 }}>
                             <ResponsiveContainer>
                                 <BarChart
@@ -424,9 +476,16 @@ class SituationReport extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.map}>
-                        <h3 className={styles.mapHeading}>
-                            Casuality Statistics
-                        </h3>
+                        <Translation>
+                            {
+                                t => (
+                                    <h3 className={styles.mapHeading}>
+                                        {t('Casuality Statistics')}
+                                    </h3>
+                                )
+                            }
+                        </Translation>
+
                         <Map
                             mapStyle={mapStyle}
                             mapOptions={{
@@ -443,20 +502,35 @@ class SituationReport extends React.PureComponent {
                                 paint={colorPaint.paint}
                                 mapState={mapState}
                             />
-                            <LayerLegend
-                                layer={{
-                                    type: 'choropleth',
-                                    minValue: minCasuality,
-                                    legendTitle: 'Casualty Statistics',
-                                    legend: colorPaint.legend,
-                                }}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+
+                                        <LayerLegend
+                                            layer={{
+                                                type: 'choropleth',
+                                                minValue: minCasuality,
+                                                legendTitle: t('Casuality Statistics'),
+                                                legend: colorPaint.legend,
+                                            }}
+                                        />
+                                    )
+                                }
+                            </Translation>
+
                         </Map>
                     </div>
                     <div className={styles.charts}>
                         <div className={styles.pieCharts}>
                             <div className={styles.pieChart}>
-                                <h4>People Loss</h4>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <h4>{t('People Loss')}</h4>
+
+                                        )
+                                    }
+                                </Translation>
                                 <PieChart width={240} height={240}>
                                     <Pie
                                         data={peopleLossPieData}
@@ -485,7 +559,14 @@ class SituationReport extends React.PureComponent {
                                 </div>
                             </div>
                             <div className={styles.pieChart}>
-                                <h4>Family Loss</h4>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <h4>{t('Family Loss')}</h4>
+
+                                        )
+                                    }
+                                </Translation>
                                 <PieChart width={240} height={240}>
                                     <Pie
                                         data={familyLossPieData}

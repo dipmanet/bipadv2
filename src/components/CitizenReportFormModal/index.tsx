@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 import { connect } from 'react-redux';
 
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -17,8 +18,6 @@ import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import ReCaptcha from '#rsci/ReCaptcha';
-
-
 import {
     HazardType,
 } from '#store/atom/page/types';
@@ -31,6 +30,7 @@ import {
 } from '#types';
 
 import {
+    convertDateAccToLanguage,
     encodeDate,
     encodeTime,
 } from '#utils/common';
@@ -40,6 +40,7 @@ import {
     eventListSelector,
     sourceListSelector,
     hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -61,6 +62,7 @@ interface PropsFromAppState {
     eventList: EventElement[];
     sourceList: SourceElement[];
     hazardList: HazardType[];
+    language: object;
 }
 
 interface FaramValues {
@@ -95,6 +97,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     eventList: eventListSelector(state),
     sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 const schema = {
@@ -119,7 +122,7 @@ const schema = {
 };
 
 const keySelector = (d: BasicElement) => d.id;
-const labelSelector = (d: BasicElement) => d.title;
+const labelSelector = (d: BasicElement, language) => (language === 'en' ? d.title : d.titleNe);
 
 const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> } = {
     citizenReportPostRequest: {
@@ -154,11 +157,17 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
 class CitizenReportFormModal extends React.PureComponent<Props, State> {
     public state = {
         faramValues: {
-            incidentOnDate: encodeDate(new Date()),
+            incidentOnDate:
+                convertDateAccToLanguage(
+                    new Date(new Date().setDate(new Date()
+                        .getDate())).toJSON().slice(0, 10).replace(/-/g, '-'),
+                    this.props.language.language,
+                ),
             incidentOnTime: encodeTime(new Date()),
         },
         faramErrors: {},
     };
+
 
     private handleFaramValidationFailure = (faramErrors: object) => {
         this.setState({ faramErrors });
@@ -214,6 +223,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -222,93 +232,124 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal
-                className={_cs(styles.addCitizenReportFormModal, className)}
-                // onClose={closeModal}
-            >
-                <Faram
-                    className={styles.form}
-                    schema={schema}
-                    onChange={this.handleFaramChange}
-                    value={faramValues}
-                    error={faramErrors}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    disabled={pending}
-                >
-                    <ModalHeader
-                        className={styles.header}
-                        title="Report an incident"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody className={styles.body}>
-                        <NonFieldErrors faramElement />
-                        <TextArea
-                            className={styles.input}
-                            faramElementName="description"
-                            label="Description"
-                            autoFocus
-                        />
-                        <div className={styles.inputGroup}>
-                            <SelectInput
-                                className={styles.input}
-                                faramElementName="hazard"
-                                options={hazardList}
-                                keySelector={keySelector}
-                                labelSelector={labelSelector}
-                                label="Hazard"
-                            />
-                            <div className={styles.dateTimeInput}>
-                                <DateInput
-                                    label="Incident on"
-                                    className={styles.input}
-                                    faramElementName="incidentOnDate"
-                                />
-                                <TimeInput
-                                    className={styles.input}
-                                    faramElementName="incidentOnTime"
-                                />
-                            </div>
-                        </div>
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="streetAddress"
-                            label="Street Address"
-                        />
-                        <RawFileInput
-                            className={styles.fileInput}
-                            faramElementName="image"
-                            showStatus
-                            accept="image/*"
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            className={_cs(styles.addCitizenReportFormModal,
+                                className, language === 'np' && styles.languageFont)}
                         >
-                            Upload Image
-                        </RawFileInput>
-                        <LocationInput
-                            className={_cs(styles.locationInput, styles.input)}
-                            faramElementName="location"
-                        />
-                        <ReCaptcha
-                            faramElementName="recaptcha"
-                            siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <PrimaryButton
-                            type="submit"
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+                            <Faram
+                                className={styles.form}
+                                schema={schema}
+                                onChange={this.handleFaramChange}
+                                value={faramValues}
+                                error={faramErrors}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                disabled={pending}
+                            >
+
+                                <ModalHeader
+                                    className={styles.header}
+                                    title={t('Report an incident')}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal}
+                                            title="Close Modal"
+                                        />
+                                    )}
+                                />
+
+
+                                <ModalBody className={styles.body}>
+                                    <NonFieldErrors faramElement />
+
+                                    <TextArea
+                                        className={styles.input}
+                                        faramElementName="description"
+                                        label={t('Description')}
+                                        autoFocus
+                                    />
+
+
+                                    <div className={styles.inputGroup}>
+
+                                        <SelectInput
+                                            className={styles.input}
+                                            faramElementName="hazard"
+                                            options={hazardList}
+                                            keySelector={keySelector}
+                                            labelSelector={d => labelSelector(d, language)}
+                                            label={t('Hazard')}
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                        />
+
+
+                                        <div className={styles.dateTimeInput}>
+
+                                            <DateInput
+                                                label={t('Incident on')}
+                                                className={language === 'en' ? styles.input : 'startDateInput'}
+                                                languageMargin={language !== 'en'}
+                                                faramElementName="incidentOnDate"
+                                                language={language}
+                                            />
+
+
+                                            <TimeInput
+                                                className={styles.input}
+                                                faramElementName="incidentOnTime"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <TextInput
+                                        className={styles.input}
+                                        faramElementName="streetAddress"
+                                        label={t('Street Address')}
+                                    />
+
+
+                                    <RawFileInput
+                                        className={styles.fileInput}
+                                        faramElementName="image"
+                                        showStatus
+                                        accept="image/*"
+                                        language={language}
+                                    >
+                                        {t('Upload Image')}
+                                    </RawFileInput>
+
+
+                                    <LocationInput
+                                        className={_cs(styles.locationInput, styles.input)}
+                                        faramElementName="location"
+                                    />
+                                    <ReCaptcha
+                                        faramElementName="recaptcha"
+                                        siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+
+
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

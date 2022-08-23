@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
 import ListView from '#rsu/../v2/View/ListView';
 import { getHashFromBrowser } from '#rscg/HashManager';
 
@@ -12,6 +13,16 @@ import {
 } from '../attributes';
 import Attribute from './Attribute';
 import styles from './styles.scss';
+import { AppState } from '#store/types';
+import {
+    languageSelector,
+} from '#selectors';
+
+
+const mapStateToProps = (state: AppState) => ({
+    language: languageSelector(state),
+
+});
 
 interface State {
     hash: string | undefined;
@@ -24,7 +35,7 @@ interface Props {
     activeAttribute: AttributeKey;
 }
 
-export default class Overview extends React.PureComponent<Props, State> {
+class Overview extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -48,9 +59,9 @@ export default class Overview extends React.PureComponent<Props, State> {
 
     private getAttributeRendererParams = (_: string, attribute: AttributeItem) => ({
         attributeKey: attribute.key,
-        title: attribute.title,
-        icon: attribute.icon,
-        description: attribute.description,
+        title: this.props.language.language === 'en' ? attribute.title : attribute.titleNep,
+        icon: this.props.language.language === 'en' ? attribute.icon : attribute.iconNep,
+        description: this.props.language.language === 'en' ? attribute.description : attribute.descriptionNep,
         onClick: this.props.onAttributeClick,
         className: styles.attribute,
         titleShown: this.props.titleShown,
@@ -78,3 +89,4 @@ export default class Overview extends React.PureComponent<Props, State> {
         );
     }
 }
+export default connect(mapStateToProps)(Overview);

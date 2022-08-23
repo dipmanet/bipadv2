@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { _cs, listToMap } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 import memoize from 'memoize-one';
-
+import { Translation } from 'react-i18next';
 import SelectInput from '#rsci/SelectInput';
 import SearchSelectInput from '#rsci/SearchSelectInput';
 // import SegmentInput from '#rsci/SegmentInput';
@@ -12,6 +12,7 @@ import SearchSelectInput from '#rsci/SearchSelectInput';
 import {
     // adminLevelListSelector,
     districtsSelector,
+    languageSelector,
     municipalitiesSelector,
     provincesSelector,
 } from '#selectors';
@@ -22,7 +23,12 @@ const adminLevelKeySelector = d => d.id;
 // const adminLevelLabelSelector = d => d.title;
 
 const geoareaKeySelector = d => `${d.adminLevel}-${d.id}`;
-const geoareaLabelSelector = d => d.title;
+const geoareaLabelSelector = (d, language) => {
+    if (language === 'en') {
+        return d.title;
+    }
+    return d.title_ne;
+};
 
 const emptyObject = {};
 // const emptyArray = [];
@@ -45,12 +51,14 @@ const defaultProps = {
     showHintAndError: false,
     maxOptions: 0,
     autoFocus: false,
+    language: { lagnuage: 'en' },
 };
 
 const mapStateToProps = state => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
+    language: languageSelector(state),
 });
 
 
@@ -137,6 +145,7 @@ export default class RegionSelectInput extends React.PureComponent {
             municipalities,
             maxOptions,
             autoFocus,
+            language: { language },
             ...otherProps
         } = this.props;
 
@@ -152,7 +161,6 @@ export default class RegionSelectInput extends React.PureComponent {
 
         const options = this.createSingleList(provinces, districts, municipalities);
         const Input = maxOptions > 0 ? SearchSelectInput : SelectInput;
-
         return (
             <div className={_cs(className, styles.regionSelectInput)}>
                 {/*
@@ -167,19 +175,25 @@ export default class RegionSelectInput extends React.PureComponent {
                     showHintAndError={showHintAndError}
                 />
                 */}
-                <Input
-                    label="Location"
-                    key={adminLevel}
-                    {...otherProps}
-                    maxDisplayOptions={maxOptions}
-                    className={styles.geoareaSelectInput}
-                    options={options}
-                    value={value}
-                    keySelector={geoareaKeySelector}
-                    labelSelector={geoareaLabelSelector}
-                    onChange={this.handleGeoAreaChange}
-                    autoFocus={autoFocus}
-                />
+                <Translation>
+                    {
+                        t => (
+                            <Input
+                                label={t('Location')}
+                                key={adminLevel}
+                                {...otherProps}
+                                maxDisplayOptions={maxOptions}
+                                className={styles.geoareaSelectInput}
+                                options={options}
+                                value={value}
+                                keySelector={geoareaKeySelector}
+                                labelSelector={e => geoareaLabelSelector(e, language)}
+                                onChange={this.handleGeoAreaChange}
+                                autoFocus={autoFocus}
+                            />
+                        )
+                    }
+                </Translation>
             </div>
         );
     }

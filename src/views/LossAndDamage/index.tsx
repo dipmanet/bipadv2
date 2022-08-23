@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { compose } from 'redux';
@@ -18,6 +19,7 @@ import {
     CartesianGrid,
     Brush,
 } from 'recharts';
+import { Translation } from 'react-i18next';
 
 import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
@@ -34,12 +36,14 @@ import {
     sum,
     saveChart,
     encodeDate,
+    convertDateAccToLanguage,
 } from '#utils/common';
 import {
     hazardTypesSelector,
     hazardFilterSelector,
     regionFilterSelector,
     regionsSelector,
+    languageSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -65,6 +69,7 @@ import {
 import styles from './styles.scss';
 import Overview from './Overview';
 
+
 const ModalButton = modalize(Button);
 
 const IncidentTableModal = ({
@@ -72,17 +77,24 @@ const IncidentTableModal = ({
     incidentList,
 }) => (
     <Modal className={styles.lossAndDamageTableModal}>
-        <ModalHeader
-            title="Incidents"
-            rightComponent={(
-                <DangerButton
-                    transparent
-                    iconName="close"
-                    onClick={closeModal}
-                    title="Close Modal"
-                />
-            )}
-        />
+        <Translation>
+            {
+                t => (
+                    <ModalHeader
+                        title={t('Incidents')}
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
+                )
+            }
+        </Translation>
+
         <ModalBody className={styles.body}>
             <TabularView
                 className={styles.table}
@@ -153,10 +165,10 @@ const getDatesInLocaleTime = (startDate: string, endDate: string) => ({
     endDate: endDate ? `${endDate}T23:59:59+05:45` : undefined,
 });
 
-const timeTickFormatter = (timestamp: number) => {
+const timeTickFormatter = (timestamp: number, language: string) => {
     const date = new Date();
     date.setTime(timestamp);
-    return `${date.getFullYear()}-${date.getMonth() + 1}`;
+    return convertDateAccToLanguage(`${date.getFullYear()}-${date.getMonth() + 1}`, language);
 };
 
 const incidentMetricChartParams = {
@@ -318,8 +330,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         // incidentsGetRequest.do({
         //     ...getDatesInIsoString(startDate, endDate),
         // });
-
-        this.setState({ startDate });
+        const { language: { language } } = this.props;
+        const newConvertedStartDate = convertDateAccToLanguage(startDate, language, true);
+        this.setState({ startDate: newConvertedStartDate });
     }
 
     private handleEndDateChange = (endDate) => {
@@ -329,7 +342,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         // incidentsGetRequest.do({
         //     ...getDatesInIsoString(startDate, endDate),
         // });
-        this.setState({ endDate });
+        const { language: { language } } = this.props;
+        const newConvertedEndDate = convertDateAccToLanguage(endDate, language, true);
+
+        this.setState({ endDate: newConvertedEndDate });
     }
 
     private handleSubmitClick = () => {
@@ -338,11 +354,15 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         if (startDate > endDate) {
             return;
         }
+
         const { requests: { incidentsGetRequest } } = this.props;
         incidentsGetRequest.do({
             ...getDatesInLocaleTime(startDate, endDate),
         });
-        this.setState({ submittedStartDate: startDate, submittedEndDate: endDate });
+        this.setState({
+            submittedStartDate: startDate,
+            submittedEndDate: endDate,
+        });
     }
 
     public render() {
@@ -352,6 +372,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             hazardFilter,
             regionFilter,
             regions,
+            language: { language },
         } = this.props;
 
         const {
@@ -392,39 +413,67 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     <div className={styles.label}>
-                                        Showing data from
+                                        <Translation>
+                                            {
+                                                t => <span>{t('DateRangeInfo')}</span>
+                                            }
+                                        </Translation>
                                     </div>
                                     <DateInput
                                         showLabel={false}
                                         showHintAndError={false}
-                                        className={styles.dateFromInput}
-                                        value={startDate}
+                                        className={'startDateInput'}
+                                        value={convertDateAccToLanguage(startDate, language)}
                                         onChange={this.handleStartDateChange}
+                                        language={language}
                                     />
                                     <div className={styles.label}>
-                                        to
+                                        <div className={styles.label}>
+                                            {language === 'en'
+                                                ? <span>to</span>
+                                                : <span>देखि</span>
+                                            }
+                                        </div>
                                     </div>
                                     <DateInput
                                         showLabel={false}
                                         showHintAndError={false}
-                                        className={styles.dateToInput}
-                                        value={endDate}
+                                        className={'endDateInput'}
+                                        value={convertDateAccToLanguage(endDate, language)}
                                         onChange={this.handleEndDateChange}
+                                        language={language}
                                     />
+                                    {language === 'np'
+                                        && (
+                                            <span>
+                                                सम्‍म
+                                                {' '}
+                                                {''}
+                                            </span>
+                                        )
+                                    }
                                     <div
                                         className={styles.submitButton}
                                         onClick={this.handleSubmitClick}
                                         role="presentation"
                                     >
-                                        Submit
+                                        <Translation>
+                                            {
+                                                t => <span>{t('Submit')}</span>
+                                            }
+                                        </Translation>
                                     </div>
                                 </div>
-                                { startDate > endDate
-                                        && (
-                                            <div className={styles.warningText}>
-                                                WARNING! Start date cannot be greater than End Date
-                                            </div>
-                                        )
+                                {startDate > endDate
+                                    && (
+                                        <div className={styles.warningText}>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('DateMismatchWarning')}</span>
+                                                }
+                                            </Translation>
+                                        </div>
+                                    )
                                 }
                                 <div className={styles.sourceDetails}>
                                     <div className={styles.infoIconContainer}>
@@ -434,15 +483,28 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     <div className={styles.label}>
-                                        Data sources:
+                                        <Translation>
+                                            {
+                                                t => <span>{t('Data sources')}</span>
+                                            }
+                                        </Translation>
+                                        :
                                     </div>
                                     <div className={styles.value}>
                                         <div className={styles.source}>
-                                            Nepal Police
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Nepal Police')}</span>
+                                                }
+                                            </Translation>
                                         </div>
                                         <div className={styles.source}>
                                             <div className={styles.text}>
-                                                DRR Portal
+                                                <Translation>
+                                                    {
+                                                        t => <span>{t('DRR Portal')}</span>
+                                                    }
+                                                </Translation>
                                             </div>
                                             <a
                                                 className={styles.link}
@@ -464,19 +526,29 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.compareButton}
                                     modal={<Comparative lossAndDamageList={incidentList} />}
                                 >
-                                    Compare regions
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Compare Regions')}</span>
+                                        }
+                                    </Translation>
                                 </ModalButton>
-                                <ModalButton
-                                    title="Show data in tabular format"
-                                    className={styles.showTableButton}
-                                    iconName="table"
-                                    transparent
-                                    modal={(
-                                        <IncidentTableModal
-                                            incidentList={filteredData}
-                                        />
-                                    )}
-                                />
+                                <Translation>
+                                    {
+                                        t => (
+                                            <ModalButton
+                                                title={t('Show data in tabular format')}
+                                                className={styles.showTableButton}
+                                                iconName="table"
+                                                transparent
+                                                modal={(
+                                                    <IncidentTableModal
+                                                        incidentList={filteredData}
+                                                    />
+                                                )}
+                                            />
+                                        )
+                                    }
+                                </Translation>
                             </div>
                             <div className={styles.mainContent}>
                                 <LossDetails
@@ -496,52 +568,65 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.chartList}
                                     id="chartList"
                                 >
-                                    { Object.values(incidentMetricChartParams).map(metric => (
+                                    {Object.values(incidentMetricChartParams).map(metric => (
                                         <div
                                             key={metric.dataKey}
                                             className={styles.chartContainer}
                                         >
                                             <h4 className={styles.heading}>
-                                                { metric.title }
+                                                <Translation>
+                                                    {
+                                                        t => <span>{t(`${metric.title}`)}</span>
+                                                    }
+                                                </Translation>
                                             </h4>
                                             <div className={styles.content}>
-                                                <ResponsiveContainer>
-                                                    <AreaChart
-                                                        data={chartData}
-                                                        syncId="lndChart"
-                                                        margin={chartMargin}
-                                                    >
-                                                        <defs>
-                                                            <linearGradient id={`${metric.dataKey}-color`} y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor={metric.color} stopOpacity={0.8} />
-                                                                <stop offset="95%" stopColor={metric.color} stopOpacity={0} />
-                                                            </linearGradient>
-                                                        </defs>
-                                                        <CartesianGrid strokeDasharray="3 3" />
-                                                        <XAxis
-                                                            type="number"
-                                                            dataKey="incidentMonthTimestamp"
-                                                            domain={['dataMin', 'dataMax']}
-                                                            allowDecimals={false}
-                                                            hide
-                                                        />
-                                                        <YAxis
-                                                            hide
-                                                            type="number"
-                                                            domain={['dataMin', 'dataMax']}
-                                                        />
-                                                        <Area
-                                                            type="monotone"
-                                                            fill={`url(#${metric.dataKey}-color)`}
-                                                            dataKey={metric.dataKey}
-                                                            stroke={metric.color}
-                                                        />
-                                                        <Tooltip
-                                                            labelFormatter={() => null}
-                                                            formatter={(value, name, p) => [value, `${metric.title} in ${timeTickFormatter(p.payload.incidentMonthTimestamp)}`]}
-                                                        />
-                                                    </AreaChart>
-                                                </ResponsiveContainer>
+                                                <Translation>
+                                                    {
+                                                        t => (
+                                                            <ResponsiveContainer>
+                                                                <AreaChart
+                                                                    data={chartData}
+                                                                    syncId="lndChart"
+                                                                    margin={chartMargin}
+                                                                >
+                                                                    <defs>
+                                                                        <linearGradient id={`${metric.dataKey}-color`} y1="0" x2="0" y2="1">
+                                                                            <stop offset="5%" stopColor={metric.color} stopOpacity={0.8} />
+                                                                            <stop offset="95%" stopColor={metric.color} stopOpacity={0} />
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                                    <XAxis
+                                                                        type="number"
+                                                                        dataKey="incidentMonthTimestamp"
+                                                                        domain={['dataMin', 'dataMax']}
+                                                                        allowDecimals={false}
+                                                                        hide
+                                                                    />
+                                                                    <YAxis
+                                                                        hide
+                                                                        type="number"
+                                                                        domain={['dataMin', 'dataMax']}
+                                                                    />
+                                                                    <Area
+                                                                        type="monotone"
+                                                                        fill={`url(#${metric.dataKey}-color)`}
+                                                                        dataKey={metric.dataKey}
+                                                                        stroke={metric.color}
+                                                                    />
+                                                                    <Tooltip
+                                                                        labelFormatter={() => null}
+                                                                        formatter={(value, name, p) => [value, `${t(`${metric.title}`)} ${t('in')}
+                                                                        ${timeTickFormatter(p.payload.incidentMonthTimestamp, language)}`]}
+                                                                    />
+
+                                                                </AreaChart>
+                                                            </ResponsiveContainer>
+                                                        )
+                                                    }
+                                                </Translation>
+
                                             </div>
                                         </div>
                                     ))}
@@ -553,7 +638,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 syncId="lndChart"
                                             >
                                                 <XAxis
-                                                    tickFormatter={timeTickFormatter}
+                                                    tickFormatter={date => timeTickFormatter(
+                                                        date,
+                                                        language,
+                                                    )}
                                                     scale="time"
                                                     dataKey="incidentMonthTimestamp"
                                                     domain={['dataMin', 'dataMax']}
@@ -563,7 +651,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 />
                                                 <Brush
                                                     dataKey="incidentMonthTimestamp"
-                                                    tickFormatter={timeTickFormatter}
+                                                    tickFormatter={date => timeTickFormatter(
+                                                        date,
+                                                        language,
+                                                    )}
                                                 />
                                             </AreaChart>
                                         </ResponsiveContainer>
@@ -590,6 +681,7 @@ const mapStateToProps = state => ({
     hazardFilter: hazardFilterSelector(state),
     regionFilter: regionFilterSelector(state),
     regions: regionsSelector(state),
+    language: languageSelector(state),
 });
 
 export default compose(

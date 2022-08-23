@@ -2,8 +2,10 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -20,6 +22,7 @@ import {
 } from '#utils/table';
 
 import styles from './styles.scss';
+import { convertDateAccToLanguage } from '#utils/common';
 
 interface Props {
     realTimeEarthquake: RealTimeEarthquake[];
@@ -38,17 +41,17 @@ class Earthquake extends React.PureComponent<Props> {
         super(props);
 
         // TODO: add OandM by to riverWatch
-        this.earthquakeHeader = [
+        this.earthquakeHeader = language => ([
             {
                 key: 'address',
-                label: 'Epicenter',
+                label: language === 'en' ? 'Epicenter' : 'इपिसेन्टर',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.address, b.address),
             },
             {
                 key: 'magnitude',
-                label: 'Magnitude',
+                label: language === 'en' ? 'Magnitude' : 'परिमाण',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.magnitude, b.magnitude),
@@ -60,7 +63,7 @@ class Earthquake extends React.PureComponent<Props> {
             },
             {
                 key: 'eventOn',
-                label: 'Measured On',
+                label: language === 'en' ? 'Measured On' : 'मापन गरिएको मिति',
                 order: 3,
                 sortable: true,
                 comparator: (a, b) => compareString(a.eventOn, b.eventOn),
@@ -68,12 +71,14 @@ class Earthquake extends React.PureComponent<Props> {
                     const { eventOn } = row;
 
                     // parsing date to appropiate format
-                    return (eventOn) ? eventOn.substring(0, eventOn.indexOf('T')) : undefined;
+                    return (eventOn)
+                        ? convertDateAccToLanguage(eventOn.substring(0, eventOn.indexOf('T')), language)
+                        : undefined;
                 },
             },
             {
                 key: 'time',
-                label: 'time',
+                label: language === 'en' ? 'time' : 'समय',
                 order: 4,
                 sortable: false,
                 modifier: (row: RealTimeEarthquake) => {
@@ -87,12 +92,12 @@ class Earthquake extends React.PureComponent<Props> {
             },
             {
                 key: 'description',
-                label: 'Description',
+                label: language === 'en' ? 'Description' : 'विवरण',
                 order: 5,
                 sortable: true,
                 comparator: (a, b) => compareString(a.description, b.description),
             },
-        ];
+        ]);
     }
 
     private getClassName = (row: RealTimeEarthquake) => {
@@ -125,49 +130,59 @@ class Earthquake extends React.PureComponent<Props> {
         const {
             realTimeEarthquake,
             closeModal,
+            language,
         } = this.props;
 
+        const earthquakeHeader = this.earthquakeHeader(language);
+
         const formattedTableData = convertNormalTableToCsv(realTimeEarthquake,
-            this.earthquakeHeader);
+            earthquakeHeader);
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={closeModal}
-                className={styles.earthquakeModal}
-            >
-                <ModalHeader
-                    title="Earthquake"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    <Table
-                        rowClassNameSelector={this.getClassName}
-                        className={styles.earthquakeTable}
-                        data={realTimeEarthquake}
-                        headers={this.earthquakeHeader}
-                        keySelector={earthquakeSelector}
-                        defaultSort={defaultSort}
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <DangerButton onClick={closeModal}>
-                        Close
-                    </DangerButton>
-                    <DownloadButton
-                        value={formattedTableData}
-                        name="Earthquake.csv"
-                    >
-                        Download
-                    </DownloadButton>
-                </ModalFooter>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={closeModal}
+                            className={_cs(styles.earthquakeModal, styles.languageFont)}
+                        >
+                            <ModalHeader
+                                title={t('Earthquake')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                <Table
+                                    rowClassNameSelector={this.getClassName}
+                                    className={styles.earthquakeTable}
+                                    data={realTimeEarthquake}
+                                    headers={earthquakeHeader}
+                                    keySelector={earthquakeSelector}
+                                    defaultSort={defaultSort}
+                                />
+                            </ModalBody>
+                            <ModalFooter>
+                                <DangerButton onClick={closeModal}>
+                                    {t('Close')}
+                                </DangerButton>
+                                <DownloadButton
+                                    value={formattedTableData}
+                                    name="Earthquake.csv"
+                                >
+                                    {t('Download')}
+                                </DownloadButton>
+                            </ModalFooter>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

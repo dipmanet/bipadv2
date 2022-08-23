@@ -1,7 +1,8 @@
 .legend {
     position: absolute;
     bottom: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium));
+    // left: calc(var(--width-left-panel) + var(--spacing-medium));
+    left: 49%;
     z-index: 11;
     border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--radius-border-pane);

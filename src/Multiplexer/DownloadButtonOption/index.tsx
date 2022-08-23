@@ -12,6 +12,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Faram from '@togglecorp/faram';
+import { Translation } from 'react-i18next';
 import ReduxContext from '#components/ReduxContext';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import osmLibertyStyle from '#mapStyles/style';
@@ -295,277 +296,288 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
 
         return (
-
-            <DropdownMenu
-                className={_cs(styles.layerSwitch, className)}
-                iconName="download"
-                hideDropdownIcon
-                tooltip="Download Map"
-                handleToggleAnimationMapDownloadButton={handleToggleAnimationMapDownloadButton}
-            >
-                <div className={styles.mainContainer} id="downloadButtonOption123">
-                    <div className={styles.heading}>
-                        <h3>Download</h3>
-                    </div>
-                    <div className={styles.buttonOptions}>
-                        {/* <Button
+            <Translation>
+                {
+                    t => (
+                        <DropdownMenu
+                            className={_cs(styles.layerSwitch, className)}
+                            iconName="download"
+                            hideDropdownIcon
+                            tooltip={t('Download Map')}
+                            handleToggleAnimationMapDownloadButton={handleToggleAnimationMapDownloadButton}
+                        >
+                            <div className={styles.mainContainer} id="downloadButtonOption123">
+                                <div className={styles.heading}>
+                                    <h3>{t('Download')}</h3>
+                                </div>
+                                <div className={styles.buttonOptions}>
+                                    {/* <Button
                             className={styles.downloadButton}
                         >
                             Download with default settings
                         </Button> */}
-                        <MapDownloadButton
-                            // className={styles.mapDownloadButton}
-                            className={showCustomSetting ? styles.disableButton : styles.downloadButton}
-                            // transparent
-                            title="Download current map"
-                            // iconName="download"
-                            onPendingStateChange={
-                                onPendingStateChange
-                            }
-                            activeLayers={activeLayers}
-                            resolution={resolution}
-                            buttonText="Download with default settings"
-                            defaultMap
-                            disableDefaultDownload={disableDefaultDownload}
-                            handleDisableDownloadButton={this.handleDisableDownloadButton}
-
-                        />
-                        {
-                            showCustomSetting ? '' : (
-                                <Button
-                                    className={styles.downloadButton}
-                                    onClick={this.handleCustomDownloadClick}
-                                >
-                                    Download with custom settings
-                                </Button>
-                            )
-                        }
-                        {
-                            showCustomSetting
-                                ? (
-                                    <>
-                                        <div>
-                                            <form className={styles.dropdown}>
-                                                <label htmlFor="Custom">
-                                                    Custom:
-                                                </label>
-                                                <select name="custom" id="custom" onClick={this.handleCustomPageCategory}>
-                                                    <option value>Page Type</option>
-                                                    <option value={false}>Resolution Type</option>
-
-                                                </select>
-
-
-                                            </form>
-
-                                        </div>
-                                        {showPageType === 'true' ? (
-                                            <div>
-                                                <form className={styles.pageType}>
-                                                    <label htmlFor="Custom">
-                                                        Select Page Type :
-                                                    </label>
-                                                    <div>
-                                                        <Button
-                                                            className={_cs(selectedPageType === 'A3' ? (styles.active) : (styles.pageSizeButton))}
-                                                            onClick={() => {
-                                                                this.setState({
-                                                                    selectedPageType: 'A3',
-                                                                    // resolution: {
-                                                                    //     height: 1587,
-                                                                    //     width: 1123,
-                                                                    // },
-                                                                    resolution: {
-                                                                        height: mapOrientation === 'portrait' ? 1587 : 1123,
-                                                                        width: mapOrientation === 'portrait' ? 1123 : 1587,
-                                                                    },
-                                                                });
-                                                            }}
-                                                        >
-                                                            A3
-                                                        </Button>
-                                                        <Button
-                                                            className={_cs(selectedPageType === 'A4' ? (styles.active) : (styles.pageSizeButton))}
-
-                                                            onClick={() => {
-                                                                this.setState({
-                                                                    selectedPageType: 'A4',
-                                                                    resolution: {
-                                                                        height: mapOrientation === 'portrait' ? 1123 : 794,
-                                                                        width: mapOrientation === 'portrait' ? 794 : 1123,
-                                                                    },
-                                                                });
-                                                            }}
-                                                        >
-                                                            A4
-                                                        </Button>
-                                                        <Button
-                                                            className={_cs(selectedPageType === 'B4' ? (styles.active) : (styles.pageSizeButton))}
-
-                                                            onClick={() => {
-                                                                this.setState({
-                                                                    selectedPageType: 'B4',
-                                                                    // resolution: {
-                                                                    //     height: 1334,
-                                                                    //     width: 945,
-                                                                    // },
-                                                                    resolution: {
-                                                                        height: mapOrientation === 'portrait' ? 1334 : 945,
-                                                                        width: mapOrientation === 'portrait' ? 945 : 1334,
-                                                                    },
-                                                                });
-                                                            }}
-                                                        >
-                                                            B4
-                                                        </Button>
-                                                        <Button
-                                                            className={_cs(selectedPageType === 'B5' ? (styles.active) : (styles.pageSizeButton))}
-
-                                                            onClick={() => {
-                                                                this.setState({
-                                                                    selectedPageType: 'B5',
-                                                                    // resolution: {
-                                                                    //     height: 945,
-                                                                    //     width: 665,
-                                                                    // },
-                                                                    resolution: {
-                                                                        height: mapOrientation === 'portrait' ? 945 : 665,
-                                                                        width: mapOrientation === 'portrait' ? 665 : 945,
-                                                                    },
-                                                                });
-                                                            }}
-                                                        >
-                                                            B5
-                                                        </Button>
-                                                    </div>
-                                                </form>
-
-                                            </div>
-                                        ) : (
-
-                                            <div>
-                                                <form className={styles.pageType}>
-                                                    <label htmlFor="Custom">
-                                                        Resolution :
-                                                    </label>
-
-                                                    <div>
-
-                                                        <input
-                                                            type="number"
-                                                            name="width"
-                                                            id="vehicle1"
-                                                            value={width}
-                                                            style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
-                                                            onChange={e => this.handleChangeResolution(e)}
-                                                            placeholder="Width"
-                                                        />
-
-                                                        X
-                                                        <input
-                                                            type="number"
-                                                            name="height"
-                                                            id="vehicle1"
-                                                            value={height}
-                                                            style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
-                                                            onChange={e => this.handleChangeResolution(e)}
-                                                            placeholder="Height"
-
-                                                        />
-
-                                                    </div>
-
-
-                                                </form>
-                                                {(height > 499 && height < 5001) && (width > 499 && width < 5001) ? ''
-                                                    : <h5 style={{ textAlign: 'right', marginRight: '10px', color: '#E35163' }}>Max value 5000 & Min value 500</h5>
-                                                }
-
-                                            </div>
-                                        )
-
+                                    <MapDownloadButton
+                                        // className={styles.mapDownloadButton}
+                                        className={showCustomSetting ? styles.disableButton : styles.downloadButton}
+                                        // transparent
+                                        title="Download current map"
+                                        // iconName="download"
+                                        onPendingStateChange={
+                                            onPendingStateChange
                                         }
-                                        {showPageType === 'true'
+                                        activeLayers={activeLayers}
+                                        resolution={resolution}
+                                        buttonText={t('Download with default settings')}
+                                        defaultMap
+                                        disableDefaultDownload={disableDefaultDownload}
+                                        handleDisableDownloadButton={this.handleDisableDownloadButton}
+
+                                    />
+                                    {
+                                        showCustomSetting ? '' : (
+                                            <Button
+                                                className={styles.downloadButton}
+                                                onClick={this.handleCustomDownloadClick}
+                                            >
+                                                {t('Download with custom settings')}
+                                            </Button>
+                                        )
+                                    }
+                                    {
+                                        showCustomSetting
                                             ? (
-                                                <div>
-                                                    <form className={styles.pageType}>
-                                                        <label htmlFor="Custom">
-                                                            Orientation :
-                                                        </label>
+                                                <>
+                                                    <div>
+                                                        <form className={styles.dropdown}>
+                                                            <label htmlFor="Custom">
+                                                                {t('Custom')}
+                                                                :
+                                                            </label>
+                                                            <select name="custom" id="custom" onClick={this.handleCustomPageCategory}>
+                                                                <option value>{t('Page Type')}</option>
+                                                                <option value={false}>{t('Resolution Type')}</option>
+
+                                                            </select>
+
+
+                                                        </form>
+
+                                                    </div>
+                                                    {showPageType === 'true' ? (
                                                         <div>
-                                                            <Button
-                                                                className={_cs(mapOrientation === 'landscape' ? (styles.active) : (styles.pageSizeButton))}
-                                                                onClick={() => {
-                                                                    this.setState({
-                                                                        mapOrientation: 'landscape',
-                                                                        orientationType: {
-                                                                            height: width,
-                                                                            width: height,
-                                                                        },
+                                                            <form className={styles.pageType}>
+                                                                <label htmlFor="Custom">
+                                                                    {t('Select Page Type')}
+                                                                    {' '}
+                                                                    :
+                                                                </label>
+                                                                <div>
+                                                                    <Button
+                                                                        className={_cs(selectedPageType === 'A3' ? (styles.active) : (styles.pageSizeButton))}
+                                                                        onClick={() => {
+                                                                            this.setState({
+                                                                                selectedPageType: 'A3',
+                                                                                // resolution: {
+                                                                                //     height: 1587,
+                                                                                //     width: 1123,
+                                                                                // },
+                                                                                resolution: {
+                                                                                    height: mapOrientation === 'portrait' ? 1587 : 1123,
+                                                                                    width: mapOrientation === 'portrait' ? 1123 : 1587,
+                                                                                },
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        A3
+                                                                    </Button>
+                                                                    <Button
+                                                                        className={_cs(selectedPageType === 'A4' ? (styles.active) : (styles.pageSizeButton))}
 
+                                                                        onClick={() => {
+                                                                            this.setState({
+                                                                                selectedPageType: 'A4',
+                                                                                resolution: {
+                                                                                    height: mapOrientation === 'portrait' ? 1123 : 794,
+                                                                                    width: mapOrientation === 'portrait' ? 794 : 1123,
+                                                                                },
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        A4
+                                                                    </Button>
+                                                                    <Button
+                                                                        className={_cs(selectedPageType === 'B4' ? (styles.active) : (styles.pageSizeButton))}
 
-                                                                    });
-                                                                }}
-                                                            >
-                                                                Landscape
-                                                            </Button>
-                                                            <Button
-                                                                className={_cs(mapOrientation === 'portrait' ? (styles.active) : (styles.pageSizeButton))}
-                                                                onClick={() => {
-                                                                    this.setState({
-                                                                        mapOrientation: 'portrait',
-                                                                        orientationType: {
-                                                                            height: resolution.width,
-                                                                            width: resolution.height,
-                                                                        },
+                                                                        onClick={() => {
+                                                                            this.setState({
+                                                                                selectedPageType: 'B4',
+                                                                                // resolution: {
+                                                                                //     height: 1334,
+                                                                                //     width: 945,
+                                                                                // },
+                                                                                resolution: {
+                                                                                    height: mapOrientation === 'portrait' ? 1334 : 945,
+                                                                                    width: mapOrientation === 'portrait' ? 945 : 1334,
+                                                                                },
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        B4
+                                                                    </Button>
+                                                                    <Button
+                                                                        className={_cs(selectedPageType === 'B5' ? (styles.active) : (styles.pageSizeButton))}
 
-                                                                    });
-                                                                }}
-                                                            >
-                                                                Portrait
-                                                            </Button>
+                                                                        onClick={() => {
+                                                                            this.setState({
+                                                                                selectedPageType: 'B5',
+                                                                                // resolution: {
+                                                                                //     height: 945,
+                                                                                //     width: 665,
+                                                                                // },
+                                                                                resolution: {
+                                                                                    height: mapOrientation === 'portrait' ? 945 : 665,
+                                                                                    width: mapOrientation === 'portrait' ? 665 : 945,
+                                                                                },
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        B5
+                                                                    </Button>
+                                                                </div>
+                                                            </form>
 
                                                         </div>
-                                                    </form>
+                                                    ) : (
 
-                                                </div>
-                                            ) : ''}
+                                                        <div>
+                                                            <form className={styles.pageType}>
+                                                                <label htmlFor="Custom">
+                                                                    {t('Resolution')}
+                                                                    {' '}
+                                                                    :
+                                                                </label>
 
-                                        <div>
-                                            <form className={styles.pageType}>
-                                                <label htmlFor="Custom">
-                                                    File format :
-                                                </label>
-                                                <div>
-                                                    <Button
-                                                        className={_cs(selectedFileFormat === 'png' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                        onClick={() => this.setState({ selectedFileFormat: 'png' })}
+                                                                <div>
 
-                                                    >
-                                                        PNG
-                                                    </Button>
-                                                    <Button
-                                                        className={_cs(selectedFileFormat === 'jpeg' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                        onClick={() => this.setState({ selectedFileFormat: 'jpeg' })}
+                                                                    <input
+                                                                        type="number"
+                                                                        name="width"
+                                                                        id="vehicle1"
+                                                                        value={width}
+                                                                        style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
+                                                                        onChange={e => this.handleChangeResolution(e)}
+                                                                        placeholder="Width"
+                                                                    />
 
-                                                    >
-                                                        JPG
-                                                    </Button>
+                                                                    X
+                                                                    <input
+                                                                        type="number"
+                                                                        name="height"
+                                                                        id="vehicle1"
+                                                                        value={height}
+                                                                        style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
+                                                                        onChange={e => this.handleChangeResolution(e)}
+                                                                        placeholder="Height"
+
+                                                                    />
+
+                                                                </div>
+
+
+                                                            </form>
+                                                            {(height > 499 && height < 5001) && (width > 499 && width < 5001) ? ''
+                                                                : <h5 style={{ textAlign: 'right', marginRight: '10px', color: '#E35163' }}>{t('Max value 5000 & Min value 500')}</h5>
+                                                            }
+
+                                                        </div>
+                                                    )
+
+                                                    }
                                                     {showPageType === 'true'
                                                         ? (
-                                                            <Button
-                                                                className={_cs(selectedFileFormat === 'PDF' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                                onClick={() => this.setState({ selectedFileFormat: 'PDF' })}
-                                                            >
-                                                                PDF
-                                                            </Button>
+                                                            <div>
+                                                                <form className={styles.pageType}>
+                                                                    <label htmlFor="Custom">
+                                                                        {t('Orientation')}
+                                                                        {' '}
+                                                                        :
+                                                                    </label>
+                                                                    <div>
+                                                                        <Button
+                                                                            className={_cs(mapOrientation === 'landscape' ? (styles.active) : (styles.pageSizeButton))}
+                                                                            onClick={() => {
+                                                                                this.setState({
+                                                                                    mapOrientation: 'landscape',
+                                                                                    orientationType: {
+                                                                                        height: width,
+                                                                                        width: height,
+                                                                                    },
+
+
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            {t('Landscape')}
+                                                                        </Button>
+                                                                        <Button
+                                                                            className={_cs(mapOrientation === 'portrait' ? (styles.active) : (styles.pageSizeButton))}
+                                                                            onClick={() => {
+                                                                                this.setState({
+                                                                                    mapOrientation: 'portrait',
+                                                                                    orientationType: {
+                                                                                        height: resolution.width,
+                                                                                        width: resolution.height,
+                                                                                    },
+
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            {t('Portrait')}
+                                                                        </Button>
+
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
                                                         ) : ''}
 
-                                                </div>
-                                            </form>
+                                                    <div>
+                                                        <form className={styles.pageType}>
+                                                            <label htmlFor="Custom">
+                                                                {t('File format')}
+                                                                {' '}
+                                                                :
+                                                            </label>
+                                                            <div>
+                                                                <Button
+                                                                    className={_cs(selectedFileFormat === 'png' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                                    onClick={() => this.setState({ selectedFileFormat: 'png' })}
 
-                                        </div>
-                                        {/* <div>
+                                                                >
+                                                                    PNG
+                                                                </Button>
+                                                                <Button
+                                                                    className={_cs(selectedFileFormat === 'jpeg' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                                    onClick={() => this.setState({ selectedFileFormat: 'jpeg' })}
+
+                                                                >
+                                                                    JPG
+                                                                </Button>
+                                                                {showPageType === 'true'
+                                                                    ? (
+                                                                        <Button
+                                                                            className={_cs(selectedFileFormat === 'PDF' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                                            onClick={() => this.setState({ selectedFileFormat: 'PDF' })}
+                                                                        >
+                                                                            PDF
+                                                                        </Button>
+                                                                    ) : ''}
+
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                    {/* <div>
                                             <form className={styles.grid}>
 
                                                 <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
@@ -574,67 +586,74 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
                                             </form>
                                         </div> */}
-                                        <div className={styles.footerButton}>
-                                            {!isTilesLoaded ? (
-                                                <div style={{ position: 'relative' }}>
-                                                    <LoadingAnimation className={styles.loader} />
-                                                    {' '}
-                                                    <p style={{ marginLeft: '20px' }}> Loading...</p>
-                                                </div>
-                                            )
-                                                : (
-                                                    // <Button
-                                                    //     className={styles.fileFormatButton}
-                                                    //     onClick={this.handlepreview}
-                                                    // >
-                                                    //     Download
-                                                    // </Button>
-                                                    <MapDownloadButton
-                                                        // className={styles.mapDownloadButton}
-                                                        className={disableDownloadButton ? styles.disableButton : styles.downloadButton}
-                                                        // transparent
-                                                        title="Download custom map"
-                                                        // iconName="download"
-                                                        onPendingStateChange={
-                                                            onPendingStateChange
-                                                        }
-                                                        activeLayers={activeLayers}
-                                                        resolution={resolution}
-                                                        buttonText="Download"
-                                                        selectedFileFormat={selectedFileFormat}
-                                                        selectedPageType={selectedPageType}
-                                                        showPageType={showPageType}
-                                                        handleCancelButton={this.handleCancelButton}
-                                                        mapOrientation={mapOrientation}
-                                                        handleDisableDownloadButton={this.handleDisableDownloadButton}
+                                                    <div className={styles.footerButton}>
+                                                        {!isTilesLoaded ? (
+                                                            <div style={{ position: 'relative' }}>
+                                                                <LoadingAnimation className={styles.loader} />
+                                                                {' '}
+                                                                <p style={{ marginLeft: '20px' }}>
+                                                                    {' '}
+                                                                    {t('Loading...')}
+                                                                </p>
+                                                            </div>
+                                                        )
+                                                            : (
+                                                                // <Button
+                                                                //     className={styles.fileFormatButton}
+                                                                //     onClick={this.handlepreview}
+                                                                // >
+                                                                //     Download
+                                                                // </Button>
+                                                                <MapDownloadButton
+                                                                    // className={styles.mapDownloadButton}
+                                                                    className={disableDownloadButton ? styles.disableButton : styles.downloadButton}
+                                                                    // transparent
+                                                                    title="Download custom map"
+                                                                    // iconName="download"
+                                                                    onPendingStateChange={
+                                                                        onPendingStateChange
+                                                                    }
+                                                                    activeLayers={activeLayers}
+                                                                    resolution={resolution}
+                                                                    buttonText={t('Download')}
+                                                                    selectedFileFormat={selectedFileFormat}
+                                                                    selectedPageType={selectedPageType}
+                                                                    showPageType={showPageType}
+                                                                    handleCancelButton={this.handleCancelButton}
+                                                                    mapOrientation={mapOrientation}
+                                                                    handleDisableDownloadButton={this.handleDisableDownloadButton}
 
 
-                                                    />
-                                                )}
-                                            <Button
-                                                className={styles.cancelButton}
-                                                onClick={this.handleCancelButton}
-                                            >
-                                                Cancel
-                                            </Button>
-                                        </div>
-                                    </>
-                                ) : ''
+                                                                />
+                                                            )}
+                                                        <Button
+                                                            className={styles.cancelButton}
+                                                            onClick={this.handleCancelButton}
+                                                        >
+                                                            {t('Cancel')}
+                                                        </Button>
+                                                    </div>
+                                                </>
+                                            ) : ''
 
-                        }
+                                    }
 
-                    </div>
+                                </div>
 
 
-                </div>
+                            </div>
 
-                {/* <ListView
+                            {/* <ListView
                     data={mapStyles}
                     keySelector={layerKeySelector}
                     renderer={LayerButton}
                     rendererParams={this.getLayerButtonRendererParams}
                 /> */}
-            </DropdownMenu>
+                        </DropdownMenu>
+                    )
+                }
+            </Translation>
+
 
         );
     }

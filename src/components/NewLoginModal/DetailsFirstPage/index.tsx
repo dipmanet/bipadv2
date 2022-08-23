@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { _cs, isDefined } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
 import DangerButton from '#rsca/Button/DangerButton';
@@ -78,76 +79,89 @@ const DetailsFirstPage = (props: Props) => {
     }, [district, municipality, province]);
 
     return (
-        <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.welcomeBack}>
-                <h1>Welcome Back</h1>
-                <p>
-                    To login to BIPAD Portal, please use your credentials.
-                </p>
-                <div className={styles.loginBtn}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.newsignIn}
-                        onClick={handleCancelBtn}
-                    >
-                        Sign in
-                    </PrimaryButton>
-                </div>
+        <Translation>
+            {
+                t => (
+                    <div className={styles.mainPageDetailsContainer}>
+                        <div className={styles.welcomeBack}>
+                            <h1>{t('Welcome Back')}</h1>
+                            <p>
+                                {t('To login to BIPAD Portal, please use your credentials.')}
+                            </p>
+                            <div className={styles.loginBtn}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.newsignIn}
+                                    onClick={handleCancelBtn}
+                                >
+                                    {t('Sign in')}
+                                </PrimaryButton>
+                            </div>
 
-            </div>
-
-            <div className={styles.detailsFormContainer}>
-                <div className={styles.closeBtn}>
-                    <DangerButton className={styles.dangerbtn} onClick={closeModal}>
-                        <Icon
-                            name="times"
-                            className={styles.closeIcon}
-                        />
-                    </DangerButton>
-                </div>
-                <div className={styles.formContainer}>
-                    <h2>You are representing: </h2>
-                    <div className={styles.newSignupForm}>
-                        <div className={styles.inputContainer}>
-                            <StepwiseRegionSelectInput
-                                className={
-                                    _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                                faramElementName="region"
-                                wardsHidden
-                                onChange={handleFormRegion}
-                                initialLoc={{ municipality,
-                                    district,
-                                    province }}
-                                provinceInputClassName={styles.snprovinceinput}
-                                districtInputClassName={styles.sndistinput}
-                                municipalityInputClassName={styles.snmuniinput}
-                            />
                         </div>
-                        {errMsg && showErr ? <span className={styles.errMsg}>Please select at least one field</span> : ''}
+
+                        <div className={styles.detailsFormContainer}>
+                            <div className={styles.closeBtn}>
+                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                    <Icon
+                                        name="times"
+                                        className={styles.closeIcon}
+                                    />
+                                </DangerButton>
+                            </div>
+                            <div className={styles.formContainer}>
+                                <h2>
+                                    {t('You are representing:')}
+                                </h2>
+                                <div className={styles.newSignupForm}>
+                                    <div className={styles.inputContainer}>
+                                        <StepwiseRegionSelectInput
+                                            className={_cs(styles.activeView,
+                                                styles.stepwiseRegionSelectInput)}
+                                            faramElementName="region"
+                                            wardsHidden
+                                            onChange={handleFormRegion}
+                                            initialLoc={{ municipality,
+                                                district,
+                                                province }}
+                                            provinceInputClassName={styles.snprovinceinput}
+                                            districtInputClassName={styles.sndistinput}
+                                            municipalityInputClassName={styles.snmuniinput}
+                                        />
+                                    </div>
+                                    {errMsg && showErr ? (
+                                        <span className={styles.errMsg}>
+                                            {t('Please select at least one field')}
+                                        </span>
+                                    ) : ''}
+                                </div>
+                            </div>
+                            <div className={styles.cancelAgreeBtns}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={handleDetails}
+                                >
+                                    {t('Back')}
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.agreeBtn}
+                                    onClick={handleAgreeBtn}
+                                >
+                                    {t('Next')}
+                                </PrimaryButton>
+
+                            </div>
+
+
+                        </div>
                     </div>
-                </div>
-                <div className={styles.cancelAgreeBtns}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.cancelBtn}
-                        onClick={handleDetails}
-                    >
-                        Back
-                    </PrimaryButton>
+                )
+            }
+        </Translation>
 
-                    <PrimaryButton
-                        type="button"
-                        className={styles.agreeBtn}
-                        onClick={handleAgreeBtn}
-                    >
-                        Next
-                    </PrimaryButton>
-
-                </div>
-
-
-            </div>
-        </div>
     );
 };
 

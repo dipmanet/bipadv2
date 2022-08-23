@@ -18,6 +18,10 @@ import {
 export interface Field {
     id: number;
     title: string;
+    titleNe: string;
+}
+export interface Language {
+    language: string;
 }
 
 interface Centroid {
@@ -300,6 +304,7 @@ export interface SeverityType extends Field {
 export interface ResourceType extends Field {
     id: number;
     title: ResourceTypeKeys;
+    titleNe: string;
 }
 export interface DocumentCategory extends Field {
 }
@@ -388,6 +393,7 @@ export interface Layer extends Field {
 export interface LayerGroup extends Field {
     category: string;
     shortDescription: string;
+    shortDescriptionNe: string;
     longDescription: string;
     parent: number | null;
 }
@@ -448,6 +454,7 @@ export interface MapStyle {
 export interface AdminLevel {
     id: number;
     title: string;
+    titleNe: string;
 }
 
 export interface Region {
@@ -654,11 +661,13 @@ export interface ProfileContactPage {
 export interface RealTimeSource {
     id: number;
     title: string;
+    titleNe: string;
 }
 
 export interface OtherSource {
     id: number;
     title: string;
+    titleNe: string;
 }
 
 export interface RealTimeMonitoringPage {
@@ -746,6 +755,7 @@ export interface PageState {
     region: Region;
     filters: FiltersElement;
 
+    language: Language;
     daEarthquakeFilter: DAEarthquakeFiltersElement;
     daPollutionFilter: DAPollutionFiltersElement;
     daRainFilter: DARainFiltersElement;
@@ -787,7 +797,7 @@ export interface PageState {
     // dataArchivePage: DataArchivePage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
-    disasterProfilePage: DisasterProfilePage;
+    Page: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
     generalData: GeneralData;
     palikaRedirect: PalikaRedirect;
@@ -941,6 +951,7 @@ export interface DataArchiveEarthquakeFilters {
 
 // eslint-disable-next-line import/prefer-default-export
 export enum PageType {
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/DRRM_REPORT/SET_GENERAL_DATA',
     SET_PALIKA_REDIRECT = 'page/DRRM_REPORT/SET_PALIKA_REDIRECT',
@@ -1052,6 +1063,10 @@ export enum PageType {
 }
 
 // ACTION CREATOR INTERFACE
+
+export interface SetLanguage {
+    language: Language;
+}
 
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
@@ -1489,6 +1504,7 @@ export interface SetEpidemicsPage {
 }
 
 export type PageActionTypes = (
+    SetLanguage | SetRegion | SetInitialPopupHidden |
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData | SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |

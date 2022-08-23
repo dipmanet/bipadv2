@@ -1,8 +1,21 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { doesObjectHaveNoData } from '@togglecorp/fujs';
+import { doesObjectHaveNoData, _cs } from '@togglecorp/fujs';
 import PlotlyComponent from 'react-plotly.js';
 import { Table } from 'semantic-ui-react';
+
+import {
+    ResponsiveContainer,
+    ComposedChart,
+    Line,
+    Area,
+    XAxis,
+    YAxis,
+    Tooltip,
+    Legend,
+} from 'recharts';
+
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -24,6 +37,7 @@ import SummaryItem from '#components/SummaryItem';
 
 import styles from './styles.scss';
 import { filterDataByReturnPeriod } from '#views/RealTimeMonitoring/utils';
+import Button from '#rsca/Button';
 
 interface OwnProps {
     handleModalClose: () => void;
@@ -113,6 +127,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
             id,
             handleModalClose,
             requests,
+            language,
         } = this.props;
 
         const streamflowData: StreamflowData[] = getResults(requests, 'streamflowGetRequest');
@@ -247,74 +262,143 @@ class StreamflowDetails extends React.PureComponent<Props> {
             displayModeBar: true,
         };
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={handleModalClose}
-                className={styles.streamflowModal}
-            >
-                <ModalHeader
-                    title={`Streamflow Details for River ${id}`}
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={handleModalClose}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    {pending && <LoadingAnimation />}
-                    {!pending && (
-                        <div className={styles.streamflow}>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={handleModalClose}
+                            className={_cs(styles.streamflowModal,
+                                language === 'np' && styles.languageFont)}
+                        >
 
-                            <div className={styles.returnPeriod}>
-                                <Table celled structured className={styles.returnPeriodTable}>
-                                    <Table.Row>
-                                        <Table.HeaderCell className={styles.headerTitle}>
-                                            Discharge(m3/s)
-                                        </Table.HeaderCell>
-                                        {returnPeriod.map(value => (
-                                            <Table.Cell className={styles.headerTitle}>
-                                                {value.value}
-                                            </Table.Cell>
-                                        ))}
-                                    </Table.Row>
-                                    <Table.Row>
-                                        <Table.HeaderCell className={styles.headerTitle}>
-                                            Return Period
-                                        </Table.HeaderCell>
-                                        {returnPeriod.map(value => (
-                                            <Table.Cell className={styles.headerTitle}>
-                                                {value.label}
-                                            </Table.Cell>
-                                        ))}
-                                    </Table.Row>
-                                </Table>
-                            </div>
-                            {/* <ListView
-                                className={styles.returnPeriod}
-                                keySelector={keySelector}
-                                data={returnPeriod}
-                                renderer={SummaryItem}
-                                rendererParams={this.rendererParams}
-                            /> */}
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    Streamflow
-                                </h3>
-                            </header>
-                            <PlotlyComponent
-                                className="chart"
-                                data={data}
-                                layout={layout1}
-                                config={config}
+                            <ModalHeader
+                                title={`Streamflow Details for River ${id}`}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={handleModalClose}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
                             />
+                            <ModalBody className={styles.body}>
+                                {pending && <LoadingAnimation />}
+                                {!pending && (
+                                    <div className={styles.streamflow}>
+                                        <header className={styles.header}>
+                                            <h3 className={styles.heading}>
+                                                {t('Return Period')}
+                                            </h3>
+                                        </header>
+                                        <ListView
+                                            className={styles.returnPeriod}
+                                            keySelector={keySelector}
+                                            data={returnPeriod}
+                                            renderer={SummaryItem}
+                                            rendererParams={this.rendererParams}
+                                        />
+                                        <header className={styles.header}>
+                                            <h3 className={styles.heading}>
+                                                {t('Streamflow')}
+                                            </h3>
+                                            <Button
+                                                title="Download Chart"
+                                                className={styles.chartDownload}
+                                                transparent
+                                                disabled={pending}
+                                                onClick={this.handleSaveClick}
+                                                iconName="download"
+                                            />
+                                        </header>
+                                        <ResponsiveContainer
+                                            className={styles.chart}
+                                            id="streamflowChart"
+                                        >
+                                            <ComposedChart
+                                                data={chartData}
+                                            >
+                                                <XAxis
+                                                    dataKey="date"
+                                                    type="number"
+                                                    scale="time"
+                                                    domain={['dataMin', 'dataMax']}
+                                                    tickFormatter={value => new Date(value).toDateString()}
+                                                />
+                                                <YAxis
+                                                    type="number"
+                                                />
+                                                <Tooltip
+                                                    labelFormatter={value => `Date: ${new Date(value)}`}
+                                                />
+                                                <Legend verticalAlign="top" />
+                                                <Area
+                                                    type="monotone"
+                                                    dataKey="flow"
+                                                    stroke="none"
+                                                    fill="#90ed7d"
+                                                    legendType="square"
+                                                />
+                                                <Area
+                                                    type="monotone"
+                                                    dataKey="std"
+                                                    stroke="none"
+                                                    fill="#33a02c"
+                                                    legendType="square"
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="STD Upper Value"
+                                                    stroke="#33a02c"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="STD Lower Value"
+                                                    stroke="#33a02c"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="min"
+                                                    stroke="#90ed7d"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="max"
+                                                    stroke="#90ed7d"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="HRES"
+                                                    stroke="#434348"
+                                                    dot={false}
+                                                />
+                                                <Line
+                                                    strokeWidth={2}
+                                                    type="monotone"
+                                                    dataKey="mean"
+                                                    stroke="#1f78b4"
+                                                    dot={false}
+                                                />
+                                            </ComposedChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                )}
+                            </ModalBody>
+                        </Modal>
+                    )
+                }
+            </Translation>
 
-                        </div>
-                    )}
-                </ModalBody>
-            </Modal>
         );
     }
 }

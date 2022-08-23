@@ -1,9 +1,12 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { unique } from '@togglecorp/fujs';
-
+import { Translation } from 'react-i18next';
 import List from '#rscv/List';
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
@@ -30,7 +33,7 @@ import {
 } from '#utils/domain';
 import { getYesterday, framize, getImage } from '#utils/common';
 
-import { hazardTypesSelector } from '#selectors';
+import { hazardTypesSelector, languageSelector } from '#selectors';
 
 import RainTooltip from './Tooltips/Alerts/Rain';
 import RiverTooltip from './Tooltips/Alerts/River';
@@ -51,21 +54,23 @@ import styles from './styles.scss';
 // </div>
 // );
 
-const AlertTooltip = ({ title, description, referenceType, referenceData, createdDate }) => {
+const AlertTooltip = ({ title, description,
+    referenceType, referenceData,
+    createdDate, language }) => {
     if (referenceType && referenceType === 'rain') {
-        return RainTooltip(title, description, createdDate, referenceData);
+        return RainTooltip(title, description, createdDate, referenceData, language);
     }
     if (referenceType && referenceType === 'river') {
-        return RiverTooltip(title, description, createdDate, referenceData);
+        return RiverTooltip(title, description, createdDate, referenceData, language);
     }
     if (title.toUpperCase().includes('EARTH') && referenceData) {
-        return EarthquakeTooltip(title, description, createdDate, referenceData);
+        return EarthquakeTooltip(title, description, createdDate, referenceData, language);
     }
     if (referenceType && referenceType === 'fire') {
-        return FireTooltip(title, description, createdDate, referenceData);
+        return FireTooltip(title, description, createdDate, referenceData, language);
     }
     if (referenceType && referenceType === 'pollution') {
-        return PollutionTooltip(title, description, createdDate, referenceData);
+        return PollutionTooltip(title, description, createdDate, referenceData, language);
     }
     if (title) {
         return (
@@ -74,7 +79,7 @@ const AlertTooltip = ({ title, description, referenceType, referenceData, create
                     {title}
                 </h3>
                 <div className={styles.description}>
-                    { description }
+                    {description}
                 </div>
             </div>
         );
@@ -152,6 +157,7 @@ const defaultProps = {
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 const hazardKeySelector = hazard => hazard.id;
@@ -223,6 +229,7 @@ class AlertEventMap extends React.PureComponent {
                 startedOn,
                 createdDate } } = feature;
         const data = referenceData ? JSON.parse(referenceData) : undefined;
+        // translation to do: change the following data
 
         this.setState({
             alertTitle: title,
@@ -308,6 +315,7 @@ class AlertEventMap extends React.PureComponent {
             eventHoverAttributes,
             isEventHovered,
             isAlertHovered,
+            language: { language },
         } = this.props;
 
         const featureConvexCollection = this.getConvexAlertsFeatureCollection(alertList, hazards);
@@ -487,6 +495,7 @@ class AlertEventMap extends React.PureComponent {
                                 referenceType={alertReferenceType}
                                 referenceData={alertReferenceData}
                                 createdDate={alertCreatedDate}
+                                language={language}
                             />
                         </MapTooltip>
                     )}

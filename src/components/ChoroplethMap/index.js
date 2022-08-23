@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
@@ -30,6 +31,7 @@ import {
     selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
+    languageSelector,
 } from '#selectors';
 
 const propTypes = {
@@ -81,6 +83,7 @@ const mapStateToProps = (state, props) => ({
     selectedProvinceId: selectedProvinceIdSelector(state, props),
     selectedDistrictId: selectedDistrictIdSelector(state, props),
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
+    language: languageSelector(state),
 });
 
 const visibleLayout = {
@@ -145,6 +148,7 @@ class ChoroplethMap extends React.PureComponent {
             regionLevel = regionLevelFromAppState,
             tooltipRenderer: TooltipRenderer,
             tooltipParams,
+            language: { language },
         } = this.props;
 
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
@@ -355,7 +359,12 @@ class ChoroplethMap extends React.PureComponent {
                             'source-layer': mapSources.nepalCentroid.layers.province,
                             type: 'symbol',
                             paint: mapStyles.provinceLabel.paint,
-                            layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
+                            layout: showProvinceLabel
+                                ? (language === 'en'
+                                    ? mapStyles.provinceLabel.layout
+                                    : mapStyles.provinceLabelNep.layout
+                                )
+                                : noneLayout,
                             filter: provinceFilter,
                         }}
                     />
@@ -365,7 +374,11 @@ class ChoroplethMap extends React.PureComponent {
                             'source-layer': mapSources.nepalCentroid.layers.district,
                             type: 'symbol',
                             paint: mapStyles.districtLabel.paint,
-                            layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
+                            layout: showDistrictLabel
+                                ? (language === 'en'
+                                    ? mapStyles.districtLabel.layout
+                                    : mapStyles.districtLabelNep.layout
+                                ) : noneLayout,
                             filter: districtFilter,
                         }}
                     />
@@ -376,7 +389,11 @@ class ChoroplethMap extends React.PureComponent {
                             type: 'symbol',
                             paint: mapStyles.municipalityLabel.paint,
                             layout: showMunicipalityLabel
-                                ? mapStyles.municipalityLabel.layout : noneLayout,
+                                ? (language === 'en'
+                                    ? mapStyles.municipalityLabel.layout
+                                    : mapStyles.municipalityLabelNep.layout
+                                )
+                                : noneLayout,
                             filter: municipalityFilter,
                         }}
                     />
@@ -386,7 +403,11 @@ class ChoroplethMap extends React.PureComponent {
                             'source-layer': mapSources.nepalCentroid.layers.ward,
                             type: 'symbol',
                             paint: mapStyles.wardLabel.paint,
-                            layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
+                            layout: showWardLabel
+                                ? (language === 'en'
+                                    ? mapStyles.wardLabel.layout
+                                    : mapStyles.wardLabelNep.layout)
+                                : noneLayout,
                             filter: wardFilter,
                         }}
                     />

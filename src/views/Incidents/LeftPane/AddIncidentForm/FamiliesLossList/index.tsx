@@ -5,6 +5,8 @@ import {
     isTruthy,
 } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -25,6 +27,11 @@ import { Header } from '#store/atom/table/types';
 
 import AddFamilyLossModal from './AddFamilyLossModal';
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const ModalButton = modalize(Button);
 
@@ -99,6 +106,7 @@ class FamilyLossList extends React.PureComponent<Props, State> {
             requests: {
                 listRequest,
             },
+            language: { language },
         } = this.props;
 
         listRequest.setDefaultParams({
@@ -108,34 +116,34 @@ class FamilyLossList extends React.PureComponent<Props, State> {
         this.headers = [
             {
                 key: 'name',
-                label: 'Name',
+                label: language === 'en' ? 'Name' : 'नाम',
                 order: 1,
             },
             {
                 key: 'phoneNumber',
-                label: 'Phone Number',
+                label: language === 'en' ? 'Phone Number' : 'फोन नम्बर',
                 order: 3,
             },
             {
                 key: 'belowPoverty',
-                label: 'Below Poverty',
+                label: language === 'en' ? 'Below Poverty' : 'गरिबी मुनि',
                 order: 5,
                 modifier: row => (row.belowPoverty ? 'Yes' : 'No'),
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: language === 'en' ? 'Status' : 'स्थिति',
                 order: 6,
             },
             {
                 key: 'verified',
-                label: 'Verified',
+                label: language === 'en' ? 'Verified' : 'प्रमाणित',
                 order: 5,
                 modifier: row => (isTruthy(row.verified) ? String(row.verified) : 'N/A'),
             },
             {
                 key: 'actions',
-                label: 'Actions',
+                label: language === 'en' ? 'Actions' : 'कार्यहरू',
                 order: 7,
                 modifier: (row) => {
                     const {
@@ -143,15 +151,22 @@ class FamilyLossList extends React.PureComponent<Props, State> {
                     } = row;
 
                     return (
-                        <div className={styles.actionButton}>
-                            <Cloak hiddenIf={p => !p.delete_family}>
-                                <DangerConfirmButton
-                                    iconName="delete"
-                                    confirmationMessage="Are you sure you want to delete this item?"
-                                    onClick={() => this.handleItemRemove(rowKey)}
-                                />
-                            </Cloak>
-                        </div>
+                        <Translation>
+                            {
+                                t => (
+                                    <div className={styles.actionButton}>
+                                        <Cloak hiddenIf={p => !p.delete_family}>
+                                            <DangerConfirmButton
+                                                iconName="delete"
+                                                confirmationMessage={t('Are you sure you want to delete this item?')}
+                                                onClick={() => this.handleItemRemove(rowKey)}
+                                            />
+                                        </Cloak>
+                                    </div>
+                                )
+                            }
+                        </Translation>
+
                     );
                 },
             },
@@ -218,35 +233,42 @@ class FamilyLossList extends React.PureComponent<Props, State> {
         const pending = listPending || itemRemovePending;
 
         return (
-            <ModalBody className={_cs(styles.listContainer, className)}>
-                {pending && <LoadingAnimation />}
-                <header className={styles.header}>
-                    <div className={styles.heading} />
-                    <Cloak hiddenIf={p => !p.add_family}>
-                        <ModalButton
-                            className={styles.button}
-                            iconName="add"
-                            transparent
-                            modal={(
-                                <AddFamilyLossModal
-                                    lossServerId={lossServerId}
-                                    onAddSuccess={this.handleListItemAdd}
-                                />
-                            )}
-                        >
-                            Add Family Loss
-                        </ModalButton>
-                    </Cloak>
-                </header>
-                <Table
-                    className={styles.table}
-                    headers={this.headers}
-                    data={list}
-                    keySelector={keySelector}
-                />
-            </ModalBody>
+            <Translation>
+                {
+                    t => (
+                        <ModalBody className={_cs(styles.listContainer, className)}>
+                            {pending && <LoadingAnimation />}
+                            <header className={styles.header}>
+                                <div className={styles.heading} />
+                                <Cloak hiddenIf={p => !p.add_family}>
+                                    <ModalButton
+                                        className={styles.button}
+                                        iconName="add"
+                                        transparent
+                                        modal={(
+                                            <AddFamilyLossModal
+                                                lossServerId={lossServerId}
+                                                onAddSuccess={this.handleListItemAdd}
+                                            />
+                                        )}
+                                    >
+                                        {t('Add Family Loss')}
+                                    </ModalButton>
+                                </Cloak>
+                            </header>
+                            <Table
+                                className={styles.table}
+                                headers={this.headers}
+                                data={list}
+                                keySelector={keySelector}
+                            />
+                        </ModalBody>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default compose(createRequestClient(requests))(FamilyLossList);
+export default connect(mapStateToProps)(compose(createRequestClient(requests))(FamilyLossList));

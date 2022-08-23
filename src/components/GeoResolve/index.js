@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import {
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
+    languageSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -26,6 +28,7 @@ const mapStateToProps = state => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    language: languageSelector(state),
 });
 
 @connect(mapStateToProps)
@@ -57,12 +60,11 @@ export default class GeoResolve extends React.PureComponent {
     }
 
     render() {
-        const { className, data } = this.props;
+        const { className, data, language: { language } } = this.props;
         const selectedRegionDetails = this.getRegionDetails(data);
-
         return (
             <p className={_cs(className, styles.geoResolve)}>
-                {selectedRegionDetails.title}
+                {language === 'en' ? selectedRegionDetails.title : selectedRegionDetails.title_ne }
             </p>
         );
     }

@@ -1,10 +1,14 @@
 import React from 'react';
 
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+import { convertDateAccToLanguage } from '#utils/common';
 
 interface Props {
     className?: string;
@@ -14,12 +18,17 @@ interface Props {
 interface State {
 }
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 class DateRangeInfo extends React.PureComponent<Props, State> {
     public render() {
         const {
             className,
             startDate,
             endDate,
+            language: { language },
         } = this.props;
 
         return (
@@ -31,24 +40,49 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                     />
                 </div>
                 <div className={styles.label}>
-                    Showing data from
+                    <Translation>
+                        {
+                            t => <span>{t('DateRangeInfo')}</span>
+                        }
+                    </Translation>
                 </div>
                 <FormattedDate
                     className={styles.startDate}
                     mode="yyyy-MM-dd"
                     value={startDate}
                 />
-                <div className={styles.label}>
-                    to
-                </div>
+
+                {
+                    language === 'np' && (
+                        <div className={styles.label}>
+                            <span>देखि</span>
+                        </div>
+                    )
+                }
+
+                {language === 'en'
+                    && (
+                        <div className={styles.label}>
+                            <span>to</span>
+                        </div>
+                    )
+                }
+
                 <FormattedDate
                     className={styles.endDate}
                     mode="yyyy-MM-dd"
                     value={endDate}
                 />
+                {language === 'np'
+                    && (
+                        <div className={styles.label}>
+                            <span>सम्‍म</span>
+                        </div>
+                    )
+                }
             </div>
         );
     }
 }
 
-export default DateRangeInfo;
+export default connect(mapStateToProps)(DateRangeInfo);

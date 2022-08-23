@@ -4,26 +4,38 @@ import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import { AppState } from '#store/types';
 import ListSelection from '#rsci/ListSelection';
 
 import { setRealTimeFiltersAction } from '#actionCreators';
-import { realTimeFiltersSelector } from '#selectors';
+import { languageSelector, realTimeFiltersSelector } from '#selectors';
 
 import styles from './styles.scss';
 
 const sourceKeySelector = (d: Source) => d.id;
-const sourceLabelSelector = (d: Source) => d.title;
+const sourceLabelSelector = (d: Source, language: string) => {
+    if (language === 'en') {
+        return d.title;
+    }
+    return d.titleNe;
+};
 
 interface Source {
     id: number;
     title: string;
+    titleNe: string;
+}
+
+interface Language {
+    language: 'en' | 'np';
 }
 
 interface OwnProps {
     className?: string;
     realTimeSourceList: Source[];
     otherSourceList: Source[];
+    language: { language: 'en' | 'np' };
 }
 
 interface PropsFromAppState {
@@ -52,6 +64,7 @@ interface State {
 
 const mapStateToProps = (state: AppState) => ({
     filters: realTimeFiltersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -92,6 +105,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
             },
             realTimeSourceList,
             otherSourceList,
+            language: { language },
         } = this.props;
 
 
@@ -107,26 +121,38 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                 error={faramErrors}
                 disabled={false}
             >
-                <ListSelection
-                    label="Realtime layers"
-                    className={styles.realTimeSourcesInput}
-                    faramElementName="realtimeSources"
-                    options={realTimeSourceList}
-                    keySelector={sourceKeySelector}
-                    labelSelector={sourceLabelSelector}
-                    showHintAndError={false}
-                // autoFocus
-                />
-                <ListSelection
-                    label="Other layers"
-                    className={styles.otherSourcesInput}
-                    listClassName={styles.list}
-                    faramElementName="otherSources"
-                    options={otherSourceList}
-                    keySelector={sourceKeySelector}
-                    labelSelector={sourceLabelSelector}
-                    showHintAndError={false}
-                />
+                <Translation>
+                    {
+                        t => (
+                            <ListSelection
+                                label={t('Realtime layers')}
+                                className={styles.realTimeSourcesInput}
+                                faramElementName="realtimeSources"
+                                options={realTimeSourceList}
+                                keySelector={sourceKeySelector}
+                                labelSelector={(e: Source) => sourceLabelSelector(e, language)}
+                                showHintAndError={false}
+                            // autoFocus
+                            />
+                        )
+                    }
+                </Translation>
+                <Translation>
+                    {
+                        t => (
+                            <ListSelection
+                                label={t('Other layers')}
+                                className={styles.otherSourcesInput}
+                                listClassName={styles.list}
+                                faramElementName="otherSources"
+                                options={otherSourceList}
+                                keySelector={sourceKeySelector}
+                                labelSelector={(e: Source) => sourceLabelSelector(e, language)}
+                                showHintAndError={false}
+                            />
+                        )
+                    }
+                </Translation>
             </Faram>
         );
     }

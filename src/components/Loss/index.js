@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import TextOutput from '#components/TextOutput';
 
 import styles from './styles.scss';
@@ -44,6 +45,7 @@ export default class Loss extends React.PureComponent {
             contentClassName,
             rowClassName,
             loss = emptyObject,
+            language,
         } = this.props;
 
         const {
@@ -55,52 +57,64 @@ export default class Loss extends React.PureComponent {
         } = loss;
 
         return (
-            <div className={_cs(className, styles.loss)}>
-                <h3 className={_cs(titleClassName, styles.title)}>
-                    { title }
-                </h3>
-                <div className={contentClassName}>
-                    <TextOutput
-                        className={rowClassName}
-                        labelClassName={labelClassName}
-                        valueClassName={valueClassName}
-                        label="People Dead"
-                        value={peopleDeathCount}
-                        isNumericValue
-                    />
-                    <TextOutput
-                        className={rowClassName}
-                        labelClassName={labelClassName}
-                        valueClassName={valueClassName}
-                        label="Livestock Destroyed"
-                        value={livestockDestroyedCount}
-                        isNumericValue
-                    />
-                    <TextOutput
-                        className={rowClassName}
-                        labelClassName={labelClassName}
-                        valueClassName={valueClassName}
-                        label="Infrastructures Destroyed"
-                        value={infrastructureDestroyedCount}
-                        isNumericValue
-                    />
-                    <TextOutput
-                        className={rowClassName}
-                        labelClassName={labelClassName}
-                        valueClassName={valueClassName}
-                        label="Estimated Loss (NRs.)"
-                        value={estimatedLoss}
-                        isNumericValue
-                    />
-                    <TextOutput
-                        className={rowClassName}
-                        labelClassName={labelClassName}
-                        valueClassName={valueClassName}
-                        label="Description"
-                        value={description}
-                    />
-                </div>
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.loss)}>
+                            <h3 className={_cs(titleClassName, styles.title)}>
+                                {title}
+                            </h3>
+                            <div className={contentClassName}>
+                                <TextOutput
+                                    className={rowClassName}
+                                    labelClassName={labelClassName}
+                                    valueClassName={valueClassName}
+                                    label={t('People Dead')}
+                                    value={peopleDeathCount}
+                                    isNumericValue
+                                    language={language}
+                                />
+                                <TextOutput
+                                    className={rowClassName}
+                                    labelClassName={labelClassName}
+                                    valueClassName={valueClassName}
+                                    label={t('Livestock Destroyed')}
+                                    value={livestockDestroyedCount}
+                                    isNumericValue
+                                    language={language}
+                                />
+                                <TextOutput
+                                    className={rowClassName}
+                                    labelClassName={labelClassName}
+                                    valueClassName={valueClassName}
+                                    label={t('Infrastructures Destroyed')}
+                                    value={infrastructureDestroyedCount}
+                                    isNumericValue
+                                    language={language}
+                                />
+                                <TextOutput
+                                    className={rowClassName}
+                                    labelClassName={labelClassName}
+                                    valueClassName={valueClassName}
+                                    label={t('Estimated Loss (NRs.)')}
+                                    value={estimatedLoss}
+                                    isNumericValue
+                                    language={language}
+                                />
+                                <TextOutput
+                                    className={rowClassName}
+                                    labelClassName={labelClassName}
+                                    valueClassName={valueClassName}
+                                    label={t('Description')}
+                                    value={t(description)}
+                                    language={language}
+                                />
+                            </div>
+                        </div>
+
+                    )
+                }
+            </Translation>
         );
     }
 }

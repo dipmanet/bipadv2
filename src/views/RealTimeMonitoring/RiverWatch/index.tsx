@@ -2,8 +2,11 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -21,12 +24,18 @@ import {
 
 import styles from './styles.scss';
 
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 interface Props {
     realTimeRiver: RealTimeRiver[];
     closeModal?: () => void;
 }
 
-interface RealTimeRiver extends RealTimeRiverOld{
+interface RealTimeRiver extends RealTimeRiverOld {
     stationSeriesId?: number;
 }
 
@@ -40,40 +49,41 @@ const defaultSort = {
 class RiverWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
+        const { language: { language } } = this.props;
 
         // TODO: add OandM by to riverWatch
         this.riverWatchHeader = [
             {
                 key: 'basin',
-                label: 'Basin',
+                label: language === 'en' ? 'Basin' : 'बेसिन',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.basin, b.basin),
             },
             {
                 key: 'title',
-                label: 'Station Name',
+                label: language === 'en' ? 'Station Name' : 'स्टेशनको नाम',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
                 key: 'stationSeriesId',
-                label: 'Station Id',
+                label: language === 'en' ? 'Station Id' : 'स्टेशन आईडी',
                 order: 3,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.stationSeriesId, b.stationSeriesId),
             },
             {
                 key: 'district',
-                label: 'District',
+                label: language === 'en' ? 'District' : 'जिल्‍ला',
                 order: 4,
                 sortable: true,
                 comparator: (a, b) => compareString(a.district, b.district),
             },
             {
                 key: 'waterLevel',
-                label: 'Water Level (m)',
+                label: language === 'en' ? 'Water Level (m)' : 'पानीको स्तर (मि)',
                 order: 5,
                 sortable: true,
                 comparator: (a, b) => compareNumber(
@@ -82,31 +92,45 @@ class RiverWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'warningLevel',
-                label: 'Warning Level',
+                label: language === 'en' ? 'Warning Level' : 'चेतावनी स्तर',
                 order: 6,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.warningLevel, b.warningLevel),
             },
             {
                 key: 'dangerLevel',
-                label: 'Danger Level',
+                label: language === 'en' ? 'Danger Level' : 'खतरा स्तर',
                 order: 7,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.dangerLevel, b.dangerLevel),
             },
             {
                 key: 'steady',
-                label: 'Steady',
+                label: language === 'en' ? 'Steady' : 'स्थिर',
                 order: 8,
                 sortable: true,
                 comparator: (a, b) => compareString(a.steady, b.steady),
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: language === 'en' ? 'Status' : 'स्थिति',
                 order: 9,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),
+                modifier: (row) => {
+                    const { status } = row;
+                    if (status) {
+                        return (
+                            <div>
+                                <Translation>
+                                    {
+                                        t => t(status)
+                                    }
+                                </Translation>
+                            </div>
+                        );
+                    } return undefined;
+                },
             },
         ];
     }
@@ -135,46 +159,53 @@ class RiverWatch extends React.PureComponent<Props> {
 
         const formattedTableData = convertNormalTableToCsv(realTimeRiver, this.riverWatchHeader);
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={closeModal}
-                className={styles.riverWatchModal}
-            >
-                <ModalHeader
-                    title="River Watch"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    <Table
-                        rowClassNameSelector={this.getClassName}
-                        className={styles.riverWatchTable}
-                        data={realTimeRiver}
-                        headers={this.riverWatchHeader}
-                        keySelector={riverWatchKeySelector}
-                        defaultSort={defaultSort}
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <DangerButton onClick={closeModal}>
-                        Close
-                    </DangerButton>
-                    <DownloadButton
-                        value={formattedTableData}
-                        name="River Watch.csv"
-                    >
-                        Download
-                    </DownloadButton>
-                </ModalFooter>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={closeModal}
+                            className={_cs(styles.riverWatchModal, styles.languageFont)}
+                        >
+                            <ModalHeader
+                                title={t('River Watch')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.body}>
+                                <Table
+                                    rowClassNameSelector={this.getClassName}
+                                    className={styles.riverWatchTable}
+                                    data={realTimeRiver}
+                                    headers={this.riverWatchHeader}
+                                    keySelector={riverWatchKeySelector}
+                                    defaultSort={defaultSort}
+                                />
+                            </ModalBody>
+                            <ModalFooter>
+                                <DangerButton onClick={closeModal}>
+                                    {t('Close')}
+                                </DangerButton>
+                                <DownloadButton
+                                    value={formattedTableData}
+                                    name="River Watch.csv"
+                                >
+                                    {t('Download')}
+                                </DownloadButton>
+                            </ModalFooter>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default RiverWatch;
+export default connect(mapStateToProps)(RiverWatch);

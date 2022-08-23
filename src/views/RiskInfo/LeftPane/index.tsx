@@ -5,6 +5,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import {
@@ -222,16 +223,29 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                                 iconName="back"
                                 transparent
                             />
-                            <h2 className={styles.heading}>
-                                Risk Info / &nbsp;
-                                {attributeNames[activeAttribute]}
-                            </h2>
+                            <Translation>
+                                {
+                                    t => (
+                                        <h2 className={styles.heading}>
+                                            {t(`Risk Info / ${attributeNames[activeAttribute]}`)}
+                                        </h2>
+                                    )
+                                }
+                            </Translation>
+
                         </>
                     ) : (
                         <>
-                            <h2 className={styles.heading}>
-                                Risk Info
-                            </h2>
+                            <Translation>
+                                {
+                                    t => (
+                                        <h2 className={styles.heading}>
+                                            {t('Risk Info')}
+                                        </h2>
+                                    )
+                                }
+                            </Translation>
+
                             <CommonMap sourceKey="risk-info" />
                         </>
                     )}

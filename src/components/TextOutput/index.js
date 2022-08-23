@@ -53,6 +53,7 @@ export default class TextOutput extends React.PureComponent {
             labelClassName,
             nullCondition,
             finalData,
+            language = 'en',
             ...otherProps
 
         } = this.props;
@@ -64,7 +65,7 @@ export default class TextOutput extends React.PureComponent {
         const valueComponent = (value === '-')
             ? (
                 <div className={_cs(styles.value, valueClassName)} title="N/A">
-            &#8212;
+                    &#8212;
                     {/* {value} */}
 
                 </div>
@@ -78,6 +79,7 @@ export default class TextOutput extends React.PureComponent {
                                 <Numeral
                                     className={_cs(styles.value, valueClassName)}
                                     value={value}
+                                    language={language}
                                     precision={0}
                                     {...otherProps}
                                     nullCondition={nullCondition}
@@ -93,6 +95,7 @@ export default class TextOutput extends React.PureComponent {
                             <Numeral
                                 className={_cs(styles.value, valueClassName)}
                                 value={value}
+                                language={language}
                                 precision={0}
                                 {...otherProps}
                                 nullCondition={nullCondition}
@@ -101,7 +104,7 @@ export default class TextOutput extends React.PureComponent {
 
                 ) : (
                     <div className={_cs(styles.value, valueClassName)}>
-                        { value }
+                        {value}
                     </div>
                 );
         return (
@@ -111,7 +114,7 @@ export default class TextOutput extends React.PureComponent {
                     styles[type],
                 )}
             >
-                { iconLabel ? (
+                {iconLabel ? (
                     <div className={_cs(
                         styles.iconLabel,
                         label,
@@ -119,7 +122,7 @@ export default class TextOutput extends React.PureComponent {
                     />
                 ) : (
                     <div className={_cs(styles.label, labelClassName)}>
-                        { label }
+                        {label}
                     </div>
                 )}
                 {valueComponent}

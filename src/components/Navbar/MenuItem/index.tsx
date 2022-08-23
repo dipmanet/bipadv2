@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 
 import Icon from '#rscg/Icon';
 
@@ -19,6 +20,14 @@ interface State {
 }
 
 export default class MenuItem extends React.PureComponent<Props, State> {
+    public getTitle = (val: string) => (
+        <Translation>
+            {
+                t => <span>{t(`${val}`)}</span>
+            }
+        </Translation>
+    );
+
     private getProps = ({ isCurrent }: { isCurrent: boolean }) => {
         const {
             className,
@@ -42,7 +51,6 @@ export default class MenuItem extends React.PureComponent<Props, State> {
             iconName,
             titleClassName,
         } = this.props;
-
         return (
             <Link
                 to={link}
@@ -54,7 +62,8 @@ export default class MenuItem extends React.PureComponent<Props, State> {
                     name={iconName}
                 />
                 <div className={_cs(titleClassName, styles.title)}>
-                    {title}
+
+                    {this.getTitle(title)}
                 </div>
             </Link>
         );

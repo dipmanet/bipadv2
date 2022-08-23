@@ -1,5 +1,6 @@
 import { Obj } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
+import { ADToBS } from 'bikram-sambat-js';
 import { FiltersWithRegion } from '#store/atom/page/types';
 import {
     RegionAdminLevel,
@@ -15,12 +16,16 @@ const addDaysToDate = (date: Date, days: number) => {
     return newDate;
 };
 
-export const pastDaysToDateRange = (pastDays: number) => {
+export const pastDaysToDateRange = (pastDays: number, language) => {
     const today = new Date();
     const lastDate = addDaysToDate(today, -pastDays);
+    const todayNepali = ADToBS(today);
+    const lastDateNepali = ADToBS(lastDate);
+    const todayDateCheck = language === 'np' ? todayNepali : today;
+    const lastDateCheck = language === 'np' ? lastDateNepali : lastDate;
     return {
-        startDate: lastDate,
-        endDate: today,
+        startDate: lastDateCheck,
+        endDate: todayDateCheck,
     };
 };
 
@@ -57,7 +62,7 @@ export const transformDateRangeFilterParam = (
          * <destParamName>__gt: <iso>
          * }
          */
-        const { startDate, endDate } = pastDaysToDateRange(dateRange);
+        const { startDate, endDate } = pastDaysToDateRange(dateRange, '');
         outputFilters = {
             ...outputFilters,
             [`${destParamName}__lt`]: endDate.toISOString(),
@@ -105,7 +110,7 @@ export const transformDataRangeToFilter = (
     });
 
     if (rangeInDays !== 'custom') {
-        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays, '');
         return getFilter(startDate, endDate);
     }
 
@@ -145,7 +150,7 @@ export const transformDataRangeLocaleToFilter = (
     });
 
     if (rangeInDays !== 'custom') {
-        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays, '');
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
         return getNonCustomFilter(formattedStartDate, formattedEndDate);

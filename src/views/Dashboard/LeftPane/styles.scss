@@ -1,3 +1,15 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    unicode-range: U+30-39;
+    size-adjust: 90%;
+
+}
+
+.languageFont {
+    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
+
 .left-pane {
     display: flex;
     flex-direction: column;

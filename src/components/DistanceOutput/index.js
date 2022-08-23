@@ -22,10 +22,11 @@ export default class DistanceOutput extends React.PureComponent {
         const {
             className: classNameFromProps,
             value: valueFromProps,
+            language,
         } = this.props;
 
         let amount = valueFromProps;
-        let unit = 'Km';
+        let unit = language === 'en' ? 'Km' : 'कि.मि.';
 
         if (isFalsy(valueFromProps)) {
             return null;
@@ -33,7 +34,7 @@ export default class DistanceOutput extends React.PureComponent {
 
         if (amount < 1) {
             amount *= 1000;
-            unit = 'm';
+            unit = language === 'en' ? 'm' : 'मि.';
         }
 
         return (
@@ -47,10 +48,10 @@ export default class DistanceOutput extends React.PureComponent {
                 />
                 <div className={styles.value}>
                     <div className={styles.amount}>
-                        { amount }
+                        {amount}
                     </div>
                     <div className={styles.unit}>
-                        { unit }
+                        {unit}
                     </div>
                 </div>
             </div>

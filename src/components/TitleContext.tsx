@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { languageSelector } from '#selectors';
 
 export interface Profile {
     mainModule: string;
@@ -44,8 +46,12 @@ interface Props {
     children: React.ReactNode;
 }
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 const TitleContextProvider = (props: Props) => {
-    const { children } = props;
+    const { children, language: { language } } = props;
     const [dashboard, setDashboard] = useState('Alerts');
     const [incident, setIncident] = useState('Incidents');
     const [damageAndLoss, setDamageAndLoss] = useState<DamageAndLoss>({
@@ -67,6 +73,15 @@ const TitleContextProvider = (props: Props) => {
     });
     const [source, setSource] = useState('');
 
+    useEffect(() => {
+        if (language === 'np') {
+            setDashboard('अलर्टहरू');
+            setIncident('घटनाहरू');
+        } else {
+            setDashboard('Alerts');
+            setIncident('Incidents');
+        }
+    }, [language]);
     const titleProps = {
         dashboard,
         incident,
@@ -94,4 +109,4 @@ const TitleContextProvider = (props: Props) => {
     );
 };
 
-export default TitleContextProvider;
+export default connect(mapStateToProps)(TitleContextProvider);

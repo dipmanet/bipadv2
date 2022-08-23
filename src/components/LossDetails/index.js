@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
-
-
 import StatOutput from '#components/StatOutput';
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
-
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
@@ -16,7 +15,9 @@ const propTypes = {
     className: PropTypes.string,
     hideIncidentCount: PropTypes.bool,
 };
-
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 const defaultProps = {
     className: undefined,
     hideIncidentCount: false,
@@ -24,7 +25,7 @@ const defaultProps = {
 const emptyList = [];
 // eslint-disable-next-line space-infix-ops
 
-export default class LossDetails extends React.Component {
+class LossDetails extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -43,7 +44,7 @@ export default class LossDetails extends React.Component {
         return stat;
     });
 
-    null_check=(m) => {
+    null_check = (m) => {
         const { nullCondition, data = emptyList } = this.props;
         if (nullCondition) {
             const summaryData = this.calculateSummary(data);
@@ -60,6 +61,7 @@ export default class LossDetails extends React.Component {
         const {
             className,
             hideIncidentCount,
+            language: { language },
         } = this.props;
 
 
@@ -70,14 +72,21 @@ export default class LossDetails extends React.Component {
                         return null;
                     }
                     return (
+
                         <StatOutput
                             key={metric.key}
-                            label={metric.label}
+                            label={language === 'en' ? metric.label : metric.labelNe}
+                            // value={summaryData[metric.key]}
+                            // label={metric.label}
                             value={this.null_check(metric.key)}
+                            language={language}
                         />
+
+
                     );
                 })}
             </div>
         );
     }
 }
+export default connect(mapStateToProps)(LossDetails);

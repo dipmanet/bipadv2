@@ -3,6 +3,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -26,6 +27,7 @@ import {
     trainingKeySelector,
     trainingLabelSelector,
     trainingValueList,
+    trainingValueListNe,
 } from '../../../utils';
 
 interface FaramValues {
@@ -54,7 +56,7 @@ interface State {
     pristine: boolean;
 }
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     addTrainingRequest: {
         url: '/contact-training/',
         method: methods.POST,
@@ -150,6 +152,7 @@ class AddTraining extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language,
         } = this.props;
 
         const {
@@ -159,56 +162,63 @@ class AddTraining extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={className}>
-                <ModalHeader
-                    title="Add Training"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddTraining.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                >
-                    <ModalBody>
-                        {pending && <LoadingAnimation />}
-                        <NonFieldErrors faramElement />
-                        <SelectInput
-                            faramElementName="title"
-                            options={trainingValueList}
-                            keySelector={trainingKeySelector}
-                            labelSelector={trainingLabelSelector}
-                            label="Title"
-                            autoFocus
-                        />
-                        <NumberInput
-                            faramElementName="durationDays"
-                            label="Duration in Days"
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={className}>
+                            <ModalHeader
+                                title={t('Add Training')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title={t('Close Modal')}
+                                    />
+                                )}
+                            />
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddTraining.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                            >
+                                <ModalBody>
+                                    {pending && <LoadingAnimation />}
+                                    <NonFieldErrors faramElement />
+                                    <SelectInput
+                                        faramElementName="title"
+                                        options={language === 'en' ? trainingValueList : trainingValueListNe}
+                                        keySelector={trainingKeySelector}
+                                        labelSelector={trainingLabelSelector}
+                                        label={t('Title')}
+                                        autoFocus
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
+                                    />
+                                    <NumberInput
+                                        faramElementName="durationDays"
+                                        label={t('Duration in Days')}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
         );
     }
 }

@@ -14,6 +14,7 @@ import {
 } from '#actionCreators';
 import {
     lossAndDamageFiltersSelector,
+    languageSelector,
 } from '#selectors';
 
 import CollapsibleView from '#components/CollapsibleView';
@@ -36,6 +37,7 @@ const defaultProps = {
 const mapStateToProps = state => ({
     // hazardTypeList: hazardTypeListSelector(state),
     filters: lossAndDamageFiltersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -101,6 +103,7 @@ class LossAndDamageFilter extends React.PureComponent {
             disabledMetricSelect,
             hideRegionSelect,
             hideMetricSelect,
+            language: { language },
         } = this.props;
 
         const {
@@ -149,14 +152,14 @@ class LossAndDamageFilter extends React.PureComponent {
                             value={faramValues}
                             error={faramErrors}
                         >
-                            { !hideRegionSelect && (
+                            {!hideRegionSelect && (
                                 <RegionSelectInput
                                     className={styles.regionSelectionInput}
                                     faramElementName="region"
                                     disabled={disabledRegionSelect}
                                 />
                             )}
-                            { !hideMetricSelect && (
+                            {!hideMetricSelect && (
                                 <SelectInput
                                     className={styles.metricSelectionInput}
                                     label="Metric"
@@ -170,12 +173,14 @@ class LossAndDamageFilter extends React.PureComponent {
                                 className={styles.startDateInput}
                                 label="Start Date"
                                 faramElementName="start"
-                                // autoFocus
+                                language={language}
+                            // autoFocus
                             />
                             <DateInput
                                 className={styles.endDateInput}
                                 label="End Date"
                                 faramElementName="end"
+                                language={language}
                             />
                             <HazardSelectionInput
                                 className={styles.hazardSelectionInput}

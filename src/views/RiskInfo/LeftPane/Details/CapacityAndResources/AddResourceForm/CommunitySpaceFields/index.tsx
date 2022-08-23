@@ -1,5 +1,7 @@
 import React from 'react';
 import { isNotDefined } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import {
     createRequestClient,
     ClientAttributes,
@@ -15,7 +17,11 @@ import BasicInfo from './CommunitySpaceTabs/BasicInfo';
 import ScrollTabs from '#rscv/ScrollTabs';
 import Details from './CommunitySpaceTabs/Details';
 
+import { languageSelector } from '#selectors';
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 const keySelector = (d: any) => d.id;
 
 interface State {
@@ -136,10 +142,10 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
         // }
     }
 
-    private tabs = {
-        basicInfo: 'Basic Info',
-        details: 'Details',
-    };
+    private tabs = language => ({
+        basicInfo: language === 'en' ? 'Basic Info' : 'आधारभूत जानकारी',
+        details: language === 'en' ? 'Details' : 'विवरणहरू',
+    });
 
     private views = {
         basicInfo: {
@@ -260,12 +266,13 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
 
     public render() {
         const { currentView } = this.state;
-        const { faramValueSetNull, LoadingSuccessHalt, faramValues } = this.props;
+        const { faramValueSetNull, LoadingSuccessHalt, faramValues,
+            language: { language } } = this.props;
         return (
             <>
                 <ScrollTabs
                     className={styles.tabs}
-                    tabs={this.tabs}
+                    tabs={this.tabs(language)}
                     active={currentView}
                     onClick={this.handleTabClick}
                     faramValueSetNull={faramValueSetNull}
@@ -284,4 +291,4 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
 }
 
 
-export default createRequestClient(requests)(CommunitySpaceFields);
+export default connect(mapStateToProps)(createRequestClient(requests)(CommunitySpaceFields));

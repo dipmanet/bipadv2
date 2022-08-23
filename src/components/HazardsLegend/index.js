@@ -6,6 +6,7 @@ import Legend from '#rscz/Legend';
 
 import {
     hazardTypesSelector,
+    languageSelector,
 } from '#selectors';
 
 const propTypes = {
@@ -19,9 +20,15 @@ const defaultProps = {
     filteredHazardTypes: undefined,
 };
 
-const legendKeySelector = d => d.title;
 const legendColorSelector = d => d.color;
-const legendLabelSelector = d => d.title;
+const legendLabelSelector = (d, language) => {
+    if (language === 'en') {
+        return d.title;
+    }
+    return d.titleNe;
+};
+
+const legendKeySelector = d => d.title;
 
 class HazardsLegend extends React.PureComponent {
     static propTypes = propTypes
@@ -30,20 +37,22 @@ class HazardsLegend extends React.PureComponent {
 
     render() {
         const {
+            language: { language },
             className,
             hazardTypes,
             filteredHazardTypes,
             ...otherProps
         } = this.props;
 
-        const hazardItems = filteredHazardTypes || Object.values(hazardTypes);
 
+        const hazardItems = filteredHazardTypes || Object.values(hazardTypes);
+        console.log('hazardItems', hazardItems);
         return (
             <Legend
                 className={className}
                 data={hazardItems}
                 keySelector={legendKeySelector}
-                labelSelector={legendLabelSelector}
+                labelSelector={d => legendLabelSelector(d, language)}
                 colorSelector={legendColorSelector}
                 emptyComponent={null}
                 {...otherProps}
@@ -54,6 +63,7 @@ class HazardsLegend extends React.PureComponent {
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 export default connect(mapStateToProps)(HazardsLegend);

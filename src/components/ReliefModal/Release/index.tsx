@@ -1,5 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -74,36 +75,43 @@ class ReliefRelease extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div className={_cs(className, styles.release)}>
-                { pending && <LoadingAnimation />}
-                <header className={styles.header}>
-                    <h3 className={styles.heading}>
-                        Releases
-                    </h3>
-                    <Cloak hiddenIf={p => !p.add_release}>
-                        <ModalAccentButton
-                            className={styles.addReleaseButton}
-                            title="Add Release"
-                            iconName="add"
-                            transparent
-                            modal={(
-                                <AddReleaseForm
-                                    onUpdate={this.handleReliefReleaseChange}
-                                />
-                            )}
-                        >
-                            New Release
-                        </ModalAccentButton>
-                    </Cloak>
-                </header>
-                <ListView
-                    className={styles.content}
-                    data={releaseList}
-                    keySelector={releaseKeySelector}
-                    renderer={ReleaseItem}
-                    rendererParams={this.getReleaseRendererParams}
-                />
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.release)}>
+                            { pending && <LoadingAnimation />}
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    {t('Releases')}
+                                </h3>
+                                <Cloak hiddenIf={p => !p.add_release}>
+                                    <ModalAccentButton
+                                        className={styles.addReleaseButton}
+                                        title={t('Add Release')}
+                                        iconName="add"
+                                        transparent
+                                        modal={(
+                                            <AddReleaseForm
+                                                onUpdate={this.handleReliefReleaseChange}
+                                            />
+                                        )}
+                                    >
+                                        {t('New Release')}
+                                    </ModalAccentButton>
+                                </Cloak>
+                            </header>
+                            <ListView
+                                className={styles.content}
+                                data={releaseList}
+                                keySelector={releaseKeySelector}
+                                renderer={ReleaseItem}
+                                rendererParams={this.getReleaseRendererParams}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

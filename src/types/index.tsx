@@ -195,6 +195,9 @@ export interface SourceElement extends Source { }
 export type LayerType = 'raster' | 'choropleth';
 export interface Layer {
     id: number;
+    longDescription: string;
+    longDescriptionNe: string;
+    description: string;
     minValue?: number;
     title: string;
     type: LayerType;
@@ -230,6 +233,7 @@ export interface RegionElement {
     centroid: number[];
     title: string;
     code?: string;
+    title_ne: string;
 }
 
 export interface ProvinceElement extends RegionElement {
@@ -310,10 +314,14 @@ export interface VulnerabilityType {
     id: string;
     indicatorType: 'positive' | 'negative';
     shortDescription?: string;
+    shortDescriptionNe?: string;
+    legendTitle?: string;
+    legendTitleNe?: string;
     children: VulnerabilityType[];
     isParent?: boolean;
-    valueType: 'index' | 'count';
+    valueType?: 'index' | 'count';
     title: string;
+    titleNe?: string;
     suffix?: string;
     iconName?: string;
 }
@@ -335,6 +343,7 @@ export interface LegendItem {
 export interface Scenario {
     key: string;
     label: string;
+    labelNe: string;
 }
 
 export interface RiskData {

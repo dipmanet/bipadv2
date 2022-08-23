@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
@@ -7,6 +8,7 @@ import Faram, {
     lengthGreaterThanCondition,
 } from '@togglecorp/faram';
 import { parseAsync } from '@babel/core';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 import PasswordReq from './PasswordReq';
 import DangerButton from '#rsca/Button/DangerButton';
@@ -28,6 +30,11 @@ import {
     setAuthAction,
     setUserDetailAction,
 } from '#actionCreators';
+
+
+import {
+    languageSelector,
+} from '#selectors';
 
 import {
     createConnectedRequestCoordinator,
@@ -109,6 +116,11 @@ interface PropsFromDispatch {
 type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAuth: params => dispatch(setAuthAction(params)),
@@ -528,123 +540,149 @@ class Login extends React.PureComponent<Props, State> {
         let displayElement;
         if (pageAction === 'loginPage') {
             displayElement = (
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={Login.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    disabled={pending}
-                >
-                    <div className={styles.mainLoginContainer}>
-                        <div className={styles.signIn}>
-                            <div className={styles.signinTitles}>
-                                <h1>Welcome to BIPAD Portal</h1>
-                                <p>
-                                    An integrated and comprehensive DIMS platform to support
-                                    disaster risk management through informed decision making.
-                                </p>
-                                <hr />
-                            </div>
+                <Translation>
+                    {
+                        t => (
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={Login.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                                disabled={pending}
+                            >
+                                <div className={styles.mainLoginContainer}>
+                                    <div className={styles.signIn}>
 
-                            <div className={styles.formElements}>
-                                <div className={styles.newLoginForm}>
-                                    <div className={styles.inputContainer}>
-                                        <Icon
-                                            name="user"
-                                            className={styles.inputIcon}
-                                        />
-                                        <TextInput
-                                            className={styles.newinput}
-                                            faramElementName="username"
-                                            label="Username"
-                                            placeholder="Username"
-                                            autoFocus
-                                            showLabel={false}
 
-                                        />
-                                    </div>
-                                    <div className={styles.inputContainer}>
-                                        <Icon
-                                            name="lock"
-                                            className={styles.inputIcon}
-                                        />
-                                        <TextInput
-                                            className={styles.newinput}
-                                            faramElementName="password"
-                                            label="Password"
-                                            placeholder="Password"
-                                            type="password"
-                                            showLabel={false}
-
-                                        />
-                                    </div>
-                                    <NonFieldErrors faramElement className={styles.errorField} />
-                                    <button
-                                        type="button"
-                                        onClick={this.handleForgotPassword}
-                                        className={styles.forgotPasswordRequestBtn}
-                                    >
-                                    Forgot Password
-                                    </button>
-                                    <hr className={styles.horzLine} />
-                                </div>
-                                <div className={styles.loginBtn}>
-                                    <PrimaryButton
-                                        type="submit"
-                                        pending={pending}
-                                        className={styles.newsignIn}
-                                    >
-                                        Login
-                                    </PrimaryButton>
-                                </div>
-                                <div className={styles.externalLink}>
-                                    Other logins:
-                                    <a
-                                        className={styles.extlink}
-                                        href={`${process.env.REACT_APP_PROJECT_SERVER_URL}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <div className={styles.linktexts}>
-                                            <Icon
-                                                className={styles.icon}
-                                                name="externalLink"
-                                            />
-                                         MDSA
+                                        <div className={styles.signinTitles}>
+                                            <h1>{t('Welcome to BIPAD Portal')}</h1>
+                                            <p>
+                                                {t('An integrated and comprehensive DIMS platform to support disaster risk management through informed decision making.')}
+                                            </p>
+                                            <hr />
                                         </div>
-                                    </a>
+
+
+                                        <div className={styles.formElements}>
+
+
+                                            <div className={styles.newLoginForm}>
+                                                <div className={styles.inputContainer}>
+                                                    <Icon
+                                                        name="user"
+                                                        className={styles.inputIcon}
+                                                    />
+                                                    <TextInput
+                                                        className={styles.newinput}
+                                                        faramElementName="username"
+                                                        label="Username"
+                                                        placeholder={t('Username')}
+                                                        autoFocus
+                                                        showLabel={false}
+
+                                                    />
+                                                </div>
+                                                <div className={styles.inputContainer}>
+                                                    <Icon
+                                                        name="lock"
+                                                        className={styles.inputIcon}
+                                                    />
+                                                    <TextInput
+                                                        className={styles.newinput}
+                                                        faramElementName="password"
+                                                        label="Password"
+                                                        placeholder={t('Password')}
+                                                        type="password"
+                                                        showLabel={false}
+
+                                                    />
+                                                </div>
+                                                <NonFieldErrors faramElement className={styles.errorField} />
+                                                <button
+                                                    type="button"
+                                                    onClick={this.handleForgotPassword}
+                                                    className={styles.forgotPasswordRequestBtn}
+                                                >
+                                                    {t('Forgot Password')}
+                                                </button>
+                                                <hr className={styles.horzLine} />
+                                            </div>
+
+
+                                            <div className={styles.loginBtn}>
+
+
+                                                <PrimaryButton
+                                                    type="submit"
+                                                    pending={pending}
+                                                    className={styles.newsignIn}
+                                                >
+                                                    {t('Login')}
+                                                </PrimaryButton>
+
+
+                                            </div>
+
+
+                                            <div className={styles.externalLink}>
+                                                {t('Other logins:')}
+                                                <a
+                                                    className={styles.extlink}
+                                                    href={`${process.env.REACT_APP_PROJECT_SERVER_URL}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <div className={styles.linktexts}>
+                                                        <Icon
+                                                            className={styles.icon}
+                                                            name="externalLink"
+                                                        />
+                                                 MDSA
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <div className={styles.pwdRequestContainer}>
+
+                                        <div className={styles.closeBtn}>
+                                            <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                                <Icon
+                                                    name="times"
+                                                    className={styles.settingsBtn}
+                                                />
+                                            </DangerButton>
+                                        </div>
+                                        <div className={styles.pwdRequest}>
+                                            <h1>{t('Do not have an account?')}</h1>
+                                            <p>{t('Click to request BIPAD login credential')}</p>
+                                            <DangerButton
+                                                type="button"
+                                                className={styles.pwdResetBtn}
+                                                onClick={() => this.updatePage('tncPage')}
+                                            >
+                                                {t('PASSWORD REQUEST')}
+                                            </DangerButton>
+                                        </div>
+                                        <div className={styles.feedbackandtechsupport}>
+                                            <span>TECH SUPPORT</span>
+                                            <span>FEEDBACK </span>
+                                        </div>
+                                    </div>
+
+
                                 </div>
-                            </div>
-                        </div>
-                        <div className={styles.pwdRequestContainer}>
-                            <div className={styles.closeBtn}>
-                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
-                                    <Icon
-                                        name="times"
-                                        className={styles.settingsBtn}
-                                    />
-                                </DangerButton>
-                            </div>
-                            <div className={styles.pwdRequest}>
-                                <h1>Do not have an account?</h1>
-                                <p>Click to request BIPAD login credential</p>
-                                <DangerButton
-                                    type="button"
-                                    className={styles.pwdResetBtn}
-                                    onClick={() => this.updatePage('tncPage')}
-                                >
-                                    PASSWORD REQUEST
-                                </DangerButton>
-                            </div>
-                            <div className={styles.feedbackandtechsupport}>
-                                <span>TECH SUPPORT</span>
-                                <span>FEEDBACK </span>
-                            </div>
-                        </div>
-                    </div>
-                </Faram>
+                            </Faram>
+                        )
+                    }
+                </Translation>
+
             );
         }
         if (pageAction === 'tncPage') {
@@ -753,7 +791,7 @@ class Login extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(undefined, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requestOptions)(
             Login,

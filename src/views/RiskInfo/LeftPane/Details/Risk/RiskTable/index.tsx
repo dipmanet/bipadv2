@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { districtsMapSelector } from '#selectors';
+import { districtsMapSelector, languageSelector } from '#selectors';
 import DataTableModal from '#components/DataTableModal';
 
 interface Props {
@@ -10,43 +10,44 @@ interface Props {
     closeModal?: boolean;
 }
 
-const headers = [
+const headers = language => ([
     {
         key: 'districtName',
-        label: 'District',
+        label: language === 'en' ? 'District' : 'जिल्‍ला',
     },
     {
         key: 'hdiScore',
-        label: 'HDI',
+        label: language === 'en' ? 'HDI' : 'HDI',
     },
     {
         key: 'maxScore',
-        label: 'Maximum fatalitites',
+        label: language === 'en' ? 'Maximum fatalitites' : 'अधिकतम घातकता',
     },
     {
         key: 'medScore',
-        label: 'Median fatalities',
+        label: language === 'en' ? 'Median fatalities' : 'औसत मृत्युहरू',
     },
     {
         key: 'remoteScore',
-        label: 'Remoteness',
+        label: language === 'en' ? 'Remoteness' : 'दुर्गमता',
     },
     {
         key: 'specificityScore',
-        label: 'Specificity',
+        label: language === 'en' ? 'Specificity' : 'विशिष्टता',
     },
     {
         key: 'pctScore',
-        label: 'Frequency',
+        label: language === 'en' ? 'Frequency' : 'आवृत्ति',
     },
     {
         key: 'rank',
-        label: 'Rank',
+        label: language === 'en' ? 'Rank' : 'श्रेणी',
     },
-];
+]);
 
 const mapStateToProps = state => ({
     districts: districtsMapSelector(state),
+    language: languageSelector(state),
 });
 
 const keySelector = d => d.id;
@@ -66,6 +67,7 @@ class RiskTable extends React.PureComponent<Props> {
             data,
             title,
             closeModal,
+            language: { language },
         } = this.props;
 
         const renderData = this.getRenderData(data);
@@ -74,7 +76,7 @@ class RiskTable extends React.PureComponent<Props> {
             <DataTableModal
                 className={className}
                 closeModal={closeModal}
-                headers={headers}
+                headers={headers(language)}
                 data={renderData}
                 title={title}
                 keySelector={keySelector}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
 import DangerButton from '#rsca/Button/DangerButton';
@@ -134,116 +135,122 @@ const DetailsPage = (props: Props) => {
 
 
     return (
-        <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.welcomeBack}>
-                <h1>Welcome Back</h1>
-                <p>
-                    To login to BIPAD Portal, please use your credentials.
-                </p>
-                <div className={styles.loginBtn}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.newsignIn}
-                        onClick={handleCancelBtn}
-                    >
-                        Sign in
-                    </PrimaryButton>
-                </div>
-            </div>
+        <Translation>
+            {
+                t => (
+                    <div className={styles.mainPageDetailsContainer}>
+                        <div className={styles.welcomeBack}>
+                            <h1>{t('Welcome Back')}</h1>
+                            <p>
+                                {t('To login to BIPAD Portal, please use your credentials.')}
+                            </p>
+                            <div className={styles.loginBtn}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.newsignIn}
+                                    onClick={handleCancelBtn}
+                                >
+                                    {t('Sign in')}
+                                </PrimaryButton>
+                            </div>
+                        </div>
 
-            <div className={styles.detailsFormContainer}>
-                <div className={styles.closeBtn}>
-                    <DangerButton className={styles.dangerbtn} onClick={closeModal}>
-                        <Icon
-                            name="times"
-                            className={styles.closeIcon}
-                        />
-                    </DangerButton>
-                </div>
-                <div className={styles.formContainer}>
-                    <h2>Please provide the following details</h2>
-                    <div className={styles.newSignupForm}>
-                        {showErr && errFullName ? <span className={styles.errMsg}>Full Name is required</span> : ''}
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Full Name"
-                                onChange={handleFullnameChange}
-                                value={nameprop || ''}
-                            />
-                        </div>
-                        {showErr && errDesignation ? <span className={styles.errMsg}>Desingation is required</span> : ''}
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Desingation (eg. IT Officer)"
-                                onChange={handleDesignationChange}
-                                value={designationprop || ''}
-                            />
-                        </div>
-                        {showErr && errPhone ? <span className={styles.errMsg}>Valid Phone no. is required</span> : ''}
-                        <div className={styles.multinputContainer}>
-                            <div className={styles.smallElements}>
-                                <input
-                                    type="tel"
-                                    className={styles.smallElement}
-                                    placeholder="+977"
-                                    disabled
-                                />
+                        <div className={styles.detailsFormContainer}>
+                            <div className={styles.closeBtn}>
+                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                    <Icon
+                                        name="times"
+                                        className={styles.closeIcon}
+                                    />
+                                </DangerButton>
                             </div>
-                            <div className={styles.biggerElements}>
-                                <input
-                                    type="tel"
-                                    className={styles.biggerElement}
-                                    placeholder="Phone No."
-                                    onChange={handlePhoneChange}
-                                    value={phoneprop || ''}
-                                />
+                            <div className={styles.formContainer}>
+                                <h2>{t('Please provide the following details')}</h2>
+                                <div className={styles.newSignupForm}>
+                                    {showErr && errFullName ? <span className={styles.errMsg}>{t('Full Name is required')}</span> : ''}
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            placeholder={t('Full Name')}
+                                            onChange={handleFullnameChange}
+                                            value={nameprop || ''}
+                                        />
+                                    </div>
+                                    {showErr && errDesignation ? <span className={styles.errMsg}>{t('Designation is required')}</span> : ''}
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            placeholder={t('Desingation (eg. IT Officer)')}
+                                            onChange={handleDesignationChange}
+                                            value={designationprop || ''}
+                                        />
+                                    </div>
+                                    {showErr && errPhone ? <span className={styles.errMsg}>{t('Valid Phone no. is required')}</span> : ''}
+                                    <div className={styles.multinputContainer}>
+                                        <div className={styles.smallElements}>
+                                            <input
+                                                type="tel"
+                                                className={styles.smallElement}
+                                                placeholder={t('+977')}
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className={styles.biggerElements}>
+                                            <input
+                                                type="tel"
+                                                className={styles.biggerElement}
+                                                placeholder={t('Phone No.')}
+                                                onChange={handlePhoneChange}
+                                                value={phoneprop || ''}
+                                            />
+                                        </div>
+                                    </div>
+                                    {showErr && errEmail ? <span className={styles.errMsg}>{t('Valid Official Email is required')}</span> : ''}
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            placeholder={t('Official Email')}
+                                            onChange={handleEmailChange}
+                                            value={emailprop || ''}
+                                        />
+                                    </div>
+                                    <p className={styles.moreInfo}>
+                                        <Icon
+                                            name="info"
+                                            className={styles.infoIcon}
+                                        />
+                                        {t('The official email will be registered in the system and will be used as the primary email for any official correspondence.')}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className={styles.cancelAgreeBtns}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={handleDetails}
+                                >
+                                    {t('Back')}
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.agreeBtn}
+                                    onClick={() => handleAgreeBtn('detailsFirstPage')}
+                                >
+                                    {t('Next')}
+                                </PrimaryButton>
+
                             </div>
                         </div>
-                        {showErr && errEmail ? <span className={styles.errMsg}>Valid Official Email is required</span> : ''}
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Official Email"
-                                onChange={handleEmailChange}
-                                value={emailprop || ''}
-                            />
-                        </div>
-                        <p className={styles.moreInfo}>
-                            <Icon
-                                name="info"
-                                className={styles.infoIcon}
-                            />
-                            The official email will be registered in the
-                            system and will be used as the
-                            primary email for any official correspondence.
-                        </p>
                     </div>
-                </div>
-                <div className={styles.cancelAgreeBtns}>
-                    <PrimaryButton
-                        type="button"
-                        className={styles.cancelBtn}
-                        onClick={handleDetails}
-                    >
-                        Back
-                    </PrimaryButton>
+                )
+            }
 
-                    <PrimaryButton
-                        type="button"
-                        className={styles.agreeBtn}
-                        onClick={() => handleAgreeBtn('detailsFirstPage')}
-                    >
-                        Next
-                    </PrimaryButton>
+        </Translation>
 
-                </div>
-            </div>
-        </div>
     );
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,7 +9,7 @@ import {
     reverseRoute,
 } from '@togglecorp/fujs';
 import { Link } from '@reach/router';
-
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     methods,
@@ -21,10 +22,10 @@ import DateOutput from '#components/DateOutput';
 import IncidentFeedbacksModal from '#components/IncidentFeedbacksModal';
 import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
 
-import { getYesterday } from '#utils/common';
+import { convertDateAccToLanguage, getYesterday } from '#utils/common';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
-import { sourcesSelector } from '#selectors';
+import { languageSelector, sourcesSelector } from '#selectors';
 
 import {
     patchIncidentActionIP,
@@ -60,6 +61,7 @@ const propTypes = {
 
 const mapStateToProps = state => ({
     sources: sourcesSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -80,24 +82,24 @@ const LocationOutput = ({
     streetAddress,
 }) => (
     <div className={styles.locationOutput}>
-        { provinceTitle && (
+        {provinceTitle && (
             <div className={styles.provinceName}>
-                { provinceTitle }
+                {provinceTitle}
             </div>
         )}
-        { districtTitle && (
+        {districtTitle && (
             <div className={styles.districtName}>
-                { districtTitle }
+                {districtTitle}
             </div>
         )}
-        { municipalityTitle && (
+        {municipalityTitle && (
             <div className={styles.municipalityName}>
-                { municipalityTitle }
+                {municipalityTitle}
             </div>
         )}
-        { streetAddress && (
+        {streetAddress && (
             <div className={styles.streetAddress}>
-                { streetAddress }
+                {streetAddress}
             </div>
         )}
     </div>
@@ -199,11 +201,13 @@ class IncidentItem extends React.PureComponent {
                     pending: incidentDeletePending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
             id: incidentServerId,
             title,
+            titleNe,
             incidentOn,
             streetAddress,
             source,
@@ -244,14 +248,29 @@ class IncidentItem extends React.PureComponent {
                 <div className={styles.right}>
                     <header className={styles.header}>
                         <h3
-                            title={title}
+                            title={
+                                language === 'en'
+                                    ? title
+                                    : titleNe === undefined
+                                        ? title
+                                        : titleNe
+                            }
                             className={styles.heading}
                         >
-                            { title }
+                            {
+                                language === 'en'
+                                    ? title
+                                    : titleNe === undefined
+                                        ? title
+                                        : titleNe
+
+                            }
                         </h3>
                         <DateOutput
                             className={styles.date}
-                            value={incidentOn}
+                            value={convertDateAccToLanguage(new Date(incidentOn)
+                                .toLocaleDateString(), language)}
+                            language={language}
                         />
                     </header>
                     <div className={styles.adminActions}>
@@ -270,20 +289,35 @@ class IncidentItem extends React.PureComponent {
                                     />
                                 )}
                             >
-                                Edit
+                                <Translation>
+                                    {
+                                        t => <span>{t('Edit')}</span>
+                                    }
+                                </Translation>
+
                             </ModalAccentButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_incident}>
-                            <DangerConfirmButton
-                                iconName="delete"
-                                className={styles.button}
-                                confirmationMessage="Are you sure you want to delete this incident?"
-                                onClick={this.handleIncidentDelete}
-                                pending={incidentDeletePending}
-                                transparent
-                            >
-                                Delete
-                            </DangerConfirmButton>
+                            <Translation>
+                                {
+                                    t => (
+                                        <DangerConfirmButton
+                                            iconName="delete"
+                                            className={styles.button}
+                                            confirmationMessage={t('Are you sure you want to delete this incident?')}
+                                            onClick={this.handleIncidentDelete}
+                                            pending={incidentDeletePending}
+                                            transparent
+                                        >
+
+                                            <span>{t('Delete')}</span>
+
+                                        </DangerConfirmButton>
+                                    )
+
+                                }
+                            </Translation>
+
                         </Cloak>
                         <Cloak hiddenIf={p => !p.change_feedback}>
                             <ModalAccentButton
@@ -296,7 +330,12 @@ class IncidentItem extends React.PureComponent {
                                     />
                                 )}
                             >
-                                {`Feedbacks (${unacknowledgedFeedbackCount || 0})`}
+                                <Translation>
+                                    {
+                                        t => <span>{t('Feedbacks')}</span>
+                                    }
+                                </Translation>
+                                {`(${unacknowledgedFeedbackCount || 0})`}
                             </ModalAccentButton>
                         </Cloak>
                     </div>
@@ -309,27 +348,45 @@ class IncidentItem extends React.PureComponent {
                             alwaysVisible
                         />
                         <div className={styles.outputGroup}>
-                            <TextOutput
-                                label="Source"
-                                value={sources[source]}
-                                alwaysVisible
-                                className={styles.source}
-                            />
-                            <TextOutput
-                                value={verified ? 'Verified' : 'Not verified'}
-                                label="Status"
-                                alwaysVisible
-                                className={styles.status}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+                                        <>
+                                            <TextOutput
+                                                label={t('Source')}
+                                                value={source === 'nepal_police' ? t('Nepal Police') : ''}
+                                                alwaysVisible
+                                                className={styles.source}
+                                            />
+                                            <TextOutput
+                                                value={verified ? t('Verified') : t('Not verified')}
+                                                label={t('Status')}
+                                                alwaysVisible
+                                                className={styles.status}
+                                            />
+                                        </>
+                                    )
+                                }
+                            </Translation>
+
+
                         </div>
                     </div>
                     <div className={styles.publicActions}>
-                        <Link
-                            className={styles.link}
-                            to={reverseRoute('incidents/:incidentId/response', { incidentId })}
-                        >
-                            Go to response
-                        </Link>
+                        <Translation>
+                            {
+                                t => (
+                                    <Link
+                                        className={styles.link}
+                                        to={reverseRoute('incidents/:incidentId/response', { incidentId })}
+                                    >
+                                        {t('Go to response')}
+                                    </Link>
+                                )
+                            }
+
+                        </Translation>
+
                         <ModalAccentButton
                             className={styles.button}
                             transparent
@@ -340,7 +397,12 @@ class IncidentItem extends React.PureComponent {
                                 />
                             )}
                         >
-                            Leave Feedback
+                            <Translation>
+                                {
+                                    t => <span>{t('LEAVE FEEDBACK')}</span>
+                                }
+                            </Translation>
+
                         </ModalAccentButton>
                     </div>
                 </div>
