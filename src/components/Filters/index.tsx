@@ -573,6 +573,7 @@ class Filters extends React.PureComponent<Props, State> {
                 hazard: 'Hazard',
                 dataRange: 'Data range',
                 others: 'Project',
+
             };
 
             if (!extraContent) {

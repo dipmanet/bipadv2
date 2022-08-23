@@ -397,7 +397,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             <>
                 <Loading pending={pending} />
                 <Page
-                    hideDataRangeFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
@@ -538,6 +537,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 <BarChartVisual
                                     filter={regionFilter}
                                     data={filteredData}
+                                    selectOption={selectOption}
                                     valueOnclick={valueOnclick}
                                 />
                                 <AreaChartVisual

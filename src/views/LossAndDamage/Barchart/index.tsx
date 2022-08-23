@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
 import React, { useEffect, useState } from 'react';
@@ -7,7 +8,9 @@ import styles from './styles.scss';
 import { lossMetrics } from '#utils/domain';
 import { nullCheck } from '../../../utils/common';
 
-const BarChartVisual = ({ filter, data, valueOnclick }) => {
+const BarChartVisual = (props) => {
+    const { filter, data, valueOnclick, selectOption } = props;
+    console.log(valueOnclick, 'value');
     const key = lossMetrics.map(item => item.key);
     const filterProvinceData = [];
     const province = [1, 2, 3, 4, 5, 6, 7];
@@ -44,6 +47,17 @@ const BarChartVisual = ({ filter, data, valueOnclick }) => {
         }
     };
 
+    function CustomTooltip({ payload, active, label }) {
+        if (payload && active && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <span className={styles.label}>{payload[0].payload.name}</span>
+                    <span className={styles.label}>{`${selectOption.name}:${payload[0].payload.value}`}</span>
+                </div>
+            );
+        }
+        return null;
+    }
 
     return (
         // <div className={styles.container}>
@@ -84,7 +98,9 @@ const BarChartVisual = ({ filter, data, valueOnclick }) => {
                                     angle={-30}
                                 />
                                 <YAxis axisLine={false} tickLine={false} />
-                                <Tooltip />
+                                <Tooltip
+                                    content={<CustomTooltip />}
+                                />
                                 <CartesianGrid stroke="#ccc" horizontal vertical={false} />
                                 <Bar dataKey="value" fill="#db6e51" />
                             </BarChart>
