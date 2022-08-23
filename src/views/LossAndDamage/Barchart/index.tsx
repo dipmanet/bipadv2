@@ -28,6 +28,8 @@ const BarChartVisual = ({ filter, data, valueOnclick }) => {
 
     const provinceWiseData = provinceChartData.map((item, index) => ({ name: `Province ${index + 1}`, value: item[valueOnclick.index][valueOnclick.value] }));
 
+    const districtWiseData = data.filter(item => item.district);
+    console.log(districtWiseData, 'district');
 
     const distributionType = (type) => {
         switch (type.adminLevel) {
