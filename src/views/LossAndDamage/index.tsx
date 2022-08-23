@@ -70,6 +70,7 @@ import BarChartVisual from './Barchart';
 import AreaChartVisual from './AreaChart';
 import HazardWise from './HazardWise';
 import DataTable from './DataTable';
+import DateRangeInfo from '#components/DateRangeInfo';
 
 const ModalButton = modalize(Button);
 
@@ -498,26 +499,34 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             <div className={styles.container}>
 
                                 <div className={styles.showheader}>
-                                    <span className={styles.textHead}>Showing</span>
-                                    <span className={styles.tableData}>
+                                    {/* <span className={styles.textHead}> */}
+                                    <DateRangeInfo
+                                        className={styles.dateRange}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                    />
+                                    {/* </span> */}
+                                    <ModalButton
+                                        className={styles.tableData}
+                                        transparent
+                                        modal={(
+                                            <DataTable
+                                                incidentList={filteredData}
+                                            />
+                                        )}
+                                    >
                                         View tabular data
-                                        <ModalButton
-                                            title="Show data in tabular format"
-                                            className={styles.showTableButton}
-                                            iconName="table"
-                                            transparent
-                                            modal={(
-                                                <DataTable
-                                                    incidentList={filteredData}
-                                                />
-                                                // <IncidentTableModal
-                                                //     incidentList={filteredData}
-                                                // />
-                                            )}
-                                        />
+                                    </ModalButton>
 
-                                    </span>
-
+                                </div>
+                                <div className={styles.actions}>
+                                    <ModalButton
+                                        disabled={pending}
+                                        className={styles.compareButton}
+                                        modal={<Comparative lossAndDamageList={incidentList} />}
+                                    >
+                                    Compare regions
+                                    </ModalButton>
                                 </div>
 
                                 <Dropdown
