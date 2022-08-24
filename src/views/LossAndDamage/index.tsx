@@ -71,6 +71,7 @@ import AreaChartVisual from './AreaChart';
 import HazardWise from './HazardWise';
 import DataTable from './DataTable';
 import DateRangeInfo from '#components/DateRangeInfo';
+import FilterRadio from './FilterRadio';
 
 const ModalButton = modalize(Button);
 
@@ -203,6 +204,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         Null_check_estimatedLoss: false,
         selectOption: { name: '', key: '' },
         valueOnclick: { value: 'count', index: 0 },
+        regionRadio: 'province',
+        regionWiseBarChartData: [],
     }
 
     private handleSaveClick = () => {
@@ -371,6 +374,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             Null_check_estimatedLoss,
             valueOnclick,
             selectOption,
+            regionRadio,
+            regionWiseBarChartData,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -391,6 +396,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
         const setSelectOption = (name, key) => {
             this.setState({ selectOption: { name, key } });
+        };
+
+        const setRegionRadio = (val) => {
+            this.setState({ regionRadio: val });
+        };
+        const setRegionWiseBarChartData = (data) => {
+            this.setState({ regionWiseBarChartData: data });
         };
 
         return (
@@ -528,6 +540,14 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     </ModalButton>
                                 </div>
 
+                                <FilterRadio
+                                    regionRadio={regionRadio}
+                                    setRegionRadio={setRegionRadio}
+                                    data={filteredData}
+                                    valueOnclick={valueOnclick}
+                                    setRegionWiseBarChartData={setRegionWiseBarChartData}
+                                />
+
                                 <Dropdown
                                     data={filteredData}
                                     setVAlueOnClick={setVAlueOnClick}
@@ -539,6 +559,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     data={filteredData}
                                     selectOption={selectOption}
                                     valueOnclick={valueOnclick}
+                                    regionRadio={regionRadio}
+                                    regionWiseBarChartData={regionWiseBarChartData}
                                 />
                                 <AreaChartVisual
                                     selectOption={selectOption}

@@ -9,43 +9,7 @@ import { lossMetrics } from '#utils/domain';
 import { nullCheck } from '../../../utils/common';
 
 const BarChartVisual = (props) => {
-    const { filter, data, valueOnclick, selectOption } = props;
-    console.log(valueOnclick, 'value');
-    const key = lossMetrics.map(item => item.key);
-    const filterProvinceData = [];
-    const province = [1, 2, 3, 4, 5, 6, 7];
-    for (let i = 0; i < province.length; i++) {
-        const filteredProvince = data.filter(item => item.province === province[i]);
-        filterProvinceData.push(filteredProvince);
-    }
-
-    const provinceChartData = [];
-
-    for (let i = 0; i < filterProvinceData.length; i++) {
-        const provinceWiseData = [];
-        for (let j = 0; j < key.length; j++) {
-            provinceWiseData.push({ [key[j]]: nullCheck(false, filterProvinceData[i], key[j]) });
-        }
-        provinceChartData.push(provinceWiseData);
-    }
-
-    const provinceWiseData = provinceChartData.map((item, index) => ({ name: `Province ${index + 1}`, value: item[valueOnclick.index][valueOnclick.value] }));
-
-    const districtWiseData = data.filter(item => item.district);
-    console.log(districtWiseData, 'district');
-
-    const distributionType = (type) => {
-        switch (type.adminLevel) {
-            case 1:
-                return 'PROVINCE';
-            case 2:
-                return 'DISTRICT';
-            case 3:
-                return 'MUNICIPALITY';
-            default:
-                return 'PROVINCE';
-        }
-    };
+    const { filter, data, valueOnclick, selectOption, regionRadio, regionWiseBarChartData } = props;
 
     function CustomTooltip({ payload, active, label }) {
         if (payload && active && payload.length) {
@@ -64,7 +28,7 @@ const BarChartVisual = (props) => {
         <div className={styles.wrapper}>
 
             <div className={styles.firstDiv}>
-                <p className={styles.text}>{`${distributionType(filter)}WISE DISTRIBUTION`}</p>
+                <p className={styles.text}>{`${regionRadio}wise distribution`}</p>
                 <Button
                     title="Download Chart"
                     className={styles.downloadButton}
@@ -76,11 +40,11 @@ const BarChartVisual = (props) => {
             </div>
             <div className={styles.barChart}>
                 {
-                    provinceWiseData
+                    regionWiseBarChartData
                     && (
                         <ResponsiveContainer width="100%" height={200}>
                             <BarChart
-                                data={provinceWiseData}
+                                data={regionWiseBarChartData}
                                 margin={{
                                     top: 5,
                                     bottom: 20,
