@@ -2,7 +2,7 @@ const tourContents = [
     {
         tourTitle: 'VisRisk',
         tourContent: `Simple Yet Creative way of visualizing disaster-related
-        information through text, cgarts, ingographics, and maps using story
+        information through text, cgarts, infographics, and maps using story
         telling format.`,
     },
     {

@@ -93,7 +93,7 @@ const Map = (props: Props) => {
             //     lat: 28.384151,
             // },
             zoom: 7,
-            maxBounds: bounds,
+            // maxBounds: bounds,
         });
 
         if (updateMap) {
@@ -138,59 +138,59 @@ const Map = (props: Props) => {
                 });
             });
 
-            landingPageMap.addLayer({
-                id: 'province-vizrisk',
-                source: 'base-outline',
-                'source-layer': mapSources.nepal.layers.province,
-                type: 'fill',
-                paint: {
-                    'fill-opacity': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        0.8,
-                        1,
-                    ],
-                    'fill-color': ['feature-state', 'color'],
-                },
-                layout: {
-                    visibility: 'none',
-                },
-            });
+            // landingPageMap.addLayer({
+            //     id: 'province-vizrisk',
+            //     source: 'base-outline',
+            //     'source-layer': mapSources.nepal.layers.province,
+            //     type: 'fill',
+            //     paint: {
+            //         'fill-opacity': [
+            //             'case',
+            //             ['boolean', ['feature-state', 'hover'], false],
+            //             0.8,
+            //             1,
+            //         ],
+            //         'fill-color': ['feature-state', 'color'],
+            //     },
+            //     layout: {
+            //         visibility: 'none',
+            //     },
+            // });
 
 
-            landingPageMap.addLayer({
-                id: 'province-vizrisk-extrusion',
-                source: 'base-outline',
-                'source-layer': mapSources.nepal.layers.province,
-                type: 'fill-extrusion',
-                paint: {
-                    'fill-extrusion-color': ['feature-state', 'color'],
+            // landingPageMap.addLayer({
+            //     id: 'province-vizrisk-extrusion',
+            //     source: 'base-outline',
+            //     'source-layer': mapSources.nepal.layers.province,
+            //     type: 'fill-extrusion',
+            //     paint: {
+            //         'fill-extrusion-color': ['feature-state', 'color'],
 
-                    'fill-extrusion-height':
-                        [
-                            'interpolate', ['linear'], ['zoom'],
-                            7, [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                4000,
-                                0,
-                            ],
+            //         'fill-extrusion-height':
+            //             [
+            //                 'interpolate', ['linear'], ['zoom'],
+            //                 7, [
+            //                     'case',
+            //                     ['boolean', ['feature-state', 'hover'], false],
+            //                     4000,
+            //                     0,
+            //                 ],
 
-                            10, [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                400,
-                                0,
-                            ],
-                        ],
+            //                 10, [
+            //                     'case',
+            //                     ['boolean', ['feature-state', 'hover'], false],
+            //                     400,
+            //                     0,
+            //                 ],
+            //             ],
 
-                    'fill-extrusion-base': 0,
-                },
-                layout: {
-                    visibility: 'none',
-                },
+            //         'fill-extrusion-base': 0,
+            //     },
+            //     layout: {
+            //         visibility: 'none',
+            //     },
 
-            });
+            // });
 
             allDataMunipal.forEach((attribute: any) => {
                 landingPageMap.setFeatureState({
@@ -206,7 +206,7 @@ const Map = (props: Props) => {
             landingPageMap.addLayer({
                 id: 'municipality-vizrisk',
                 source: 'base-outline',
-                'source-layer': mapSources.nepal.layers.municipality,
+                'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
                     'fill-opacity':
@@ -216,44 +216,44 @@ const Map = (props: Props) => {
                             0.8,
                             1,
                         ],
-                    'fill-color': ['feature-state', 'color'],
+                    'fill-color': 'transparent',
                 },
 
             });
-            landingPageMap.addLayer({
-                id: 'municipality-vizrisk-extrusion',
-                source: 'base-outline',
-                'source-layer': mapSources.nepal.layers.municipality,
-                type: 'fill-extrusion',
-                paint: {
-                    'fill-extrusion-color': ['feature-state', 'color'],
+            // landingPageMap.addLayer({
+            //     id: 'municipality-vizrisk-extrusion',
+            //     source: 'base-outline',
+            //     'source-layer': mapSources.nepal.layers.municipality,
+            //     type: 'fill-extrusion',
+            //     paint: {
+            //         'fill-extrusion-color': ['feature-state', 'color'],
 
-                    'fill-extrusion-height':
-                        [
-                            'interpolate', ['linear'], ['zoom'],
-                            7, [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                8000,
-                                0,
-                            ],
+            //         'fill-extrusion-height':
+            //             [
+            //                 'interpolate', ['linear'], ['zoom'],
+            //                 7, [
+            //                     'case',
+            //                     ['boolean', ['feature-state', 'hover'], false],
+            //                     8000,
+            //                     0,
+            //                 ],
 
-                            11, [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                400,
-                                0,
-                            ],
-                        ],
+            //                 11, [
+            //                     'case',
+            //                     ['boolean', ['feature-state', 'hover'], false],
+            //                     400,
+            //                     0,
+            //                 ],
+            //             ],
 
-                    'fill-extrusion-base': 0,
+            //         'fill-extrusion-base': 0,
 
-                },
-                layout: {
-                    visibility: 'visible',
-                },
+            //     },
+            //     layout: {
+            //         visibility: 'visible',
+            //     },
 
-            });
+            // });
 
             landingPageMap.on('click', 'municipality-vizrisk', (e) => {
                 if (e && e.features && e.features[0]) {
@@ -265,45 +265,48 @@ const Map = (props: Props) => {
                     }
                 }
             });
-            landingPageMap.on('mousemove', 'municipality-vizrisk', (e) => {
-                landingPageMap.getCanvas().style.cursor = 'pointer';
-                if (e && e.features && e.features[0] && e.features[0].properties) {
-                    const { lngLat } = e;
-                    const coordinates: number[] = [lngLat.lng, lngLat.lat];
-                    const name = e.features[0].properties.title;
-                    const type = e.features[0].state.indicator;
+            //     landingPageMap.on('mousemove', 'municipality-vizrisk', (e) => {
+            //         landingPageMap.getCanvas().style.cursor = 'pointer';
+            //         if (e && e.features && e.features[0] && e.features[0].properties) {
+            //             const { lngLat } = e;
+            //             const coordinates: number[] = [lngLat.lng, lngLat.lat];
+            //             const name = e.features[0].properties.title;
+            //             const type = e.features[0].state.indicator;
 
 
-                    popup.setLngLat(coordinates).setHTML(
-                        `<div style="display : flex; flex-direction:column ;
-                        align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
-                        <p style="margin:0px;padding:5px;color:cyan;text-transform: uppercase;font-weight:bold;">${name}</p>
-                        <p style="margin:0px;padding:5px;color:white;font-weight:bold;">${vizRiskType(type)}</p>
-                         </div>
-        `,
-                    ).addTo(landingPageMap);
-                    if (hoverId) {
-                        landingPageMap.setFeatureState(
-                            {
-                                id: hoverId,
-                                source: 'base-outline',
-                                sourceLayer: mapSources.nepal.layers.municipality,
-                            },
-                            { hover: false },
-                        );
-                    }
-                    hoverId = e.features[0].id;
-                    landingPageMap.setFeatureState(
-                        {
-                            id: hoverId,
-                            source: 'base-outline',
-                            sourceLayer: mapSources.nepal.layers.municipality,
+            //             popup.setLngLat(coordinates).setHTML(
+            //                 `<div style="display : flex; flex-direction:column ;
+            //                 align-items : center ;padding: 5px;
+            //                 border-radius: 1px;background-color : rgb(3, 33, 46);">
+            //                 <p style="margin:0px;padding:5px;color:cyan;
+            //                 text-transform: uppercase;font-weight:bold;">${name}</p>
+            //                 <p style="margin:0px;padding:5px;
+            //                  color:white;font-weight:bold;">${vizRiskType(type)}</p>
+            //                  </div>
+            // `,
+            //             ).addTo(landingPageMap);
+            //             if (hoverId) {
+            //                 landingPageMap.setFeatureState(
+            //                     {
+            //                         id: hoverId,
+            //                         source: 'base-outline',
+            //                         sourceLayer: mapSources.nepal.layers.municipality,
+            //                     },
+            //                     { hover: false },
+            //                 );
+            //             }
+            //             hoverId = e.features[0].id;
+            //             landingPageMap.setFeatureState(
+            //                 {
+            //                     id: hoverId,
+            //                     source: 'base-outline',
+            //                     sourceLayer: mapSources.nepal.layers.municipality,
 
-                        },
-                        { hover: true },
-                    );
-                }
-            });
+            //                 },
+            //                 { hover: true },
+            //             );
+            //         }
+            //     });
             landingPageMap.on('mouseleave', 'municipality-vizrisk', (e) => {
                 landingPageMap.getCanvas().style.cursor = '';
                 if (hoverId) {
@@ -352,15 +355,11 @@ const Map = (props: Props) => {
             landingPageMap.addLayer({
                 id: 'municipality-outline',
                 source: 'base-outline',
-                'source-layer': mapSources.nepal.layers.municipality,
+                'source-layer': mapSources.nepal.layers.ward,
                 type: 'line',
                 paint: {
-                    'line-color': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        '#C1292E',
-                        '#C1292E',
-                    ],
+                    'line-color': '#03212e',
+                    'line-opacity': 0.5,
                     'line-width': 1,
                 },
                 layout: {
@@ -398,11 +397,74 @@ const Map = (props: Props) => {
                         'multihazard',
                         'multihazard',
                     ],
-                    'icon-size': 0.08,
+                    'icon-size': 0.2,
                     'icon-anchor': 'bottom',
                     visibility: 'none',
 
                 },
+            });
+            landingPageMap.on('click', 'pop-image-layer-province', (e) => {
+                if (e && e.features && e.features[0]) {
+                    const { name } = e.features[0].properties;
+                    if (allAvialableVizrisks.includes(e.features[0].id)) {
+                        setClickedVizrisk(name);
+                        setShowMenu(false);
+                    }
+                }
+            });
+            landingPageMap.on('mousemove', 'pop-image-layer-province', (e) => {
+                landingPageMap.getCanvas().style.cursor = 'pointer';
+                if (e && e.features && e.features[0] && e.features[0].properties) {
+                    const { lngLat } = e;
+                    const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                    const { name } = e.features[0].properties;
+                    const type = e.features[0].properties.indicator;
+
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="display : flex;padding:5px;flex-direction:column;border:1px solid #0180d8;
+                        align-items : center ;padding: 5px;border-radius: 1px;background-color : rgb(3, 33, 46);">
+                        <p style="margin:0px;padding:5px;color:cyan;text-transform: uppercase;font-weight:bold;">${name}</p>
+                        <p style="margin:0px 15px 8px 15px;padding: 3px 10px;color:white;font-weight:bold;background-color:#0180d8">${vizRiskType(type)}</p>
+                         </div>
+        `,
+                    ).addTo(landingPageMap);
+                    if (hoverId) {
+                        landingPageMap.setFeatureState(
+                            {
+                                id: hoverId,
+                                source: 'base-outline',
+                                sourceLayer: mapSources.nepal.layers.province,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoverId = e.features[0].id;
+                    landingPageMap.setFeatureState(
+                        {
+                            id: hoverId,
+                            source: 'base-outline',
+                            sourceLayer: mapSources.nepal.layers.province,
+
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+            landingPageMap.on('mouseleave', 'pop-image-layer-province', (e) => {
+                landingPageMap.getCanvas().style.cursor = '';
+                if (hoverId) {
+                    landingPageMap.setFeatureState(
+                        {
+                            source: 'base-outline',
+                            id: hoverId,
+                            sourceLayer: mapSources.nepal.layers.province,
+                        },
+                        { hover: false },
+
+                    );
+                }
+                hoverId = undefined;
+                popup.remove();
             });
             landingPageMap.addSource('pop-layer-municipal', {
                 type: 'geojson',
@@ -548,83 +610,86 @@ const Map = (props: Props) => {
 
         const allExposureId = [...proFloodId, ...proLandSlideId, ...proMultiHazardId];
         const allFilteredExposureId = allExposureId.filter(id => id !== 8);
+        console.log('vzLabel', vzLabel);
 
         if (updateMap.current && updateMap.current.isStyleLoaded()) {
             if (vzLabel === 'province') {
-                showMapLayers('province-outline', updateMap);
-                showMapLayers('province-vizrisk', updateMap);
-                showMapLayers('province-vizrisk-extrusion', updateMap);
+                // showMapLayers('province-outline', updateMap);
+                showMapLayers('pop-image-layer-province', updateMap);
+                // showMapLayers('province-vizrisk-extrusion', updateMap);
                 // updateMap.current.setFilter('province-vizrisk-extrusion',
                 //     ['match', ['id'], provinceIdarray, true, false]);
-                switch (selctFieldCurrentValue) {
-                    case 'Flood Exposure':
-                        updateMap.current.setFilter('province-vizrisk',
-                            ['match', ['id'], proFloodId, true, false]);
-                        updateMap.current.setFilter('province-vizrisk-extrusion',
-                            ['match', ['id'], proFloodId, true, false]);
-                        break;
-                    case 'Landslide Exposure':
-                        updateMap.current.setFilter('province-vizrisk',
-                            ['match', ['id'], proLandSlideId, true, false]);
-                        updateMap.current.setFilter('province-vizrisk-extrusion',
-                            ['match', ['id'], proLandSlideId, true, false]);
-                        break;
-                    case 'Multi-hazard Exposure':
-                        updateMap.current.setFilter('province-vizrisk',
-                            ['match', ['id'], proMultiHazardId, true, false]);
-                        updateMap.current.setFilter('province-vizrisk-extrusion',
-                            ['match', ['id'], proMultiHazardId, true, false]);
-                        break;
+                // switch (selctFieldCurrentValue) {
+                //     case 'Flood Exposure':
+                //         updateMap.current.setFilter('province-vizrisk',
+                //             ['match', ['id'], proFloodId, true, false]);
+                //         updateMap.current.setFilter('province-vizrisk-extrusion',
+                //             ['match', ['id'], proFloodId, true, false]);
+                //         break;
+                //     case 'Landslide Exposure':
+                //         updateMap.current.setFilter('province-vizrisk',
+                //             ['match', ['id'], proLandSlideId, true, false]);
+                //         updateMap.current.setFilter('province-vizrisk-extrusion',
+                //             ['match', ['id'], proLandSlideId, true, false]);
+                //         break;
+                //     case 'Multi-hazard Exposure':
+                //         updateMap.current.setFilter('province-vizrisk',
+                //             ['match', ['id'], proMultiHazardId, true, false]);
+                //         updateMap.current.setFilter('province-vizrisk-extrusion',
+                //             ['match', ['id'], proMultiHazardId, true, false]);
+                //         break;
 
-                    default:
-                        updateMap.current.setFilter('province-vizrisk',
-                            ['match', ['id'],
-                                [...allFilteredExposureId],
-                                true, false]);
-                        break;
-                }
+                //     default:
+                //         updateMap.current.setFilter('province-vizrisk',
+                //             ['match', ['id'],
+                //                 [...allFilteredExposureId],
+                //                 true, false]);
+                //         break;
+                // }
             } else {
-                hideMapLayers('province-outline', updateMap);
-                hideMapLayers('province-vizrisk', updateMap);
-                hideMapLayers('province-vizrisk-extrusion', updateMap);
+                hideMapLayers('pop-image-layer-province', updateMap);
+                // hideMapLayers('province-vizrisk', updateMap);
+                // hideMapLayers('province-vizrisk-extrusion', updateMap);
             }
 
             if (vzLabel === 'municipality') {
-                showMapLayers('municipality-outline', updateMap);
-                showMapLayers('municipality-vizrisk', updateMap);
-                showMapLayers('municipality-vizrisk-extrusion', updateMap);
-                switch (selctFieldCurrentValue) {
-                    case 'Flood Exposure':
-                        updateMap.current.setFilter('municipality-vizrisk',
-                            ['match', ['id'], munFloodId, true, false]);
-                        updateMap.current.setFilter('municipality-vizrisk-extrusion',
-                            ['match', ['id'], munFloodId, true, false]);
-                        break;
-                    case 'Landslide Exposure':
-                        updateMap.current.setFilter('municipality-vizrisk',
-                            ['match', ['id'], munLandSlideId, true, false]);
-                        updateMap.current.setFilter('municipality-vizrisk-extrusion',
-                            ['match', ['id'], munLandSlideId, true, false]);
-                        break;
-                    case 'Multi-hazard Exposure':
-                        updateMap.current.setFilter('municipality-vizrisk',
-                            ['match', ['id'], munMultiHazardId, true, false]);
-                        updateMap.current.setFilter('municipality-vizrisk-extrusion',
-                            ['match', ['id'], munMultiHazardId, true, false]);
-                        break;
+                showMapLayers('pop-image-layer-municipal', updateMap);
+                // showMapLayers('municipality-vizrisk', updateMap);
+                // showMapLayers('municipality-vizrisk-extrusion', updateMap);
+                // switch (selctFieldCurrentValue) {
+                //     case 'Flood Exposure':
+                //         updateMap.current.setFilter('municipality-vizrisk',
+                //             ['match', ['id'], munFloodId, true, false]);
+                //         updateMap.current.setFilter('municipality-vizrisk-extrusion',
+                //             ['match', ['id'], munFloodId, true, false]);
+                //         break;
+                //     case 'Landslide Exposure':
+                //         updateMap.current.setFilter('municipality-vizrisk',
+                //             ['match', ['id'], munLandSlideId, true, false]);
+                //         updateMap.current.setFilter('municipality-vizrisk-extrusion',
+                //             ['match', ['id'], munLandSlideId, true, false]);
+                //         break;
+                //     case 'Multi-hazard Exposure':
+                //         updateMap.current.setFilter('municipality-vizrisk',
+                //             ['match', ['id'], munMultiHazardId, true, false]);
+                //         updateMap.current.setFilter('municipality-vizrisk-extrusion',
+                //             ['match', ['id'], munMultiHazardId, true, false]);
+                //         break;
 
-                    default:
-                        updateMap.current.setFilter('municipality-vizrisk',
-                            ['match', ['id'], [...munFloodId, ...munLandSlideId, ...munMultiHazardId], true, false]);
-                        break;
-                }
+                //     default:
+                //         updateMap.current.setFilter('municipality-vizrisk',
+                // ['match', ['id'],
+                //  [...munFloodId, ...munLandSlideId, ...munMultiHazardId], true, false]);
+                //         break;
+                // }
             } else {
-                hideMapLayers('municipality-outline', updateMap);
-                hideMapLayers('municipality-vizrisk', updateMap);
-                hideMapLayers('municipality-vizrisk-extrusion', updateMap);
+                hideMapLayers('pop-image-layer-municipal', updateMap);
+                // hideMapLayers('municipality-vizrisk', updateMap);
+                // hideMapLayers('municipality-vizrisk-extrusion', updateMap);
             }
         }
-    }, [municipalities, provinces, selctFieldCurrentValue, vzLabel]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [vzLabel]);
 
     useEffect(() => {
         if (updateMap.current) {
