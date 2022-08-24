@@ -3,7 +3,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { lossMetrics } from '#utils/domain';
 import { nullCheck } from '../../../utils/common';
 import styles from './styles.scss';
@@ -87,7 +87,8 @@ const FilterRadio = (props) => {
         if (regionRadio) {
             switch (regionRadio) {
                 case 'province':
-                    setRegionWiseBarChartData(distributionCalculate(provinceIndex, 'province'));
+                    setRegionWiseBarChartData(distributionCalculate(provinceIndex, 'province')
+                        .sort((a, b) => b.value - a.value));
                     break;
                 case 'district':
                     setRegionWiseBarChartData(distributionCalculate(districtIndex, 'district')
