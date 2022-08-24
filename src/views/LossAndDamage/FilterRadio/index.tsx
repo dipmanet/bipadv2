@@ -64,7 +64,8 @@ const FilterRadio = (props) => {
         setRegionRadio(e.target.value);
         switch (e.target.value) {
             case 'province':
-                setRegionWiseBarChartData(distributionCalculate(provinceIndex, 'province'));
+                setRegionWiseBarChartData(distributionCalculate(provinceIndex, 'province')
+                    .sort((a, b) => b.value - a.value));
                 break;
             case 'district':
                 setRegionWiseBarChartData(distributionCalculate(districtIndex, 'district')
