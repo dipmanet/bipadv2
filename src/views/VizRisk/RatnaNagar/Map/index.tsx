@@ -706,6 +706,10 @@ const Map = (props: any) => {
                 if (sideEffect === '20 years' && (checkFeildVal === '20 years' || checkFeildVal === '5 years')) {
                     dataForFloodReturnPeriod.push(eachData);
                 }
+                if (sideEffect === '100 years' && (checkFeildVal === '100 years'
+                    || checkFeildVal === '20 years' || checkFeildVal === '5 years')) {
+                    dataForFloodReturnPeriod.push(eachData);
+                }
             }
         }
 
