@@ -214,7 +214,7 @@ const VizRiskMainPage = (props: Props) => {
                                 !tourStatus && (
                                     <>
                                         <LayerToggle setVzLabel={setVzLabel} vzLabel={vzLabel} />
-                                        <ThemeSelector
+                                        {/* <ThemeSelector
                                             selectFieldValue={themes}
                                             selctFieldCurrentValue={selctFieldCurrentValue}
                                             setSelctFieldCurrentValue={setselctFieldCurrentValue}
@@ -225,7 +225,7 @@ const VizRiskMainPage = (props: Props) => {
                                             setSelctFieldCurrentValue={setselctFieldCurrentValue}
                                             vzLabel={vzLabel}
                                             forDisable={forDisable}
-                                        />
+                                        /> */}
                                     </>
                                 )
                             }

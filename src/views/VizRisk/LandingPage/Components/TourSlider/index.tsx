@@ -1,4 +1,5 @@
 import React from 'react';
+import DownArr from '#resources/icons/downArrowViz.svg';
 import styles from './styles.scss';
 
 interface Props {
@@ -30,11 +31,7 @@ const VisRiskTourSlider = (props: Props) => {
                             onClick={handleScrollClick}
                             type="submit"
                         >
-                            <i
-                                className={`fa fa-angle-down ${tourSectionComplete
-                                    ? styles.downIconComplete : styles.downIcon}`}
-                                aria-hidden="true"
-                            />
+                            <img style={{ cursor: 'pointer' }} src={DownArr} alt="" />
                         </button>
                     )
                 }

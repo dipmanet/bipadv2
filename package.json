@@ -138,7 +138,7 @@
     },
     "dependencies": {
         "@babel/runtime-corejs3": "^7.5.5",
-        "@deck.gl/extensions": "^8.8.2",
+        "@deck.gl/extensions": "^8.8.9",
         "@deck.gl/layers": "^8.4.10",
         "@deck.gl/mapbox": "^8.4.10",
         "@deck.gl/react": "^8.4.10",

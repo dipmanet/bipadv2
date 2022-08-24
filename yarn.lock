@@ -1343,12 +1343,12 @@
   dependencies:
     "@luma.gl/shadertools" "^8.5.10"
 
-"@deck.gl/extensions@^8.8.2":
-  version "8.8.2"
-  resolved "https://registry.yarnpkg.com/@deck.gl/extensions/-/extensions-8.8.2.tgz#67b2985f82b44f57a5735991df1875d87b429393"
-  integrity sha512-ryP7GwoPV/g2sCfMrYsTmunnbl5jci+T4sUntKH1Zix+57Gu8+4MU/KOEUTE7RfZfy5SiaDGvBuomEhh1o6wog==
+"@deck.gl/extensions@^8.8.9":
+  version "8.8.9"
+  resolved "https://registry.yarnpkg.com/@deck.gl/extensions/-/extensions-8.8.9.tgz#983199d1dfc2daf3b5609252e0077bfac81fc4fc"
+  integrity sha512-A91E5YQTh9eTzqmb+KB3ehARIqMosQkZz77TvnaMEWaRgrbRp4/lNZEBTtu0RenDnxy04lojCaYxRoh+kPidSg==
   dependencies:
-    "@luma.gl/shadertools" "^8.5.14"
+    "@luma.gl/shadertools" "^8.5.16"
 
 "@deck.gl/geo-layers@8.7.8":
   version "8.7.8"
@@ -1906,10 +1906,10 @@
     "@babel/runtime" "^7.0.0"
     "@math.gl/core" "^3.5.0"
 
-"@luma.gl/shadertools@^8.5.14":
-  version "8.5.14"
-  resolved "https://registry.yarnpkg.com/@luma.gl/shadertools/-/shadertools-8.5.14.tgz#dce11869c4e45744fc6d0326a72f1b1522cdf9ad"
-  integrity sha512-vq0XzMYzGM/A/usNvCzfWJw+ycN2vzqN4AtgrejrOrYu+6yP8LmfRp/iAxjhFkukCPgs03tUFYSlkY7I6HIVtw==
+"@luma.gl/shadertools@^8.5.16":
+  version "8.5.16"
+  resolved "https://registry.yarnpkg.com/@luma.gl/shadertools/-/shadertools-8.5.16.tgz#90eeed64fc4dfce9e87cd096238988cff06dda30"
+  integrity sha512-L3M3v6bQhIT8McCeqLvHnLJBmBXYDog1QblF4PVszuIB/WH+cHxZ0I26X2a1eEsVCvdeCrxRBxr42743oyfUNA==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@math.gl/core" "^3.5.0"
