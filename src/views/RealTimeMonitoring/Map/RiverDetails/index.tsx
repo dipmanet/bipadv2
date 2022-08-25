@@ -63,6 +63,13 @@ interface LegendItem {
     language: string;
 }
 
+const RiverEmptyComponent = () => (
+    <Message>
+        Data is currently not available
+    </Message>
+);
+
+
 const RiverEmptyComponentNe = () => (
     <Message>
         डाटा हाल उपलब्ध छैन
@@ -75,8 +82,13 @@ const riverLegendData: LegendItem[] = language => ([
     { key: 'dangerLevel', label: language === 'en' ? 'Danger Level' : 'खतरा स्तर', color: '#e41a1c' },
 ]);
 
+const labelSelector = (d: LegendItem) => d.label;
+const keySelector = (d: LegendItem) => d.label;
+const colorSelector = (d: LegendItem) => d.color;
+
 type Props = NewProps<OwnProps, Params>;
 
+const riverKeySelector = (riverDetail: RealTimeRiverDetails) => riverDetail.id;
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
