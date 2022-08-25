@@ -47,7 +47,8 @@ const RangeStatusLegend = (props) => {
                     />
                 </svg>
                 <p className={styles.titleName}>
-                    {`${getCurrentType(leftElement).charAt(0).toUpperCase()
+                    {getCurrentType(leftElement) === 'adaptiveCapacity' ? 'Lack of Adaptive Capacity'
+                        : `${getCurrentType(leftElement).charAt(0).toUpperCase()
                         + getCurrentType(leftElement).slice(1)} Score`
                     }
 

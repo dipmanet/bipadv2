@@ -51,7 +51,7 @@ export const SlideTitle = [
 
 export const staticSelectFieldValues = {
     Sensitivity: {
-        'Social Condition': [
+        Social: [
             'Number of Dependent Population (Children <15 and Elderly (Age >=60 years)',
             'Household head Gender',
             'Ethnicity',
@@ -64,7 +64,7 @@ export const staticSelectFieldValues = {
             'Identity Revealing',
             'Education level (literate Vs Illiterate)',
         ],
-        'Economic Condition': [
+        Economic: [
             'Annual Income (NPR)',
             'Income Source',
             'Yearly saving of your house (NPR)',
@@ -95,7 +95,7 @@ export const staticSelectFieldValues = {
             'Distance from ward office for people with disability',
             'Access to safe shelter',
         ],
-        'Sensitivity of Household': [
+        Physical: [
             'Number of storey',
             'Building designed following building code',
             'Building permit received from the municipality',
@@ -123,7 +123,7 @@ export const staticSelectFieldValues = {
         'Training, membership and participation': [
             'Training on DRR received',
             'Membership of the family members in community groups',
-            "Women\\'s participation in community meeting and or decision-making process",
+            "Women's participation in community meeting and or decision-making process",
         ],
     },
 };

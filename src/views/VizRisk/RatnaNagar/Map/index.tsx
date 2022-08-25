@@ -39,12 +39,9 @@ const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
-const mapStateToProps = (state: AppState) => {
-    console.log('mapStateToProps-stateValue', state);
-    return ({
-        wards: wardsSelector(state),
-    });
-};
+const mapStateToProps = (state: AppState) => ({
+    wards: wardsSelector(state),
+});
 
 let hoveredWardId: number | string | undefined;
 
@@ -61,7 +58,7 @@ const Map = (props: any) => {
         floodLayer,
         setFloodLayer,
         setNavIdleStatus,
-        children } = props;
+        renderPage } = props;
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -215,6 +212,10 @@ const Map = (props: any) => {
         if (mapRef) {
             mapRef.current = map.current;
         }
+
+        // if (renderPage === 'homepage') {
+        //     multihazardMap.scrollZoom.disable();
+        // }
 
         multihazardMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
@@ -450,10 +451,12 @@ const Map = (props: any) => {
                     type: 'raster',
                     source: 'floodInundation',
                     layout: {
-                        visibility: 'none',
+                        visibility: renderPage === 'homepage'
+                            ? 'visible' : 'none',
                     },
                     paint: {
-                        'raster-opacity': innundationOpacity,
+                        'raster-opacity': renderPage === 'homepage'
+                            ? 1 : innundationOpacity,
                     },
                 },
 
@@ -481,7 +484,11 @@ const Map = (props: any) => {
                 return null;
             });
 
-            multihazardMap.setZoom(1);
+            if (renderPage === 'homepage') {
+                multihazardMap.setZoom(11.5);
+            } else {
+                multihazardMap.setZoom(1);
+            }
         });
 
 
@@ -515,7 +522,6 @@ const Map = (props: any) => {
         }
         return null;
     };
-    console.log('hpuseholdata', householdData);
 
     useEffect(() => {
         const switchFloodRasters = (floodlayer: string) => {
@@ -633,7 +639,6 @@ const Map = (props: any) => {
     }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
 
     const sideEffect = !!currentHeaderVal && !!selectFieldValue && requiredQuery[currentHeaderVal][selectFieldValue];
-    console.log('sideEffect', sideEffect);
 
 
     useEffect(() => {
@@ -712,11 +717,30 @@ const Map = (props: any) => {
                 }
             }
         }
+        const dataForFloodReturnPeriodWithRange: any = [];
+
+        if (sideEffect && leftElement === 5 && rangeValues && rangeValues.length > 0) {
+            for (let index = 0; index < rangeValues.length; index++) {
+                if (index % 2 !== 0) {
+                    // eslint-disable-next-line no-continue
+                    continue;
+                }
+                const filteredData = dataForFloodReturnPeriod.filter(
+                    item => (item[getCurrentType(leftElement)] / 10)
+                        >= rangeValues[index] && (item[getCurrentType(leftElement)] / 10)
+                        <= rangeValues[index + 1],
+                );
+                dataForFloodReturnPeriodWithRange.push(...filteredData);
+            }
+        }
 
         const checkDataForGeoJson = () => {
             switch (true) {
-                case leftElement === 5 && dataForFloodReturnPeriod.length > 0:
+                case leftElement === 5 && dataForFloodReturnPeriod.length > 0 && rangeValues && rangeValues.length === 0:
                     return dataForFloodReturnPeriod;
+
+                case leftElement === 5 && dataForFloodReturnPeriod.length > 0 && rangeValues && rangeValues.length > 0:
+                    return dataForFloodReturnPeriodWithRange;
 
                 case sideEffect && filterdDataFromChart.length > 0
                     && rangeValues.length === 0 && leftElement !== 5:
@@ -911,7 +935,9 @@ const Map = (props: any) => {
                             </>
 
                         ))}
-                {children}
+                {/* {renderPage === 'homepage'
+                    && <InundationLegend />
+                } */}
             </div>
         </RatnaNagarMapContext.Provider>
 

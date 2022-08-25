@@ -16,27 +16,33 @@ const SelectOptions = (props: Props) => {
             {
                 !!optionTitle
                 && (
-                    <h3 style={{
-                        margin: '10px 5px',
-                        color: 'white',
-                        fontSize: 16,
-                        textDecoration: 'underline',
-                    }}
+                    <div
+                        style={{
+                            color: 'white',
+                            fontSize: 16,
+                        }}
+                        className={styles.optionTitle}
                     >
                         {optionTitle}
-                    </h3>
+                    </div>
                 )
             }
             {optionValues.map(item => (
-                <button
-                    type="submit"
+                <div
+                    role="button"
+                    tabIndex={-1}
+                    onKeyDown={() => onOptionClick(item)}
                     className={styles.optionField}
                     onClick={() => onOptionClick(item)}
                     key={item}
                 >
-                    <p className={styles.optionName}>{item}</p>
-                </button>
+                    <div className={styles.optionName}>{item}</div>
+                </div>
             ))}
+            {/* {
+                !!optionTitle
+                && <div className={styles.lineDecorator} />
+            } */}
         </div>
     );
 };

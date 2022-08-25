@@ -37,7 +37,7 @@ const LayerToggle = (props: Props) => {
 
             <div className={styles.textSection}>
                 {
-                    ['Select Province', 'Select municipality'].map(item => (
+                    ['View Provincial VisRisk', 'View Municipal VisRisk'].map(item => (
                         <p className={styles.textLabel}>{item}</p>
                     ))
                 }
