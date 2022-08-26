@@ -1,53 +1,53 @@
 import styles from './styles.scss';
 
 export const rain24LegendItems = [
-    { color: '#BA2719', label: '> 140mm', style: styles.symbol },
-    { color: '#F3A53A', label: '120mm - 139.9mm', style: styles.symbol },
-    { color: '#F8D054', label: '100mm - 119.9mm', style: styles.symbol },
-    { color: '#5D9E52', label: '80mm - 99.9mm', style: styles.symbol },
-    { color: '#569ED4', label: '0.5mm - 79.9mm', style: styles.symbol },
-    { color: '#798590', label: '0.01mm - 0.49mm', style: styles.symbol },
-    { color: '#BFBFBF', label: '0mm', style: styles.symbol },
+    { color: '#BA2719', label: '> 140mm', labelNe: '> 140mm', style: styles.symbol },
+    { color: '#F3A53A', label: '120mm - 139.9mm', labelNe: '120mm - 139.9mm', style: styles.symbol },
+    { color: '#F8D054', label: '100mm - 119.9mm', labelNe: '100mm - 119.9mm', style: styles.symbol },
+    { color: '#5D9E52', label: '80mm - 99.9mm', labelNe: '80mm - 99.9mm', style: styles.symbol },
+    { color: '#569ED4', label: '0.5mm - 79.9mm', labelNe: '0.5mm - 79.9mm', style: styles.symbol },
+    { color: '#798590', label: '0.01mm - 0.49mm', labelNe: '0.01mm - 0.49mm', style: styles.symbol },
+    { color: '#BFBFBF', label: '0mm', labelNe: '0mm', style: styles.symbol },
 ];
 
 export const rain12LegendItems = [
-    { color: '#BA2719', label: '> 120mm', style: styles.symbol },
-    { color: '#F3A53A', label: '100mm - 119.9mm', style: styles.symbol },
-    { color: '#F8D054', label: '80mm - 99.9mm', style: styles.symbol },
-    { color: '#5D9E52', label: '60mm - 79.9mm', style: styles.symbol },
-    { color: '#569ED4', label: '0.5mm - 59.9mm', style: styles.symbol },
-    { color: '#798590', label: '0.01mm - 0.49mm', style: styles.symbol },
-    { color: '#BFBFBF', label: '0mm', style: styles.symbol },
+    { color: '#BA2719', label: '> 120mm', labelNe: '> 120mm', style: styles.symbol },
+    { color: '#F3A53A', label: '100mm - 119.9mm', labelNe: '100mm - 119.9mm', style: styles.symbol },
+    { color: '#F8D054', label: '80mm - 99.9mm', labelNe: '80mm - 99.9mm', style: styles.symbol },
+    { color: '#5D9E52', label: '60mm - 79.9mm', labelNe: '60mm - 79.9mm', style: styles.symbol },
+    { color: '#569ED4', label: '0.5mm - 59.9mm', labelNe: '0.5mm - 59.9mm', style: styles.symbol },
+    { color: '#798590', label: '0.01mm - 0.49mm', labelNe: '0.01mm - 0.49mm', style: styles.symbol },
+    { color: '#BFBFBF', label: '0mm', labelNe: '0mm', style: styles.symbol },
 ];
 
 export const rain6LegendItems = [
-    { color: '#BA2719', label: '> 100mm', style: styles.symbol },
-    { color: '#F3A53A', label: '80mm - 99.9mm', style: styles.symbol },
-    { color: '#F8D054', label: '60mm - 79.9mm', style: styles.symbol },
+    { color: '#BA2719', label: '> 100mm', labelNe: '> 100mm', style: styles.symbol },
+    { color: '#F3A53A', label: '80mm - 99.9mm', labelNe: '80mm - 99.9mm', style: styles.symbol },
+    { color: '#F8D054', label: '60mm - 79.9mm', labelNe: '60mm - 79.9mm', style: styles.symbol },
     { color: '#5D9E52', label: '40mm - 59.9mm', style: styles.symbol },
-    { color: '#569ED4', label: '0.5mm - 39.9mm', style: styles.symbol },
-    { color: '#798590', label: '0.01mm - 0.49mm', style: styles.symbol },
-    { color: '#BFBFBF', label: '0mm', style: styles.symbol },
+    { color: '#569ED4', label: '0.5mm - 39.9mm', labelNe: '0.5mm - 39.9mm', style: styles.symbol },
+    { color: '#798590', label: '0.01mm - 0.49mm', labelNe: '0.01mm - 0.49mm', style: styles.symbol },
+    { color: '#BFBFBF', label: '0mm', labelNe: '0mm', style: styles.symbol },
 ];
 
 export const rain3LegendItems = [
-    { color: '#BA2719', label: '> 80mm', style: styles.symbol },
-    { color: '#F3A53A', label: '60mm - 79.9mm', style: styles.symbol },
+    { color: '#BA2719', label: '> 80mm', labelNe: '> 80mm', style: styles.symbol },
+    { color: '#F3A53A', label: '60mm - 79.9mm', labelNe: '60mm - 79.9mm', style: styles.symbol },
     { color: '#F8D054', label: '40mm - 59.9mm', style: styles.symbol },
-    { color: '#5D9E52', label: '20mm - 39.9mm', style: styles.symbol },
-    { color: '#569ED4', label: '0.5mm - 19.9mm', style: styles.symbol },
-    { color: '#798590', label: '0.01mm - 0.49mm', style: styles.symbol },
-    { color: '#BFBFBF', label: '0mm', style: styles.symbol },
+    { color: '#5D9E52', label: '20mm - 39.9mm', labelNe: '20mm - 39.9mm', style: styles.symbol },
+    { color: '#569ED4', label: '0.5mm - 19.9mm', labelNe: '0.5mm - 19.9mm', style: styles.symbol },
+    { color: '#798590', label: '0.01mm - 0.49mm', labelNe: '0.01mm - 0.49mm', style: styles.symbol },
+    { color: '#BFBFBF', label: '0mm', labelNe: '0mm', style: styles.symbol },
 ];
 
 export const rain1LegendItems = [
-    { color: '#BA2719', label: '> 60mm', style: styles.symbol },
-    { color: '#F3A53A', label: '40mm - 59.9mm', style: styles.symbol },
-    { color: '#F8D054', label: '20mm - 39.9mm', style: styles.symbol },
-    { color: '#5D9E52', label: '10mm - 19.9mm', style: styles.symbol },
-    { color: '#569ED4', label: '0.5mm - 9.9mm', style: styles.symbol },
-    { color: '#798590', label: '0.01mm - 0.49mm', style: styles.symbol },
-    { color: '#BFBFBF', label: '0mm', style: styles.symbol },
+    { color: '#BA2719', label: '> 60mm', labelNe: '> 60mm', style: styles.symbol },
+    { color: '#F3A53A', label: '40mm - 59.9mm', labelNe: '40mm - 59.9mm', style: styles.symbol },
+    { color: '#F8D054', label: '20mm - 39.9mm', labelNe: '20mm - 39.9mm', style: styles.symbol },
+    { color: '#5D9E52', label: '10mm - 19.9mm', labelNe: '10mm - 19.9mm', style: styles.symbol },
+    { color: '#569ED4', label: '0.5mm - 9.9mm', labelNe: '0.5mm - 9.9mm', style: styles.symbol },
+    { color: '#798590', label: '0.01mm - 0.49mm', labelNe: '0.01mm - 0.49mm', style: styles.symbol },
+    { color: '#BFBFBF', label: '0mm', labelNe: '0mm', style: styles.symbol },
 ];
 
 export const lT = {
