@@ -41,6 +41,7 @@ import {
     hazardFilterSelector,
     regionFilterSelector,
     regionsSelector,
+    filtersSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -62,6 +63,12 @@ import {
     getResults,
     getPending,
 } from '#utils/request';
+import {
+    transformDataRangeToFilter,
+    transformRegionToFilter,
+    transformDataRangeLocaleToFilter,
+    pastDaysToDateRange,
+} from '#utils/transformations';
 
 import styles from './styles.scss';
 import Overview from './Overview';
@@ -72,6 +79,7 @@ import HazardWise from './HazardWise';
 import DataTable from './DataTable';
 import DateRangeInfo from '#components/DateRangeInfo';
 import FilterRadio from './FilterRadio';
+import { setIncidentListActionIP } from '#actionCreators';
 
 const ModalButton = modalize(Button);
 
@@ -125,31 +133,48 @@ oneYearAgo.setMonth(today.getMonth() - 6);
 const DEFAULT_START_DATE = oneYearAgo;
 const DEFAULT_END_DATE = today;
 
-const requestQuery = ({
-    params: {
-        // startDate = DEFAULT_START_DATE.toISOString(),
-        // endDate = DEFAULT_END_DATE.toISOString(),
-        startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,
-        endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
-    } = {},
+const transformFilters = ({
+    dataDateRange,
+    region,
+    ...otherFilters
 }) => ({
-    expand: ['loss.peoples', 'wards'],
-    limit: -1,
-    incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
-    incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-    ordering: '-incident_on',
-    // lnd: true,
+    ...otherFilters,
+    // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
+    ...transformRegionToFilter(region),
 });
 
-const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
+const requestOptions: { [key: string] } = {
     incidentsGetRequest: {
         url: '/incident/',
         method: methods.GET,
-        query: requestQuery,
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: ({ props: { filters } }) => ({
+            ...transformFilters(filters),
+            expand: ['loss', 'event', 'wards'],
+            ordering: '-incident_on',
+            limit: -1,
+        }),
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            interface Response { results }
+            const { results: incidentList = [] } = response as Response;
+            setIncidentList({ incidentList });
+        },
         onMount: true,
-        // extras: { schemaName: 'incidentWithPeopleResponse' },
+        onPropsChanged: {
+            filters: ({
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
+
+                return shouldRequest;
+            },
+        },
+        // extras: { schemaName: 'incidentResponse' },
     },
 };
+
 
 const getDatesInIsoString = (startDate: string, endDate: string) => ({
     startDate: startDate ? (new Date(startDate)).toISOString() : undefined,
@@ -166,35 +191,6 @@ const timeTickFormatter = (timestamp: number) => {
     date.setTime(timestamp);
     return `${date.getFullYear()}-${date.getMonth() + 1}`;
 };
-
-const incidentMetricChartParams = {
-    count: {
-        color: '#ffa600',
-        dataKey: 'summary.count',
-        title: 'No. of incidents',
-    },
-    peopleDeath: {
-        color: '#ff6361',
-        dataKey: 'summary.peopleDeathCount',
-        title: 'People death',
-    },
-    estimatedLoss: {
-        color: '#58508d',
-        dataKey: 'summary.estimatedLoss',
-        title: 'Estimated loss',
-    },
-    infrastructureDestroyed: {
-        color: '#003f5c',
-        dataKey: 'summary.infrastructureDestroyedCount',
-        title: 'Infrastructure destroyed',
-    },
-    livestockDestroyed: {
-        color: '#bc5090',
-        dataKey: 'summary.livestockDestroyedCount',
-        title: 'Livestock destroyed',
-    },
-};
-
 class LossAndDamage extends React.PureComponent<Props, State> {
     public state = {
         startDate: encodeDate(DEFAULT_START_DATE),
@@ -364,11 +360,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             hazardFilter,
             regionFilter,
             regions,
+            filters,
         } = this.props;
+        console.log(hazardFilter, regionFilter, 'filters');
 
         const {
-            startDate,
-            endDate,
+            // startDate,
+            // endDate,
             submittedStartDate,
             submittedEndDate,
             Null_check_estimatedLoss,
@@ -404,6 +402,15 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const setRegionWiseBarChartData = (data) => {
             this.setState({ regionWiseBarChartData: data });
         };
+
+        const { rangeInDays } = filters.dataDateRange;
+        let startDate;
+        let endDate;
+        if (rangeInDays !== 'custom') {
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+        } else {
+            ({ startDate, endDate } = filters.dataDateRange);
+        }
 
         return (
             <>
@@ -547,7 +554,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     valueOnclick={valueOnclick}
                                     setRegionWiseBarChartData={setRegionWiseBarChartData}
                                 />
-
                                 <Dropdown
                                     data={filteredData}
                                     setVAlueOnClick={setVAlueOnClick}
@@ -564,6 +570,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 />
                                 <AreaChartVisual
                                     selectOption={selectOption}
+                                    data={chartData}
                                 />
                                 <HazardWise
                                     selectOption={selectOption}
@@ -687,10 +694,16 @@ const mapStateToProps = state => ({
     hazardFilter: hazardFilterSelector(state),
     regionFilter: regionFilterSelector(state),
     regions: regionsSelector(state),
+    filters: filtersSelector(state),
 });
 
+const mapDispatchToProps = dispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+});
+
+
 export default compose(
-    connect(mapStateToProps, null),
+    connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ComponentProps>(),
     createRequestClient(requestOptions),
 )(LossAndDamage);

@@ -12,7 +12,6 @@ const Dropdown = (props) => {
     const [showOption, setShowOption] = useState(false);
     const optionShowRef = useRef(null);
     const { data, setVAlueOnClick, setSelectOption, selectOption } = props;
-    console.log(data, 'test');
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
         if (selectOption.name === '' || selectOption.key === '') {
