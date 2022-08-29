@@ -854,10 +854,10 @@ const Bulletin = (props: Props) => {
     }, [addedHazardFields]);
 
     const handleNextBtn = () => {
-        // if (!filterDateType) {
-        //     setFilterDataTypeError(true);
-        //     return null;
-        // }
+        if (!filterDateType) {
+            setFilterDataTypeError(true);
+            return null;
+        }
 
         if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
