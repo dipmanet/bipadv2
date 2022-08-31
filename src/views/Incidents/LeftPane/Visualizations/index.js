@@ -120,7 +120,6 @@ export default class Visualizations extends React.PureComponent {
             incidentList,
             hazardTypes,
         } = this.props;
-
         const severitySummary = this.getSeveritySummary(incidentList);
         const hazardSummary = this.getHazardSummary(incidentList);
         const lifeLossSummary = this.getLifeLossSummary(incidentList);

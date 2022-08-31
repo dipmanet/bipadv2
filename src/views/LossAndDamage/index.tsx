@@ -362,7 +362,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regions,
             filters,
         } = this.props;
-        console.log(hazardFilter, regionFilter, 'filters');
 
         const {
             // startDate,
@@ -411,7 +410,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         } else {
             ({ startDate, endDate } = filters.dataDateRange);
         }
-
+        const hazardSummary = this.getHazardsCount(filteredData, hazardTypes);
         return (
             <>
                 <Loading pending={pending} />
@@ -574,7 +573,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 />
                                 <HazardWise
                                     selectOption={selectOption}
-                                    data={filteredData}
+                                    data={hazardSummary}
                                 />
                             </div>
 
