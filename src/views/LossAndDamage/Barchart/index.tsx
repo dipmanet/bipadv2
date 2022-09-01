@@ -47,7 +47,14 @@ const BarChartVisual = (props) => {
         <div className={styles.wrapper}>
 
             <div className={styles.firstDiv}>
-                <p className={styles.text}>{`${regionRadio}wise distribution`}</p>
+                <p className={styles.text}>
+                    {
+                        regionRadio === 'district' || regionRadio === 'municipality'
+                            ? `${regionRadio}wise distribution (Top 10)`
+                            : `${regionRadio}wise distribution`
+                    }
+
+                </p>
                 <Button
                     title="Download Chart"
                     className={styles.downloadButton}
@@ -67,7 +74,6 @@ const BarChartVisual = (props) => {
                                 margin={{
                                     top: 5,
                                     bottom: 45,
-                                    right: 20,
                                 }}
                                 barSize={20}
                             >

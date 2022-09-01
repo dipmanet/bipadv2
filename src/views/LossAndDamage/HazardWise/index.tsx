@@ -231,10 +231,10 @@ const HazardWise = (props) => {
             </div>
 
             {hazardWiseData.length > 0 && (
-                <ResponsiveContainer height={400}>
+                <ResponsiveContainer height={300}>
                     <Treemap
                         width={400}
-                        height={200}
+                        height={300}
                         data={hazardWiseData}
                         dataKey="value"
                         stroke="#FFFFFF"
@@ -245,7 +245,7 @@ const HazardWise = (props) => {
                 </ResponsiveContainer>
             )}
 
-            <p className={styles.hazardText}>
+            <p className={styles.hazardText} style={{ marginTop: '45px' }}>
                 Data source : nepal police,drr portal
             </p>
         </div>

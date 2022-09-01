@@ -44,14 +44,14 @@ const AreaChartVisual = (props) => {
             <div className={styles.areaChart}>
                 {
                     chartData && (
-                        <ResponsiveContainer width="100%" height={200}>
+                        <ResponsiveContainer width="100%" height={300}>
                             <AreaChart
                                 width={500}
                                 height={200}
                                 data={chartData}
                                 margin={{
                                     top: 5,
-                                    bottom: 20,
+                                    bottom: 45,
                                 }}
                             >
                                 <defs>
