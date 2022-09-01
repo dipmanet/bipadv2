@@ -315,6 +315,7 @@ const Bulletin = (props: Props) => {
     const [covidQuaratine, setCovidQurantine] = useState([]);
     const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
     const [initialAddedHazardFetch, setInitialAddedHazardFetch] = useState(false);
+    const [filterSelected, setFilterSelected] = useState(false);
     covidNationalInfo.setDefaultParams({ setCovidNational, dateAltTo });
     covidQuarantine.setDefaultParams({ setCovidQurantine, setLoading });
     sitRepQuery.setDefaultParams({ setSitRep });
@@ -385,6 +386,7 @@ const Bulletin = (props: Props) => {
     const incidentFetchFunction = () => {
         setIncidentFetchCondition(true);
         setInitialAddedHazardFetch(!initialAddedHazardFetch);
+        setFilterSelected(true);
     };
     useEffect(() => {
         let today; let
@@ -695,6 +697,10 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         const addedHazardFieldCollection = Object.values(addedHazardFields);
+        const totalDeath = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
+        const totalMissing = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
+        const totalInjured = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
+        const totalIncident = addedHazardFieldCollection.length;
         if (addedHazardFieldCollection.length) {
             const p1Data = addedHazardFieldCollection.filter(i => i.provinceId === 1);
             const p1DataDeath = p1Data.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
@@ -732,10 +738,6 @@ const Bulletin = (props: Props) => {
             const sudurPaschimProvInjured = sudurPaschimProv.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
 
 
-            const totalDeath = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.deaths, 0);
-            const totalMissing = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.missing, 0);
-            const totalInjured = addedHazardFieldCollection.reduce((previousValue, currentValue) => previousValue + currentValue.injured, 0);
-            const totalIncident = addedHazardFieldCollection.length;
             const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
             const provincialLevelData = {
                 bagmati: {
@@ -782,10 +784,12 @@ const Bulletin = (props: Props) => {
 
             };
             setPeopleLoss(provincialLevelData);
-            const totalIncidentUpdated = totalIncident + numberOfIncidents;
-            const totalDeathUpdated = totalDeath + numberOfDeath;
-            const totalMissingUpdated = totalMissing + numberOfMissing;
-            const totalInjuredUpdated = totalInjured + numberOfInjured;
+            const totalIncidentUpdated = filterSelected ? totalIncident + numberOfIncidents : numberOfIncidents;
+            const totalDeathUpdated = filterSelected ? totalDeath + numberOfDeath : numberOfDeath;
+            const totalMissingUpdated = filterSelected ? totalMissing + numberOfMissing : numberOfMissing;
+            const totalInjuredUpdated = filterSelected ? totalInjured + numberOfInjured : numberOfInjured;
+            console.log('totalDeath', totalDeath);
+            console.log('numberOfDeath', numberOfDeath);
             setIncidentData({
                 ...incidentData,
                 numberOfDeath: totalDeathUpdated,
@@ -794,7 +798,10 @@ const Bulletin = (props: Props) => {
                 numberOfMissing: totalMissingUpdated,
             });
         } else {
+            console.log('This is final design');
             const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
+            console.log('This is final value', tempIncidentData);
+
             const provincialLevelData = {
                 bagmati: {
                     death: tempPeopleLossData.bagmati.death,
@@ -840,10 +847,11 @@ const Bulletin = (props: Props) => {
 
             };
             setPeopleLoss(provincialLevelData);
-            const totalIncidentUpdated = numberOfIncidents;
-            const totalDeathUpdated = numberOfDeath;
-            const totalMissingUpdated = numberOfMissing;
-            const totalInjuredUpdated = numberOfInjured;
+
+            const totalIncidentUpdated = !filterSelected && numberOfIncidents > 0 ? numberOfIncidents - 1 : numberOfIncidents;
+            const totalDeathUpdated = !filterSelected ? numberOfDeath - totalDeath : numberOfDeath;
+            const totalMissingUpdated = !filterSelected ? numberOfMissing - totalMissing : numberOfMissing;
+            const totalInjuredUpdated = !filterSelected ? numberOfInjured - totalInjured : numberOfInjured;
             setIncidentData({
                 ...incidentData,
                 numberOfDeath: totalDeathUpdated,
@@ -852,7 +860,7 @@ const Bulletin = (props: Props) => {
                 numberOfMissing: totalMissingUpdated,
             });
         }
-    }, [addedHazardFields, initialAddedHazardFetch]);
+    }, [addedHazardFields, initialAddedHazardFetch, filterSelected]);
 
     const handleNextBtn = () => {
         if (!filterDateType) {
