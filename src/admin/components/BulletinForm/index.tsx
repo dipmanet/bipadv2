@@ -314,7 +314,7 @@ const Bulletin = (props: Props) => {
     const [covidNational, setCovidNational] = useState([]);
     const [covidQuaratine, setCovidQurantine] = useState([]);
     const [isFeedbackDataUpdated, setIsFeedbackDataUpdated] = useState(false);
-
+    const [initialAddedHazardFetch, setInitialAddedHazardFetch] = useState(false);
     covidNationalInfo.setDefaultParams({ setCovidNational, dateAltTo });
     covidQuarantine.setDefaultParams({ setCovidQurantine, setLoading });
     sitRepQuery.setDefaultParams({ setSitRep });
@@ -384,6 +384,7 @@ const Bulletin = (props: Props) => {
     }, [addedHazardsNe, incidentFetchCondition, feedback, addedHazards]);
     const incidentFetchFunction = () => {
         setIncidentFetchCondition(true);
+        setInitialAddedHazardFetch(!initialAddedHazardFetch);
     };
     useEffect(() => {
         let today; let
@@ -459,7 +460,7 @@ const Bulletin = (props: Props) => {
             // setFilterDateType(bulletinEditData.filterBy);
             setFilterDateType('');
             setSitRep(bulletinEditData.sitrep);
-            setIncidentData(bulletinEditData.incidentSummary);
+            // setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);
             setgenderWiseLoss(bulletinEditData.genderWiseLoss);
             setcovid24hrsStat(bulletinEditData.covidTwentyfourHrsStat);
@@ -851,7 +852,7 @@ const Bulletin = (props: Props) => {
                 numberOfMissing: totalMissingUpdated,
             });
         }
-    }, [addedHazardFields]);
+    }, [addedHazardFields, initialAddedHazardFetch]);
 
     const handleNextBtn = () => {
         if (!filterDateType) {
