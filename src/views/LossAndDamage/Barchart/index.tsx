@@ -61,7 +61,7 @@ const BarChartVisual = (props) => {
                 {
                     regionWiseBarChartData
                     && (
-                        <ResponsiveContainer width="100%" height={250}>
+                        <ResponsiveContainer width="100%" height={300}>
                             <BarChart
                                 data={regionWiseBarChartData}
                                 margin={{
