@@ -35,7 +35,7 @@ interface OwnProps {
     className?: string;
     realTimeSourceList: Source[];
     otherSourceList: Source[];
-    language: { language: 'en' | 'np'};
+    language: { language: 'en' | 'np' };
 }
 
 interface PropsFromAppState {
@@ -108,6 +108,10 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
             language: { language },
         } = this.props;
 
+
+        console.log('faramValues', faramValues);
+
+
         return (
             <Faram
                 className={_cs(className, styles.filter)}
@@ -128,7 +132,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                                 keySelector={sourceKeySelector}
                                 labelSelector={(e: Source) => sourceLabelSelector(e, language)}
                                 showHintAndError={false}
-                                // autoFocus
+                            // autoFocus
                             />
                         )
                     }

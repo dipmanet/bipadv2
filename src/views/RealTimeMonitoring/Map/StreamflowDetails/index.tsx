@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { _cs, doesObjectHaveNoData } from '@togglecorp/fujs';
+import { doesObjectHaveNoData, _cs } from '@togglecorp/fujs';
+import PlotlyComponent from 'react-plotly.js';
+import { Table } from 'semantic-ui-react';
+
 import {
     ResponsiveContainer,
     ComposedChart,
@@ -23,9 +26,6 @@ import {
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
-import { saveChart } from '#utils/common';
-
-import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import DangerButton from '#rsca/Button/DangerButton';
@@ -36,6 +36,8 @@ import { KeyValue } from '#types';
 import SummaryItem from '#components/SummaryItem';
 
 import styles from './styles.scss';
+import { filterDataByReturnPeriod } from '#views/RealTimeMonitoring/utils';
+import Button from '#rsca/Button';
 
 interface OwnProps {
     handleModalClose: () => void;
@@ -84,10 +86,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 type Props = NewProps<OwnProps, Params>
 const keySelector = (d: KeyValue) => d.key;
 class StreamflowDetails extends React.PureComponent<Props> {
-    private handleSaveClick = () => {
-        saveChart('streamflowChart', 'streamflow');
-    }
-
     private getChartData = (data: FlowData[] = []) => (
         data.map((d) => {
             const { date, values } = d;
@@ -136,8 +134,133 @@ class StreamflowDetails extends React.PureComponent<Props> {
         const chartData = this.getChartData((streamflowData[0] || {}).data);
         const returnPeriod: KeyValue[] = this.getReturnPeriod(
             (streamflowData[0] || {}).returnPeriod,
-        );
+        ).sort((val1, val2) => val1.value - val2.value);
+
         const pending = isAnyRequestPending(requests);
+
+        const minDate = Math.min(...chartData.map(meanData => meanData.date));
+        const maxDate = Math.max(...chartData.map(meanData => meanData.date));
+
+        console.log('returnPeriod', returnPeriod);
+
+        const data = [
+            {
+                type: 'scatter', // all "bar" chart attributes: #bar
+                x: chartData.map(meanData => new Date(meanData.date)), // more about "x": #bar-x
+                y: chartData.map(meanData => meanData.mean), // #bar-y
+                name: 'Mean', // #bar-name
+                fill: 'tonexty',
+                line: {
+                    color: 'blue',
+                    width: 2,
+                },
+            },
+            {
+                type: 'scatter', // all "bar" chart attributes: #bar
+                x: chartData.map(meanData => new Date(meanData.date)), // more about "x": #bar-x
+                y: chartData.map(meanData => meanData.max), // #bar-y
+                name: 'Max',
+                fill: 'tonexty',
+                line: {
+                    color: 'rgb(152, 251, 152)',
+                    width: 0,
+                },
+
+            },
+            {
+                type: 'scatter', // all "scatter" attributes: https://plot.ly/javascript/reference/#scatter
+                x: chartData.map(meanData => new Date(meanData.date)), // more about "x": #scatter-x
+                y: chartData.map(meanData => meanData.min), // #scatter-y
+                name: 'Min',
+                fill: 'tonexty',
+                line: {
+                    color: 'rgb(152, 251, 152)',
+                    width: 1,
+                },
+            },
+
+            {
+                name: 'HRES',
+                x: chartData.map(meanData => new Date(meanData.date)),
+                y: chartData.map(meanData => meanData.HRES),
+                type: 'scatter',
+                line: {
+                    color: 'black',
+                    width: 2,
+                },
+            },
+        ];
+        const layout1 = {
+            title: 'Forecast at Date (Time Zone: UTC) ',
+            autosize: true,
+            height: 700,
+            shapes: [
+                {
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'y',
+                    x0: new Date(minDate),
+                    y0: filterDataByReturnPeriod(returnPeriod, '50years'),
+                    x1: new Date(maxDate),
+                    y1: filterDataByReturnPeriod(returnPeriod, 'max'),
+                    line: {
+                        width: 0,
+                    },
+                    fillcolor: 'rgba(128, 0, 128, 0.4)',
+                },
+                {
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'y',
+                    x0: new Date(minDate),
+                    y0: filterDataByReturnPeriod(returnPeriod, '20years'),
+                    x1: new Date(maxDate),
+                    y1: filterDataByReturnPeriod(returnPeriod, '50years'),
+                    line: {
+                        width: 0,
+                    },
+                    fillcolor: 'rgba(255, 0, 0, 0.4)',
+                },
+                {
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'y',
+                    x0: new Date(minDate),
+                    y0: filterDataByReturnPeriod(returnPeriod, '10years'),
+                    x1: new Date(maxDate),
+                    y1: filterDataByReturnPeriod(returnPeriod, '20years'),
+                    line: {
+                        width: 0,
+                    },
+                    fillcolor: 'rgba(255, 149, 6, 0.4)',
+                },
+                {
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'y',
+                    x0: new Date(minDate),
+                    y0: filterDataByReturnPeriod(returnPeriod, '5years'),
+                    x1: new Date(maxDate),
+                    y1: filterDataByReturnPeriod(returnPeriod, '10years'),
+                    line: {
+                        width: 0,
+                    },
+                    fillcolor: 'rgba(255, 219,88, 0.4)',
+                },
+            ],
+            xaxis: {
+                title: 'Dates',
+            },
+            yaxis: {
+                title: 'Streamflow (m3/s)',
+                range: [0, filterDataByReturnPeriod(returnPeriod, 'max')],
+            },
+        };
+
+        const config = {
+            showLink: false,
+            displayModeBar: true,
+        };
         return (
             <Translation>
                 {

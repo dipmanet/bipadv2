@@ -1119,16 +1119,37 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ toggleAnimationMapDownloadButton: boolean });
     }
 
-    private handleModalLanguage = () => {
-        console.log('working from multiplexer');
+    private clickHandler = (data) => {
+        const { activeRouteDetails } = this.context;
+        this.setState({ mapDataOnClick: data });
+        this.setState({ tooltipClicked: true });
+        this.setState({
+            tooltipLatlng: data.lngLat,
+        });
+    }
 
-        // const RequiredRoutes = [
-        //     'Situation Report', 'Relief', 'Reported incidents',
-        //     'Report an incident', 'Feedback & Support', 'About Us', 'Login'];
+    private closeTooltip = (data) => {
+        this.setState({ tooltipLatlng: data });
+    }
 
-        // if (RequiredRoutes.includes(identity)) {
-        //     console.log(identity, 'included');
-        // }
+    private handleLandslidePolygonImageMap = (data) => {
+        this.setState({
+            landslidePolygonImagemap: data,
+        });
+    }
+
+    private handlelandslidePolygonChoroplethMapData = (data) => {
+        this.setState({
+            landslidePolygonChoroplethMapData: data,
+        });
+    }
+
+    private setClimateChangeSelectedDistrict = (data) => {
+        const { id, properties: { title } } = data;
+
+        this.setState({
+            climateChangeSelectedDistrict: { id, title },
+        });
     }
 
     public render() {
@@ -1515,6 +1536,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     extraContentContainerClassName={
                                                         filterContentContainerClassName
                                                     }
+                                                    activeRouteDetails={activeRouteDetails}
                                                 />
                                             )}
                                         </aside>

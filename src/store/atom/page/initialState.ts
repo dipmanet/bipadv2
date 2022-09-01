@@ -22,6 +22,10 @@ const state: PageState = {
     },
 
     filters: {
+        rainBasin: '',
+        rainStation: '',
+        riverBasin: '',
+        riverStation: '',
         region: {},
         hazard: [],
         dataDateRange: {

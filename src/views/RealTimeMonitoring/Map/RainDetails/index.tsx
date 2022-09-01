@@ -1,3 +1,6 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import memoize from 'memoize-one';
 import {
@@ -39,7 +42,16 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import { groupList } from '#utils/common';
 
+import {
+    parsePeriod, getChartData,
+    arraySorter, isEqualObject, parseInterval,
+} from '#views/DataArchive/Modals/Rainwatch/utils';
+import TableView from '#views/DataArchive/Modals/Rainwatch/TableView';
+
+import Graph from '#views/DataArchive/Modals/Rainwatch/Graph';
+import PeriodSelector from '#views/DataArchive/Modals/Rainwatch/Filters/PeriodSelector';
 import styles from './styles.scss';
 
 interface Params { }
@@ -87,22 +99,86 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
         url: '/rain/',
         method: methods.GET,
-        query: ({ props: { title } }) => ({
-            historical: 'true',
-            format: 'json',
-            title,
-        }),
-        onMount: true,
+        // query: ({ props: { title } }) => ({
+        //     historical: 'true',
+        //     format: 'json',
+        //     title,
+        // }),
+        query: ({ params, props: { title } }) => {
+            if (!params || !params.dataDateRange) {
+                return undefined;
+            }
+            const { startDate, endDate } = params.dataDateRange;
+
+            let measuredOnGt;
+            let measuredOnLt;
+            if (params.isHourly === 2) {
+                measuredOnGt = `${startDate}T01:00:00+05:45`;
+                // eslint-disable-next-line prefer-const
+                const [year, month, day] = endDate.split('-');
+                // eslint-disable-next-line radix
+                const day1 = parseInt(day) + 1;
+                // const date = new Date(`${endDate}Z`);
+                measuredOnLt = `${year}-${month}-${day1}T01:00:00+05:45`;
+            } else {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                measuredOnGt = `${startDate}T00:00:00+05:45`;
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                measuredOnLt = `${endDate}T23:59:59+05:45`;
+            }
+
+            return {
+                title,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                is_hourly: params.isHourly,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                is_daily: params.isDaily,
+
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                measured_on__gt: measuredOnGt,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                measured_on__lt: measuredOnLt,
+
+                fields: [
+                    'id',
+                    'created_on',
+                    'measured_on',
+                    'title',
+                    'image',
+                    'basin',
+                    'point',
+                    'averages',
+                    'status',
+                    'station',
+                ],
+                limit: -1,
+            };
+        },
+        onMount: false,
         onPropsChanged: ['title'],
     },
 };
 
 const emptyArray: any[] = [];
 
-class RainDetails extends React.PureComponent<Props> {
+class RainDetails extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
+        this.state = {
+            filterValues: {
+                dataDateRange: {
+                    startDate: new Date(new Date().setDate(new Date()
+                        .getDate() - 3)).toJSON().slice(0, 10).replace(/-/g, '-'),
+                    endDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-'),
+                },
+                period: { periodCode: 'hourly' },
+            },
+            riverDetails: [],
+            filterwiseChartData: [],
+            intervalCode: '',
+            isInitial: true,
+        };
         const { language } = this.props;
 
         this.latestWaterLevelHeader = [
@@ -167,6 +243,78 @@ class RainDetails extends React.PureComponent<Props> {
                 },
             },
         ];
+    }
+
+    public componentDidMount() {
+        const { requests: {
+            detailRequest,
+        } } = this.props;
+        const { filterValues } = this.state;
+        const { dataDateRange } = filterValues;
+        const isDaily = true;
+        detailRequest.do({ dataDateRange, isDaily });
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        const initialFaramValue = {
+            dataDateRange: {
+                startDate: '',
+                endDate: '',
+            },
+            period: {},
+        };
+
+        if (prevState.filterValues !== this.state.filterValues
+            || prevState.riverDetails !== this.state.riverDetails) {
+            const { riverDetails } = this.state;
+            const rainDataWithParameter = parseInterval(riverDetails);
+            const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
+
+            const hourWiseGroup = groupList(
+                rainDataWithPeriod.filter(r => r.dateWithHour),
+                rain => rain.dateWithHour,
+            );
+
+            const dailyWiseGroup = groupList(
+                rainDataWithPeriod.filter(r => r.dateOnly),
+                rain => rain.dateOnly,
+            );
+
+            const monthlyWiseGroup = groupList(
+                rainDataWithPeriod.filter(r => r.dateOnly),
+                rain => rain.dateOnly,
+            );
+
+            let filterWiseChartData;
+
+            const {
+                period: { periodCode },
+            } = this.state.filterValues;
+
+            if (periodCode === 'hourly') {
+                filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+                this.setState({ filterWiseChartData });
+                this.setState({ intervalCode: 'oneHour' });
+            }
+            if (periodCode === 'daily') {
+                filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+                this.setState({ filterWiseChartData });
+                this.setState({ intervalCode: 'twentyFourHour' });
+            }
+            if (periodCode === 'monthly') {
+                filterWiseChartData = getChartData(monthlyWiseGroup, 'monthName');
+                this.setState({ filterWiseChartData });
+                this.setState({ intervalCode: 'twentyFourHour' });
+            }
+
+            if (filterWiseChartData) {
+                filterWiseChartData.sort(arraySorter);
+                this.setState({ filterWiseChartData: filterWiseChartData.sort(arraySorter) });
+            }
+            // eslint-disable-next-line react/destructuring-assignment
+            const isInitialCheck = isEqualObject(initialFaramValue, this.state.filterValues);
+            this.setState({ isInitial: isInitialCheck });
+        }
     }
 
     private latestWaterLevelHeader: Header<WaterLevelAverage>[];
@@ -246,6 +394,20 @@ class RainDetails extends React.PureComponent<Props> {
         return rainHours;
     })
 
+    private handlePeriodChange = (periodName: string) => {
+        this.setState(prevState => ({
+            ...prevState,
+            filterValues: {
+                dataDateRange: {
+                    startDate: new Date(new Date().setDate(new Date()
+                        .getDate() - 3)).toJSON().slice(0, 10).replace(/-/g, '-'),
+                    endDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-'),
+                },
+                period: { periodCode: periodName ? periodName.periodCode : 'hourly' },
+            },
+        }));
+    };
+
     private getHourlyChartData = memoize((rainDetails: RealTimeRainDetails[]) => {
         interface ChartData {
             createdOn: number[];
@@ -298,11 +460,33 @@ class RainDetails extends React.PureComponent<Props> {
                     pending,
                 },
             },
-            title,
+            title = '',
             handleModalClose,
+        } = this.props;
+
+        const { filterValues,
+            filterWiseChartData,
+            intervalCode,
+            isInitial } = this.state;
+
+
+        let riverDetails: RealTimeRainDetails[] = [];
+        if (!pending && response) {
+            const {
+                results,
+            } = response as MultiResponse<RealTimeRainDetails>;
+            riverDetails = results;
+            this.setState({ riverDetails });
+        }
+
+        const {
             className,
             language,
         } = this.props;
+
+        const {
+            period: { periodCode },
+        } = this.state.filterValues;
 
         let rainDetails: RealTimeRainDetails[] = emptyArray;
         if (!pending && response) {

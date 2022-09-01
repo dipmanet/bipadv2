@@ -6,6 +6,7 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 
+import { compose, Dispatch } from 'redux';
 import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
@@ -18,7 +19,7 @@ import {
     RealTimeRain,
 } from '#store/atom/page/types';
 
-import { languageSelector } from '#selectors';
+import { languageSelector, realTimeDurationSelector } from '#selectors';
 
 import RainWatch from '../RainWatch';
 import { TitleContext } from '#components/TitleContext';
@@ -27,10 +28,10 @@ import { AppState } from '#store/types';
 import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
 
-const mapStateToProps = (state: AppState) => ({
-    language: languageSelector(state),
-});
 
+import {
+    setRealTimeDurationAction,
+} from '#actionCreators';
 
 interface Props {
     realTimeRain: RealTimeRain[];
@@ -45,6 +46,23 @@ interface KeyValue {
     key: number;
     label: string;
 }
+interface PropsFromDispatch {
+    setRealTimeDuration: typeof setRealTimeDurationAction;
+}
+
+interface PropsFromState {
+    duration: PageType.Duration;
+}
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    language: languageSelector(state),
+    duration: realTimeDurationSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
+    setRealTimeDuration: params => dispatch(setRealTimeDurationAction(params)),
+
+});
 
 const durationOptions = language => (
     [
@@ -103,13 +121,13 @@ const ModalButton = modalize(Button);
 const rainWatchKeySelector = (station: RealTimeRain) => station.id;
 
 class MiniRainWatch extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
+    // public constructor(props: Props) {
+    //     super(props);
 
-        this.state = {
-            duration: 24,
-        };
-    }
+    //     // this.state = {
+    //     //     duration: 24,
+    //     // };
+    // }
 
     public static contextType = TitleContext;
 
@@ -227,9 +245,10 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
     ]);
 
     private handleDurationSelect = (duration: number) => {
-        this.setState({
-            duration,
-        });
+        // this.setState({
+        //     duration,
+        // });
+        this.props.setRealTimeDuration({ duration });
     }
 
     private getClassName = (row: RealTimeRain) => {
@@ -251,18 +270,22 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             className,
             realTimeRain,
             onHazardHover,
+            setRealTimeDuration,
+            duration,
             language: { language },
+
         } = this.props;
 
-        const { duration } = this.state;
+        // const { duration } = this.props;
         const rainHeader: Header<RealTimeRain>[] = this.getRainHeader(duration, language);
         const { setRealtime } = this.context;
 
         if (setRealtime) {
             setRealtime((prevProfile: number) => {
-                const { duration: selectedHour } = this.state;
-                if (prevProfile !== selectedHour) {
-                    return selectedHour;
+                setRealTimeDuration({ duration });
+                // const { duration: selectedHour } = this.state;
+                if (prevProfile !== duration) {
+                    return duration;
                 }
                 return prevProfile;
             });
@@ -301,7 +324,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                         data={realTimeRain}
                         headers={rainHeader}
                         keySelector={rainWatchKeySelector}
-                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHover={(id: number) => onHazardHover(id, 'real-time-rain-points')}
                         onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
@@ -311,4 +334,8 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps)(MiniRainWatch);
+// export default MiniRainWatch;
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+)(MiniRainWatch);

@@ -76,7 +76,7 @@
 
                 .hourly-water-level {
                     display: flex;
-                    flex-basis: 50%;
+                    flex-basis: 45%;
                     flex-direction: column;
                     flex-shrink: 0;
                     overflow: auto;
@@ -99,9 +99,11 @@
 
                 .water-level-chart-container {
                     display: flex;
-                    flex-basis: 50%;
+                    flex-basis: 45%;
                     flex-direction: column;
                     flex-shrink: 0;
+                    min-height: 350px;
+                    overflow: scroll;
 
                     .river-chart {
                         display: flex;
@@ -119,6 +121,9 @@
                             padding: var(--spacing-extra-small) 0;
                         }
                     }
+                }
+                .selectComponent{
+                    margin: 10px;
                 }
             }
         }

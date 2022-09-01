@@ -1,8 +1,5 @@
 import React from 'react';
-
-
 import Page from '#components/Page';
-
 import LeftPane from './LeftPane';
 import RiskInfoMap from './Map';
 import ActiveLayers from './ActiveLayers';

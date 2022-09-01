@@ -145,7 +145,7 @@ class MiniEarthquake extends React.PureComponent<Props> {
                         data={realTimeEarthquake}
                         headers={earthquakeHeader}
                         keySelector={earthquakeKeySelector}
-                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHover={(id: number) => onHazardHover(id, 'real-time-earthquake-points')}
                         onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />

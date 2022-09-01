@@ -505,6 +505,41 @@ const setRiskInfoClimateChangeTitle = (
 
 /* Risk Info Submodules ends */
 
+// DataArchive
+/**
+ * @param titleContext Context for Titles
+ */
+const setDataArchiveTitle = (
+    titleContext: TitleContextProps,
+) => {
+    const { dataArchive, setSource } = titleContext;
+    if (dataArchive) {
+        const { mainModule, location, startDate, endDate } = dataArchive;
+
+        // Earthquake
+        if (mainModule === 'Earthquake') {
+            defineSource('Department of Mines and Geology', setSource);
+            return `Historical Earthquake Data (${startDate} to ${endDate}), ${location}`;
+        }
+        // Pollution
+        if (mainModule === 'Pollution') {
+            defineSource('Ministry of Forests and Environment', setSource);
+            return `Air Quality Index (AQI), ${location || 'Nepal'}`;
+        }
+        // Rain
+        if (mainModule === 'Rain') {
+            defineSource('Department of Hydrology and Meteorology', setSource);
+            return `Rain Watch, ${location || 'Nepal'}`;
+        }
+        // River
+        if (mainModule === 'River') {
+            defineSource('Department of Hydrology and Meteorology', setSource);
+            return `River Watch, ${location || 'Nepal'}`;
+        }
+    }
+    return '';
+};
+
 /**
  * @param pageTitle Default Page title
  * @param pageContext Context for the page
@@ -606,6 +641,10 @@ export const getRouteWiseTitleAndSource = (
             if (riskInfoSubModule === 'climate-change') {
                 title = setRiskInfoClimateChangeTitle(activeLayer, regionName, setSource);
             }
+        }
+
+        if (routeName === 'dataArchive') {
+            title = setDataArchiveTitle(titleContext);
         }
         const tempSource = calculatedSourceTitle;
         calculatedSourceTitle = '';

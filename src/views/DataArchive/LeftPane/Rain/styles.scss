@@ -1,0 +1,25 @@
+.rain {
+    .header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+    .note {
+        padding: var(--spacing-medium);
+        background-color: var(--color-foreground);
+    }
+    
+}
+.message {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.basin {
+    padding: var(--spacing-medium);
+    background-color: var(--color-foreground);
+    color: #4881B1;
+    font-weight: bold;
+    // border: 1px solid red;
+}

@@ -62,6 +62,14 @@ const propTypes = {
     showDistrict: PropTypes.bool,
     showMunicipality: PropTypes.bool,
     showWard: PropTypes.bool,
+
+    // For props from components
+    regionFromComp: PropTypes.number,
+    provinceFromComp: PropTypes.number,
+    districtFromComp: PropTypes.number,
+    municipalityFromComp: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    boundingsFromComp: PropTypes.array,
 };
 
 const defaultProps = {
@@ -76,6 +84,11 @@ const defaultProps = {
     showDistrict: undefined,
     showMunicipality: undefined,
     showWard: undefined,
+    regionFromComp: undefined,
+    provinceFromComp: undefined,
+    districtFromComp: undefined,
+    municipalityFromComp: undefined,
+    boundingsFromComp: undefined,
 };
 
 const mapStateToProps = (state, props) => ({
@@ -121,25 +134,35 @@ class CommonMap extends React.PureComponent {
     render() {
         const {
             boundsPadding,
-            regionLevel,
-            bounds,
+            regionLevel: selfRegionLevel,
+            bounds: selfBounds,
             // provinces,
             districts,
             municipalities,
             wards,
 
-            selectedProvinceId: provinceId,
-            selectedDistrictId: districtId,
-            selectedMunicipalityId: municipalityId,
+            selectedProvinceId: selfProvinceId,
+            selectedDistrictId: selfDistrictId,
+            selectedMunicipalityId: selfMunicipalityId,
             sourceKey,
 
             showProvince: showProvinceFromProps,
             showDistrict: showDistrictFromProps,
             showMunicipality: showMunicipalityFromProps,
             showWard: showWardFromProps,
+            regionFromComp,
+            provinceFromComp,
+            districtFromComp,
+            municipalityFromComp,
+            boundingsFromComp,
             children,
             language: { language },
         } = this.props;
+        const regionLevel = regionFromComp || selfRegionLevel;
+        const provinceId = provinceFromComp || selfProvinceId;
+        const districtId = districtFromComp || selfDistrictId;
+        const municipalityId = municipalityFromComp || selfMunicipalityId;
+        const bounds = boundingsFromComp || selfBounds;
 
         const isForced = showProvinceFromProps
             || showDistrictFromProps

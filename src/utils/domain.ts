@@ -537,11 +537,13 @@ export const earthquakeToGeojson = (realTimeEarthquakeList: RealTimeEarthquake[]
             .map(earthquake => ({
                 id: earthquake.id,
                 type: 'Feature',
+                source: 'earthquake',
                 geometry: {
                     ...earthquake.point,
                 },
                 properties: {
                     earthquakeId: earthquake.id,
+                    source: 'real-time-earthquake-points',
                     address: earthquake.address,
                     description: earthquake.description,
                     eventOn: earthquake.eventOn,
@@ -561,12 +563,14 @@ export const riverToGeojson = (realTimeRiverList: RealTimeRiver[]) => {
             .map(river => ({
                 id: river.id,
                 type: 'Feature',
+                source: 'river',
                 geometry: {
                     ...river.point,
                 },
                 properties: {
                     riverId: river.id,
                     title: river.title,
+                    source: 'real-time-river-points',
                     description: river.description,
                     basin: river.basin,
                     status: river.status,
@@ -586,11 +590,13 @@ export const rainToGeojson = (realTimeRainList: RealTimeRain[]) => {
             .map(rain => ({
                 id: rain.id,
                 type: 'Feature',
+                source: 'rain',
                 geometry: {
                     ...rain.point,
                 },
                 properties: {
                     rainId: rain.id,
+                    source: 'real-time-rain-points',
                     title: rain.title,
                     description: rain.description,
                     basin: rain.basin,
@@ -614,11 +620,13 @@ export const fireToGeojson = (realTimeFireList: RealTimeFire[]) => {
             .map(fire => ({
                 id: fire.id,
                 type: 'Feature',
+                source: 'fire',
                 geometry: {
                     ...fire.point,
                 },
                 properties: {
                     fireId: fire.id,
+                    source: 'real-time-fire-points',
                     brightness: fire.brightness,
                     confidence: fire.confidence,
                     eventOn: fire.eventOn,
@@ -639,11 +647,13 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
             .map(pollution => ({
                 id: pollution.id,
                 type: 'Feature',
+                source: 'pollution',
                 geometry: {
                     ...pollution.point,
                 },
                 properties: {
                     ...pollution,
+                    source: 'real-time-pollution-points',
                     aqi: Math.round(pollution.aqi),
                 },
             })),

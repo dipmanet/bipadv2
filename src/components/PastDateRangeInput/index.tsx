@@ -11,6 +11,7 @@ import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
 import DateInput from '#rsci/DateInput';
 import RadioInput from '#components/RadioInput';
+import Icon from '#rscg/Icon';
 import PageContext from '#components/PageContext';
 
 import {
@@ -104,6 +105,7 @@ interface Props {
     className?: string;
     onChange: (value: InputValue) => void;
     value: InputValue;
+    error?: string;
 }
 
 class PastDateRangeInput extends React.Component<Props> {
@@ -188,6 +190,7 @@ class PastDateRangeInput extends React.Component<Props> {
         const {
             className,
             value,
+            error,
             language: { language },
         } = this.props;
         const {
@@ -238,6 +241,15 @@ class PastDateRangeInput extends React.Component<Props> {
                             }
                         </Translation>
 
+                    </div>
+                )}
+                {error && (
+                    <div className={styles.error}>
+                        <Icon
+                            className={styles.infoIcon}
+                            name="info"
+                        />
+                        {error}
                     </div>
                 )}
             </div>

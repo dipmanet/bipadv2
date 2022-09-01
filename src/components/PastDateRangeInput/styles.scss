@@ -3,6 +3,16 @@
         padding: var(--spacing-medium);
         padding-bottom: 0;
     }
+    .error {
+        display: flex;
+        padding: var(--spacing-medium);
+        padding-top: 0;
+        color: var(--color-accent);
+        .info-icon {
+            font-size: var(--font-size-medium);
+            padding-right: var(--spacing-small);
+        }
+    }
 }
 
 .date-ranges {

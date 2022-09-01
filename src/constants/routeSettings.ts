@@ -77,6 +77,15 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
     },
     {
+        name: 'dataArchive',
+        title: 'Data Archive',
+        titleNep: 'डाटा संग्रह',
+        path: '/data-archive/',
+        iconName: 'clipboard',
+        load: () => import('../views/DataArchive'),
+        navbar: true,
+    },
+    {
         name: 'demography',
         title: 'Demography',
         path: '/profile/demography/',

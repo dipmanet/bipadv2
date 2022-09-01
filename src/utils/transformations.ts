@@ -164,3 +164,55 @@ export const transformDataRangeLocaleToFilter = (
         endDate ? new Date(endDate) : undefined,
     );
 };
+
+export const transformRegion = (region: {
+    adminLevel?: number;
+    geoarea?: number;
+}) => {
+    const { adminLevel, geoarea } = region;
+
+    if (adminLevel === 1) {
+        return { province: geoarea };
+    }
+    if (adminLevel === 2) {
+        return { district: geoarea };
+    }
+    if (adminLevel === 3) {
+        return { municipality: geoarea };
+    }
+    return {};
+};
+
+export const transformMagnitude = (magnitude: number[]): {
+    magnitude__gt: number | undefined;
+    magnitude__lt: number | undefined;
+} => {
+    const defaultMagnitude = {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        magnitude__gt: undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        magnitude__lt: undefined,
+    };
+    const MAX_MAG = 8;
+    if (magnitude.length === 0) {
+        return defaultMagnitude;
+    }
+
+    const min = Math.min(...magnitude);
+    const max = Math.max(...magnitude);
+
+    if (max >= MAX_MAG) {
+        return {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            magnitude__gt: min,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            magnitude__lt: undefined,
+        };
+    }
+    return {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        magnitude__lt: max + 0.9,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        magnitude__gt: min,
+    };
+};

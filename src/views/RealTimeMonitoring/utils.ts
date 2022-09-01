@@ -9,6 +9,13 @@ interface LegendItem {
     order: number;
 }
 
+interface StreamFlowDataValues {
+    key: string;
+    value: number;
+}
+
+type StreamFlowData = StreamFlowDataValues[]
+
 // river
 export const getAutoRealTimeRiverLegends = (
     dataList: PageType.RealTimeRiver[],
@@ -84,4 +91,40 @@ export const getPollutionLegends = (
     });
     const sortedPollutionLegends = pollutionLegends.sort((a, b) => (a.order > b.order ? 1 : -1));
     return sortedPollutionLegends;
+};
+
+
+export const checkStreamRiskValue = (riskScore: number) => {
+    switch (riskScore) {
+        case 1:
+            return '#2a52bd';
+        case 2:
+            return '#2a52bd';
+        case 3:
+            return '#0088dd';
+        case 4:
+            return '#ffd301';
+        case 5:
+            return '#ff8b01';
+        case 6:
+            return '#c23b21';
+        case 7:
+            return '#ff0000';
+
+        default:
+            return 'white';
+    }
+};
+
+
+export const filterDataByReturnPeriod = (data: StreamFlowData, filterKey: string) => {
+    if (data.length > 0) {
+        const filteredData = data.filter(
+            (individualData: StreamFlowDataValues) => individualData.key === filterKey,
+        );
+        if (filteredData.length > 0) {
+            return filteredData[0].value;
+        }
+    }
+    return '';
 };

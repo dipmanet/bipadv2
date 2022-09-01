@@ -4,7 +4,7 @@ import {
     FiltersElement,
     ResourceTypeKeys,
     ModelEnum,
-    KeyValue,
+    // KeyValue,
     DAEarthquakeFiltersElement,
     DAPollutionFiltersElement,
     DARainFiltersElement,
@@ -794,7 +794,7 @@ export interface PageState {
     incidentPage: IncidentPage;
     responsePage: ResponsePage;
     realTimeMonitoringPage: RealTimeMonitoringPage;
-    dataArchivePage: DataArchivePage;
+    // dataArchivePage: DataArchivePage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
     Page: DisasterProfilePage;
@@ -817,6 +817,7 @@ export interface PageState {
     epidemicsPage: EpidemicPage;
     bulletinEditData: Bulletin;
 }
+
 
 // Data Archive
 export interface Federal {
@@ -851,6 +852,70 @@ export interface DataArchiveEarthquake extends FederalLocation {
     eventOn: string;
 }
 
+// export interface DataArchivePollution extends RealTimePollution {
+//     title?: string;
+//     description?: string;
+//     elevation?: number | null;
+//     createdOn?: string;
+//     dateTime?: string;
+// }
+
+// export interface DataArchiveRain extends RealTimeRain {
+//     station: number;
+//     measuredOn?: string;
+//     stationSeriesId: number;
+//     province: number;
+//     district: number;
+//     municipality: number;
+//     ward: number;
+// }
+
+export interface DataArchiveRiver extends RealTimeRiver {
+    station: number;
+    stationSeriesId: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
+
+// export interface DataArchiveEarthquakeFilters {
+//     dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
+// }
+
+// Data Archive
+// export interface Federal {
+//     id: number;
+//     bbox: [number, number, number, number];
+//     centroid: {
+//         type: string;
+//         coordinates: [number, number];
+//     };
+//     title: string;
+//     titleEn: string;
+//     titleNe: string;
+//     code: string;
+//     order: number;
+// }
+
+// export interface FederalLocation {
+//     province?: Federal;
+//     district?: Federal;
+//     municipality?: Federal;
+// }
+
+// export interface DataArchiveEarthquake extends FederalLocation{
+//     id?: number;
+//     description?: string;
+//     point?: {
+//         type: string;
+//         coordinates: [ number, number];
+//     };
+//     magnitude: number;
+//     address: string;
+//     eventOn: string;
+// }
+
 export interface DataArchivePollution extends RealTimePollution {
     title?: string;
     description?: string;
@@ -869,19 +934,18 @@ export interface DataArchiveRain extends RealTimeRain {
     ward: number;
 }
 
-export interface DataArchiveRiver extends RealTimeRiver {
-    station: number;
-    stationSeriesId: number;
-    province: number;
-    district: number;
-    municipality: number;
-    ward: number;
-}
+// export interface DataArchiveRiver extends RealTimeRiver {
+//     station: number;
+//     stationSeriesId: number;
+//     province: number;
+//     district: number;
+//     municipality: number;
+//     ward: number;
+// }
 
 export interface DataArchiveEarthquakeFilters {
     dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
 }
-
 
 // ACTION TYPES
 
@@ -1464,6 +1528,6 @@ export type PageActionTypes = (
     SetDataArchiveRainFilters | SetDataArchiveRiverFilters |
     SetDataArchiveRainStations | SetDataArchiveRiverStations |
     SetDashboardHazardType | SetIbfPage |
-    SetDashboardHazardType | SetBulletinDataCovid
-    | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage | SetBulletinEditData
+    SetDashboardHazardType | SetBulletinDataCovid |
+    SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage | SetBulletinEditData
 );

@@ -215,7 +215,7 @@ class MiniPollution extends React.PureComponent<Props> {
                         data={realTimePollution}
                         headers={pollutionHeader}
                         keySelector={pollutionKeySelector}
-                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHover={(id: number) => onHazardHover(id, 'real-time-pollution-points')}
                         onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />

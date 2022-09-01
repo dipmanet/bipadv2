@@ -193,7 +193,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         data={realTimeRiver}
                         headers={riverWatchHeader}
                         keySelector={riverWatchKeySelector}
-                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHover={(id: number) => onHazardHover(id, 'real-time-river-points')}
                         onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />

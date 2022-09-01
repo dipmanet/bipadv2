@@ -1,0 +1,7 @@
+.basin-selector {
+    display: flex;
+    .basin-input {
+        margin: var(--spacing-small) var(--spacing-medium);
+        flex: 1;
+    }    
+}
