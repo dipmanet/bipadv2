@@ -1,15 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
-import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { lossMetrics } from '#utils/domain';
-import { nullCheck } from '../../../utils/common';
 
 const BarChartVisual = (props) => {
-    const { filter, data, valueOnclick, selectOption, regionRadio, regionWiseBarChartData } = props;
+    const { selectOption, regionRadio, regionWiseBarChartData } = props;
 
     function CustomTooltip({ payload, active, label }) {
         if (payload && active && payload.length) {
@@ -22,6 +20,27 @@ const BarChartVisual = (props) => {
         }
         return null;
     }
+
+    const CustomizedLabel = (prop) => {
+        // eslint-disable-next-line react/prop-types
+        const { x, y, payload, dy, dx } = prop;
+        return (
+            <Text
+                dy={dy}
+                dx={dx}
+                x={x}
+                y={y}
+                textAnchor="end"
+                verticalAnchor="middle"
+                fontSize={12}
+                angle={-30}
+                width={100}
+            >
+                {payload.value}
+
+            </Text>
+        );
+    };
 
     return (
         // <div className={styles.container}>
@@ -42,31 +61,33 @@ const BarChartVisual = (props) => {
                 {
                     regionWiseBarChartData
                     && (
-                        <ResponsiveContainer width="100%" height={200}>
+                        <ResponsiveContainer width="100%" height={250}>
                             <BarChart
                                 data={regionWiseBarChartData}
                                 margin={{
                                     top: 5,
-                                    bottom: 20,
+                                    bottom: 45,
                                     right: 20,
                                 }}
                                 barSize={20}
-                                barCategoryGap={0}
                             >
                                 <XAxis
+                                    dy={10}
+                                    dx={5}
                                     tickLine={false}
                                     dataKey="name"
-                                    scale="point"
-                                    padding={{ left: 25, right: 0 }}
-                                    dy={15}
-                                    angle={-30}
+                                    scale="auto"
+                                    padding={{ left: 20, right: 20 }}
+                                    interval={0}
+                                    tick={<CustomizedLabel />}
                                 />
                                 <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip
+                                    cursor={false}
                                     content={<CustomTooltip />}
                                 />
                                 <CartesianGrid stroke="#ccc" horizontal vertical={false} />
-                                <Bar dataKey="value" fill="#db6e51" />
+                                <Bar dataKey="value" fill="#db6e51" minPointSize={3} />
                             </BarChart>
                         </ResponsiveContainer>
                     )

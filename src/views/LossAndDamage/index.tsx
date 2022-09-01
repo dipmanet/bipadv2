@@ -200,7 +200,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         Null_check_estimatedLoss: false,
         selectOption: { name: '', key: '' },
         valueOnclick: { value: 'count', index: 0 },
-        regionRadio: 'province',
+        regionRadio: '',
         regionWiseBarChartData: [],
     }
 
