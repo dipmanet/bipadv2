@@ -506,7 +506,7 @@ const Bulletin = (props: Props) => {
             sitRepQuery.do();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bulletinEditData]);
+    }, [bulletinEditData, sitRep]);
 
     useEffect(() => {
         if (dateAltTo) {

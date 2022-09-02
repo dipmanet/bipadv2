@@ -566,6 +566,7 @@ const Bulletin = (props: Props) => {
                                             }
                                         </InputLabel>
                                         <Input
+                                            disabled={!filterDateType}
                                             type="number"
                                             value={peopleLossData[field][subField]}
                                             onChange={e => handlePeopleLossChange(e, field, subField)}
@@ -613,6 +614,7 @@ const Bulletin = (props: Props) => {
                                                 </InputLabel>
 
                                                 <Input
+
                                                     type="number"
                                                     className={styles.select}
                                                     value={hazardWiseLossData[field][subField]}
@@ -643,6 +645,7 @@ const Bulletin = (props: Props) => {
 
                                 </h3>
                                 <button
+                                    disabled={!filterDateType}
                                     style={{ width: '10%', marginTop: '10px' }}
                                     type="button"
                                     onClick={() => handleHazardRemoveItem(addedHazardFields[field].hazard, field)}
@@ -677,6 +680,7 @@ const Bulletin = (props: Props) => {
                                         return (
                                             <div className={styles.inputContainer}>
                                                 <StepwiseRegionSelectInput
+                                                    disabled={!filterDateType}
                                                     className={
                                                         _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                                                     faramElementName="region"
@@ -726,6 +730,7 @@ const Bulletin = (props: Props) => {
                                                     }
                                                 </InputLabel>
                                                 <Input
+                                                    disabled={!filterDateType}
                                                     type="number"
                                                     className={styles.select}
                                                     value={addedHazardFields[field][subField]}
@@ -762,6 +767,7 @@ const Bulletin = (props: Props) => {
                                 </Translation>
                             </InputLabel>
                             <Select
+                                disabled={!filterDateType}
                                 labelId="hazardLabel"
                                 id="hazardInput"
                                 value={hazard}
@@ -784,7 +790,7 @@ const Bulletin = (props: Props) => {
                             type="button"
                             onClick={handleHazardAddItem}
                             className={styles.hazardAddBtn}
-                            disabled={hazard === null}
+                            disabled={hazard === null || !filterDateType}
                         >
                             {
                                 language === 'np'
@@ -811,6 +817,7 @@ const Bulletin = (props: Props) => {
                                         : englishRef[field]}
                                 </InputLabel>
                                 <Input
+                                    disabled={!filterDateType}
                                     type="number"
                                     value={genderWiseLossData[field]}
                                     onChange={e => handlegenderWiseLoss(e, field)}
