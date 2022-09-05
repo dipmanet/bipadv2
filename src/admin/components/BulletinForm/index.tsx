@@ -788,8 +788,7 @@ const Bulletin = (props: Props) => {
             const totalDeathUpdated = filterSelected ? totalDeath + numberOfDeath : numberOfDeath;
             const totalMissingUpdated = filterSelected ? totalMissing + numberOfMissing : numberOfMissing;
             const totalInjuredUpdated = filterSelected ? totalInjured + numberOfInjured : numberOfInjured;
-            console.log('totalDeath', totalDeath);
-            console.log('numberOfDeath', numberOfDeath);
+
             setIncidentData({
                 ...incidentData,
                 numberOfDeath: totalDeathUpdated,
@@ -798,10 +797,7 @@ const Bulletin = (props: Props) => {
                 numberOfMissing: totalMissingUpdated,
             });
         } else {
-            console.log('This is final design');
             const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
-            console.log('This is final value', tempIncidentData);
-
             const provincialLevelData = {
                 bagmati: {
                     death: tempPeopleLossData.bagmati.death,
@@ -984,7 +980,7 @@ const Bulletin = (props: Props) => {
         setBulletinFeedback({ feedback: {} });
     }, []);
     useEffect(() => {
-        if (lossData && lossData.length > 0) {
+        if (lossData && (lossData.length > 0 || lossData.length === 0)) {
             const summary = calculateSummary(lossData);
             setTempIncidentData({
                 numberOfIncidents: summary.count,
