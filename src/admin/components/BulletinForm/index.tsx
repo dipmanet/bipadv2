@@ -201,7 +201,10 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         url: '/bipad-bulletin/?ordering=-sitrep&limit=1',
         method: methods.GET,
         onMount: false,
-        onSuccess: ({ response, params: { setSitRep } }) => {
+        onSuccess: ({ response, params: { setSitRep }, props }) => {
+            if (props.bulletinEditData.sitrep) {
+                return;
+            }
             setSitRep(response.results[0].sitrep + 1);
         },
     },
@@ -506,7 +509,8 @@ const Bulletin = (props: Props) => {
             sitRepQuery.do();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bulletinEditData, sitRep]);
+    }, [bulletinEditData]);
+
 
     useEffect(() => {
         if (dateAltTo) {
@@ -982,14 +986,15 @@ const Bulletin = (props: Props) => {
     useEffect(() => {
         if (lossData && (lossData.length > 0 || lossData.length === 0)) {
             const summary = calculateSummary(lossData);
+
             setTempIncidentData({
                 numberOfIncidents: summary.count,
                 numberOfDeath: summary.peopleDeathCount,
                 numberOfMissing: summary.peopleMissingCount,
                 numberOfInjured: summary.peopleInjuredCount,
-                estimatedLoss: summary.estimatedLoss,
-                roadBlock: summary.infrastructureDestroyedRoadCount,
-                cattleLoss: summary.livestockDestroyedCount,
+                estimatedLoss: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.incidentSummary.estimatedLoss : summary.estimatedLoss,
+                roadBlock: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.incidentSummary.roadBlock : summary.infrastructureDestroyedRoadCount,
+                cattleLoss: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.incidentSummary.cattleLoss : summary.livestockDestroyedCount,
             });
             const p1Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 1);
             const p2Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 2);
@@ -1037,6 +1042,7 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [lossData]);
+
     // eslint-disable-next-line consistent-return
     useEffect(() => {
         if (lossData && (lossData.length > 0 || lossData.length === 0)) {
@@ -1046,15 +1052,15 @@ const Bulletin = (props: Props) => {
                 numberOfDeath: summary.peopleDeathCount,
                 numberOfMissing: summary.peopleMissingCount,
                 numberOfInjured: summary.peopleInjuredCount,
-                estimatedLoss: summary.estimatedLoss,
-                roadBlock: summary.infrastructureDestroyedRoadCount,
-                cattleLoss: summary.livestockDestroyedCount,
+                estimatedLoss: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.incidentSummary.estimatedLoss : summary.estimatedLoss,
+                roadBlock: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.incidentSummary.roadBlock : summary.infrastructureDestroyedRoadCount,
+                cattleLoss: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.incidentSummary.cattleLoss : summary.livestockDestroyedCount,
             });
 
             setgenderWiseLoss({
-                male: summary.peopleDeathMaleCount,
-                female: summary.peopleDeathFemaleCount,
-                unknown: summary.peopleDeathOtherCount,
+                male: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.genderWiseLoss.male : summary.peopleDeathMaleCount,
+                female: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.genderWiseLoss.female : summary.peopleDeathFemaleCount,
+                unknown: Object.keys(bulletinEditData).length > 0 ? bulletinEditData.genderWiseLoss.unknown : summary.peopleDeathOtherCount,
             });
 
             const p1Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 1);
@@ -1146,7 +1152,6 @@ const Bulletin = (props: Props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData, language]);
-
 
     useEffect(() => {
         if (covidNational.length > 0) {
