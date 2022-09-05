@@ -45,23 +45,32 @@
 
 .bodyheader {
     display: flex;
-    // border: 1px solid blue;
     align-items: center;
-    justify-content: space-between;
-    width: 90%;
     height: 5vh;
+    gap: 15px;
 
     .headerContent{
         display: flex;
         align-items: center;
-        justify-content: space-between;
         cursor: pointer;
+        max-width: 10%;
+        min-width: 10%;
     .bodyHeaderItem {
         font-size: 0.75rem;
         font-weight: 600;
-        padding-right: 5px;
+        padding-right: 3px;
         text-transform: capitalize;
         color: #7599b9;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        &:hover {
+    overflow: visible;
+   white-space: normal;
+   height: auto;
+   width: max-content;
+            }     
+
     }
 
     .sort{
@@ -76,20 +85,23 @@
 .bodyContainer {
     display: flex;
     flex-direction: column;
-    // border: 1px solid blue;
-    align-items: center;
-    width: 90%;
-    height: auto;
-
     .bodyWrapper {
         display: flex;
-        width: 100%;
-        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
 
         .bodyItem {
-            width: 200px;
             font-size: 0.75rem;
             text-transform: capitalize;
+            font-weight: 500;
+            padding-right: 3px;
+            max-width: 10%;
+            min-width: 10%;
+            text-align: justify;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
         }
     }
 
@@ -107,6 +119,9 @@
     .body {
         display: flex;
         flex-direction: column;
+        overflow-anchor: none;
+        scroll-behavior: smooth;
+        width: auto;
 
 
         .table {

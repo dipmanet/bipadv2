@@ -3,6 +3,7 @@
 /* eslint-disable no-plusplus */
 import React, {} from 'react';
 import { ResponsiveContainer, Treemap } from 'recharts';
+import { Item } from 'semantic-ui-react';
 import Icon from '#resources/icons/Alert.svg';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
@@ -248,6 +249,15 @@ const HazardWise = (props) => {
             <p className={styles.hazardText} style={{ marginTop: '45px' }}>
                 Data source : nepal police,drr portal
             </p>
+            {
+                hazardWiseData.map(item => (
+                    <div style={{ display: 'flex' }}>
+                        <p>{item.name}</p>
+                        <img src={item.icon} alt="" style={{ marginTop: '5px', width: '30px', height: '30px' }} />
+                    </div>
+
+                ))
+            }
         </div>
     );
 };
