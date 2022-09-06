@@ -11,12 +11,11 @@
 
 .header{
     display: flex;
-    // border: 1px solid green;
     width: 50vw;
-    height: 12vh;
     justify-content: space-between;
     align-items: flex-end;
     overflow: hidden;
+    padding-top: 1.25rem;
 
         .headerItem {
             padding: 1.25rem 0.625rem 1.25rem 0px;
@@ -36,8 +35,8 @@
    
         .headerItemActive{
             @extend .headerItem;
-            padding: 1.25rem 0.625rem 0.8125rem 0px;
-            border-bottom: 7px solid #2470ab
+            padding: 1.25rem 0.625rem 1rem 0px;
+            border-bottom: 4px solid #2470ab
         }
 
    
@@ -46,9 +45,11 @@
 .bodyheader {
     display: flex;
     align-items: center;
-    height: 5vh;
+    // height: 5vh;
+    margin-top: 15px;
+    margin-bottom: 2px;
     gap: 15px;
-
+    background: #ffffff;
     .headerContent{
         display: flex;
         align-items: center;
@@ -81,10 +82,28 @@
 }
 
 }
+.bodyItem {
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    font-weight: 500;
+    padding-right: 3px;
+    max-width: 10%;
+    min-width: 10%;
+    text-align: justify;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+.colorOne{
+   background: #f6f6f6;
+}
+.colorTwo{
+    background: #ffffff;
+}
 
 .bodyContainer {
-    display: flex;
-    flex-direction: column;
+    height: auto;
     .bodyWrapper {
         display: flex;
         align-items: center;
@@ -94,7 +113,7 @@
             font-size: 0.75rem;
             text-transform: capitalize;
             font-weight: 500;
-            padding-right: 3px;
+            padding-left: 3px;
             max-width: 10%;
             min-width: 10%;
             text-align: justify;
@@ -116,12 +135,18 @@
     width: 80vw;
     height: 80vh;
 
+    .modalHeader{
+        padding-top: 0;
+        padding-bottom: 0;
+        border-bottom: 2px solid #aaaaaa;
+        align-items: center;
+    }
+
     .body {
         display: flex;
         flex-direction: column;
-        overflow-anchor: none;
-        scroll-behavior: smooth;
-        width: auto;
+        overflow-x: hidden;
+        background:#f6f6f6;
 
 
         .table {

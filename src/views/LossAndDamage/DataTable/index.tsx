@@ -3,8 +3,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { FixedSizeList as List } from 'react-window';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -12,9 +13,11 @@ import DangerButton from '#rsca/Button/DangerButton';
 import styles from './styles.scss';
 import { mainHeading, bodyheader } from './headers';
 
+
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
+
 
     useEffect(() => {
         const requiredDataEval = () => {
@@ -117,7 +120,7 @@ const DataTable = ({ closeModal, incidentList }) => {
     };
     const totalData = sumAvailabeData();
     const Header = () => (
-        <div className={styles.header}>
+        <div className={styles.header} ref={headerRef}>
             {
                 mainHeading.map(item => (
                     <p
@@ -171,36 +174,20 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     );
 
-    const BodyData = () => (
-        <div className={styles.bodyContainer}>
-
-            {data.length > 0 && data.map((item, index) => (
-                <div
-                    className={styles.bodyWrapper}
-                    style={
-                        index % 2 === 0
-                            ? { background: '#f6f6f6' }
-                            : { background: '#ffffff' }
-                    }
-                >
-                    {Object.values(item).map(datas => (
-                        <>
-                            <p className={styles.bodyItem}>
-                                {datas}
-                            </p>
-                        </>
-                    ))}
-                </div>
-            ))}
-            <div className={styles.totalValues}>
-                <p className={styles.bodyItem}>
-                    Grand total
-                </p>
-                {totalData.map(total => (
-                    <p className={styles.bodyItem}>
-                        {total}
-                    </p>
-                ))}
+    const Row = ({ index, key, style }) => (
+        <div
+            key={key}
+            style={style}
+            className={index % 2 === 0
+                ? styles.colorOne
+                : styles.colorTwo}
+        >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                {
+                    Object.values(data[index]).map(item => (
+                        <p className={styles.bodyItem}>{item}</p>
+                    ))
+                }
             </div>
         </div>
 
@@ -221,15 +208,23 @@ const DataTable = ({ closeModal, incidentList }) => {
                         title="Close Modal"
                     />
                 )}
+                className={styles.modalHeader}
             />
             <ModalBody className={styles.body}>
                 <BodyHeader />
-                <BodyData />
+                <List
+                    width={'100%'}
+                    height={700}
+                    itemCount={data.length}
+                    itemSize={45}
+                    rowHeight={'5px'}
+                >
+                    {Row}
+                </List>
             </ModalBody>
         </Modal>
 
 
     );
 };
-
 export default DataTable;
