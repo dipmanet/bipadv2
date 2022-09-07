@@ -17,7 +17,32 @@ import { mainHeading, bodyheader } from './headers';
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
+    // const bodyRef = useRef<List>('');
+    // const [curerntListPos, setCurerntListPos] = useState(0);
 
+    // useEffect(() => {
+    //     const element = document.querySelector('.listDiv');
+    //     const func = (e: Event) => {
+    //         if (element) {
+    //             setCurerntListPos(element.scrollLeft);
+    //         }
+    //     };
+    //     if (element) {
+    //         element.addEventListener('scroll', func);
+    //     }
+    //     return () => element && element.removeEventListener('scroll', func);
+
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
+
+    // useEffect(() => {
+    //     const element1 = document.getElementById('mainHeader');
+
+    //     if (element1) {
+    //         console.log('element1', element1);
+    //         element1.scrollBy(1000, 0);
+    //     }
+    // }, [curerntListPos]);
 
     useEffect(() => {
         const requiredDataEval = () => {
@@ -120,7 +145,7 @@ const DataTable = ({ closeModal, incidentList }) => {
     };
     const totalData = sumAvailabeData();
     const Header = () => (
-        <div className={styles.header} ref={headerRef}>
+        <div className={styles.header}>
             {
                 mainHeading.map(item => (
                     <p
@@ -140,7 +165,7 @@ const DataTable = ({ closeModal, incidentList }) => {
     );
 
     const BodyHeader = () => (
-        <div className={styles.bodyheader}>
+        <div id="mainHeader" className={styles.bodyheader}>
             {
                 bodyheader[Object.keys(bodyheader)
                     .filter(item => item === focus.name)[0]]
@@ -173,6 +198,7 @@ const DataTable = ({ closeModal, incidentList }) => {
         </div>
 
     );
+    // const scrollDiv = document.querySelector('#scrollDiv');
 
     const Row = ({ index, key, style }) => (
         <div
@@ -194,36 +220,39 @@ const DataTable = ({ closeModal, incidentList }) => {
     );
 
     return (
+        <>
 
-        <Modal className={styles.lossAndDamageTableModal}>
-            <ModalHeader
-                title={
-                    <Header />
-                }
-                rightComponent={(
-                    <DangerButton
-                        transparent
-                        iconName="close"
-                        onClick={closeModal}
-                        title="Close Modal"
-                    />
-                )}
-                className={styles.modalHeader}
-            />
-            <ModalBody className={styles.body}>
-                <BodyHeader />
-                <List
-                    width={'100%'}
-                    height={700}
-                    itemCount={data.length}
-                    itemSize={45}
-                    rowHeight={'5px'}
-                >
-                    {Row}
-                </List>
-            </ModalBody>
-        </Modal>
+            <Modal className={styles.lossAndDamageTableModal}>
+                <ModalHeader
+                    title={
+                        <Header />
+                    }
+                    rightComponent={(
+                        <DangerButton
+                            transparent
+                            iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
+                        />
+                    )}
+                    className={styles.modalHeader}
+                />
+                <ModalBody className={styles.body}>
+                    <BodyHeader />
+                    <List
+                        width={'100%'}
+                        height={700}
+                        itemCount={data.length}
+                        itemSize={45}
+                        rowHeight={'5px'}
+                        className="listDiv"
+                    >
+                        {Row}
+                    </List>
+                </ModalBody>
+            </Modal>
 
+        </>
 
     );
 };
