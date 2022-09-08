@@ -540,6 +540,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             <NewCompare
                                                 lossAndDamageList={incidentList}
                                                 getDataAggregatedByYear={this.getDataAggregatedByYear}
+                                                getHazardsCount={this.getHazardsCount}
+                                                hazardTypes={hazardTypes}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
                                             />

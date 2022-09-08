@@ -40,6 +40,7 @@ import styles from './styles.scss';
 import Visualizations from '../Comparative/Visualizations';
 import AreaChartVisual from '../AreaChart';
 import BarChartVisual from '../Barchart';
+import HazardWise from '../HazardWise';
 
 const propTypes = {
 };
@@ -180,6 +181,8 @@ class NewCompare extends React.PureComponent {
             getDataAggregatedByYear,
             selectOption,
             valueOnclick,
+            getHazardsCount,
+            hazardTypes,
         } = this.props;
 
         const {
@@ -352,6 +355,26 @@ class NewCompare extends React.PureComponent {
                                         <div className={styles.region2Container}>
                                             <AreaChartVisual
                                                 data={getDataAggregatedByYear(region2Incidents)}
+                                                selectOption={selectOption}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                                <div className={styles.otherVisualizations}>
+                                    {isRegionValid(faramValues.region1) && (
+                                        <div className={styles.region1Container}>
+                                            <HazardWise
+                                                // eslint-disable-next-line max-len
+                                                data={getHazardsCount(region1Incidents, hazardTypes)}
+                                                selectOption={selectOption}
+                                            />
+                                        </div>
+                                    )}
+                                    {isRegionValid(faramValues.region2) && (
+                                        <div className={styles.region2Container}>
+                                            <HazardWise
+                                                // eslint-disable-next-line max-len
+                                                data={getHazardsCount(region2Incidents, hazardTypes)}
                                                 selectOption={selectOption}
                                             />
                                         </div>
