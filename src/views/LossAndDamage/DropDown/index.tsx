@@ -5,17 +5,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
-import { lossMetrics } from '#utils/domain';
 import DataCount from '../DataCount';
 
 const Dropdown = (props) => {
     const [showOption, setShowOption] = useState(false);
     const optionShowRef = useRef(null);
-    const { data, setVAlueOnClick, setSelectOption, selectOption } = props;
+    const { data,
+        setVAlueOnClick,
+        icon,
+        dropdownOption,
+        setSelectOption,
+        selectOption,
+        placeholder } = props;
+    const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState(placeholder);
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
-        if (selectOption.name === '' || selectOption.key === '') {
-            setSelectOption(lossMetrics[0].label, lossMetrics[0].key);
+        if (selectOption.name === '' && selectOption.key === '') {
+            setSelectOption(dropdownOption[0].label, dropdownOption[0].key);
         }
     }, []);
 
@@ -42,6 +48,9 @@ const Dropdown = (props) => {
         setSelectOption(name, key);
         setShowOption(false);
         setVAlueOnClick({ value: key, index });
+        if (dropDownPlaceHolder) {
+            setdropDownPlaceHolder('');
+        }
     };
 
     return (
@@ -53,17 +62,20 @@ const Dropdown = (props) => {
             >
                 <div className={styles.mainDiv}>
                     <div className={styles.selectDiv}>
-                        <Icon
-                            className={styles.icon}
-                            name="warning"
-                        />
+                        {icon
+                            && (
+                                <Icon
+                                    className={styles.icon}
+                                    name="warning"
+                                />
+                            )}
                         <div
                             className={styles.selectField}
                             onClick={onSelectClick}
                         >
                             <p className={styles.selectItem}>
                                 {
-                                    selectOption.name
+                                    dropDownPlaceHolder || selectOption.name
                                 }
 
                             </p>
@@ -76,16 +88,21 @@ const Dropdown = (props) => {
                         <div
                             className={styles.optionDiv}
                         >
-                            {lossMetrics.map((item, index) => (
+                            {dropdownOption.map((item, index) => (
                                 <div
                                     className={styles.optionField}
                                     onClick={() => onOptionClick(item.key, item.label, index)}
                                     key={item.key}
                                 >
-                                    <Icon
-                                        className={styles.icon}
-                                        name="warning"
-                                    />
+                                    {
+                                        icon
+                                        && (
+                                            <Icon
+                                                className={styles.icon}
+                                                name="warning"
+                                            />
+                                        )
+                                    }
                                     <p className={styles.optionName}>{item.label}</p>
                                 </div>
                             ))}

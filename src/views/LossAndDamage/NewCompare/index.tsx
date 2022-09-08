@@ -213,14 +213,14 @@ class NewCompare extends React.PureComponent {
                         disabled={false}
                     >
                         <RegionSelectInput
-                            label="First location"
+                            label="Enter a Location to compare"
                             className={styles.regionInput}
                             faramElementName="region1"
                             showHintAndError={false}
                         // autoFocus
                         />
                         <RegionSelectInput
-                            label="Second location"
+                            label="Enter a Location to compare"
                             className={styles.regionInput}
                             faramElementName="region2"
                             showHintAndError={false}
@@ -322,6 +322,7 @@ class NewCompare extends React.PureComponent {
                                         //     minDate={minDate}
                                         // />
                                         <BarChartVisual
+                                            className={styles.aggregatedStat}
                                             data={region1Incidents}
                                             regionRadio={region1}
                                             selectOption={selectOption}
@@ -335,6 +336,7 @@ class NewCompare extends React.PureComponent {
                                         //     minDate={minDate}
                                         // />
                                         <BarChartVisual
+                                            className={styles.aggregatedStat}
                                             data={region2Incidents}
                                             regionRadio={region2}
                                             selectOption={selectOption}

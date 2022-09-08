@@ -4,6 +4,7 @@
 /* eslint-disable no-plusplus */
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
+import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
@@ -20,7 +21,7 @@ const BarChartVisual = (props) => {
     const { selectOption,
         regionRadio,
         data,
-        valueOnclick } = props;
+        valueOnclick, className } = props;
 
     const provinceIndex = data.map(i => ({
         name: i.provinceTitle,
@@ -139,8 +140,10 @@ const BarChartVisual = (props) => {
 
     return (
         // <div className={styles.container}>
-        <div className={styles.wrapper}>
-
+        <div className={className
+            ? _cs(className, styles.wrapper)
+            : styles.wrapper}
+        >
             <div className={styles.firstDiv}>
                 <p className={styles.text}>
                     {nameReturn(regionRadio)}

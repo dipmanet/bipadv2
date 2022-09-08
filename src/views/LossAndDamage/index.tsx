@@ -70,7 +70,6 @@ import {
     pastDaysToDateRange,
 } from '#utils/transformations';
 
-import styles from './styles.scss';
 import Overview from './Overview';
 import Dropdown from './DropDown';
 import BarChartVisual from './Barchart';
@@ -81,6 +80,9 @@ import DateRangeInfo from '#components/DateRangeInfo';
 import FilterRadio from './FilterRadio';
 import { setIncidentListActionIP } from '#actionCreators';
 import NewCompare from './NewCompare';
+
+import styles from './styles.scss';
+
 
 const ModalButton = modalize(Button);
 
@@ -562,6 +564,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     setVAlueOnClick={setVAlueOnClick}
                                     selectOption={selectOption}
                                     setSelectOption={setSelectOption}
+                                    dropdownOption={lossMetrics}
+                                    icon
+                                // placeholder="Select an option"
                                 />
                                 <BarChartVisual
                                     filter={regionFilter}
