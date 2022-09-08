@@ -80,6 +80,7 @@ import DataTable from './DataTable';
 import DateRangeInfo from '#components/DateRangeInfo';
 import FilterRadio from './FilterRadio';
 import { setIncidentListActionIP } from '#actionCreators';
+import NewCompare from './NewCompare';
 
 const ModalButton = modalize(Button);
 
@@ -200,8 +201,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         Null_check_estimatedLoss: false,
         selectOption: { name: '', key: '' },
         valueOnclick: { value: 'count', index: 0 },
-        regionRadio: '',
-        regionWiseBarChartData: [],
+        regionRadio: 'province',
     }
 
     private handleSaveClick = () => {
@@ -372,7 +372,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             valueOnclick,
             selectOption,
             regionRadio,
-            regionWiseBarChartData,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -397,9 +396,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
         const setRegionRadio = (val) => {
             this.setState({ regionRadio: val });
-        };
-        const setRegionWiseBarChartData = (data) => {
-            this.setState({ regionWiseBarChartData: data });
         };
 
         const { rangeInDays } = filters.dataDateRange;
@@ -540,9 +536,16 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     <ModalButton
                                         disabled={pending}
                                         className={styles.compareButton}
-                                        modal={<Comparative lossAndDamageList={incidentList} />}
+                                        modal={(
+                                            <NewCompare
+                                                lossAndDamageList={incidentList}
+                                                getDataAggregatedByYear={this.getDataAggregatedByYear}
+                                                selectOption={selectOption}
+                                                valueOnclick={valueOnclick}
+                                            />
+                                        )}
                                     >
-                                    Compare regions
+                                        Compare regions
                                     </ModalButton>
                                 </div>
 
@@ -551,7 +554,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     setRegionRadio={setRegionRadio}
                                     data={filteredData}
                                     valueOnclick={valueOnclick}
-                                    setRegionWiseBarChartData={setRegionWiseBarChartData}
                                 />
                                 <Dropdown
                                     data={filteredData}
@@ -565,7 +567,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     selectOption={selectOption}
                                     valueOnclick={valueOnclick}
                                     regionRadio={regionRadio}
-                                    regionWiseBarChartData={regionWiseBarChartData}
                                 />
                                 <AreaChartVisual
                                     selectOption={selectOption}

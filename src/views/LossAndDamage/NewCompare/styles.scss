@@ -1,0 +1,102 @@
+@import '~base-scss/base';
+
+.comparative {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+    width: 90vw;
+    height: 90vh;
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        .region-selection-form {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            flex-shrink: 0;
+
+            .region-input {
+                margin: $spacing-medium;
+            }
+        }
+
+        .close-button {
+            flex-shrink: 0;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
+
+        .pre-comparision-message {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+            opacity: .3;
+            font-size: $font-size-super-large;
+        }
+
+        .comparision-container {
+            flex-grow: 1;
+            overflow: auto;
+
+            .title-container {
+                display: flex;
+
+                >h2 {
+                    flex-basis: 50%;
+                    flex-shrink: 0;
+                    padding: var(--spacing-medium);
+                }
+            }
+
+            .map-container {
+                display: flex;
+                flex-shrink: 0;
+                height: 360px;
+
+                .map-1,
+                .map-2 {
+                    flex-basis: calc(50% - var(--spacing-small) * 2);
+                    margin: 0 var(--spacing-small);
+                    height: 100%;
+                }
+            }
+
+            .visualizations {
+                .aggregated-stats {
+                    display: flex;
+
+                    .aggregated-stat {
+                        display: flex;
+                        flex-basis: 50%;
+                        flex-shrink: 0;
+                        flex-wrap: wrap;
+                        padding: var(--spacing-medium);
+                    } 
+                }
+
+                .other-visualizations {
+                    display: flex;
+
+                    .region1-container,
+                    .region2-container {
+                        flex-basis: 50%;
+                        flex-grow: 0;
+                        flex-shrink: 0;
+                        width: 50%;
+                    }
+                }
+            }
+        }
+    }
+}
+

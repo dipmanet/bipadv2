@@ -7,7 +7,6 @@ import styles from './styles.scss';
 const AreaChartVisual = (props) => {
     const { selectOption: { name, key }, data } = props;
 
-
     const chartData = data.map((item, index) => {
         const date = new Date();
         date.setTime(item.incidentMonthTimestamp);
@@ -18,12 +17,11 @@ const AreaChartVisual = (props) => {
             date: finalDate,
             [name]: item.summary[key],
         };
+
         return obj;
     });
 
     return (
-
-        // <div className={styles.container}>
         <div className={styles.wrapper}>
             <div className={styles.firstDiv}>
                 <p className={styles.text}>
@@ -85,7 +83,6 @@ const AreaChartVisual = (props) => {
                 }
             </div>
         </div>
-        // </div>
     );
 };
 
