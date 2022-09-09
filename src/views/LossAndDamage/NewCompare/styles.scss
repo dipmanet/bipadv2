@@ -4,14 +4,26 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
-    width: 90vw;
-    height: 90vh;
+    width: 60vw;
+    height: 70vh;
     overflow: auto;
+
+    .regionHead{
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        .compareText{
+            color: #364553;
+            font-size: 18px;
+        }
+    }
 
     .header {
         display: flex;
         align-items: center;
         flex-shrink: 0;
+        padding: 13px;
+
 
         .region-selection-form {
             display: flex;
@@ -21,6 +33,7 @@
 
             .region-input {
                 margin: $spacing-medium;
+                width: 50%;
             }
         }
 
@@ -37,11 +50,21 @@
 
         .pre-comparision-message {
             display: flex;
+            flex-direction: column;
             align-items: center;
             flex-grow: 1;
             justify-content: center;
-            opacity: .3;
-            font-size: $font-size-super-large;
+            // opacity: .3;
+            .headerText{
+                color: rgb(113, 126, 125);
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .textOption{
+                color: rgb(113, 126, 125);
+                font-size: 16px;
+                margin: 0;
+            }
         }
 
         .comparision-container {

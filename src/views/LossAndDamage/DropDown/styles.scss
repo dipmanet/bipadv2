@@ -5,6 +5,14 @@
     align-items: center;
     position: relative;
 
+    .labelText{
+        font-size: 14px;
+        font-weight: bold;
+        width: 95%;
+        padding-bottom: 5px;
+        margin: 0;
+    }
+
     .mainDiv {
         display: flex;
         flex-direction: row;
@@ -33,6 +41,7 @@
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
+                margin: auto;
 
                 .selectItem {
                     font-size: 14px;
@@ -67,6 +76,8 @@
         cursor: pointer;
         // box-shadow: 2px 2px 0.5px gray;
         border: 1px solid gray;
+        overflow-y: scroll ;
+        height: 250px;
 
         .optionField {
             display: flex;

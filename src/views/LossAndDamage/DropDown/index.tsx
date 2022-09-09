@@ -3,30 +3,34 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useRef, useState } from 'react';
+import { _cs } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
-import DataCount from '../DataCount';
 
 const Dropdown = (props) => {
     const [showOption, setShowOption] = useState(false);
     const optionShowRef = useRef(null);
-    const { data,
-        setVAlueOnClick,
+    const { dropDownClickHandler,
+        setSelectOption,
         icon,
         dropdownOption,
-        setSelectOption,
         selectOption,
-        placeholder } = props;
+        placeholder,
+        label,
+        className,
+        elementName } = props;
+    const [selectName, setSelectName] = useState(dropdownOption[0].label);
     const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState(placeholder);
+
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
-        if (selectOption.name === '' && selectOption.key === '') {
+        if (selectOption && setSelectOption) {
             setSelectOption(dropdownOption[0].label, dropdownOption[0].key);
         }
     }, []);
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event: EventListenerOrEventListenerObject) => {
             if (optionShowRef.current && !optionShowRef.current.contains(event.target)) {
                 setShowOption(false);
             }
@@ -44,24 +48,34 @@ const Dropdown = (props) => {
         setShowOption(state => !state);
     };
 
-    const onOptionClick = (key: string, name: string, index: number) => {
-        setSelectOption(name, key);
-        setShowOption(false);
-        setVAlueOnClick({ value: key, index });
+    const onOptionClick = (item: any, index: number) => {
+        dropDownClickHandler(item, index, elementName);
         if (dropDownPlaceHolder) {
-            setdropDownPlaceHolder('');
+            setdropDownPlaceHolder(null);
         }
+        setSelectName(item.label);
+        setShowOption(false);
     };
 
     return (
         <>
-
             <div
-                className={styles.selectContainer}
+                className={className
+                    ? _cs(styles.selectContainer, className)
+                    : styles.selectContainer}
                 ref={optionShowRef}
             >
+                {label
+                    && <p className={styles.labelText}>{label}</p>
+                }
                 <div className={styles.mainDiv}>
-                    <div className={styles.selectDiv}>
+                    <div
+                        className={styles.selectDiv}
+                        style={dropDownPlaceHolder
+                            ? { opacity: 0.5 }
+                            : {}
+                        }
+                    >
                         {icon
                             && (
                                 <Icon
@@ -75,7 +89,7 @@ const Dropdown = (props) => {
                         >
                             <p className={styles.selectItem}>
                                 {
-                                    dropDownPlaceHolder || selectOption.name
+                                    dropDownPlaceHolder || selectName
                                 }
 
                             </p>
@@ -91,8 +105,8 @@ const Dropdown = (props) => {
                             {dropdownOption.map((item, index) => (
                                 <div
                                     className={styles.optionField}
-                                    onClick={() => onOptionClick(item.key, item.label, index)}
-                                    key={item.key}
+                                    onClick={() => onOptionClick(item, index)}
+                                    key={item.label}
                                 >
                                     {
                                         icon
@@ -110,7 +124,6 @@ const Dropdown = (props) => {
                     )
                 }
             </div>
-            <DataCount data={data} value={selectOption} />
         </>
 
     );

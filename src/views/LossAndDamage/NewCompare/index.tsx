@@ -41,6 +41,8 @@ import Visualizations from '../Comparative/Visualizations';
 import AreaChartVisual from '../AreaChart';
 import BarChartVisual from '../Barchart';
 import HazardWise from '../HazardWise';
+import { createSingleList } from '#components/RegionSelectInput/util.js';
+import Dropdown from '../DropDown';
 
 const propTypes = {
 };
@@ -157,6 +159,7 @@ class NewCompare extends React.PureComponent {
             faramValues,
             faramErrors,
         });
+        console.log(faramValues, 'faram values');
     }
 
     handleFaramValidationSuccess = (faramValues) => {
@@ -183,6 +186,11 @@ class NewCompare extends React.PureComponent {
             valueOnclick,
             getHazardsCount,
             hazardTypes,
+            provinces,
+            municipalities,
+            districts,
+            setSelectOption,
+            setVAlueOnClick,
         } = this.props;
 
         const {
@@ -199,34 +207,26 @@ class NewCompare extends React.PureComponent {
         const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
 
+        const RegionOptions = createSingleList(provinces, districts, municipalities)
+            .map(region => ({
+                adminLevel: region.adminLevel,
+                geoarea: region.id,
+                label: region.title,
+            }));
+
+        const dropDownClickHandler = (item, index, elementName) => {
+            const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
+            this.setState({ faramValues: { ...faramValues, [elementName]: data } });
+        };
+
         return (
-            <Modal className={_cs(className, styles.comparative)}>
-                <header className={styles.header}>
-                    <Faram
-                        className={styles.regionSelectionForm}
-                        onChange={this.handleFaramChange}
-                        onValidationFailure={this.handleFaramValidationFailure}
-                        // onValidationSuccess={this.handleFaramValidationSuccess}
-                        schema={this.schema}
-                        value={faramValues}
-                        error={faramErrors}
-                        disabled={false}
-                    >
-                        <RegionSelectInput
-                            label="Enter a Location to compare"
-                            className={styles.regionInput}
-                            faramElementName="region1"
-                            showHintAndError={false}
-                        // autoFocus
-                        />
-                        <RegionSelectInput
-                            label="Enter a Location to compare"
-                            className={styles.regionInput}
-                            faramElementName="region2"
-                            showHintAndError={false}
-                            disabled={!faramValues.region1}
-                        />
-                    </Faram>
+            <Modal className={_cs(className, styles.comparative)
+            }
+            >
+                <div className={styles.regionHead}>
+                    <h1 className={styles.compareText}>
+                        COMPARE
+                    </h1>
                     <Button
                         title="Download Chart"
                         className={styles.chartDownload}
@@ -235,6 +235,43 @@ class NewCompare extends React.PureComponent {
                         onClick={this.handleSaveClick}
                         iconName="download"
                     />
+                </div>
+                <header className={styles.header}>
+                    <div
+                        className={styles.regionSelectionForm}
+                    >
+                        <Dropdown
+                            elementName="region1"
+                            label="Enter a Location to compare"
+                            className={styles.regionInput}
+                            placeholder="Select an Option"
+                            dropdownOption={RegionOptions}
+                            icon={false}
+                            dropDownClickHandler={dropDownClickHandler}
+                        />
+                        {/* <RegionSelectInput
+                            label="Enter a Location to compare"
+                            className={styles.regionInput}
+                            faramElementName="region1"
+                            showHintAndError={false}
+                        // autoFocus
+                        /> */}
+                        {/* <RegionSelectInput
+                            label="Enter a Location to compare"
+                            className={styles.regionInput}
+                            faramElementName="region2"
+                            showHintAndError={false}
+                            disabled={faramValues.region1} */}
+                        <Dropdown
+                            elementName="region2"
+                            label="Enter a Location to compare"
+                            className={styles.regionInput}
+                            placeholder="Select an Option"
+                            dropdownOption={RegionOptions}
+                            icon={false}
+                            dropDownClickHandler={dropDownClickHandler}
+                        />
+                    </div>
                     <Button
                         onClick={closeModal}
                         iconName="close"
@@ -246,11 +283,14 @@ class NewCompare extends React.PureComponent {
                 >
                     {(!region1 && !region2) ? (
                         <div className={styles.preComparisionMessage}>
-                            Please select locations to start the comparison
+                            <h3 className={styles.headerText}>No comparison is made</h3>
+                            <p className={styles.textOption}>
+                                Try selecting different section to compare
+                            </p>
                         </div>
                     ) : (
                         <div className={styles.comparisionContainer}>
-                            <div className={styles.titleContainer}>
+                            {/* <div className={styles.titleContainer}>
                                 {isRegionValid(faramValues.region1) && (
                                     <h2>
                                         <GeoResolve data={region1} />
@@ -261,7 +301,7 @@ class NewCompare extends React.PureComponent {
                                         <GeoResolve data={region2} />
                                     </h2>
                                 )}
-                            </div>
+                            </div> */}
                             <div className={styles.mapContainer}>
                                 {isRegionValid(faramValues.region1) && (
                                     <Map

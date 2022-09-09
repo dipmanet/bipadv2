@@ -82,6 +82,7 @@ import { setIncidentListActionIP } from '#actionCreators';
 import NewCompare from './NewCompare';
 
 import styles from './styles.scss';
+import DataCount from './DataCount';
 
 
 const ModalButton = modalize(Button);
@@ -409,6 +410,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             ({ startDate, endDate } = filters.dataDateRange);
         }
         const hazardSummary = this.getHazardsCount(filteredData, hazardTypes);
+        const dropDownClickHandler = (item, index) => {
+            const { label, key } = item;
+            setVAlueOnClick({ value: key, index });
+            setSelectOption(label, key);
+        };
+
+
         return (
             <>
                 <Loading pending={pending} />
@@ -560,14 +568,17 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     valueOnclick={valueOnclick}
                                 />
                                 <Dropdown
-                                    data={filteredData}
-                                    setVAlueOnClick={setVAlueOnClick}
+                                    dropDownClickHandler={dropDownClickHandler}
                                     selectOption={selectOption}
                                     setSelectOption={setSelectOption}
                                     dropdownOption={lossMetrics}
                                     icon
-                                // placeholder="Select an option"
                                 />
+                                <DataCount
+                                    data={filteredData}
+                                    value={selectOption}
+                                />
+
                                 <BarChartVisual
                                     filter={regionFilter}
                                     data={filteredData}
