@@ -394,138 +394,142 @@ class RiverDetails extends React.PureComponent<Props> {
                 />
                 <ModalBody className={styles.body}>
                     {pending && <LoadingAnimation />}
-                    {latestRiverDetail && (
-                        <div className={styles.riverDetails}>
-                            <div className={styles.top}>
-                                {latestRiverDetail.image ? (
-                                    <Image
-                                        className={styles.image}
-                                        src={latestRiverDetail.image}
-                                        alt="image"
-                                        zoomable
-                                    />
-                                ) : (
-                                    <div className={styles.noImage}>
-                                        Image not available
-                                    </div>
-                                )}
-                                <div className={styles.details}>
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Description"
-                                        value={latestRiverDetail.description}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Basin"
-                                        value={latestRiverDetail.basin}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Status"
-                                        value={latestRiverDetail.status}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Latitude"
-                                        value={latestRiverDetail.point.coordinates[1]}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Longitude"
-                                        value={latestRiverDetail.point.coordinates[0]}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Flow"
-                                        value={latestRiverDetail.steady}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Elevation"
-                                        value={latestRiverDetail.elevation}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Water Level"
-                                        value={latestRiverDetail.waterLevel}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Danger Level"
-                                        value={latestRiverDetail.dangerLevel}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Warning Level"
-                                        value={latestRiverDetail.warningLevel}
-                                    />
-                                    <TextOutput
-                                        className={styles.detail}
-                                        labelClassName={styles.label}
-                                        valueClassName={styles.value}
-                                        label="Measured On"
-                                        value={(
-                                            <FormattedDate
-                                                value={latestRiverDetail.waterLevelOn}
-                                                mode="yyyy-MM-dd, hh:mm:aaa"
-                                            />
-                                        )}
-                                    />
+                    <div className={styles.riverDetails}>
+                        <div className={styles.top}>
+                            {latestRiverDetail && latestRiverDetail.image ? (
+                                <Image
+                                    className={styles.image}
+                                    src={latestRiverDetail.image}
+                                    alt="image"
+                                    zoomable
+                                />
+                            ) : (
+                                <div className={styles.noImage}>
+                                    Image not available
                                 </div>
-                            </div>
-                            <div className={styles.bottom}>
-                                <div className={styles.hourlyWaterLevel}>
-                                    <header className={styles.header}>
-                                        <h4 className={styles.heading}>
-                                            Hourly Water Level
-                                        </h4>
-                                    </header>
-                                    <Graph
-                                        stationData={riverDetails}
-                                        filterWiseChartData={filterWiseChartData}
-                                        periodCode={periodCode}
-                                        isInitial={isInitial}
-                                        stationName={title}
-                                        filterValues={this.state.filterValues}
-                                    />
+                            )}
+                            {
+                                latestRiverDetail
 
-                                </div>
-                                <div className={styles.selectComponent}>
-                                    <h3>Period</h3>
-                                    <PeriodSelector onChange={this.handlePeriodChange} />
-                                </div>
-                                <div className={styles.waterLevelChartContainer}>
-                                    <TableView
-                                        filterWiseChartData={filterWiseChartData}
-                                        filterValues={this.state.filterValues}
-                                        isInitial={isInitial}
-                                        stationName={title}
-                                    />
-                                </div>
+                                && (
+                                    <div className={styles.details}>
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Description"
+                                            value={latestRiverDetail.description}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Basin"
+                                            value={latestRiverDetail.basin}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Status"
+                                            value={latestRiverDetail.status}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Latitude"
+                                            value={latestRiverDetail.point.coordinates[1]}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Longitude"
+                                            value={latestRiverDetail.point.coordinates[0]}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Flow"
+                                            value={latestRiverDetail.steady}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Elevation"
+                                            value={latestRiverDetail.elevation}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Water Level"
+                                            value={latestRiverDetail.waterLevel}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Danger Level"
+                                            value={latestRiverDetail.dangerLevel}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Warning Level"
+                                            value={latestRiverDetail.warningLevel}
+                                        />
+                                        <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Measured On"
+                                            value={(
+                                                <FormattedDate
+                                                    value={latestRiverDetail.waterLevelOn}
+                                                    mode="yyyy-MM-dd, hh:mm:aaa"
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                )
+                            }
+                        </div>
+                        <div className={styles.bottom}>
+                            <div className={styles.hourlyWaterLevel}>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Hourly Water Level
+                                    </h4>
+                                </header>
+                                <Graph
+                                    stationData={riverDetails}
+                                    filterWiseChartData={filterWiseChartData}
+                                    periodCode={periodCode}
+                                    isInitial={isInitial}
+                                    stationName={title}
+                                    filterValues={this.state.filterValues}
+                                />
+
+                            </div>
+                            <div className={styles.selectComponent}>
+                                <h3>Period</h3>
+                                <PeriodSelector onChange={this.handlePeriodChange} />
+                            </div>
+                            <div className={styles.waterLevelChartContainer}>
+                                <TableView
+                                    filterWiseChartData={filterWiseChartData}
+                                    filterValues={this.state.filterValues}
+                                    isInitial={isInitial}
+                                    stationName={title}
+                                />
                             </div>
                         </div>
-                    )}
+                    </div>
                 </ModalBody>
             </Modal>
         );
