@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 /* eslint-disable no-mixed-spaces-and-tabs */
@@ -8,18 +9,17 @@ import Loadable from 'react-loadable';
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
-import { Router } from '@reach/router';
+import { Router, navigate } from '@reach/router';
 import {
     _cs,
     bound,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-import i18n from 'i18next';
-import { initReactI18next, Translation } from 'react-i18next';
-
 import { bbox, point, buffer } from '@turf/turf';
 import mapboxgl from 'mapbox-gl';
-import { enTranslation, npTranslation } from '#constants/translations';
+import Joyride, { CallBackProps, STATUS } from 'react-joyride';
+import Cookies from 'js-cookie';
+
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
@@ -35,9 +35,7 @@ import {
     RegionValueElement,
     Layer,
     FiltersElement,
-    Language,
 } from '#types';
-
 
 import {
     District,
@@ -59,26 +57,26 @@ import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import AppBrand from '#components/AppBrand';
 import Filters from '#components/Filters';
-
 import {
     userSelector,
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
     filtersSelector,
-    languageSelector,
+    closeWalkThroughSelector,
+    runSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
     setFiltersAction,
-    setLanguageAction,
+    setInitialCloseWalkThroughAction,
+    setInitialRunAction,
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
 import { getFeatureInfo } from '#utils/domain';
-import LanguageToggle from '#components/LanguageToggle';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -89,7 +87,6 @@ import ZoomToolBar from '#components/ZoomToolBar';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
 import styles from './styles.scss';
-
 import DownloadButtonOption from './DownloadButtonOption';
 
 
@@ -98,41 +95,27 @@ function reloadPage() {
 }
 
 const ErrorInPage = () => (
-    <Translation>
-        {
-            t => (
-                <div className={styles.errorInPage}>
-                    {t('Some problem occurred.')}
-                    <DangerButton
-                        transparent
-                        onClick={reloadPage}
-                    >
-                        {t('Reload')}
-                    </DangerButton>
-                </div>
-            )
-        }
-    </Translation>
+    <div className={styles.errorInPage}>
+        Some problem occurred.
+        <DangerButton
+            transparent
+            onClick={reloadPage}
+        >
+            Reload
+        </DangerButton>
+    </div>
 );
 
 const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
-    <Translation>
-        {
-            t => (
-                <div className={styles.retryableErrorInPage}>
-                    {t('Some problem occurred.')}
-                    <DangerButton
-                        onClick={retry}
-                        transparent
-                    >
-                        {t('Reload')}
-                    </DangerButton>
-                </div>
-            )
-
-        }
-    </Translation>
-
+    <div className={styles.retryableErrorInPage}>
+        Some problem occurred.
+        <DangerButton
+            onClick={retry}
+            transparent
+        >
+            Reload
+        </DangerButton>
+    </div>
 );
 
 
@@ -153,20 +136,12 @@ const LoadingPage = ({ error, retry }: LoadOptions) => {
         );
     }
     return (
-        <Translation>
-            {
-                t => (
-                    <Loading
-                        text={t('Loading Page')}
-                        pending
-                    />
-                )
-            }
-        </Translation>
-
+        <Loading
+            text="Loading Page"
+            pending
+        />
     );
 };
-
 
 const routes = routeSettings.map(({ load, ...settings }) => {
     const Com = authRoute<typeof settings>()(
@@ -179,6 +154,7 @@ const routes = routeSettings.map(({ load, ...settings }) => {
     );
 
     const Component = errorBound<typeof settings>(ErrorInPage)(Com);
+
     return (
         <Component
             key={settings.name}
@@ -231,7 +207,6 @@ interface OwnProps {
     hasError: boolean;
     mapStyle: string;
     boundingClientRect?: BoundingClientRect;
-    language: Language;
 }
 
 interface PropsFromState {
@@ -240,7 +215,6 @@ interface PropsFromState {
     provinces: Province[];
     municipalities: Municipality[];
     filters: FiltersElement;
-    language: Language;
     // hazardList: HazardType[];
 }
 
@@ -248,7 +222,6 @@ interface PropsFromDispatch {
     setInitialPopupHidden: typeof setInitialPopupHiddenAction;
     setRegion: typeof setRegionAction;
     setFilters: typeof setFiltersAction;
-    setLanguage: typeof setLanguageAction;
 }
 
 interface Coords {
@@ -260,22 +233,26 @@ interface Coords {
 
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
-
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    language: languageSelector(state),
     user: userSelector(state),
     filters: filtersSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
     // hazardList: hazardTypeListSelector(state),
+    closeWalkThroughHomepage: closeWalkThroughSelector(state),
+    run: runSelector(state),
+
+
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setLanguage: params => dispatch(setLanguageAction(params)),
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
     setFilters: params => dispatch(setFiltersAction(params)),
+    setCloseWalkThrough: params => dispatch(setInitialCloseWalkThroughAction(params)),
+    setRun: params => dispatch(setInitialRunAction(params)),
+
 });
 
 const getMatchingRegion = (
@@ -314,7 +291,6 @@ const getMatchingRegion = (
 
     return undefined;
 };
-
 
 const layerNameMap = {
     raster: 'raster-layer',
@@ -394,14 +370,304 @@ class Multiplexer extends React.PureComponent<Props, State> {
             isTilesLoaded: false,
             toggleAnimationMapDownloadButton: false,
             elementStatus: false,
-            showLanguageToolbar: false,
+            steps: [
+                {
+                    content: 'BIPAD Portal is an Integrated Disaster Information Management System of Nepal and is led by the National Disaster Risk Reduction and Management Authority of Nepal.',
+                    title: 'Let\'s take BIPAD Portal Tour!',
+                    locale: { skip: <strong aria-label="skip">SKIP</strong> },
+                    placement: 'center',
+                    target: 'body',
+                },
+                {
+                    content: 'This Module provides geospatial data of the alerts of flood war flood warnings, heavy rainfall, earthquake, and air pollution.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#navbar-dashboard',
+                    title: 'Dashboard',
+                },
+                {
+                    content: 'This module displays the geospatial data of the hazard incidents from the year 2011 reported by Nepal Police.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#navbar-incident',
+                    title: 'Incident module',
+                },
+                {
+                    content: 'Visualizes historic loss and damage data caused by various hazard incidents.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#navbar-lossDamage',
+                    title: 'Damage & Loss module',
+                },
+                {
+                    content: 'This module provides the real data on rainfall and river watch, earthquake, air pollution, and forest fires along with streamflow forecast.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#navbar-realtime',
+                    title: 'Real Time Module',
+                },
+                {
+                    content: 'This module displays the records of DRRM documents, status of DRRM projects, contact information of DRR focal persons and disaster reports at national, provincial district, and municipal levels for the selected time frame.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#navbar-profile',
+                    title: 'Profile module',
+                },
+                {
+                    content: 'This module provides information on Hazard, Exposure, Vulnerability, Risk, Climate Change, and Capacity and Resources.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#navbar-riskinfo',
+                    title: 'Risk Info module',
+                },
+                {
+                    content: 'This feature gives you the situation reports of the particular event and its casualties including human, livestock and infrastructure loss.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#situation-report',
+                    title: 'Situation Reports',
+                },
+                // {
+                //     content: 'These are our super awesome projects!',
+                //     placement: 'bottom',
+                //     styles: {
+                //         options: {
+                //             width: 300,
+                //         },
+                //     },
+                //     target: '#relief',
+                //     title: 'Relief',
+                // },
+                // {
+                //     content: 'These are our super awesome projects!',
+                //     placement: 'bottom',
+                //     styles: {
+                //         options: {
+                //             width: 300,
+                //         },
+                //     },
+                //     target: '#reported-incidents',
+                //     title: 'Reported Incidents',
+                // },
+                {
+                    content: 'General users can also report an incident that occurred in a particular area using this feature. It includes details of hazard occurred, time and date of occurrence and area of incident.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#report-an-incident',
+                    title: 'Report an incident',
+                },
+                {
+                    content: 'You can log in to the portal using the login credentials provided or request a username and password.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#login',
+                    title: 'Login',
+                },
+                {
+                    content: 'Here you can find the information about the BIPAD Portal, its development and modules along with a technical handbook for the users.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#about-us',
+                    title: 'About Us',
+                },
+                {
+                    content: 'This page provides a brief introduction of BIPAD Portal and enables you to take a tour of the Portal.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#logout',
+                    title: 'Home Page',
+                },
+                {
+                    content: 'Filters allow you to choose the location (for e.g., province, district, municipality) hazard of interest and time frame of the data.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '#component-filter',
+                    title: 'Filters',
+                },
+                {
+                    content: 'You can click here to download the map in various resolutions.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.downloadButton-tour',
+                    title: 'Map Download',
+                },
+                {
+                    content: 'The base map layer can be selected to change the type of base layers.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.layerSwitch-tour',
+                    title: 'Map Layout',
+                },
+                {
+                    content: 'Here you can choose to display the administrative boundaries of the province, district, municipality, or wards.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.adminSwitch-tour',
+                    title: 'Administrative Boundary',
+                },
+                {
+                    content: 'This toolbar provides option to zoom in into a desired area, to locate your current location, and search a location by its coordinates.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.zoomToolbar-tour',
+                    title: 'Zoom Toolbar',
+                },
+                {
+                    content: 'This section defines features in a map. It simply displays the symbol followed by a text description of what that symbol represents.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.legend-tour',
+                    title: 'Legend Section',
+                },
+                {
+                    content: 'It provides the starting and end date of the data being displayed.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.date-range-tour',
+                    title: 'Date Range ',
+                },
+                {
+                    content: 'These are our super awesome projects!',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.source-tour',
+                    title: 'Data Source ',
+                },
+                {
+                    content: 'In this section, the alerts generated for various hazards are enlisted.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.alert-tour',
+                    title: 'Alert ',
+                },
+                // {
+                //     content: 'These are our super awesome projects!',
+                //     placement: 'bottom',
+                //     styles: {
+                //         options: {
+                //             width: 300,
+                //         },
+                //     },
+                //     target: '.event-tour',
+                //     title: 'Event',
+                // },
+                {
+                    content: 'This section provides a summary of the number of alerts generated for each hazard.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.visualization-tour',
+                    title: 'Visualization',
+                },
+                {
+                    content: 'This section provides detailed information on the alerts in tabular format.',
+                    placement: 'bottom',
+                    styles: {
+                        options: {
+                            width: 300,
+                        },
+                    },
+                    target: '.tabular-data-tour',
+                    title: 'Table Data',
+                },
+                {
+                    content: 'Thankyou for visiting BIPAD Portal Tour!',
+                    locale: { skip: <strong aria-label="skip">SKIP</strong> },
+                    placement: 'center',
+                    target: 'body',
+                },
+
+            ],
         };
     }
-
 
     public componentDidMount() {
         // NOTE: this means everything has loaded before mounting this page,
         // which is highly unlikely
+        const { setCloseWalkThrough } = this.props;
         const {
             pending,
             provinces,
@@ -415,23 +681,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (!pending) {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
-        // debug true for development
-        i18n.use(initReactI18next).init({
-            lng: 'en',
-            debug: false,
-            fallbackLng: 'en',
-            resources: {
-                en: enTranslation,
-                np: npTranslation,
-            },
-        });
+        // setCloseWalkThrough({ value: true });
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const {
             pending: oldPending,
         } = this.props;
-
 
         const {
             pending: newPending,
@@ -449,26 +705,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentDidUpdate(prevProps) {
-        const { boundingClientRect, setLanguage } = this.props;
-        const { showLanguageToolbar } = this.state;
+    public componentDidUpdate() {
+        const { boundingClientRect } = this.props;
         this.setLeftPanelWidth(boundingClientRect);
-        const { language: { language } } = this.props;
-        if (prevProps.language !== language) {
-            i18n.changeLanguage(language);
+        const { activeRouteDetails } = this.state;
+        const { closeWalkThroughHomepage } = this.props;
+        const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        const isFirstTimeUser = Cookies.get('isFirstTimeUser');
+        if (activeRouteName === 'homepage' && isFirstTimeUser !== undefined && closeWalkThroughHomepage) {
+            navigate('/dashboard/');
         }
-        if (language === 'np' && !showLanguageToolbar) {
-            setLanguage({ language: 'en' });
-        }
-
-        // Km to nepali translation//
-        // const x = document.getElementsByClassName('mapboxgl-ctrl mapboxgl-ctrl-scale')[0];
-
-        // if (language === 'np' && x && x.innerHTML.includes('km')) {
-        //     x.innerHTML = x.innerHTML.replaceAll('km', 'किमि');
-        // } else if (language === 'en' && x && x.innerHTML.includes('किमि')) {
-        //     x.innerHTML = x.innerHTML.replaceAll('किमि', 'km');
-        // }
     }
 
     private handlemapClickedResponse = (data) => {
@@ -566,17 +812,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
         if (pending) {
             return (
-                <Translation>
-                    {
-                        t => (
-                            <Loading
-                                text={t('Loading Resources')}
-                                pending
-                            />
-                        )
-                    }
-                </Translation>
-
+                <Loading
+                    text="Loading Resources"
+                    pending
+                />
             );
         }
         return (
@@ -786,64 +1025,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         municipalities: Municipality[],
     ) => {
         if (!selectedRegion || !selectedRegion.adminLevel) {
-            return (
-                <Translation>
-                    {
-                        t => <span>{t('National')}</span>
-                    }
-                </Translation>
-            );
-        }
-
-        const adminLevels: {
-            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
-        } = {
-            1: provinces,
-            2: districts,
-            3: municipalities,
-        };
-
-        const regionList = adminLevels[selectedRegion.adminLevel];
-        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
-        const { language: { language } } = this.props;
-        if (currentRegion && language === 'en') {
-            return (
-                <Translation>
-                    {
-                        t => (
-                            `${currentRegion.title} ${t(currentRegion.type)}`
-
-                        )
-                    }
-                </Translation>
-
-
-            );
-        }
-
-        if (currentRegion && language === 'np') {
-            return (
-                <Translation>
-                    {
-                        t => (
-                            `${currentRegion.title_ne} ${t(currentRegion.type)}`
-
-                        )
-                    }
-                </Translation>
-            );
-        }
-
-        return 'Unknown';
-    }
-
-    private getRegionDetails = (
-        selectedRegion: RegionValueElement,
-        provinces: Province[],
-        districts: District[],
-        municipalities: Municipality[],
-    ) => {
-        if (!selectedRegion || !selectedRegion.adminLevel) {
             return 'National';
         }
 
@@ -859,7 +1040,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
 
         if (currentRegion) {
-            return currentRegion;
+            return currentRegion.title;
         }
 
         return 'Unknown';
@@ -1152,6 +1333,28 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    // private handleCloseWalkThrough = () => {
+    //     this.setState({ closeWalkThrough: true });
+    // }
+
+    private handleStartTour = () => {
+        this.setState({
+            run: true,
+        });
+    }
+
+    private handleJoyrideCallback = (data: CallBackProps) => {
+        const { status, type } = data;
+        const { setRun } = this.props;
+        const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+        if (finishedStatuses.includes(status)) {
+            setRun({ value: false });
+            // Cookies.set('isFirstTimeUser', false, { expires: new Date(Date.now() + 2592000) });
+            Cookies.set('isFirstTimeUser', false, { path: '/', domain: '.yilab.org.np', expires: 365 });
+        }
+    };
+
     public render() {
         const {
             mapStyle,
@@ -1159,11 +1362,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
-            language: { language },
             // hazardList,
-            // hazardList,
+            run,
+            closeWalkThroughHomepage,
         } = this.props;
-
 
         const {
             leftContent,
@@ -1205,7 +1407,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             checkFullScreenStatus,
             isTilesLoaded,
             toggleAnimationMapDownloadButton,
-            showLanguageToolbar,
+
+            steps,
         } = this.state;
 
 
@@ -1227,6 +1430,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             showDataRangeFilter: this.showDataRangeFilter,
             hideDataRangeFilter: this.hideDataRangeFilter,
             extraFilterName: this.extraFilterName,
+
 
         };
 
@@ -1254,6 +1458,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             isFilterClicked,
             addResource,
             setAddResource: this.setAddResource,
+            activeRouteDetails,
 
         };
 
@@ -1272,7 +1477,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
             districts,
             municipalities,
         );
-
 
         const resetLocation = () => {
             // if (this.state.geoLocationStatus && this.geoLocationRef.current) {
@@ -1332,17 +1536,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             this.setState({ lattitude: val });
         };
         const queryStringParams = window.location.href.split('#/')[1];
-
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-        const Routes = ['dashboard', '', 'profile', 'incidents', 'damage-and-loss', 'realtime', 'risk-info'];
-        const queryStringParamsTranlation = window.location.href.split('/')[3];
-
-        if (Routes.includes(queryStringParamsTranlation)) {
-            this.setState({ showLanguageToolbar: true });
-        } else {
-            this.setState({ showLanguageToolbar: false });
-        }
 
         return (
             <PageContext.Provider value={pageProps}>
@@ -1351,15 +1546,33 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         styles.multiplexer,
                         leftContainerHidden && styles.leftContainerHidden,
                         mapDownloadPending && styles.downloadingMap,
-                        language === 'np' && styles.languageFont,
                     )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>
+                            <Joyride
+                                callback={this.handleJoyrideCallback}
+                                continuous
+                                // getHelpers={this.getHelpers}
+                                run={run}
+                                scrollToFirstStep
+                                showProgress
+                                showSkipButton
+                                steps={steps}
+                                styles={{
+                                    options: {
+                                        zIndex: 10000,
+                                    },
+                                }}
+                            />
+                            {/* {closeWalkThrough ? ''
+                                : isFirstTimeUser === undefined ? (
+                                    <WalkThrough
+                                        startTour={this.handleStartTour}
+                                    />
+                                ) : ''
+                            } */}
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
-                                    activeRouteName={activeRouteName}
-                                    hideMap={hideMap}
-                                    toggleLeftPaneButtonStretched={toggleLeftPaneButtonStretched}
                                     handleTilesLoad={this.handleTilesLoad}
                                     isTilesLoaded={isTilesLoaded}
                                     mapStyle={mapStyle}
@@ -1433,6 +1646,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             <div className={_cs(
                                                 styles.mainContentContainer,
                                                 mainContentContainerClassName,
+                                                'legend-tour',
                                             )}
                                             >
                                                 {mainContent}
@@ -1480,7 +1694,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 /> */}
                                                 <DownloadButtonOption
                                                     isTilesLoaded={isTilesLoaded}
-                                                    className={styles.layerSwitch}
+                                                    className={_cs(styles.mapSwitch, 'downloadButton-tour')}
                                                     onPendingStateChange={
                                                         this.handleMapDownloadStateChange
                                                     }
@@ -1489,9 +1703,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
                                                 />
                                                 <LayerSwitch
-                                                    className={styles.layerSwitch}
+                                                    className={_cs(styles.layerSwitch, 'layerSwitch-tour')}
                                                 />
-                                                <LayerToggle />
+                                                <LayerToggle className={_cs(styles.adminSwitch, 'adminSwitch-tour')} />
                                                 <ZoomToolBar
                                                     fullScreenMap={this.fullScreenMap}
                                                     resetLocation={resetLocation}
@@ -1509,7 +1723,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             </div>
                                         )}
                                     </main>
-
                                     {(rightContent || !hideFilters) && (
                                         <aside className={styles.right}>
                                             {rightContent && (
@@ -1521,10 +1734,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 >
                                                     {rightContent}
                                                 </div>
-
                                             )}
-                                            {showLanguageToolbar && <LanguageToggle />}
-
                                             {!hideFilter && (
                                                 <Filters
                                                     className={styles.filters}
@@ -1536,19 +1746,24 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     extraContentContainerClassName={
                                                         filterContentContainerClassName
                                                     }
-                                                    activeRouteDetails={activeRouteDetails}
                                                 />
                                             )}
                                         </aside>
                                     )}
                                     {this.renderRoutes()}
                                     <MapOrder ordering={orderedLayers} />
-
                                 </Map>
                             </RiskInfoLayerContext.Provider>
                         </div>
+                        {activeRouteName === 'homepage'
+                            ? ''
+                            : activeRouteName === 'about'
+                                ? ''
+                                : activeRouteName === 'developers'
+                                    ? '' : activeRouteName === 'manuals'
+                                        ? '' : activeRouteName === 'faqs'
+                                            ? '' : <Navbar className={styles.navbar} />}
 
-                        <Navbar className={styles.navbar} />
                     </div>
                 </TitleContextProvider>
             </PageContext.Provider>

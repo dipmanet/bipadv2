@@ -1,0 +1,67 @@
+.mainContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: #F3F3F3;
+    z-index: 10;
+    height: 10vh;
+
+    .navLinks {
+        margin-left: 100px;
+
+        .active {
+            border-bottom: 2px solid blue;
+            font-weight: 600;
+            padding-bottom: 5px;
+        }
+
+        span {
+
+            margin-left: 5px;
+            margin-right: 5px;
+            opacity: 0.67;
+            color: #000000;
+            font-size: 16px;
+        }
+    }
+
+    .languageButton {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 100px;
+
+
+        // height: 10vh;
+        .loginButtonImage {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            cursor: pointer;
+
+            p {
+                color: #000000;
+                opacity: 0.67;
+                font-size: 20px;
+            }
+        }
+
+        .languageToggle {
+            left: unset;
+            height: unset;
+            top: unset;
+            position: relative;
+
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .languageButton {
+        justify-content: flex-start !important;
+        margin-left: 20px !important;
+        width: 100% !important;
+    }
+}

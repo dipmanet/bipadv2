@@ -1,0 +1,351 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@1,100&family=Roboto:wght@300;400;500;700;900&display=swap');
+
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #F3F3F3;
+    color: #0C0C0C;
+    opacity: 0.87;
+
+
+
+    .container {
+        padding: 40px;
+        // margin-top: 25%;
+        // height: 90vh;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        font-family: 'Fira Sans';
+
+        .content {
+            display: flex;
+            padding: 20px;
+
+            .footer {
+                margin-top: 50px;
+                display: flex;
+
+                .contains {
+                    margin: 0px 20px;
+                }
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    font-size: 14px;
+                    color: #000000;
+                    opacity: 0.67;
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+
+            }
+
+            p {
+                color: #0C0C0C;
+                opacity: 0.87;
+            }
+
+            .imageLogo {
+                margin: 30px;
+                margin-top: 0px;
+            }
+        }
+
+        .welcome {
+            font-size: 34px;
+            line-height: 36px;
+            font-weight: 300;
+            font-style: normal;
+            color: #FCFCFC;
+            margin: 0;
+
+        }
+
+        .bipadPortal {
+            font-size: 48px;
+            line-height: 52px;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: -0.5px;
+            color: #FCFCFC;
+            margin-top: 0;
+
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0.25px;
+            font-weight: 400;
+            font-style: normal;
+            color: #FCFCFC;
+
+
+        }
+
+
+
+        .buttonGroup {
+            display: flex;
+            align-items: center;
+
+            .viewDashboard {
+                margin-left: 20px;
+                font-size: 16px;
+                letter-spacing: 0.1px;
+                font-weight: 500;
+                font-style: normal;
+                line-height: 20px;
+
+                color: #407CD5;
+                border: 1px solid;
+                margin: 5px;
+                padding: 5px;
+                margin-top: 8px;
+                height: 42px;
+                width: 127px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+
+            }
+
+            .submit-button {
+                height: 42px;
+                width: 127px;
+                display: flex !important;
+                justify-content: center;
+                align-items: center;
+                font-size: 16px;
+                letter-spacing: 0.1px;
+                font-weight: 500 !important;
+                font-style: normal;
+                line-height: 20px;
+                margin-left: 0px !important;
+                opacity: 0.9;
+                padding: var(--spacing-small) var(--spacing-medium);
+                margin: var(--spacing-small) var(--spacing-medium);
+                background-color: #407CD4;
+                display: inline-block;
+                margin-top: 10px;
+                color: white;
+                cursor: pointer;
+
+
+                &:hover {
+                    // font-weight: bold;
+                    opacity: 1;
+                }
+            }
+        }
+
+    }
+}
+
+@media only screen and (max-width: 380px) {
+    .container {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 0px;
+
+
+        .bipadPortal {
+            margin-bottom: 0px;
+            font-size: 36px;
+        }
+
+        .welcome {
+            font-size: 30px;
+        }
+
+        .paragraph {
+            font-size: 13px;
+            margin-bottom: 0px;
+        }
+
+        .content {
+            flex-direction: column;
+            width: 100% !important;
+
+            .imageLogo {
+                margin: 0px;
+                margin-top: 0px;
+
+                img {
+                    height: 60px;
+                    width: 60px;
+                }
+            }
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 500px) {
+    // .bipadPortal {
+    //     margin-bottom: 0px;
+    // }
+
+    // .content {
+    //     flex-direction: column;
+
+    //     .imageLogo {
+    //         margin: 0px;
+    //         margin-top: 0px;
+    //     }
+    // }
+    .container {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 0px;
+        width: 100%;
+
+        .bipadPortal {
+            margin-bottom: 0px;
+            font-size: 36px;
+        }
+
+        .welcome {
+            font-size: 30px;
+        }
+
+        .content {
+            flex-direction: column;
+            width: 82%;
+
+            .imageLogo {
+                margin: 0px;
+                margin-top: 0px;
+
+                img {
+                    height: 80px !important;
+                    width: 80px !important;
+                }
+            }
+        }
+    }
+
+
+
+}
+
+@media only screen and (max-width: 600px) {
+    .container {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 0px;
+        width: 100%;
+
+        .bipadPortal {
+            margin-bottom: 0px;
+            font-size: 36px;
+        }
+
+        .welcome {
+            font-size: 30px;
+        }
+
+        .content {
+            flex-direction: column;
+            width: 100%;
+
+            .imageLogo {
+                margin: 0px;
+                margin-top: 0px;
+
+                img {
+                    height: 100px;
+                    width: 100px;
+                }
+            }
+        }
+    }
+
+
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .footer {
+        flex-direction: column !important;
+        justify-content: center !important;
+        margin-bottom: 20px !important;
+    }
+
+    .content {
+        padding: 0px !important;
+    }
+
+    .contains {
+        margin: 10px 0px !important;
+    }
+
+    .imageLogo {
+        margin: 0px !important;
+    }
+
+    .container {
+        padding-top: 0px !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 20px !important;
+    }
+
+    // .buttonGroup {
+    //     flex-direction: column !important;
+    //     align-items: unset !important;
+    // }
+
+    .viewDashboard {
+        margin-left: 0px !important;
+    }
+
+    .welcome {
+        font-size: 24px !important;
+    }
+
+    .bipadPortal {
+        font-size: 30px !important;
+        line-height: 40px !important;
+    }
+
+}
+
+@media only screen and (max-width: 992px) {
+    .footer {
+        margin-top: 20px !important;
+    }
+
+    .container {
+        width: 100% !important;
+        margin-left: 0px;
+        margin-right: 0px;
+        display: unset !important;
+        align-items: unset !important;
+        margin-left: unset !important;
+        margin-right: unset !important;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .container {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
