@@ -62,7 +62,7 @@ module.exports = {
     },
     'rules': {
         'strict': 0,
-        'indent': ['error', 4, { 'SwitchCase': 1 }],
+        // 'indent': ['error', 4, { 'SwitchCase': 1 }],
         'no-unused-vars': [1, { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
         'no-console': 0,
 

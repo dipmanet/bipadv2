@@ -146,6 +146,15 @@ const routeSettings: SomeRoute[] = [
         disabled: false,
         iconName: 'riskInfoSvg',
     },
+    // {
+    //     name: 'feedbackAndSupport',
+    //     title: 'Feedback & Support',
+    //     path: '/feedback-support/',
+    //     load: () => import('../views/FeedbackSupport'),
+    //     navbar: true,
+    //     disabled: false,
+    //     iconName: 'chatBoxes',
+    // },
     {
         name: 'fourHundredThree',
         title: '403',
@@ -163,6 +172,7 @@ const routeSettings: SomeRoute[] = [
         path: undefined,
         navbar: false,
     },
+
     {
         name: 'forgotPassword',
         title: 'New Password',

@@ -122,6 +122,7 @@ const iconNames = {
     lgprofilePopupUpArrow: 'fa fa-chevron-up',
 
 
+    feedbackIcon: 'fa fa-comments',
 };
 
 export default iconNames;

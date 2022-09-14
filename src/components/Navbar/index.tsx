@@ -32,6 +32,7 @@ import Relief from '#components/ReliefModal';
 import FeedbackSupport from '#views/FeedbackSupport';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
+import FeedbackSupport from '#views/FeedbackSupport';
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
