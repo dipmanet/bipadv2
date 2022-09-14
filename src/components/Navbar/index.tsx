@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
+
+import { navigate } from '@reach/router';
+import Cookies from 'js-cookie';
 import ListView from '#rscv/List/ListView';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import { routeSettings } from '#constants';
-import { authStateSelector, languageSelector } from '#selectors';
-import { setAuthAction } from '#actionCreators';
+import { authStateSelector } from '#selectors';
+import { setAuthAction, setInitialCloseWalkThroughAction } from '#actionCreators';
 import { AppState } from '#store/types';
 import { AuthState } from '#store/atom/auth/types';
-
 import { getAuthState } from '#utils/session';
 import {
     createConnectedRequestCoordinator,
@@ -28,19 +29,85 @@ import NewLoginModal from '#components/NewLoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
-
+import FeedbackSupport from '#views/FeedbackSupport';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
-
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import ButtonGroupLogo from '#resources/icons/sidebarGroupButtons.svg';
+import GroupMenuContainer from './GroupMenuContainer';
+import PageContext from '#components/PageContext';
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
+
 interface Menu {
     title: string;
-    titleNep: string;
     name: string;
     path: string;
     iconName: string;
     disabled: boolean;
+    id: string;
+    image: boolean;
+    handleActiveGroupButton: (data: boolean) => void;
 }
+const GroupMenuListContainer = ({
+    title,
+    className,
+    onClick,
+    iconName,
+    disabled,
+    id,
+    image,
+    handleActiveGroupButton,
+    children
+}: {
+    title: string;
+    className?: string;
+    handleActiveGroupButton: () => void;
+    onClick: () => void;
+    iconName?: string;
+    disabled?: boolean;
+    id: string;
+    image?: boolean;
+    children: JSX.Element
+}) => {
+    const [showInfo1, setShowInfo1] = useState<boolean>(false);
+    useEffect(() => {
+        handleActiveGroupButton(showInfo1)
+    }, [showInfo1])
+    return (
+        <div className={styles.container}>
+            <div className={styles.infoBoxWrapper}>
+
+                <div
+                    role="presentation"
+                    className={_cs(styles.menuItemLikeButton, className)}
+                    onClick={() => {
+                        setShowInfo1(true)
+                    }}
+                    title={title}
+                    id={id}
+                >{image ? <ScalableVectorGraphics
+                    className={styles.infoIconMax}
+                    src={iconName}
+                /> : <Icon
+                    className={styles.icon}
+                    name={iconName}
+                />}
+
+                    <div className={styles.title}>
+                        {title}
+                    </div>
+                </div>
+
+                <GroupMenuContainer show={showInfo1} onClickOutside={() => {
+                    setShowInfo1(false)
+                }}  >{children}</GroupMenuContainer>
+
+            </div>
+        </div>
+    )
+}
+
+
 
 const MenuItemLikeButton = ({
     title,
@@ -48,23 +115,31 @@ const MenuItemLikeButton = ({
     onClick,
     iconName,
     disabled,
+    id,
+    image,
 }: {
     title: string;
     className?: string;
     onClick: () => void;
     iconName?: string;
     disabled?: boolean;
+    id: string;
+    image?: boolean
 }) => (
     <div
         role="presentation"
         className={_cs(styles.menuItemLikeButton, className)}
         onClick={!disabled ? onClick : undefined}
         title={title}
-    >
-        <Icon
-            className={styles.icon}
-            name={iconName}
-        />
+        id={id}
+    >{image ? <ScalableVectorGraphics
+        className={styles.infoIconMax}
+        src={iconName}
+    /> : <Icon
+        className={styles.icon}
+        name={iconName}
+    />}
+
         <div className={styles.title}>
             {title}
         </div>
@@ -96,11 +171,11 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState) => ({
     authState: authStateSelector(state),
-    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAuth: params => dispatch(setAuthAction(params)),
+    setCloseWalkThroughHomepage: params => dispatch(setInitialCloseWalkThroughAction(params)),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -124,18 +199,26 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-const menuKeySelector = (d: {name: string}) => d.name;
+const menuKeySelector = (d: { name: string }) => d.name;
 
 class Navbar extends React.PureComponent<Props, State> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeGroupButton: false,
+        };
+    }
     private menuRendererParams = (_: string, data: Menu) => ({
-        title: this.props.language.language === 'en' ? data.title : data.titleNep,
+        title: data.title,
         link: data.path,
         disabled: data.disabled,
         iconName: data.iconName,
         className: styles.menuItem,
-
-    })
-
+        id: data.id ? data.id : null,
+    });
+    private handleActiveGroupButton = (data: boolean) => {
+        this.setState({ activeGroupButton: data })
+    }
     public render() {
         const {
             className,
@@ -143,11 +226,16 @@ class Navbar extends React.PureComponent<Props, State> {
             requests: {
                 logoutRequest,
             },
+            setCloseWalkThroughHomepage,
         } = this.props;
-
+        const { activeRouteDetails } = this.context;
+        const { activeGroupButton } = this.state;
         const { authenticated, user } = authState;
+        const activeRouteName = activeRouteDetails && activeRouteDetails.name;
         // <Logo />
-
+        console.log("This is button group", activeRouteDetails)
+        const GroupMenuListRoutes = ['realtime', 'dataArchive']
+        const isRoutedListedHere = GroupMenuListRoutes.find(i => i === activeRouteName) ? true : false;
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView
@@ -158,79 +246,113 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
-                    <Translation>
-                        {
-                            t => (
-                                <ModalButton
-                                    className={styles.reportIncidentButton}
-                                    title={t('Situation Report')}
-                                    iconName="textDocument"
-                                    modal={<SituationReport />}
-                                />
-                            )}
-                    </Translation>
 
-                    {authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <ModalButton
-                                        className={styles.reliefButton}
-                                        title={t('Relief')}
-                                        iconName="cart"
-                                        modal={<Relief />}
-                                    />
-                                )}
-                        </Translation>
-                    )}
-                    {authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <ModalButton
-                                        className={styles.reportIncidentButton}
-                                        title={t('Reported incidents')}
-                                        iconName="list"
-                                        modal={<CitizenReportsModal />}
-                                    />
-                                )}
-                        </Translation>
-                    )}
-                    <Translation>
-                        {
-                            t => (
-                                <ModalButton
-                                    className={styles.reportIncidentButton}
-                                    title={t('Report an incident')}
-                                    iconName="telephone"
-                                    modal={<CitizenReportFormModal />}
-                                />
-                            )}
-                    </Translation>
+
+                    {/* <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="Feedback & Support"
+                        iconName="feedbackIcon"
+                        modal={<FeedbackSupport />}
+                    // onClick={() => navigate('/feedback-support/')}
+                    /> */}
+                    {/* <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="About Us"
+                        id="about-us"
+                        iconName="aboutUs"
+                        modal={<AboutModal />}
+                    /> */}
+                    {/* <MenuItemLikeButton
+                        className={styles.logoutButton}
+                        title=""
+                        iconName={ButtonGroupLogo}
+                        image={true}
+
+                    /> */}
+                    <GroupMenuListContainer
+                        className={(activeGroupButton || isRoutedListedHere) ? styles.logoutButtonActive : styles.buttomGroup}
+                        title=""
+                        iconName={ButtonGroupLogo}
+                        image={true}
+                        handleActiveGroupButton={this.handleActiveGroupButton}
+                    >
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="Situation Report"
+                            id="situation-report"
+                            iconName="textDocument"
+                            modal={<SituationReport />}
+                        />
+                        {authenticated && (
+                            <ModalButton
+                                className={styles.reliefButton}
+                                title="Relief"
+                                iconName="cart"
+                                id="relief"
+                                modal={<Relief />}
+                            />
+                        )}
+                        {authenticated && (
+                            <ModalButton
+                                className={styles.reportIncidentButton}
+                                title="Reported incidents"
+                                id="reported-incidents"
+                                iconName="list"
+                                modal={<CitizenReportsModal />}
+                            />
+                        )}
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="Report an incident"
+                            id="report-an-incident"
+                            iconName="telephone"
+                            modal={<CitizenReportFormModal />}
+                        />
+                        {/* <MenuItemLikeButton
+                            className={styles.logoutButton}
+                            title="Home Page"
+                            iconName="aboutUs"
+                            id="logout"
+                            onClick={() => {
+                                Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
+                                setCloseWalkThroughHomepage({ value: false });
+                                navigate('/');
+                            }}
+
+                        /> */}
+                        <MenuItemLikeButton
+                            className={activeRouteName === 'realtime' ? styles.selectedButtonActive : styles.reportIncidentButton}
+                            title="Real Time"
+                            iconName="aboutUs"
+                            id="logout"
+                            onClick={() => {
+
+                                navigate('/realtime/');
+                            }}
+
+                        />
+                        <MenuItemLikeButton
+                            className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
+                            title="Real Time"
+                            iconName="aboutUs"
+                            id="logout"
+                            onClick={() => {
+
+                                navigate('/data-archive/');
+                            }}
+
+                        />
+
+                    </GroupMenuListContainer>
                     {!authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <ModalButton
-                                        className={styles.menuItem}
-                                        title={t('Login')}
-                                        iconName="login"
-                                        modal={<NewLoginModal />}
-                                    />
-                                )}
-                        </Translation>
+                        <ModalButton
+                            className={styles.menuItem}
+                            title="Login"
+                            id="login"
+                            iconName="login"
+                            modal={<NewLoginModal />}
+                        />
                     )}
-                    <Translation>
-                        {
-                            t => (
-                                <ModalButton
-                                    className={styles.reportIncidentButton}
-                                    title={t('About Us')}
-                                    iconName="aboutUs"
-                                    modal={<AboutModal />}
-                                />
-                            )}
-                    </Translation>
                     {user && (
                         <Icon
                             className={styles.userIcon}
@@ -239,25 +361,22 @@ class Navbar extends React.PureComponent<Props, State> {
                         />
                     )}
                     {authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <MenuItemLikeButton
-                                        className={styles.logoutButton}
-                                        title={t('Logout')}
-                                        iconName="logout"
-                                        onClick={logoutRequest.do}
-                                        disabled={logoutRequest.pending}
-                                    />
-                                )}
-                        </Translation>
+                        <MenuItemLikeButton
+                            className={styles.logoutButton}
+                            title="Logout"
+                            iconName="logout"
+                            id="logout"
+                            onClick={logoutRequest.do}
+                            disabled={logoutRequest.pending}
+                        />
                     )}
+
                 </div>
             </nav>
         );
     }
 }
-
+Navbar.contextType = PageContext;
 // check for map styles
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(

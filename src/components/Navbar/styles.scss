@@ -19,6 +19,12 @@
         flex-direction: column;
         flex-shrink: 0;
 
+        .container {
+            position: relative;
+        }
+
+
+
         .menu-item {
             padding: var(--spacing-small-alt) 0;
         }
@@ -32,8 +38,39 @@
         }
 
         .report-incident-button,
+        .reliefButton {
+            padding: var(--spacing-medium) 0;
+            width: 33%;
+        }
+
+        .buttomGroup {
+            padding: var(--spacing-medium) 0;
+
+        }
+
         .logout-button {
             padding: var(--spacing-medium) 0;
+
+
+        }
+
+        .selectedButtonActive {
+            padding: var(--spacing-medium) 0;
+            color: #E66677;
+            width: 33%;
+
+            path {
+                fill: #E66677;
+            }
+        }
+
+        .logoutButtonActive {
+            padding: var(--spacing-medium) 0;
+            color: #E66677;
+
+            path {
+                fill: #E66677;
+            }
         }
     }
 }

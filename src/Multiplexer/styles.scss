@@ -336,10 +336,13 @@ button {
     }
 
     .mapboxgl-ctrl-bottom-right {
+        z-index: auto;
+
         .mapboxgl-ctrl-attrib {
             // display: none;
             // margin-right: var(--spacing-medium)!important;
             // padding: 0!important;
+
         }
     }
 
