@@ -219,6 +219,10 @@ class NewCompare extends React.PureComponent {
             this.setState({ faramValues: { ...faramValues, [elementName]: data } });
         };
 
+        const clearValues = (element: string) => {
+            this.setState({ faramValues: { ...faramValues, [element]: {} } });
+        };
+
         return (
             <Modal className={_cs(className, styles.comparative)
             }
@@ -248,6 +252,8 @@ class NewCompare extends React.PureComponent {
                             dropdownOption={RegionOptions}
                             icon={false}
                             dropDownClickHandler={dropDownClickHandler}
+                            deleteIcon
+                            clearValues={clearValues}
                         />
                         {/* <RegionSelectInput
                             label="Enter a Location to compare"
@@ -270,6 +276,9 @@ class NewCompare extends React.PureComponent {
                             dropdownOption={RegionOptions}
                             icon={false}
                             dropDownClickHandler={dropDownClickHandler}
+                            deleteIcon
+                            clearValues={clearValues}
+
                         />
                     </div>
                     <Button

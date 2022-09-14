@@ -18,9 +18,12 @@ const Dropdown = (props) => {
         placeholder,
         label,
         className,
-        elementName } = props;
+        elementName,
+        deleteIcon,
+        clearValues } = props;
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
     const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState(placeholder);
+    // const [deleteIcon, setDeleteIcon] = useState(false);
 
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
@@ -57,6 +60,12 @@ const Dropdown = (props) => {
         setShowOption(false);
     };
 
+    const clearButtonHandler = () => {
+        clearValues(elementName);
+        setdropDownPlaceHolder(placeholder);
+        setSelectName('');
+    };
+
     return (
         <>
             <div
@@ -85,7 +94,6 @@ const Dropdown = (props) => {
                             )}
                         <div
                             className={styles.selectField}
-                            onClick={onSelectClick}
                         >
                             <p className={styles.selectItem}>
                                 {
@@ -93,7 +101,25 @@ const Dropdown = (props) => {
                                 }
 
                             </p>
-                            <div className={styles.selectIcon} />
+                            {
+                                deleteIcon
+                                && (
+
+                                    <span
+                                        className={styles.crossIcon}
+                                        onClick={clearButtonHandler}
+                                    >
+                                        <Icon
+                                            name="times"
+                                        />
+                                    </span>
+                                )
+                            }
+
+                            <div
+                                className={styles.selectIcon}
+                                onClick={onSelectClick}
+                            />
                         </div>
                     </div>
                 </div>
