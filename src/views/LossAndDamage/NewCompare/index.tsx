@@ -252,7 +252,7 @@ class NewCompare extends React.PureComponent {
                             dropdownOption={RegionOptions}
                             icon={false}
                             dropDownClickHandler={dropDownClickHandler}
-                            deleteIcon
+                            deleteicon
                             clearValues={clearValues}
                         />
                         {/* <RegionSelectInput
@@ -276,7 +276,7 @@ class NewCompare extends React.PureComponent {
                             dropdownOption={RegionOptions}
                             icon={false}
                             dropDownClickHandler={dropDownClickHandler}
-                            deleteIcon
+                            deleteicon
                             clearValues={clearValues}
 
                         />

@@ -19,12 +19,10 @@ const Dropdown = (props) => {
         label,
         className,
         elementName,
-        deleteIcon,
+        deleteicon,
         clearValues } = props;
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
     const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState(placeholder);
-    // const [deleteIcon, setDeleteIcon] = useState(false);
-
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
         if (selectOption && setSelectOption) {
@@ -102,7 +100,7 @@ const Dropdown = (props) => {
 
                             </p>
                             {
-                                deleteIcon
+                                deleteicon
                                 && (
 
                                     <span
