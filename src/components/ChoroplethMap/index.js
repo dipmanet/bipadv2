@@ -148,14 +148,14 @@ class ChoroplethMap extends React.PureComponent {
         } = this.props;
 
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
-        const showDistrict = [1, 2].includes(regionLevel);
-        const showMunicipality = [2, 3].includes(regionLevel);
-        const showWard = [3, 4].includes(regionLevel);
+        const showDistrict = [2].includes(regionLevel);
+        const showMunicipality = [3].includes(regionLevel);
+        const showWard = [4].includes(regionLevel);
 
-        const showProvinceFill = isNotDefined(regionLevel);
-        const showDistrictFill = regionLevel === 1;
-        const showMunicipalityFill = regionLevel === 2;
-        const showWardFill = regionLevel === 3;
+        const showProvinceFill = isNotDefined(regionLevel) || regionLevel === 1;
+        const showDistrictFill = regionLevel === 2;
+        const showMunicipalityFill = regionLevel === 3;
+        const showWardFill = regionLevel === 4;
 
         const showProvinceLabel = showProvinceFill;
         const showDistrictLabel = showDistrictFill;
@@ -253,6 +253,8 @@ class ChoroplethMap extends React.PureComponent {
                     />
                     <MapLayer
                         layerKey="province-fill"
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.province,

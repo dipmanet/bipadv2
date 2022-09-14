@@ -202,9 +202,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         submittedStartDate: encodeDate(DEFAULT_START_DATE),
         submittedEndDate: encodeDate(DEFAULT_END_DATE),
         Null_check_estimatedLoss: false,
-        selectOption: { name: '', key: '' },
+        selectOption: { name: 'Incidents', key: 'count' },
         valueOnclick: { value: 'count', index: 0 },
-        regionRadio: 'province',
+        regionRadio: { name: 'province', id: 1 },
     }
 
     private handleSaveClick = () => {
@@ -397,8 +397,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             this.setState({ selectOption: { name, key } });
         };
 
-        const setRegionRadio = (val) => {
-            this.setState({ regionRadio: val });
+        const setRegionRadio = (val, id) => {
+            this.setState({ regionRadio: { name: val, id } });
         };
 
         const { rangeInDays } = filters.dataDateRange;
@@ -698,7 +698,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             lossAndDamageList={filteredData}
                             startDate={submittedStartDate}
                             endDate={submittedEndDate}
-                            currentSelection={selectOption.name}
+                            radioSelect={regionRadio}
+                            currentSelection={selectOption}
                         />
                     )}
                 />

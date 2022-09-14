@@ -73,18 +73,18 @@ const BarChartVisual = (props) => {
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
-        if (regionRadio.adminLevel || regionRadio) {
+        if (regionRadio.adminLevel || regionRadio.name) {
             switch (true) {
-                case regionRadio.adminLevel === 1 || regionRadio === 'province':
+                case regionRadio.adminLevel === 1 || regionRadio.name === 'province':
                     setChartData(distributionCalculate(provinceIndex, 'province')
                         .sort((a, b) => b.value - a.value));
                     break;
-                case regionRadio.adminLevel === 2 || regionRadio === 'district':
+                case regionRadio.adminLevel === 2 || regionRadio.name === 'district':
                     setChartData(distributionCalculate(districtIndex, 'district')
                         .sort((a, b) => b.value - a.value)
                         .slice(0, 10));
                     break;
-                case regionRadio.adminLevel === 3 || regionRadio === 'municipality':
+                case regionRadio.adminLevel === 3 || regionRadio.name === 'municipality':
                     setChartData(distributionCalculate(municipalityIndex, 'municipality')
                         .sort((a, b) => b.value - a.value)
                         .slice(0, 10));
@@ -97,8 +97,8 @@ const BarChartVisual = (props) => {
 
     function nameReturn(region: string | object) {
         if (typeof region === 'string') {
-            if (region === 'district' || region === 'municipality') return `${regionRadio}wise distribution (Top 10)`;
-            return `${regionRadio}wise distribution`;
+            if (region === 'district' || region === 'municipality') return `${regionRadio.name}wise distribution (Top 10)`;
+            return `${regionRadio.name}wise distribution`;
         }
 
         if (region.adminLevel === 1) return 'ProvinceWise distribution';

@@ -79,14 +79,42 @@ export default class LossAndDamageMap extends React.PureComponent {
             metricName,
             metricKey,
             onMetricChange,
+            radioSelect,
+            currentSelection,
         } = this.props;
 
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
         const mapState = this.generateMapState(geoareas, mapping, metric);
+        console.log(sourceKey, 'map state');
 
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
+
+        const tooltipRenderer = (props) => {
+            const { feature } = props;
+            return (
+                <>
+                    <h3 style={{ 'font-size': '12px',
+                        margin: 0,
+                        padding: '10px 20px 0px 20px',
+                        textTransform: 'uppercase',
+                        textAlign: 'center' }}
+                    >
+                        {feature.properties.title}
+
+                    </h3>
+                    <p style={{ margin: 0,
+                        padding: '0 20px 10px 20px',
+                        fontSize: '12px',
+                        textAlign: 'center' }}
+                    >
+                        {`No of ${currentSelection}: ${feature.state.value}`}
+                    </p>
+
+                </>
+            );
+        };
 
         return (
             <React.Fragment>
@@ -156,6 +184,8 @@ export default class LossAndDamageMap extends React.PureComponent {
                     sourceKey={sourceKey}
                     paint={colorPaint}
                     mapState={mapState}
+                    regionLevel={radioSelect}
+                    tooltipRenderer={tooltipRenderer}
                 />
             </React.Fragment>
         );

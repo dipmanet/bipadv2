@@ -66,7 +66,7 @@ class Overview extends React.PureComponent {
             };
         }
 
-        const groupFn = getGroupMethod(regionLevel + 1);
+        const groupFn = getGroupMethod(regionLevel);
         const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
         const aggregatedStat = getAggregatedStats(regionGroupedIncidents.flat());
 
@@ -78,7 +78,6 @@ class Overview extends React.PureComponent {
             )
         );
         const mapping = listToMapGroupedItem(regionGroupedIncidents);
-
         return {
             mapping,
             aggregatedStat,
@@ -99,10 +98,11 @@ class Overview extends React.PureComponent {
             startDate,
             endDate,
             currentSelection,
+            radioSelect,
         } = this.props;
-        const {
-            selectedMetricKey = 'count',
-        } = this.state;
+        // const {
+        //     selectedMetricKey = 'count',
+        // } = this.state;
 
 
         const sanitizedList = getSanitizedIncidents(
@@ -114,16 +114,15 @@ class Overview extends React.PureComponent {
         const {
             mapping,
             aggregatedStat,
-        } = this.generateOverallDataset(sanitizedList, regionLevel);
+        } = this.generateOverallDataset(sanitizedList, radioSelect.id);
 
-        const selectedMetric = metricMap[selectedMetricKey];
+        const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
         const geoareas = (
-            (regionLevel === 3 && wards)
-            || (regionLevel === 2 && municipalities)
-            || (regionLevel === 1 && districts)
-            || provinces
+            (radioSelect.id === 3 && municipalities)
+            || (radioSelect.id === 2 && districts)
+            || (radioSelect.id === 1 && provinces)
         );
 
         const { setDamageAndLoss } = this.context;
@@ -138,10 +137,9 @@ class Overview extends React.PureComponent {
                 return prevState;
             });
         }
-
         return (
             <>
-                <DamageLossTooltip currentSelection={currentSelection} />
+                <DamageLossTooltip currentSelection={currentSelection.name} />
                 <Map
                     geoareas={geoareas}
                     mapping={mapping}
@@ -151,9 +149,11 @@ class Overview extends React.PureComponent {
                     metric={selectedMetric.metricFn}
                     metricName={selectedMetric.label}
                     metricKey={selectedMetric.key}
-                    onMetricChange={(m) => {
-                        this.setState({ selectedMetricKey: m });
-                    }}
+                    radioSelect={radioSelect.id}
+                    currentSelection={currentSelection.name}
+                    // onMetricChange={(m) => {
+                    //     this.setState({ selectedMetricKey: m });
+                    // }}
                 />
             </>
 

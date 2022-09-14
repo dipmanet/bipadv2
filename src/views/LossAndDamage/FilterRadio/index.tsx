@@ -23,8 +23,8 @@ const FilterRadio = (props) => {
                             type="radio"
                             name="filter"
                             value={item.name}
-                            onClick={e => setRegionRadio(e.target.value)}
-                            checked={regionRadio === item.name}
+                            onClick={e => setRegionRadio(e.target.value, item.id)}
+                            checked={regionRadio.name && regionRadio.name === item.name}
                         />
                         {item.name}
                     </label>
