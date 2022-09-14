@@ -16,16 +16,13 @@ const state: PageState = {
     eventTypes: {},
 
     hidePopup: false,
-
+    closeWalkThrough: true,
+    run: false,
     region: {
         adminLevel: undefined,
     },
 
     filters: {
-        rainBasin: '',
-        rainStation: '',
-        riverBasin: '',
-        riverStation: '',
         region: {},
         hazard: [],
         dataDateRange: {
@@ -78,22 +75,18 @@ const state: PageState = {
         {
             id: 0,
             title: 'national',
-            titleNe: 'राष्ट्रिय',
         },
         {
             id: 1,
             title: 'province',
-            titleNe: 'प्रदेश',
         },
         {
             id: 2,
             title: 'district',
-            titleNe: 'जिल्‍ला',
         },
         {
             id: 3,
             title: 'municipality',
-            titleNe: 'नगरपालिका',
         },
     ],
 
@@ -106,104 +99,88 @@ const state: PageState = {
     riverStations: [],
     documentCategoryList: [],
 
-    selectedMapStyle: 'mapbox://styles/yilab/ckb7jq0gk08gx1io0xanwesfp',
+    selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
     hazardTypes: {},
     resourceTypeList: [
         {
             id: 1,
             title: 'education',
             label: 'Education',
-            labelNe: 'शैक्षिक संस्था',
         },
         {
             id: 2,
             title: 'health',
             label: 'Health',
-            labelNe: 'स्वास्थ्य संस्था',
         },
         {
             id: 3,
             title: 'finance',
             label: 'Banking & Finance',
-            labelNe: 'बैंकिङ तथा वित्त संस्था',
         },
         {
             id: 4,
             title: 'governance',
             label: 'Governance',
-            labelNe: 'संस्थागत विवरण',
         },
         {
             id: 5,
             title: 'hotelandrestaurant',
             label: 'Hotel & Restaurant',
-            labelNe: 'होटल तथा रेस्टुरेन्ट',
         },
         {
             id: 6,
             title: 'cultural',
             label: 'Culture',
-            labelNe: 'धार्मिक स्थान',
         },
         {
             id: 7,
             title: 'industry',
             label: 'Industry',
-            labelNe: 'उद्योग',
         },
         {
             id: 8,
             title: 'communication',
             label: 'Communication',
-            labelNe: 'सञ्चार सुबिधा',
         },
         {
             id: 9,
             title: 'helipad',
             label: 'Helipad',
-            labelNe: 'हेलिप्याड',
         },
         {
             id: 10,
             title: 'bridge',
             label: 'Bridge',
-            labelNe: 'पुल',
         },
         {
             id: 11,
             title: 'electricity',
             label: 'Electricity',
-            labelNe: 'ऊर्जा सेवा',
         },
         {
             id: 12,
             title: 'sanitation',
             label: 'Sanitation',
-            labelNe: 'सरसफाई सेवा',
         },
         {
             id: 13,
             title: 'watersupply',
             label: 'Water Supply',
-            labelNe: 'पानी आपूर्ति सेवा',
         },
         {
             id: 14,
             title: 'airway',
             label: 'Airway',
-            labelNe: 'हवाई सुबिधा',
         },
         {
             id: 15,
             title: 'waterway',
             label: 'Waterway',
-            labelNe: 'जलमार्ग',
         },
         {
             id: 16,
             title: 'roadway',
             label: 'Roadway',
-            labelNe: 'स्थलमार्ग सुबिधा',
         },
         // {
         //     id: 17,
@@ -214,25 +191,21 @@ const state: PageState = {
             id: 21,
             title: 'firefightingapparatus',
             label: 'Firefighting apparatus ',
-            labelNe: 'अग्नी नियनत्रण उपकरण',
         },
         {
             id: 18,
             title: 'evacuationcentre',
             label: 'Evacuation Center',
-            labelNe: 'आपतकालीन सेल्टर',
         },
         {
             id: 19,
             title: 'openspace',
             label: 'Humanitarian Open Space',
-            labelNe: 'मानवीय खुल्ला स्थान',
         },
         {
             id: 20,
             title: 'communityspace',
             label: 'Community Space',
-            labelNe: 'सामुदायिक खुल्ला स्थान',
         },
     ],
     carKeys: [],
@@ -278,14 +251,14 @@ const state: PageState = {
         realTimeFireList: [],
         realTimePollutionList: [],
         realTimeSourceList: [
-            { id: 3, title: 'Rain', titleNe: 'वर्षा' },
-            { id: 2, title: 'River', titleNe: 'नदी' },
+            { id: 3, title: 'Rain' },
+            { id: 2, title: 'River' },
         ],
         otherSourceList: [
-            { id: 1, title: 'Earthquake', titleNe: 'भूकम्प' },
-            { id: 5, title: 'Air pollution', titleNe: 'वायु प्रदूषण' },
-            { id: 4, title: 'Forest Fire', titleNe: 'वन डढेँलो' },
-            { id: 6, title: 'Streamflow', titleNe: 'नदीको बहाब' },
+            { id: 1, title: 'Earthquake' },
+            { id: 5, title: 'Air pollution' },
+            { id: 4, title: 'Forest Fire' },
+            { id: 6, title: 'Streamflow' },
         ],
         filters: {
             faramValues: {
@@ -347,9 +320,6 @@ const state: PageState = {
             pristine: true,
         },
     },
-    language: {
-        language: 'en',
-    },
     generalData: {
         reportTitle: '',
         fiscalYear: '',
@@ -397,6 +367,10 @@ const state: PageState = {
     palikaLanguage: {
         language: 'en',
     },
+    language: {
+        language: 'en',
+    },
+
     drrmOrg: {
         data: [],
     },
@@ -497,7 +471,7 @@ const state: PageState = {
                 deaths: 0,
                 incidents: 0,
             },
-            'वन डढेँलो': {
+            डढेलो: {
                 deaths: 0,
                 incidents: 0,
             },

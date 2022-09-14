@@ -4,7 +4,7 @@ import {
     FiltersElement,
     ResourceTypeKeys,
     ModelEnum,
-    // KeyValue,
+    KeyValue,
     DAEarthquakeFiltersElement,
     DAPollutionFiltersElement,
     DARainFiltersElement,
@@ -14,11 +14,9 @@ import {
     RiverStation,
 } from '#types';
 
-
 export interface Field {
     id: number;
     title: string;
-    titleNe: string;
 }
 export interface Language {
     language: string;
@@ -304,7 +302,6 @@ export interface SeverityType extends Field {
 export interface ResourceType extends Field {
     id: number;
     title: ResourceTypeKeys;
-    titleNe: string;
 }
 export interface DocumentCategory extends Field {
 }
@@ -393,7 +390,6 @@ export interface Layer extends Field {
 export interface LayerGroup extends Field {
     category: string;
     shortDescription: string;
-    shortDescriptionNe: string;
     longDescription: string;
     parent: number | null;
 }
@@ -454,7 +450,6 @@ export interface MapStyle {
 export interface AdminLevel {
     id: number;
     title: string;
-    titleNe: string;
 }
 
 export interface Region {
@@ -661,13 +656,11 @@ export interface ProfileContactPage {
 export interface RealTimeSource {
     id: number;
     title: string;
-    titleNe: string;
 }
 
 export interface OtherSource {
     id: number;
     title: string;
-    titleNe: string;
 }
 
 export interface RealTimeMonitoringPage {
@@ -690,6 +683,7 @@ export interface DataArchivePage {
     dataArchivePollutionList: DataArchivePollution[];
     filters: Filters;
 }
+
 
 export interface ProjectsProfileFilters {
     faramValues: {
@@ -747,6 +741,8 @@ export interface EpidemicPage {
 
 export interface PageState {
     hidePopup: boolean;
+    closeWalkThrough: boolean;
+    run: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
     carKeys: [];
@@ -754,7 +750,6 @@ export interface PageState {
     layerGroups: [];
     region: Region;
     filters: FiltersElement;
-
     language: Language;
     daEarthquakeFilter: DAEarthquakeFiltersElement;
     daPollutionFilter: DAPollutionFiltersElement;
@@ -794,10 +789,10 @@ export interface PageState {
     incidentPage: IncidentPage;
     responsePage: ResponsePage;
     realTimeMonitoringPage: RealTimeMonitoringPage;
-    // dataArchivePage: DataArchivePage;
+    dataArchivePage: DataArchivePage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
-    Page: DisasterProfilePage;
+    disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
     generalData: GeneralData;
     palikaRedirect: PalikaRedirect;
@@ -818,7 +813,6 @@ export interface PageState {
     bulletinEditData: Bulletin;
 }
 
-
 // Data Archive
 export interface Federal {
     id: number;
@@ -833,6 +827,9 @@ export interface Federal {
     code: string;
     order: number;
 }
+
+// Data Archive
+
 
 export interface FederalLocation {
     province?: Federal;
@@ -852,70 +849,6 @@ export interface DataArchiveEarthquake extends FederalLocation {
     eventOn: string;
 }
 
-// export interface DataArchivePollution extends RealTimePollution {
-//     title?: string;
-//     description?: string;
-//     elevation?: number | null;
-//     createdOn?: string;
-//     dateTime?: string;
-// }
-
-// export interface DataArchiveRain extends RealTimeRain {
-//     station: number;
-//     measuredOn?: string;
-//     stationSeriesId: number;
-//     province: number;
-//     district: number;
-//     municipality: number;
-//     ward: number;
-// }
-
-export interface DataArchiveRiver extends RealTimeRiver {
-    station: number;
-    stationSeriesId: number;
-    province: number;
-    district: number;
-    municipality: number;
-    ward: number;
-}
-
-// export interface DataArchiveEarthquakeFilters {
-//     dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
-// }
-
-// Data Archive
-// export interface Federal {
-//     id: number;
-//     bbox: [number, number, number, number];
-//     centroid: {
-//         type: string;
-//         coordinates: [number, number];
-//     };
-//     title: string;
-//     titleEn: string;
-//     titleNe: string;
-//     code: string;
-//     order: number;
-// }
-
-// export interface FederalLocation {
-//     province?: Federal;
-//     district?: Federal;
-//     municipality?: Federal;
-// }
-
-// export interface DataArchiveEarthquake extends FederalLocation{
-//     id?: number;
-//     description?: string;
-//     point?: {
-//         type: string;
-//         coordinates: [ number, number];
-//     };
-//     magnitude: number;
-//     address: string;
-//     eventOn: string;
-// }
-
 export interface DataArchivePollution extends RealTimePollution {
     title?: string;
     description?: string;
@@ -934,14 +867,14 @@ export interface DataArchiveRain extends RealTimeRain {
     ward: number;
 }
 
-// export interface DataArchiveRiver extends RealTimeRiver {
-//     station: number;
-//     stationSeriesId: number;
-//     province: number;
-//     district: number;
-//     municipality: number;
-//     ward: number;
-// }
+export interface DataArchiveRiver extends RealTimeRiver {
+    station: number;
+    stationSeriesId: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
 
 export interface DataArchiveEarthquakeFilters {
     dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
@@ -967,6 +900,8 @@ export enum PageType {
     SET_PROGRAM_AND_POLICY_DATA = 'page/DRRM_REPORT/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/DRRM_REPORT/SET_BUDGET_ACTIVITY_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
+    SET_INITIAL_CLOSE_WALK_THROUGH = 'page/SET_INITIAL_CLOSE_WALK_THROUGH',
+    SET_INITIAL_RUN = 'page/SET_INITIAL_RUN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
@@ -1031,6 +966,7 @@ export enum PageType {
     DA__SET_DATA_ARCHIVE_RAIN_STATIONS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_STATIONS/',
     DA__SET_DATA_ARCHIVE_RIVER_STATIONS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_STATIONS/',
 
+
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
     LD__SET_LOSS_AND_DAMAGE_LIST = 'page/LOSS_AND_DAMAGE/SET_LOSS_AND_DAMAGE_LIST',
@@ -1062,11 +998,11 @@ export enum PageType {
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
 
-// ACTION CREATOR INTERFACE
-
 export interface SetLanguage {
     language: Language;
 }
+
+// ACTION CREATOR INTERFACE
 
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
@@ -1181,7 +1117,14 @@ export interface SetInitialPopupHidden {
     type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
     value: boolean;
 }
-
+export interface SetInitialCloseWalkThrough {
+    type: typeof PageType.SET_INITIAL_CLOSE_WALK_THROUGH;
+    value: boolean;
+}
+export interface SetInitialRun {
+    type: typeof PageType.SET_INITIAL_RUN;
+    value: boolean;
+}
 export interface SetHazardType {
     type: typeof PageType.SET_HAZARD_TYPES;
     hazardTypes: HazardType[];
@@ -1504,7 +1447,7 @@ export interface SetEpidemicsPage {
 }
 
 export type PageActionTypes = (
-    SetLanguage | SetRegion | SetInitialPopupHidden |
+    SetLanguage |
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData | SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
@@ -1528,6 +1471,9 @@ export type PageActionTypes = (
     SetDataArchiveRainFilters | SetDataArchiveRiverFilters |
     SetDataArchiveRainStations | SetDataArchiveRiverStations |
     SetDashboardHazardType | SetIbfPage |
-    SetDashboardHazardType | SetBulletinDataCovid |
-    SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage | SetBulletinEditData
+    SetDashboardHazardType | SetBulletinDataCovid
+    | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage |
+    SetBulletinEditData |
+    SetInitialCloseWalkThrough | SetInitialRun |
+    SetDataArchiveRainStations | SetDataArchiveRiverStations
 );

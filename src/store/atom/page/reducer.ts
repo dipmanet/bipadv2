@@ -2,18 +2,11 @@
 import produce from 'immer';
 import { listToMap } from '@togglecorp/fujs';
 
+import { ModelEnum } from '#types';
 import * as Type from './types';
 import initialState from './initialState';
 
-import { ModelEnum } from '#types';
-
 // ACTION CREATORS
-
-
-export const setLanguageAction = language => ({
-    type: Type.PageType.SET_LANGUAGE,
-    language,
-});
 
 // IBF
 export const setIbfPageAction = ibfPage => ({
@@ -40,7 +33,10 @@ export const setBulletinEditDataAction = bulletinEditData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA,
     bulletinEditData,
 });
-
+export const setLanguageAction = language => ({
+    type: Type.PageType.SET_LANGUAGE,
+    language,
+});
 // bulletin actions end
 // Epidemics
 export const SetEpidemicsPageAction = epidemicsPage => ({
@@ -128,6 +124,19 @@ export const setInitialPopupHiddenAction = (
     value,
 });
 
+
+export const setInitialCloseWalkThroughAction = (
+    { value }: { value: boolean },
+) => ({
+    type: Type.PageType.SET_INITIAL_CLOSE_WALK_THROUGH,
+    value,
+});
+export const setInitialRunAction = (
+    { value }: { value: boolean },
+) => ({
+    type: Type.PageType.SET_INITIAL_RUN,
+    value,
+});
 export const setHazardTypesAction = (
     { hazardTypes }: { hazardTypes: Type.HazardType[] },
 ) => ({
@@ -612,12 +621,31 @@ const setRegion = (state: Type.PageState, action: Type.SetRegion) => {
 
 const setInitialPopupHidden = (state: Type.PageState, action: Type.SetInitialPopupHidden) => {
     const { value } = action;
+
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
         deferedState.hidePopup = value;
     });
     return newState;
 };
+const setInitialCloseWalkThrough = (state: Type.PageState,
+    action: Type.SetInitialCloseWalkThrough) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.closeWalkThrough = value;
+    });
+    return newState;
+};
+const setInitialRun = (state: Type.PageState, action: Type.SetInitialRun) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.run = value;
+    });
+    return newState;
+};
+
 
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
     const { hazardTypes: hazardTypesFromAction } = action;
@@ -1606,16 +1634,6 @@ export const setProfileContactFilters = (
     return newState;
 };
 
-const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
-    console.log('action', action);
-    const { language } = action;
-    const newState = produce(state, (deferedState) => {
-        // eslint-disable-next-line no-param-reassign
-        deferedState.language = language;
-    });
-    return newState;
-};
-
 
 const setGeneralData = (state: Type.PageState, action: Type.SetGeneralData) => {
     const { generalData } = action;
@@ -1782,6 +1800,15 @@ const setDrrmOrg = (state: Type.PageState, action: Type.SetDrrmOrg) => {
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
         deferedState.drrmOrg = drrmOrg;
+    });
+    return newState;
+};
+
+const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
+    const { language } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.language = language;
     });
     return newState;
 };
@@ -2101,10 +2128,12 @@ export default function routeReducer(
             return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
-        case Type.PageType.SET_LANGUAGE:
-            return setLanguageLocal(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
             return setInitialPopupHidden(state, action);
+        case Type.PageType.SET_INITIAL_CLOSE_WALK_THROUGH:
+            return setInitialCloseWalkThrough(state, action);
+        case Type.PageType.SET_INITIAL_RUN:
+            return setInitialRun(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
         case Type.PageType.SET_DASHBOARD_HAZARD_TYPES:
@@ -2113,6 +2142,8 @@ export default function routeReducer(
             return setEventTypes(state, action);
         case Type.PageType.SET_MAP_STYLES:
             return setMapStyles(state, action);
+        case Type.PageType.SET_LANGUAGE:
+            return setLanguageLocal(state, action);
         case Type.PageType.SET_MAP_STYLE:
             return setMapStyle(state, action);
         case Type.PageType.SET_PROVINCES:
