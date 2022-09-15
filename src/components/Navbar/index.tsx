@@ -288,27 +288,7 @@ class Navbar extends React.PureComponent<Props, State> {
                 <div className={styles.bottom}>
 
 
-                    {/* <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Feedback & Support"
-                        iconName="feedbackIcon"
-                        modal={<FeedbackSupport />}
-                    // onClick={() => navigate('/feedback-support/')}
-                    /> */}
-                    {/* <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="About Us"
-                        id="about-us"
-                        iconName="aboutUs"
-                        modal={<AboutModal />}
-                    /> */}
-                    {/* <MenuItemLikeButton
-                        className={styles.logoutButton}
-                        title=""
-                        iconName={ButtonGroupLogo}
-                        image={true}
 
-                    /> */}
                     {activeRouteName === 'incident' ?
                         <ReportIncidentModalButton
                             className={styles.reportIncident}
@@ -350,30 +330,6 @@ class Navbar extends React.PureComponent<Props, State> {
                                 modal={<CitizenReportsModal />}
                             />
                         )}
-
-                        {/* <MenuItemLikeButton
-                            className={styles.logoutButton}
-                            title="Home Page"
-                            iconName="aboutUs"
-                            id="logout"
-                            onClick={() => {
-                                Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
-                                setCloseWalkThroughHomepage({ value: false });
-                                navigate('/');
-                            }}
-
-                        /> */}
-                        <MenuItemLikeButton
-                            className={activeRouteName === 'realtime' ? styles.selectedButtonActive : styles.reportIncidentButton}
-                            title="Real Time"
-                            iconName="aboutUs"
-                            id="logout"
-                            onClick={() => {
-
-                                navigate('/realtime/');
-                            }}
-
-                        />
                         <MenuItemLikeButton
                             className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
                             title="Data Archive"

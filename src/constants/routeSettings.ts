@@ -82,7 +82,7 @@ const routeSettings: SomeRoute[] = [
         path: '/realtime/',
         iconName: 'realtime',
         load: () => import('../views/RealTimeMonitoring'),
-        navbar: false,
+        navbar: true,
         id: 'navbar-realtime',
     },
     {
