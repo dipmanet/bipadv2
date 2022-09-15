@@ -19,6 +19,36 @@
         flex-direction: column;
         flex-shrink: 0;
 
+
+        .reportIncident {
+            position: absolute;
+            right: 160px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: row;
+
+            .reportIncidentTitle {
+                width: 130px;
+                font-size: 16px;
+                color: #E35163;
+                padding: var(--spacing-extra-small);
+                text-align: center;
+                font-weight: bold;
+
+            }
+
+            .incidentButtonImagePart {
+                display: flex;
+                height: 50px;
+                width: 50px;
+                background-color: white;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                box-shadow: 0 3px 10px #BBBBBA;
+            }
+        }
+
         .container {
             position: relative;
         }

@@ -36,6 +36,7 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ButtonGroupLogo from '#resources/icons/sidebarGroupButtons.svg';
 import GroupMenuContainer from './GroupMenuContainer';
 import PageContext from '#components/PageContext';
+import ReportIncidentIcon from '#resources/icons/reportIncident.svg';
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
 interface Menu {
@@ -145,7 +146,46 @@ const MenuItemLikeButton = ({
         </div>
     </div>
 );
+const ReportIncidentButton = ({
+    title,
+    className,
+    onClick,
+    iconName,
+    disabled,
+    id,
+    image,
+}: {
+    title: string;
+    className?: string;
+    onClick: () => void;
+    iconName?: string;
+    disabled?: boolean;
+    id: string;
+    image?: boolean
+}) => (
+    <div
+        role="presentation"
+        className={_cs(styles.menuItemLikeButton, className)}
+        onClick={!disabled ? onClick : undefined}
+        title={title}
+        id={id}
+    >
+        <div className={styles.reportIncidentTitle}>
+            {title}
+        </div>
 
+        {image ? <div className={styles.incidentButtonImagePart} > <ScalableVectorGraphics
+            className={styles.infoIconMax}
+            src={iconName}
+        /></div> : <div> <Icon
+            className={styles.icon}
+            name={iconName}
+        /></div>}
+
+
+    </div>
+);
+const ReportIncidentModalButton = modalize(ReportIncidentButton);
 const ModalButton = modalize(MenuItemLikeButton);
 
 interface State {
@@ -269,6 +309,15 @@ class Navbar extends React.PureComponent<Props, State> {
                         image={true}
 
                     /> */}
+                    {activeRouteName === 'incident' ?
+                        <ReportIncidentModalButton
+                            className={styles.reportIncident}
+                            title="Report Incident"
+                            id="report-an-incident"
+                            iconName={ReportIncidentIcon}
+                            image={true}
+                            modal={<CitizenReportFormModal />}
+                        /> : ''}
                     <GroupMenuListContainer
                         className={(activeGroupButton || isRoutedListedHere) ? styles.logoutButtonActive : styles.buttomGroup}
                         title=""
@@ -301,13 +350,7 @@ class Navbar extends React.PureComponent<Props, State> {
                                 modal={<CitizenReportsModal />}
                             />
                         )}
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="Report an incident"
-                            id="report-an-incident"
-                            iconName="telephone"
-                            modal={<CitizenReportFormModal />}
-                        />
+
                         {/* <MenuItemLikeButton
                             className={styles.logoutButton}
                             title="Home Page"
