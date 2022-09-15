@@ -398,7 +398,7 @@ class RiverDetails extends React.PureComponent<Props> {
         const todaysRiverDetail = this.getTodaysRiverDetail(sortedRiverDetails);
         const hourlyRiverDetails = this.getHourlyRiverData(todaysRiverDetail);
         const hourlyRiverChartData = this.getHourlyChartData(hourlyRiverDetails);
-        console.log('filterWiseChartData', filterWiseChartData);
+
 
         return (
             <Modal

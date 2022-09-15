@@ -47,7 +47,7 @@ export default class Page extends React.PureComponent<Props, State> {
             showDataRangeFilter,
             hideDataRangeFilter,
         } = this.context;
-        console.log('Context', this.context);
+
 
 
         this.transferContents(this.props, this.context);
@@ -193,7 +193,7 @@ export default class Page extends React.PureComponent<Props, State> {
             setFilterContent,
             setMainContent,
         } = context;
-        console.log('transferContents', context);
+
 
         const {
             leftContent = null,

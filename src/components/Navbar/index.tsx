@@ -274,9 +274,6 @@ class Navbar extends React.PureComponent<Props, State> {
         const { activeGroupButton } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        console.log('This is language', language)
-        // <Logo />
-        console.log("This is button group", activeRouteDetails)
         const GroupMenuListRoutes = ['realtime', 'dataArchive']
         const isRoutedListedHere = GroupMenuListRoutes.find(i => i === activeRouteName) ? true : false;
         return (

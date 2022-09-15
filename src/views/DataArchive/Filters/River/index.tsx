@@ -356,7 +356,7 @@ class RiverFilters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-        console.log('river filters', this.props.riverStations);
+
 
         return (
             <div className={_cs(styles.filters, className)}>

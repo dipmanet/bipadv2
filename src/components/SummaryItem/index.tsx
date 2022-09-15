@@ -19,7 +19,7 @@ const SummaryItem = (props: Props) => {
         },
     } = props;
 
-    console.log('data', props.data);
+
 
 
     return (

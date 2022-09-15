@@ -1607,7 +1607,7 @@ export const setProfileContactFilters = (
 };
 
 const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
-    console.log('action', action);
+
     const { language } = action;
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign

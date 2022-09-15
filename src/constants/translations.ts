@@ -770,7 +770,7 @@ export const enTranslation = {
         Logout: 'Logout',
         'About Us': 'About Us',
         'Reported incidents': 'Reported incidents',
-        'Report an incident': 'Report an incident',
+        'Report an incident': 'Report Incident',
         Relief: 'Relief',
         'Situation Report': 'Situation Report',
         'Data Archive': 'Data Archive',

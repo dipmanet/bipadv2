@@ -126,7 +126,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
         const minDate = Math.min(...chartData.map(meanData => meanData.date));
         const maxDate = Math.max(...chartData.map(meanData => meanData.date));
 
-        console.log('returnPeriod', returnPeriod);
+
 
         const data = [
             {

@@ -496,7 +496,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const {
             requests,
         } = this.props;
-        console.log('district', feature);
+
         this.setState({
             selectedDistrictName: title,
             selectedDistrict: id,
