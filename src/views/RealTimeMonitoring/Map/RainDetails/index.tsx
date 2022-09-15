@@ -514,125 +514,137 @@ class RainDetails extends React.PureComponent<Props, State> {
         console.log('rainImage', rainImage);
 
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={handleModalClose}
-                className={_cs(className, styles.rainDetailModal)}
-            >
-                <ModalHeader
-                    title={title}
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={handleModalClose}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    {pending && <LoadingAnimation />}
-                    <div className={styles.rainDetails}>
-                        <div className={styles.top}>
-                            {rainImage ? (
-                                <Image
-                                    className={styles.image}
-                                    src={rainImage}
-                                    alt="rain-image"
-                                    zoomable
-                                />
-                            ) : (
-                                <div className={styles.noImage}>
-                                    Image not available
-                                </div>
-                            )}
-
-                            <div className={styles.details}>
-                                {/* <TextOutput
-                                    className={styles.detail}
-                                    labelClassName={styles.label}
-                                    valueClassName={styles.value}
-                                    label="Description"
-                                    value={description || 'No Data'}
-                                /> */}
-                                <TextOutput
-                                    className={styles.detail}
-                                    labelClassName={styles.label}
-                                    valueClassName={styles.value}
-                                    label="Basin"
-                                    value={basin || '-'}
-                                />
-                                <TextOutput
-                                    className={styles.detail}
-                                    labelClassName={styles.label}
-                                    valueClassName={styles.value}
-                                    label="Status"
-                                    value={status || '-'}
-                                />
-                                <TextOutput
-                                    className={styles.detail}
-                                    labelClassName={styles.label}
-                                    valueClassName={styles.value}
-                                    label="Latitude"
-                                    value={lat || '-'}
-                                />
-                                <TextOutput
-                                    className={styles.detail}
-                                    labelClassName={styles.label}
-                                    valueClassName={styles.value}
-                                    label="Longitude"
-                                    value={lng || '-'}
-                                />
-                                <TextOutput
-                                    className={styles.detail}
-                                    labelClassName={styles.label}
-                                    valueClassName={styles.value}
-                                    label="Measured On"
-                                    value={(
-                                        <FormattedDate
-                                            value={measuredOn || ''}
-                                            mode="yyyy-MM-dd, hh:mm:aaa"
+            <>
+                <Translation>
+                    {
+                        t => (
+                            <Modal
+                                // closeOnEscape
+                                // onClose={handleModalClose}
+                                className={_cs(className, styles.rainDetailModal)}
+                            >
+                                <ModalHeader
+                                    title={title}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={handleModalClose}
+                                            title="Close Modal"
                                         />
                                     )}
                                 />
-                            </div>
+                                <ModalBody className={styles.body}>
+                                    {pending && <LoadingAnimation />}
+                                    <div className={styles.rainDetails}>
+                                        <div className={styles.top}>
+                                            {rainImage ? (
+                                                <Image
+                                                    className={styles.image}
+                                                    src={rainImage}
+                                                    alt="rain-image"
+                                                    zoomable
+                                                />
+                                            ) : (
+                                                <div className={styles.noImage}>
+                                                    {t('Image not available')}
+                                                </div>
 
-                        </div>
-                        <div className={styles.bottom}>
-                            <div className={styles.latestRainfall}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Latest Rainfall
-                                    </h4>
-                                </header>
-                                <Graph
-                                    stationData={riverDetails}
-                                    filterWiseChartData={filterWiseChartData}
-                                    intervalCode={intervalCode}
-                                    periodCode={periodCode}
-                                    isInitial={isInitial}
-                                    stationName={title}
-                                    filterValues={this.state.filterValues}
-                                    chartTitle={'Accumulated Rainfall (mm)'}
+                                            )}
 
-                                />
-                            </div>
-                            <div className={styles.selectComponent}>
-                                <h3>Period</h3>
-                                <PeriodSelector onChange={this.handlePeriodChange} />
-                            </div>
-                            <div className={styles.accumulatedRainfall}>
-                                <TableView
-                                    filterWiseChartData={filterWiseChartData}
-                                    filterValues={this.state.filterValues}
-                                    isInitial={isInitial}
-                                    stationName={title}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </ModalBody>
-            </Modal>
+                                            <div className={styles.details}>
+                                                {/* <TextOutput
+                                            className={styles.detail}
+                                            labelClassName={styles.label}
+                                            valueClassName={styles.value}
+                                            label="Description"
+                                            value={description || 'No Data'}
+                                        /> */}
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Basin')}
+                                                    value={basin || '-'}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Status')}
+                                                    value={status || '-'}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Latitude')}
+                                                    value={lat || '-'}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label={t('Longitude')}
+                                                    value={lng || '-'}
+                                                />
+                                                <TextOutput
+                                                    className={styles.detail}
+                                                    labelClassName={styles.label}
+                                                    valueClassName={styles.value}
+                                                    label="Measured On"
+                                                    value={(
+                                                        <FormattedDate
+                                                            value={measuredOn || ''}
+                                                            language={language}
+                                                            mode="yyyy-MM-dd, hh:mm:aaa"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+
+                                        </div>
+                                        <div className={styles.bottom}>
+                                            <div className={styles.latestRainfall}>
+                                                <header className={styles.header}>
+                                                    <h4 className={styles.heading}>
+                                                        {t('Latest Rainfall')}
+                                                    </h4>
+                                                </header>
+                                                <Graph
+                                                    stationData={riverDetails}
+                                                    filterWiseChartData={filterWiseChartData}
+                                                    intervalCode={intervalCode}
+                                                    periodCode={periodCode}
+                                                    isInitial={isInitial}
+                                                    stationName={title}
+                                                    filterValues={this.state.filterValues}
+                                                    chartTitle={'Accumulated Rainfall (mm)'}
+
+                                                />
+                                            </div>
+                                            <div className={styles.selectComponent}>
+                                                <h3>Period</h3>
+                                                <PeriodSelector
+                                                    onChange={this.handlePeriodChange}
+                                                />
+                                            </div>
+                                            <div className={styles.accumulatedRainfall}>
+                                                <TableView
+                                                    filterWiseChartData={filterWiseChartData}
+                                                    filterValues={this.state.filterValues}
+                                                    isInitial={isInitial}
+                                                    stationName={title}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ModalBody>
+                            </Modal>
+                        )}
+                </Translation>
+
+            </>
         );
     }
 }
