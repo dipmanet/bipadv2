@@ -136,7 +136,7 @@ class DashboardFilter extends React.PureComponent<Props, State> {
                     value={faramValues.region}
                     onChange={this.handleRegionChange}
                 />
-                { showEvent && (
+                {showEvent && (
                     <SelectInput
                         // faramElementName="event"
                         className={styles.eventSelectInput}

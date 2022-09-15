@@ -875,7 +875,6 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-        console.log('activeView', activeView);
 
 
         return (

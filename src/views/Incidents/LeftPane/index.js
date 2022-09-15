@@ -36,7 +36,7 @@ import AddIncidentForm from './AddIncidentForm';
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
-
+import { convertDateAccToLanguage } from '#utils/common';
 import styles from './styles.scss';
 
 const AccentModalButton = modalize(AccentButton);
@@ -186,7 +186,7 @@ class LeftPane extends React.PureComponent {
         let startDate;
         let endDate;
         if (rangeInDays !== 'custom') {
-            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays, language));
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
         } else {
             ({ startDate, endDate } = dateRange);
         }
@@ -195,8 +195,8 @@ class LeftPane extends React.PureComponent {
             <div className={_cs(className, styles.leftPane)}>
                 <DateRangeInfo
                     className={styles.dateRange}
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={convertDateAccToLanguage(startDate, language)}
+                    endDate={convertDateAccToLanguage(endDate, language)}
                 />
                 <div className={styles.sourceDetails}>
                     <div className={styles.infoIconContainer}>

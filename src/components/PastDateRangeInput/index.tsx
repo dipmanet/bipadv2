@@ -209,40 +209,48 @@ class PastDateRangeInput extends React.Component<Props> {
                     value={value.rangeInDays}
                     contentClassName={styles.dateRanges}
                 />
-                {value.rangeInDays === 'custom' && (
-                    <div className={styles.customRange}>
-                        <Translation>
-                            {
-                                t => (
+                {value.rangeInDays === 'custom'
+                    && (
+                        <div className={styles.customRange}>
+                            <Translation>
+                                {
+                                    t => (
 
-                                    <DateInput
-                                        onChange={this.handleStartDateInputChange}
-                                        className={'startDateInput'}
-                                        label={t('Start Date')}
-                                        faramElementName="start"
-                                        value={convertDateAccToLanguage(value.startDate, language)}
-                                        language={language}
-                                    />
-                                )
-                            }
-                        </Translation>
-                        <Translation>
-                            {
-                                t => (
-                                    <DateInput
-                                        onChange={this.handleEndDateInputChange}
-                                        className={'endDateInput'}
-                                        label={t('End Date')}
-                                        faramElementName="end"
-                                        value={convertDateAccToLanguage(value.endDate, language)}
-                                        language={language}
-                                    />
-                                )
-                            }
-                        </Translation>
+                                        <DateInput
+                                            onChange={this.handleStartDateInputChange}
+                                            className={'startDateInput'}
+                                            label={t('Start Date')}
+                                            faramElementName="start"
+                                            value={convertDateAccToLanguage(
+                                                value.startDate,
+                                                language,
+                                            )}
+                                            language={language}
+                                        />
+                                    )
+                                }
+                            </Translation>
+                            <Translation>
+                                {
+                                    t => (
+                                        <DateInput
+                                            onChange={this.handleEndDateInputChange}
+                                            className={'endDateInput'}
+                                            label={t('End Date')}
+                                            faramElementName="end"
+                                            value={convertDateAccToLanguage(
+                                                value.endDate,
+                                                language,
+                                            )}
+                                            language={language}
+                                        />
+                                    )
+                                }
+                            </Translation>
 
-                    </div>
-                )}
+                        </div>
+                    )
+                }
                 {error && (
                     <div className={styles.error}>
                         <Icon

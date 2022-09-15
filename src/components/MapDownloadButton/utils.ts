@@ -41,14 +41,14 @@ const formatDate = (date: Date, mode: string) => (
         })
 );
 
-const getStartAndEndDate = (dataDateRange: DataDateRangeValueElement, language) => {
+const getStartAndEndDate = (dataDateRange: DataDateRangeValueElement) => {
     let startDate;
     let endDate;
     const mode = 'yyyy-MM-dd';
     const { rangeInDays } = dataDateRange;
 
     if (rangeInDays !== 'custom') {
-        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays, language));
+        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
     } else {
         ({ startDate, endDate } = dataDateRange);
     }

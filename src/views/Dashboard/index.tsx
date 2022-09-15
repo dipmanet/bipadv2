@@ -123,7 +123,7 @@ const transformDataRangeToFilter = (
     });
 
     if (rangeInDays !== 'custom') {
-        const { startDate, endDate } = pastDaysToDateRange(rangeInDays, '');
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
         return getFilter(startDate, endDate);
     }
 
@@ -165,7 +165,7 @@ const transformDataRangeToLocaleFilter = (
     });
 
     if (rangeInDays !== 'custom') {
-        const { startDate, endDate } = pastDaysToDateRange(rangeInDays, '');
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
         return getNonCustomFilter(formattedStartDate, formattedEndDate);
@@ -325,6 +325,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     public componentDidMount(): void {
         this.getInitialHazardList();
+        this.setDefaultFilterOnCustom();
     }
 
     public componentWillUnmount(): void {
@@ -460,6 +461,21 @@ class Dashboard extends React.PureComponent<Props, State> {
             id: hoveredEventId,
             value: true,
         }];
+    }
+
+    private setDefaultFilterOnCustom = () => {
+        const { setFilters, filters } = this.props;
+        if (filters.dataDateRange.rangeInDays === 'custom') {
+            const newFiltered = {
+                ...filters,
+                dataDateRange: {
+                    rangeInDays: 7,
+                    startDate: undefined,
+                    endDate: undefined,
+                },
+            };
+            setFilters({ filters: newFiltered });
+        }
     }
 
     public render() {

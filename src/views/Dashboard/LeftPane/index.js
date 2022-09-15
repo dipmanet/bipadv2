@@ -286,7 +286,7 @@ class LeftPane extends React.PureComponent {
         let startDate;
         let endDate;
         if (rangeInDays !== 'custom') {
-            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays, language));
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
         } else {
             ({ startDate, endDate } = dateRange);
         }
