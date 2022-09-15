@@ -28,7 +28,7 @@ button {
 
     .navbar {
         flex-shrink: 0;
-        z-index: 1;
+        z-index: 12;
         box-shadow: -3px 0 5px -3px rgba(0, 0, 0, 0.3);
     }
 
@@ -156,7 +156,7 @@ button {
                 position: absolute;
                 bottom: var(--spacing-medium);
                 left: var(--spacing-medium);
-                // z-index: 11;
+                z-index: 11;
             }
 
             .map {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import React, { useEffect, useState } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
@@ -242,7 +243,6 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAuth: params => dispatch(setAuthAction(params)),
-    setCloseWalkThroughHomepage: params => dispatch(setInitialCloseWalkThroughAction(params)),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -302,7 +302,7 @@ class Navbar extends React.PureComponent<Props, State> {
         const { activeGroupButton } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        const GroupMenuListRoutes = ['realtime', 'dataArchive'];
+        const GroupMenuListRoutes = ['dataArchive'];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
         return (
             <nav className={_cs(styles.navbar, className)}>
@@ -336,7 +336,8 @@ class Navbar extends React.PureComponent<Props, State> {
 
                         : ''}
                     <GroupMenuListContainer
-                        className={(activeGroupButton || isRoutedListedHere) ? styles.logoutButtonActive : styles.buttomGroup}
+                        className={(activeGroupButton || isRoutedListedHere)
+                            ? styles.logoutButtonActive : styles.buttomGroup}
                         title=""
                         iconName={ButtonGroupLogo}
                         image
@@ -392,12 +393,21 @@ class Navbar extends React.PureComponent<Props, State> {
                             }}
 
                         />
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="Feedback & Support"
-                            iconName="feedbackIcon"
-                            modal={<FeedbackSupport />}
-                        />
+
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.reportIncidentButton}
+                                        title="Feedback and support"
+                                        iconName="feedbackIcon"
+                                        modal={<FeedbackSupport />}
+                                    />
+
+                                )}
+                        </Translation>
+
+
                         <ModalButton
                             className={styles.reportIncidentButton}
                             title="About Us"
