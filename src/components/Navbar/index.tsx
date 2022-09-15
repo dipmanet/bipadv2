@@ -2,14 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-<<<<<<< HEAD
 import { Translation } from 'react-i18next';
 import { navigate } from '@reach/router';
 import Cookies from 'js-cookie';
-=======
-
-import { navigate } from '@reach/router';
->>>>>>> feature/feedback-support
 import ListView from '#rscv/List/ListView';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
@@ -397,7 +392,18 @@ class Navbar extends React.PureComponent<Props, State> {
                             }}
 
                         />
-
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="Feedback & Support"
+                            iconName="feedbackIcon"
+                            modal={<FeedbackSupport />}
+                        />
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="About Us"
+                            iconName="aboutUs"
+                            modal={<AboutModal />}
+                        />
                     </GroupMenuListContainer>
                     {!authenticated && (
                         <Translation>
@@ -412,53 +418,37 @@ class Navbar extends React.PureComponent<Props, State> {
                                 )}
                         </Translation>
                     )}
-<<<<<<< HEAD
 
-=======
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Feedback & Support"
-                        iconName="feedbackIcon"
-                        modal={<FeedbackSupport />}
-                    // onClick={() => navigate('/feedback-support/')}
-                    />
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="About Us"
-                        iconName="aboutUs"
-                        modal={<AboutModal />}
-                    />
->>>>>>> feature/feedback-support
-        {
-            user && (
-                <Icon
-                    className={styles.userIcon}
-                    title={`${user.username}`}
-                    name="user"
-                />
-            )
-        }
-
-        {
-            authenticated && (
-                <Translation>
                     {
-                        t => (
-                            <MenuItemLikeButton
-                                className={styles.logoutButton}
-                                title={t('Logout')}
-                                iconName="logout"
-                                onClick={logoutRequest.do}
-                                disabled={logoutRequest.pending}
+                        user && (
+                            <Icon
+                                className={styles.userIcon}
+                                title={`${user.username}`}
+                                name="user"
                             />
-                        )}
-                </Translation>
-            )
-        }
+                        )
+                    }
+
+                    {
+                        authenticated && (
+                            <Translation>
+                                {
+                                    t => (
+                                        <MenuItemLikeButton
+                                            className={styles.logoutButton}
+                                            title={t('Logout')}
+                                            iconName="logout"
+                                            onClick={logoutRequest.do}
+                                            disabled={logoutRequest.pending}
+                                        />
+                                    )}
+                            </Translation>
+                        )
+                    }
 
 
-                </div >
-            </nav >
+                </div>
+            </nav>
         );
     }
 }
