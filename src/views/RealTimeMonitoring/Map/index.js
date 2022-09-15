@@ -96,31 +96,6 @@ const mapStateToProps = state => ({
 
 });
 
-const rainStationToGeojson = (rainStation) => {
-    const geojson = {
-        type: 'FeatureCollection',
-        features: rainStation
-            .filter(station => station.point)
-            .map(station => ({
-                id: station.id,
-                type: 'Feature',
-                geometry: {
-                    ...station.point,
-                },
-                properties: {
-                    ...station,
-                    stationId: station.id,
-                    title: station.title,
-                    description: station.description,
-                    basin: station.basin,
-                    status: station.status,
-                    measuredOn: station.measuredOn,
-                    averages: station.averages,
-                },
-            })),
-    };
-    return geojson;
-};
 
 const requestOptions = {
     streamFlowDataGetRequest: {
@@ -141,9 +116,19 @@ class RealTimeMap extends React.PureComponent {
             rainTitle: undefined,
             riverTitle: undefined,
             streamflowId: undefined,
+            basin: '',
+            status: '',
+            lat: '',
+            lng: '',
+            measuredOn: '',
+            description: '',
+            flow: '',
+            waterLevel: '',
             gis: undefined,
             rainId: undefined,
             riverId: undefined,
+            rainImage: '',
+            riverImage: '',
             rasterLayers: [],
             filteredGis: undefined,
             streamFlowGeoJsonData: undefined,
@@ -203,8 +188,6 @@ class RealTimeMap extends React.PureComponent {
     }
 
 
-    getRainStationFeatureCollection = memoize(rainStationToGeojson);
-
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
     getRiverFeatureCollection = memoize(riverToGeojson)
@@ -234,24 +217,41 @@ class RealTimeMap extends React.PureComponent {
     });
 
     handleRainClick = (feature) => {
-        const { properties: { title, rainId } } = feature;
+        const { properties: { title, image, status,
+            measuredOn, basin, rainId, lng, lat } } = feature;
         this.setState({
             rainTitle: title,
+            rainImage: image,
             riverTitle: undefined,
             streamflowId: undefined,
+            status,
+            basin,
+            measuredOn,
             rainId,
+            lng,
+            lat,
 
         });
         return true;
     }
 
     handleRiverClick = (feature) => {
-        const { properties: { title, riverId } } = feature;
+        const { properties: { title, image, basin,
+            status, measuredOn, waterLevel, flow, lng, lat, description, riverId } } = feature;
         this.setState({
             riverTitle: title,
             streamflowId: undefined,
             rainTitle: undefined,
+            riverImage: image,
+            status,
+            basin,
+            measuredOn,
+            description,
+            waterLevel,
+            flow,
             riverId,
+            lng,
+            lat,
         });
         return true;
     }
@@ -868,10 +868,6 @@ class RealTimeMap extends React.PureComponent {
             realTimeEarthquakeList,
         );
 
-        const rainStationFeatureCollection = this.getRainStationFeatureCollection(
-            this.props.rainStation,
-        );
-
 
         const fireFeatureCollection = this.getFireFeatureCollection(realTimeFireList);
 
@@ -888,6 +884,16 @@ class RealTimeMap extends React.PureComponent {
             coordinates,
             riverTitle,
             rainTitle,
+            rainImage,
+            status,
+            basin,
+            measuredOn,
+            description,
+            lat,
+            lng,
+            waterLevel,
+            flow,
+            riverImage,
             streamflowId,
             rainId,
             gis,
@@ -923,6 +929,8 @@ class RealTimeMap extends React.PureComponent {
 
             })),
         };
+
+        console.log('rainFeatureCollection', hazardHoveredAttribute);
 
         return (
             <React.Fragment>
@@ -1442,6 +1450,13 @@ class RealTimeMap extends React.PureComponent {
                 {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
+                        riverImage={riverImage}
+                        status={status}
+                        basin={basin}
+                        measuredOn={measuredOn}
+                        description={description}
+                        lat={lat}
+                        lng={lng}
                         id={riverId}
                         language={language}
                         handleModalClose={this.handleModalClose}
@@ -1450,6 +1465,14 @@ class RealTimeMap extends React.PureComponent {
                 {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        status={status}
+                        basin={basin}
+                        measuredOn={measuredOn}
+                        rainImage={rainImage}
+                        lat={lat}
+                        lng={lng}
+                        waterLevel={waterLevel}
+                        flow={flow}
                         id={rainId}
                         language={language}
                         handleModalClose={this.handleModalClose}
