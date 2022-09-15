@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-
+import { Translation } from 'react-i18next';
 import { navigate } from '@reach/router';
 import Cookies from 'js-cookie';
 import ListView from '#rscv/List/ListView';
@@ -10,8 +10,8 @@ import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import { routeSettings } from '#constants';
-import { authStateSelector } from '#selectors';
-import { setAuthAction, setInitialCloseWalkThroughAction } from '#actionCreators';
+import { authStateSelector, languageSelector } from '#selectors';
+import { setAuthAction } from '#actionCreators';
 import { AppState } from '#store/types';
 import { AuthState } from '#store/atom/auth/types';
 import { getAuthState } from '#utils/session';
@@ -211,6 +211,7 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState) => ({
     authState: authStateSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -249,13 +250,14 @@ class Navbar extends React.PureComponent<Props, State> {
         };
     }
     private menuRendererParams = (_: string, data: Menu) => ({
-        title: data.title,
+        title: this.props.language.language === 'en' ? data.title : data.titleNep,
         link: data.path,
         disabled: data.disabled,
         iconName: data.iconName,
         className: styles.menuItem,
-        id: data.id ? data.id : null,
-    });
+
+    })
+
     private handleActiveGroupButton = (data: boolean) => {
         this.setState({ activeGroupButton: data })
     }
@@ -266,12 +268,13 @@ class Navbar extends React.PureComponent<Props, State> {
             requests: {
                 logoutRequest,
             },
-            setCloseWalkThroughHomepage,
+            language: { language }
         } = this.props;
         const { activeRouteDetails } = this.context;
         const { activeGroupButton } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        console.log('This is language', language)
         // <Logo />
         console.log("This is button group", activeRouteDetails)
         const GroupMenuListRoutes = ['realtime', 'dataArchive']
@@ -290,14 +293,22 @@ class Navbar extends React.PureComponent<Props, State> {
 
 
                     {activeRouteName === 'incident' ?
-                        <ReportIncidentModalButton
-                            className={styles.reportIncident}
-                            title="Report Incident"
-                            id="report-an-incident"
-                            iconName={ReportIncidentIcon}
-                            image={true}
-                            modal={<CitizenReportFormModal />}
-                        /> : ''}
+                        <Translation>
+                            {
+                                t => (
+
+                                    <ReportIncidentModalButton
+                                        className={styles.reportIncident}
+                                        title={t('Report an incident')}
+                                        id="report-an-incident"
+                                        iconName={ReportIncidentIcon}
+                                        image={true}
+                                        modal={<CitizenReportFormModal />}
+                                    />
+                                )}
+                        </Translation>
+
+                        : ''}
                     <GroupMenuListContainer
                         className={(activeGroupButton || isRoutedListedHere) ? styles.logoutButtonActive : styles.buttomGroup}
                         title=""
@@ -305,34 +316,49 @@ class Navbar extends React.PureComponent<Props, State> {
                         image={true}
                         handleActiveGroupButton={this.handleActiveGroupButton}
                     >
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="Situation Report"
-                            id="situation-report"
-                            iconName="textDocument"
-                            modal={<SituationReport />}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.reportIncidentButton}
+                                        title={t('Situation Report')}
+                                        iconName="textDocument"
+                                        modal={<SituationReport />}
+                                    />
+                                )}
+                        </Translation>
+
                         {authenticated && (
-                            <ModalButton
-                                className={styles.reliefButton}
-                                title="Relief"
-                                iconName="cart"
-                                id="relief"
-                                modal={<Relief />}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+                                        <ModalButton
+                                            className={styles.reliefButton}
+                                            title={t('Relief')}
+                                            iconName="cart"
+                                            modal={<Relief />}
+                                        />
+                                    )}
+                            </Translation>
                         )}
+
                         {authenticated && (
-                            <ModalButton
-                                className={styles.reportIncidentButton}
-                                title="Reported incidents"
-                                id="reported-incidents"
-                                iconName="list"
-                                modal={<CitizenReportsModal />}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+                                        <ModalButton
+                                            className={styles.reportIncidentButton}
+                                            title={t('Reported incidents')}
+                                            iconName="list"
+                                            modal={<CitizenReportsModal />}
+                                        />
+                                    )}
+                            </Translation>
                         )}
+
                         <MenuItemLikeButton
                             className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
-                            title="Data Archive"
+                            title={language === 'en' ? "Data Archive" : 'डाटा संग्रह'}
                             iconName="clipboard"
                             id="logout"
                             onClick={() => {
@@ -344,14 +370,19 @@ class Navbar extends React.PureComponent<Props, State> {
 
                     </GroupMenuListContainer>
                     {!authenticated && (
-                        <ModalButton
-                            className={styles.menuItem}
-                            title="Login"
-                            id="login"
-                            iconName="login"
-                            modal={<NewLoginModal />}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.menuItem}
+                                        title={t('Login')}
+                                        iconName="login"
+                                        modal={<NewLoginModal />}
+                                    />
+                                )}
+                        </Translation>
                     )}
+
                     {user && (
                         <Icon
                             className={styles.userIcon}
@@ -359,16 +390,22 @@ class Navbar extends React.PureComponent<Props, State> {
                             name="user"
                         />
                     )}
+
                     {authenticated && (
-                        <MenuItemLikeButton
-                            className={styles.logoutButton}
-                            title="Logout"
-                            iconName="logout"
-                            id="logout"
-                            onClick={logoutRequest.do}
-                            disabled={logoutRequest.pending}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <MenuItemLikeButton
+                                        className={styles.logoutButton}
+                                        title={t('Logout')}
+                                        iconName="logout"
+                                        onClick={logoutRequest.do}
+                                        disabled={logoutRequest.pending}
+                                    />
+                                )}
+                        </Translation>
                     )}
+
 
                 </div>
             </nav>

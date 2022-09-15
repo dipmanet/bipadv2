@@ -20,6 +20,7 @@ export interface FallbackRoute {
     default: true;
     navbar: false;
     title: string;
+    titleNep: string;
     name: string;
     load: any;
     path: undefined;
@@ -43,6 +44,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'dashboard',
         title: 'Dashboard',
+        titleNep: 'ड्यासबोर्ड',
         path: '/',
         load: () => import('../views/Dashboard'),
         navbar: true,
@@ -53,6 +55,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'incident',
         title: 'Incident',
+        titleNep: 'घटना',
         path: '/incidents/',
         load: () => import('../views/Incidents'),
         navbar: true,
@@ -62,6 +65,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'response',
         title: 'Incident Response',
+        titleNep: 'घटना रिपोर्ट',
         path: '/incidents/:incidentId/response/',
         load: () => import('../views/Response'),
         navbar: false,
@@ -70,6 +74,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'lossAndDamage',
         title: 'Damage & Loss',
+        titleNep: 'क्षति र नोक्सान',
         path: '/damage-and-loss/',
         load: () => import('../views/LossAndDamage'),
         navbar: true,
@@ -79,6 +84,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'realtime',
         title: 'Realtime',
+        titleNep: 'वास्तविक समय',
         path: '/realtime/',
         iconName: 'realtime',
         load: () => import('../views/RealTimeMonitoring'),
@@ -88,6 +94,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'dataArchive',
         title: 'Data Archive',
+        titleNep: 'डाटा संग्रह',
         path: '/data-archive/',
         iconName: 'clipboard',
         load: () => import('../views/DataArchive'),
@@ -96,6 +103,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'profile',
         title: 'Profile',
+        titleNep: 'प्रोफाइल',
         path: '/profile/',
         iconName: 'profile',
         load: () => import('../views/Profile'),
@@ -105,6 +113,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'riskInfo',
         title: 'Risk Info',
+        titleNep: 'जोखिम जानकारी',
         path: '/risk-info/',
         load: () => import('../views/RiskInfo'),
         navbar: true,
@@ -178,6 +187,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'fourHundredThree',
         title: '403',
+        titleNep: '',
         path: '/403/',
         load: () => import('../views/FourHundredThree'),
         navbar: false,
@@ -186,6 +196,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'fourHundredFour',
         title: '404',
+        titleNep: '',
         load: () => import('../views/FourHundredFour'),
         default: true,
         path: undefined,
@@ -196,6 +207,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'forgotPassword',
         title: 'New Password',
+        titleNep: '',
         load: () => import('../views/ForgotPassword'),
         path: '/set-new-password/',
         navbar: false,
