@@ -220,7 +220,7 @@ class NewCompare extends React.PureComponent {
         };
 
         const clearValues = (element: string) => {
-            this.setState({ faramValues: { ...faramValues, [element]: {} } });
+            this.setState({ faramValues: { ...faramValues, [element]: null } });
         };
 
         return (
@@ -231,6 +231,11 @@ class NewCompare extends React.PureComponent {
                     <h1 className={styles.compareText}>
                         COMPARE
                     </h1>
+                    <Button
+                        onClick={closeModal}
+                        iconName="close"
+                        className={styles.closeButton}
+                    />
                     <Button
                         title="Download Chart"
                         className={styles.chartDownload}
@@ -281,11 +286,6 @@ class NewCompare extends React.PureComponent {
 
                         />
                     </div>
-                    <Button
-                        onClick={closeModal}
-                        iconName="close"
-                        className={styles.closeButton}
-                    />
                 </header>
                 <div
                     className={styles.content}
