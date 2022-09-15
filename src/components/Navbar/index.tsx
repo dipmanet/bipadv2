@@ -37,6 +37,7 @@ import ButtonGroupLogo from '#resources/icons/sidebarGroupButtons.svg';
 import GroupMenuContainer from './GroupMenuContainer';
 import PageContext from '#components/PageContext';
 import ReportIncidentIcon from '#resources/icons/reportIncident.svg';
+
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
 interface Menu {
@@ -58,7 +59,7 @@ const GroupMenuListContainer = ({
     id,
     image,
     handleActiveGroupButton,
-    children
+    children,
 }: {
     title: string;
     className?: string;
@@ -68,12 +69,12 @@ const GroupMenuListContainer = ({
     disabled?: boolean;
     id: string;
     image?: boolean;
-    children: JSX.Element
+    children: JSX.Element;
 }) => {
     const [showInfo1, setShowInfo1] = useState<boolean>(false);
     useEffect(() => {
-        handleActiveGroupButton(showInfo1)
-    }, [showInfo1])
+        handleActiveGroupButton(showInfo1);
+    }, [handleActiveGroupButton, showInfo1]);
     return (
         <div className={styles.container}>
             <div className={styles.infoBoxWrapper}>
@@ -82,32 +83,42 @@ const GroupMenuListContainer = ({
                     role="presentation"
                     className={_cs(styles.menuItemLikeButton, className)}
                     onClick={() => {
-                        setShowInfo1(true)
+                        setShowInfo1(true);
                     }}
                     title={title}
                     id={id}
-                >{image ? <ScalableVectorGraphics
-                    className={styles.infoIconMax}
-                    src={iconName}
-                /> : <Icon
-                    className={styles.icon}
-                    name={iconName}
-                />}
+                >
+                    {image ? (
+                        <ScalableVectorGraphics
+                            className={styles.infoIconMax}
+                            src={iconName}
+                        />
+                    ) : (
+                        <Icon
+                            className={styles.icon}
+                            name={iconName}
+                        />
+                    )}
 
                     <div className={styles.title}>
                         {title}
                     </div>
                 </div>
 
-                <GroupMenuContainer show={showInfo1} onClickOutside={() => {
-                    setShowInfo1(false)
-                }}  >{children}</GroupMenuContainer>
+                <GroupMenuContainer
+                    show={showInfo1}
+                    onClickOutside={() => {
+                        setShowInfo1(false);
+                    }}
+                >
+                    {children}
+
+                </GroupMenuContainer>
 
             </div>
         </div>
-    )
-}
-
+    );
+};
 
 
 const MenuItemLikeButton = ({
@@ -125,7 +136,7 @@ const MenuItemLikeButton = ({
     iconName?: string;
     disabled?: boolean;
     id: string;
-    image?: boolean
+    image?: boolean;
 }) => (
     <div
         role="presentation"
@@ -133,13 +144,18 @@ const MenuItemLikeButton = ({
         onClick={!disabled ? onClick : undefined}
         title={title}
         id={id}
-    >{image ? <ScalableVectorGraphics
-        className={styles.infoIconMax}
-        src={iconName}
-    /> : <Icon
-        className={styles.icon}
-        name={iconName}
-    />}
+    >
+        {image ? (
+            <ScalableVectorGraphics
+                className={styles.infoIconMax}
+                src={iconName}
+            />
+        ) : (
+            <Icon
+                className={styles.icon}
+                name={iconName}
+            />
+        )}
 
         <div className={styles.title}>
             {title}
@@ -161,7 +177,7 @@ const ReportIncidentButton = ({
     iconName?: string;
     disabled?: boolean;
     id: string;
-    image?: boolean
+    image?: boolean;
 }) => (
     <div
         role="presentation"
@@ -174,13 +190,23 @@ const ReportIncidentButton = ({
             {title}
         </div>
 
-        {image ? <div className={styles.incidentButtonImagePart} > <ScalableVectorGraphics
-            className={styles.infoIconMax}
-            src={iconName}
-        /></div> : <div> <Icon
-            className={styles.icon}
-            name={iconName}
-        /></div>}
+        {image ? (
+            <div className={styles.incidentButtonImagePart}>
+                {' '}
+                <ScalableVectorGraphics
+                    className={styles.infoIconMax}
+                    src={iconName}
+                />
+            </div>
+        ) : (
+            <div>
+                {' '}
+                <Icon
+                    className={styles.icon}
+                    name={iconName}
+                />
+            </div>
+        )}
 
 
     </div>
@@ -249,6 +275,7 @@ class Navbar extends React.PureComponent<Props, State> {
             activeGroupButton: false,
         };
     }
+
     private menuRendererParams = (_: string, data: Menu) => ({
         title: this.props.language.language === 'en' ? data.title : data.titleNep,
         link: data.path,
@@ -259,8 +286,9 @@ class Navbar extends React.PureComponent<Props, State> {
     })
 
     private handleActiveGroupButton = (data: boolean) => {
-        this.setState({ activeGroupButton: data })
+        this.setState({ activeGroupButton: data });
     }
+
     public render() {
         const {
             className,
@@ -268,14 +296,14 @@ class Navbar extends React.PureComponent<Props, State> {
             requests: {
                 logoutRequest,
             },
-            language: { language }
+            language: { language },
         } = this.props;
         const { activeRouteDetails } = this.context;
         const { activeGroupButton } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        const GroupMenuListRoutes = ['realtime', 'dataArchive']
-        const isRoutedListedHere = GroupMenuListRoutes.find(i => i === activeRouteName) ? true : false;
+        const GroupMenuListRoutes = ['realtime', 'dataArchive'];
+        const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView
@@ -288,29 +316,30 @@ class Navbar extends React.PureComponent<Props, State> {
                 <div className={styles.bottom}>
 
 
+                    {activeRouteName === 'incident'
+                        ? (
+                            <Translation>
+                                {
+                                    t => (
 
-                    {activeRouteName === 'incident' ?
-                        <Translation>
-                            {
-                                t => (
-
-                                    <ReportIncidentModalButton
-                                        className={styles.reportIncident}
-                                        title={t('Report an incident')}
-                                        id="report-an-incident"
-                                        iconName={ReportIncidentIcon}
-                                        image={true}
-                                        modal={<CitizenReportFormModal />}
-                                    />
-                                )}
-                        </Translation>
+                                        <ReportIncidentModalButton
+                                            className={styles.reportIncident}
+                                            title={t('Report an incident')}
+                                            id="report-an-incident"
+                                            iconName={ReportIncidentIcon}
+                                            image
+                                            modal={<CitizenReportFormModal />}
+                                        />
+                                    )}
+                            </Translation>
+                        )
 
                         : ''}
                     <GroupMenuListContainer
                         className={(activeGroupButton || isRoutedListedHere) ? styles.logoutButtonActive : styles.buttomGroup}
                         title=""
                         iconName={ButtonGroupLogo}
-                        image={true}
+                        image
                         handleActiveGroupButton={this.handleActiveGroupButton}
                     >
                         <Translation>
@@ -355,11 +384,10 @@ class Navbar extends React.PureComponent<Props, State> {
 
                         <MenuItemLikeButton
                             className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
-                            title={language === 'en' ? "Data Archive" : 'डाटा संग्रह'}
+                            title={language === 'en' ? 'Data Archive' : 'डाटा संग्रह'}
                             iconName="clipboard"
                             id="logout"
                             onClick={() => {
-
                                 navigate('/data-archive/');
                             }}
 
