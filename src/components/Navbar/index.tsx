@@ -333,8 +333,8 @@ class Navbar extends React.PureComponent<Props, State> {
                         />
                         <MenuItemLikeButton
                             className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
-                            title="Real Time"
-                            iconName="aboutUs"
+                            title="Data Archive"
+                            iconName="clipboard"
                             id="logout"
                             onClick={() => {
 
