@@ -482,6 +482,15 @@ class RainDetails extends React.PureComponent<Props, State> {
         const {
             className,
             language,
+            rainImage,
+            status,
+            basin,
+            description,
+            measuredOn,
+            lng,
+            lat,
+            flow,
+            waterLevel,
         } = this.props;
 
         const {
@@ -502,6 +511,7 @@ class RainDetails extends React.PureComponent<Props, State> {
         const hourlyRainDetails = this.getHourlyRainData(todaysRainDetails);
         const hourlyRainChartData = this.getHourlyChartData(hourlyRainDetails);
         const weeklyRainChartData = this.getWeeklyRainDetails(rainDetails);
+        console.log('rainImage', rainImage);
 
         return (
             <Modal
@@ -524,10 +534,10 @@ class RainDetails extends React.PureComponent<Props, State> {
                     {pending && <LoadingAnimation />}
                     <div className={styles.rainDetails}>
                         <div className={styles.top}>
-                            {latestRainDetail && latestRainDetail.image ? (
+                            {rainImage ? (
                                 <Image
                                     className={styles.image}
-                                    src={latestRainDetail.image}
+                                    src={rainImage}
                                     alt="rain-image"
                                     zoomable
                                 />
@@ -536,59 +546,57 @@ class RainDetails extends React.PureComponent<Props, State> {
                                     Image not available
                                 </div>
                             )}
-                            {latestRainDetail
-                                && (
-                                    <div className={styles.details}>
-                                        <TextOutput
-                                            className={styles.detail}
-                                            labelClassName={styles.label}
-                                            valueClassName={styles.value}
-                                            label="Description"
-                                            value={latestRainDetail.description}
+
+                            <div className={styles.details}>
+                                {/* <TextOutput
+                                    className={styles.detail}
+                                    labelClassName={styles.label}
+                                    valueClassName={styles.value}
+                                    label="Description"
+                                    value={description || 'No Data'}
+                                /> */}
+                                <TextOutput
+                                    className={styles.detail}
+                                    labelClassName={styles.label}
+                                    valueClassName={styles.value}
+                                    label="Basin"
+                                    value={basin || '-'}
+                                />
+                                <TextOutput
+                                    className={styles.detail}
+                                    labelClassName={styles.label}
+                                    valueClassName={styles.value}
+                                    label="Status"
+                                    value={status || '-'}
+                                />
+                                <TextOutput
+                                    className={styles.detail}
+                                    labelClassName={styles.label}
+                                    valueClassName={styles.value}
+                                    label="Latitude"
+                                    value={lat || '-'}
+                                />
+                                <TextOutput
+                                    className={styles.detail}
+                                    labelClassName={styles.label}
+                                    valueClassName={styles.value}
+                                    label="Longitude"
+                                    value={lng || '-'}
+                                />
+                                <TextOutput
+                                    className={styles.detail}
+                                    labelClassName={styles.label}
+                                    valueClassName={styles.value}
+                                    label="Measured On"
+                                    value={(
+                                        <FormattedDate
+                                            value={measuredOn || ''}
+                                            mode="yyyy-MM-dd, hh:mm:aaa"
                                         />
-                                        <TextOutput
-                                            className={styles.detail}
-                                            labelClassName={styles.label}
-                                            valueClassName={styles.value}
-                                            label="Basin"
-                                            value={latestRainDetail.basin}
-                                        />
-                                        <TextOutput
-                                            className={styles.detail}
-                                            labelClassName={styles.label}
-                                            valueClassName={styles.value}
-                                            label="Status"
-                                            value={latestRainDetail.status}
-                                        />
-                                        <TextOutput
-                                            className={styles.detail}
-                                            labelClassName={styles.label}
-                                            valueClassName={styles.value}
-                                            label="Latitude"
-                                            value={latestRainDetail.point.coordinates[1]}
-                                        />
-                                        <TextOutput
-                                            className={styles.detail}
-                                            labelClassName={styles.label}
-                                            valueClassName={styles.value}
-                                            label="Longitude"
-                                            value={latestRainDetail.point.coordinates[0]}
-                                        />
-                                        <TextOutput
-                                            className={styles.detail}
-                                            labelClassName={styles.label}
-                                            valueClassName={styles.value}
-                                            label="Measured On"
-                                            value={(
-                                                <FormattedDate
-                                                    value={latestRainDetail.createdOn}
-                                                    mode="yyyy-MM-dd, hh:mm:aaa"
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                )
-                            }
+                                    )}
+                                />
+                            </div>
+
                         </div>
                         <div className={styles.bottom}>
                             <div className={styles.latestRainfall}>
