@@ -383,16 +383,6 @@ class Navbar extends React.PureComponent<Props, State> {
                             </Translation>
                         )}
 
-                        <MenuItemLikeButton
-                            className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
-                            title={language === 'en' ? 'Data Archive' : 'डाटा संग्रह'}
-                            iconName="clipboard"
-                            id="logout"
-                            onClick={() => {
-                                navigate('/data-archive/');
-                            }}
-
-                        />
 
                         <Translation>
                             {
@@ -408,11 +398,21 @@ class Navbar extends React.PureComponent<Props, State> {
                         </Translation>
 
 
-                        <ModalButton
+                        {/* <ModalButton
                             className={styles.reportIncidentButton}
                             title="About Us"
                             iconName="aboutUs"
                             modal={<AboutModal />}
+                        /> */}
+                        <MenuItemLikeButton
+                            className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
+                            title={language === 'en' ? 'Data Archive' : 'डाटा संग्रह'}
+                            iconName="clipboard"
+                            id="logout"
+                            onClick={() => {
+                                navigate('/data-archive/');
+                            }}
+
                         />
                     </GroupMenuListContainer>
                     {!authenticated && (
