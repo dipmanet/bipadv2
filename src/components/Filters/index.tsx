@@ -879,7 +879,7 @@ class Filters extends React.PureComponent<Props, State> {
 
 
         return (
-            <div className={_cs(styles.filters, className)}>
+            <div className={_cs(styles.filters, className)} id="component-filter">
                 <header className={styles.header}>
                     <h3 className={styles.heading}>
                         <Translation>

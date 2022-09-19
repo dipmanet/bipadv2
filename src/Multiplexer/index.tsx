@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
@@ -65,6 +66,7 @@ import {
     filtersSelector,
     closeWalkThroughSelector,
     runSelector,
+    languageSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
@@ -243,6 +245,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     // hazardList: hazardTypeListSelector(state),
     closeWalkThroughHomepage: closeWalkThroughSelector(state),
     run: runSelector(state),
+    language: languageSelector(state),
 
 
 });
@@ -706,15 +709,586 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(prevProps) {
         const { boundingClientRect } = this.props;
         this.setLeftPanelWidth(boundingClientRect);
         const { activeRouteDetails } = this.state;
-        const { closeWalkThroughHomepage } = this.props;
+        const { closeWalkThroughHomepage, language: { language } } = this.props;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
         const isFirstTimeUser = Cookies.get('isFirstTimeUser');
         if (activeRouteName === 'homepage' && isFirstTimeUser !== undefined && closeWalkThroughHomepage) {
             navigate('/dashboard/');
+        }
+        if (prevProps.language.language !== language) {
+            if (language === 'en') {
+                this.setState({
+                    steps: [
+                        {
+                            content: 'BIPAD Portal is an Integrated Disaster Information Management System of Nepal and is led by the National Disaster Risk Reduction and Management Authority of Nepal.',
+                            title: 'Let\'s take BIPAD Portal Tour!',
+                            locale: { skip: <strong aria-label="skip">SKIP</strong> },
+                            placement: 'center',
+                            target: 'body',
+                        },
+                        {
+                            content: 'This Module provides geospatial data of the alerts of flood war flood warnings, heavy rainfall, earthquake, and air pollution.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-dashboard',
+                            title: 'Dashboard',
+                        },
+                        {
+                            content: 'This module displays the geospatial data of the hazard incidents from the year 2011 reported by Nepal Police.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-incident',
+                            title: 'Incident module',
+                        },
+                        {
+                            content: 'Visualizes historic loss and damage data caused by various hazard incidents.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-lossDamage',
+                            title: 'Damage & Loss module',
+                        },
+                        {
+                            content: 'This module provides the real data on rainfall and river watch, earthquake, air pollution, and forest fires along with streamflow forecast.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-realtime',
+                            title: 'Real Time Module',
+                        },
+                        {
+                            content: 'This module displays the records of DRRM documents, status of DRRM projects, contact information of DRR focal persons and disaster reports at national, provincial district, and municipal levels for the selected time frame.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-profile',
+                            title: 'Profile module',
+                        },
+                        {
+                            content: 'This module provides information on Hazard, Exposure, Vulnerability, Risk, Climate Change, and Capacity and Resources.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-riskinfo',
+                            title: 'Risk Info module',
+                        },
+                        {
+                            content: 'This feature gives you the situation reports of the particular event and its casualties including human, livestock and infrastructure loss.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#situation-report',
+                            title: 'Situation Reports',
+                        },
+                        // {
+                        //     content: 'These are our super awesome projects!',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '#relief',
+                        //     title: 'Relief',
+                        // },
+                        // {
+                        //     content: 'These are our super awesome projects!',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '#reported-incidents',
+                        //     title: 'Reported Incidents',
+                        // },
+                        {
+                            content: 'General users can also report an incident that occurred in a particular area using this feature. It includes details of hazard occurred, time and date of occurrence and area of incident.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#report-an-incident',
+                            title: 'Report an incident',
+                        },
+                        {
+                            content: 'You can log in to the portal using the login credentials provided or request a username and password.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#login',
+                            title: 'Login',
+                        },
+                        {
+                            content: 'Here you can find the information about the BIPAD Portal, its development and modules along with a technical handbook for the users.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#about-us',
+                            title: 'About Us',
+                        },
+                        {
+                            content: 'This page provides a brief introduction of BIPAD Portal and enables you to take a tour of the Portal.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#logout',
+                            title: 'Home Page',
+                        },
+                        {
+                            content: 'Filters allow you to choose the location (for e.g., province, district, municipality) hazard of interest and time frame of the data.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#component-filter',
+                            title: 'Filters',
+                        },
+                        {
+                            content: 'You can click here to download the map in various resolutions.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.downloadButton-tour',
+                            title: 'Map Download',
+                        },
+                        {
+                            content: 'The base map layer can be selected to change the type of base layers.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.layerSwitch-tour',
+                            title: 'Map Layout',
+                        },
+                        {
+                            content: 'Here you can choose to display the administrative boundaries of the province, district, municipality, or wards.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.adminSwitch-tour',
+                            title: 'Administrative Boundary',
+                        },
+                        {
+                            content: 'This toolbar provides option to zoom in into a desired area, to locate your current location, and search a location by its coordinates.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.zoomToolbar-tour',
+                            title: 'Zoom Toolbar',
+                        },
+                        {
+                            content: 'This section defines features in a map. It simply displays the symbol followed by a text description of what that symbol represents.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.legend-tour',
+                            title: 'Legend Section',
+                        },
+                        {
+                            content: 'It provides the starting and end date of the data being displayed.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.date-range-tour',
+                            title: 'Date Range ',
+                        },
+                        {
+                            content: 'These are our super awesome projects!',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.source-tour',
+                            title: 'Data Source ',
+                        },
+                        {
+                            content: 'In this section, the alerts generated for various hazards are enlisted.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.alert-tour',
+                            title: 'Alert ',
+                        },
+                        // {
+                        //     content: 'These are our super awesome projects!',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '.event-tour',
+                        //     title: 'Event',
+                        // },
+                        {
+                            content: 'This section provides a summary of the number of alerts generated for each hazard.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.visualization-tour',
+                            title: 'Visualization',
+                        },
+                        {
+                            content: 'This section provides detailed information on the alerts in tabular format.',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.tabular-data-tour',
+                            title: 'Table Data',
+                        },
+                        {
+                            content: 'Thankyou for visiting BIPAD Portal Tour!',
+                            locale: { skip: <strong aria-label="skip">SKIP</strong> },
+                            placement: 'center',
+                            target: 'body',
+                        },
+
+                    ],
+
+                });
+            } else {
+                this.setState({
+                    steps: [
+                        {
+                            content: 'BIPAD पोर्टल नेपालको एक एकीकृत विपद् सूचना व्यवस्थापन प्रणाली हो र यसको नेतृत्व नेपाल राष्ट्रिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्राधिकरणले गर्छ।',
+                            title: 'BIPAD पोर्टल भ्रमण गरौं!',
+                            locale: { skip: <strong aria-label="skip">SKIP</strong> },
+                            placement: 'center',
+                            target: 'body',
+                        },
+                        {
+                            content: 'यस मोड्युलले बाढी युद्ध बाढी चेतावनी, भारी वर्षा, भूकम्प, र वायु प्रदूषणको अलर्टहरूको भूस्थानिक डाटा प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-dashboard',
+                            title: 'ड्यासबोर्ड',
+                        },
+                        {
+                            content: 'यो मोड्युलले नेपाल प्रहरीद्वारा रिपोर्ट गरिएको वर्ष २०११ देखि भएका जोखिम घटनाहरूको भौगोलिक तथ्याङ्क देखाउँछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-incident',
+                            title: 'घटना मोड्युल',
+                        },
+                        {
+                            content: 'विभिन्न जोखिम घटनाहरु को कारण ऐतिहासिक क्षति र क्षति डाटा को कल्पना गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-lossDamage',
+                            title: 'क्षति र हानि मोड्युल',
+                        },
+                        {
+                            content: 'यस मोड्युलले वर्षा र नदी हेरचाह, भूकम्प, वायु प्रदूषण, र स्ट्रिमफ्लो पूर्वानुमानको साथमा जंगलको आगोको वास्तविक डाटा प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-realtime',
+                            title: 'वास्तविक समय मोड्युल',
+                        },
+                        {
+                            content: 'यो मोड्युलले चयन गरिएको समय सीमाको लागि DRRM कागजातहरू, DRRM परियोजनाहरूको स्थिति, DRR फोकल व्यक्तिहरूको सम्पर्क जानकारी र राष्ट्रिय, प्रदेश, जिल्ला र नगरपालिका स्तरहरूमा विपद् रिपोर्टहरू प्रदर्शन गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-profile',
+                            title: 'प्रोफाइल मोड्युल:',
+                        },
+                        {
+                            content: 'यो मोड्युलले प्रकोप, सम्मुखता, संकटासन्नता,  जोखिम, जलवायु परिवतर्न, र क्षमता र स्रोतहरू बारे जानकारी प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#navbar-riskinfo',
+                            title: 'जोखिम जानकारी मोड्युल',
+                        },
+                        // {
+                        //     content: 'यो सुविधाले तपाईंलाई विशेष घटना र मानव, पशुधन र पूर्वाधारको क्षति सहितको हताहतको स्थिति रिपोर्ट दिन्छ।',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '#situation-report',
+                        //     title: 'स्थिति रिपोर्टहरू',
+                        // },
+                        // {
+                        //     content: 'सामान्य प्रयोगकर्ताहरूले पनि यो सुविधा प्रयोग गरेर एक विशेष क्षेत्रमा भएको घटना रिपोर्ट गर्न सक्छन्। यसले खतराको विवरण, घटनाको समय र मिति र घटनाको क्षेत्र समावेश गर्दछ।',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '#report-an-incident',
+                        //     title: 'घटना रिपोर्ट गर्नुहोस्',
+                        // },
+                        {
+                            content: 'तपाईंले प्रदान गरिएको लगइन प्रमाणहरू प्रयोग गरेर पोर्टलमा लग इन गर्न सक्नुहुन्छ वा प्रयोगकर्ता नाम र पासवर्ड अनुरोध गर्न सक्नुहुन्छ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#login',
+                            title: 'लगइन गर्नुहोस्',
+                        },
+                        // {
+                        //     content: 'यहाँ तपाईंले BIPAD पोर्टल, यसको विकास र मोड्युलहरूका साथै प्रयोगकर्ताहरूको लागि प्राविधिक ह्यान्डबुकको बारेमा जानकारी पाउन सक्नुहुन्छ।',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '#about-us',
+                        //     title: 'हाम्रो बारेमा',
+                        // },
+                        // {
+                        //     content: 'यो पृष्ठले BIPAD पोर्टलको संक्षिप्त परिचय प्रदान गर्दछ र तपाईंलाई पोर्टलको भ्रमण गर्न सक्षम बनाउँछ।',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '#logout',
+                        //     title: ' गृह पृष्ठ',
+                        // },
+                        {
+                            content: 'फिल्टरहरूले तपाईंलाई स्थान छनौट गर्न अनुमति दिन्छ (जस्तै, प्रदेश, जिल्ला, नगरपालिका) डाटाको रुचि र समय सीमाको जोखिम।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '#component-filter',
+                            title: 'फिल्टरहरू',
+                        },
+                        {
+                            content: 'तपाईं विभिन्न रिजोल्युसनहरूमा नक्सा डाउनलोड गर्न यहाँ क्लिक गर्न सक्नुहुन्छ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.downloadButton-tour',
+                            title: 'नक्सा डाउनलोड',
+                        },
+                        {
+                            content: 'आधार तहको प्रकार परिवर्तन गर्न आधार नक्सा तह चयन गर्न सकिन्छ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.layerSwitch-tour',
+                            title: 'नक्सा लेआउट',
+                        },
+                        {
+                            content: 'यहाँ तपाईंले प्रदेश, जिल्ला, नगरपालिका वा वडाहरूको प्रशासनिक सीमाहरू प्रदर्शन गर्न छनौट गर्न सक्नुहुन्छ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.adminSwitch-tour',
+                            title: 'प्रशासनिक सीमा',
+                        },
+                        {
+                            content: 'यो टुलबारले इच्छित क्षेत्रमा जुम इन गर्न, तपाईंको हालको स्थान पत्ता लगाउन, र यसको निर्देशांकहरूद्वारा स्थान खोज्ने विकल्प प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.zoomToolbar-tour',
+                            title: 'जुम टुलबार',
+                        },
+                        {
+                            content: 'यो खण्डले नक्सामा सुविधाहरू परिभाषित गर्दछ। यसले संकेतलाई के प्रतिनिधित्व गर्दछ भन्ने विवरणलाई देखाउँछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.legend-tour',
+                            title: 'संकेत खण्ड',
+                        },
+                        {
+                            content: 'यसले प्रदर्शन भइरहेको डाटाको सुरु र अन्त्य मिति प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.date-range-tour',
+                            title: 'मिति ',
+                        },
+                        {
+                            content: 'These are our super awesome projects!',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.source-tour',
+                            title: 'Data Source ',
+                        },
+                        {
+                            content: 'यस खण्डमा,विभिन्न खतराहरूको लागि उत्पन्न अलर्टहरू सूचीबद्ध छन्।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.alert-tour',
+                            title: 'अलर्ट',
+                        },
+                        // {
+                        //     content: 'These are our super awesome projects!',
+                        //     placement: 'bottom',
+                        //     styles: {
+                        //         options: {
+                        //             width: 300,
+                        //         },
+                        //     },
+                        //     target: '.event-tour',
+                        //     title: 'Event',
+                        // },
+                        {
+                            content: 'यस खण्डले प्रत्येक खतराको लागि उत्पन्न अलर्टहरूको संख्याको सारांश प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.visualization-tour',
+                            title: 'दृश्यावलोकन',
+                        },
+                        {
+                            content: 'यो खण्डले तालिका ढाँचामा अलर्टहरूमा विस्तृत जानकारी प्रदान गर्दछ।',
+                            placement: 'bottom',
+                            styles: {
+                                options: {
+                                    width: 300,
+                                },
+                            },
+                            target: '.tabular-data-tour',
+                            title: 'तालिका डाटा',
+                        },
+                        {
+                            content: 'BIPAD पोर्टल भ्रमणको लागि धन्यवाद!',
+                            locale: { skip: <strong aria-label="skip">SKIP</strong> },
+                            placement: 'center',
+                            target: 'body',
+                        },
+
+                    ],
+
+                });
+            }
         }
     }
 
