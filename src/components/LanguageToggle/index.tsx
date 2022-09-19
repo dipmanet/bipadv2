@@ -14,8 +14,8 @@ import {
     setLanguageAction,
 } from '#actionCreators';
 
-import styles from './styles.scss';
 import { AppState } from '#types';
+import styles from './styles.scss';
 
 interface ComponentProps {
 }
@@ -24,7 +24,7 @@ interface PropsFromAppState {
     language: PageTypes.Language;
 }
 
-type Props = ComponentProps & PropsFromAppState & PropsFromDispatch ;
+type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
 
 interface PropsFromDispatch {
     setLanguage: typeof setLanguageAction;
@@ -38,14 +38,14 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const LanguageToggle = (props: Props) => {
-    const { language: { language }, setLanguage } = props;
+    const { language: { language }, setLanguage, className } = props;
 
     const handleLangButton = (val: string) => {
         setLanguage({ language: val });
     };
 
     return (
-        <div className={styles.languageButton}>
+        <div className={_cs(styles.languageButton, className)}>
             <button
                 onClick={() => handleLangButton('en')}
                 className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}

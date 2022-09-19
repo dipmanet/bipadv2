@@ -27,10 +27,10 @@ import {
 } from '#actionCreators';
 
 import LanguageToggle from '#components/LanguageToggle';
-import about from '#resources/icons/about.png';
-import technicalSupport from '#resources/icons/technicalsupport.png';
-import manuals from '#resources/icons/manuals.png';
-import faq from '#resources/icons/faqs.png';
+import about from '#resources/icons/about.svg';
+import technicalSupport from '#resources/icons/technicalsupport.svg';
+import manuals from '#resources/icons/manuals.svg';
+import faq from '#resources/icons/faqs.svg';
 import NewLoginModal from '#components/NewLoginModal';
 
 import { createConnectedRequestCoordinator } from '#request';

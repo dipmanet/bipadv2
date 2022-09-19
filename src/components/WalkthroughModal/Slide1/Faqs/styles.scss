@@ -1,8 +1,10 @@
 .mainContainer {
-    width: calc(100vw - 60px);
+    // width: calc(100vw - 60px);
     height: 100%;
     color: black;
     display: flex;
+    background-color: white;
+    width: 100vw;
 
     .sidebar {
         flex: 2;
@@ -73,7 +75,7 @@
 
                     span {
                         font-weight: 500;
-                        font-size: 20px;
+                        font-size: 16px;
                         color: #0C0C0C;
                         opacity: 0.87;
                     }
@@ -102,6 +104,7 @@
                 font-weight: 400;
                 color: #0C0C0C;
                 opacity: 0.67;
+                font-size: 16px;
             }
 
             h1 {

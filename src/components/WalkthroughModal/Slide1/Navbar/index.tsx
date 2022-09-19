@@ -3,18 +3,18 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-curly-spacing */
 import React, { useState, useContext } from 'react';
+import { createRequestClient, methods } from '@togglecorp/react-rest-request';
+import { connect } from 'react-redux';
+import { Link } from '@reach/router';
 import LanguageToggle from '#components/LanguageToggle';
 import login from '#resources/icons/login.png';
-import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import { createConnectedRequestCoordinator } from '#request';
-import { connect } from 'react-redux';
 import { authStateSelector, closeWalkThroughSelector, languageSelector, runSelector } from '#selectors';
 import { setAuthAction, setInitialCloseWalkThroughAction, setInitialRunAction } from '#actionCreators';
 import { getAuthState } from '#utils/session';
 import NewLoginModal from '#components/NewLoginModal';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import LoadingAnimation from '#rscv/LoadingAnimation';
-import { Link } from '@reach/router';
 import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({

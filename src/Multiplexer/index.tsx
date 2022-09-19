@@ -88,6 +88,7 @@ import errorBound from '../errorBound';
 import helmetify from '../helmetify';
 import styles from './styles.scss';
 import DownloadButtonOption from './DownloadButtonOption';
+import LanguageToggle from '#components/LanguageToggle';
 
 
 function reloadPage() {
@@ -1355,6 +1356,27 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     };
 
+    private hiddenNavRouteName = (routeName) => {
+        if (routeName === 'homepage') {
+            return true;
+        } if (routeName === 'gpdrr') {
+            return true;
+        }
+        if (routeName === 'about') {
+            return true;
+        }
+        if (routeName === 'developers') {
+            return true;
+        }
+        if (routeName === 'manuals') {
+            return true;
+        }
+        if (routeName === 'faqs') {
+            return true;
+        }
+        return false;
+    }
+
     public render() {
         const {
             mapStyle,
@@ -1735,6 +1757,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     {rightContent}
                                                 </div>
                                             )}
+                                            {!this.hiddenNavRouteName(activeRouteName) && <LanguageToggle />}
                                             {!hideFilter && (
                                                 <Filters
                                                     className={styles.filters}
@@ -1755,14 +1778,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 </Map>
                             </RiskInfoLayerContext.Provider>
                         </div>
-                        {activeRouteName === 'homepage'
-                            ? ''
-                            : activeRouteName === 'about'
-                                ? ''
-                                : activeRouteName === 'developers'
-                                    ? '' : activeRouteName === 'manuals'
-                                        ? '' : activeRouteName === 'faqs'
-                                            ? '' : <Navbar className={styles.navbar} />}
+                        {!this.hiddenNavRouteName(activeRouteName)
+                            && <Navbar className={styles.navbar} />
+                        }
+
 
                     </div>
                 </TitleContextProvider>

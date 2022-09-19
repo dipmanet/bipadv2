@@ -1,9 +1,11 @@
 .mainContainer {
-    width: calc(100vw - 60px);
+    // width: calc(100vw - 60px);
     height: 100%;
     // overflow: scroll;
     color: black;
     display: flex;
+    background-color: white;
+    width: 100vw;
 
     .sidebar {
         flex: 2;
