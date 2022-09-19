@@ -578,22 +578,36 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     data={filteredData}
                                     value={selectOption}
                                 />
-
-                                <BarChartVisual
-                                    filter={regionFilter}
-                                    data={filteredData}
-                                    selectOption={selectOption}
-                                    valueOnclick={valueOnclick}
-                                    regionRadio={regionRadio}
-                                />
-                                <AreaChartVisual
-                                    selectOption={selectOption}
-                                    data={chartData}
-                                />
-                                <HazardWise
-                                    selectOption={selectOption}
-                                    data={hazardSummary}
-                                />
+                                {
+                                    filteredData.length > 0
+                                        ? (
+                                            <>
+                                                <BarChartVisual
+                                                    filter={regionFilter}
+                                                    data={filteredData}
+                                                    selectOption={selectOption}
+                                                    valueOnclick={valueOnclick}
+                                                    regionRadio={regionRadio}
+                                                />
+                                                <AreaChartVisual
+                                                    selectOption={selectOption}
+                                                    data={chartData}
+                                                />
+                                                <HazardWise
+                                                    selectOption={selectOption}
+                                                    data={hazardSummary}
+                                                />
+                                            </>
+                                        )
+                                        : (
+                                            <div className={styles.dataUnavailable}>
+                                                <h3 className={styles.headerText}>No data are available</h3>
+                                                <p className={styles.textOption}>
+                                                    Try selecting different parameters.
+                                                </p>
+                                            </div>
+                                        )
+                                }
                             </div>
 
 

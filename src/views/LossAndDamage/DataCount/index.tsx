@@ -31,9 +31,17 @@ const DataCount = (props) => {
                     `Total number of ${name}`
                 }
             </p>
-            <span className={styles.alertValue}>
-                {dataValue && estimatedLossValueFormatter(dataValue)}
-            </span>
+
+            {
+                data.length > 0
+                && (
+                    <span className={styles.alertValue}>
+                        {dataValue && estimatedLossValueFormatter(dataValue)}
+                    </span>
+                )
+            }
+
+
         </div>
         /* </div> */
     );
