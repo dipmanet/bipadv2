@@ -449,50 +449,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Risk Info module',
                 },
                 {
-                    content: 'This feature gives you the situation reports of the particular event and its casualties including human, livestock and infrastructure loss.',
-                    placement: 'bottom',
-                    styles: {
-                        options: {
-                            width: 300,
-                        },
-                    },
-                    target: '#situation-report',
-                    title: 'Situation Reports',
-                },
-                // {
-                //     content: 'These are our super awesome projects!',
-                //     placement: 'bottom',
-                //     styles: {
-                //         options: {
-                //             width: 300,
-                //         },
-                //     },
-                //     target: '#relief',
-                //     title: 'Relief',
-                // },
-                // {
-                //     content: 'These are our super awesome projects!',
-                //     placement: 'bottom',
-                //     styles: {
-                //         options: {
-                //             width: 300,
-                //         },
-                //     },
-                //     target: '#reported-incidents',
-                //     title: 'Reported Incidents',
-                // },
-                {
-                    content: 'General users can also report an incident that occurred in a particular area using this feature. It includes details of hazard occurred, time and date of occurrence and area of incident.',
-                    placement: 'bottom',
-                    styles: {
-                        options: {
-                            width: 300,
-                        },
-                    },
-                    target: '#report-an-incident',
-                    title: 'Report an incident',
-                },
-                {
                     content: 'You can log in to the portal using the login credentials provided or request a username and password.',
                     placement: 'bottom',
                     styles: {
@@ -502,28 +458,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     },
                     target: '#login',
                     title: 'Login',
-                },
-                {
-                    content: 'Here you can find the information about the BIPAD Portal, its development and modules along with a technical handbook for the users.',
-                    placement: 'bottom',
-                    styles: {
-                        options: {
-                            width: 300,
-                        },
-                    },
-                    target: '#about-us',
-                    title: 'About Us',
-                },
-                {
-                    content: 'This page provides a brief introduction of BIPAD Portal and enables you to take a tour of the Portal.',
-                    placement: 'bottom',
-                    styles: {
-                        options: {
-                            width: 300,
-                        },
-                    },
-                    target: '#logout',
-                    title: 'Home Page',
                 },
                 {
                     content: 'Filters allow you to choose the location (for e.g., province, district, municipality) hazard of interest and time frame of the data.',
@@ -624,17 +558,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     target: '.alert-tour',
                     title: 'Alert ',
                 },
-                // {
-                //     content: 'These are our super awesome projects!',
-                //     placement: 'bottom',
-                //     styles: {
-                //         options: {
-                //             width: 300,
-                //         },
-                //     },
-                //     target: '.event-tour',
-                //     title: 'Event',
-                // },
                 {
                     content: 'This section provides a summary of the number of alerts generated for each hazard.',
                     placement: 'bottom',
@@ -797,50 +720,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             title: 'Risk Info module',
                         },
                         {
-                            content: 'This feature gives you the situation reports of the particular event and its casualties including human, livestock and infrastructure loss.',
-                            placement: 'bottom',
-                            styles: {
-                                options: {
-                                    width: 300,
-                                },
-                            },
-                            target: '#situation-report',
-                            title: 'Situation Reports',
-                        },
-                        // {
-                        //     content: 'These are our super awesome projects!',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '#relief',
-                        //     title: 'Relief',
-                        // },
-                        // {
-                        //     content: 'These are our super awesome projects!',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '#reported-incidents',
-                        //     title: 'Reported Incidents',
-                        // },
-                        {
-                            content: 'General users can also report an incident that occurred in a particular area using this feature. It includes details of hazard occurred, time and date of occurrence and area of incident.',
-                            placement: 'bottom',
-                            styles: {
-                                options: {
-                                    width: 300,
-                                },
-                            },
-                            target: '#report-an-incident',
-                            title: 'Report an incident',
-                        },
-                        {
                             content: 'You can log in to the portal using the login credentials provided or request a username and password.',
                             placement: 'bottom',
                             styles: {
@@ -850,28 +729,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             },
                             target: '#login',
                             title: 'Login',
-                        },
-                        {
-                            content: 'Here you can find the information about the BIPAD Portal, its development and modules along with a technical handbook for the users.',
-                            placement: 'bottom',
-                            styles: {
-                                options: {
-                                    width: 300,
-                                },
-                            },
-                            target: '#about-us',
-                            title: 'About Us',
-                        },
-                        {
-                            content: 'This page provides a brief introduction of BIPAD Portal and enables you to take a tour of the Portal.',
-                            placement: 'bottom',
-                            styles: {
-                                options: {
-                                    width: 300,
-                                },
-                            },
-                            target: '#logout',
-                            title: 'Home Page',
                         },
                         {
                             content: 'Filters allow you to choose the location (for e.g., province, district, municipality) hazard of interest and time frame of the data.',
@@ -972,17 +829,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             target: '.alert-tour',
                             title: 'Alert ',
                         },
-                        // {
-                        //     content: 'These are our super awesome projects!',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '.event-tour',
-                        //     title: 'Event',
-                        // },
                         {
                             content: 'This section provides a summary of the number of alerts generated for each hazard.',
                             placement: 'bottom',
@@ -1091,28 +937,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             target: '#navbar-riskinfo',
                             title: 'जोखिम जानकारी मोड्युल',
                         },
-                        // {
-                        //     content: 'यो सुविधाले तपाईंलाई विशेष घटना र मानव, पशुधन र पूर्वाधारको क्षति सहितको हताहतको स्थिति रिपोर्ट दिन्छ।',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '#situation-report',
-                        //     title: 'स्थिति रिपोर्टहरू',
-                        // },
-                        // {
-                        //     content: 'सामान्य प्रयोगकर्ताहरूले पनि यो सुविधा प्रयोग गरेर एक विशेष क्षेत्रमा भएको घटना रिपोर्ट गर्न सक्छन्। यसले खतराको विवरण, घटनाको समय र मिति र घटनाको क्षेत्र समावेश गर्दछ।',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '#report-an-incident',
-                        //     title: 'घटना रिपोर्ट गर्नुहोस्',
-                        // },
                         {
                             content: 'तपाईंले प्रदान गरिएको लगइन प्रमाणहरू प्रयोग गरेर पोर्टलमा लग इन गर्न सक्नुहुन्छ वा प्रयोगकर्ता नाम र पासवर्ड अनुरोध गर्न सक्नुहुन्छ।',
                             placement: 'bottom',
@@ -1124,28 +948,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             target: '#login',
                             title: 'लगइन गर्नुहोस्',
                         },
-                        // {
-                        //     content: 'यहाँ तपाईंले BIPAD पोर्टल, यसको विकास र मोड्युलहरूका साथै प्रयोगकर्ताहरूको लागि प्राविधिक ह्यान्डबुकको बारेमा जानकारी पाउन सक्नुहुन्छ।',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '#about-us',
-                        //     title: 'हाम्रो बारेमा',
-                        // },
-                        // {
-                        //     content: 'यो पृष्ठले BIPAD पोर्टलको संक्षिप्त परिचय प्रदान गर्दछ र तपाईंलाई पोर्टलको भ्रमण गर्न सक्षम बनाउँछ।',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '#logout',
-                        //     title: ' गृह पृष्ठ',
-                        // },
                         {
                             content: 'फिल्टरहरूले तपाईंलाई स्थान छनौट गर्न अनुमति दिन्छ (जस्तै, प्रदेश, जिल्ला, नगरपालिका) डाटाको रुचि र समय सीमाको जोखिम।',
                             placement: 'bottom',
@@ -1245,17 +1047,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             target: '.alert-tour',
                             title: 'अलर्ट',
                         },
-                        // {
-                        //     content: 'These are our super awesome projects!',
-                        //     placement: 'bottom',
-                        //     styles: {
-                        //         options: {
-                        //             width: 300,
-                        //         },
-                        //     },
-                        //     target: '.event-tour',
-                        //     title: 'Event',
-                        // },
                         {
                             content: 'यस खण्डले प्रत्येक खतराको लागि उत्पन्न अलर्टहरूको संख्याको सारांश प्रदान गर्दछ।',
                             placement: 'bottom',
