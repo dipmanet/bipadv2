@@ -86,11 +86,11 @@ import {
     methods,
 } from '#request';
 import ZoomToolBar from '#components/ZoomToolBar';
+import LanguageToggle from '#components/LanguageToggle';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
 import styles from './styles.scss';
 import DownloadButtonOption from './DownloadButtonOption';
-import LanguageToggle from '#components/LanguageToggle';
 
 
 function reloadPage() {
@@ -2134,6 +2134,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     extraContentContainerClassName={
                                                         filterContentContainerClassName
                                                     }
+                                                    activeRouteDetails={activeRouteDetails}
                                                 />
                                             )}
                                         </aside>
