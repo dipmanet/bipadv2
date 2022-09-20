@@ -1,13 +1,21 @@
 @import '~base-scss/base';
 
+.toolTipItem {
+    display: none;
+    font-size: 0.75rem;
+    font-weight: 400;
+    width: max-content;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    border: 2px solid white;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
 
-// .numeral {
-//     display: block;
-//     padding: $spacing-small;
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-//     white-space: nowrap;
-// }
 
 .header{
     display: flex;
@@ -30,7 +38,7 @@
             overflow: hidden;
             &:hover{
                 cursor: pointer;
-                 }
+                 }   
         }
    
         .headerItemActive{
@@ -65,13 +73,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        &:hover {
-    overflow: visible;
-   white-space: normal;
-   height: auto;
-   width: max-content;
-            }     
-
+        &:hover{
+            .toolTipItem {
+                display: block
+            }
+          }
     }
 
     .sort{
@@ -82,19 +88,7 @@
 }
 
 }
-.bodyItem {
-    font-size: 0.75rem;
-    text-transform: capitalize;
-    font-weight: 500;
-    padding-right: 3px;
-    max-width: 10%;
-    min-width: 10%;
-    text-align: justify;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
-}
 .colorOne{
    background: #f6f6f6;
 }
@@ -102,14 +96,13 @@
     background: #ffffff;
 }
 
-.bodyContainer {
-    height: auto;
     .bodyWrapper {
         display: flex;
         align-items: center;
         gap: 15px;
+    }
 
-        .bodyItem {
+    .bodyItem {
             font-size: 0.75rem;
             text-transform: capitalize;
             font-weight: 500;
@@ -120,8 +113,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            &:hover{
+                .toolTipItem {
+                    display:block;
+                  }
+            }
 
-        }
     }
 
     .totalValues{
@@ -129,7 +126,6 @@
         background: #e5e5e5;
     }
 
-}
 
 .loss-and-damage-table-modal {
     width: 80vw;

@@ -37,4 +37,14 @@
 
 }
 
+.customTooltip{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .label{
+        color:black;
+        font-size: 12px;
+    }
+}
+
 // }

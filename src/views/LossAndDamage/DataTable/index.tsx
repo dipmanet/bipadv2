@@ -12,11 +12,13 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import styles from './styles.scss';
 import { mainHeading, bodyheader } from './headers';
+import { estimatedLossValueFormatter } from '../utils/utils';
 
 
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
+    console.log(data, 'sorted');
     // const bodyRef = useRef<List>('');
     // const [curerntListPos, setCurerntListPos] = useState(0);
 
@@ -53,6 +55,12 @@ const DataTable = ({ closeModal, incidentList }) => {
                     const d = new Date(value).toISOString().split('T')[0];
                     return d;
                 }
+
+                if (key === 'description') {
+                    if (value === undefined) return '-';
+                    return value;
+                }
+
                 if (key === 'verified') {
                     if (value === true) return 'Yes';
                     return 'No';
@@ -90,11 +98,7 @@ const DataTable = ({ closeModal, incidentList }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [focus.name]);
 
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
-
-    // const requiredData = requiredDataEval();
 
     const sumAvailabeData = () => {
         const values = data.length > 0 && Object.values(data[0]);
@@ -106,7 +110,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                 const individualValue = values[i];
                 const individualKey = keys[i];
                 if (typeof (individualValue) === 'string') {
-                    resultData.push('');
+                    resultData.push('-');
                     // eslint-disable-next-line no-continue
                     continue;
                 }
@@ -125,21 +129,37 @@ const DataTable = ({ closeModal, incidentList }) => {
         return resultData;
     };
 
-    const sortDatahandler = (type: string) => {
-        const entries = data.length > 0 && Object.entries(data);
+    const sortDatahandler = (type: string, key: string) => {
+        console.log('sorted data');
+        let sortedArr = [];
         if (type === 'string') {
-            const sortedArr = entries.sort((a, b) => {
-                const nameA = a;
-                console.log(nameA, 'sort');
-
-                // const nameB = b.name.toUpperCase();
+            sortedArr = data.length > 0 && data.sort((a, b) => {
+                const nameA = a[key].toUpperCase();
+                const nameB = b[key].toUpperCase();
+                // eslint-disable-next-line no-nested-ternary
+                return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+            });
+        } else if (type === 'numeric') {
+            sortedArr = data.length > 0 && data.sort((a, b) => {
+                const nameA = a[key];
+                const nameB = b[key];
+                return nameA - nameB;
                 // eslint-disable-next-line no-nested-ternary
                 // return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
-                return '';
             });
-            // setData(sortedArr);
-            // return;
         }
+
+        if (type === 'date') {
+            sortedArr = data.length > 0 && data.sort((a, b) => {
+                const dateA = new Date(a[key]);
+                const dateB = new Date(b[key]);
+                return dateA - dateB;
+            });
+        }
+
+        setData(sortedArr);
+
+
         // const sortedArr = data.sort((a, b) => a[type] - b[type]);
         // setData(sortedArr);
     };
@@ -172,7 +192,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                     .map(dat => (
                         <div
                             className={styles.headerContent}
-                            onClick={() => sortDatahandler(dat.type)}
+                            onClick={() => sortDatahandler(dat.type, dat.key)}
                             role="button"
                             tabIndex={0}
                             key={dat.id}
@@ -182,6 +202,11 @@ const DataTable = ({ closeModal, incidentList }) => {
                                 className={styles.bodyHeaderItem}
                             >
                                 {dat.name}
+                                <span className={styles.toolTipItem}>
+                                    {
+                                        dat.name
+                                    }
+                                </span>
                             </p>
                             <span className={styles.sort}>
                                 <i
@@ -194,11 +219,8 @@ const DataTable = ({ closeModal, incidentList }) => {
 
                     ))
             }
-
         </div>
-
     );
-    // const scrollDiv = document.querySelector('#scrollDiv');
 
     const Row = ({ index, key, style }) => (
         <div
@@ -208,14 +230,64 @@ const DataTable = ({ closeModal, incidentList }) => {
                 ? styles.colorOne
                 : styles.colorTwo}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <div className={styles.bodyWrapper}>
                 {
                     Object.values(data[index]).map(item => (
-                        <p className={styles.bodyItem}>{item}</p>
+                        <>
+                            <p className={styles.bodyItem}>
+
+                                {
+                                    typeof (item) === 'number'
+                                        ? estimatedLossValueFormatter(item)
+                                        : item
+                                }
+                                <span className={styles.toolTipItem}>
+                                    {
+                                        typeof (item) === 'number'
+                                            ? estimatedLossValueFormatter(item)
+                                            : item
+                                    }
+                                </span>
+                            </p>
+
+
+                        </>
+
                     ))
                 }
             </div>
         </div>
+
+    );
+
+    const TotalData = () => (totalData.length > 0
+        && (
+            <div
+                style={{
+                    background: '#e5e5e5',
+                    display: 'flex',
+                    gap: '15px',
+                    width: '100%',
+                }}
+            >
+                <>
+                    <p className={styles.bodyItem}>Grand Total</p>
+                    {
+                        totalData.map(item => (
+                            <p className={styles.bodyItem}>
+                                {
+                                    typeof (item) === 'number'
+                                        ? estimatedLossValueFormatter(item)
+                                        : item
+                                }
+
+                            </p>
+
+                        ))
+                    }
+                </>
+            </div>
+        )
 
     );
 
@@ -249,6 +321,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                     >
                         {Row}
                     </List>
+                    <TotalData />
                 </ModalBody>
             </Modal>
 

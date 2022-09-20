@@ -1,7 +1,10 @@
+/* eslint-disable max-len */
+/* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
+import { estimatedLossValueFormatter } from '../utils/utils';
 
 
 const AreaChartVisual = (props) => {
@@ -20,6 +23,26 @@ const AreaChartVisual = (props) => {
 
         return obj;
     });
+
+
+    const CustomizedTick = (value: number) => estimatedLossValueFormatter(value);
+
+    function CustomTooltip({ payload, active, label }) {
+        if (payload && active && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <span className={styles.label}>
+                        {
+                            `${payload[0].name}:${estimatedLossValueFormatter(payload[0].value)}`
+                        }
+
+                    </span>
+                </div>
+            );
+        }
+        return null;
+    }
+
 
     return (
         <div className={styles.wrapper}>
@@ -66,9 +89,13 @@ const AreaChartVisual = (props) => {
                                     dy={15}
                                     angle={-30}
                                 />
-                                <YAxis axisLine={false} tickLine={false} />
+                                <YAxis
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tickFormatter={CustomizedTick}
+                                />
                                 <Tooltip
-                                    labelFormatter={() => null}
+                                    content={CustomTooltip}
                                 />
                                 <Area
                                     type="monotone"

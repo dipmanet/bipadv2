@@ -6,6 +6,7 @@ import React from 'react';
 import { ResponsiveContainer, Treemap } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
+import { estimatedLossValueFormatter } from '../utils/utils';
 
 const HazardWise = (props) => {
     const { selectOption, data } = props;
@@ -66,7 +67,7 @@ const HazardWise = (props) => {
                                     fontSize={(height + width) / 20}
                                     fontWeight={'300'}
                                 >
-                                    {(height + width) > 150 ? value : ''}
+                                    {(height + width) > 150 ? estimatedLossValueFormatter(value) : ''}
                                 </text>
                                 <image
                                     fill={'red'}

@@ -9,6 +9,7 @@ import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
+import { estimatedLossValueFormatter } from '../utils/utils';
 
 interface IndividualChartData {
     name: string;
@@ -111,7 +112,7 @@ const BarChartVisual = (props) => {
             return (
                 <div className={styles.customTooltip}>
                     <span className={styles.label}>{payload[0].payload.name}</span>
-                    <span className={styles.label}>{`${selectOption.name}:${payload[0].payload.value}`}</span>
+                    <span className={styles.label}>{`${selectOption.name}:${estimatedLossValueFormatter(payload[0].payload.value)}`}</span>
                 </div>
             );
         }
@@ -122,20 +123,34 @@ const BarChartVisual = (props) => {
         // eslint-disable-next-line react/prop-types
         const { x, y, payload, dy, dx } = prop;
         return (
-            <Text
-                dy={dy}
-                dx={dx}
-                x={x}
-                y={y}
-                textAnchor="end"
-                verticalAnchor="middle"
-                fontSize={12}
-                angle={-30}
-                width={100}
-            >
-                {payload.value}
-            </Text>
-        );
+
+            typeof (payload.value) === 'string'
+                ? (
+                    <Text
+                        dy={dy}
+                        dx={dx}
+                        x={x}
+                        y={y}
+                        textAnchor="end"
+                        verticalAnchor="middle"
+                        fontSize={12}
+                        angle={-30}
+                        width={100}
+                    >
+                        {payload.value}
+
+                    </Text>
+                ) : (
+                    <Text
+                        dy={dy}
+                        dx={dx}
+                        x={x}
+                        y={y}
+                    >
+                        {estimatedLossValueFormatter(payload.value)}
+
+                    </Text>
+                ));
     };
 
     return (
@@ -181,7 +196,11 @@ const BarChartVisual = (props) => {
                                     interval={0}
                                     tick={<CustomizedLabel />}
                                 />
-                                <YAxis axisLine={false} tickLine={false} />
+                                <YAxis
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={<CustomizedLabel />}
+                                />
                                 <Tooltip
                                     cursor={false}
                                     content={<CustomTooltip />}

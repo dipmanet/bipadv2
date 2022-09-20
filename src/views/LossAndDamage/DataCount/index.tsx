@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
-import Numeral from '#rscv/Numeral';
+import { estimatedLossValueFormatter } from '../utils/utils';
 
 const DataCount = (props) => {
     const { data, value } = props;
@@ -10,21 +10,7 @@ const DataCount = (props) => {
     const nullCondition = false;
     const dataValue = nullCheck(nullCondition, data, key);
 
-    const estimatedLossValueFormatter = (d) => {
-        const { number, normalizeSuffix } = Numeral.getNormalizedNumber({
-            value: d,
-            normal: true,
-            precision: 0,
-        });
-        if (normalizeSuffix) {
-            return `${number}${normalizeSuffix}`;
-        }
-        return number;
-    };
-
     return (
-
-        // <div className={styles.container}>
         <div className={styles.wrapper}>
             <p className={styles.alertText}>
                 {
@@ -43,7 +29,6 @@ const DataCount = (props) => {
 
 
         </div>
-        /* </div> */
     );
 };
 

@@ -55,7 +55,7 @@ export const bodyheader = {
         ],
     'Temporal summary':
         [
-            { id: 1, name: 'Year', key: 'incidentOn', type: 'string' },
+            { id: 1, name: 'Year', key: 'incidentOn', type: 'date' },
             { id: 2, name: 'Number of incident', key: 'numberOfIncident', type: 'numeric' },
             { id: 3, name: 'People death', key: 'loss.peopleDeathCount', type: 'numeric' },
             { id: 4, name: 'People missing', key: 'loss.peopleMissingCount', type: 'numeric' },
