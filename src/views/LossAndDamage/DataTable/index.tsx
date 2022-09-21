@@ -107,7 +107,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                 const individualValue = values[i];
                 const individualKey = keys[i];
                 if (typeof (individualValue) === 'string') {
-                    resultData.push('-');
+                    resultData.push({ id: individualKey, val: '-' });
                     // eslint-disable-next-line no-continue
                     continue;
                 }
@@ -118,7 +118,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                     return [];
                 })
                     .reduce((prev, cur) => prev + cur, 0);
-                resultData.push(reduceData);
+                resultData.push({ id: individualKey, val: reduceData });
             }
         }
         resultData.shift();
@@ -214,9 +214,8 @@ const DataTable = ({ closeModal, incidentList }) => {
         </div>
     );
 
-    const Row = ({ index, style }) => (
+    const Row = ({ index, style, key }) => (
         <div
-            key={index}
             style={style}
             className={index % 2 === 0
                 ? styles.colorOne
@@ -225,26 +224,23 @@ const DataTable = ({ closeModal, incidentList }) => {
             <div className={styles.bodyWrapper}>
                 {
                     Object.values(data[index]).map(item => (
-                        <>
-                            <p className={styles.bodyItem}>
-
+                        <p
+                            className={styles.bodyItem}
+                            key={key}
+                        >
+                            {
+                                typeof (item) === 'number'
+                                    ? estimatedLossValueFormatter(item)
+                                    : item
+                            }
+                            <span className={styles.toolTipItem}>
                                 {
                                     typeof (item) === 'number'
                                         ? estimatedLossValueFormatter(item)
                                         : item
                                 }
-                                <span className={styles.toolTipItem}>
-                                    {
-                                        typeof (item) === 'number'
-                                            ? estimatedLossValueFormatter(item)
-                                            : item
-                                    }
-                                </span>
-                            </p>
-
-
-                        </>
-
+                            </span>
+                        </p>
                     ))
                 }
             </div>
@@ -252,7 +248,7 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     );
 
-    const TotalData = (): boolean | JSX => (
+    const TotalData = () => (
         totalTableData.length > 0
         && (
             <div
@@ -261,12 +257,12 @@ const DataTable = ({ closeModal, incidentList }) => {
             >
                 <p className={styles.bodyItem}>Grand Total</p>
                 {
-                    totalTableData.map((item: string | number) => (
-                        <p className={styles.bodyItem} key={item}>
+                    totalTableData.map(item => (
+                        <p className={styles.bodyItem} key={item.id}>
                             {
-                                typeof (item) === 'number'
-                                    ? estimatedLossValueFormatter(item)
-                                    : item
+                                typeof (item.val) === 'number'
+                                    ? estimatedLossValueFormatter(item.val)
+                                    : item.val
                             }
 
                         </p>
@@ -283,9 +279,9 @@ const DataTable = ({ closeModal, incidentList }) => {
 
             <Modal className={styles.lossAndDamageTableModal}>
                 <ModalHeader
-                    title={
+                    title={(
                         <Header />
-                    }
+                    )}
                     rightComponent={(
                         <DangerButton
                             transparent
