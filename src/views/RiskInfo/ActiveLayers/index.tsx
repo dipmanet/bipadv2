@@ -44,8 +44,8 @@ const ActiveLayer = (
         onOpacityChange,
         showLegend,
         showOpacityInput,
-
-    }, language,
+        language: { language },
+    },
 ) => {
     const { map } = useContext(MapChildContext);
 
@@ -129,6 +129,7 @@ class ActiveLayers extends React.PureComponent<Props, State> {
         showOpacityInput: true,
     }
 
+
     private handleRemoveButtonClick = (layer) => {
         const { removeLayer } = this.context;
         removeLayer(layer.id);
@@ -160,6 +161,7 @@ class ActiveLayers extends React.PureComponent<Props, State> {
         onOpacityChange: this.handleOpacityChange,
         showOpacityInput: this.state.showOpacityInput,
         showLegend: this.state.showLegend,
+        language: this.props.language,
     })
 
     private getData = memoize(data => (
@@ -225,7 +227,7 @@ class ActiveLayers extends React.PureComponent<Props, State> {
                                 className={styles.content}
                                 itemClassName={styles.activeLayerContainer}
                                 data={data}
-                                renderer={d => ActiveLayer(d, language)}
+                                renderer={ActiveLayer}
                                 rendererParams={this.getRendererParams}
                                 keySelector={d => String(d.id)}
                                 onChange={this.handleChange}
