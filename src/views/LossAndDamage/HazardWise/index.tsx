@@ -28,7 +28,6 @@ const HazardWise = (props) => {
     const totalSum = hazardWiseData.length > 0 && hazardWiseData.map(item => item.value).reduce((a, b) => a + b);
     const CustomizedContent = (prop: any) => {
         const { root, depth, x, y, width, height, index, colors, name, value, icon } = prop;
-        console.log('x:', x, 'y:', y, 'height:', height);
         return (
             <g>
                 <rect

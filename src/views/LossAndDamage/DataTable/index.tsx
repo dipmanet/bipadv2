@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { FixedSizeList as List } from 'react-window';
 import Modal from '#rscv/Modal';
@@ -18,7 +18,20 @@ import { estimatedLossValueFormatter } from '../utils/utils';
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
-    console.log(data, 'sorted');
+    const [isSortClicked, setIsSortClicked] = useState(false);
+    const tableRef = React.createRef<HTMLInputElement>();
+
+    useEffect(() => {
+        if (tableRef.current) {
+            const Heading = document.getElementById('mainHeader');
+            Heading.scrollLeft = 400;
+
+            tableRef.current.scrollLeft = 100;
+            const rect = tableRef.current.getBoundingClientRect();
+            const leftPos = rect.left;
+        }
+    }, [tableRef]);
+
     // const bodyRef = useRef<List>('');
     // const [curerntListPos, setCurerntListPos] = useState(0);
 
@@ -45,6 +58,13 @@ const DataTable = ({ closeModal, incidentList }) => {
     //         element1.scrollBy(1000, 0);
     //     }
     // }, [curerntListPos]);
+
+    useEffect(() => {
+        if (isSortClicked) {
+            setIsSortClicked(false);
+        }
+    }, [isSortClicked]);
+
 
     useEffect(() => {
         const requiredDataEval = () => {
@@ -125,12 +145,13 @@ const DataTable = ({ closeModal, incidentList }) => {
             }
         }
         resultData.shift();
-
         return resultData;
     };
 
+    const totalTableData = sumAvailabeData();
+
     const sortDatahandler = (type: string, key: string) => {
-        console.log('sorted data');
+        setIsSortClicked(true);
         let sortedArr = [];
         if (type === 'string') {
             sortedArr = data.length > 0 && data.sort((a, b) => {
@@ -144,11 +165,8 @@ const DataTable = ({ closeModal, incidentList }) => {
                 const nameA = a[key];
                 const nameB = b[key];
                 return nameA - nameB;
-                // eslint-disable-next-line no-nested-ternary
-                // return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
             });
         }
-
         if (type === 'date') {
             sortedArr = data.length > 0 && data.sort((a, b) => {
                 const dateA = new Date(a[key]);
@@ -156,14 +174,8 @@ const DataTable = ({ closeModal, incidentList }) => {
                 return dateA - dateB;
             });
         }
-
         setData(sortedArr);
-
-
-        // const sortedArr = data.sort((a, b) => a[type] - b[type]);
-        // setData(sortedArr);
     };
-    const totalData = sumAvailabeData();
     const Header = () => (
         <div className={styles.header}>
             {
@@ -224,6 +236,7 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     const Row = ({ index, key, style }) => (
         <div
+            ref={tableRef}
             key={key}
             style={style}
             className={index % 2 === 0
@@ -260,7 +273,7 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     );
 
-    const TotalData = () => (totalData.length > 0
+    const TotalData = () => (totalTableData.length > 0
         && (
             <div
                 style={{
@@ -273,7 +286,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                 <>
                     <p className={styles.bodyItem}>Grand Total</p>
                     {
-                        totalData.map(item => (
+                        totalTableData.map(item => (
                             <p className={styles.bodyItem}>
                                 {
                                     typeof (item) === 'number'
@@ -318,6 +331,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                         itemSize={45}
                         rowHeight={'5px'}
                         className="listDiv"
+                        sortData={isSortClicked}
                     >
                         {Row}
                     </List>
