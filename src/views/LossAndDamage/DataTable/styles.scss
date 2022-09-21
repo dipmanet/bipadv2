@@ -62,8 +62,8 @@
         display: flex;
         align-items: center;
         cursor: pointer;
-        max-width: 10%;
-        min-width: 10%;
+        max-width: 10rem;
+        min-width: 10rem;
     .bodyHeaderItem {
         font-size: 0.75rem;
         font-weight: 600;
@@ -107,8 +107,8 @@
             text-transform: capitalize;
             font-weight: 500;
             padding-left: 3px;
-            max-width: 10%;
-            min-width: 10%;
+            max-width: 10rem;
+            min-width: 10rem;
             text-align: justify;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -124,8 +124,14 @@
     .totalValues{
         @extend .bodyWrapper;
         background: #e5e5e5;
+        width: fit-content;
     }
 
+.reactWindow{
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    scroll-behavior: smooth !important;
+}    
 
 .loss-and-damage-table-modal {
     width: 80vw;
@@ -141,8 +147,9 @@
     .body {
         display: flex;
         flex-direction: column;
-        overflow-x: hidden;
         background:#f6f6f6;
+        overflow: scroll;
+        scroll-behavior: smooth;
 
 
         .table {

@@ -5,7 +5,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList, FixedSizeList as List } from 'react-window';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -19,45 +19,22 @@ const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
-    const tableRef = React.createRef<HTMLInputElement>();
+    const tableRef = React.createRef<FixedSizeList<any>>();
+    const headerRef = React.createRef<HTMLInputElement>();
+    const totalRef = React.createRef<HTMLInputElement>();
 
     useEffect(() => {
-        if (tableRef.current) {
-            const Heading = document.getElementById('mainHeader');
-            Heading.scrollLeft = 400;
-
-            tableRef.current.scrollLeft = 100;
-            const rect = tableRef.current.getBoundingClientRect();
-            const leftPos = rect.left;
+        if (headerRef.current) {
+            const headerDivWidth = headerRef.current.scrollWidth;
+            if (tableRef.current) {
+                // eslint-disable-next-line no-underscore-dangle
+                tableRef.current._outerRef.style.width = `${headerDivWidth}px`;
+            }
+            if (totalRef.current) totalRef.current.style.width = `${headerDivWidth}px`;
+            // setDivWidth(modalWidth);
         }
-    }, [tableRef]);
-
-    // const bodyRef = useRef<List>('');
-    // const [curerntListPos, setCurerntListPos] = useState(0);
-
-    // useEffect(() => {
-    //     const element = document.querySelector('.listDiv');
-    //     const func = (e: Event) => {
-    //         if (element) {
-    //             setCurerntListPos(element.scrollLeft);
-    //         }
-    //     };
-    //     if (element) {
-    //         element.addEventListener('scroll', func);
-    //     }
-    //     return () => element && element.removeEventListener('scroll', func);
-
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
-
-    // useEffect(() => {
-    //     const element1 = document.getElementById('mainHeader');
-
-    //     if (element1) {
-    //         console.log('element1', element1);
-    //         element1.scrollBy(1000, 0);
-    //     }
-    // }, [curerntListPos]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalRef, headerRef]);
 
     useEffect(() => {
         if (isSortClicked) {
@@ -152,9 +129,9 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     const sortDatahandler = (type: string, key: string) => {
         setIsSortClicked(true);
-        let sortedArr = [];
+        let sortedArr: (string | number)[] = [];
         if (type === 'string') {
-            sortedArr = data.length > 0 && data.sort((a, b) => {
+            sortedArr = data.length > 0 && data.sort((a: any, b: any) => {
                 const nameA = a[key].toUpperCase();
                 const nameB = b[key].toUpperCase();
                 // eslint-disable-next-line no-nested-ternary
@@ -197,7 +174,10 @@ const DataTable = ({ closeModal, incidentList }) => {
     );
 
     const BodyHeader = () => (
-        <div id="mainHeader" className={styles.bodyheader}>
+        <div
+            className={styles.bodyheader}
+            ref={headerRef}
+        >
             {
                 bodyheader[Object.keys(bodyheader)
                     .filter(item => item === focus.name)[0]]
@@ -234,10 +214,9 @@ const DataTable = ({ closeModal, incidentList }) => {
         </div>
     );
 
-    const Row = ({ index, key, style }) => (
+    const Row = ({ index, style }) => (
         <div
-            ref={tableRef}
-            key={key}
+            key={index}
             style={style}
             className={index % 2 === 0
                 ? styles.colorOne
@@ -273,32 +252,27 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     );
 
-    const TotalData = () => (totalTableData.length > 0
+    const TotalData = (): boolean | JSX => (
+        totalTableData.length > 0
         && (
             <div
-                style={{
-                    background: '#e5e5e5',
-                    display: 'flex',
-                    gap: '15px',
-                    width: '100%',
-                }}
+                className={styles.totalValues}
+                ref={totalRef}
             >
-                <>
-                    <p className={styles.bodyItem}>Grand Total</p>
-                    {
-                        totalTableData.map(item => (
-                            <p className={styles.bodyItem}>
-                                {
-                                    typeof (item) === 'number'
-                                        ? estimatedLossValueFormatter(item)
-                                        : item
-                                }
+                <p className={styles.bodyItem}>Grand Total</p>
+                {
+                    totalTableData.map((item: string | number) => (
+                        <p className={styles.bodyItem} key={item}>
+                            {
+                                typeof (item) === 'number'
+                                    ? estimatedLossValueFormatter(item)
+                                    : item
+                            }
 
-                            </p>
+                        </p>
 
-                        ))
-                    }
-                </>
+                    ))
+                }
             </div>
         )
 
@@ -330,8 +304,9 @@ const DataTable = ({ closeModal, incidentList }) => {
                         itemCount={data.length}
                         itemSize={45}
                         rowHeight={'5px'}
-                        className="listDiv"
                         sortData={isSortClicked}
+                        ref={tableRef}
+                        className={styles.reactWindow}
                     >
                         {Row}
                     </List>
