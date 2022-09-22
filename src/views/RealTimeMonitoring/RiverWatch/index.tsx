@@ -155,6 +155,7 @@ class RiverWatch extends React.PureComponent<Props> {
         const {
             realTimeRiver,
             closeModal,
+            language: { language },
         } = this.props;
 
         const formattedTableData = convertNormalTableToCsv(realTimeRiver, this.riverWatchHeader);
@@ -165,7 +166,7 @@ class RiverWatch extends React.PureComponent<Props> {
                         <Modal
                             // closeOnEscape
                             // onClose={closeModal}
-                            className={_cs(styles.riverWatchModal, styles.languageFont)}
+                            className={_cs(styles.riverWatchModal, language === 'np' && styles.languageFont)}
                         >
                             <ModalHeader
                                 title={t('River Watch')}

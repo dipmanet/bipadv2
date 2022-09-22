@@ -64,6 +64,12 @@
                             font-size: var(--font-size-large);
                             font-weight: var(--font-weight-bold);
                         }
+
+                        .dateClass {
+                            p {
+                                margin: 0 !important;
+                            }
+                        }
                     }
                 }
             }
@@ -138,7 +144,8 @@
                         }
                     }
                 }
-                .selectComponent{
+
+                .selectComponent {
                     margin: 10px;
                 }
             }

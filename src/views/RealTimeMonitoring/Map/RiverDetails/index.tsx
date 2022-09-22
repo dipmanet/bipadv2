@@ -382,6 +382,7 @@ class RiverDetails extends React.PureComponent<Props> {
             lat,
             waterLevel,
             flow,
+            steady,
         } = this.props;
 
         const { filterValues,
@@ -407,7 +408,6 @@ class RiverDetails extends React.PureComponent<Props> {
         const todaysRiverDetail = this.getTodaysRiverDetail(sortedRiverDetails);
         const hourlyRiverDetails = this.getHourlyRiverData(todaysRiverDetail);
         const hourlyRiverChartData = this.getHourlyChartData(hourlyRiverDetails);
-        console.log('filterWiseChartData', lng, lat);
 
         return (
             <>
@@ -488,7 +488,7 @@ class RiverDetails extends React.PureComponent<Props> {
                                                     labelClassName={styles.label}
                                                     valueClassName={styles.value}
                                                     label={t('Flow')}
-                                                    value={flow || '-'}
+                                                    value={steady || '-'}
                                                 />
                                                 {/* <TextOutput
                                                 className={styles.detail}
@@ -502,7 +502,7 @@ class RiverDetails extends React.PureComponent<Props> {
                                                     labelClassName={styles.label}
                                                     valueClassName={styles.value}
                                                     label={t('Warning Level')}
-                                                    value={waterLevel || '-'}
+                                                    value={status || '-'}
                                                 />
 
                                                 <TextOutput

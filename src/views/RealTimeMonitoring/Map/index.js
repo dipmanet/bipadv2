@@ -123,6 +123,7 @@ class RealTimeMap extends React.PureComponent {
             measuredOn: '',
             description: '',
             flow: '',
+            steady: '',
             waterLevel: '',
             gis: undefined,
             rainId: undefined,
@@ -218,7 +219,7 @@ class RealTimeMap extends React.PureComponent {
 
     handleRainClick = (feature) => {
         const { properties: { title, image, status,
-            measuredOn, basin, rainId, lng, lat } } = feature;
+            measuredOn, basin, rainId, lng, lat, steady } } = feature;
         this.setState({
             rainTitle: title,
             rainImage: image,
@@ -230,14 +231,16 @@ class RealTimeMap extends React.PureComponent {
             rainId,
             lng,
             lat,
+            steady,
 
         });
         return true;
     }
 
     handleRiverClick = (feature) => {
+        console.log('feature', feature);
         const { properties: { title, image, basin,
-            status, measuredOn, waterLevel, flow, lng, lat, description, riverId } } = feature;
+            status, measuredOn, waterLevel, steady, lng, lat, description, riverId } } = feature;
         this.setState({
             riverTitle: title,
             streamflowId: undefined,
@@ -248,7 +251,7 @@ class RealTimeMap extends React.PureComponent {
             measuredOn,
             description,
             waterLevel,
-            flow,
+            steady,
             riverId,
             lng,
             lat,
@@ -892,7 +895,7 @@ class RealTimeMap extends React.PureComponent {
             lat,
             lng,
             waterLevel,
-            flow,
+            steady,
             riverImage,
             streamflowId,
             rainId,
@@ -1457,6 +1460,7 @@ class RealTimeMap extends React.PureComponent {
                         description={description}
                         lat={lat}
                         lng={lng}
+                        steady={steady}
                         id={riverId}
                         language={language}
                         handleModalClose={this.handleModalClose}
@@ -1472,7 +1476,7 @@ class RealTimeMap extends React.PureComponent {
                         lat={lat}
                         lng={lng}
                         waterLevel={waterLevel}
-                        flow={flow}
+                        // flow={flow}
                         id={rainId}
                         language={language}
                         handleModalClose={this.handleModalClose}

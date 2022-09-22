@@ -196,6 +196,7 @@ class RainWatch extends React.PureComponent<Props> {
         const {
             realTimeRain,
             closeModal,
+            language: { language },
         } = this.props;
 
         const formattedTableData = convertNormalTableToCsv(realTimeRain, this.rainWatchHeader);
@@ -206,7 +207,7 @@ class RainWatch extends React.PureComponent<Props> {
                         <Modal
                             // closeOnEscape
                             // onClose={closeModal}
-                            className={_cs(styles.rainWatchModal, styles.languageFont)}
+                            className={_cs(styles.rainWatchModal, language === 'np' && styles.languageFont)}
                         >
 
                             <ModalHeader
