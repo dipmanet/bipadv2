@@ -1,8 +1,9 @@
 .languageButton {
-position: absolute;
-left: -65px;
-top: 10px;
-height: 0px;
+    position: absolute;
+    left: -65px;
+    top: 10px;
+    height: 0px;
+
     .nepButton {
         background-color: #a6a6a6;
         opacity: 0.67;
@@ -18,14 +19,26 @@ height: 0px;
         font-weight: 500;
         filter: saturate(100%);
     }
+
     .engButton {
-      @extend .nepButton;
+        @extend .nepButton;
         padding-right: 22px;
     }
-    
+
     .selectedLanguage {
         background-color: #216cd7;
         opacity: 1 !important;
         width: 22px;
     }
+}
+
+@media only screen and (max-width: 600px) {
+    .languageButton {
+        position: absolute;
+        left: unset;
+        top: 15px;
+        right: 0;
+        height: 0px;
+    }
+
 }
