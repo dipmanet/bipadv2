@@ -186,6 +186,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                     mapState={mapState}
                     regionLevel={radioSelect}
                     tooltipRenderer={tooltipRenderer}
+                    isDamageAndLoss
                 />
             </React.Fragment>
         );
