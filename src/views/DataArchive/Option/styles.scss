@@ -1,40 +1,47 @@
 .option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 380px;
-  color: white;
-  background-color: #405b67;
-  padding: var(--spacing-super-large);
-  border-radius: 3px;
-  transition: all 250ms ease-out;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 380px;
+    color: white;
+    background-color: #405b67;
+    padding: var(--spacing-super-large);
+    border-radius: 3px;
+    transition: all 250ms ease-out;
+    cursor: pointer;
 
-  &:hover {
-    background-color: #E35163;
-  }
-
-  .left {
-    .title {
-      color: white;
-      font-size: var(--font-size-super-large);
-      font-weight: var(--font-weight-bold);
+    &:hover {
+        background-color: #E35163;
     }
 
-    .subtitle {
-      opacity: 60%;
-      font-size: var(--font-size-medium-alt);
+    .left {
+        .title {
+            color: white;
+            font-size: var(--font-size-super-large);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .subtitle {
+            opacity: 60%;
+            font-size: var(--font-size-medium-alt);
+        }
     }
-  }
 
-  .spacer {
-    flex: 1;
-  }
+    .spacer {
+        flex: 1;
+    }
 
-  .option-icon {
-    width: 28px;
-    height: 28px;
-    filter: brightness(0) invert(1);
-  }
+    .option-icon {
+        width: 28px;
+        height: 28px;
+        filter: brightness(0) invert(1);
+    }
+
+}
+
+@media only screen and (max-width: 600px) {
+    .option {
+        min-width: 250px;
+    }
 
 }
