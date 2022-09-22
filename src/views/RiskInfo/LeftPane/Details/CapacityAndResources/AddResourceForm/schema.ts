@@ -59,6 +59,7 @@ const schema: Schema = {
             remarksOnBuildingCode: [],
         },
     },
+
     health: {
         fields: {
             ...defaultFields,
@@ -766,6 +767,33 @@ const schema: Schema = {
             website: [],
             remarksOnOpeningHours: [],
             hasEvacuationRoute: [],
+        },
+    },
+    warehouse: {
+        fields: {
+            ...defaultFields,
+            noOfEmployee: [],
+            noOfMaleEmployee: [],
+            noOfFemaleEmployee: [],
+            noOfOtherEmployee: [],
+            noOfDifferentlyAbledFemaleEmployees: [],
+            noOfDifferentlyAbledMaleEmployees: [],
+            noOfDifferentlyAbledOtherEmployees: [],
+            hasDisableFriendlyInfrastructure: [],
+            specifyInfrastructure: [],
+            startTime: [],
+            endTime: [],
+            website: [],
+            localAddress: [],
+            picture: [],
+            remarksOnOpeningHours: [],
+            address: [],
+            focalPersonName: [],
+            emailAddress: [],
+            phoneNumber: [],
+            designation: [],
+            remarks: [],
+            resourceType: [],
         },
     },
 

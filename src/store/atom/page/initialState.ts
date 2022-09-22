@@ -234,6 +234,12 @@ const state: PageState = {
             label: 'Community Space',
             labelNe: 'सामुदायिक खुल्ला स्थान',
         },
+        {
+            id: 22,
+            title: 'warehouse',
+            label: 'Ware House',
+            labelNe: 'गोदाम',
+        },
     ],
     carKeys: [],
     lossList: [],

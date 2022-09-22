@@ -175,7 +175,8 @@ type toggleValues =
     | 'fire fighting apparatus'
     | 'sanitation'
     | 'watersupply'
-    | 'evacuationcentre';
+    | 'evacuationcentre'
+    | 'warehouse';
 
 const initialActiveLayersIndication = {
     education: false,
@@ -199,6 +200,7 @@ const initialActiveLayersIndication = {
     sanitation: false,
     watersupply: false,
     evacuationcentre: false,
+    warehouse: false,
 
 
 };
@@ -396,6 +398,7 @@ interface ResourceColletion {
     sanitation: PageType.Resource[];
     watersupply: PageType.Resource[];
     evacuationcentre: PageType.Resource[];
+    warehouse: PageType.Resource[];
 }
 
 interface State {
@@ -434,6 +437,7 @@ interface State {
         sanitation: boolean;
         watersupply: boolean;
         evacuationcentre: boolean;
+        warehouse: boolean;
 
     };
 }
@@ -695,6 +699,10 @@ const sidepanelLogo = [
         name: 'Evacuation Centre',
         image: evacuationCentre,
     },
+    {
+        name: 'Ware House',
+        image: evacuationCentre,
+    },
 ];
 const indeterminateArray = capacityResource.map(item => item.name);
 
@@ -774,6 +782,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: [],
                 watersupply: [],
                 evacuationcentre: [],
+                warehouse: [],
 
 
             },
@@ -799,6 +808,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: [],
                 watersupply: [],
                 evacuationcentre: [],
+                warehouse: [],
 
             },
             ErrorData: '',
@@ -887,6 +897,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         sanitation: [],
                         watersupply: [],
                         evacuationcentre: [],
+                        warehouse: [],
 
 
                     },
@@ -1202,6 +1213,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             sanitation: [],
             watersupply: [],
             evacuationcentre: [],
+            warehouse: [],
         };
         const { resourceType } = resource;
 
@@ -1252,6 +1264,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: false,
                 watersupply: false,
                 evacuationcentre: false,
+                warehouse: false,
             },
         });
         const { handleActiveLayerIndication } = this.props;
@@ -1465,6 +1478,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: false,
                 watersupply: false,
                 evacuationcentre: false,
+                warehouse: false,
             },
         });
         const { handleActiveLayerIndication } = this.props;
@@ -1556,6 +1570,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: false,
                 watersupply: false,
                 evacuationcentre: false,
+                warehouse: false,
             },
         });
         setAddResource(true);
@@ -2445,6 +2460,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const sanitationGeoJson = this.getGeojson(resourceCollection.sanitation);
         const waterSupplyGeoJson = this.getGeojson(resourceCollection.watersupply);
         const evacuationcentreGeoJson = this.getGeojson(resourceCollection.evacuationcentre);
+        const warehouseGeojson = this.getGeojson(resourceCollection.warehouse);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -2619,36 +2635,40 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     </h3>
                                                 </div>
 
+                                                {
+                                                    item.resourceType === 'warehouse' ? ''
 
-                                                <div style={{ display: 'flex', alignItems: 'center', marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px' }}>
-                                                    {item.level === 1 ? (
-                                                        <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, item.name, item.resourceType, item.level, item.name, item.typeName)}>
-                                                            {/* <Icon
+                                                        : (
+                                                            <div style={{ display: 'flex', alignItems: 'center', marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px' }}>
+                                                                {item.level === 1 ? (
+                                                                    <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, item.name, item.resourceType, item.level, item.name, item.typeName)}>
+                                                                        {/* <Icon
                                                                 name="table"
                                                                 className={styles.inputIcon}
                                                             /> */}
-                                                            <ScalableVectorGraphics
-                                                                className={styles.visualizationIcon}
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.visualizationIcon}
 
 
-                                                                src={visualization}
-                                                            />
+                                                                            src={visualization}
+                                                                        />
 
-                                                        </button>
-                                                    ) : ''}
-                                                    {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
-                                                        ? (
-                                                            <Icon
-                                                                name="dropdown"
-                                                                className={styles.inputIconDropdown}
-                                                            />
-                                                        ) : (
-                                                            <Icon
-                                                                name="dropRight"
-                                                                className={styles.inputIconDropdown}
-                                                            />
-                                                        ) : ''}
-                                                </div>
+                                                                    </button>
+                                                                ) : ''}
+                                                                {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
+                                                                    ? (
+                                                                        <Icon
+                                                                            name="dropdown"
+                                                                            className={styles.inputIconDropdown}
+                                                                        />
+                                                                    ) : (
+                                                                        <Icon
+                                                                            name="dropRight"
+                                                                            className={styles.inputIconDropdown}
+                                                                        />
+                                                                    ) : ''}
+                                                            </div>
+                                                        )}
                                             </div>
 
                                         </div>
@@ -3947,6 +3967,98 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         />
                                         <MapLayer
                                             layerKey="-resourece-symbol-icon-evacuationcentre"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                layout: {
+                                                    'icon-image': 'evacuationcentre',
+                                                    'icon-size': 0.03,
+                                                },
+                                            }}
+                                        />
+
+                                        {resourceLngLat && resourceInfo && (
+                                            <MapTooltip
+                                                coordinates={resourceLngLat}
+                                                tooltipOptions={tooltipOptions}
+                                                onHide={this.handleTooltipClose}
+                                            >
+                                                <ResourceTooltip
+                                                    // FIXME: hide tooltip edit if there is no permission
+                                                    language={language}
+                                                    isLoggedInUser={isLoggedInUser}
+                                                    {...resourceInfo}
+                                                    {...resourceDetails}
+                                                    onEditClick={this.handleEditClick}
+                                                    wardsRef={wardsRef}
+                                                    onShowInventoryClick={this.handleShowInventoryClick}
+                                                    filterPermissionGranted={filterPermissionGranted}
+                                                />
+                                            </MapTooltip>
+                                        )}
+                                    </MapSource>
+
+                                </>
+                            )}
+
+
+                            {/** wareHouseGeoJson */}
+                            {activeLayersIndication.warehouse && (
+                                <>
+                                    <MapSource
+                                        sourceKey="resource-symbol-warehouse"
+                                        sourceOptions={{
+                                            type: 'geojson',
+                                            cluster: true,
+                                            clusterMaxZoom: 10,
+                                        }}
+                                        geoJson={warehouseGeojson}
+                                    >
+                                        <MapLayer
+                                            layerKey="cluster-warehouse"
+                                            onClick={this.handleClusterClick}
+                                            layerOptions={{
+                                                type: 'circle',
+                                                paint:
+                                                    mapStyles.resourceCluster
+                                                        .warehouse,
+                                                filter: ['has', 'point_count'],
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="cluster-count-warehouse"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: ['has', 'point_count'],
+                                                layout: {
+                                                    'text-field':
+                                                        '{point_count_abbreviated}',
+                                                    'text-size': 12,
+                                                },
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="resource-symbol-background-warehouse"
+                                            onClick={this.handleResourceClick}
+                                            onMouserEnter={
+                                                this.handleResourceMouseEnter
+                                            }
+                                            layerOptions={{
+                                                type: 'circle',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                paint:
+                                                    mapStyles.resourcePoint
+                                                        .warehouse,
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="-resourece-symbol-icon-warehouse"
                                             layerOptions={{
                                                 type: 'symbol',
                                                 filter: [

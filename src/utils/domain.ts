@@ -3056,4 +3056,13 @@ export const capacityResource = [
         level: 1,
         subCategory: [],
     },
+    {
+        id: 29,
+        name: 'Ware House',
+        nameNe: 'आपतकालीन सेल्टर',
+        resourceType: 'warehouse',
+        attribute: '',
+        level: 1,
+        subCategory: [],
+    },
 ];

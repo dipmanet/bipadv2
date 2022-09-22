@@ -3,7 +3,7 @@ import styles from './styles.scss';
 
 type ToggleValues = 'education' | 'health' | 'finance' | 'governance'
     | 'hotelandrestaurant' | 'cultural' | 'industry' | 'communication' | 'openspace' |
-    'communityspace' | 'firefightingapparatus' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway' | 'evacuationcentre';
+    'communityspace' | 'firefightingapparatus' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway' | 'evacuationcentre' | 'warehouse';
 
 interface LegendItems {
     color: string;
@@ -32,6 +32,7 @@ const capacityAndResourcesLegendItems: LegendItems[] = [
     { color: '#2F6209', key: 'sanitation', label: 'Sanitation', style: styles.symbol },
     { color: '#3BC7F8', key: 'watersupply', label: 'Water Supply', style: styles.symbol },
     { color: '#F47267', key: 'evacuationcentre', label: 'Evacuation Center', style: styles.symbol },
+    { color: '#F47267', key: 'warehouse', label: 'Ware House', style: styles.symbol },
 ];
 
 export default capacityAndResourcesLegendItems;
