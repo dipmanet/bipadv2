@@ -554,6 +554,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 hazardTypes={hazardTypes}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
+                                                currentSelection={selectOption}
+
                                             />
                                         )}
                                     >

@@ -150,7 +150,8 @@ class ChoroplethMap extends React.PureComponent {
 
         const checkShowBoundary = (condition, isDamageandLoss, type) => {
             if (isDamageandLoss) {
-                if ((type === 'district' && regionLevel === 2) || (type === 'muni' && regionLevel === 3)) {
+                if ((type === 'district' && regionLevel === 2)
+                || (type === 'muni' && regionLevel === 3)) {
                     return true;
                 }
                 return false;
@@ -162,9 +163,7 @@ class ChoroplethMap extends React.PureComponent {
             if (isDamageandLoss) {
                 if ((type === 'prov' && regionLevel === 1)
                 || (type === 'district' && regionLevel === 2)
-                || (type === 'muni' && regionLevel === 3)
-
-                ) {
+                || (type === 'muni' && regionLevel === 3)) {
                     return true;
                 }
                 return false;

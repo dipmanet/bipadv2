@@ -34,7 +34,7 @@ import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
 import { saveChart } from '#utils/common';
 
-import { getSanitizedIncidents } from '../common';
+import { getSanitizedIncidents, metricMap } from '../common';
 
 import styles from './styles.scss';
 import Visualizations from '../Comparative/Visualizations';
@@ -43,6 +43,9 @@ import BarChartVisual from '../Barchart';
 import HazardWise from '../HazardWise';
 import { createSingleList } from '#components/RegionSelectInput/util.js';
 import Dropdown from '../DropDown';
+import { colorGrade, generateColor, generateMapState, generatePaint } from '../Map/utils';
+import { generateOverallDataset } from '../Overview/util';
+import ChoroplethMap from '#components/ChoroplethMap';
 
 const propTypes = {
 };
@@ -142,7 +145,6 @@ class NewCompare extends React.PureComponent {
         if (!region) {
             return [];
         }
-
         const sanitizedIncidents = getSanitizedIncidents(incidents, regions, {}).filter(
             params => (
                 isNotDefined(region)
@@ -150,7 +152,6 @@ class NewCompare extends React.PureComponent {
                 || isValidIncident(params, region)
             ),
         );
-
         return sanitizedIncidents;
     }
 
@@ -159,7 +160,6 @@ class NewCompare extends React.PureComponent {
             faramValues,
             faramErrors,
         });
-        console.log(faramValues, 'faram values');
     }
 
     handleFaramValidationSuccess = (faramValues) => {
@@ -191,6 +191,7 @@ class NewCompare extends React.PureComponent {
             districts,
             setSelectOption,
             setVAlueOnClick,
+            currentSelection,
         } = this.props;
 
         const {
@@ -222,6 +223,80 @@ class NewCompare extends React.PureComponent {
         const clearValues = (element: string) => {
             this.setState({ faramValues: { ...faramValues, [element]: null } });
         };
+
+        const filterGeoArea = (value) => {
+            const totalData = createSingleList(provinces, districts, municipalities);
+            if (value) {
+                const filteredData = totalData.filter(item => item.adminLevel === value.adminLevel
+                    && item.id === value.geoarea);
+
+                return filteredData;
+            }
+            return [];
+        };
+
+        const mapStateValue = (Region, Incidents) => {
+            const geoareas = filterGeoArea(Region);
+            const regionLevel = Region && Region.adminLevel;
+
+            const {
+                mapping,
+                aggregatedStat,
+            } = generateOverallDataset(Incidents, regionLevel);
+
+            const mapState = Object.values(mapping).map(item => ({
+                id: geoareas[0].id,
+                value: item[currentSelection.key],
+            }));
+
+            return mapState;
+        };
+
+        const colorPaintValue = (Region, Incidents) => {
+            const regionLevel = Region && Region.adminLevel;
+            const {
+                aggregatedStat,
+            } = generateOverallDataset(Incidents, regionLevel);
+            const metric = metricMap[currentSelection.key].metricFn;
+            const maxValue = Math.max(metric(aggregatedStat), 1);
+            const color = generateColor(maxValue, 0, colorGrade);
+            const colorPaint = generatePaint(color);
+            return colorPaint;
+        };
+
+        console.log(mapStateValue(faramValues.region1, region1Incidents), 'map values');
+
+
+        const tooltipRenderer = (props) => {
+            const { feature } = props;
+            return (
+                <>
+                    <h3 style={{
+                        fontSize: '12px',
+                        margin: 0,
+                        padding: '10px 20px 0px 20px',
+                        textTransform: 'uppercase',
+                        textAlign: 'center',
+                    }}
+                    >
+                        {feature.properties.title}
+
+                    </h3>
+                    <p style={{
+                        margin: 0,
+                        padding: '0 20px 10px 20px',
+                        fontSize: '12px',
+                        textAlign: 'center',
+                    }}
+                    >
+                        {`No of ${currentSelection.name}: ${feature.state.value}`}
+                    </p>
+
+                </>
+            );
+        };
+        // console.log(mapState, 'mapping');
+
 
         return (
             <Modal className={_cs(className, styles.comparative)
@@ -328,10 +403,23 @@ class NewCompare extends React.PureComponent {
                                         navControlPosition="bottom-right"
                                     >
                                         <MapContainer className={styles.map1} />
-                                        <CommonMap
+                                        <ChoroplethMap
                                             sourceKey="comparative-first"
-                                            region={faramValues.region1}
-                                            debug
+                                            paint={
+                                                colorPaintValue(
+                                                    faramValues.region1,
+                                                    region1Incidents,
+                                                )
+                                            }
+                                            mapState={
+                                                mapStateValue(
+                                                    faramValues.region1,
+                                                    region1Incidents,
+                                                )
+                                            }
+                                            regionLevel={faramValues.region1.adminLevel}
+                                            tooltipRenderer={tooltipRenderer}
+                                            isDamageAndLoss
                                         />
                                     </Map>
                                 )}
@@ -351,10 +439,23 @@ class NewCompare extends React.PureComponent {
                                         navControlPosition="bottom-right"
                                     >
                                         <MapContainer className={styles.map2} />
-                                        <CommonMap
+                                        <ChoroplethMap
                                             sourceKey="comparative-second"
-                                            region={faramValues.region2}
-                                            debug
+                                            paint={
+                                                colorPaintValue(
+                                                    faramValues.region2,
+                                                    region2Incidents,
+                                                )
+                                            }
+                                            mapState={
+                                                mapStateValue(
+                                                    faramValues.region2,
+                                                    region2Incidents,
+                                                )
+                                            }
+                                            regionLevel={faramValues.region2.adminLevel}
+                                            tooltipRenderer={tooltipRenderer}
+                                            isDamageAndLoss
                                         />
                                     </Map>
                                 )}

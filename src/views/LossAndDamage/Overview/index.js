@@ -1,7 +1,5 @@
 import React from 'react';
-import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-import { listToMap } from '@togglecorp/fujs';
 import { TitleContext } from '#components/TitleContext';
 
 import {
@@ -21,11 +19,9 @@ import DamageLossTooltip from '../DamageLossTooltip';
 
 import {
     metricMap,
-    getGroupMethod,
-    getGroupedIncidents,
-    getAggregatedStats,
     getSanitizedIncidents,
 } from '../common';
+import { generateOverallDataset } from './util';
 
 import styles from './styles.scss';
 
@@ -58,32 +54,6 @@ class Overview extends React.PureComponent {
 
     static contextType = TitleContext;
 
-    generateOverallDataset = memoize((incidents, regionLevel) => {
-        if (!incidents || incidents.length <= 0) {
-            return {
-                mapping: [],
-                aggregatedStat: {},
-            };
-        }
-
-        const groupFn = getGroupMethod(regionLevel);
-        const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
-        const aggregatedStat = getAggregatedStats(regionGroupedIncidents.flat());
-
-        const listToMapGroupedItem = groupedIncidents => (
-            listToMap(
-                groupedIncidents,
-                incident => incident.key,
-                incident => incident,
-            )
-        );
-        const mapping = listToMapGroupedItem(regionGroupedIncidents);
-        return {
-            mapping,
-            aggregatedStat,
-        };
-    })
-
     render() {
         const {
             lossAndDamageList,
@@ -114,7 +84,7 @@ class Overview extends React.PureComponent {
         const {
             mapping,
             aggregatedStat,
-        } = this.generateOverallDataset(sanitizedList, radioSelect.id);
+        } = generateOverallDataset(sanitizedList, radioSelect.id);
 
         const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);

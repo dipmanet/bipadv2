@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import Numeral from '#rscv/Numeral';
@@ -11,18 +10,7 @@ import { lossMetrics } from '#utils/domain';
 
 import styles from './styles.scss';
 import Legend from '../Legend';
-
-const colorGrade = [
-    '#ffe5d4',
-    '#f9d0b8',
-    '#f2bb9e',
-    '#eca685',
-    '#e4906e',
-    '#dd7a59',
-    '#d46246',
-    '#cb4836',
-    '#c22727',
-];
+import { generateColor, generatePaint, generateMapState, colorGrade } from './utils';
 
 const propTypes = {
     geoareas: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -35,37 +23,6 @@ export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
-
-    generateColor = memoize((maxValue, minValue, colorMapping) => {
-        const newColor = [];
-        const { length } = colorMapping;
-        const range = maxValue - minValue;
-        colorMapping.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
-            newColor.push(color);
-        });
-        return newColor;
-    });
-
-    generatePaint = memoize(color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            ...color,
-        ],
-    }))
-
-    generateMapState = memoize((geoareas, groupedIncidentMapping, metricFn) => {
-        const value = geoareas.map(geoarea => ({
-            id: geoarea.id,
-            value: groupedIncidentMapping
-                ? metricFn(groupedIncidentMapping[geoarea.id])
-                : 0,
-        }));
-        return value;
-    });
 
     render() {
         const {
@@ -83,19 +40,18 @@ export default class LossAndDamageMap extends React.PureComponent {
             currentSelection,
         } = this.props;
 
-        const color = this.generateColor(maxValue, 0, colorGrade);
-        const colorPaint = this.generatePaint(color);
-        const mapState = this.generateMapState(geoareas, mapping, metric);
-        console.log(sourceKey, 'map state');
-
+        const color = generateColor(maxValue, 0, colorGrade);
+        const colorPaint = generatePaint(color);
+        const mapState = generateMapState(geoareas, mapping, metric);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
+        console.log(mapState, 'map state');
 
         const tooltipRenderer = (props) => {
             const { feature } = props;
             return (
                 <>
-                    <h3 style={{ 'font-size': '12px',
+                    <h3 style={{ fontSize: '12px',
                         margin: 0,
                         padding: '10px 20px 0px 20px',
                         textTransform: 'uppercase',
