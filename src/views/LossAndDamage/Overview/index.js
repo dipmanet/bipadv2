@@ -81,8 +81,6 @@ class Overview extends React.PureComponent {
             hazardTypes,
         );
 
-        console.log(sanitizedList, 'sanitized');
-
         const {
             mapping,
             aggregatedStat,

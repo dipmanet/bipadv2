@@ -271,10 +271,6 @@ class NewCompare extends React.PureComponent {
             return colorPaint;
         };
 
-        console.log(mapStateValue(faramValues.region1, region1Incidents), 'map values');
-
-        // console.log(mapState, 'mapping');
-
 
         return (
             <Modal className={_cs(className, styles.comparative)

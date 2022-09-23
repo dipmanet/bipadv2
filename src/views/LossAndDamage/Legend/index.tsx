@@ -1,6 +1,50 @@
 import React from 'react';
 import styles from './styles.scss';
 
+export const legentItemsTest = [
+    {
+        name: '0-100',
+        color: 'red',
+        value: '<=100',
+    },
+    {
+        name: '100-200',
+        color: 'orange',
+        value: '>100 && <=200',
+    },
+    {
+        name: '200-300',
+        color: 'yellow',
+        value: '>200 && <=300',
+    },
+    {
+        name: '300-400',
+        color: 'green',
+        value: '>300 && <=400',
+    },
+    {
+        name: '400-500',
+        color: 'blue',
+        value: '>400 && <=500',
+    },
+    {
+        name: '500-600',
+        color: 'pink',
+        value: '>500 && <=600',
+    },
+    {
+        name: '600-700',
+        color: 'aquamarine',
+        value: '>600 && <=700',
+    },
+    {
+        name: '700-more',
+        color: 'black',
+        value: '>700',
+    },
+
+];
+
 const Legend = () => {
     const legentItems = [
         {
@@ -45,12 +89,11 @@ const Legend = () => {
         },
 
     ];
-
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
                 {
-                    legentItems.map(item => (
+                    legentItemsTest.map(item => (
                         <div className={styles.legendItem}>
                             <div
                                 className={styles.legendColor}

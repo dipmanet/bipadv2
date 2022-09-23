@@ -75,6 +75,16 @@ export const generateOverallDataset = memoize((incidents, regionLevel) => {
     };
 });
 
+export const generateMapState = memoize((geoareas, groupedIncidentMapping, metricFn) => {
+    const value = geoareas.map(geoarea => ({
+        id: geoarea.id,
+        value: groupedIncidentMapping
+            ? metricFn(groupedIncidentMapping[geoarea.id])
+            : 0,
+    }));
+    return value;
+});
+
 export const generateColor = memoize((maxValue, minValue, colorMapping) => {
     const newColor = [];
     const { length } = colorMapping;
@@ -95,16 +105,6 @@ export const generatePaint = memoize(color => ({
         ...color,
     ],
 }));
-
-export const generateMapState = memoize((geoareas, groupedIncidentMapping, metricFn) => {
-    const value = geoareas.map(geoarea => ({
-        id: geoarea.id,
-        value: groupedIncidentMapping
-            ? metricFn(groupedIncidentMapping[geoarea.id])
-            : 0,
-    }));
-    return value;
-});
 
 export const colorGrade = [
     '#ffe5d4',
