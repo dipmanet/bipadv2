@@ -1,3 +1,4 @@
+/* eslint-disable no-eval */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
@@ -53,6 +54,7 @@ import {
     generatePaint,
 } from '../utils/utils';
 import ChoroplethMap from '#components/ChoroplethMap';
+import { legentItemsTest } from '../Legend';
 
 const propTypes = {
 };
@@ -259,14 +261,33 @@ class NewCompare extends React.PureComponent {
             return mapState;
         };
 
+        const generateColorTest = (valueFromData, valueToBeCompared) => {
+            const color = [];
+            // eslint-disable-next-line no-restricted-syntax
+            for (const element of valueToBeCompared) {
+                if (eval(`${valueFromData}${element.value[0]}`)
+                    && eval(`${valueFromData}${element.value[1]}`)) {
+                    const colorFromElement = element.color;
+                    color.push(valueFromData, colorFromElement);
+                }
+            }
+            return color;
+        };
+
         const colorPaintValue = (Region, Incidents) => {
             const regionLevel = Region && Region.adminLevel;
             const {
                 aggregatedStat,
             } = generateOverallDataset(Incidents, regionLevel);
             const metric = metricMap[currentSelection.key].metricFn;
-            const maxValue = Math.max(metric(aggregatedStat), 1);
-            const color = generateColor(maxValue, 0, colorGrade);
+            const valueFromData = Math.max(metric(aggregatedStat), 1);
+            const valueToBeCompared = legentItemsTest.map(i => (
+                {
+                    value: i.value,
+                    color: i.color,
+                }
+            ));
+            const color = generateColorTest(valueFromData, valueToBeCompared);
             const colorPaint = generatePaint(color);
             return colorPaint;
         };

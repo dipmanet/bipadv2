@@ -5,7 +5,7 @@ export const legentItemsTest = [
     {
         name: '0-100',
         color: 'red',
-        value: ['<=100'],
+        value: ['>0', '<=100'],
     },
     {
         name: '100-200',
@@ -40,7 +40,7 @@ export const legentItemsTest = [
     {
         name: '700-more',
         color: 'black',
-        value: ['>700'],
+        value: ['>700', '>700'],
     },
 
 ];
