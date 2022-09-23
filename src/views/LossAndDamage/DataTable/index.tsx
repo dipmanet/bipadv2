@@ -26,11 +26,13 @@ const DataTable = ({ closeModal, incidentList }) => {
     useEffect(() => {
         if (headerRef.current) {
             const headerDivWidth = headerRef.current.scrollWidth;
+            headerRef.current.style.width = `${headerDivWidth}px`;
             if (tableRef.current) {
                 // eslint-disable-next-line no-underscore-dangle
                 tableRef.current._outerRef.style.width = `${headerDivWidth}px`;
             }
             if (totalRef.current) totalRef.current.style.width = `${headerDivWidth}px`;
+
             // setDivWidth(modalWidth);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
