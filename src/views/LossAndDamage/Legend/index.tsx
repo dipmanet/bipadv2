@@ -5,42 +5,42 @@ export const legentItemsTest = [
     {
         name: '0-100',
         color: 'red',
-        value: '<=100',
+        value: ['<=100'],
     },
     {
         name: '100-200',
         color: 'orange',
-        value: '>100 && <=200',
+        value: ['>100', '<=200'],
     },
     {
         name: '200-300',
         color: 'yellow',
-        value: '>200 && <=300',
+        value: ['>200', '<=300'],
     },
     {
         name: '300-400',
         color: 'green',
-        value: '>300 && <=400',
+        value: ['>300', '<=400'],
     },
     {
         name: '400-500',
         color: 'blue',
-        value: '>400 && <=500',
+        value: ['>400', '<=500'],
     },
     {
         name: '500-600',
         color: 'pink',
-        value: '>500 && <=600',
+        value: ['>500', '<=600'],
     },
     {
         name: '600-700',
         color: 'aquamarine',
-        value: '>600 && <=700',
+        value: ['>600', '<=700'],
     },
     {
         name: '700-more',
         color: 'black',
-        value: '>700',
+        value: ['>700'],
     },
 
 ];
