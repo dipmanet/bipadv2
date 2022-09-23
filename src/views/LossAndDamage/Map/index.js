@@ -10,7 +10,12 @@ import { lossMetrics } from '#utils/domain';
 
 import styles from './styles.scss';
 import Legend from '../Legend';
-import { generateColor, generatePaint, generateMapState, colorGrade } from './utils';
+import { generateColor,
+    generatePaint,
+    generateMapState,
+    colorGrade,
+    tooltipRenderer } from '../utils/utils';
+
 
 const propTypes = {
     geoareas: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -45,32 +50,6 @@ export default class LossAndDamageMap extends React.PureComponent {
         const mapState = generateMapState(geoareas, mapping, metric);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
-        console.log(mapState, 'map state');
-
-        const tooltipRenderer = (props) => {
-            const { feature } = props;
-            return (
-                <>
-                    <h3 style={{ fontSize: '12px',
-                        margin: 0,
-                        padding: '10px 20px 0px 20px',
-                        textTransform: 'uppercase',
-                        textAlign: 'center' }}
-                    >
-                        {feature.properties.title}
-
-                    </h3>
-                    <p style={{ margin: 0,
-                        padding: '0 20px 10px 20px',
-                        fontSize: '12px',
-                        textAlign: 'center' }}
-                    >
-                        {`No of ${currentSelection}: ${feature.state.value}`}
-                    </p>
-
-                </>
-            );
-        };
 
         return (
             <React.Fragment>
@@ -141,7 +120,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                     paint={colorPaint}
                     mapState={mapState}
                     regionLevel={radioSelect}
-                    tooltipRenderer={tooltipRenderer}
+                    tooltipRenderer={prop => tooltipRenderer(prop, currentSelection)}
                     isDamageAndLoss
                 />
             </React.Fragment>

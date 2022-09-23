@@ -21,7 +21,7 @@ import {
     metricMap,
     getSanitizedIncidents,
 } from '../common';
-import { generateOverallDataset } from './util';
+import { generateOverallDataset } from '../utils/utils';
 
 import styles from './styles.scss';
 
@@ -80,6 +80,8 @@ class Overview extends React.PureComponent {
             regions,
             hazardTypes,
         );
+
+        console.log(sanitizedList, 'sanitized');
 
         const {
             mapping,

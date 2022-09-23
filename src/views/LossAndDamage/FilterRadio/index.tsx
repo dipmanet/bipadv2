@@ -17,7 +17,7 @@ const FilterRadio = (props) => {
         <div className={styles.container}>
             {filter.map(item => (
                 <>
-                    <label className={styles.radioItems}>
+                    <label className={styles.radioItems} key={item.id}>
                         <input
                             className={styles.radioInput}
                             type="radio"

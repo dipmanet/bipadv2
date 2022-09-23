@@ -43,8 +43,15 @@ import BarChartVisual from '../Barchart';
 import HazardWise from '../HazardWise';
 import { createSingleList } from '#components/RegionSelectInput/util.js';
 import Dropdown from '../DropDown';
-import { colorGrade, generateColor, generateMapState, generatePaint } from '../Map/utils';
-import { generateOverallDataset } from '../Overview/util';
+
+import {
+    tooltipRenderer,
+    generateOverallDataset,
+    colorGrade,
+    generateColor,
+    generateMapState,
+    generatePaint,
+} from '../utils/utils';
 import ChoroplethMap from '#components/ChoroplethMap';
 
 const propTypes = {
@@ -266,35 +273,6 @@ class NewCompare extends React.PureComponent {
 
         console.log(mapStateValue(faramValues.region1, region1Incidents), 'map values');
 
-
-        const tooltipRenderer = (props) => {
-            const { feature } = props;
-            return (
-                <>
-                    <h3 style={{
-                        fontSize: '12px',
-                        margin: 0,
-                        padding: '10px 20px 0px 20px',
-                        textTransform: 'uppercase',
-                        textAlign: 'center',
-                    }}
-                    >
-                        {feature.properties.title}
-
-                    </h3>
-                    <p style={{
-                        margin: 0,
-                        padding: '0 20px 10px 20px',
-                        fontSize: '12px',
-                        textAlign: 'center',
-                    }}
-                    >
-                        {`No of ${currentSelection.name}: ${feature.state.value}`}
-                    </p>
-
-                </>
-            );
-        };
         // console.log(mapState, 'mapping');
 
 
@@ -403,6 +381,11 @@ class NewCompare extends React.PureComponent {
                                         navControlPosition="bottom-right"
                                     >
                                         <MapContainer className={styles.map1} />
+                                        {/* <CommonMap
+                                            sourceKey="comparative-first"
+                                            region={faramValues.region1}
+                                            debug
+                                        /> */}
                                         <ChoroplethMap
                                             sourceKey="comparative-first"
                                             paint={
@@ -417,8 +400,11 @@ class NewCompare extends React.PureComponent {
                                                     region1Incidents,
                                                 )
                                             }
-                                            regionLevel={faramValues.region1.adminLevel}
-                                            tooltipRenderer={tooltipRenderer}
+                                            region={faramValues.region1}
+                                            tooltipRenderer={prop => tooltipRenderer(
+                                                prop,
+                                                currentSelection.name,
+                                            )}
                                             isDamageAndLoss
                                         />
                                     </Map>
@@ -439,6 +425,11 @@ class NewCompare extends React.PureComponent {
                                         navControlPosition="bottom-right"
                                     >
                                         <MapContainer className={styles.map2} />
+                                        {/* <CommonMap
+                                            sourceKey="comparative-second"
+                                            region={faramValues.region2}
+                                            debug
+                                        /> */}
                                         <ChoroplethMap
                                             sourceKey="comparative-second"
                                             paint={
@@ -453,8 +444,11 @@ class NewCompare extends React.PureComponent {
                                                     region2Incidents,
                                                 )
                                             }
-                                            regionLevel={faramValues.region2.adminLevel}
-                                            tooltipRenderer={tooltipRenderer}
+                                            region={faramValues.region2}
+                                            tooltipRenderer={prop => tooltipRenderer(
+                                                prop,
+                                                currentSelection.name,
+                                            )}
                                             isDamageAndLoss
                                         />
                                     </Map>
