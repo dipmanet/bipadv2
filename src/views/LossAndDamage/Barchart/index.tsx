@@ -99,8 +99,12 @@ const BarChartVisual = (props) => {
     }, [regionRadio, valueOnclick, data]);
 
     function nameReturn(region: object) {
+        console.log(region, 'region select');
         if (region.name === 'district' || region.name === 'municipality') return `${regionRadio.name}wise distribution (Top 10)`;
-        return `${regionRadio.name}wise distribution`;
+        if (region.name === 'province') return `${regionRadio.name}wise distribution`;
+        if (region.adminLevel === 1) return 'ProvinceWise distribution';
+        if (region.adminLevel === 2) return 'DistrictWise distribution';
+        return 'MunicipalityWise distribution';
     }
 
     function CustomTooltip({ payload, active, label }) {

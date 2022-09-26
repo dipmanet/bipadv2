@@ -143,10 +143,6 @@ class NewCompare extends React.PureComponent {
         }
     }
 
-    handleSaveClick = () => {
-        saveChart('comparative', 'comparative');
-    }
-
     filterIncidents = (incidents = emptyList, regions, region) => {
         if (!region) {
             return [];
@@ -298,7 +294,7 @@ class NewCompare extends React.PureComponent {
                         className={styles.chartDownload}
                         transparent
                         disabled={!region1 && !region2}
-                        onClick={this.handleSaveClick}
+                        onClick={() => handleSaveClick('comparative', 'compare')}
                         iconName="download"
                     />
                 </div>
@@ -337,7 +333,7 @@ class NewCompare extends React.PureComponent {
                     {(!region1 && !region2) ? (
                         this.messageForNoData(false)
                     ) : (
-                        <div className={styles.comparisionContainer}>
+                        <div className={styles.comparisionContainer} id="comparativeDiv">
                             <div className={styles.mapContainer}>
                                 {isRegionValid(faramValues.region1)
                                     && region1Incidents.length > 0
@@ -429,7 +425,6 @@ class NewCompare extends React.PureComponent {
                                                 regionRadio={region1}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
-                                                handleSaveClick={handleSaveClick}
                                             />
                                         )
                                         : <div />
@@ -443,7 +438,6 @@ class NewCompare extends React.PureComponent {
                                                 regionRadio={region2}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
-                                                handleSaveClick={handleSaveClick}
                                             />
                                         ) : <div />
                                     }
@@ -456,7 +450,7 @@ class NewCompare extends React.PureComponent {
                                                 <AreaChartVisual
                                                     data={getDataAggregatedByYear(region1Incidents)}
                                                     selectOption={selectOption}
-                                                    handleSaveClick={handleSaveClick}
+
                                                 />
                                             </div>
                                         ) : <div />
@@ -468,7 +462,7 @@ class NewCompare extends React.PureComponent {
                                                 <AreaChartVisual
                                                     data={getDataAggregatedByYear(region2Incidents)}
                                                     selectOption={selectOption}
-                                                    handleSaveClick={handleSaveClick}
+
                                                 />
                                             </div>
                                         ) : <div />
@@ -483,7 +477,7 @@ class NewCompare extends React.PureComponent {
                                                     // eslint-disable-next-line max-len
                                                     data={getHazardsCount(region1Incidents, hazardTypes)}
                                                     selectOption={selectOption}
-                                                    handleSaveClick={handleSaveClick}
+
                                                 />
                                             </div>
                                         ) : <div />
@@ -496,7 +490,7 @@ class NewCompare extends React.PureComponent {
                                                     // eslint-disable-next-line max-len
                                                     data={getHazardsCount(region2Incidents, hazardTypes)}
                                                     selectOption={selectOption}
-                                                    handleSaveClick={handleSaveClick}
+
                                                 />
                                             </div>
                                         ) : <div />
