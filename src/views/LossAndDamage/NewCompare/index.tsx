@@ -31,14 +31,11 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
-import CommonMap from '#components/CommonMap';
-import RegionSelectInput from '#components/RegionSelectInput';
 import { saveChart } from '#utils/common';
 
 import { getSanitizedIncidents, metricMap } from '../common';
 
 import styles from './styles.scss';
-import Visualizations from '../Comparative/Visualizations';
 import AreaChartVisual from '../AreaChart';
 import BarChartVisual from '../Barchart';
 import HazardWise from '../HazardWise';
@@ -54,7 +51,7 @@ import {
     generatePaint,
 } from '../utils/utils';
 import ChoroplethMap from '#components/ChoroplethMap';
-import { legentItemsTest } from '../Legend';
+import { legendItems } from '../Legend';
 
 const propTypes = {
 };
@@ -182,6 +179,21 @@ class NewCompare extends React.PureComponent {
         this.setState({ faramErrors });
     }
 
+    messageForNoData = (noData) => {
+        const noOptionSelected = 'No comparison is made';
+        const nodataAvailable = 'Data is not available';
+        return (
+            <div className={styles.preComparisionMessage}>
+                <h3 className={styles.headerText}>{noData ? nodataAvailable : noOptionSelected}</h3>
+                <p className={styles.textOption}>
+                    {
+                        `Try selecting different ${noData ? 'region' : 'section'} to compare`
+                    }
+                </p>
+            </div>
+        );
+    }
+
     render() {
         const {
             className,
@@ -216,6 +228,8 @@ class NewCompare extends React.PureComponent {
 
         const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
+
+        console.log(region2Incidents, 'region one');
 
         const RegionOptions = createSingleList(provinces, districts, municipalities)
             .map(region => ({
@@ -260,38 +274,12 @@ class NewCompare extends React.PureComponent {
 
             return mapState;
         };
-
-        const generateColorTest = (valueFromData, valueToBeCompared) => {
-            const color = [];
-            // eslint-disable-next-line no-restricted-syntax
-            for (const element of valueToBeCompared) {
-                if (eval(`${valueFromData}${element.value[0]}`)
-                    && eval(`${valueFromData}${element.value[1]}`)) {
-                    const colorFromElement = element.color;
-                    color.push(valueFromData, colorFromElement);
-                }
-            }
-            return color;
-        };
-
-        const colorPaintValue = (Region, Incidents) => {
-            const regionLevel = Region && Region.adminLevel;
-            const {
-                aggregatedStat,
-            } = generateOverallDataset(Incidents, regionLevel);
-            const metric = metricMap[currentSelection.key].metricFn;
-            const valueFromData = Math.max(metric(aggregatedStat), 1);
-            const valueToBeCompared = legentItemsTest.map(i => (
-                {
-                    value: i.value,
-                    color: i.color,
-                }
-            ));
-            const color = generateColorTest(valueFromData, valueToBeCompared);
-            const colorPaint = generatePaint(color);
-            return colorPaint;
-        };
-
+        const colorRange = [];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const item of legendItems) {
+            colorRange.push(item.value, item.color);
+        }
+        const colorPaint = generatePaint(colorRange);
 
         return (
             <Modal className={_cs(className, styles.comparative)
@@ -330,19 +318,6 @@ class NewCompare extends React.PureComponent {
                             deleteicon
                             clearValues={clearValues}
                         />
-                        {/* <RegionSelectInput
-                            label="Enter a Location to compare"
-                            className={styles.regionInput}
-                            faramElementName="region1"
-                            showHintAndError={false}
-                        // autoFocus
-                        /> */}
-                        {/* <RegionSelectInput
-                            label="Enter a Location to compare"
-                            className={styles.regionInput}
-                            faramElementName="region2"
-                            showHintAndError={false}
-                            disabled={faramValues.region1} */}
                         <Dropdown
                             elementName="region2"
                             label="Enter a Location to compare"
@@ -361,187 +336,166 @@ class NewCompare extends React.PureComponent {
                     className={styles.content}
                 >
                     {(!region1 && !region2) ? (
-                        <div className={styles.preComparisionMessage}>
-                            <h3 className={styles.headerText}>No comparison is made</h3>
-                            <p className={styles.textOption}>
-                                Try selecting different section to compare
-                            </p>
-                        </div>
+                        this.messageForNoData(false)
                     ) : (
                         <div className={styles.comparisionContainer}>
-                            {/* <div className={styles.titleContainer}>
-                                {isRegionValid(faramValues.region1) && (
-                                    <h2>
-                                        <GeoResolve data={region1} />
-                                    </h2>
-                                )}
-                                {isRegionValid(faramValues.region2) && (
-                                    <h2>
-                                        <GeoResolve data={region2} />
-                                    </h2>
-                                )}
-                            </div> */}
                             <div className={styles.mapContainer}>
-                                {isRegionValid(faramValues.region1) && (
-                                    <Map
-                                        mapStyle={mapStyle}
-                                        mapOptions={{
-                                            logoPosition: 'top-left',
-                                            minZoom: 5,
-                                        }}
-                                        // debug
+                                {isRegionValid(faramValues.region1)
+                                    && region1Incidents.length > 0
+                                    ? (
+                                        <Map
+                                            mapStyle={mapStyle}
+                                            mapOptions={{
+                                                logoPosition: 'top-left',
+                                                minZoom: 5,
+                                            }}
+                                            // debug
 
-                                        scaleControlShown
-                                        scaleControlPosition="bottom-right"
+                                            scaleControlShown
+                                            scaleControlPosition="bottom-right"
 
-                                        navControlShown
-                                        navControlPosition="bottom-right"
-                                    >
-                                        <MapContainer className={styles.map1} />
-                                        {/* <CommonMap
-                                            sourceKey="comparative-first"
-                                            region={faramValues.region1}
-                                            debug
-                                        /> */}
-                                        <ChoroplethMap
-                                            sourceKey="comparative-first"
-                                            paint={
-                                                colorPaintValue(
-                                                    faramValues.region1,
-                                                    region1Incidents,
-                                                )
-                                            }
-                                            mapState={
-                                                mapStateValue(
-                                                    faramValues.region1,
-                                                    region1Incidents,
-                                                )
-                                            }
-                                            region={faramValues.region1}
-                                            tooltipRenderer={prop => tooltipRenderer(
-                                                prop,
-                                                currentSelection.name,
-                                            )}
-                                            isDamageAndLoss
-                                        />
-                                    </Map>
-                                )}
-                                {isRegionValid(faramValues.region2) && (
-                                    <Map
-                                        mapStyle={mapStyle}
-                                        mapOptions={{
-                                            logoPosition: 'top-left',
-                                            minZoom: 5,
-                                        }}
-                                        // debug
+                                            navControlShown
+                                            navControlPosition="bottom-right"
+                                        >
+                                            <MapContainer className={styles.map1} />
+                                            <ChoroplethMap
+                                                sourceKey="comparative-first"
+                                                paint={colorPaint}
+                                                mapState={
+                                                    mapStateValue(
+                                                        faramValues.region1,
+                                                        region1Incidents,
+                                                    )
+                                                }
+                                                region={faramValues.region1}
+                                                tooltipRenderer={prop => tooltipRenderer(
+                                                    prop,
+                                                    currentSelection.name,
+                                                )}
+                                                isDamageAndLoss
+                                            />
+                                        </Map>
+                                    )
+                                    : this.messageForNoData(true)
+                                }
+                                {isRegionValid(faramValues.region2)
+                                    && region2Incidents.length > 0
+                                    ? (
+                                        <Map
+                                            mapStyle={mapStyle}
+                                            mapOptions={{
+                                                logoPosition: 'top-left',
+                                                minZoom: 5,
+                                            }}
+                                            // debug
 
-                                        scaleControlShown
-                                        scaleControlPosition="bottom-right"
+                                            scaleControlShown
+                                            scaleControlPosition="bottom-right"
 
-                                        navControlShown
-                                        navControlPosition="bottom-right"
-                                    >
-                                        <MapContainer className={styles.map2} />
-                                        {/* <CommonMap
-                                            sourceKey="comparative-second"
-                                            region={faramValues.region2}
-                                            debug
-                                        /> */}
-                                        <ChoroplethMap
-                                            sourceKey="comparative-second"
-                                            paint={
-                                                colorPaintValue(
-                                                    faramValues.region2,
-                                                    region2Incidents,
-                                                )
-                                            }
-                                            mapState={
-                                                mapStateValue(
-                                                    faramValues.region2,
-                                                    region2Incidents,
-                                                )
-                                            }
-                                            region={faramValues.region2}
-                                            tooltipRenderer={prop => tooltipRenderer(
-                                                prop,
-                                                currentSelection.name,
-                                            )}
-                                            isDamageAndLoss
-                                        />
-                                    </Map>
-                                )}
+                                            navControlShown
+                                            navControlPosition="bottom-right"
+                                        >
+                                            <MapContainer className={styles.map2} />
+                                            <ChoroplethMap
+                                                sourceKey="comparative-second"
+                                                paint={colorPaint}
+                                                mapState={
+                                                    mapStateValue(
+                                                        faramValues.region2,
+                                                        region2Incidents,
+                                                    )
+                                                }
+                                                region={faramValues.region2}
+                                                tooltipRenderer={prop => tooltipRenderer(
+                                                    prop,
+                                                    currentSelection.name,
+                                                )}
+                                                isDamageAndLoss
+                                            />
+                                        </Map>
+                                    ) : this.messageForNoData(true)
+                                }
                             </div>
                             <div
                                 className={styles.visualizations}
                                 id="comparative"
                             >
                                 <div className={styles.aggregatedStats}>
-                                    {isRegionValid(faramValues.region1) && (
-                                        // <LossDetails
-                                        //     className={styles.aggregatedStat}
-                                        //     data={region1Incidents}
-                                        //     minDate={minDate}
-                                        // />
-                                        <BarChartVisual
-                                            className={styles.aggregatedStat}
-                                            data={region1Incidents}
-                                            regionRadio={region1}
-                                            selectOption={selectOption}
-                                            valueOnclick={valueOnclick}
-                                        />
-                                    )}
-                                    {isRegionValid(faramValues.region2) && (
-                                        // <LossDetails
-                                        //     className={styles.aggregatedStat}
-                                        //     data={region2Incidents}
-                                        //     minDate={minDate}
-                                        // />
-                                        <BarChartVisual
-                                            className={styles.aggregatedStat}
-                                            data={region2Incidents}
-                                            regionRadio={region2}
-                                            selectOption={selectOption}
-                                            valueOnclick={valueOnclick}
-                                        />
-                                    )}
+                                    {isRegionValid(faramValues.region1)
+                                        && region1Incidents.length > 0
+                                        ? (
+                                            <BarChartVisual
+                                                className={styles.aggregatedStat}
+                                                data={region1Incidents}
+                                                regionRadio={region1}
+                                                selectOption={selectOption}
+                                                valueOnclick={valueOnclick}
+                                            />
+                                        )
+                                        : <div />
+                                    }
+                                    {isRegionValid(faramValues.region2)
+                                        && region2Incidents.length > 0
+                                        ? (
+                                            <BarChartVisual
+                                                className={styles.aggregatedStat}
+                                                data={region2Incidents}
+                                                regionRadio={region2}
+                                                selectOption={selectOption}
+                                                valueOnclick={valueOnclick}
+                                            />
+                                        ) : <div />
+                                    }
                                 </div>
                                 <div className={styles.otherVisualizations}>
-                                    {isRegionValid(faramValues.region1) && (
-                                        <div className={styles.region1Container}>
-                                            <AreaChartVisual
-                                                data={getDataAggregatedByYear(region1Incidents)}
-                                                selectOption={selectOption}
-                                            />
-                                        </div>
-                                    )}
-                                    {isRegionValid(faramValues.region2) && (
-                                        <div className={styles.region2Container}>
-                                            <AreaChartVisual
-                                                data={getDataAggregatedByYear(region2Incidents)}
-                                                selectOption={selectOption}
-                                            />
-                                        </div>
-                                    )}
+                                    {isRegionValid(faramValues.region1)
+                                        && region1Incidents.length > 0
+                                        ? (
+                                            <div className={styles.region1Container}>
+                                                <AreaChartVisual
+                                                    data={getDataAggregatedByYear(region1Incidents)}
+                                                    selectOption={selectOption}
+                                                />
+                                            </div>
+                                        ) : <div />
+                                    }
+                                    {isRegionValid(faramValues.region2)
+                                        && region2Incidents.length > 0
+                                        ? (
+                                            <div className={styles.region2Container}>
+                                                <AreaChartVisual
+                                                    data={getDataAggregatedByYear(region2Incidents)}
+                                                    selectOption={selectOption}
+                                                />
+                                            </div>
+                                        ) : <div />
+                                    }
                                 </div>
                                 <div className={styles.otherVisualizations}>
-                                    {isRegionValid(faramValues.region1) && (
-                                        <div className={styles.region1Container}>
-                                            <HazardWise
-                                                // eslint-disable-next-line max-len
-                                                data={getHazardsCount(region1Incidents, hazardTypes)}
-                                                selectOption={selectOption}
-                                            />
-                                        </div>
-                                    )}
-                                    {isRegionValid(faramValues.region2) && (
-                                        <div className={styles.region2Container}>
-                                            <HazardWise
-                                                // eslint-disable-next-line max-len
-                                                data={getHazardsCount(region2Incidents, hazardTypes)}
-                                                selectOption={selectOption}
-                                            />
-                                        </div>
-                                    )}
+                                    {isRegionValid(faramValues.region1)
+                                        && region1Incidents.length > 0
+                                        ? (
+                                            <div className={styles.region1Container}>
+                                                <HazardWise
+                                                    // eslint-disable-next-line max-len
+                                                    data={getHazardsCount(region1Incidents, hazardTypes)}
+                                                    selectOption={selectOption}
+                                                />
+                                            </div>
+                                        ) : <div />
+                                    }
+                                    {isRegionValid(faramValues.region2)
+                                        && region2Incidents.length > 0
+                                        ? (
+                                            <div className={styles.region2Container}>
+                                                <HazardWise
+                                                    // eslint-disable-next-line max-len
+                                                    data={getHazardsCount(region2Incidents, hazardTypes)}
+                                                    selectOption={selectOption}
+                                                />
+                                            </div>
+                                        ) : <div />
+                                    }
                                 </div>
                             </div>
                         </div>

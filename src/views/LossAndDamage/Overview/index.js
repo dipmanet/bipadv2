@@ -57,7 +57,6 @@ class Overview extends React.PureComponent {
     render() {
         const {
             lossAndDamageList,
-            regionLevel,
             provinces,
             districts,
             municipalities,
