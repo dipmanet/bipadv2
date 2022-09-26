@@ -207,8 +207,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         regionRadio: { name: 'province', id: 1 },
     }
 
-    private handleSaveClick = () => {
-        saveChart('chartList', 'lndChart');
+    private handleSaveClick = (domId, saveName) => {
+        saveChart(domId, saveName);
     }
 
     private calculateSummary = (data) => {
@@ -555,6 +555,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
                                                 currentSelection={selectOption}
+                                                handleSaveClick={this.handleSaveClick}
 
                                             />
                                         )}
@@ -590,14 +591,17 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     selectOption={selectOption}
                                                     valueOnclick={valueOnclick}
                                                     regionRadio={regionRadio}
+                                                    handleSaveClick={this.handleSaveClick}
                                                 />
                                                 <AreaChartVisual
                                                     selectOption={selectOption}
                                                     data={chartData}
+                                                    handleSaveClick={this.handleSaveClick}
                                                 />
                                                 <HazardWise
                                                     selectOption={selectOption}
                                                     data={hazardSummary}
+                                                    handleSaveClick={this.handleSaveClick}
                                                 />
                                             </>
                                         )

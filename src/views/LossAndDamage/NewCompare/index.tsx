@@ -213,6 +213,7 @@ class NewCompare extends React.PureComponent {
             setSelectOption,
             setVAlueOnClick,
             currentSelection,
+            handleSaveClick,
         } = this.props;
 
         const {
@@ -228,8 +229,6 @@ class NewCompare extends React.PureComponent {
 
         const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
-
-        console.log(region2Incidents, 'region one');
 
         const RegionOptions = createSingleList(provinces, districts, municipalities)
             .map(region => ({
@@ -430,6 +429,7 @@ class NewCompare extends React.PureComponent {
                                                 regionRadio={region1}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
+                                                handleSaveClick={handleSaveClick}
                                             />
                                         )
                                         : <div />
@@ -443,6 +443,7 @@ class NewCompare extends React.PureComponent {
                                                 regionRadio={region2}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
+                                                handleSaveClick={handleSaveClick}
                                             />
                                         ) : <div />
                                     }
@@ -455,6 +456,7 @@ class NewCompare extends React.PureComponent {
                                                 <AreaChartVisual
                                                     data={getDataAggregatedByYear(region1Incidents)}
                                                     selectOption={selectOption}
+                                                    handleSaveClick={handleSaveClick}
                                                 />
                                             </div>
                                         ) : <div />
@@ -466,6 +468,7 @@ class NewCompare extends React.PureComponent {
                                                 <AreaChartVisual
                                                     data={getDataAggregatedByYear(region2Incidents)}
                                                     selectOption={selectOption}
+                                                    handleSaveClick={handleSaveClick}
                                                 />
                                             </div>
                                         ) : <div />
@@ -480,6 +483,7 @@ class NewCompare extends React.PureComponent {
                                                     // eslint-disable-next-line max-len
                                                     data={getHazardsCount(region1Incidents, hazardTypes)}
                                                     selectOption={selectOption}
+                                                    handleSaveClick={handleSaveClick}
                                                 />
                                             </div>
                                         ) : <div />
@@ -492,6 +496,7 @@ class NewCompare extends React.PureComponent {
                                                     // eslint-disable-next-line max-len
                                                     data={getHazardsCount(region2Incidents, hazardTypes)}
                                                     selectOption={selectOption}
+                                                    handleSaveClick={handleSaveClick}
                                                 />
                                             </div>
                                         ) : <div />

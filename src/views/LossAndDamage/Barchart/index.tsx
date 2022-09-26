@@ -22,7 +22,9 @@ const BarChartVisual = (props) => {
     const { selectOption,
         regionRadio,
         data,
-        valueOnclick, className } = props;
+        valueOnclick,
+        className,
+        handleSaveClick } = props;
 
     const provinceIndex = data.map(i => ({
         name: i.provinceTitle,
@@ -168,11 +170,11 @@ const BarChartVisual = (props) => {
                     className={styles.downloadButton}
                     transparent
                     // disabled={pending}
-                    // onClick={this.handleSaveClick}
+                    onClick={() => handleSaveClick('barChart', 'barChart')}
                     iconName="download"
                 />
             </div>
-            <div className={styles.barChart}>
+            <div className={styles.barChart} id="barChart">
                 {
                     chartData.length > 0
                     && (

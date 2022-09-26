@@ -9,7 +9,7 @@ import styles from './styles.scss';
 import { estimatedLossValueFormatter } from '../utils/utils';
 
 const HazardWise = (props) => {
-    const { selectOption, data } = props;
+    const { selectOption, data, handleSaveClick } = props;
 
     const hazardWiseData = Object.entries(data).map((item) => {
         const obj = {
@@ -101,26 +101,26 @@ const HazardWise = (props) => {
                     className={styles.downloadButton}
                     transparent
                     // disabled={pending}
-                    // onClick={this.handleSaveClick}
+                    onClick={() => handleSaveClick('treemap', 'treeMap')}
                     iconName="download"
                 />
             </div>
-
-            {hazardWiseData.length > 0 && (
-                <ResponsiveContainer height={300}>
-                    <Treemap
-                        width={400}
-                        height={300}
-                        data={hazardWiseData}
-                        dataKey="value"
-                        stroke="#FFFFFF"
-                        fill={barColors.map(item => item)[1]}
-                        content={<CustomizedContent colors={barColors} />}
-                        aspectRatio={4 / 3}
-                    />
-                </ResponsiveContainer>
-            )}
-
+            <div id="treemap">
+                {hazardWiseData.length > 0 && (
+                    <ResponsiveContainer height={300}>
+                        <Treemap
+                            width={400}
+                            height={300}
+                            data={hazardWiseData}
+                            dataKey="value"
+                            stroke="#FFFFFF"
+                            fill={barColors.map(item => item)[1]}
+                            content={<CustomizedContent colors={barColors} />}
+                            aspectRatio={4 / 3}
+                        />
+                    </ResponsiveContainer>
+                )}
+            </div>
             <p className={styles.hazardText} style={{ marginTop: '45px' }}>
                 Data source : nepal police,drr portal
             </p>
