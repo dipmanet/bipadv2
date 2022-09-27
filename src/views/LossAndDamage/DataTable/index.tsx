@@ -130,27 +130,28 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     const totalTableData = sumAvailabeData();
 
-    const sortDatahandler = (type: string, key: string) => {
+    const sortDatahandler = (type: string, name: string) => {
+        console.log(type, name, 'sort');
         setIsSortClicked(true);
         let sortedArr: (string | number)[] = [];
         if (type === 'string') {
             sortedArr = data.length > 0 && data.sort((a: any, b: any) => {
-                const nameA = a[key].toUpperCase();
-                const nameB = b[key].toUpperCase();
+                const nameA = a[name].toUpperCase();
+                const nameB = b[name].toUpperCase();
                 // eslint-disable-next-line no-nested-ternary
                 return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
             });
         } else if (type === 'numeric') {
             sortedArr = data.length > 0 && data.sort((a, b) => {
-                const nameA = a[key];
-                const nameB = b[key];
+                const nameA = a[name];
+                const nameB = b[name];
                 return nameA - nameB;
             });
         }
         if (type === 'date') {
             sortedArr = data.length > 0 && data.sort((a, b) => {
-                const dateA = new Date(a[key]);
-                const dateB = new Date(b[key]);
+                const dateA = new Date(a[name]);
+                const dateB = new Date(b[name]);
                 return dateA - dateB;
             });
         }
@@ -187,7 +188,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                     .map(dat => (
                         <div
                             className={styles.headerContent}
-                            onClick={() => sortDatahandler(dat.type, dat.key)}
+                            onClick={() => sortDatahandler(dat.type, dat.name)}
                             role="button"
                             tabIndex={0}
                             key={dat.id}
