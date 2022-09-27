@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { _cs, Obj, isDefined } from '@togglecorp/fujs';
 
@@ -14,7 +15,7 @@ import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import Numeral from '#rscv/Numeral';
 import ModalHeader from '#rscv/Modal/Header';
-
+import { Translation } from 'react-i18next';
 import Cloak from '#components/Cloak';
 
 import * as PageType from '#store/atom/page/types';
@@ -29,7 +30,7 @@ import {
 import {
     setPalikaRedirectAction,
 } from '#actionCreators';
-import { palikaRedirectSelector } from '#selectors';
+import { languageSelector, palikaRedirectSelector } from '#selectors';
 
 
 import { MultiResponse } from '#store/atom/response/types';
@@ -37,9 +38,11 @@ import { MultiResponse } from '#store/atom/response/types';
 
 import AddInventoryForm from './AddInventoryForm';
 import styles from './styles.scss';
+import TableDataList from './TableDataList';
 
 const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -67,6 +70,7 @@ const InventoryItem = (props: InventoryItemProps) => {
         resourceId,
         palikaRedirect,
         setPalikaRedirect,
+
     } = props;
 
     const {
@@ -175,7 +179,7 @@ interface Params {
 
 type Props = NewProps<OwnProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     inventoriesGetRequest: {
         url: '/inventory/',
         query: ({ props }) => ({
@@ -194,6 +198,16 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
 };
 
 class InventoriesModal extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            selectedCategory: 1,
+            selectedCategoryName: 'Inventories',
+        };
+    }
+
+
     private rendererParams = (key: number, data: PageType.Inventory) => ({
         data,
         onUpdate: this.handleRefresh,
@@ -223,6 +237,13 @@ class InventoriesModal extends React.PureComponent<Props, State> {
             { state: { showForm: true }, replace: true });
     };
 
+    private handleClickedDataset = (id, name) => {
+        this.setState({
+            selectedCategory: id,
+            selectedCategoryName: name,
+        });
+    };
+
     public render() {
         const {
             className,
@@ -236,8 +257,9 @@ class InventoriesModal extends React.PureComponent<Props, State> {
             resourceId,
             palikaRedirect,
             filterPermissionGranted,
+            language: { language },
         } = this.props;
-
+        const { selectedCategory, selectedCategoryName } = this.state;
         let inventoryList: PageType.Inventory[] = [];
         if (!pending && response) {
             const inventoriesResponse = response as MultiResponse<PageType.Inventory>;
@@ -247,7 +269,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         return (
             <Modal className={_cs(styles.inventoriesModal, className)}>
                 <ModalHeader
-                    title="Inventories"
+                    title="Inventory Details"
                     rightComponent={(
                         <DangerButton
                             transparent
@@ -258,47 +280,110 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                     )}
                 />
                 <ModalBody className={styles.modalBody}>
-                    {filterPermissionGranted
-                        ? (
-                            <Cloak hiddenIf={p => !p.add_inventory}>
-                                <div className={styles.header}>
-                                    <ModalButton
-                                        className={styles.addButton}
-                                        modal={(
-                                            <AddInventoryForm
-                                                onUpdate={this.handleRefresh}
-                                                resourceId={resourceId}
-                                            />
-                                        )}
-                                        iconName="add"
-                                        transparent
-                                        disabled={pending}
-                                    >
-                                New Inventory
-                                    </ModalButton>
-                                </div>
-                            </Cloak>
+                    <>
+
+                        {/* <ListView
+                            className={styles.inventoryList}
+                            data={inventoryList}
+                            keySelector={keySelector}
+                            renderer={InventoryItem}
+                            rendererParams={this.rendererParams}
+                            pending={pending}
+                        /> */}
+                        <Translation>
+                            {
+                                t => (
+
+
+                                    <div className={styles.buttonGroup}>
+                                        <Button
+                                            className={selectedCategory === 1 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(1, 'Inventories')}
+                                        >
+                                            {t('Inventories')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 2 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(2, 'Items')}
+                                        >
+                                            {t('Items')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 3 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(3, 'Clusters')}
+                                        >
+                                            {t('Clusters')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 4 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(4, 'Categories')}
+                                        >
+                                            {t('Categories')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 5 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(5, 'Organization')}
+                                        >
+                                            {t('Organization')}
+
+                                        </Button>
+                                        {filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddInventoryForm
+                                                                    onUpdate={this.handleRefresh}
+                                                                    resourceId={resourceId}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''}
+
+
+                                        <TableDataList
+                                            selectedCategory={selectedCategory}
+                                            language={language}
+                                            inventoryList={inventoryList}
+                                            onUpdate={this.handleRefresh}
+                                            disable={pending}
+                                            onDelete={this.handleInventoryDelete}
+                                            resourceId={resourceId}
+
+                                        />
+
+                                    </div>
+                                )
+                            }
+                        </Translation>
+                    </>
+                    {isDefined(palikaRedirect.inventoryItem)
+
+                        && (
+                            <button
+                                onClick={this.handleReturnToPalika}
+                                type="button"
+                            >
+                                Close and return to DRRM Report
+
+                            </button>
                         )
-                        : ''}
-                    <ListView
-                        className={styles.inventoryList}
-                        data={inventoryList}
-                        keySelector={keySelector}
-                        renderer={InventoryItem}
-                        rendererParams={this.rendererParams}
-                        pending={pending}
-                    />
-                    { isDefined(palikaRedirect.inventoryItem)
-
-                            && (
-                                <button
-                                    onClick={this.handleReturnToPalika}
-                                    type="button"
-                                >
-                                  Close and return to DRRM Report
-
-                                </button>
-                            )
                     }
 
 

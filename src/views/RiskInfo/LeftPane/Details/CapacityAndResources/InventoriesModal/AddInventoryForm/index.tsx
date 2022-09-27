@@ -87,7 +87,7 @@ const labelSelector = (d: PageType.Field) => (
     d.unit ? `${d.title} (${d.unit})` : d.title
 );
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     inventoryItemListGetRequest: {
         url: '/inventory-item/',
         method: methods.GET,
@@ -227,8 +227,8 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addInventoryModal, className)}
-                // onClose={closeModal}
-                // closeOnEscape
+            // onClose={closeModal}
+            // closeOnEscape
             >
                 {pending && <LoadingAnimation />}
                 <Faram

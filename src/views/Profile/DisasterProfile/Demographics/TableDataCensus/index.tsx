@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { Translation } from 'react-i18next';
-import styles from './styles.scss';
 import Button from '#rsca/Button';
+import styles from './styles.scss';
 import TableDataList from './TableDataList';
 
 const TableData = ({ population, literacy, ageGroup,

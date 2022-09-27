@@ -7,10 +7,21 @@
         padding: 0;
         overflow: auto;
 
+        .buttonGroup {
+            padding: var(--spacing-medium) var(--spacing-medium-alt);
+        }
+
+        .active {
+            background-color: #216CD7 !important;
+            filter: none;
+            color: white !important;
+        }
+
         .header {
             display: flex;
             justify-content: flex-end;
-            padding: var(--spacing-medium);
+            // padding: var(--spacing-medium);
+            float: right;
         }
 
         .inventory-list {
@@ -38,6 +49,7 @@
             margin-left: var(--spacing-extra-small);
         }
     }
+
     &:hover {
         background-color: var(--color-background-hover);
     }

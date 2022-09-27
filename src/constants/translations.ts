@@ -221,6 +221,9 @@ export const enTranslation = {
         'Stockpile Items': 'Stockpile Items',
         Search: 'Search',
         Item: 'Item',
+        Items: 'Items',
+        Categories: 'Categories',
+        Clusters: 'Clusters',
         Quantity: 'Quantity',
         Operator: 'Operator',
 
@@ -1161,6 +1164,9 @@ export const npTranslation = {
         'Stockpile Items': 'भण्डार वस्तुहरू',
         Search: 'खोज्नुहोस्',
         Item: 'वस्तु',
+        Items: 'वस्तुहरू',
+        Categories: 'कोटीहरू',
+        Clusters: 'क्लस्टरहरू',
         Quantity: 'मात्रा',
         Operator: 'अपरेटर',
 
