@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
-import Numeral from '#rscv/Numeral';
-
-import SegmentInput from '#rsci/SegmentInput';
 import ChoroplethMap from '#components/ChoroplethMap';
-import { lossMetrics } from '#utils/domain';
 
 import styles from './styles.scss';
 import Legend, { legendItems } from '../Legend';
@@ -52,7 +48,6 @@ export default class LossAndDamageMap extends React.PureComponent {
         }
         const colorPaint = generatePaint(colorRange);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
-        console.log(colorPaint, 'color');
         // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
 
         return (
@@ -65,59 +60,6 @@ export default class LossAndDamageMap extends React.PureComponent {
                     )}
                 >
                     <Legend />
-
-                    {/* <SegmentInput
-                        options={lossMetrics}
-                        keySelector={d => d.key}
-                        labelSelector={d => d.label}
-                        value={metricKey}
-                        onChange={onMetricChange}
-                        showLabel={false}
-                        showHintAndError={false}
-                    /> */}
-
-                    {/*
-                    <h5 className={styles.heading}>
-                        {metricName}
-                    </h5>
-                    <div className={styles.range}>
-                        <Numeral
-                            className={styles.min}
-                            value={0}
-                            precision={0}
-                        />
-                        <Numeral
-                            className={styles.max}
-                            value={maxValue}
-                            precision={0}
-                        />
-                    </div>
-                    */}
-
-                    {/* <div className={styles.scale}>
-                        {color.map((c, i) => {
-                            if (i % 2 === 0) {
-                                return null;
-                            }
-
-                            return (
-                                <div className={styles.scaleElement} key={c}>
-                                    <div
-                                        key={c}
-                                        className={styles.colorUnit}
-                                        style={{
-                                            // width: colorUnitWidth,
-                                            backgroundColor: c,
-                                        }}
-                                    />
-                                    <div className={styles.value}>
-                                        {Math.round(color[i - 1])}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div> */}
-
                 </div>
                 <ChoroplethMap
                     sourceKey={sourceKey}

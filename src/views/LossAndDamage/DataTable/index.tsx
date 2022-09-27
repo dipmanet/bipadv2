@@ -131,7 +131,6 @@ const DataTable = ({ closeModal, incidentList }) => {
     const totalTableData = sumAvailabeData();
 
     const sortDatahandler = (type: string, name: string) => {
-        console.log(type, name, 'sort');
         setIsSortClicked(true);
         let sortedArr: (string | number)[] = [];
         if (type === 'string') {
@@ -288,18 +287,18 @@ const DataTable = ({ closeModal, incidentList }) => {
                     )}
                     rightComponent={(
                         <>
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
                             <DownloadButton
                                 value={data}
                                 name="incidents"
                             >
                                 Download csv
                             </DownloadButton>
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
                         </>
                     )}
                     className={styles.modalHeader}
