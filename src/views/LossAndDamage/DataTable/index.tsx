@@ -13,6 +13,7 @@ import DangerButton from '#rsca/Button/DangerButton';
 import styles from './styles.scss';
 import { mainHeading, bodyheader } from './headers';
 import { estimatedLossValueFormatter } from '../utils/utils';
+import DownloadButton from '#components/DownloadButton';
 
 
 const DataTable = ({ closeModal, incidentList }) => {
@@ -82,9 +83,9 @@ const DataTable = ({ closeModal, incidentList }) => {
                         if (elemCur.key.split('').includes('.')) {
                             const requiredKey = elemCur.key.replace('.', ' ').split(' ')[0];
                             const requiredKey1 = elemCur.key.replace('.', ' ').split(' ')[1];
-                            obj[elemCur.key] = returnDataByFormat(elemCur.key, element[requiredKey][requiredKey1]);
+                            obj[elemCur.name] = returnDataByFormat(elemCur.key, element[requiredKey][requiredKey1]);
                         } else {
-                            obj[elemCur.key] = returnDataByFormat(elemCur.key, element[elemCur.key]);
+                            obj[elemCur.name] = returnDataByFormat(elemCur.key, element[elemCur.key]);
                         }
                     }
                     array.push(obj);
@@ -285,12 +286,20 @@ const DataTable = ({ closeModal, incidentList }) => {
                         <Header />
                     )}
                     rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
+                        <>
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                            <DownloadButton
+                                value={data}
+                                name="incidents"
+                            >
+                                Download csv
+                            </DownloadButton>
+                        </>
                     )}
                     className={styles.modalHeader}
                 />

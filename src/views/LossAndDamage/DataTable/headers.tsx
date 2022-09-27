@@ -51,7 +51,7 @@ export const bodyheader = {
             { id: 5, name: 'People injured', key: 'loss.peopleInjuredCount', type: 'numeric' },
             { id: 6, name: 'House destroyed', key: 'loss.infrastructureDestroyedHouseCount', type: 'numeric' },
             { id: 7, name: 'House affected', key: 'loss.infrastructureAffectedHouseCount', type: 'numeric' },
-            { id: 8, name: 'livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
+            { id: 8, name: 'Livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
         ],
     'Temporal summary':
         [
@@ -62,7 +62,7 @@ export const bodyheader = {
             { id: 5, name: 'People injured', key: 'loss.peopleInjuredCount', type: 'numeric' },
             { id: 6, name: 'House destroyed', key: 'loss.infrastructureDestroyedHouseCount', type: 'numeric' },
             { id: 7, name: 'House affected', key: 'loss.infrastructureAffectedHouseCount', type: 'numeric' },
-            { id: 8, name: 'livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
+            { id: 8, name: 'Livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
         ],
     'Locationwise summary':
         [
@@ -73,7 +73,7 @@ export const bodyheader = {
             { id: 5, name: 'People injured', key: 'loss.peopleInjuredCount', type: 'numeric' },
             { id: 6, name: 'House destroyed', key: 'loss.infrastructureDestroyedHouseCount', type: 'numeric' },
             { id: 7, name: 'House affected', key: 'loss.infrastructureAffectedHouseCount', type: 'numeric' },
-            { id: 8, name: 'livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
+            { id: 8, name: 'Livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
         ],
 
 
