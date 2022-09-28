@@ -16,19 +16,18 @@ const FilterRadio = (props) => {
     return (
         <div className={styles.container}>
             {filter.map(item => (
-                <div key={item.id}>
+                <div key={item.id} className={styles.wrapper}>
+                    <input
+                        className={styles.radioInput}
+                        type="radio"
+                        name="filter"
+                        value={item.name}
+                        onClick={e => setRegionRadio(e.target.value, item.id)}
+                        defaultChecked={regionRadio.name && regionRadio.name === item.name}
+                    />
                     <label className={styles.radioItems} key={item.id}>
-                        <input
-                            className={styles.radioInput}
-                            type="radio"
-                            name="filter"
-                            value={item.name}
-                            onClick={e => setRegionRadio(e.target.value, item.id)}
-                            defaultChecked={regionRadio.name && regionRadio.name === item.name}
-                        />
                         {item.name}
                     </label>
-
                 </div>
             ))}
         </div>
