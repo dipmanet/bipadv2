@@ -532,6 +532,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     <ModalButton
                                         className={styles.tableData}
                                         transparent
+                                        disabled={pending}
                                         modal={(
                                             <DataTable
                                                 incidentList={filteredData}
