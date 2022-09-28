@@ -285,17 +285,17 @@ class NewCompare extends React.PureComponent {
                         COMPARE
                     </h1>
                     <Button
-                        onClick={closeModal}
-                        iconName="close"
-                        className={styles.closeButton}
-                    />
-                    <Button
                         title="Download Chart"
                         className={styles.chartDownload}
                         transparent
                         disabled={!region1 && !region2}
                         onClick={() => handleSaveClick('comparative', 'compare')}
                         iconName="download"
+                    />
+                    <Button
+                        onClick={closeModal}
+                        iconName="close"
+                        className={styles.closeButton}
                     />
                 </div>
                 <header className={styles.header}>

@@ -73,9 +73,9 @@ const Dropdown = (props) => {
                 ref={optionShowRef}
             >
                 {label
-                    && <p className={styles.labelText}>{label}</p>
+                    && <p className={styles.labelText} style={!icon ? { width: '98%' } : {}}>{label}</p>
                 }
-                <div className={styles.mainDiv}>
+                <div className={styles.mainDiv} style={!icon ? { width: '98%' } : {}}>
                     <div
                         className={styles.selectDiv}
                         style={dropDownPlaceHolder

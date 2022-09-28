@@ -9,9 +9,15 @@
     overflow: auto;
 
     .regionHead{
-        padding: 20px;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
         display: flex;
-        justify-content: space-between;
+        padding: 25px 15px;
+
+        .chartDownload{
+            margin-left: auto;
+        }
         .compareText{
             color: #364553;
             font-size: 18px;
@@ -31,6 +37,8 @@
             align-items: center;
             flex-grow: 1;
             flex-shrink: 0;
+            margin: 0;
+            padding: 0;
 
             .region-input {
                 margin-bottom: $spacing-medium;
