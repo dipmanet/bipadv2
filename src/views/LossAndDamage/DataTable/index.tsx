@@ -286,7 +286,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                         <Header />
                     )}
                     rightComponent={(
-                        <>
+                        <div style={{ display: 'flex', marginTop: '20px' }}>
                             <DownloadButton
                                 value={data}
                                 name="incidents"
@@ -299,7 +299,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                                 onClick={closeModal}
                                 title="Close Modal"
                             />
-                        </>
+                        </div>
                     )}
                     className={styles.modalHeader}
                 />

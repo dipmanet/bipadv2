@@ -1,7 +1,8 @@
 .textData {
     position: fixed;
-    top: -2px;
-    left: 54%;
+    top: 15px;
+    left: 60%;
+    transform: translate(-50%,-50%);
     z-index: 10;
     overflow: hidden;
     width: fit-content;
