@@ -50,7 +50,7 @@ const Legend = () => (
         <div className={styles.wrapper}>
             {
                 legendItems.map(item => (
-                    <div className={styles.legendItem}>
+                    <div className={styles.legendItem} key={item.value}>
                         <div
                             className={styles.legendColor}
                             style={{ background: item.color }}
