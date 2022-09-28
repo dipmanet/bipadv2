@@ -29,7 +29,7 @@
                 flex-shrink: 0;
             }
 
-            .tableData {
+            .modalButton {
                 text-transform: capitalize;
                 font-size: 12px;
                 font-weight: 600;
@@ -138,6 +138,13 @@
             }
         }
 
+    }
+
+    .radioAndCompare{
+        display: flex;
+        width: 95%;
+        justify-content: space-between;
+        padding:0px 0px 10px 0px;
     }
 
     .actions {

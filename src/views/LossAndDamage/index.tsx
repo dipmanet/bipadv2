@@ -530,7 +530,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     />
                                     {/* </span> */}
                                     <ModalButton
-                                        className={styles.tableData}
+                                        className={styles.modalButton}
                                         transparent
                                         disabled={pending}
                                         modal={(
@@ -543,10 +543,17 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     </ModalButton>
 
                                 </div>
-                                <div className={styles.actions}>
+                                <div className={styles.radioAndCompare}>
+                                    <FilterRadio
+                                        regionRadio={regionRadio}
+                                        setRegionRadio={setRegionRadio}
+                                        data={filteredData}
+                                        valueOnclick={valueOnclick}
+                                    />
                                     <ModalButton
                                         disabled={pending}
-                                        className={styles.compareButton}
+                                        transparent
+                                        className={styles.modalButton}
                                         modal={(
                                             <NewCompare
                                                 lossAndDamageList={incidentList}
@@ -564,13 +571,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         Compare regions
                                     </ModalButton>
                                 </div>
-
-                                <FilterRadio
-                                    regionRadio={regionRadio}
-                                    setRegionRadio={setRegionRadio}
-                                    data={filteredData}
-                                    valueOnclick={valueOnclick}
-                                />
                                 <Dropdown
                                     dropDownClickHandler={dropDownClickHandler}
                                     selectOption={selectOption}
