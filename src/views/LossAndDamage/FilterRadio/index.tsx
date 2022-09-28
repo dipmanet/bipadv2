@@ -20,12 +20,11 @@ const FilterRadio = (props) => {
                     <input
                         className={styles.radioInput}
                         type="radio"
-                        name="filter"
                         value={item.name}
-                        onClick={e => setRegionRadio(e.target.value, item.id)}
-                        defaultChecked={regionRadio.name && regionRadio.name === item.name}
+                        onChange={e => setRegionRadio(e.target.value, item.id)}
+                        checked={regionRadio.name && regionRadio.name === item.name}
                     />
-                    <label className={styles.radioItems} key={item.id}>
+                    <label className={styles.radioItems}>
                         {item.name}
                     </label>
                 </div>
