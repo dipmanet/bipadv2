@@ -584,7 +584,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 {
                                     filteredData.length > 0
                                         ? (
-                                            <>
+                                            <div style={{ width: '95%' }}>
                                                 <BarChartVisual
                                                     filter={regionFilter}
                                                     data={filteredData}
@@ -592,18 +592,24 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     valueOnclick={valueOnclick}
                                                     regionRadio={regionRadio}
                                                     handleSaveClick={this.handleSaveClick}
+                                                    downloadButton
                                                 />
                                                 <AreaChartVisual
                                                     selectOption={selectOption}
                                                     data={chartData}
                                                     handleSaveClick={this.handleSaveClick}
+                                                    downloadButton
                                                 />
                                                 <HazardWise
                                                     selectOption={selectOption}
                                                     data={hazardSummary}
                                                     handleSaveClick={this.handleSaveClick}
+                                                    downloadButton
                                                 />
-                                            </>
+                                                <p className={styles.hazardText}>
+                                                    Data source : nepal police,drr portal
+                                                </p>
+                                            </div>
                                         )
                                         : (
                                             <div className={styles.dataUnavailable}>

@@ -24,7 +24,7 @@ const BarChartVisual = (props) => {
         data,
         valueOnclick,
         className,
-        handleSaveClick } = props;
+        handleSaveClick, downloadButton } = props;
 
     const provinceIndex = data.map(i => ({
         name: i.provinceTitle,
@@ -162,14 +162,19 @@ const BarChartVisual = (props) => {
                 <p className={styles.text}>
                     {nameReturn(regionRadio)}
                 </p>
-                <Button
-                    title="Download Chart"
-                    className={styles.downloadButton}
-                    transparent
-                    // disabled={pending}
-                    onClick={() => handleSaveClick('barChart', 'barChart')}
-                    iconName="download"
-                />
+                {
+                    downloadButton && (
+                        <Button
+                            title="Download Chart"
+                            className={styles.downloadButton}
+                            transparent
+                            // disabled={pending}
+                            onClick={() => handleSaveClick('barChart', 'barChart')}
+                            iconName="download"
+                        />
+                    )
+                }
+
             </div>
             <div className={styles.barChart} id="barChart">
                 {
@@ -181,9 +186,9 @@ const BarChartVisual = (props) => {
                                 margin={{
                                     top: 5,
                                     bottom: 45,
+                                    left: 0,
                                 }}
                                 barSize={20}
-                                width={500}
                             >
                                 <XAxis
                                     dy={10}
@@ -191,7 +196,7 @@ const BarChartVisual = (props) => {
                                     tickLine={false}
                                     dataKey="name"
                                     scale="auto"
-                                    padding={{ left: 20, right: 20 }}
+                                    // padding={{ left: 20, right: 20 }}
                                     interval={0}
                                     tick={<CustomizedLabel />}
                                 />

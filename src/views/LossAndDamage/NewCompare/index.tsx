@@ -496,6 +496,9 @@ class NewCompare extends React.PureComponent {
                                         ) : <div />
                                     }
                                 </div>
+                                <p className={styles.hazardText}>
+                                    Data source : nepal police,drr portal
+                                </p>
                             </div>
                         </div>
                     )}

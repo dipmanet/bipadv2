@@ -8,7 +8,7 @@ import { estimatedLossValueFormatter } from '../utils/utils';
 
 
 const AreaChartVisual = (props) => {
-    const { selectOption: { name, key }, data, handleSaveClick } = props;
+    const { selectOption: { name, key }, data, handleSaveClick, downloadButton } = props;
 
     const chartData = data.map((item, index) => {
         const date = new Date();
@@ -52,14 +52,20 @@ const AreaChartVisual = (props) => {
                     {' '}
                     {name}
                 </p>
-                <Button
-                    title="Download Chart"
-                    className={styles.downloadButton}
-                    transparent
-                    // disabled={pending}
-                    onClick={() => handleSaveClick('areaChart', 'areaChart')}
-                    iconName="download"
-                />
+                {
+                    downloadButton
+                    && (
+                        <Button
+                            title="Download Chart"
+                            className={styles.downloadButton}
+                            transparent
+                            // disabled={pending}
+                            onClick={() => handleSaveClick('areaChart', 'areaChart')}
+                            iconName="download"
+                        />
+                    )
+                }
+
 
             </div>
             <div className={styles.areaChart} id="areaChart">

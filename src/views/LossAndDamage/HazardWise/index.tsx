@@ -9,7 +9,7 @@ import styles from './styles.scss';
 import { estimatedLossValueFormatter } from '../utils/utils';
 
 const HazardWise = (props) => {
-    const { selectOption, data, handleSaveClick } = props;
+    const { selectOption, data, handleSaveClick, downloadButton } = props;
 
     const hazardWiseData = Object.entries(data).map((item) => {
         const obj = {
@@ -96,14 +96,19 @@ const HazardWise = (props) => {
                     {selectOption.name}
                     {' '}
                 </p>
-                <Button
-                    title="Download Chart"
-                    className={styles.downloadButton}
-                    transparent
-                    // disabled={pending}
-                    onClick={() => handleSaveClick('treemap', 'treeMap')}
-                    iconName="download"
-                />
+                {
+                    downloadButton && (
+                        <Button
+                            title="Download Chart"
+                            className={styles.downloadButton}
+                            transparent
+                            // disabled={pending}
+                            onClick={() => handleSaveClick('treemap', 'treeMap')}
+                            iconName="download"
+                        />
+                    )
+                }
+
             </div>
             <div id="treemap">
                 {hazardWiseData.length > 0 && (
@@ -121,9 +126,6 @@ const HazardWise = (props) => {
                     </ResponsiveContainer>
                 )}
             </div>
-            <p className={styles.hazardText} style={{ marginTop: '45px' }}>
-                Data source : nepal police,drr portal
-            </p>
         </div>
     );
 };
