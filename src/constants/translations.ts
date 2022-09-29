@@ -209,7 +209,8 @@ export const enTranslation = {
         'Below Poverty': 'Below Poverty',
         Count: 'Count',
         Nationality: 'Nationality',
-
+        StockIn: 'Stock In',
+        StockOut: 'Stock Out',
         'Add People Loss': 'Add People Loss',
         'Are you sure you want to delete this item?': 'Are you sure you want to delete this item?',
         Cause: 'Cause',
@@ -226,7 +227,7 @@ export const enTranslation = {
         Clusters: 'Clusters',
         Quantity: 'Quantity',
         Operator: 'Operator',
-
+        Unit: 'Unit',
 
         'Health Post': 'Health Post',
         'Primary Health Care Center': 'Primary Health Care Center',
@@ -1042,7 +1043,8 @@ export const npTranslation = {
         Organization: 'संस्‍था',
         Project: 'परियोजना',
         'Budget(USD)': 'बजेट (USD)',
-
+        StockIn: 'स्टक भित्र',
+        StockOut: 'स्टक बाहिर',
         'No Data Available': 'कुनै डाटा उपलब्ध छैन',
         Value: 'मान',
         Percentage: 'प्रतिशत',
@@ -1117,7 +1119,7 @@ export const npTranslation = {
         'Pre Primary': 'पूर्व प्राथमिक',
         College: 'कलेज',
         Government: 'सरकार',
-
+        Unit: 'एकाइ',
         mm: 'मिमि',
         Confidence: 'निर्धक्क',
         'Home Page': 'गृह पृष्ठ',

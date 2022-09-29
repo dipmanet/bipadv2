@@ -4,6 +4,7 @@ import { _cs, Obj, isDefined } from '@togglecorp/fujs';
 
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
+import { Translation } from 'react-i18next';
 import modalize from '#rscg/Modalize';
 import TextOutput from '#components/TextOutput';
 import FormattedDate from '#rscv/FormattedDate';
@@ -15,7 +16,6 @@ import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import Numeral from '#rscv/Numeral';
 import ModalHeader from '#rscv/Modal/Header';
-import { Translation } from 'react-i18next';
 import Cloak from '#components/Cloak';
 
 import * as PageType from '#store/atom/page/types';
@@ -30,7 +30,7 @@ import {
 import {
     setPalikaRedirectAction,
 } from '#actionCreators';
-import { languageSelector, palikaRedirectSelector } from '#selectors';
+import { hazardTypesSelector, languageSelector, palikaRedirectSelector } from '#selectors';
 
 
 import { MultiResponse } from '#store/atom/response/types';
@@ -39,10 +39,15 @@ import { MultiResponse } from '#store/atom/response/types';
 import AddInventoryForm from './AddInventoryForm';
 import styles from './styles.scss';
 import TableDataList from './TableDataList';
+import AddClusterForm from './AddClusterForm';
+import AddCategoryForm from './AddCategoryForm';
+import AddUnitForm from './AddUnitForm';
+import AddItemForm from './AddItemForm';
 
 const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
     language: languageSelector(state),
+    hazard: hazardTypesSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -70,6 +75,7 @@ const InventoryItem = (props: InventoryItemProps) => {
         resourceId,
         palikaRedirect,
         setPalikaRedirect,
+
 
     } = props;
 
@@ -188,6 +194,46 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         method: methods.GET,
         onMount: true,
     },
+    clusterGetRequest: {
+        url: '/inventory-cluster/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
+    categoryGetRequest: {
+        url: '/inventory-category/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
+    unitGetRequest: {
+        url: '/inventory-item-unit/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
+    itemGetRequest: {
+        url: '/inventory-item/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
+    hazardGetRequest: {
+        url: '/hazard/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
     inventoryDeleteRequest: {
         url: ({ params }) => `/inventory/${params && params.inventoryId}/`,
         method: methods.DELETE,
@@ -218,6 +264,22 @@ class InventoriesModal extends React.PureComponent<Props, State> {
 
     private handleRefresh = () => {
         this.props.requests.inventoriesGetRequest.do();
+    }
+
+    private handleRefreshCluster = () => {
+        this.props.requests.clusterGetRequest.do();
+    }
+
+    private handleRefreshCategory = () => {
+        this.props.requests.categoryGetRequest.do();
+    }
+
+    private handleRefreshUnit = () => {
+        this.props.requests.unitGetRequest.do();
+    }
+
+    private handleRefreshItem = () => {
+        this.props.requests.itemGetRequest.do();
     }
 
     private handleInventoryDelete = (id: number) => {
@@ -253,18 +315,70 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                     pending,
                     response,
                 },
+                clusterGetRequest: {
+                    pending: clusterPending,
+                    response: clusterResponse,
+                },
+                categoryGetRequest: {
+                    pending: categoryPending,
+                    response: categoryResponse,
+                },
+                unitGetRequest: {
+                    pending: unitPending,
+                    response: unitResponse,
+                },
+                itemGetRequest: {
+                    pending: itemPending,
+                    response: itemResponse,
+                },
+                hazardGetRequest: {
+                    pending: hazardPending,
+                    response: hazardResponse,
+                },
             },
             resourceId,
             palikaRedirect,
             filterPermissionGranted,
             language: { language },
+            hazard,
         } = this.props;
         const { selectedCategory, selectedCategoryName } = this.state;
         let inventoryList: PageType.Inventory[] = [];
+        let clusterList = [];
+        let categoryList = [];
+        let unitList = [];
+        // eslint-disable-next-line prefer-const
+        let itemList = [];
+        let hazardList = [];
         if (!pending && response) {
             const inventoriesResponse = response as MultiResponse<PageType.Inventory>;
             inventoryList = inventoriesResponse.results;
         }
+        if (!clusterPending && clusterResponse) {
+            clusterList = clusterResponse.results;
+            console.log('This is final cluster pending', clusterList);
+        }
+        if (!categoryPending && categoryResponse) {
+            categoryList = categoryResponse.results;
+            console.log('This is final cluster pending', clusterList);
+        }
+        if (!unitPending && unitResponse) {
+            unitList = unitResponse.results;
+            console.log('This is final cluster pending', clusterList);
+        }
+        if (!itemPending && itemResponse) {
+            itemList = itemResponse.results;
+            console.log('This is final cluster pending', clusterList);
+        }
+        if (!hazardPending && hazardResponse) {
+            hazardList = hazardResponse.results;
+        }
+        console.log('This is inventory', inventoryList);
+        console.log('This is cluster list', clusterList);
+        console.log('This is categories', categoryList);
+        console.log('This is unit list', unitList);
+        console.log('This is item list', itemList);
+        console.log('This is hazard list', hazardList);
 
         return (
             <Modal className={_cs(styles.inventoriesModal, className)}>
@@ -305,33 +419,54 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                         </Button>
                                         <Button
                                             className={selectedCategory === 2 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(2, 'Items')}
+                                            onClick={() => this.handleClickedDataset(2, 'StockIn')}
+                                        >
+                                            {t('StockIn')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 3 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(3, 'StockOut')}
+                                        >
+                                            {t('StockOut')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 4 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(4, 'Organization')}
+                                        >
+                                            {t('Organization')}
+
+                                        </Button>
+                                        <Button
+                                            className={selectedCategory === 5 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(5, 'Items')}
                                         >
                                             {t('Items')}
 
                                         </Button>
                                         <Button
-                                            className={selectedCategory === 3 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(3, 'Clusters')}
+                                            className={selectedCategory === 6 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(6, 'Unit')}
                                         >
-                                            {t('Clusters')}
+                                            {t('Unit')}
 
                                         </Button>
                                         <Button
-                                            className={selectedCategory === 4 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(4, 'Categories')}
+                                            className={selectedCategory === 7 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(7, 'Categories')}
                                         >
                                             {t('Categories')}
 
                                         </Button>
                                         <Button
-                                            className={selectedCategory === 5 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(5, 'Organization')}
+                                            className={selectedCategory === 8 ? styles.active : ''}
+                                            onClick={() => this.handleClickedDataset(8, 'Clusters')}
                                         >
-                                            {t('Organization')}
+                                            {t('Clusters')}
 
                                         </Button>
-                                        {filterPermissionGranted
+                                        {/* {selectedCategory !== 1 && filterPermissionGranted
                                             ? (
                                                 <Cloak
                                                     hiddenIf={p => !p.add_inventory}
@@ -342,6 +477,107 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                                             modal={(
                                                                 <AddInventoryForm
                                                                     onUpdate={this.handleRefresh}
+                                                                    resourceId={resourceId}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''} */}
+                                        {selectedCategory === 5 && filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddItemForm
+                                                                    onUpdate={this.handleRefreshItem}
+                                                                    resourceId={resourceId}
+                                                                    unitList={unitList}
+                                                                    categoriesList={categoryList}
+                                                                    clustersList={clusterList}
+                                                                    language={language}
+                                                                    hazard={hazardList}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''}
+                                        {selectedCategory === 6 && filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddUnitForm
+                                                                    onUpdate={this.handleRefreshUnit}
+                                                                    resourceId={resourceId}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''}
+                                        {selectedCategory === 7 && filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddCategoryForm
+                                                                    onUpdate={this.handleRefreshCategory}
+                                                                    resourceId={resourceId}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''}
+                                        {selectedCategory === 8 && filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddClusterForm
+                                                                    onUpdate={this.handleRefreshCluster}
                                                                     resourceId={resourceId}
                                                                 />
                                                             )}
@@ -365,6 +601,10 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                             disable={pending}
                                             onDelete={this.handleInventoryDelete}
                                             resourceId={resourceId}
+                                            clusterList={clusterList}
+                                            categoryList={categoryList}
+                                            unitList={unitList}
+                                            itemList={itemList}
 
                                         />
 

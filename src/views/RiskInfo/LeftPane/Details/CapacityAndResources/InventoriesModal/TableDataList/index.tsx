@@ -16,7 +16,8 @@ import AddInventoryForm from '../AddInventoryForm';
 const ModalButton = modalize(Button);
 const TableDataList = ({ population, literacy,
     householdSummary, ageGroup,
-    selectedCategory, language, inventoryList, onUpdate, disable, onDelete, resourceId }) => (
+    selectedCategory, language, inventoryList, onUpdate, disable,
+    onDelete, resourceId, clusterList, categoryList, unitList, itemList }) => (
     <>
         <Loading pending={disable} />
         <Translation>
@@ -35,45 +36,52 @@ const TableDataList = ({ population, literacy,
                                 language === 'np' && styles.languageFont)}
                             >
                                 <thead>
+
                                     <tr>
-                                        <th colSpan="6" scope="colgroup" style={{ textAlign: 'center' }}>{t('Inventories')}</th>
+                                        <th colSpan="10" scope="colgroup" style={{ textAlign: 'center' }}>{t('Items')}</th>
+
+                                        <th rowSpan="2">Quantity</th>
+                                        <th rowSpan="2">Organization</th>
+                                        <th rowSpan="2">Description</th>
                                     </tr>
-                                    {/* <tr>
-                                        {householdSummary.map(item => (
 
-                                            <th scope="col" key={item.key}>{item.label}</th>
-
-                                        ))}
-                                        {population.map(data => (
-
-                                            <th scope="col" key={data.key}>{data.label}</th>
-
-                                        ))}
-
-
-                                    </tr> */}
                                     <tr>
+                                        <th>Image</th>
                                         <th>Title</th>
-                                        <th>Category</th>
-                                        <th>Quantity</th>
-                                        <th>Created on</th>
+                                        <th>Unit</th>
                                         <th>Description</th>
-                                        <th>Remarks</th>
+                                        <th>Dimension</th>
+                                        <th>Occupancy</th>
+                                        <th>Code</th>
+                                        <th>Category</th>
+                                        <th>Clusters</th>
+                                        <th>Hazards</th>
+
+
+                                        {/* <th>Remarks</th> */}
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* {householdSummary.map(item => (
-
-                                        <td key={item.key}>{item.value}</td>
-
+                                    {inventoryList.map(data => (
+                                        <tr key={data.id}>
+                                            <td>{data.item.image || '-'}</td>
+                                            <td>{language === 'en' ? data.item.title : data.item.titleNe || '-'}</td>
+                                            <td>{language === 'en' ? data.item.unit || '-' : data.item.unitNp || '-'}</td>
+                                            <td>{data.item.shortDescription || '-'}</td>
+                                            <td>{data.item.dimension || '-'}</td>
+                                            <td>{data.item.occupency || '-'}</td>
+                                            <td>{data.item.code || '-'}</td>
+                                            <td>{data.item.categories.length ? data.item.categories : '-'}</td>
+                                            <td>{data.item.clusters.length ? data.item.clusters : '-'}</td>
+                                            <td>{data.item.hazards.length ? data.item.hazards : '-'}</td>
+                                            <td>{data.quantity || '-'}</td>
+                                            <td>{data.organization.length ? data.organization : '-'}</td>
+                                            <td>{data.description || '-'}</td>
+                                        </tr>
                                     ))}
-                                    {population.map(data => (
 
-                                        <td key={data.key}>{data.value}</td>
-
-                                    ))} */}
-                                    {inventoryList.map(item => (
+                                    {/* {inventoryList.map(item => (
                                         <tr key={item.id}>
                                             <td>{item.item.title}</td>
                                             <td>{item.item.category}</td>
@@ -121,12 +129,13 @@ const TableDataList = ({ population, literacy,
                                             </td>
 
                                         </tr>
-                                    ))}
+                                    ))} */}
 
 
                                 </tbody>
                             </table>
                         ) : ''}
+
                         {
                             selectedCategory === 2
                                 ? (
@@ -135,7 +144,7 @@ const TableDataList = ({ population, literacy,
                                     >
                                         <thead>
                                             <tr>
-                                                <th colSpan="4" scope="colgroup" style={{ textAlign: 'center' }}>{t('Items')}</th>
+                                                <th colSpan="4" scope="colgroup" style={{ textAlign: 'center' }}>{t('StockIn')}</th>
                                             </tr>
                                             <tr>
 
@@ -176,7 +185,7 @@ const TableDataList = ({ population, literacy,
                             >
                                 <thead>
                                     <tr>
-                                        <th colSpan="5" scope="colgroup" style={{ textAlign: 'center' }}>{t('Clusters')}</th>
+                                        <th colSpan="5" scope="colgroup" style={{ textAlign: 'center' }}>{t('StockOut')}</th>
                                     </tr>
                                     <tr>
                                         {/* {literacy.map(item => (
@@ -285,6 +294,85 @@ const TableDataList = ({ population, literacy,
                                         <td>12</td>
                                         <td>12</td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        ) : ''}
+                        {selectedCategory === 6 ? (
+                            <table className={_cs(styles.contacts,
+                                language === 'np' && styles.languageFont)}
+                            >
+                                <thead>
+
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Description</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {unitList.map(item => (
+                                        <tr key={item.id}>
+                                            <td>{language === 'en' ? item.title : item.titleNe}</td>
+                                            <td>{item.description}</td>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : ''}
+                        {selectedCategory === 7 ? (
+                            <table className={_cs(styles.contacts,
+                                language === 'np' && styles.languageFont)}
+                            >
+                                <thead>
+
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Description</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {categoryList.map(item => (
+                                        <tr key={item.id}>
+                                            <td>{language === 'en' ? item.title : item.titleNe}</td>
+                                            <td>{item.description}</td>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : ''}
+                        {selectedCategory === 8 ? (
+                            <table className={_cs(styles.contacts,
+                                language === 'np' && styles.languageFont)}
+                            >
+                                <thead>
+                                    <tr>
+                                        {/* {literacy.map(item => (
+
+                                            <th scope="col" key={item.key}>{item.label}</th>
+
+                                        ))} */}
+                                        <th>Title</th>
+                                        <th>Description</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {/* {literacy.map(item => (
+
+                                        <td key={item.key}>{item.value}</td>
+
+                                    ))} */}
+                                    {clusterList.map(item => (
+                                        <tr key={item.id}>
+                                            <td>{language === 'en' ? item.title : item.titleNe}</td>
+                                            <td>{item.description}</td>
+
+                                        </tr>
+                                    ))}
+
                                 </tbody>
                             </table>
                         ) : ''}
