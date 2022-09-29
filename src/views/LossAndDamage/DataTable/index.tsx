@@ -10,16 +10,16 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
-import styles from './styles.scss';
 import { mainHeading, bodyheader } from './headers';
 import { estimatedLossValueFormatter } from '../utils/utils';
 import DownloadButton from '#components/DownloadButton';
-
+import styles from './styles.scss';
 
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
+    const [sortDirection, setSortDirection] = useState(false);
     const tableRef = React.createRef<FixedSizeList<any>>();
     const headerRef = React.createRef<HTMLInputElement>();
     const totalRef = React.createRef<HTMLInputElement>();
@@ -132,26 +132,31 @@ const DataTable = ({ closeModal, incidentList }) => {
 
     const sortDatahandler = (type: string, name: string) => {
         setIsSortClicked(true);
+        setSortDirection(!sortDirection);
         let sortedArr: (string | number)[] = [];
         if (type === 'string') {
             sortedArr = data.length > 0 && data.sort((a: any, b: any) => {
                 const nameA = a[name].toUpperCase();
                 const nameB = b[name].toUpperCase();
                 // eslint-disable-next-line no-nested-ternary
-                return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+                return sortDirection
+                    // eslint-disable-next-line no-nested-ternary
+                    ? (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
+                    // eslint-disable-next-line no-nested-ternary
+                    : (nameB < nameA) ? -1 : (nameB > nameA) ? 1 : 0;
             });
         } else if (type === 'numeric') {
             sortedArr = data.length > 0 && data.sort((a, b) => {
                 const nameA = a[name];
                 const nameB = b[name];
-                return nameA - nameB;
+                return sortDirection ? nameA - nameB : nameB - nameA;
             });
         }
         if (type === 'date') {
             sortedArr = data.length > 0 && data.sort((a, b) => {
                 const dateA = new Date(a[name]);
                 const dateB = new Date(b[name]);
-                return dateA - dateB;
+                return sortDirection ? dateA - dateB : dateB - dateA;
             });
         }
         setData(sortedArr);

@@ -186,7 +186,7 @@ const BarChartVisual = (props) => {
                                 margin={{
                                     top: 5,
                                     bottom: 45,
-                                    left: -50,
+                                    left: -32,
                                 }}
                                 barSize={20}
                             >
