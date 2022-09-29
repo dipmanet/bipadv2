@@ -20,12 +20,12 @@ const HazardWise = (props) => {
         return obj;
     }).sort((a, b) => b.value - a.value).slice(0, 10);
 
-    const barColors = ['#d4543d', '#d76047', '#d96c54', '#dd7860',
+    const barColors = [
+        '#d4543d', '#d76047', '#d96c54', '#dd7860',
         '#e49077', '#e79c83', '#e69c83',
         '#edb49a', '#f0c0a6', '#f3ccb1', '#f7d8bf',
         '#f6d8bf'];
 
-    const totalSum = hazardWiseData.length > 0 && hazardWiseData.map(item => item.value).reduce((a, b) => a + b);
     const CustomizedContent = (prop: any) => {
         const { root, depth, x, y, width, height, index, colors, name, value, icon } = prop;
         return (
@@ -69,7 +69,7 @@ const HazardWise = (props) => {
                                     {(height + width) > 150 ? estimatedLossValueFormatter(value) : ''}
                                 </text>
                                 <image
-                                    fill={'red'}
+                                    className={styles.svg}
                                     textAnchor="top"
                                     width={(height + width) <= 150 ? '15px' : (height + width) / 14}
                                     height={(height + width) <= 150 ? '15px' : (height + width) / 14}
