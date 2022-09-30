@@ -415,12 +415,12 @@ class NewCompare extends React.PureComponent {
                                 className={styles.visualizations}
                                 id="comparative"
                             >
-                                <div className={styles.aggregatedStats}>
+                                <div className={styles.otherVisualizations}>
                                     {isRegionValid(faramValues.region1)
                                         && region1Incidents.length > 0
                                         ? (
                                             <BarChartVisual
-                                                className={styles.aggregatedStat}
+                                                className={styles.region1Container}
                                                 data={region1Incidents}
                                                 regionRadio={region1}
                                                 selectOption={selectOption}
@@ -433,7 +433,7 @@ class NewCompare extends React.PureComponent {
                                         && region2Incidents.length > 0
                                         ? (
                                             <BarChartVisual
-                                                className={styles.aggregatedStat}
+                                                className={styles.region2Container}
                                                 data={region2Incidents}
                                                 regionRadio={region2}
                                                 selectOption={selectOption}
