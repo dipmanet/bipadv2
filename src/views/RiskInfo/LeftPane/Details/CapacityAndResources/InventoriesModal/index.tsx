@@ -605,6 +605,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                             categoryList={categoryList}
                                             unitList={unitList}
                                             itemList={itemList}
+                                            hazard={hazardList}
 
                                         />
 

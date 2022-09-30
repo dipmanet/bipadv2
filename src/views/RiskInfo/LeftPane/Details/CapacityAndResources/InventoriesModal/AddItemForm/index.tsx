@@ -387,6 +387,7 @@ class AddItemForm extends React.PureComponent<Props, State> {
                                 color: 'rgba(0, 0, 0, 0.6)',
                                 textTransform: 'uppercase',
                                 fontSize: '10px',
+                                marginTop: '18px',
                             }}
                             >
                                 Clusters
@@ -407,6 +408,7 @@ class AddItemForm extends React.PureComponent<Props, State> {
                                 color: 'rgba(0, 0, 0, 0.6)',
                                 textTransform: 'uppercase',
                                 fontSize: '10px',
+                                marginTop: '18px',
                             }}
                             >
                                 Hazards
@@ -420,15 +422,16 @@ class AddItemForm extends React.PureComponent<Props, State> {
 
                             />
                         </div>
-
-                        <RawFileInput
-                            faramElementName="image"
-                            showStatus
-                            accept="image/*"
-                            language={language}
-                        >
-                            Upload Image
-                        </RawFileInput>
+                        <div style={{ margin: '10px 0px' }}>
+                            <RawFileInput
+                                faramElementName="image"
+                                showStatus
+                                accept="image/*"
+                                language={language}
+                            >
+                                Upload Image
+                            </RawFileInput>
+                        </div>
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton onClick={closeModal}>
