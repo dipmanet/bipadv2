@@ -68,15 +68,21 @@ const HazardWise = (props) => {
                                 >
                                     {(height + width) > 150 ? estimatedLossValueFormatter(value) : ''}
                                 </text>
-                                <image
-                                    className={styles.svg}
-                                    textAnchor="top"
+                                <foreignObject
                                     width={(height + width) <= 150 ? '15px' : (height + width) / 14}
                                     height={(height + width) <= 150 ? '15px' : (height + width) / 14}
-                                    href={icon}
                                     x={x + width / 8}
                                     y={(height + width) <= 150 ? (y + height / 7) : y + height / 1.5}
-                                />
+                                >
+                                    <img
+                                        className={styles.svg}
+                                        width={(height + width) <= 150 ? '15px' : (height + width) / 14}
+                                        height={(height + width) <= 150 ? '15px' : (height + width) / 14}
+                                        src={icon}
+                                        alt={name}
+                                    />
+                                </foreignObject>
+
                             </>
                         )
                         : null
