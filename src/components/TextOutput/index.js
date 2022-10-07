@@ -73,9 +73,25 @@ export default class TextOutput extends React.PureComponent {
             : isNumericValue
 
                 ? (
-                    finalData && finalData.label === 'Estimated loss (NPR)' && finalData.value === 0
+                    finalData && (finalData.label === 'Estimated loss (NPR)' || finalData.label === 'अनुमानित आर्थिक क्षेति (रु )') // finalData.value === 0
                         ? (
-                            <div className={_cs(styles.value, valueClassName)}>
+                            (finalData.value === 0) ? (
+                                <div className={_cs(styles.value, valueClassName)}>
+                                    <Numeral
+                                        className={_cs(styles.value, valueClassName)}
+                                        value={value}
+                                        language={language}
+                                        precision={0}
+                                        {...otherProps}
+                                        nullCondition={nullCondition}
+                                    />
+                                    <Icon
+                                        className={styles.infoIcon}
+                                        name="info"
+                                        title={'0 can be no data available or zero estimated loss'}
+                                    />
+                                </div>
+                            ) : (
                                 <Numeral
                                     className={_cs(styles.value, valueClassName)}
                                     value={value}
@@ -84,22 +100,14 @@ export default class TextOutput extends React.PureComponent {
                                     {...otherProps}
                                     nullCondition={nullCondition}
                                 />
-                                <Icon
-                                    className={styles.infoIcon}
-                                    name="info"
-                                    title={'0 can be no data available or zero estimated loss'}
-                                />
-                            </div>
+                            )
                         )
                         : (
-                            <Numeral
+                            <span
                                 className={_cs(styles.value, valueClassName)}
-                                value={value}
-                                language={language}
-                                precision={0}
-                                {...otherProps}
-                                nullCondition={nullCondition}
-                            />
+                            >
+                                {value}
+                            </span>
                         )
 
                 ) : (

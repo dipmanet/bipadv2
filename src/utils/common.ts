@@ -342,10 +342,10 @@ export const DataFormater = (value, lang) => {
         } if (value > 100000) {
             return { number: (decimalRemoveToComma((value / 100000).toFixed(0))), normalizeSuffix: 'लाख' };
         } if (value > 10000) {
-            return { number: (decimalRemoveToComma((value / 1000))), normalizeSuffix: 'हजार' };
+            return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'हजार' };
         }
         if (value > 1000) {
-            return { number: value.toLocaleString(), normalizeSuffix: 'हजार' };
+            return { number: value.toLocaleString(), normalizeSuffix: '' };
         }
         return { number: value, normalizeSuffix: '' };
     }
@@ -355,10 +355,10 @@ export const DataFormater = (value, lang) => {
     } if (value > 1000000) {
         return { number: (decimalRemoveToComma((value / 1000000).toFixed(0))), normalizeSuffix: 'M' };
     } if (value > 10000) {
-        return { number: (decimalRemoveToComma((value / 1000))), normalizeSuffix: 'K' };
+        return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'K' };
     }
     if (value > 1000) {
-        return { number: value.toLocaleString(), normalizeSuffix: 'K' };
+        return { number: value.toLocaleString(), normalizeSuffix: '' };
     }
     return { number: value, normalizeSuffix: '' };
 };
