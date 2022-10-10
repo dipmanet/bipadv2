@@ -48,6 +48,14 @@
 }
 
 table {
+    thead {
+        tr {
+            position: sticky;
+            top: -5px;
+            background-color: white;
+        }
+    }
+
     tbody {
         .action-buttons {
             display: flex;

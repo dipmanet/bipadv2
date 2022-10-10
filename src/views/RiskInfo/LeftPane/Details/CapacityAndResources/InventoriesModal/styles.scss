@@ -1,15 +1,17 @@
 .inventories-modal {
     height: 90vh;
     width: 50%;
+    overflow: none !important;
 
     .modal-body {
         display: flex;
         flex-direction: column;
         padding: 0;
-        overflow: auto;
+        height: 90%;
 
         .buttonGroup {
             padding: var(--spacing-medium) var(--spacing-medium-alt);
+            height: 100%;
         }
 
         .active {

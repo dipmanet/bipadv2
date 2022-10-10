@@ -43,6 +43,7 @@ import AddClusterForm from './AddClusterForm';
 import AddCategoryForm from './AddCategoryForm';
 import AddUnitForm from './AddUnitForm';
 import AddItemForm from './AddItemForm';
+import AddOrganizationForm from './AddOrganizationForm';
 
 const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
@@ -226,6 +227,14 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         method: methods.GET,
         onMount: true,
     },
+    organizationGetRequest: {
+        url: '/organization/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
     hazardGetRequest: {
         url: '/hazard/',
         query: ({ props }) => ({
@@ -282,6 +291,10 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         this.props.requests.itemGetRequest.do();
     }
 
+    private handleRefreshOrganization = () => {
+        this.props.requests.organizationGetRequest.do();
+    }
+
     private handleInventoryDelete = (id: number) => {
         this.props.requests.inventoryDeleteRequest.do({
             inventoryId: id,
@@ -335,6 +348,10 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                     pending: hazardPending,
                     response: hazardResponse,
                 },
+                organizationGetRequest: {
+                    pending: organizationPending,
+                    response: organizationResponse,
+                },
             },
             resourceId,
             palikaRedirect,
@@ -350,6 +367,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         // eslint-disable-next-line prefer-const
         let itemList = [];
         let hazardList = [];
+        let organizationList = [];
         if (!pending && response) {
             const inventoriesResponse = response as MultiResponse<PageType.Inventory>;
             inventoryList = inventoriesResponse.results;
@@ -373,12 +391,16 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         if (!hazardPending && hazardResponse) {
             hazardList = hazardResponse.results;
         }
+        if (!organizationPending && organizationResponse) {
+            organizationList = organizationResponse.results;
+        }
         console.log('This is inventory', inventoryList);
         console.log('This is cluster list', clusterList);
         console.log('This is categories', categoryList);
         console.log('This is unit list', unitList);
         console.log('This is item list', itemList);
         console.log('This is hazard list', hazardList);
+        console.log('This is organization list', organizationList);
 
         return (
             <Modal className={_cs(styles.inventoriesModal, className)}>
@@ -490,6 +512,30 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                                 </Cloak>
                                             )
                                             : ''} */}
+                                        {selectedCategory === 4 && filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddOrganizationForm
+                                                                    onUpdate={this.handleRefreshOrganization}
+                                                                    resourceId={resourceId}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''}
                                         {selectedCategory === 5 && filterPermissionGranted
                                             ? (
                                                 <Cloak
@@ -606,6 +652,8 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                             unitList={unitList}
                                             itemList={itemList}
                                             hazard={hazardList}
+                                            organizationList={organizationList}
+
 
                                         />
 
