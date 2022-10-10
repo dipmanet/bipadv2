@@ -19,7 +19,7 @@ const TableDataList = ({ population, literacy,
     householdSummary, ageGroup,
     selectedCategory, language, inventoryList, onUpdate, disable,
     onDelete, resourceId, clusterList, categoryList, unitList,
-    organizationList,
+    organizationList, stockOutList,
     itemList, hazard }) => {
     console.log('This is translation', categoryList);
     const idToTitle = (array, id, lang) => {
@@ -198,36 +198,38 @@ const TableDataList = ({ population, literacy,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-                                        <tr>
-                                            <th colSpan="5" scope="colgroup" style={{ textAlign: 'center' }}>{t('StockOut')}</th>
-                                        </tr>
-                                        <tr>
-                                            {/* {literacy.map(item => (
 
-                                            <th scope="col" key={item.key}>{item.label}</th>
+                                        <tr>
 
-                                        ))} */}
-                                            <th>Name</th>
-                                            <th>Age</th>
-                                            <th>Name</th>
-                                            <th>Age</th>
-                                            <th>Name</th>
+                                            <th>Brand Registration Number</th>
+                                            <th>Date</th>
+                                            <th>Rate</th>
+                                            <th>Quantity</th>
+                                            <th>Reference Number</th>
+                                            <th>Remarks</th>
+                                            <th>Expire Date</th>
+                                            <th>Download</th>
+                                            <th>Item</th>
+                                            <th>Transfered to resource</th>
+                                            <th>Organization</th>
 
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {literacy.map(item => (
 
-                                        <td key={item.key}>{item.value}</td>
-
-                                    ))} */}
                                         <tr>
                                             <td>12</td>
                                             <td>12</td>
                                             <td>12</td>
                                             <td>12</td>
                                             <td>12</td>
+                                            <td>12</td>
+                                            <td>12</td>
+                                            <td>12</td>
+                                            <td>12</td>
+                                            <td>12</td>
+                                            <td>11</td>
                                         </tr>
 
 
