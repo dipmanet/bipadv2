@@ -511,7 +511,7 @@ class RainDetails extends React.PureComponent<Props, State> {
         const hourlyRainDetails = this.getHourlyRainData(todaysRainDetails);
         const hourlyRainChartData = this.getHourlyChartData(hourlyRainDetails);
         const weeklyRainChartData = this.getWeeklyRainDetails(rainDetails);
-        console.log('rainImage', rainImage);
+
 
         return (
             <>

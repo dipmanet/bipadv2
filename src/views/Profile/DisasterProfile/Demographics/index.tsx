@@ -2985,7 +2985,7 @@ class Demographics extends React.PureComponent<Props> {
                     )
                         : (
                             <>
-                                <MapSource
+                                {/* <MapSource
                                     sourceKey="lg-profile-data"
                                     sourceOptions={{
                                         type: 'vector',
@@ -3001,7 +3001,8 @@ class Demographics extends React.PureComponent<Props> {
 
                                         }}
                                     />
-                                </MapSource>
+                                </MapSource> */}
+                                <CommonMap sourceKey="lg-profile" />
                                 <MapSource
                                     sourceKey="resource-symbol-education"
                                     sourceOptions={{

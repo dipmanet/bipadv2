@@ -330,8 +330,6 @@ class RiverMap extends React.PureComponent {
 
         const { title: stationName, stationId, geometry } = tooltipParams || {};
         const region = { adminLevel: 3, geoarea: municipality || undefined };
-
-        console.log('riverStations', this.props.riverStations);
         return (
             <div className={styles.dataArchiveRiverMap}>
                 <CommonMap

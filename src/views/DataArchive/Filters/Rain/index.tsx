@@ -145,8 +145,6 @@ class RainFilters extends React.PureComponent<Props, State> {
 
     public componentDidMount() {
         const { rainFilters: faramValues } = this.props;
-        console.log('rainFilters', this.props.rainFilters);
-
         this.setState({ faramValues });
     }
 

@@ -93,9 +93,6 @@ const RiverModal = (props: Props) => {
         geometry,
         stationId,
         handleModalClose } = props;
-
-    console.log('stationData', stationData);
-
     let riverDetails: ArchiveRiver = emptyObject;
     if (!pending && response) {
         const results = response as ArchiveRiver;
