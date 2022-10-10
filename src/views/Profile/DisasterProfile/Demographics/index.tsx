@@ -967,9 +967,9 @@ class Demographics extends React.PureComponent<Props> {
             closeButton: false,
             offset: 10,
         };
-
-        const majorOccupationList = houseHoldInformation && JSON.parse(houseHoldInformation.majorOccupations);
-        const supportingOccupationList = houseHoldInformation && JSON.parse(houseHoldInformation.supportingOccupations);
+        console.log('This is household info', houseHoldInformation);
+        const majorOccupationList = houseHoldInformation && houseHoldInformation.majorOccupations && JSON.parse(houseHoldInformation.majorOccupations);
+        const supportingOccupationList = houseHoldInformation && houseHoldInformation.supportingOccupations && JSON.parse(houseHoldInformation.supportingOccupations);
         const lgProfileAgeGroup = lgProfileAgeGroupData(lgProfileData);
 
         const filteredLGProfileAgeGroup = lgProfileAgeGroup.filter(i => i.value !== 0);
