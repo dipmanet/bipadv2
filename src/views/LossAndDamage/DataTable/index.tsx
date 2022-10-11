@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { FixedSizeList, FixedSizeList as List } from 'react-window';
 import Modal from '#rscv/Modal';
@@ -33,8 +33,6 @@ const DataTable = ({ closeModal, incidentList }) => {
                 tableRef.current._outerRef.style.width = `${headerDivWidth}px`;
             }
             if (totalRef.current) totalRef.current.style.width = `${headerDivWidth}px`;
-
-            // setDivWidth(modalWidth);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [totalRef, headerRef]);
@@ -107,7 +105,6 @@ const DataTable = ({ closeModal, incidentList }) => {
             if (incidentList.length > 0) {
                 // eslint-disable-next-line no-plusplus
                 for (const element of incidentList) {
-                    // const element = incidentList[i];
                     // eslint-disable-next-line no-plusplus
                     const obj = {};
                     for (const elemCur of currentVal) {
