@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { FixedSizeList, FixedSizeList as List } from 'react-window';
 import Modal from '#rscv/Modal';
@@ -18,7 +18,6 @@ import styles from './styles.scss';
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
-    const [summaryData, setSummaryData] = useState([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
     const [sortDirection, setSortDirection] = useState(false);
     const tableRef = React.createRef<FixedSizeList<any>>();
@@ -47,17 +46,14 @@ const DataTable = ({ closeModal, incidentList }) => {
     }, [isSortClicked]);
 
 
-    useEffect(() => {
-        const totalObjectLength = data.length > 0 && Object.keys(Object.values(data)[0]).length;
-        // console.log(totalObjectLength, 'length');
-        if (focus.id !== 1 && totalObjectLength < 10) {
-            const newData = [...data];
-            const keys = [...new Set(data.map(item => Object.values(item)[0]))];
+    const summaryCalculate = (Data) => {
+        if (focus.id !== 1) {
+            const keys = [...new Set(Data.map(item => Object.values(item)[0]))];
             const reducedData = [];
             const groupedData = [];
             for (const keyItem of keys) {
                 const array = [];
-                for (const item of newData) {
+                for (const item of Data) {
                     if ((Object.values(item)[0]) === keyItem) array.push(item);
                 }
                 groupedData.push(array);
@@ -76,14 +72,11 @@ const DataTable = ({ closeModal, incidentList }) => {
                 result['Number of incident'] = noOfIncidents;
                 reducedData.push(result);
             }
-            setSummaryData(reducedData);
+
+            return reducedData;
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focus, data]);
-
-    console.log(summaryData, 'summary');
-
+        return Data;
+    };
 
     useEffect(() => {
         const requiredDataEval = () => {
@@ -130,7 +123,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                     array.push(obj);
                 }
             }
-            return array;
+            return summaryCalculate(array);
         };
         const incidentData = requiredDataEval();
         setData(incidentData);
