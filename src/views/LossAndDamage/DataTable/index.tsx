@@ -18,6 +18,7 @@ import styles from './styles.scss';
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
     const [data, setData] = useState([]);
+    const [summaryData, setSummaryData] = useState([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
     const [sortDirection, setSortDirection] = useState(false);
     const tableRef = React.createRef<FixedSizeList<any>>();
@@ -44,6 +45,44 @@ const DataTable = ({ closeModal, incidentList }) => {
             setIsSortClicked(false);
         }
     }, [isSortClicked]);
+
+
+    useEffect(() => {
+        const totalObjectLength = data.length > 0 && Object.keys(Object.values(data)[0]).length;
+        // console.log(totalObjectLength, 'length');
+        if (focus.id !== 1 && totalObjectLength < 10) {
+            const newData = [...data];
+            const keys = [...new Set(data.map(item => Object.values(item)[0]))];
+            const reducedData = [];
+            const groupedData = [];
+            for (const keyItem of keys) {
+                const array = [];
+                for (const item of newData) {
+                    if ((Object.values(item)[0]) === keyItem) array.push(item);
+                }
+                groupedData.push(array);
+            }
+            for (const individualArray of groupedData) {
+                const noOfIncidents = individualArray.length;
+                const titleValue = Object.entries(individualArray[0]).filter(item => typeof item[1] === 'string');
+                const [title, valueOfTitle] = titleValue[0];
+                const result = individualArray.reduce((r, o) => ((
+                    Object.entries(o)
+                        // eslint-disable-next-line no-return-assign
+                        .forEach(([k, v]) =>
+                            // eslint-disable-next-line no-return-assign, no-param-reassign, implicit-arrow-linebreak
+                            r[k] = (r[k] || 0) + v), r)), {});
+                result[title] = valueOfTitle;
+                result['Number of incident'] = noOfIncidents;
+                reducedData.push(result);
+            }
+            setSummaryData(reducedData);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focus, data]);
+
+    console.log(summaryData, 'summary');
 
 
     useEffect(() => {
@@ -96,7 +135,7 @@ const DataTable = ({ closeModal, incidentList }) => {
         const incidentData = requiredDataEval();
         setData(incidentData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focus.name]);
+    }, [focus]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
