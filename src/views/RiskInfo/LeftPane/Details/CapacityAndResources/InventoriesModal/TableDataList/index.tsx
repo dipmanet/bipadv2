@@ -19,9 +19,10 @@ const TableDataList = ({ population, literacy,
     householdSummary, ageGroup,
     selectedCategory, language, inventoryList, onUpdate, disable,
     onDelete, resourceId, clusterList, categoryList, unitList,
-    organizationList, stockOutList,
+    organizationList, stockOutList, stockInList,
     itemList, hazard }) => {
-    console.log('This is translation', categoryList);
+    console.log('This is translation', organizationList);
+    console.log('This is resource', stockInList);
     const idToTitle = (array, id, lang) => {
         console.log('This is array', array);
         console.log('This is id', id);
@@ -150,49 +151,57 @@ const TableDataList = ({ population, literacy,
                                 </table>
                             ) : ''}
 
-                            {
-                                selectedCategory === 2
-                                    ? (
-                                        <table className={_cs(styles.contacts,
-                                            language === 'np' && styles.languageFont)}
-                                        >
-                                            <thead>
-                                                <tr>
-                                                    <th colSpan="4" scope="colgroup" style={{ textAlign: 'center' }}>{t('StockIn')}</th>
-                                                </tr>
-                                                <tr>
+                            {selectedCategory === 2 ? (
+                                <table className={_cs(styles.contacts,
+                                    language === 'np' && styles.languageFont)}
+                                >
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>Brand Registration Number</th>
+                                            <th>Date</th>
+                                            <th>Rate</th>
+                                            <th>Quantity</th>
+                                            <th>Reference Number</th>
+                                            <th>Remarks</th>
+                                            <th>Expire Date</th>
+                                            <th>Download</th>
+                                            <th>Item</th>
+                                            <th>Transfered to resource</th>
+                                            <th>Organization</th>
 
 
-                                                    <th scope="col">{t('Age Group')}</th>
-                                                    <th scope="col">{t('Male')}</th>
-                                                    <th scope="col">{t('Female')}</th>
-                                                    <th scope="col">{t('Others')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {stockInList.map(item => (
+                                            <tr key={item.id}>
+                                                <td>{item.brandRegistrationNumber}</td>
+                                                <td>{item.date}</td>
+                                                <td>{item.rate}</td>
+                                                <td>{item.quantity}</td>
+                                                <td>{item.referenceNumber}</td>
+                                                <td>{item.remarks}</td>
+                                                <td>{item.expiryDate}</td>
+                                                <td>{item.file}</td>
+                                                <td>{idToTitle(itemList, item.item, language)}</td>
+                                                <td>
+                                                    {idToTitle(itemList, item.transferedToResource,
+                                                        language)}
 
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {/* {ageGroup.map(data => (
-                                                <tr key={data.key}>
-                                                    <td>{data.label}</td>
-                                                    <td>{data.male}</td>
-                                                    <td>{data.female}</td>
-                                                    <td>{data.other ? data.other : '-'}</td>
-                                                </tr>
-
-                                            ))} */}
-                                                <tr>
-                                                    <td>12</td>
-                                                    <td>12</td>
-                                                    <td>12</td>
-                                                    <td>12</td>
-                                                </tr>
-
-
-                                            </tbody>
-                                        </table>
-                                    ) : ''
-                            }
+                                                </td>
+                                                <td>
+                                                    {item.organization
+                                                        .map((d, index) => `${idToTitle(organizationList,
+                                                            d, language)}
+                                                            ${item.organization.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : ''}
                             {selectedCategory === 3 ? (
                                 <table className={_cs(styles.contacts,
                                     language === 'np' && styles.languageFont)}

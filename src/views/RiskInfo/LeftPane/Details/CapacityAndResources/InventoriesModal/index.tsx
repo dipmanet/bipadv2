@@ -45,6 +45,7 @@ import AddUnitForm from './AddUnitForm';
 import AddItemForm from './AddItemForm';
 import AddOrganizationForm from './AddOrganizationForm';
 import AddStockOutForm from './AddStockOutForm';
+import AddStockInForm from './AddStockInForm';
 
 const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
@@ -244,6 +245,14 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         method: methods.GET,
         onMount: true,
     },
+    stockInGetRequest: {
+        url: '/inventory-stockin/',
+        query: ({ props }) => ({
+            resource: props.resourceId,
+        }),
+        method: methods.GET,
+        onMount: true,
+    },
     hazardGetRequest: {
         url: '/hazard/',
         query: ({ props }) => ({
@@ -308,6 +317,10 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         this.props.requests.stockOutGetRequest.do();
     }
 
+    private handleRefreshStockIn = () => {
+        this.props.requests.stockInGetRequest.do();
+    }
+
     private handleInventoryDelete = (id: number) => {
         this.props.requests.inventoryDeleteRequest.do({
             inventoryId: id,
@@ -369,6 +382,10 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                     pending: stockOutPending,
                     response: stockOutResponse,
                 },
+                stockInGetRequest: {
+                    pending: stockInPending,
+                    response: stockInResponse,
+                },
             },
             resourceId,
             palikaRedirect,
@@ -387,6 +404,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         let hazardList = [];
         let organizationList = [];
         let stockOutList = [];
+        let stockInList = [];
         if (!pending && response) {
             const inventoriesResponse = response as MultiResponse<PageType.Inventory>;
             inventoryList = inventoriesResponse.results;
@@ -416,6 +434,9 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         if (!stockOutPending && stockOutResponse) {
             stockOutList = stockOutResponse.results;
         }
+        if (!stockInPending && stockInResponse) {
+            stockInList = stockInResponse.results;
+        }
         console.log('This is inventory', inventoryList);
         console.log('This is cluster list', clusterList);
         console.log('This is categories', categoryList);
@@ -424,6 +445,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         console.log('This is hazard list', hazardList);
         console.log('This is organization list', organizationList);
         console.log('This is stock out', stockOutList);
+        console.log('This is stock in list', stockInList);
 
         return (
             <Modal className={_cs(styles.inventoriesModal, className)}>
@@ -535,6 +557,38 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                                 </Cloak>
                                             )
                                             : ''} */}
+                                        {selectedCategory === 2 && filterPermissionGranted
+                                            ? (
+                                                <Cloak
+                                                    hiddenIf={p => !p.add_inventory}
+                                                >
+                                                    <div className={styles.header}>
+                                                        <ModalButton
+                                                            className={styles.addButton}
+                                                            modal={(
+                                                                <AddStockInForm
+                                                                    onUpdate={this.handleRefreshStockOut}
+                                                                    resourceId={resourceId}
+                                                                    unitList={unitList}
+                                                                    categoriesList={categoryList}
+                                                                    clustersList={clusterList}
+                                                                    language={language}
+                                                                    hazard={hazardList}
+                                                                    organizationList={organizationList}
+                                                                    resourceList={resourceList}
+                                                                    itemList={itemList}
+                                                                />
+                                                            )}
+                                                            iconName="add"
+                                                            transparent
+                                                            disabled={pending}
+                                                        >
+                                                            {` New ${selectedCategoryName}`}
+                                                        </ModalButton>
+                                                    </div>
+                                                </Cloak>
+                                            )
+                                            : ''}
                                         {selectedCategory === 3 && filterPermissionGranted
                                             ? (
                                                 <Cloak
@@ -709,6 +763,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                             hazard={hazardList}
                                             organizationList={organizationList}
                                             stockOutList={stockOutList}
+                                            stockInList={stockInList}
 
 
                                         />
