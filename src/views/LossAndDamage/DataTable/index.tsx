@@ -214,6 +214,7 @@ const DataTable = ({ closeModal, incidentList }) => {
         <div
             className={styles.bodyheader}
             ref={headerRef}
+            style={focus.id === 1 ? { width: 'fit-content' } : {}}
         >
             {
                 bodyheader[Object.keys(bodyheader)
@@ -251,7 +252,7 @@ const DataTable = ({ closeModal, incidentList }) => {
         </div>
     );
 
-    const Row = ({ index, style, key }) => (
+    const Row = ({ index, style }) => (
         <div
             style={style}
             className={index % 2 === 0
@@ -260,10 +261,10 @@ const DataTable = ({ closeModal, incidentList }) => {
         >
             <div className={styles.bodyWrapper}>
                 {
-                    Object.values(data[index]).map(item => (
+                    Object.values(data[index]).map((item, idx) => (
                         <p
                             className={styles.bodyItem}
-                            key={key}
+                            key={`${index}-${`${idx}-`}`}
                         >
                             {
                                 typeof (item) === 'number'
@@ -291,6 +292,7 @@ const DataTable = ({ closeModal, incidentList }) => {
             <div
                 className={styles.totalValues}
                 ref={totalRef}
+                style={focus.id === 1 ? { width: 'fit-content' } : {}}
             >
                 <p className={styles.bodyItem}>Grand Total</p>
                 {
