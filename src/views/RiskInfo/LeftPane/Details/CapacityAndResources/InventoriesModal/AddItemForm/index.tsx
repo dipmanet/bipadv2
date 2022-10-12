@@ -331,14 +331,7 @@ class AddItemForm extends React.PureComponent<Props, State> {
                             faramElementName="description"
                             label="Description"
                         />
-                        <TextArea
-                            faramElementName="unitNp"
-                            label="Unit Nepali"
-                        />
-                        <TextArea
-                            faramElementName="unit"
-                            label="Unit English"
-                        />
+
                         <TextArea
                             faramElementName="dimension"
                             label="Dimension"
@@ -356,8 +349,28 @@ class AddItemForm extends React.PureComponent<Props, State> {
                             options={unitList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
-                            label="Unit Link"
+                            label="Unit"
                         />
+                        <div>
+                            <pre style={{
+                                fontWeight: '700',
+                                margin: '5px 0px',
+                                color: 'rgba(0, 0, 0, 0.6)',
+                                textTransform: 'uppercase',
+                                fontSize: '10px',
+                                marginTop: '18px',
+                            }}
+                            >
+                                Clusters
+
+                            </pre>
+                            <Select
+                                value={selectedClusters}
+                                options={clusterRenderlist}
+                                onChange={this.handleClusters}
+                                isMulti
+                            />
+                        </div>
                         <div>
                             <pre
                                 className={styles.multiselect}
@@ -380,27 +393,7 @@ class AddItemForm extends React.PureComponent<Props, State> {
 
                             />
                         </div>
-                        <div>
-                            <pre style={{
-                                fontWeight: '700',
-                                margin: '5px 0px',
-                                color: 'rgba(0, 0, 0, 0.6)',
-                                textTransform: 'uppercase',
-                                fontSize: '10px',
-                                marginTop: '18px',
-                            }}
-                            >
-                                Clusters
 
-                            </pre>
-                            <Select
-                                value={selectedClusters}
-                                options={clusterRenderlist}
-                                onChange={this.handleClusters}
-                                isMulti
-
-                            />
-                        </div>
                         <div>
                             <pre style={{
                                 fontWeight: '700',

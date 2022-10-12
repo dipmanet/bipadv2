@@ -292,7 +292,7 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
                 >
                     <ModalHeader
                         title={
-                            value ? 'Edit Item' : 'Add Item'
+                            value ? 'Edit Organization' : 'Add Organization'
                         }
                         rightComponent={(
                             <DangerButton
@@ -321,10 +321,6 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
                         <TextArea
                             faramElementName="description"
                             label="Description"
-                        />
-                        <NumberInput
-                            faramElementName="incidentVerificationDuration"
-                            label="Incident Verification Duration"
                         />
                         <LocationInput
                             className={styles.locationInput}

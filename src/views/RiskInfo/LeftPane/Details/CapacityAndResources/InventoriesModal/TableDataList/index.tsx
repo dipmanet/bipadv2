@@ -24,9 +24,8 @@ const TableDataList = ({ population, literacy,
     organizationList, stockOutList, stockInList,
     itemList, hazard }) => {
     const idToTitle = (array, id, lang) => {
-        const data = array.find(item => item.id === id);
-
-        const selectedData = id ? lang === 'en' ? data.title : data.titleNe || data.title : '-';
+        const data = array.length && array.find(item => item.id === id);
+        const selectedData = id && array.length ? lang === 'en' ? data.title : data.titleNe || data.title : '-';
         return selectedData;
     };
     return (
@@ -66,8 +65,8 @@ const TableDataList = ({ population, literacy,
                                             <th>Dimension</th>
                                             <th>Occupancy</th>
                                             <th>Code</th>
-                                            <th>Category</th>
                                             <th>Clusters</th>
+                                            <th>Category</th>
                                             <th>Hazards</th>
 
 
@@ -99,9 +98,23 @@ const TableDataList = ({ population, literacy,
                                                 <td>{data.item.dimension || '-'}</td>
                                                 <td>{data.item.occupency || '-'}</td>
                                                 <td>{data.item.code || '-'}</td>
-                                                <td>{data.item.categories.length ? data.item.categories : '-'}</td>
-                                                <td>{data.item.clusters.length ? data.item.clusters : '-'}</td>
-                                                <td>{data.item.hazards.length ? data.item.hazards : '-'}</td>
+                                                <td>
+                                                    {' '}
+                                                    {data.item.clusters.map((d, index) => `${idToTitle(clusterList,
+                                                        d, language)}${data.item.clusters.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+                                                <td>
+                                                    {data.item.categories
+                                                        .map((d, index) => `${idToTitle(categoryList,
+                                                            d, language)}${data.item.categories.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+
+                                                <td>
+                                                    {data.item.hazards.map((d, index) => `${idToTitle(hazard,
+                                                        d, language)}${data.item.hazards.length - 1 === index ? '' : ' , '}`)}
+                                                    {' '}
+
+                                                </td>
                                                 <td>{data.quantity || '-'}</td>
                                                 <td>{data.organization.length ? data.organization : '-'}</td>
                                                 <td>{data.description || '-'}</td>
@@ -118,18 +131,23 @@ const TableDataList = ({ population, literacy,
                                     <thead>
 
                                         <tr>
-
-                                            <th>Brand Registration Number</th>
-                                            <th>Date</th>
+                                            <th>Item</th>
                                             <th>Rate</th>
                                             <th>Quantity</th>
+                                            <th>Organization</th>
+                                            <th>Entry Date</th>
+                                            <th>Expire Date</th>
+
+
+                                            <th>Brand Registration Number</th>
+
+
                                             <th>Reference Number</th>
                                             <th>Remarks</th>
-                                            <th>Expire Date</th>
+
                                             <th>Attachment</th>
-                                            <th>Item</th>
+
                                             {/* <th>Transfered to resource</th> */}
-                                            <th>Organization</th>
 
 
                                         </tr>
@@ -137,31 +155,34 @@ const TableDataList = ({ population, literacy,
                                     <tbody>
                                         {stockInList.map(item => (
                                             <tr key={item.id}>
-                                                <td>{item.brandRegistrationNumber}</td>
-                                                <td>{item.date}</td>
+                                                <td>{idToTitle(itemList, item.item, language)}</td>
                                                 <td>{item.rate}</td>
                                                 <td>{item.quantity}</td>
+                                                <td>
+                                                    {item.organization
+                                                        .map((d, index) => `${idToTitle(organizationList,
+                                                            d, language)}
+                                                                    ${item.organization.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+                                                <td>{item.date}</td>
+                                                <td>{item.expiryDate}</td>
+
+
+                                                <td>{item.brandRegistrationNumber}</td>
                                                 <td>{item.referenceNumber}</td>
                                                 <td>{item.remarks}</td>
-                                                <td>{item.expiryDate}</td>
                                                 <td>
                                                     <a href={item.file} download>
                                                         Download
                                                     </a>
 
                                                 </td>
-                                                <td>{idToTitle(itemList, item.item, language)}</td>
+
                                                 {/* <td>
                                                     {idToTitle(itemList, item.transferedToResource,
                                                         language)}
 
                                                 </td> */}
-                                                <td>
-                                                    {item.organization
-                                                        .map((d, index) => `${idToTitle(organizationList,
-                                                            d, language)}
-                                                            ${item.organization.length - 1 === index ? '' : ' , '}`)}
-                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -175,17 +196,23 @@ const TableDataList = ({ population, literacy,
 
                                         <tr>
 
-                                            <th>Brand Registration Number</th>
-                                            <th>Date</th>
+                                            <th>Item</th>
                                             <th>Rate</th>
                                             <th>Quantity</th>
+                                            <th>Organization</th>
+                                            <th>Entry Date</th>
+                                            <th>Expire Date</th>
+
+
+                                            <th>Brand Registration Number</th>
+
+
                                             <th>Reference Number</th>
                                             <th>Remarks</th>
-                                            <th>Expire Date</th>
-                                            <th>Attachmant</th>
-                                            <th>Item</th>
+
+                                            <th>Attachment</th>
+
                                             {/* <th>Transfered to resource</th> */}
-                                            <th>Organization</th>
 
 
                                         </tr>
@@ -193,31 +220,31 @@ const TableDataList = ({ population, literacy,
                                     <tbody>
                                         {stockOutList.map(item => (
                                             <tr key={item.id}>
-                                                <td>{item.brandRegistrationNumber}</td>
-                                                <td>{item.date}</td>
+
+                                                <td>{idToTitle(itemList, item.item, language)}</td>
                                                 <td>{item.rate}</td>
                                                 <td>{item.quantity}</td>
+                                                <td>
+                                                    {item.organization
+                                                        .map((d, index) => `${idToTitle(organizationList,
+                                                            d, language)}
+                                                                    ${item.organization.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+                                                <td>{item.date}</td>
+                                                <td>{item.expiryDate}</td>
+
+
+                                                <td>{item.brandRegistrationNumber}</td>
                                                 <td>{item.referenceNumber}</td>
                                                 <td>{item.remarks}</td>
-                                                <td>{item.expiryDate}</td>
                                                 <td>
                                                     <a href={item.file} download>
                                                         Download
                                                     </a>
 
                                                 </td>
-                                                <td>{idToTitle(itemList, item.item, language)}</td>
-                                                {/* <td>
-                                                    {idToTitle(itemList, item.transferedToResource,
-                                                        language)}
 
-                                                </td> */}
-                                                <td>
-                                                    {item.organization
-                                                        .map((d, index) => `${idToTitle(organizationList,
-                                                            d, language)}
-                                                            ${item.organization.length - 1 === index ? '' : ' , '}`)}
-                                                </td>
+
                                             </tr>
                                         ))}
                                     </tbody>
@@ -234,7 +261,6 @@ const TableDataList = ({ population, literacy,
                                             <th>Title</th>
                                             <th>Short Name</th>
                                             <th>description</th>
-                                            <th>Incident Verification Duration</th>
 
 
                                         </tr>
@@ -245,7 +271,7 @@ const TableDataList = ({ population, literacy,
                                                 <td>{item.longName}</td>
                                                 <td>{item.shortName}</td>
                                                 <td>{item.description}</td>
-                                                <td>{item.incidentVerificationDuration}</td>
+
                                             </tr>
                                         ))}
 
@@ -267,8 +293,8 @@ const TableDataList = ({ population, literacy,
                                             <th>Dimension</th>
                                             <th>Occupancy</th>
                                             <th>Code</th>
-                                            <th>Category</th>
                                             <th>Clusters</th>
+                                            <th>Category</th>
                                             <th>Hazards</th>
 
                                         </tr>
@@ -302,15 +328,16 @@ const TableDataList = ({ population, literacy,
                                                 <td>{item.occupency}</td>
                                                 <td>{item.code}</td>
                                                 <td>
-                                                    {item.categories
-                                                        .map((d, index) => `${idToTitle(categoryList,
-                                                            d, language)}${item.categories.length - 1 === index ? '' : ' , '}`)}
-                                                </td>
-                                                <td>
                                                     {' '}
                                                     {item.clusters.map((d, index) => `${idToTitle(clusterList,
                                                         d, language)}${item.clusters.length - 1 === index ? '' : ' , '}`)}
                                                 </td>
+                                                <td>
+                                                    {item.categories
+                                                        .map((d, index) => `${idToTitle(categoryList,
+                                                            d, language)}${item.categories.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+
                                                 <td>
                                                     {item.hazards.map((d, index) => `${idToTitle(hazard,
                                                         d, language)}${item.hazards.length - 1 === index ? '' : ' , '}`)}

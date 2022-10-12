@@ -320,7 +320,7 @@ class AddStockInForm extends React.PureComponent<Props, State> {
                 >
                     <ModalHeader
                         title={
-                            value ? 'Edit Item' : 'Add Item'
+                            value ? 'Edit Stock In' : 'Add Stock In'
                         }
                         rightComponent={(
                             <DangerButton
@@ -333,22 +333,13 @@ class AddStockInForm extends React.PureComponent<Props, State> {
                     />
                     <ModalBody>
                         <NonFieldErrors faramElement />
-                        <TextArea
-                            faramElementName="title"
-                            label="Title"
+                        <SelectInput
+                            faramElementName="item"
+                            options={itemList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            label="Item"
                         />
-                        <DateInput
-                            faramElementName="date"
-                            label="Date"
-                            language={language}
-                            optimizePosition
-                            className={'startDateInput'}
-                        />
-                        <NumberInput
-                            faramElementName="brandRegistrationNumber"
-                            label="Brand Registration Number"
-                        />
-
                         <NumberInput
                             faramElementName="rate"
                             label="Rate"
@@ -357,39 +348,6 @@ class AddStockInForm extends React.PureComponent<Props, State> {
                             faramElementName="quantity"
                             label="Quantity"
                         />
-                        <NumberInput
-                            faramElementName="referenceNumber"
-                            label="Reference Number"
-                        />
-
-
-                        <TextArea
-                            faramElementName="remarks"
-                            label="Remarks"
-                        />
-                        <DateInput
-                            faramElementName="expiryDate"
-                            label="Expiry Date"
-                            language={language}
-                            optimizePosition
-                            className={'startDateInput'}
-                        />
-                        <SelectInput
-                            faramElementName="item"
-                            options={itemList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Item"
-                        />
-                        {/* <SelectInput
-                            faramElementName="transferedToResource"
-                            options={resourceList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Transfer to Resource"
-                        /> */}
-
-
                         <div>
                             <pre
                                 className={styles.multiselect}
@@ -409,9 +367,52 @@ class AddStockInForm extends React.PureComponent<Props, State> {
                                 options={organizationRenderList}
                                 onChange={this.handleOrganization}
                                 isMulti
-
                             />
                         </div>
+
+
+                        <DateInput
+                            faramElementName="date"
+                            label="Entry Date"
+                            language={language}
+                            optimizePosition
+                            className={'startDateInput'}
+                        />
+
+                        <DateInput
+                            faramElementName="expiryDate"
+                            label="Expiry Date"
+                            language={language}
+                            optimizePosition
+                            className={'startDateInput'}
+                        />
+
+
+                        <NumberInput
+                            faramElementName="brandRegistrationNumber"
+                            label="Brand Registration Number"
+                        />
+
+
+                        <NumberInput
+                            faramElementName="referenceNumber"
+                            label="Reference Number"
+                        />
+
+
+                        <TextArea
+                            faramElementName="remarks"
+                            label="Remarks"
+                        />
+
+
+                        {/* <SelectInput
+                            faramElementName="transferedToResource"
+                            options={resourceList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            label="Transfer to Resource"
+                        /> */}
 
 
                         <div style={{ margin: '10px 0px' }}>
