@@ -53,7 +53,6 @@
 .bodyheader {
     display: flex;
     align-items: center;
-    width: fit-content;
     margin-top: 15px;
     margin-bottom: 2px;
     gap: 15px;
@@ -124,7 +123,6 @@
     .totalValues{
         @extend .bodyWrapper;
         background: #e5e5e5;
-        width: fit-content;
     }
 
 .reactWindow{

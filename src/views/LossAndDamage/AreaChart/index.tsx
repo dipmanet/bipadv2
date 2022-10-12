@@ -79,7 +79,7 @@ const AreaChartVisual = (props) => {
                                 margin={{
                                     top: 5,
                                     bottom: 45,
-                                    left: -35,
+                                    left: -30,
                                 }}
                             >
                                 <defs>
