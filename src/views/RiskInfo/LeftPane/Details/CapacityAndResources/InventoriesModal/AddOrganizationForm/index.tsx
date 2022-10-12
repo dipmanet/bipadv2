@@ -228,13 +228,13 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
             requests: { addOrganizationPostRequest },
             resourceId,
         } = this.props;
-        console.log('This is final faram values', faramValues);
+
 
         addOrganizationPostRequest.do({
             body: {
                 ...faramValues,
                 resource: resourceId,
-                wards: faramValues.location.wards,
+                point: faramValues.location.geoJson.features[0].geometry,
             },
             setFaramErrors: this.handleFaramValidationFailure,
         });
@@ -273,7 +273,7 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
             selectedHazard,
         } = this.state;
 
-        console.log('This is faram values', faramValues);
+
         return (
             <Modal
                 className={_cs(styles.addInventoryModal, className)}

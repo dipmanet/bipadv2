@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable jsx-a11y/anchor-is-valid */
@@ -21,13 +23,9 @@ const TableDataList = ({ population, literacy,
     onDelete, resourceId, clusterList, categoryList, unitList,
     organizationList, stockOutList, stockInList,
     itemList, hazard }) => {
-    console.log('This is translation', organizationList);
-    console.log('This is resource', stockInList);
     const idToTitle = (array, id, lang) => {
-        console.log('This is array', array);
-        console.log('This is id', id);
         const data = array.find(item => item.id === id);
-        console.log('This is running dta', data);
+
         const selectedData = id ? lang === 'en' ? data.title : data.titleNe || data.title : '-';
         return selectedData;
     };
@@ -80,7 +78,21 @@ const TableDataList = ({ population, literacy,
                                     <tbody>
                                         {inventoryList.map(data => (
                                             <tr key={data.id}>
-                                                <td>{data.item.image || '-'}</td>
+                                                <td>
+                                                    <a href={data.item.image} target="_blank" rel="noopener noreferrer">
+                                                        <img
+                                                            src={data.item.image}
+                                                            alt="item-pic"
+                                                            style={{
+
+                                                                height: '120px',
+                                                                width: '120px',
+                                                                objectFit: 'contain',
+                                                            }}
+                                                        />
+                                                    </a>
+                                                    {/* {data.item.image || '-'} */}
+                                                </td>
                                                 <td>{language === 'en' ? data.item.title : data.item.titleNe || '-'}</td>
                                                 <td>{language === 'en' ? data.item.unit || '-' : data.item.unitNp || '-'}</td>
                                                 <td>{data.item.shortDescription || '-'}</td>
@@ -95,58 +107,6 @@ const TableDataList = ({ population, literacy,
                                                 <td>{data.description || '-'}</td>
                                             </tr>
                                         ))}
-
-                                        {/* {inventoryList.map(item => (
-                                        <tr key={item.id}>
-                                            <td>{item.item.title}</td>
-                                            <td>{item.item.category}</td>
-                                            <td>{item.quantity}</td>
-                                            <td>
-                                                <FormattedDate
-                                                    value={item.createdOn}
-                                                    mode="yyyy-MM-dd"
-                                                />
-                                            </td>
-                                            <td>{item.description}</td>
-                                            <td>
-                                                <div className={styles.actionButtons}>
-                                                    <Cloak hiddenIf={p => !p.change_inventory}>
-                                                        <ModalButton
-                                                            className={styles.button}
-                                                            modal={(
-                                                                <AddInventoryForm
-                                                                    onUpdate={onUpdate}
-                                                                    value={item}
-                                                                    resourceId={item.resource}
-                                                                />
-                                                            )}
-                                                            disabled={disable}
-                                                            iconName="edit"
-                                                            transparent
-                                                        >
-                                                            Edit
-                                                        </ModalButton>
-                                                    </Cloak>
-                                                    <Cloak hiddenIf={p => !p.delete_inventory}>
-                                                        <DangerConfirmButton
-                                                            className={styles.button}
-                                                            onClick={() => onDelete(item.id)}
-                                                            disabled={disable}
-                                                            iconName="delete"
-                                                            transparent
-                                                            confirmationMessage="Are you sure
-                                                        you want to delete this inventory?"
-                                                        >
-                                                            Delete
-                                                        </DangerConfirmButton>
-                                                    </Cloak>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                    ))} */}
-
-
                                     </tbody>
                                 </table>
                             ) : ''}
@@ -166,9 +126,9 @@ const TableDataList = ({ population, literacy,
                                             <th>Reference Number</th>
                                             <th>Remarks</th>
                                             <th>Expire Date</th>
-                                            <th>Download</th>
+                                            <th>Attachment</th>
                                             <th>Item</th>
-                                            <th>Transfered to resource</th>
+                                            {/* <th>Transfered to resource</th> */}
                                             <th>Organization</th>
 
 
@@ -184,13 +144,18 @@ const TableDataList = ({ population, literacy,
                                                 <td>{item.referenceNumber}</td>
                                                 <td>{item.remarks}</td>
                                                 <td>{item.expiryDate}</td>
-                                                <td>{item.file}</td>
-                                                <td>{idToTitle(itemList, item.item, language)}</td>
                                                 <td>
+                                                    <a href={item.file} download>
+                                                        Download
+                                                    </a>
+
+                                                </td>
+                                                <td>{idToTitle(itemList, item.item, language)}</td>
+                                                {/* <td>
                                                     {idToTitle(itemList, item.transferedToResource,
                                                         language)}
 
-                                                </td>
+                                                </td> */}
                                                 <td>
                                                     {item.organization
                                                         .map((d, index) => `${idToTitle(organizationList,
@@ -217,31 +182,44 @@ const TableDataList = ({ population, literacy,
                                             <th>Reference Number</th>
                                             <th>Remarks</th>
                                             <th>Expire Date</th>
-                                            <th>Download</th>
+                                            <th>Attachmant</th>
                                             <th>Item</th>
-                                            <th>Transfered to resource</th>
+                                            {/* <th>Transfered to resource</th> */}
                                             <th>Organization</th>
 
 
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {stockOutList.map(item => (
+                                            <tr key={item.id}>
+                                                <td>{item.brandRegistrationNumber}</td>
+                                                <td>{item.date}</td>
+                                                <td>{item.rate}</td>
+                                                <td>{item.quantity}</td>
+                                                <td>{item.referenceNumber}</td>
+                                                <td>{item.remarks}</td>
+                                                <td>{item.expiryDate}</td>
+                                                <td>
+                                                    <a href={item.file} download>
+                                                        Download
+                                                    </a>
 
-                                        <tr>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>11</td>
-                                        </tr>
+                                                </td>
+                                                <td>{idToTitle(itemList, item.item, language)}</td>
+                                                {/* <td>
+                                                    {idToTitle(itemList, item.transferedToResource,
+                                                        language)}
 
-
+                                                </td> */}
+                                                <td>
+                                                    {item.organization
+                                                        .map((d, index) => `${idToTitle(organizationList,
+                                                            d, language)}
+                                                            ${item.organization.length - 1 === index ? '' : ' , '}`)}
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             ) : ''}
@@ -299,18 +277,18 @@ const TableDataList = ({ population, literacy,
                                         {itemList.map(item => (
                                             <tr key={item.id}>
                                                 <td>
+                                                    <a href={item.image} target="_blank" rel="noopener noreferrer">
+                                                        <img
+                                                            src={item.image}
+                                                            alt="item-pic"
+                                                            style={{
 
-                                                    <img
-                                                        src={item.image}
-                                                        alt="item-pic"
-                                                        style={{
-
-                                                            height: '120px',
-                                                            width: '120px',
-                                                            objectFit: 'contain',
-                                                        }}
-                                                    />
-
+                                                                height: '120px',
+                                                                width: '120px',
+                                                                objectFit: 'contain',
+                                                            }}
+                                                        />
+                                                    </a>
                                                     {' '}
                                                 </td>
                                                 <td>{language === 'en' ? item.title : item.titleNe || item.title}</td>

@@ -55,7 +55,6 @@ class Visualizations extends React.PureComponent {
 
     getHazardSummary = memoize((incidentList, language) => {
         const { hazardTypes } = this.props;
-        console.log('hazardTypes', hazardTypes);
         const freqCount = groupList(
             incidentList.filter(i => i.hazard),
             incident => incident.hazard,

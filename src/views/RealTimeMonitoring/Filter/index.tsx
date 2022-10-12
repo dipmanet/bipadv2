@@ -107,11 +107,6 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
             otherSourceList,
             language: { language },
         } = this.props;
-
-
-        console.log('faramValues', faramValues);
-
-
         return (
             <Faram
                 className={_cs(className, styles.filter)}

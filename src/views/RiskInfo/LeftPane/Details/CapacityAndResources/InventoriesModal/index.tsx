@@ -280,7 +280,6 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         };
     }
 
-
     private rendererParams = (key: number, data: PageType.Inventory) => ({
         data,
         onUpdate: this.handleRefresh,
@@ -411,19 +410,15 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         }
         if (!clusterPending && clusterResponse) {
             clusterList = clusterResponse.results;
-            console.log('This is final cluster pending', clusterList);
         }
         if (!categoryPending && categoryResponse) {
             categoryList = categoryResponse.results;
-            console.log('This is final cluster pending', clusterList);
         }
         if (!unitPending && unitResponse) {
             unitList = unitResponse.results;
-            console.log('This is final cluster pending', clusterList);
         }
         if (!itemPending && itemResponse) {
             itemList = itemResponse.results;
-            console.log('This is final cluster pending', clusterList);
         }
         if (!hazardPending && hazardResponse) {
             hazardList = hazardResponse.results;
@@ -437,15 +432,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         if (!stockInPending && stockInResponse) {
             stockInList = stockInResponse.results;
         }
-        console.log('This is inventory', inventoryList);
-        console.log('This is cluster list', clusterList);
-        console.log('This is categories', categoryList);
-        console.log('This is unit list', unitList);
-        console.log('This is item list', itemList);
-        console.log('This is hazard list', hazardList);
-        console.log('This is organization list', organizationList);
-        console.log('This is stock out', stockOutList);
-        console.log('This is stock in list', stockInList);
+
 
         return (
             <Modal className={_cs(styles.inventoriesModal, className)}>
@@ -479,7 +466,10 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                     <div className={styles.buttonGroup}>
                                         <Button
                                             className={selectedCategory === 1 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(1, 'Inventories')}
+                                            onClick={() => {
+                                                this.handleClickedDataset(1, 'Inventories');
+                                                this.handleRefresh();
+                                            }}
                                         >
                                             {t('Inventories')}
 
@@ -567,7 +557,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                                             className={styles.addButton}
                                                             modal={(
                                                                 <AddStockInForm
-                                                                    onUpdate={this.handleRefreshStockOut}
+                                                                    onUpdate={this.handleRefreshStockIn}
                                                                     resourceId={resourceId}
                                                                     unitList={unitList}
                                                                     categoriesList={categoryList}

@@ -209,9 +209,8 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
 
     private handleOrganization = (selectedOption) => {
         this.setState({ selectedOrganization: selectedOption }, () => {
-            console.log('This is data', selectedOption);
             const data = this.state.selectedOrganization.map(item => item.value);
-            console.log('This is final data', data);
+
             this.setState({
                 faramValues: { ...this.state.faramValues, organization: data },
             });
@@ -247,7 +246,7 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
             requests: { addStockOutPostRequest },
             resourceId,
         } = this.props;
-        console.log('This is final faram values', faramValues);
+
 
         addStockOutPostRequest.do({
             body: {
@@ -302,7 +301,7 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
         const clusterRenderlist = this.multipleSelectFunctionType(clustersList, language);
         const hazardRenderlist = this.multipleSelectFunctionType(hazard, language);
         const organizationRenderList = this.multipleSelectFunctionType(organizationList, language);
-        console.log('This is data', resourceList);
+
         return (
             <Modal
                 className={_cs(styles.addInventoryModal, className)}
@@ -370,7 +369,7 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
                         />
                         <DateInput
                             faramElementName="expiryDate"
-                            label="Date"
+                            label="Expiry Date"
                             language={language}
                             optimizePosition
                             className={'startDateInput'}

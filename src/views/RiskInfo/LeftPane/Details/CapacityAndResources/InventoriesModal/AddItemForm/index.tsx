@@ -234,7 +234,7 @@ class AddItemForm extends React.PureComponent<Props, State> {
             requests: { addClusterPostRequest },
             resourceId,
         } = this.props;
-        console.log('This is final faram values', faramValues);
+
 
         addClusterPostRequest.do({
             body: {

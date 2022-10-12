@@ -238,7 +238,6 @@ class RealTimeMap extends React.PureComponent {
     }
 
     handleRiverClick = (feature) => {
-        console.log('feature', feature);
         const { properties: { title, image, basin,
             status, measuredOn, waterLevel, steady, lng, lat, description, riverId } } = feature;
         this.setState({
@@ -933,7 +932,6 @@ class RealTimeMap extends React.PureComponent {
             })),
         };
 
-        console.log('rainFeatureCollection', hazardHoveredAttribute);
 
         return (
             <React.Fragment>

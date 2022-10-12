@@ -351,7 +351,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         const shouldDisableDistrictInput = disabled || !selectedProvinceId;
         const shouldDisableMunicipalityInput = disabled || !selectedDistrictId;
         const shouldDisableWardInput = disabled || !selectedMunicipalityId;
-        console.log('provinceOptions', provinceOptions);
+
 
         return (
             <div className={_cs(className, styles.stepwiseRegionSelectInput)}>
