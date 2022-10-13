@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable max-len */
 /* eslint-disable no-plusplus */
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
@@ -10,6 +10,7 @@ import { estimatedLossValueFormatter, returnValueByDropdown } from '../utils/uti
 
 const HazardWise = (props) => {
     const { selectOption, data, handleSaveClick, downloadButton } = props;
+    const treeMapRef = useRef(null);
 
     const hazardWiseData = Object.entries(data).map((item) => {
         const obj = {
@@ -31,6 +32,7 @@ const HazardWise = (props) => {
         return (
             <g>
                 <rect
+                    id={name}
                     x={x}
                     y={y}
                     width={width}
@@ -66,7 +68,7 @@ const HazardWise = (props) => {
                                     fontSize={(height + width) / 20}
                                     fontWeight={'300'}
                                 >
-                                    {(height + width) > 150 ? estimatedLossValueFormatter(value) : ''}
+                                    {(height + width) > 150 ? returnValueByDropdown(selectOption.name, value) : ''}
                                 </text>
                                 <foreignObject
                                     width={(height + width) <= 150 ? '15px' : (height + width) / 14}
@@ -94,7 +96,7 @@ const HazardWise = (props) => {
 
     const TreeMapTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
-            const { name, value, root } = payload[0].payload;
+            const { name, value, root, fill } = payload[0].payload;
             return (
                 <p className={styles.label}>
                     {`${name}:${value}`}
@@ -102,6 +104,27 @@ const HazardWise = (props) => {
             );
         }
         return null;
+    };
+
+    function treemapHighlight(name, fill) {
+        if (treeMapRef.current) {
+            const responsiveContainer = treeMapRef.current.getElementsByClassName('recharts-responsive-container')[0];
+            const rechartsWrapper = responsiveContainer.getElementsByClassName('recharts-wrapper');
+            const svgRecharts = rechartsWrapper[0].children[0];
+            const Gtag = svgRecharts.getElementById(name);
+            Gtag.style.fill = fill || '#7393B3';
+        }
+        // treemapRef.current.style.fill = '#FFFFFF';
+    }
+
+    const onMouseEnter = (prop) => {
+        const { name } = prop;
+        treemapHighlight(name, null);
+    };
+
+    const onMouseLeave = (prop) => {
+        const { name, fill } = prop;
+        treemapHighlight(name, fill);
     };
 
 
@@ -128,7 +151,7 @@ const HazardWise = (props) => {
                 }
 
             </div>
-            <div id="treemap">
+            <div id="treemap" ref={treeMapRef}>
                 {hazardWiseData.length > 0 && (
                     <ResponsiveContainer height={300}>
                         <Treemap
@@ -140,6 +163,8 @@ const HazardWise = (props) => {
                             fill={barColors.map(item => item)[1]}
                             content={<CustomizedContent colors={barColors} />}
                             aspectRatio={4 / 3}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
                         >
                             <Tooltip content={<TreeMapTooltip />} />
                         </Treemap>
