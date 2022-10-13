@@ -549,6 +549,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         setRegionRadio={setRegionRadio}
                                         data={filteredData}
                                         valueOnclick={valueOnclick}
+                                        regionFilter={regionFilter}
                                     />
                                     <ModalButton
                                         disabled={pending}

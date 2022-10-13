@@ -3,11 +3,29 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles.scss';
 
 const FilterRadio = (props) => {
-    const { regionRadio, setRegionRadio } = props;
+    const { regionRadio, setRegionRadio, regionFilter } = props;
+
+    useEffect(() => {
+        if (Object.keys(regionFilter).length > 1) {
+            switch (regionFilter.adminLevel) {
+                case 1:
+                    setRegionRadio('province', 1);
+                    break;
+                case 2:
+                    setRegionRadio('district', 2);
+                    break;
+                case 3:
+                    setRegionRadio('municipality', 3);
+                    break;
+                default: setRegionRadio('province', 1);
+            }
+        }
+    }, [regionFilter]);
+
     const filter = [
         { id: 1, name: 'province' },
         { id: 2, name: 'district' },
