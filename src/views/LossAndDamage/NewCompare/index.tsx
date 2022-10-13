@@ -333,7 +333,7 @@ class NewCompare extends React.PureComponent {
                     {(!region1 && !region2) ? (
                         this.messageForNoData(false)
                     ) : (
-                        <div className={styles.comparisionContainer} id="comparativeDiv">
+                        <div className={styles.comparisionContainer}>
                             <div className={styles.mapContainer}>
                                 {isRegionValid(faramValues.region1)
                                     && region1Incidents.length > 0
