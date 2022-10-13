@@ -290,57 +290,64 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader
-                        title={
-                            value ? 'Edit Organization' : 'Add Organization'
-                        }
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody>
-                        <NonFieldErrors faramElement />
+                    <Translation>
+                        {
+                            t => (
+                                <>
+                                    <ModalHeader
+                                        title={
+                                            value ? t('Edit Organization') : t('Add Organization')
+                                        }
+                                        rightComponent={(
+                                            <DangerButton
+                                                transparent
+                                                iconName="close"
+                                                onClick={closeModal}
+                                                title={t('Close Modal')}
+                                            />
+                                        )}
+                                    />
+                                    <ModalBody>
+                                        <NonFieldErrors faramElement />
 
-                        <TextArea
-                            faramElementName="title"
-                            label="Title"
-                        />
-                        <TextArea
-                            faramElementName="shortName"
-                            label="Short Name"
-                        />
-                        <TextArea
-                            faramElementName="longName"
-                            label="Long Name"
-                        />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                        />
-                        <LocationInput
-                            className={styles.locationInput}
-                            faramElementName="location"
-                        // classCategory={styles.locationInput}
+                                        <TextArea
+                                            faramElementName="title"
+                                            label={t('Title')}
+                                        />
+                                        <TextArea
+                                            faramElementName="shortName"
+                                            label={t('Short Name')}
+                                        />
+                                        <TextArea
+                                            faramElementName="longName"
+                                            label={t('Long Name')}
+                                        />
+                                        <TextArea
+                                            faramElementName="description"
+                                            label={t('Description')}
+                                        />
+                                        <LocationInput
+                                            className={styles.locationInput}
+                                            faramElementName="location"
+                                        // classCategory={styles.locationInput}
 
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
+                                        />
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <DangerButton onClick={closeModal}>
+                                            {t('Close')}
+                                        </DangerButton>
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={pristine}
+                                            pending={pending}
+                                        >
+                                            {t('Save')}
+                                        </PrimaryButton>
+                                    </ModalFooter>
+                                </>
+                            )}
+                    </Translation>
                 </Faram>
             </Modal>
         );

@@ -436,21 +436,25 @@ class InventoriesModal extends React.PureComponent<Props, State> {
 
         return (
             <Modal className={_cs(styles.inventoriesModal, className)}>
-                <ModalHeader
-                    title="Inventory Details"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody}>
-                    <>
+                <Translation>
+                    {
+                        t => (
+                            <>
+                                <ModalHeader
+                                    title={t('Inventory Details')}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal}
+                                            title="Close Modal"
+                                        />
+                                    )}
+                                />
+                                <ModalBody className={styles.modalBody}>
+                                    <>
 
-                        {/* <ListView
+                                        {/* <ListView
                             className={styles.inventoryList}
                             data={inventoryList}
                             keySelector={keySelector}
@@ -458,72 +462,69 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                             rendererParams={this.rendererParams}
                             pending={pending}
                         /> */}
-                        <Translation>
-                            {
-                                t => (
 
 
-                                    <div className={styles.buttonGroup}>
-                                        <Button
-                                            className={selectedCategory === 1 ? styles.active : ''}
-                                            onClick={() => {
-                                                this.handleClickedDataset(1, 'Inventories');
-                                                this.handleRefresh();
-                                            }}
-                                        >
-                                            {t('Inventories')}
+                                        <div className={styles.buttonGroup}>
+                                            <Button
+                                                className={selectedCategory === 1 ? styles.active : ''}
+                                                onClick={() => {
+                                                    this.handleClickedDataset(1, 'Inventories');
+                                                    this.handleRefresh();
+                                                }}
+                                            >
+                                                {t('Inventories')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 2 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(2, 'StockIn')}
-                                        >
-                                            {t('StockIn')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 2 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(2, t('StockIn'))}
+                                            >
+                                                {t('StockIn')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 3 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(3, 'StockOut')}
-                                        >
-                                            {t('StockOut')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 3 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(3, t('StockOut'))}
+                                            >
+                                                {t('StockOut')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 4 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(4, 'Organization')}
-                                        >
-                                            {t('Organization')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 4 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(4, t('Organization'))}
+                                            >
+                                                {t('Organization')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 5 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(5, 'Items')}
-                                        >
-                                            {t('Items')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 5 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(5, t('Items'))}
+                                            >
+                                                {t('Items')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 6 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(6, 'Unit')}
-                                        >
-                                            {t('Unit')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 6 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(6, t('Unit'))}
+                                            >
+                                                {t('Unit')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 7 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(7, 'Categories')}
-                                        >
-                                            {t('Categories')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 7 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(7, t('Categories'))}
+                                            >
+                                                {t('Categories')}
 
-                                        </Button>
-                                        <Button
-                                            className={selectedCategory === 8 ? styles.active : ''}
-                                            onClick={() => this.handleClickedDataset(8, 'Clusters')}
-                                        >
-                                            {t('Clusters')}
+                                            </Button>
+                                            <Button
+                                                className={selectedCategory === 8 ? styles.active : ''}
+                                                onClick={() => this.handleClickedDataset(8, t('Clusters'))}
+                                            >
+                                                {t('Clusters')}
 
-                                        </Button>
-                                        {/* {selectedCategory !== 1 && filterPermissionGranted
+                                            </Button>
+                                            {/* {selectedCategory !== 1 && filterPermissionGranted
                                             ? (
                                                 <Cloak
                                                     hiddenIf={p => !p.add_inventory}
@@ -547,237 +548,240 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                                 </Cloak>
                                             )
                                             : ''} */}
-                                        {selectedCategory === 2 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddStockInForm
-                                                                    onUpdate={this.handleRefreshStockIn}
-                                                                    resourceId={resourceId}
-                                                                    unitList={unitList}
-                                                                    categoriesList={categoryList}
-                                                                    clustersList={clusterList}
-                                                                    language={language}
-                                                                    hazard={hazardList}
-                                                                    organizationList={organizationList}
-                                                                    resourceList={resourceList}
-                                                                    itemList={itemList}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        {selectedCategory === 3 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddStockOutForm
-                                                                    onUpdate={this.handleRefreshStockOut}
-                                                                    resourceId={resourceId}
-                                                                    unitList={unitList}
-                                                                    categoriesList={categoryList}
-                                                                    clustersList={clusterList}
-                                                                    language={language}
-                                                                    hazard={hazardList}
-                                                                    organizationList={organizationList}
-                                                                    resourceList={resourceList}
-                                                                    itemList={itemList}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        {selectedCategory === 4 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddOrganizationForm
-                                                                    onUpdate={this.handleRefreshOrganization}
-                                                                    resourceId={resourceId}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        {selectedCategory === 5 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddItemForm
-                                                                    onUpdate={this.handleRefreshItem}
-                                                                    resourceId={resourceId}
-                                                                    unitList={unitList}
-                                                                    categoriesList={categoryList}
-                                                                    clustersList={clusterList}
-                                                                    language={language}
-                                                                    hazard={hazardList}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        {selectedCategory === 6 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddUnitForm
-                                                                    onUpdate={this.handleRefreshUnit}
-                                                                    resourceId={resourceId}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        {selectedCategory === 7 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddCategoryForm
-                                                                    onUpdate={this.handleRefreshCategory}
-                                                                    resourceId={resourceId}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        {selectedCategory === 8 && filterPermissionGranted
-                                            ? (
-                                                <Cloak
-                                                    hiddenIf={p => !p.add_inventory}
-                                                >
-                                                    <div className={styles.header}>
-                                                        <ModalButton
-                                                            className={styles.addButton}
-                                                            modal={(
-                                                                <AddClusterForm
-                                                                    onUpdate={this.handleRefreshCluster}
-                                                                    resourceId={resourceId}
-                                                                />
-                                                            )}
-                                                            iconName="add"
-                                                            transparent
-                                                            disabled={pending}
-                                                        >
-                                                            {` New ${selectedCategoryName}`}
-                                                        </ModalButton>
-                                                    </div>
-                                                </Cloak>
-                                            )
-                                            : ''}
+                                            {selectedCategory === 2 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddStockInForm
+                                                                        onUpdate={this.handleRefreshStockIn}
+                                                                        resourceId={resourceId}
+                                                                        unitList={unitList}
+                                                                        categoriesList={categoryList}
+                                                                        clustersList={clusterList}
+                                                                        language={language}
+                                                                        hazard={hazardList}
+                                                                        organizationList={organizationList}
+                                                                        resourceList={resourceList}
+                                                                        itemList={itemList}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
+                                            {selectedCategory === 3 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddStockOutForm
+                                                                        onUpdate={this.handleRefreshStockOut}
+                                                                        resourceId={resourceId}
+                                                                        unitList={unitList}
+                                                                        categoriesList={categoryList}
+                                                                        clustersList={clusterList}
+                                                                        language={language}
+                                                                        hazard={hazardList}
+                                                                        organizationList={organizationList}
+                                                                        resourceList={resourceList}
+                                                                        itemList={itemList}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
+                                            {selectedCategory === 4 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddOrganizationForm
+                                                                        onUpdate={this.handleRefreshOrganization}
+                                                                        resourceId={resourceId}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
+                                            {selectedCategory === 5 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddItemForm
+                                                                        onUpdate={this.handleRefreshItem}
+                                                                        resourceId={resourceId}
+                                                                        unitList={unitList}
+                                                                        categoriesList={categoryList}
+                                                                        clustersList={clusterList}
+                                                                        language={language}
+                                                                        hazard={hazardList}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
+                                            {selectedCategory === 6 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddUnitForm
+                                                                        onUpdate={this.handleRefreshUnit}
+                                                                        resourceId={resourceId}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
+                                            {selectedCategory === 7 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddCategoryForm
+                                                                        onUpdate={this.handleRefreshCategory}
+                                                                        resourceId={resourceId}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
+                                            {selectedCategory === 8 && filterPermissionGranted
+                                                ? (
+                                                    <Cloak
+                                                        hiddenIf={p => !p.add_inventory}
+                                                    >
+                                                        <div className={styles.header}>
+                                                            <ModalButton
+                                                                className={styles.addButton}
+                                                                modal={(
+                                                                    <AddClusterForm
+                                                                        onUpdate={this.handleRefreshCluster}
+                                                                        resourceId={resourceId}
+                                                                    />
+                                                                )}
+                                                                iconName="add"
+                                                                transparent
+                                                                disabled={pending}
+                                                            >
+                                                                {` ${t('New')} ${selectedCategoryName}`}
+                                                            </ModalButton>
+                                                        </div>
+                                                    </Cloak>
+                                                )
+                                                : ''}
 
 
-                                        <TableDataList
-                                            selectedCategory={selectedCategory}
-                                            language={language}
-                                            inventoryList={inventoryList}
-                                            onUpdate={this.handleRefresh}
-                                            disable={pending}
-                                            onDelete={this.handleInventoryDelete}
-                                            resourceId={resourceId}
-                                            clusterList={clusterList}
-                                            categoryList={categoryList}
-                                            unitList={unitList}
-                                            itemList={itemList}
-                                            hazard={hazardList}
-                                            organizationList={organizationList}
-                                            stockOutList={stockOutList}
-                                            stockInList={stockInList}
+                                            <TableDataList
+                                                selectedCategory={selectedCategory}
+                                                language={language}
+                                                inventoryList={inventoryList}
+                                                onUpdate={this.handleRefresh}
+                                                disable={pending}
+                                                onDelete={this.handleInventoryDelete}
+                                                resourceId={resourceId}
+                                                clusterList={clusterList}
+                                                categoryList={categoryList}
+                                                unitList={unitList}
+                                                itemList={itemList}
+                                                hazard={hazardList}
+                                                organizationList={organizationList}
+                                                stockOutList={stockOutList}
+                                                stockInList={stockInList}
 
 
-                                        />
+                                            />
 
-                                    </div>
-                                )
-                            }
-                        </Translation>
-                    </>
-                    {isDefined(palikaRedirect.inventoryItem)
+                                        </div>
 
-                        && (
-                            <button
-                                onClick={this.handleReturnToPalika}
-                                type="button"
-                            >
-                                Close and return to DRRM Report
+                                    </>
+                                    {isDefined(palikaRedirect.inventoryItem)
 
-                            </button>
+                                        && (
+                                            <button
+                                                onClick={this.handleReturnToPalika}
+                                                type="button"
+                                            >
+                                                Close and return to DRRM Report
+
+                                            </button>
+                                        )
+                                    }
+
+
+                                </ModalBody>
+                            </>
                         )
                     }
-
-
-                </ModalBody>
+                </Translation>
             </Modal>
         );
     }

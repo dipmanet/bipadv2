@@ -246,7 +246,7 @@ class AddItemForm extends React.PureComponent<Props, State> {
     }
 
     private multipleSelectFunctionType = (array, language) => {
-        const data = array.length && array.map(item => ({ value: item.id, label: language === 'en' ? item.title : item.titleNe }));
+        const data = array.length && array.map(item => ({ value: item.id, label: language === 'en' ? item.title : item.titleNe || item.title }));
         return data;
     }
 
@@ -300,144 +300,153 @@ class AddItemForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader
-                        title={
-                            value ? 'Edit Item' : 'Add Item'
-                        }
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody>
-                        <NonFieldErrors faramElement />
-                        <TextArea
-                            faramElementName="title"
-                            label="Title"
-                        />
-                        <TextArea
-                            faramElementName="titleNe"
-                            label="Title Nepali"
-                        />
-                        <TextArea
-                            faramElementName="shortDescription"
-                            label="Short Description"
-                        />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                        />
+                    <Translation>
+                        {
+                            t => (
+                                <>
+                                    <ModalHeader
+                                        title={
+                                            value ? t('Edit Item') : t('Add Item')
+                                        }
+                                        rightComponent={(
+                                            <DangerButton
+                                                transparent
+                                                iconName="close"
+                                                onClick={closeModal}
+                                                title={t('Close Modal')}
+                                            />
+                                        )}
+                                    />
+                                    <ModalBody>
+                                        <NonFieldErrors faramElement />
+                                        <TextArea
+                                            faramElementName="title"
+                                            label={t('Title')}
+                                        />
+                                        <TextArea
+                                            faramElementName="titleNe"
+                                            label={t('Title Nepali')}
+                                        />
+                                        <TextArea
+                                            faramElementName="shortDescription"
+                                            label={t('Short Description')}
+                                        />
+                                        <TextArea
+                                            faramElementName="description"
+                                            label={t('Description')}
+                                        />
 
-                        <TextArea
-                            faramElementName="dimension"
-                            label="Dimension"
-                        />
-                        <NumberInput
-                            faramElementName="occupency"
-                            label="Occupency"
-                        />
-                        <TextArea
-                            faramElementName="code"
-                            label="Code"
-                        />
-                        <SelectInput
-                            faramElementName="unitLink"
-                            options={unitList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Unit"
-                        />
-                        <div>
-                            <pre style={{
-                                fontWeight: '700',
-                                margin: '5px 0px',
-                                color: 'rgba(0, 0, 0, 0.6)',
-                                textTransform: 'uppercase',
-                                fontSize: '10px',
-                                marginTop: '18px',
-                            }}
-                            >
-                                Clusters
+                                        <TextArea
+                                            faramElementName="dimension"
+                                            label={t('Dimension')}
 
-                            </pre>
-                            <Select
-                                value={selectedClusters}
-                                options={clusterRenderlist}
-                                onChange={this.handleClusters}
-                                isMulti
-                            />
-                        </div>
-                        <div>
-                            <pre
-                                className={styles.multiselect}
-                                style={{
-                                    fontWeight: '700',
-                                    margin: '5px 0px',
-                                    color: 'rgba(0, 0, 0, 0.6)',
-                                    textTransform: 'uppercase',
-                                    fontSize: '10px',
-                                }}
-                            >
-                                Categories
+                                        />
+                                        <NumberInput
+                                            faramElementName="occupency"
+                                            label={t('Occupancy')}
+                                        />
+                                        <TextArea
+                                            faramElementName="code"
+                                            label={t('Code')}
+                                        />
+                                        <SelectInput
+                                            faramElementName="unitLink"
+                                            options={unitList}
+                                            keySelector={keySelector}
+                                            labelSelector={labelSelector}
+                                            label={t('Unit')}
+                                        />
+                                        <div>
+                                            <pre style={{
+                                                fontWeight: '700',
+                                                margin: '5px 0px',
+                                                color: 'rgba(0, 0, 0, 0.6)',
+                                                textTransform: 'uppercase',
+                                                fontSize: '10px',
+                                                marginTop: '18px',
+                                            }}
+                                            >
+                                                {t('Clusters')}
 
-                            </pre>
-                            <Select
-                                value={selectedCategories}
-                                options={categoriesRenderlist}
-                                onChange={this.handleCategories}
-                                isMulti
+                                            </pre>
+                                            <Select
+                                                value={selectedClusters}
+                                                options={clusterRenderlist}
+                                                onChange={this.handleClusters}
+                                                isMulti
+                                            />
+                                        </div>
+                                        <div>
+                                            <pre
+                                                className={styles.multiselect}
+                                                style={{
+                                                    fontWeight: '700',
+                                                    margin: '5px 0px',
+                                                    color: 'rgba(0, 0, 0, 0.6)',
+                                                    textTransform: 'uppercase',
+                                                    fontSize: '10px',
+                                                }}
+                                            >
+                                                {t('Categories')}
 
-                            />
-                        </div>
+                                            </pre>
+                                            <Select
+                                                value={selectedCategories}
+                                                options={categoriesRenderlist}
+                                                onChange={this.handleCategories}
+                                                isMulti
 
-                        <div>
-                            <pre style={{
-                                fontWeight: '700',
-                                margin: '5px 0px',
-                                color: 'rgba(0, 0, 0, 0.6)',
-                                textTransform: 'uppercase',
-                                fontSize: '10px',
-                                marginTop: '18px',
-                            }}
-                            >
-                                Hazards
+                                            />
+                                        </div>
 
-                            </pre>
-                            <Select
-                                value={selectedHazard}
-                                options={hazardRenderlist}
-                                onChange={this.handleHazard}
-                                isMulti
+                                        <div>
+                                            <pre style={{
+                                                fontWeight: '700',
+                                                margin: '5px 0px',
+                                                color: 'rgba(0, 0, 0, 0.6)',
+                                                textTransform: 'uppercase',
+                                                fontSize: '10px',
+                                                marginTop: '18px',
+                                            }}
+                                            >
+                                                {t('Hazard')}
 
-                            />
-                        </div>
-                        <div style={{ margin: '10px 0px' }}>
-                            <RawFileInput
-                                faramElementName="image"
-                                showStatus
-                                accept="image/*"
-                                language={language}
-                            >
-                                Upload Image
-                            </RawFileInput>
-                        </div>
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
+                                            </pre>
+                                            <Select
+                                                value={selectedHazard}
+                                                options={hazardRenderlist}
+                                                onChange={this.handleHazard}
+                                                isMulti
+
+                                            />
+                                        </div>
+                                        <div style={{ margin: '10px 0px' }}>
+                                            <RawFileInput
+                                                faramElementName="image"
+                                                showStatus
+                                                accept="image/*"
+                                                language={language}
+                                            >
+                                                {t('Upload Image')}
+
+                                            </RawFileInput>
+                                        </div>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <DangerButton onClick={closeModal}>
+                                            {t('Close')}
+                                        </DangerButton>
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={pristine}
+                                            pending={pending}
+                                        >
+                                            {t('Save')}
+                                        </PrimaryButton>
+                                    </ModalFooter>
+                                </>
+                            )}
+                    </Translation>
                 </Faram>
             </Modal>
         );

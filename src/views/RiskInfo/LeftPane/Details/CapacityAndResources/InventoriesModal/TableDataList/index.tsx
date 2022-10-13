@@ -15,6 +15,7 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loading from '#components/Loading';
 import styles from './styles.scss';
 import AddInventoryForm from '../AddInventoryForm';
+import inventoryDefaultImage from '#resources/images/inventory.jpg';
 
 const ModalButton = modalize(Button);
 const TableDataList = ({ population, literacy,
@@ -44,34 +45,30 @@ const TableDataList = ({ population, literacy,
                             }}
                         >
                             {selectedCategory === 1 ? (
+
                                 <table className={_cs(styles.contacts,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-
                                         <tr>
                                             <th colSpan="10" scope="colgroup" style={{ textAlign: 'center' }}>{t('Items')}</th>
-
-                                            <th rowSpan="2">Quantity</th>
-                                            <th rowSpan="2">Organization</th>
-                                            <th rowSpan="2">Description</th>
+                                            <th rowSpan="2">{t('Quantity')}</th>
+                                            <th rowSpan="2">{t('Organization')}</th>
+                                            <th rowSpan="2">{t('Description')}</th>
                                         </tr>
 
                                         <tr>
-                                            <th>Image</th>
-                                            <th>Title</th>
-                                            <th>Unit</th>
-                                            <th>Description</th>
-                                            <th>Dimension</th>
-                                            <th>Occupancy</th>
-                                            <th>Code</th>
-                                            <th>Clusters</th>
-                                            <th>Category</th>
-                                            <th>Hazards</th>
-
-
+                                            <th>{t('Image')}</th>
+                                            <th>{t('Title')}</th>
+                                            <th>{t('Unit')}</th>
+                                            <th>{t('Description')}</th>
+                                            <th>{t('Dimension')}</th>
+                                            <th>{t('Occupancy')}</th>
+                                            <th>{t('Code')}</th>
+                                            <th>{t('Clusters')}</th>
+                                            <th>{t('Category')}</th>
+                                            <th>{t('Hazard')}</th>
                                             {/* <th>Remarks</th> */}
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -80,7 +77,8 @@ const TableDataList = ({ population, literacy,
                                                 <td>
                                                     <a href={data.item.image} target="_blank" rel="noopener noreferrer">
                                                         <img
-                                                            src={data.item.image}
+                                                            src={data.item.image
+                                                                || inventoryDefaultImage}
                                                             alt="item-pic"
                                                             style={{
 
@@ -93,7 +91,11 @@ const TableDataList = ({ population, literacy,
                                                     {/* {data.item.image || '-'} */}
                                                 </td>
                                                 <td>{language === 'en' ? data.item.title : data.item.titleNe || '-'}</td>
-                                                <td>{language === 'en' ? data.item.unit || '-' : data.item.unitNp || '-'}</td>
+                                                <td>
+                                                    {idToTitle(unitList,
+                                                        data.item.unitLink, language)}
+
+                                                </td>
                                                 <td>{data.item.shortDescription || '-'}</td>
                                                 <td>{data.item.dimension || '-'}</td>
                                                 <td>{data.item.occupency || '-'}</td>
@@ -129,27 +131,18 @@ const TableDataList = ({ population, literacy,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-
                                         <tr>
-                                            <th>Item</th>
-                                            <th>Rate</th>
-                                            <th>Quantity</th>
-                                            <th>Organization</th>
-                                            <th>Entry Date</th>
-                                            <th>Expire Date</th>
-
-
-                                            <th>Brand Registration Number</th>
-
-
-                                            <th>Reference Number</th>
-                                            <th>Remarks</th>
-
-                                            <th>Attachment</th>
-
+                                            <th>{t('Items')}</th>
+                                            <th>{t('Rate')}</th>
+                                            <th>{t('Quantity')}</th>
+                                            <th>{t('Organization')}</th>
+                                            <th>{t('Entry Date')}</th>
+                                            <th>{t('Expiry Date')}</th>
+                                            <th>{t('Brand Registration Number')}</th>
+                                            <th>{t('Reference Number')}</th>
+                                            <th>{t('remarks')}</th>
+                                            <th>{t('attachment')}</th>
                                             {/* <th>Transfered to resource</th> */}
-
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -166,16 +159,13 @@ const TableDataList = ({ population, literacy,
                                                 </td>
                                                 <td>{item.date}</td>
                                                 <td>{item.expiryDate}</td>
-
-
                                                 <td>{item.brandRegistrationNumber}</td>
                                                 <td>{item.referenceNumber}</td>
                                                 <td>{item.remarks}</td>
                                                 <td>
                                                     <a href={item.file} download>
-                                                        Download
+                                                        {t('Download')}
                                                     </a>
-
                                                 </td>
 
                                                 {/* <td>
@@ -193,28 +183,18 @@ const TableDataList = ({ population, literacy,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-
                                         <tr>
-
-                                            <th>Item</th>
-                                            <th>Rate</th>
-                                            <th>Quantity</th>
-                                            <th>Organization</th>
-                                            <th>Entry Date</th>
-                                            <th>Expire Date</th>
-
-
-                                            <th>Brand Registration Number</th>
-
-
-                                            <th>Reference Number</th>
-                                            <th>Remarks</th>
-
-                                            <th>Attachment</th>
-
+                                            <th>{t('Items')}</th>
+                                            <th>{t('Rate')}</th>
+                                            <th>{t('Quantity')}</th>
+                                            <th>{t('Organization')}</th>
+                                            <th>{t('Entry Date')}</th>
+                                            <th>{t('Expiry Date')}</th>
+                                            <th>{t('Brand Registration Number')}</th>
+                                            <th>{t('Reference Number')}</th>
+                                            <th>{t('remarks')}</th>
+                                            <th>{t('attachment')}</th>
                                             {/* <th>Transfered to resource</th> */}
-
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -239,7 +219,7 @@ const TableDataList = ({ population, literacy,
                                                 <td>{item.remarks}</td>
                                                 <td>
                                                     <a href={item.file} download>
-                                                        Download
+                                                        {t('Download')}
                                                     </a>
 
                                                 </td>
@@ -255,14 +235,10 @@ const TableDataList = ({ population, literacy,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-
                                         <tr>
-
-                                            <th>Title</th>
-                                            <th>Short Name</th>
-                                            <th>description</th>
-
-
+                                            <th>{t('Title')}</th>
+                                            <th>{t('Short Name')}</th>
+                                            <th>{t('Description')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -283,19 +259,17 @@ const TableDataList = ({ population, literacy,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-
                                         <tr>
-
-                                            <th>Image</th>
-                                            <th>Title</th>
-                                            <th>Unit</th>
-                                            <th>Description</th>
-                                            <th>Dimension</th>
-                                            <th>Occupancy</th>
-                                            <th>Code</th>
-                                            <th>Clusters</th>
-                                            <th>Category</th>
-                                            <th>Hazards</th>
+                                            <th>{t('Image')}</th>
+                                            <th>{t('Title')}</th>
+                                            <th>{t('Unit')}</th>
+                                            <th>{t('Description')}</th>
+                                            <th>{t('Dimension')}</th>
+                                            <th>{t('Occupancy')}</th>
+                                            <th>{t('Code')}</th>
+                                            <th>{t('Clusters')}</th>
+                                            <th>{t('Category')}</th>
+                                            <th>{t('Hazard')}</th>
 
                                         </tr>
                                     </thead>
@@ -305,7 +279,8 @@ const TableDataList = ({ population, literacy,
                                                 <td>
                                                     <a href={item.image} target="_blank" rel="noopener noreferrer">
                                                         <img
-                                                            src={item.image}
+                                                            src={item.image
+                                                                || inventoryDefaultImage}
                                                             alt="item-pic"
                                                             style={{
 
@@ -355,10 +330,9 @@ const TableDataList = ({ population, literacy,
                                     language === 'np' && styles.languageFont)}
                                 >
                                     <thead>
-
                                         <tr>
-                                            <th>Title</th>
-                                            <th>Description</th>
+                                            <th>{t('Title')}</th>
+                                            <th>{t('Description')}</th>
 
                                         </tr>
                                     </thead>
@@ -380,8 +354,8 @@ const TableDataList = ({ population, literacy,
                                     <thead>
 
                                         <tr>
-                                            <th>Title</th>
-                                            <th>Description</th>
+                                            <th>{t('Title')}</th>
+                                            <th>{t('Description')}</th>
 
                                         </tr>
                                     </thead>
@@ -407,9 +381,8 @@ const TableDataList = ({ population, literacy,
                                             <th scope="col" key={item.key}>{item.label}</th>
 
                                         ))} */}
-                                            <th>Title</th>
-                                            <th>Description</th>
-
+                                            <th>{t('Title')}</th>
+                                            <th>{t('Description')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

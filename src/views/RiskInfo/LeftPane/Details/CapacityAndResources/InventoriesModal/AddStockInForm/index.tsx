@@ -258,7 +258,7 @@ class AddStockInForm extends React.PureComponent<Props, State> {
     }
 
     private multipleSelectFunctionType = (array, language) => {
-        const data = array.length && array.map(item => ({ value: item.id, label: language === 'en' ? item.title : item.titleNe }));
+        const data = array.length && array.map(item => ({ value: item.id, label: language === 'en' ? item.title : item.titleNe || item.title }));
         return data;
     }
 
@@ -295,7 +295,7 @@ class AddStockInForm extends React.PureComponent<Props, State> {
         } = this.state;
         const keySelector = (d: PageType.Field) => d.id;
         const labelSelector = (d: PageType.Field) => (
-            language === 'en' ? d.title : d.titleNe
+            language === 'en' ? d.title : d.titleNe || d.title
         );
         const categoriesRenderlist = this.multipleSelectFunctionType(categoriesList, language);
         const clusterRenderlist = this.multipleSelectFunctionType(clustersList, language);
@@ -318,95 +318,99 @@ class AddStockInForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader
-                        title={
-                            value ? 'Edit Stock In' : 'Add Stock In'
-                        }
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody>
-                        <NonFieldErrors faramElement />
-                        <SelectInput
-                            faramElementName="item"
-                            options={itemList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Item"
-                        />
-                        <NumberInput
-                            faramElementName="rate"
-                            label="Rate"
-                        />
-                        <NumberInput
-                            faramElementName="quantity"
-                            label="Quantity"
-                        />
-                        <div>
-                            <pre
-                                className={styles.multiselect}
-                                style={{
-                                    fontWeight: '700',
-                                    margin: '5px 0px',
-                                    color: 'rgba(0, 0, 0, 0.6)',
-                                    textTransform: 'uppercase',
-                                    fontSize: '10px',
-                                }}
-                            >
-                                Organization
+                    <Translation>
+                        {
+                            t => (
+                                <>
+                                    <ModalHeader
+                                        title={
+                                            value ? t('Edit Stock In') : t('Add Stock In')
+                                        }
+                                        rightComponent={(
+                                            <DangerButton
+                                                transparent
+                                                iconName="close"
+                                                onClick={closeModal}
+                                                title={t('Close Modal')}
+                                            />
+                                        )}
+                                    />
+                                    <ModalBody>
+                                        <NonFieldErrors faramElement />
+                                        <SelectInput
+                                            faramElementName="item"
+                                            options={itemList}
+                                            keySelector={keySelector}
+                                            labelSelector={labelSelector}
+                                            label={t('Item')}
+                                        />
+                                        <NumberInput
+                                            faramElementName="rate"
+                                            label={t('Rate')}
+                                        />
+                                        <NumberInput
+                                            faramElementName="quantity"
+                                            label={t('Quantity')}
+                                        />
+                                        <div style={{ marginBottom: '15px' }}>
+                                            <pre
+                                                className={styles.multiselect}
+                                                style={{
+                                                    fontWeight: '700',
+                                                    margin: '5px 0px',
+                                                    color: 'rgba(0, 0, 0, 0.6)',
+                                                    textTransform: 'uppercase',
+                                                    fontSize: '10px',
+                                                }}
+                                            >
+                                                {t('Organization')}
 
-                            </pre>
-                            <Select
-                                value={selectedOrganization}
-                                options={organizationRenderList}
-                                onChange={this.handleOrganization}
-                                isMulti
-                            />
-                        </div>
-
-
-                        <DateInput
-                            faramElementName="date"
-                            label="Entry Date"
-                            language={language}
-                            optimizePosition
-                            className={'startDateInput'}
-                        />
-
-                        <DateInput
-                            faramElementName="expiryDate"
-                            label="Expiry Date"
-                            language={language}
-                            optimizePosition
-                            className={'startDateInput'}
-                        />
+                                            </pre>
+                                            <Select
+                                                value={selectedOrganization}
+                                                options={organizationRenderList}
+                                                onChange={this.handleOrganization}
+                                                isMulti
+                                            />
+                                        </div>
 
 
-                        <NumberInput
-                            faramElementName="brandRegistrationNumber"
-                            label="Brand Registration Number"
-                        />
+                                        <DateInput
+                                            faramElementName="date"
+                                            label={t('Entry Date')}
+                                            language={language}
+                                            optimizePosition
+                                            className={'startDateInput'}
+                                        />
+
+                                        <DateInput
+                                            faramElementName="expiryDate"
+                                            label={t('Expiry Date')}
+                                            language={language}
+                                            optimizePosition
+                                            className={'startDateInput'}
+                                        />
 
 
-                        <NumberInput
-                            faramElementName="referenceNumber"
-                            label="Reference Number"
-                        />
+                                        <NumberInput
+                                            faramElementName="brandRegistrationNumber"
+                                            label={t('Brand Registration Number')}
+                                        />
 
 
-                        <TextArea
-                            faramElementName="remarks"
-                            label="Remarks"
-                        />
+                                        <NumberInput
+                                            faramElementName="referenceNumber"
+                                            label={t('Reference Number')}
+                                        />
 
 
-                        {/* <SelectInput
+                                        <TextArea
+                                            faramElementName="remarks"
+                                            label={t('remarks')}
+                                        />
+
+
+                                        {/* <SelectInput
                             faramElementName="transferedToResource"
                             options={resourceList}
                             keySelector={keySelector}
@@ -415,29 +419,32 @@ class AddStockInForm extends React.PureComponent<Props, State> {
                         /> */}
 
 
-                        <div style={{ margin: '10px 0px' }}>
-                            <RawFileInput
-                                faramElementName="file"
-                                showStatus
-                                accept="image/*"
-                                language={language}
-                            >
-                                Upload Image
-                            </RawFileInput>
-                        </div>
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
+                                        <div style={{ margin: '10px 0px' }}>
+                                            <RawFileInput
+                                                faramElementName="file"
+                                                showStatus
+                                                accept="image/*"
+                                                language={language}
+                                            >
+                                                {t('Upload Document')}
+                                            </RawFileInput>
+                                        </div>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <DangerButton onClick={closeModal}>
+                                            {t('Close')}
+                                        </DangerButton>
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={pristine}
+                                            pending={pending}
+                                        >
+                                            {t('Save')}
+                                        </PrimaryButton>
+                                    </ModalFooter>
+                                </>
+                            )}
+                    </Translation>
                 </Faram>
             </Modal>
         );

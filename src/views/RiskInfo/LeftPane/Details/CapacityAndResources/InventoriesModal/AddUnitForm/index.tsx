@@ -8,6 +8,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
@@ -239,36 +240,41 @@ class AddUnitForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader
-                        title={
-                            value ? 'Edit Cluster' : 'Add Cluster'
-                        }
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody>
-                        <NonFieldErrors faramElement />
-                        <TextArea
-                            faramElementName="title"
-                            label="Title"
-                        />
-                        <TextArea
-                            faramElementName="titleNe"
-                            label="Title Nepali"
-                        />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                        />
+
+                    <Translation>
+                        {
+                            t => (
+                                <>
+                                    <ModalHeader
+                                        title={
+                                            value ? t('Edit Unit') : t('Add Unit')
+                                        }
+                                        rightComponent={(
+                                            <DangerButton
+                                                transparent
+                                                iconName="close"
+                                                onClick={closeModal}
+                                                title={t('Close Modal')}
+                                            />
+                                        )}
+                                    />
+                                    <ModalBody>
+                                        <NonFieldErrors faramElement />
+                                        <TextArea
+                                            faramElementName="title"
+                                            label={t('Title')}
+                                        />
+                                        <TextArea
+                                            faramElementName="titleNe"
+                                            label={t('Title Nepali')}
+                                        />
+                                        <TextArea
+                                            faramElementName="description"
+                                            label={t('Description')}
+                                        />
 
 
-                        {/*
+                                        {/*
                         <SelectInput
                             faramElementName="resource"
                             options={resourceList}
@@ -277,19 +283,22 @@ class AddUnitForm extends React.PureComponent<Props, State> {
                             label="Resource"
                         />
                         */}
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <DangerButton onClick={closeModal}>
+                                            {t('Close')}
+                                        </DangerButton>
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={pristine}
+                                            pending={pending}
+                                        >
+                                            {t('Save')}
+                                        </PrimaryButton>
+                                    </ModalFooter>
+                                </>
+                            )}
+                    </Translation>
                 </Faram>
             </Modal>
         );
