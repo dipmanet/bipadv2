@@ -4,7 +4,7 @@ import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { estimatedLossValueFormatter } from '../utils/utils';
+import { returnValueByDropdown } from '../utils/utils';
 
 
 const AreaChartVisual = (props) => {
@@ -25,7 +25,7 @@ const AreaChartVisual = (props) => {
     });
 
 
-    const CustomizedTick = (value: number) => estimatedLossValueFormatter(value);
+    const CustomizedTick = (value: number) => returnValueByDropdown(name, value);
 
     function CustomTooltip({ payload, active, label }) {
         if (payload && active && payload.length) {
@@ -33,7 +33,7 @@ const AreaChartVisual = (props) => {
                 <div className={styles.customTooltip}>
                     <span className={styles.label}>
                         {
-                            `${payload[0].name}:${estimatedLossValueFormatter(payload[0].value)}`
+                            `${payload[0].name}:${returnValueByDropdown(name, payload[0].value)}`
                         }
 
                     </span>
@@ -79,7 +79,7 @@ const AreaChartVisual = (props) => {
                                 margin={{
                                     top: 5,
                                     bottom: 45,
-                                    left: -30,
+                                    left: -20,
                                 }}
                             >
                                 <defs>

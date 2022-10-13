@@ -1,11 +1,10 @@
 import React from 'react';
 import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
-import { estimatedLossValueFormatter } from '../utils/utils';
+import { returnValueByDropdown } from '../utils/utils';
 
 const DataCount = (props) => {
     const { data, value } = props;
-
     const { name, key } = value;
     const nullCondition = false;
     const dataValue = nullCheck(nullCondition, data, key);
@@ -22,7 +21,7 @@ const DataCount = (props) => {
                 data.length > 0
                 && (
                     <span className={styles.alertValue}>
-                        {dataValue && estimatedLossValueFormatter(dataValue)}
+                        {returnValueByDropdown(name, dataValue)}
                     </span>
                 )
             }

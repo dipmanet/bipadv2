@@ -117,3 +117,8 @@ export const colorGrade = [
     '#cb4836',
     '#c22727',
 ];
+
+export const returnValueByDropdown = (name, val) => {
+    if (name === 'Estimated loss (NPR)') return estimatedLossValueFormatter(val);
+    return val;
+};

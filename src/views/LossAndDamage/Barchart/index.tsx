@@ -9,7 +9,7 @@ import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
-import { estimatedLossValueFormatter } from '../utils/utils';
+import { returnValueByDropdown } from '../utils/utils';
 
 interface IndividualChartData {
     name: string;
@@ -110,8 +110,8 @@ const BarChartVisual = (props) => {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <span className={styles.label}>{payload[0].payload.name}</span>
-                    <span className={styles.label}>{`${selectOption.name}:${estimatedLossValueFormatter(payload[0].payload.value)}`}</span>
+                    <span className={styles.label}>{`${payload[0].payload.name} ${regionRadio.name}`}</span>
+                    <span className={styles.label}>{`${selectOption.name}:${returnValueByDropdown(selectOption.name, payload[0].payload.value)}`}</span>
                 </div>
             );
         }
@@ -146,7 +146,7 @@ const BarChartVisual = (props) => {
                         x={x}
                         y={y}
                     >
-                        {estimatedLossValueFormatter(payload.value)}
+                        {returnValueByDropdown(selectOption.name, payload.value)}
 
                     </Text>
                 ));

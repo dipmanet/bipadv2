@@ -3,10 +3,10 @@
 /* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 import React from 'react';
-import { ResponsiveContainer, Treemap } from 'recharts';
+import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { estimatedLossValueFormatter } from '../utils/utils';
+import { estimatedLossValueFormatter, returnValueByDropdown } from '../utils/utils';
 
 const HazardWise = (props) => {
     const { selectOption, data, handleSaveClick, downloadButton } = props;
@@ -92,6 +92,18 @@ const HazardWise = (props) => {
         );
     };
 
+    const TreeMapTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            const { name, value, root } = payload[0].payload;
+            return (
+                <p className={styles.label}>
+                    {`${name}:${value}`}
+                </p>
+            );
+        }
+        return null;
+    };
+
 
     return (
         <div className={styles.wrapper}>
@@ -128,7 +140,9 @@ const HazardWise = (props) => {
                             fill={barColors.map(item => item)[1]}
                             content={<CustomizedContent colors={barColors} />}
                             aspectRatio={4 / 3}
-                        />
+                        >
+                            <Tooltip content={<TreeMapTooltip />} />
+                        </Treemap>
                     </ResponsiveContainer>
                 )}
             </div>
