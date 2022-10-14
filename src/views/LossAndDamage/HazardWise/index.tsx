@@ -2,11 +2,11 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable max-len */
 /* eslint-disable no-plusplus */
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { estimatedLossValueFormatter, returnValueByDropdown } from '../utils/utils';
+import { returnValueByDropdown } from '../utils/utils';
 
 const HazardWise = (props) => {
     const { selectOption, data, handleSaveClick, downloadButton } = props;
@@ -112,9 +112,8 @@ const HazardWise = (props) => {
             const rechartsWrapper = responsiveContainer.getElementsByClassName('recharts-wrapper');
             const svgRecharts = rechartsWrapper[0].children[0];
             const Gtag = svgRecharts.getElementById(name);
-            Gtag.style.fill = fill || '#7393B3';
+            Gtag.style.fill = fill || '#BCBCBC';
         }
-        // treemapRef.current.style.fill = '#FFFFFF';
     }
 
     const onMouseEnter = (prop) => {

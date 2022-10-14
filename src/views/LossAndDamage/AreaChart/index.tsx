@@ -33,7 +33,7 @@ const AreaChartVisual = (props) => {
                 <div className={styles.customTooltip}>
                     <span className={styles.label}>
                         {
-                            `${payload[0].name}:${returnValueByDropdown(name, payload[0].value)}`
+                            `${payload[0].name}:${payload[0].value}`
                         }
 
                     </span>

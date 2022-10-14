@@ -111,7 +111,7 @@ const BarChartVisual = (props) => {
             return (
                 <div className={styles.customTooltip}>
                     <span className={styles.label}>{`${payload[0].payload.name} ${regionRadio.name}`}</span>
-                    <span className={styles.label}>{`${selectOption.name}:${returnValueByDropdown(selectOption.name, payload[0].payload.value)}`}</span>
+                    <span className={styles.label}>{`${selectOption.name}:${payload[0].payload.value}`}</span>
                 </div>
             );
         }

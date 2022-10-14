@@ -42,7 +42,7 @@ export const tooltipRenderer = (props, currentSelection) => {
                 textAlign: 'center',
             }}
             >
-                {`No of ${currentSelection}: ${estimatedLossValueFormatter(feature.state.value)}`}
+                {`No of ${currentSelection}: ${feature.state.value}`}
             </p>
 
         </>
