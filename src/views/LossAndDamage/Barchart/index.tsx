@@ -196,7 +196,7 @@ const BarChartVisual = (props) => {
                                     tickLine={false}
                                     dataKey="name"
                                     scale="auto"
-                                    padding={{ left: 5, right: 0 }}
+                                    padding={{ left: 8, right: 0 }}
                                     interval={0}
                                     tick={<CustomizedLabel />}
                                 />

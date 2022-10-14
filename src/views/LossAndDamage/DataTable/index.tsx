@@ -14,6 +14,7 @@ import { mainHeading, bodyheader } from './headers';
 import { estimatedLossValueFormatter } from '../utils/utils';
 import DownloadButton from '#components/DownloadButton';
 import styles from './styles.scss';
+import { returnDataByFormat } from './util';
 
 const DataTable = ({ closeModal, incidentList }) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
@@ -23,6 +24,7 @@ const DataTable = ({ closeModal, incidentList }) => {
     const tableRef = React.createRef<FixedSizeList<any>>();
     const headerRef = React.createRef<HTMLInputElement>();
     const totalRef = React.createRef<HTMLInputElement>();
+    const [calculation, setCalculation] = useState([]);
 
     useEffect(() => {
         if (headerRef.current) {
@@ -76,56 +78,45 @@ const DataTable = ({ closeModal, incidentList }) => {
         return Data;
     };
 
-    useEffect(() => {
-        const requiredDataEval = () => {
-            const array = [];
-            const currentVal = bodyheader[focus.name];
-            const returnDataByFormat = (key, value) => {
-                if (key === 'incidentOn') {
-                    const d = new Date(value).toISOString().split('T')[0];
-                    return d;
-                }
-
-                if (key === 'description') {
-                    if (value === undefined) return '-';
-                    return value;
-                }
-
-                if (key === 'verified') {
-                    if (value === true) return 'Yes';
-                    return 'No';
-                }
-
-                if (value === undefined) {
-                    return 0;
-                }
-
-                return value;
-            };
-            if (incidentList.length > 0) {
+    const requiredDataEval = () => {
+        const array = [];
+        const currentVal = bodyheader[focus.name];
+        if (incidentList.length > 0) {
+            // eslint-disable-next-line no-plusplus
+            for (const element of incidentList) {
                 // eslint-disable-next-line no-plusplus
-                for (const element of incidentList) {
-                    // eslint-disable-next-line no-plusplus
-                    const obj = {};
-                    for (const elemCur of currentVal) {
-                        // const elemCur = currentVal[j];
-                        if (elemCur.key.split('').includes('.')) {
-                            const requiredKey = elemCur.key.replace('.', ' ').split(' ')[0];
-                            const requiredKey1 = elemCur.key.replace('.', ' ').split(' ')[1];
-                            obj[elemCur.name] = returnDataByFormat(elemCur.key, element[requiredKey][requiredKey1]);
-                        } else {
-                            obj[elemCur.name] = returnDataByFormat(elemCur.key, element[elemCur.key]);
-                        }
+                const obj = {};
+                for (const elemCur of currentVal) {
+                    // const elemCur = currentVal[j];
+                    if (elemCur.key.split('').includes('.')) {
+                        const requiredKey = elemCur.key.replace('.', ' ').split(' ')[0];
+                        const requiredKey1 = elemCur.key.replace('.', ' ').split(' ')[1];
+                        obj[elemCur.name] = returnDataByFormat(elemCur.key, element[requiredKey][requiredKey1]);
+                    } else {
+                        obj[elemCur.name] = returnDataByFormat(elemCur.key, element[elemCur.key]);
                     }
-                    array.push(obj);
                 }
+                array.push(obj);
             }
-            return summaryCalculate(array);
-        };
+        }
+        const summary = summaryCalculate(array);
+        return summary;
+    };
+
+    const headerCickHandler = (item: Record<string, any>) => {
+        setData([]);
+        setFocus({ id: item.id, name: item.name });
+    };
+
+    useEffect(() => {
         const incidentData = requiredDataEval();
-        setData(incidentData);
+        setCalculation(incidentData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [focus]);
+
+    useEffect(() => {
+        if (calculation) setData(calculation);
+    }, [calculation]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
@@ -199,7 +190,7 @@ const DataTable = ({ closeModal, incidentList }) => {
                             ? _cs(styles.headerItem, styles.headerItemActive)
                             : styles.headerItem}
                         key={item.id}
-                        onClick={() => setFocus({ id: item.id, name: item.name })}
+                        onClick={() => headerCickHandler(item)}
                     >
                         {item.name}
                     </p>
@@ -339,22 +330,30 @@ const DataTable = ({ closeModal, incidentList }) => {
                     )}
                     className={styles.modalHeader}
                 />
-                <ModalBody className={styles.body}>
-                    <BodyHeader />
-                    <List
-                        width={'100%'}
-                        height={700}
-                        itemCount={data.length}
-                        itemSize={45}
-                        rowHeight={'5px'}
-                        sortData={isSortClicked}
-                        ref={tableRef}
-                        className={styles.reactWindow}
-                    >
-                        {Row}
-                    </List>
-                    <TotalData />
-                </ModalBody>
+                {
+                    (data.length > 0)
+                        ? (
+                            <ModalBody className={styles.body}>
+                                <BodyHeader />
+                                <List
+                                    width={'100%'}
+                                    height={700}
+                                    itemCount={data.length}
+                                    itemSize={45}
+                                    rowHeight={'5px'}
+                                    sortData={isSortClicked}
+                                    ref={tableRef}
+                                    className={styles.reactWindow}
+                                >
+                                    {Row}
+                                </List>
+                                <TotalData />
+                            </ModalBody>
+                        )
+                        : (
+                            <span className={styles.loader} />
+                        )
+                }
             </Modal>
 
         </>
