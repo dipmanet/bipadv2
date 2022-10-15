@@ -173,11 +173,11 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
     private static schema = {
         fields: {
             title: [requiredCondition],
-            shortName: [requiredCondition],
+            shortName: [],
             longName: [],
             description: [],
-            incidentVerificationDuration: [],
-            location: [requiredCondition],
+            incidentVerificationDuration: [requiredCondition],
+            location: [],
             wards: [],
         },
     };

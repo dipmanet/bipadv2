@@ -173,18 +173,18 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
 
     private static schema = {
         fields: {
-            title: [requiredCondition],
             date: [requiredCondition],
             brandRegistrationNumber: [],
             rate: [],
-            quantity: [],
+            quantity: [requiredCondition],
             referenceNumber: [],
             remarks: [],
             expiryDate: [],
             file: [],
-            item: [],
+            item: [requiredCondition],
             transferedToResource: [],
             organization: [],
+            resource: [requiredCondition],
         },
     };
 

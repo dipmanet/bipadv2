@@ -242,7 +242,7 @@ export const enTranslation = {
         Quantity: 'Quantity',
         Operator: 'Operator',
         Unit: 'Unit',
-
+        'Search Resources': 'Search Resources',
         'Health Post': 'Health Post',
         'Primary Health Care Center': 'Primary Health Care Center',
         'Development Bank': 'Development Bank',
@@ -992,6 +992,7 @@ export const npTranslation = {
         'ABOVE DANGER LEVEL': 'खतरा तह भन्दा माथि',
         nepal_police: 'नेपाल_प्रहरी',
         'Nepal Police': 'नेपाल प्रहरी',
+        'Search Resources': 'स्रोतहरू खोज्नुहोस्',
         'Name and contact number of technical staff': 'प्राविधिक कर्मचारीहरूको नाम र सम्पर्क नम्बर',
         Scale: 'मापन',
         'Total capacity of the open space.': 'खुल्ला ठाउँ (OpenSpace) को कुल क्षमता',

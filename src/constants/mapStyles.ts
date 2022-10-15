@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 const incidentCircleRadii = [
     'case',
     ['==', ['get', 'severity'], 'Minor'], 8,

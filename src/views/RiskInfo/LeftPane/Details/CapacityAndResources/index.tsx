@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 /* eslint-disable space-infix-ops */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-self-assign */
@@ -113,6 +114,7 @@ import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
 import visualization from '#resources/icons/visualization.svg';
 import helipad from '#resources/icons/heli.svg';
+import search from '#resources/icons/search-contact.svg';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
@@ -131,6 +133,8 @@ import '#resources/openspace-resources/humanitarian-fonts.css';
 import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 
 import DataVisualisation from './DataVisualisation';
+import SearchModal from './SearchModal';
+import Tooltip from './Tooltip';
 
 const TableModalButton = modalize(Button);
 
@@ -816,6 +820,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             palikaRedirectState: false,
             isLoggedInUser: false,
             wardsRef: {},
+            showSearchModal: false,
+            filteredSearchResource: [],
+            showTooltip: false,
+            selectedCategoryId: null,
+
         };
 
         const { faramValues: { region } } = filters;
@@ -1623,6 +1632,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         // setPalikaRedirect({ showForm: false });
     }
 
+    private handleSearchModalClose = () => {
+        this.setState({
+            showSearchModal: false,
+        });
+    }
+
     private handleIconClick = (key: string) => {
         this.setState({
             activeModal: key,
@@ -2356,6 +2371,37 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
+    private verifyCheckboxChecked = (category) => {
+        const { mainCategoryCheckboxChecked } = this.state;
+        const value = !!mainCategoryCheckboxChecked.find(i => i === category);
+        return value;
+    }
+
+    private handleSearchResource = (resourceType, id, name) => {
+        const { showSearchModal, PreserveresourceCollection, showTooltip, selectedCategoryId } = this.state;
+        const data = PreserveresourceCollection[resourceType].filter(i => i.resourceType === resourceType);
+        const isCheckboxChecked = this.verifyCheckboxChecked(name);
+        if (data.length) {
+            this.setState({
+                showSearchModal: !showSearchModal,
+                filteredSearchResource: data,
+
+            });
+        } else if (!isCheckboxChecked) {
+            this.setState({
+                showTooltip: true,
+                selectedCategoryId: id,
+            });
+        }
+    }
+
+
+    private searchedResourceCoordinateData = (data) => {
+        const { map } = this.context;
+        map.flyTo({ center: data, zoom: 15 });
+    }
+
+
     public render() {
         const {
             className,
@@ -2408,7 +2454,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             lvl2catName,
             disableCheckbox,
             ErrorData,
-
+            showSearchModal,
+            selectedResource,
+            filteredSearchResource,
+            showTooltip,
+            selectedCategoryId,
         } = this.state;
 
         const { addResource, isFilterClicked } = this.context;
@@ -2469,7 +2519,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-
+        console.log('This is resource list final', filteredSearchResource);
+        console.log('This is showTooltip', showTooltip);
+        console.log('This is resource collection', resourceCollection);
+        console.log('This is mainCategoryCheckboxChecked', mainCategoryCheckboxChecked);
         return (
             <>
                 <Loading pending={pending} />
@@ -2520,14 +2573,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     {filterPermissionGranted
                                                         ? (
                                                             <Cloak hiddenIf={p => !p.add_resource}>
-                                                                {/* <DangerButton
 
-                                                            onClick={this.handleResourceAdd}
-                                                            className={styles.clearButton}
-                                                            transparent
-                                                        >
-                                             + Add Resource
-                                                        </DangerButton> */}
 
                                                                 <AccentModalButton
                                                                     iconName="add"
@@ -2535,12 +2581,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                     transparent
                                                                     onClick={this.resourceAdd}
 
-                                                                // modal={(
-                                                                //     <AddResourceForm
-                                                                //         onAddSuccess={this.handleResourceAdd}
-                                                                //         onEditSuccess={this.handleResourceEdit}
-                                                                //     />
-                                                                // )}
+
                                                                 >
                                                                     {t('Add Resource')}
                                                                 </AccentModalButton>
@@ -2557,33 +2598,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     >
                                                         {t('Clear')}
                                                     </DangerButton>
-                                                    {/*
-                                                <SummaryButton
-                                                    transparent
-                                                    className={styles.summaryButton}
-                                                    disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
-                                                    modal={(
-                                                        <Summary
-                                                            data={polygonResources}
-                                                            resourceType={activeLayerKey}
-                                                        />
-                                                    )}
-                                                >
-                                                    Show summary
-                                                </SummaryButton>
-                                                         */}
-                                                    {/* <TableModalButton
-                                                modal={(
-                                                    <CapacityResourceTable
-                                                        data={resourceList}
-                                                        name={activeLayerKey}
-                                                    />
-                                                )}
-                                                initialShowModal={false}
-                                                iconName="table"
-                                                transparent
-                                                disabled={pending || !activeLayerKey}
-                                            /> */}
+
                                                 </div>
                                             </header>
                                         )
@@ -2640,21 +2655,60 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     item.resourceType === 'warehouse' ? ''
 
                                                         : (
-                                                            <div style={{ display: 'flex', alignItems: 'center', marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px' }}>
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px',
+                                                            }}
+                                                            >
                                                                 {item.level === 1 ? (
-                                                                    <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, item.name, item.resourceType, item.level, item.name, item.typeName)}>
-                                                                        {/* <Icon
-                                                                name="table"
-                                                                className={styles.inputIcon}
-                                                            /> */}
-                                                                        <ScalableVectorGraphics
-                                                                            className={styles.visualizationIcon}
+                                                                    <>
+                                                                        <div style={{ position: 'relative' }}>
+                                                                            <button
+                                                                                type="button"
+                                                                                style={{
+                                                                                    cursor: 'pointer',
+                                                                                    backgroundColor: resourceCategory.find(res => res === item.name)
+                                                                                        ? '#ddf2fd' : 'white',
+                                                                                    border: 'none',
+                                                                                }}
+                                                                                onClick={() => this.handleSearchResource(item.resourceType, item.id, item.name)}
+                                                                                title={language === 'en'
+                                                                                    ? `Search ${item.name}'s Resource`
+                                                                                    : `${item.nameNe}को स्रोत खोज्नुहोस्`}
+                                                                            >
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.icon}
+                                                                                    src={search}
+                                                                                />
+                                                                            </button>
+                                                                            {selectedCategoryId === item.id
+                                                                                && !this.verifyCheckboxChecked(item.name) ? (
+                                                                                <Tooltip
+                                                                                    show={showTooltip}
+                                                                                    onClickOutside={() => this.setState({ showTooltip: false })}
+                                                                                    message="Please Select resource list to search"
+                                                                                />
+                                                                            ) : ''
+                                                                            }
+
+                                                                        </div>
+                                                                        <button
+                                                                            type="button"
+                                                                            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                                                                            onClick={() => this.handleVisualization(true, item.name, item.resourceType,
+                                                                                item.level, item.name, item.typeName)}
+                                                                        >
+
+                                                                            <ScalableVectorGraphics
+                                                                                className={styles.visualizationIcon}
 
 
-                                                                            src={visualization}
-                                                                        />
+                                                                                src={visualization}
+                                                                            />
 
-                                                                    </button>
+                                                                        </button>
+                                                                    </>
                                                                 ) : ''}
                                                                 {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
                                                                     ? (
@@ -2701,32 +2755,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                 />
 
                                                             </button>
-                                                            {/* <Checkbox
-                                                                label="Value"
-                                                                value={checked}
-                                                                onChange={() => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2)}
-                                                                checkedCategory={!!mainCategoryCheckboxChecked.find(datas => datas === item.name)}
-                                                                showIndeterminateButton={showIndeterminateButton}
-                                                                index={this.getIndexArr(indeterminantConditionArray)}
-                                                                checkedMainCategoryIndex={this.getCheckedIndexArr()}
-                                                                ownIndex={idx}
-                                                            /> */}
-
-                                                            {/* {resourceCategory.find(itm => itm === data.name)
-                                                                ? data.subCategory && data.subCategory.map(finalitem => (
-                                                                    <ul key={finalitem.id}>
-                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === finalitem.id)} onChange={() => this.handleSubCategoryCheckbox(finalitem.id, item.name, item.resourceType)} />
-                                                                            <label htmlFor="name" style={{ cursor: 'pointer' }} onClick={() => this.handleSubCategoryCheckbox(finalitem.id, item.name, item.resourceType)}>
-                                                                                {' '}
-                                                                                <h3>{finalitem.name}</h3>
-                                                                            </label>
-
-                                                                        </div>
-                                                                    </ul>
-                                                                )) : ''
-                                                            } */}
-
                                                         </ul>
                                                     )))
                                                 : (
@@ -2756,28 +2784,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     }
 
 
-                    {/* <SwitchView
-                        activeLayersIndication={activeLayersIndication}
-                        handleToggleClick={this.handleToggleClick}
-                        handleIconClick={this.handleIconClick}
-                        disabled={pending}
-                    />
-                    /> */}
-
-                    {/* for previous radio buttons structure starts */}
-                    {/* <ListView
-                        className={styles.content}
-                        data={resourceTypeList}
-                        keySelector={d => d.title}
-                        renderer={Option}
-                        rendererParams={this.getLayerRendererParams}
-                    /> */}
-                    {/* for previous radio buttons structure ends */}
-                    {/* resourceListInsidePolygon.length !== 0 && (
-                        <div className={styles.polygonSelectedLayerInfo}>
-                            { resourceListInsidePolygon.length }
-                        </div>
-                    ) */}
                     <MapImage
                         url={HealthIcon}
                         name="health"
@@ -2792,19 +2798,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                     {Object.values(activeLayersIndication).some(Boolean) && (
                         <>
-                            {/* <MapShapeEditor
-                                geoJsons={selectedFeatures}
-                                onCreate={this.handlePolygonCreate}
-                                onUpdate={this.handlePolygonUpdate}
-                                onDelete={this.handlePolygonDelete}
-                                drawOptions={{
-                                    displayControlsDefault: false,
-                                    controls: {
-                                        polygon: true,
-                                        trash: true,
-                                    },
-                                }}
-                            /> */}
+
 
                             {/* Education */}
                             {activeLayersIndication.education && (
@@ -4528,44 +4522,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         </>
                     )}
                 </div>
-
-                {/* {
-                    (palikaRedirectState && palikaRedirect.showModal === 'addResource')
-                    && (
-                        <AddResourceForm
-                            resourceId={isDefined(palikaRedirect.organisationItem)
-                                ? palikaRedirect.organisationItem.id : null
-                            }
-                            resourceDetails={isDefined(palikaRedirect.organisationItem)
-                                ? palikaRedirect.organisationItem : null}
-                            onEditSuccess={this.handleResourceEdit}
-                            closeModal={this.handleEditResourceFormCloseButtonClick}
-                        />
-                    )
-
-                } */}
-
-                { }
-                {/* {
-                    palikaRedirect.showForm && palikaRedirect.showModal === 'inventory'
-                    // && isDefined(inventoryItem)
-                    // && isDefined(inventoryItem.id)
-                    && (
-                        <InventoriesModal
-                            resourceId={palikaRedirect.inventoryItem.resource || ''}
-                            closeModal={this.handleInventoryModalClose}
-                        />
-                    )
-                } */}
-
-                {/* {showResourceForm && resourceDetails && (
-                    <AddResourceForm
-                        resourceId={resourceDetails.id}
-                        resourceDetails={resourceDetails}
-                        onEditSuccess={this.handleResourceEdit}
-                        closeModal={this.handleEditResourceFormCloseButtonClick}
-                    />
-                )} */}
                 {
                     showInventoryModal
                     && isDefined(resourceDetails)
@@ -4579,7 +4535,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         />
                     )
                 }
+                {
+                    showSearchModal
+                    && !showTooltip && (
+                        <SearchModal
+                            closeModal={this.handleSearchModalClose}
+                            resourceList={filteredSearchResource}
+                            language={language}
+                            searchedResourceCoordinateData={this.searchedResourceCoordinateData}
+                        />
+                    )
 
+
+                }
                 {
                     activeModal === 'showOpenSpaceInfoModal' ? (
                         <OpenspaceMetaDataModal closeModal={this.handleIconClick} />
@@ -4627,6 +4595,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 }
 CapacityAndResources.contextType = RiskInfoLayerContext;
+CapacityAndResources.contextType = MapChildContext;
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requestOptions),

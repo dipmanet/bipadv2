@@ -53,7 +53,7 @@ const TableDataList = ({ population, literacy,
                                         <tr>
                                             <th colSpan="10" scope="colgroup" style={{ textAlign: 'center' }}>{t('Items')}</th>
                                             <th rowSpan="2">{t('Quantity')}</th>
-                                            <th rowSpan="2">{t('Organization')}</th>
+                                            {/* <th rowSpan="2">{t('Organization')}</th> */}
                                             <th rowSpan="2">{t('Description')}</th>
                                         </tr>
 
@@ -118,7 +118,7 @@ const TableDataList = ({ population, literacy,
 
                                                 </td>
                                                 <td>{data.quantity || '-'}</td>
-                                                <td>{data.organization.length ? data.organization : '-'}</td>
+
                                                 <td>{data.description || '-'}</td>
                                             </tr>
                                         ))}
