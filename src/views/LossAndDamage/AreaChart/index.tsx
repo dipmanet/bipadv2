@@ -13,37 +13,7 @@ import {
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
-
-interface Data {
-    incidentMonthTimestamp: string;
-    summary: {
-        count: number;
-        estimatedLoss: number;
-        infrastructureDestroyedCount: number;
-        livestockDestroyedCount: number;
-        peopleDeathCount: number;
-        peopleInjuredCount: number;
-        peopleMissingCount: number;
-    };
-}
-interface BarchartProps {
-    data: Data[];
-    selectOption: {
-        name: string;
-        key: string;
-    };
-    handleSaveClick: (id: string, fileName: string) => void;
-    downloadButton?: boolean;
-}
-
-interface TooltipInterface {
-    active: boolean;
-    payload: {
-        value: number;
-        name: string;
-    }[];
-}
-
+import { BarchartProps, TooltipInterface } from './types';
 
 const AreaChartVisual = (props: BarchartProps) => {
     const { selectOption: { name, key },
