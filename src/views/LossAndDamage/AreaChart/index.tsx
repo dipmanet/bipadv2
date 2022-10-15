@@ -1,18 +1,59 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-undef */
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+    AreaChart,
+    Area,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+} from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
 
+interface Data {
+    incidentMonthTimestamp: string;
+    summary: {
+        count: number;
+        estimatedLoss: number;
+        infrastructureDestroyedCount: number;
+        livestockDestroyedCount: number;
+        peopleDeathCount: number;
+        peopleInjuredCount: number;
+        peopleMissingCount: number;
+    };
+}
+interface BarchartProps {
+    data: Data[];
+    selectOption: {
+        name: string;
+        key: string;
+    };
+    handleSaveClick: (id: string, fileName: string) => void;
+    downloadButton?: boolean;
+}
 
-const AreaChartVisual = (props) => {
-    const { selectOption: { name, key }, data, handleSaveClick, downloadButton } = props;
+interface TooltipInterface {
+    active: boolean;
+    payload: {
+        value: number;
+        name: string;
+    }[];
+}
 
-    const chartData = data.map((item, index) => {
+
+const AreaChartVisual = (props: BarchartProps) => {
+    const { selectOption: { name, key },
+        data,
+        handleSaveClick,
+        downloadButton } = props;
+
+    const chartData = data.map((item) => {
         const date = new Date();
-        date.setTime(item.incidentMonthTimestamp);
+        date.setTime(parseInt(item.incidentMonthTimestamp, 10));
         const year = date.getFullYear();
         const month = date.getMonth();
         const finalDate = `${year}-${month}`;
@@ -20,14 +61,12 @@ const AreaChartVisual = (props) => {
             date: finalDate,
             [name]: item.summary[key],
         };
-
         return obj;
     });
 
-
     const CustomizedTick = (value: number) => returnValueByDropdown(name, value);
 
-    function CustomTooltip({ payload, active, label }) {
+    function CustomTooltip({ payload, active }: TooltipInterface) {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
