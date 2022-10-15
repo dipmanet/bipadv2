@@ -10,21 +10,17 @@ import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
 import { returnValueByDropdown } from '../utils/utils';
+import { BarchartProps, ChartData, TooltipInterface, RadioValue } from './types';
 
-interface IndividualChartData {
-    name: string;
-    value: string;
-}
-type ChartData = IndividualChartData[]
-
-const BarChartVisual = (props) => {
+const BarChartVisual = (props: BarchartProps) => {
     const [chartData, setChartData] = useState<ChartData>([]);
     const { selectOption,
         regionRadio,
         data,
         valueOnclick,
         className,
-        handleSaveClick, downloadButton } = props;
+        handleSaveClick,
+        downloadButton } = props;
 
     const provinceIndex = data.map(i => ({
         name: i.provinceTitle,
@@ -44,7 +40,7 @@ const BarChartVisual = (props) => {
     })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
         .sort((a, b) => a.id - b.id);
 
-    const distributionCalculate = (typeKey, type) => {
+    const distributionCalculate = (typeKey: { name: string; id: number }[], type: string) => {
         const key = lossMetrics.map(item => item.key);
         const filteredData = [];
         // eslint-disable-next-line no-plusplus
@@ -64,7 +60,7 @@ const BarChartVisual = (props) => {
             regiondata.push({ [typeKey[i].name]: regionWiseData });
         }
 
-        const finalRegionData = regiondata.map((item, index) => {
+        const finalRegionData = regiondata.map((item) => {
             const obj = {
                 name: Object.keys(item)[0],
                 value: item[Object.keys(item)[0]][valueOnclick.index][valueOnclick.value],
@@ -98,7 +94,7 @@ const BarChartVisual = (props) => {
         }
     }, [regionRadio, valueOnclick, data]);
 
-    function nameReturn(region: object) {
+    function nameReturn(region: RadioValue) {
         if (region.name === 'district' || region.name === 'municipality') return `${regionRadio.name}wise distribution (Top 10)`;
         if (region.name === 'province') return `${regionRadio.name}wise distribution`;
         if (region.adminLevel === 1) return 'ProvinceWise distribution';
@@ -106,7 +102,7 @@ const BarChartVisual = (props) => {
         return 'MunicipalityWise distribution';
     }
 
-    function CustomTooltip({ payload, active, label }) {
+    function CustomTooltip({ payload, active }: TooltipInterface) {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
