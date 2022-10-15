@@ -1,7 +1,11 @@
 import React from 'react';
 import styles from './styles.scss';
 
-const DamageLossTooltip = (props) => {
+interface TooltipProps {
+    currentSelection: string;
+}
+
+const DamageLossTooltip = (props: TooltipProps) => {
     const { currentSelection } = props;
     return (
         <p className={styles.textData}>
