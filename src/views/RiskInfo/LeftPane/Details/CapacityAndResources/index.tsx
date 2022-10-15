@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable space-infix-ops */
 /* eslint-disable no-param-reassign */
@@ -135,6 +137,7 @@ import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 import DataVisualisation from './DataVisualisation';
 import SearchModal from './SearchModal';
 import Tooltip from './Tooltip';
+import { t } from 'i18next';
 
 const TableModalButton = modalize(Button);
 
@@ -2381,14 +2384,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { showSearchModal, PreserveresourceCollection, showTooltip, selectedCategoryId } = this.state;
         const data = PreserveresourceCollection[resourceType].filter(i => i.resourceType === resourceType);
         const isCheckboxChecked = this.verifyCheckboxChecked(name);
-        if (data.length) {
+        if (data.length && isCheckboxChecked) {
             this.setState({
                 showSearchModal: !showSearchModal,
                 filteredSearchResource: data,
 
             });
-        } else if (!isCheckboxChecked) {
+        } else {
             this.setState({
+                showSearchModal: false,
                 showTooltip: true,
                 selectedCategoryId: id,
             });
@@ -2519,10 +2523,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-        console.log('This is resource list final', filteredSearchResource);
-        console.log('This is showTooltip', showTooltip);
-        console.log('This is resource collection', resourceCollection);
-        console.log('This is mainCategoryCheckboxChecked', mainCategoryCheckboxChecked);
         return (
             <>
                 <Loading pending={pending} />
@@ -2606,177 +2606,183 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                 </Translation>
 
                                 {capacityResource.map((item, idx) => (
-                                    <div key={item.name}>
-                                        <div
-                                            className={resourceCategory.find(res => res === item.name)
-                                                ? styles.categorySelected : styles.categories}
-                                        >
-                                            <div style={{ marginTop: '5px' }}>
-                                                <Checkbox
-                                                    label="Value"
-                                                    value={checked}
-                                                    onChange={() => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
-                                                    checkedCategory={!!mainCategoryCheckboxChecked.find(data => data === item.name)}
-                                                    showIndeterminateButton={showIndeterminateButton}
-                                                    index={this.getIndexArr(indeterminantConditionArray)}
-                                                    checkedMainCategoryIndex={this.getCheckedIndexArr()}
-                                                    ownIndex={idx}
-                                                    disableCheckbox={disableCheckbox}
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <div key={item.name}>
+                                                    <div
+                                                        className={resourceCategory.find(res => res === item.name)
+                                                            ? styles.categorySelected : styles.categories}
+                                                    >
+                                                        <div style={{ marginTop: '5px' }}>
+                                                            <Checkbox
+                                                                label="Value"
+                                                                value={checked}
+                                                                onChange={() => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
+                                                                checkedCategory={!!mainCategoryCheckboxChecked.find(data => data === item.name)}
+                                                                showIndeterminateButton={showIndeterminateButton}
+                                                                index={this.getIndexArr(indeterminantConditionArray)}
+                                                                checkedMainCategoryIndex={this.getCheckedIndexArr()}
+                                                                ownIndex={idx}
+                                                                disableCheckbox={disableCheckbox}
 
-                                                />
+                                                            />
 
-                                                {/* <input type="checkbox" checked={!!mainCategoryCheckboxChecked.find(data => data === item.name)} onClick={() => this.handleMainCategoryCheckBox(item.name)} /> */}
-                                            </div>
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                // eslint-disable-next-line max-len
-                                                onClick={(item.Category || item.subCategory.length) ? () => this.handleSubCategory(item.name, showSubCategory) : () => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
-                                                onKeyDown={undefined}
-                                                className={styles.individualCategories}
-                                            >
+                                                            {/* <input type="checkbox" checked={!!mainCategoryCheckboxChecked.find(data => data === item.name)} onClick={() => this.handleMainCategoryCheckBox(item.name)} /> */}
+                                                        </div>
+                                                        <div
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            // eslint-disable-next-line max-len
+                                                            onClick={(item.Category || item.subCategory.length) ? () => this.handleSubCategory(item.name, showSubCategory) : () => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
+                                                            onKeyDown={undefined}
+                                                            className={styles.individualCategories}
+                                                        >
 
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-
-
-                                                    <ScalableVectorGraphics
-                                                        className={styles.inputIcon}
-                                                        // className={(test.length && test.find(d => d === item.name)) ? styles.selectedInputIcon : styles.unselectedInputIcon}
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
 
 
-                                                        src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
-                                                    />
-                                                    <h3 style={{ fontSize: '16px' }}>
-                                                        {language === 'en' ? item.name : item.nameNe}
-                                                    </h3>
-                                                </div>
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.inputIcon}
+                                                                    // className={(test.length && test.find(d => d === item.name)) ? styles.selectedInputIcon : styles.unselectedInputIcon}
 
-                                                {
-                                                    item.resourceType === 'warehouse' ? ''
 
-                                                        : (
-                                                            <div style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px',
-                                                            }}
-                                                            >
-                                                                {item.level === 1 ? (
-                                                                    <>
-                                                                        <div style={{ position: 'relative' }}>
-                                                                            <button
-                                                                                type="button"
-                                                                                style={{
-                                                                                    cursor: 'pointer',
-                                                                                    backgroundColor: resourceCategory.find(res => res === item.name)
-                                                                                        ? '#ddf2fd' : 'white',
-                                                                                    border: 'none',
-                                                                                }}
-                                                                                onClick={() => this.handleSearchResource(item.resourceType, item.id, item.name)}
-                                                                                title={language === 'en'
-                                                                                    ? `Search ${item.name}'s Resource`
-                                                                                    : `${item.nameNe}को स्रोत खोज्नुहोस्`}
-                                                                            >
-                                                                                <ScalableVectorGraphics
-                                                                                    className={styles.icon}
-                                                                                    src={search}
-                                                                                />
-                                                                            </button>
-                                                                            {selectedCategoryId === item.id
-                                                                                && !this.verifyCheckboxChecked(item.name) ? (
-                                                                                <Tooltip
-                                                                                    show={showTooltip}
-                                                                                    onClickOutside={() => this.setState({ showTooltip: false })}
-                                                                                    message="Please Select resource list to search"
-                                                                                />
-                                                                            ) : ''
-                                                                            }
+                                                                    src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
+                                                                />
+                                                                <h3 style={{ fontSize: '16px' }}>
+                                                                    {language === 'en' ? item.name : item.nameNe}
+                                                                </h3>
+                                                            </div>
+
+                                                            {
+                                                                item.resourceType === 'warehouse' ? ''
+
+                                                                    : (
+                                                                        <div style={{
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px',
+                                                                        }}
+                                                                        >
+                                                                            {item.level === 1 ? (
+                                                                                <>
+                                                                                    <div style={{ position: 'relative' }}>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            style={{
+                                                                                                cursor: 'pointer',
+                                                                                                backgroundColor: resourceCategory.find(res => res === item.name)
+                                                                                                    ? '#ddf2fd' : 'white',
+                                                                                                border: 'none',
+                                                                                            }}
+                                                                                            onClick={() => this.handleSearchResource(item.resourceType, item.id, item.name)}
+                                                                                            title={language === 'en'
+                                                                                                ? `Search ${item.name}'s Resource`
+                                                                                                : `${item.nameNe}को स्रोत खोज्नुहोस्`}
+                                                                                        >
+                                                                                            <ScalableVectorGraphics
+                                                                                                className={styles.icon}
+                                                                                                src={search}
+                                                                                            />
+                                                                                        </button>
+                                                                                        {selectedCategoryId === item.id
+                                                                                            ? (
+                                                                                                <Tooltip
+                                                                                                    show={showTooltip}
+                                                                                                    onClickOutside={() => this.setState({ showTooltip: false })}
+                                                                                                    message={t('Please select resource list to search')}
+                                                                                                />
+                                                                                            ) : ''
+                                                                                        }
+
+                                                                                    </div>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                                                                                        onClick={() => this.handleVisualization(true, item.name, item.resourceType,
+                                                                                            item.level, item.name, item.typeName)}
+                                                                                    >
+
+                                                                                        <ScalableVectorGraphics
+                                                                                            className={styles.visualizationIcon}
+
+
+                                                                                            src={visualization}
+                                                                                        />
+
+                                                                                    </button>
+                                                                                </>
+                                                                            ) : ''}
+                                                                            {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
+                                                                                ? (
+                                                                                    <Icon
+                                                                                        name="dropdown"
+                                                                                        className={styles.inputIconDropdown}
+                                                                                    />
+                                                                                ) : (
+                                                                                    <Icon
+                                                                                        name="dropRight"
+                                                                                        className={styles.inputIconDropdown}
+                                                                                    />
+                                                                                ) : ''}
+                                                                        </div>
+                                                                    )}
+                                                        </div>
+
+                                                    </div>
+                                                    {resourceCategory.find(elem => elem === item.name)
+                                                        ? item.level === 2
+                                                            ? (
+                                                                item.Category.map(data => (
+                                                                    <ul key={data.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                        <div
+                                                                            style={{ display: 'flex', alignItems: 'center' }}
+                                                                            role="button"
+                                                                            tabIndex={0}
+                                                                            // eslint-disable-next-line max-len
+                                                                            onClick={() => this.handleSubCategory(data.name, showSubCategory)}
+                                                                            onKeyDown={undefined}
+
+                                                                        >
+                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
+                                                                            <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
+                                                                                {' '}
+                                                                                <h4>{data.name}</h4>
+                                                                            </label>
 
                                                                         </div>
-                                                                        <button
-                                                                            type="button"
-                                                                            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
-                                                                            onClick={() => this.handleVisualization(true, item.name, item.resourceType,
-                                                                                item.level, item.name, item.typeName)}
-                                                                        >
-
-                                                                            <ScalableVectorGraphics
-                                                                                className={styles.visualizationIcon}
-
-
-                                                                                src={visualization}
+                                                                        <button type="button" style={{ border: 'none', marginRight: '35px', fontSize: '16px', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, data.name, data.resourceType, 2, item.name, item.typeName)}>
+                                                                            <Icon
+                                                                                name="table"
+                                                                                className={styles.inputIcon}
                                                                             />
 
                                                                         </button>
-                                                                    </>
-                                                                ) : ''}
-                                                                {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
-                                                                    ? (
-                                                                        <Icon
-                                                                            name="dropdown"
-                                                                            className={styles.inputIconDropdown}
-                                                                        />
-                                                                    ) : (
-                                                                        <Icon
-                                                                            name="dropRight"
-                                                                            className={styles.inputIconDropdown}
-                                                                        />
-                                                                    ) : ''}
-                                                            </div>
-                                                        )}
-                                            </div>
+                                                                    </ul>
+                                                                )))
+                                                            : (
+                                                                item.subCategory.map(data => (
+                                                                    <ul key={data.id}>
+                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
+                                                                            <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
+                                                                                {' '}
+                                                                                <h4>{language === 'en' ? data.name : data.nameNe}</h4>
+                                                                            </label>
 
-                                        </div>
-                                        {resourceCategory.find(elem => elem === item.name)
-                                            ? item.level === 2
-                                                ? (
-                                                    item.Category.map(data => (
-                                                        <ul key={data.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                            <div
-                                                                style={{ display: 'flex', alignItems: 'center' }}
-                                                                role="button"
-                                                                tabIndex={0}
-                                                                // eslint-disable-next-line max-len
-                                                                onClick={() => this.handleSubCategory(data.name, showSubCategory)}
-                                                                onKeyDown={undefined}
+                                                                        </div>
 
-                                                            >
-                                                                <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
-                                                                    {' '}
-                                                                    <h4>{data.name}</h4>
-                                                                </label>
-
-                                                            </div>
-                                                            <button type="button" style={{ border: 'none', marginRight: '35px', fontSize: '16px', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, data.name, data.resourceType, 2, item.name, item.typeName)}>
-                                                                <Icon
-                                                                    name="table"
-                                                                    className={styles.inputIcon}
-                                                                />
-
-                                                            </button>
-                                                        </ul>
-                                                    )))
-                                                : (
-                                                    item.subCategory.map(data => (
-                                                        <ul key={data.id}>
-                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
-                                                                    {' '}
-                                                                    <h4>{language === 'en' ? data.name : data.nameNe}</h4>
-                                                                </label>
-
-                                                            </div>
-
-                                                        </ul>
-                                                    ))
+                                                                    </ul>
+                                                                ))
 
 
-                                                )
-                                            : ''}
+                                                            )
+                                                        : ''}
 
-                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </Translation>
                                 ))}
 
                             </>
@@ -4537,7 +4543,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 }
                 {
                     showSearchModal
-                    && !showTooltip && (
+                    && (
                         <SearchModal
                             closeModal={this.handleSearchModalClose}
                             resourceList={filteredSearchResource}

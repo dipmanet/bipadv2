@@ -5,7 +5,6 @@ import styles from './styles.scss';
 const InfoBox = (props) => {
     const ref = useRef(null);
     const { onClickOutside } = props;
-    console.log('This is ref', ref);
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (ref.current && !ref.current.contains(event.target)) {

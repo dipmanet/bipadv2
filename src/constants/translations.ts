@@ -967,6 +967,7 @@ export const enTranslation = {
         StreamFlow: 'StreamFlow',
         'Brand Registration Number': 'Brand Registration Number',
         'Reference Number': 'Reference Number',
+        'Please select resource list to search': 'Please select resource list to search',
     },
 };
 
@@ -993,6 +994,7 @@ export const npTranslation = {
         nepal_police: 'नेपाल_प्रहरी',
         'Nepal Police': 'नेपाल प्रहरी',
         'Search Resources': 'स्रोतहरू खोज्नुहोस्',
+        'Please select resource list to search': 'कृपया खोजी गर्न स्रोत सूची चयन गर्नुहोस्',
         'Name and contact number of technical staff': 'प्राविधिक कर्मचारीहरूको नाम र सम्पर्क नम्बर',
         Scale: 'मापन',
         'Total capacity of the open space.': 'खुल्ला ठाउँ (OpenSpace) को कुल क्षमता',
