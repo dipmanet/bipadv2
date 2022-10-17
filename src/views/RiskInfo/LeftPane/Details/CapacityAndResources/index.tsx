@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent */
@@ -31,7 +33,7 @@ import {
     mapToList,
 } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
-
+import { t } from 'i18next';
 import Icon from '#rscg/Icon';
 
 import {
@@ -81,7 +83,7 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MultiResponse } from '#store/atom/response/types';
-import { MapChildContext } from '#re-map/context';
+
 import Cloak, { getParams } from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
@@ -137,7 +139,7 @@ import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 import DataVisualisation from './DataVisualisation';
 import SearchModal from './SearchModal';
 import Tooltip from './Tooltip';
-import { t } from 'i18next';
+
 
 const TableModalButton = modalize(Button);
 
@@ -513,6 +515,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const result1 = a.join('&');
 
             const result2 = resource_type.map(item => `resource_type=${item}`);
+            console.log('This is resource type', resource_type);
             return params.filterClickCheckCondition
                 ? `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`
                 : `/resource/?resource_type=${resource_type[0]}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
@@ -880,6 +883,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { faramValues: { region } } = this.props.filters;
         const { carKeys } = this.props;
         const { isFilterClicked, FilterClickedStatus } = this.context;
+        console.log('isFilterClicked', isFilterClicked);
+        console.log('This is car keys', carKeys);
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
@@ -916,6 +921,27 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 });
             }
             if (carKeys.length) {
+                const tempResourceCollection = PreserveresourceCollection;
+                let tempResourcelistKey = Object.keys(tempResourceCollection);
+                tempResourcelistKey = tempResourcelistKey.filter(item => !carKeys.includes(item));
+
+                tempResourcelistKey.map((item, index) => (
+                    tempResourceCollection[item] = []
+
+                ));
+
+                this.setState({
+                    // resourceCollection: {
+                    //     ...this.state.resourceCollection,
+
+                    //     education: [],
+                    // },
+
+                    PreserveresourceCollection: tempResourceCollection,
+
+                });
+
+
                 this.props.requests.resourceGetRequest.do(
                     {
                         region,
@@ -2399,13 +2425,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
     }
 
-
-    private searchedResourceCoordinateData = (data) => {
-        const { map } = this.context;
-        map.flyTo({ center: data, zoom: 22 });
-    }
-
-
     public render() {
         const {
             className,
@@ -2419,6 +2438,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             carKeys,
             palikaRedirect,
             language: { language },
+            searchedResourceCoordinateData,
         } = this.props;
 
 
@@ -4554,7 +4574,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             closeModal={this.handleSearchModalClose}
                             resourceList={filteredSearchResource}
                             language={language}
-                            searchedResourceCoordinateData={this.searchedResourceCoordinateData}
+                            searchedResourceCoordinateData={searchedResourceCoordinateData}
                         />
                     )
 
@@ -4607,7 +4627,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 }
 CapacityAndResources.contextType = RiskInfoLayerContext;
-CapacityAndResources.contextType = MapChildContext;
+
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requestOptions),
