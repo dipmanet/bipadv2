@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import React, { useEffect, useState } from 'react';
 import Redux from 'redux';
@@ -31,13 +33,13 @@ import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
 import FeedbackSupport from '#views/FeedbackSupport';
-import MenuItem from './MenuItem';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ButtonGroupLogo from '#resources/icons/sidebarGroupButtons.svg';
-import GroupMenuContainer from './GroupMenuContainer';
 import PageContext from '#components/PageContext';
 import ReportIncidentIcon from '#resources/icons/reportIncident.svg';
+import GroupMenuContainer from './GroupMenuContainer';
+import styles from './styles.scss';
+import MenuItem from './MenuItem';
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
@@ -61,6 +63,7 @@ const GroupMenuListContainer = ({
     image,
     handleActiveGroupButton,
     children,
+    disableOutsideDivClick,
 }: {
     title: string;
     className?: string;
@@ -76,6 +79,11 @@ const GroupMenuListContainer = ({
     useEffect(() => {
         handleActiveGroupButton(showInfo1);
     }, [handleActiveGroupButton, showInfo1]);
+    useEffect(() => {
+        if (!disableOutsideDivClick) {
+            setShowInfo1(false);
+        }
+    }, [disableOutsideDivClick]);
     return (
         <div className={styles.container}>
             <div className={styles.infoBoxWrapper}>
@@ -109,7 +117,7 @@ const GroupMenuListContainer = ({
                 <GroupMenuContainer
                     show={showInfo1}
                     onClickOutside={() => {
-                        setShowInfo1(false);
+                        !disableOutsideDivClick ? setShowInfo1(false) : '';
                     }}
                 >
                     {children}
@@ -130,6 +138,7 @@ const MenuItemLikeButton = ({
     disabled,
     id,
     image,
+    onDisableClick,
 }: {
     title: string;
     className?: string;
@@ -142,7 +151,10 @@ const MenuItemLikeButton = ({
     <div
         role="presentation"
         className={_cs(styles.menuItemLikeButton, className)}
-        onClick={!disabled ? onClick : undefined}
+        onClick={!disabled ? () => {
+            onClick();
+            onDisableClick();
+        } : undefined}
         title={title}
         id={id}
     >
@@ -273,6 +285,7 @@ class Navbar extends React.PureComponent<Props, State> {
         super(props);
         this.state = {
             activeGroupButton: false,
+            disableOutsideDivClick: false,
         };
     }
 
@@ -289,6 +302,12 @@ class Navbar extends React.PureComponent<Props, State> {
         this.setState({ activeGroupButton: data });
     }
 
+    private handledisableOutsideDivClick = (boolean) => {
+        this.setState({
+            disableOutsideDivClick: boolean,
+        });
+    }
+
     public render() {
         const {
             className,
@@ -299,11 +318,12 @@ class Navbar extends React.PureComponent<Props, State> {
             language: { language },
         } = this.props;
         const { activeRouteDetails } = this.context;
-        const { activeGroupButton } = this.state;
+        const { activeGroupButton, disableOutsideDivClick } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
         const GroupMenuListRoutes = ['dataArchive'];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
+
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView
@@ -342,6 +362,7 @@ class Navbar extends React.PureComponent<Props, State> {
                         iconName={ButtonGroupLogo}
                         image
                         handleActiveGroupButton={this.handleActiveGroupButton}
+                        disableOutsideDivClick={disableOutsideDivClick}
                     >
                         <Translation>
                             {
@@ -350,7 +371,14 @@ class Navbar extends React.PureComponent<Props, State> {
                                         className={styles.reportIncidentButton}
                                         title={t('Situation Report')}
                                         iconName="textDocument"
-                                        modal={<SituationReport />}
+                                        modal={(
+                                            <SituationReport
+                                                handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                            />
+                                        )}
+                                        onDisableClick={() => {
+                                            this.setState({ disableOutsideDivClick: true });
+                                        }}
                                     />
                                 )}
                         </Translation>
@@ -363,7 +391,14 @@ class Navbar extends React.PureComponent<Props, State> {
                                             className={styles.reliefButton}
                                             title={t('Relief')}
                                             iconName="cart"
-                                            modal={<Relief />}
+                                            modal={(
+                                                <Relief
+                                                    handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                                />
+                                            )}
+                                            onDisableClick={() => {
+                                                this.setState({ disableOutsideDivClick: true });
+                                            }}
                                         />
                                     )}
                             </Translation>
@@ -377,7 +412,14 @@ class Navbar extends React.PureComponent<Props, State> {
                                             className={styles.reportIncidentButton}
                                             title={t('Reported incidents')}
                                             iconName="list"
-                                            modal={<CitizenReportsModal />}
+                                            modal={(
+                                                <CitizenReportsModal
+                                                    handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                                />
+                                            )}
+                                            onDisableClick={() => {
+                                                this.setState({ disableOutsideDivClick: true });
+                                            }}
                                         />
                                     )}
                             </Translation>
@@ -391,7 +433,14 @@ class Navbar extends React.PureComponent<Props, State> {
                                         className={styles.reportIncidentButton}
                                         title="Feedback and support"
                                         iconName="feedbackIcon"
-                                        modal={<FeedbackSupport />}
+                                        modal={(
+                                            <FeedbackSupport
+                                                handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                            />
+                                        )}
+                                        onDisableClick={() => {
+                                            this.setState({ disableOutsideDivClick: true });
+                                        }}
                                     />
 
                                 )}

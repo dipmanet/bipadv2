@@ -64,8 +64,8 @@ import RainBasinSelector from '#views/DataArchive/Filters/Rain/Basin/index';
 import RainStationSelector from '#views/DataArchive/Filters/Rain/Station/index';
 import RiverBasinSelector from '#views/DataArchive/Filters/River/Basin/index';
 import RiverStationSelector from '#views/DataArchive/Filters/River/Station/index';
-import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
+import styles from './styles.scss';
 
 interface ComponentProps {
     className?: string;
@@ -875,7 +875,6 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
 
 
         return (

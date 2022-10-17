@@ -53,7 +53,7 @@ interface Params {
 
 type Props = NewProps<ReduxProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     citizenReportsGetRequest: {
         url: '/citizen-report/',
         method: methods.GET,
@@ -145,6 +145,7 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
+            handledisableOutsideDivClick,
             requests: {
                 citizenReportsGetRequest: {
                     pending,
@@ -165,7 +166,10 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
                                     <DangerButton
                                         transparent
                                         iconName="close"
-                                        onClick={closeModal}
+                                        onClick={() => {
+                                            handledisableOutsideDivClick(false);
+                                            closeModal();
+                                        }}
                                         title="Close Modal"
                                     />
                                 )}

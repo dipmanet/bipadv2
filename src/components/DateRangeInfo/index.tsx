@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
 
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
 import { convertDateAccToLanguage } from '#utils/common';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;
