@@ -7,10 +7,28 @@ import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
+import { HazardDetail, Summary } from './types';
+import { TooltipInterface } from '../Barchart/types';
 
-const HazardWise = (props) => {
+interface HazardWiseProps {
+    selectOption: {
+        name: string;
+        key: string;
+    };
+    data: {
+        [key: string]: {
+            hazardDetail: HazardDetail;
+            summary: Summary;
+        };
+    };
+    handleSaveClick: (id: string, fileName: string) => void;
+    downloadButton: boolean | undefined;
+
+}
+
+const HazardWise = (props: HazardWiseProps) => {
     const { selectOption, data, handleSaveClick, downloadButton } = props;
-    const treeMapRef = useRef(null);
+    const treeMapRef = useRef<HTMLDivElement>(null);
 
     const hazardWiseData = Object.entries(data).map((item) => {
         const obj = {
@@ -94,9 +112,9 @@ const HazardWise = (props) => {
         );
     };
 
-    const TreeMapTooltip = ({ active, payload }) => {
+    const TreeMapTooltip = ({ active, payload }: TooltipInterface) => {
         if (active && payload && payload.length) {
-            const { name, value, root, fill } = payload[0].payload;
+            const { name, value } = payload[0].payload;
             return (
                 <p className={styles.label}>
                     {`${name}:${value}`}
@@ -106,7 +124,7 @@ const HazardWise = (props) => {
         return null;
     };
 
-    function treemapHighlight(name, fill) {
+    function treemapHighlight(name: string, fill: string | null) {
         if (treeMapRef.current) {
             const responsiveContainer = treeMapRef.current.getElementsByClassName('recharts-responsive-container')[0];
             const rechartsWrapper = responsiveContainer.getElementsByClassName('recharts-wrapper');
@@ -116,13 +134,11 @@ const HazardWise = (props) => {
         }
     }
 
-    const onMouseEnter = (prop) => {
-        const { name } = prop;
+    const onMouseEnter = ({ name }: { name: string }) => {
         treemapHighlight(name, null);
     };
 
-    const onMouseLeave = (prop) => {
-        const { name, fill } = prop;
+    const onMouseLeave = ({ name, fill }: { name: string; fill: string }) => {
         treemapHighlight(name, fill);
     };
 

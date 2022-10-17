@@ -1,6 +1,8 @@
 export interface DropDownOption {
     key: string;
     label: string;
+    adminLevel?: number;
+    geoarea?: number;
 }
 
 export interface DropDownProps {
