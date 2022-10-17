@@ -24,8 +24,6 @@ const Dropdown = (props: DropDownProps) => {
         deleteicon,
         clearValues } = props;
 
-    console.log(dropdownOption, 'props');
-
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
     // eslint-disable-next-line max-len
     const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState<string | undefined | null>(placeholder);
