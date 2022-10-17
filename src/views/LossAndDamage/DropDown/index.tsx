@@ -2,14 +2,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
-const Dropdown = (props) => {
+interface DropDownOption {
+    key: string;
+    label: string;
+}
+interface DropDownProps {
+    dropDownClickHandler(
+        item: { key: string, label: string },
+        index: number, elemName: string | undefined) => void;
+    setSelectOption: (name: string, key: string) => void;
+    icon?: boolean;
+    dropdownOption: DropDownOption[];
+    selectOption: { name: string; key: string };
+    placeholder?: string | undefined;
+    label?: string | undefined;
+    className?: string | undefined;
+    deleteicon: boolean;
+    elementName?: string | undefined;
+    clearValues: (elementName: string | undefined) => void;
+}
+
+
+const Dropdown = (props: DropDownProps) => {
     const [showOption, setShowOption] = useState(false);
-    const optionShowRef = useRef(null);
+    const optionShowRef = useRef<HTMLDivElement | null>(null);
     const { dropDownClickHandler,
         setSelectOption,
         icon,
@@ -21,8 +42,11 @@ const Dropdown = (props) => {
         elementName,
         deleteicon,
         clearValues } = props;
+
+    console.log(className, 'props');
+
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
-    const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState(placeholder);
+    const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState<string | null | undefined>(placeholder);
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
         if (selectOption && setSelectOption) {
@@ -31,7 +55,7 @@ const Dropdown = (props) => {
     }, []);
 
     useEffect(() => {
-        const handleClickOutside = (event: EventListenerOrEventListenerObject) => {
+        const handleClickOutside = (event: React.ChangeEvent<HTMLInputElement>) => {
             if (optionShowRef.current && !optionShowRef.current.contains(event.target)) {
                 setShowOption(false);
             }
@@ -50,6 +74,7 @@ const Dropdown = (props) => {
     };
 
     const onOptionClick = (item: any, index: number) => {
+        console.log(item, index, 'option');
         dropDownClickHandler(item, index, elementName);
         if (dropDownPlaceHolder) {
             setdropDownPlaceHolder(null);

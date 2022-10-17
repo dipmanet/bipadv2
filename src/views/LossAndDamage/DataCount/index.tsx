@@ -2,13 +2,21 @@ import React from 'react';
 import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
 import { returnValueByDropdown } from '../utils/utils';
+import { Data } from '../types';
 
-const DataCount = (props) => {
+interface DataCountProps {
+    data: Data[];
+    value: {
+        name: string;
+        key: string;
+    };
+}
+
+const DataCount = (props: DataCountProps) => {
     const { data, value } = props;
     const { name, key } = value;
     const nullCondition = false;
     const dataValue = nullCheck(nullCondition, data, key);
-
     return (
         <div className={styles.wrapper}>
             <p className={styles.alertText}>
@@ -16,7 +24,6 @@ const DataCount = (props) => {
                     `Total number of ${name}`
                 }
             </p>
-
             {
                 data.length > 0
                 && (
@@ -25,8 +32,6 @@ const DataCount = (props) => {
                     </span>
                 )
             }
-
-
         </div>
     );
 };

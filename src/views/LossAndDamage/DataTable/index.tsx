@@ -13,12 +13,19 @@ import DangerButton from '#rsca/Button/DangerButton';
 import { mainHeading, bodyheader } from './headers';
 import { estimatedLossValueFormatter } from '../utils/utils';
 import DownloadButton from '#components/DownloadButton';
-import styles from './styles.scss';
 import { returnDataByFormat } from './util';
+import { Data } from '../types';
+import { Sorted } from './types';
+import styles from './styles.scss';
 
-const DataTable = ({ closeModal, incidentList }) => {
+interface TableProps {
+    closeModal: () => void;
+    incidentList: Data[];
+}
+
+const DataTable = ({ closeModal, incidentList }: TableProps) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Sorted[] | []>([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
     const [sortDirection, setSortDirection] = useState(false);
     const tableRef = React.createRef<FixedSizeList<any>>();
@@ -46,14 +53,14 @@ const DataTable = ({ closeModal, incidentList }) => {
     }, [isSortClicked]);
 
 
-    const summaryCalculate = (Data) => {
+    const summaryCalculate = (dat) => {
         if (focus.id !== 1) {
-            const keys = [...new Set(Data.map(item => Object.values(item)[0]))];
+            const keys = [...new Set(dat.map(item => Object.values(item)[0]))];
             const reducedData = [];
             const groupedData = [];
             for (const keyItem of keys) {
                 const array = [];
-                for (const item of Data) {
+                for (const item of dat) {
                     if ((Object.values(item)[0]) === keyItem) array.push(item);
                 }
                 groupedData.push(array);
@@ -75,7 +82,7 @@ const DataTable = ({ closeModal, incidentList }) => {
 
             return reducedData;
         }
-        return Data;
+        return dat;
     };
 
     const requiredDataEval = () => {
@@ -153,33 +160,35 @@ const DataTable = ({ closeModal, incidentList }) => {
     const sortDatahandler = (type: string, name: string) => {
         setIsSortClicked(true);
         setSortDirection(!sortDirection);
-        let sortedArr: (string | number)[] = [];
-        if (type === 'string') {
-            sortedArr = data.length > 0 && data.sort((a: any, b: any) => {
-                const nameA = a[name].toUpperCase();
-                const nameB = b[name].toUpperCase();
-                // eslint-disable-next-line no-nested-ternary
-                return sortDirection
+        if (data.length > 0) {
+            let sortedArr: Sorted[] = [];
+            if (type === 'string') {
+                sortedArr = data.sort((a, b) => {
+                    const nameA = a[name].toUpperCase();
+                    const nameB = b[name].toUpperCase();
                     // eslint-disable-next-line no-nested-ternary
-                    ? (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
-                    // eslint-disable-next-line no-nested-ternary
-                    : (nameB < nameA) ? -1 : (nameB > nameA) ? 1 : 0;
-            });
-        } else if (type === 'numeric') {
-            sortedArr = data.length > 0 && data.sort((a, b) => {
-                const nameA = a[name];
-                const nameB = b[name];
-                return sortDirection ? nameA - nameB : nameB - nameA;
-            });
+                    return sortDirection
+                        // eslint-disable-next-line no-nested-ternary
+                        ? (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
+                        // eslint-disable-next-line no-nested-ternary
+                        : (nameB < nameA) ? -1 : (nameB > nameA) ? 1 : 0;
+                });
+            } else if (type === 'numeric') {
+                sortedArr = data.sort((a, b) => {
+                    const nameA = a[name];
+                    const nameB = b[name];
+                    return sortDirection ? nameA - nameB : nameB - nameA;
+                });
+            }
+            if (type === 'date') {
+                sortedArr = data.sort((a, b) => {
+                    const dateA = new Date(a[name]).valueOf();
+                    const dateB = new Date(b[name]).valueOf();
+                    return sortDirection ? dateA - dateB : dateB - dateA;
+                });
+            }
+            setData(sortedArr);
         }
-        if (type === 'date') {
-            sortedArr = data.length > 0 && data.sort((a, b) => {
-                const dateA = new Date(a[name]);
-                const dateB = new Date(b[name]);
-                return sortDirection ? dateA - dateB : dateB - dateA;
-            });
-        }
-        setData(sortedArr);
     };
     const Header = () => (
         <div className={styles.header}>
