@@ -6,26 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
-
-interface DropDownOption {
-    key: string;
-    label: string;
-}
-
-interface DropDownProps {
-    dropDownClickHandler: (item: DropDownOption,
-        index: number, elemName: string | undefined) => void;
-    setSelectOption: (name: string, key: string) => void;
-    icon?: boolean;
-    dropdownOption: DropDownOption[];
-    selectOption: { name: string; key: string };
-    placeholder?: string | undefined;
-    label?: string | undefined;
-    className?: string | undefined;
-    deleteicon: boolean;
-    elementName?: string | undefined;
-    clearValues: (elementName: string | undefined) => void;
-}
+import { DropDownOption, DropDownProps } from './types';
 
 
 const Dropdown = (props: DropDownProps) => {
