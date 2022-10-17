@@ -33,7 +33,6 @@ import {
     mapToList,
 } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
-import { t } from 'i18next';
 import Icon from '#rscg/Icon';
 
 import {

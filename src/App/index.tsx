@@ -29,13 +29,13 @@ import {
 
 import { getAuthState } from '#utils/session';
 
+import { ModelEnum } from '#types';
 import Multiplexer from '../Multiplexer';
 import styles from './styles.scss';
-import { ModelEnum } from '#types';
 
-interface State {}
-interface Params {}
-interface OwnProps {}
+interface State { }
+interface Params { }
+interface OwnProps { }
 interface PropsFromState {
     mapStyle: string;
     authState: AuthState;

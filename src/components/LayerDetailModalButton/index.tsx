@@ -25,8 +25,8 @@ import Message from '#rscv/Message';
 
 import { Layer } from '#types';
 
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;

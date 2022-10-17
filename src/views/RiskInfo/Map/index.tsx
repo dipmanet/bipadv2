@@ -29,14 +29,14 @@ import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { mapSources, mapStyles } from '#constants';
 
 import CommonMap from '#components/CommonMap';
-import LandslideToolTip from './Tooltips/RiskInfo/Landslide';
-import styles from './styles.scss';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
-import { OpenSeaDragonViewer } from '../OpenSeaDragonImageViewer';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import { OpenSeaDragonViewer } from '../OpenSeaDragonImageViewer';
+import styles from './styles.scss';
+import LandslideToolTip from './Tooltips/RiskInfo/Landslide';
 
 
 interface Props {

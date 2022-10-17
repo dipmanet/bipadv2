@@ -15,7 +15,6 @@ import ListView from '#rscv/List/ListView';
 import { setMapStyleAction } from '#actionCreators';
 import { languageSelector, mapStyleSelector } from '#selectors';
 
-import LayerButton from './LayerButton';
 
 // Icons
 import OutLineIcon from '#resources/images/outline.png';
@@ -23,6 +22,7 @@ import MapboxLightIcon from '#resources/images/mapbox-light.png';
 import MapboxRoadsIcon from '#resources/images/mapbox-roads.png';
 import MapboxSatelliteIcon from '#resources/images/mapbox-satellite.png';
 import OSMIcon from '#resources/images/osm.png';
+import LayerButton from './LayerButton';
 
 import styles from './styles.scss';
 

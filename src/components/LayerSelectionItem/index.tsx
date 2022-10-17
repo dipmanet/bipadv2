@@ -14,9 +14,9 @@ import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
 import { LayerHierarchy } from '#types';
 
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 
-import { languageSelector } from '#selectors';
 
 interface Props {
     className?: string;

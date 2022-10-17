@@ -10,14 +10,7 @@ import Faram, {
 import { parseAsync } from '@babel/core';
 import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
-import PasswordReq from './PasswordReq';
 import DangerButton from '#rsca/Button/DangerButton';
-import DetailsPage from './DetailsPage';
-import DetailsFirstPage from './DetailsFirstPage';
-import ThankYouPage from './ThankYouPage';
-import ChangePassword from './ChangePassword';
-import ForgotPassword from './ForgotPassword';
-import UserFeedback from './UserFeedback';
 
 import Modal from '#rscv/Modal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -44,6 +37,13 @@ import {
     methods,
 } from '#request';
 import { getAuthState } from '#utils/session';
+import UserFeedback from './UserFeedback';
+import ForgotPassword from './ForgotPassword';
+import ChangePassword from './ChangePassword';
+import ThankYouPage from './ThankYouPage';
+import DetailsFirstPage from './DetailsFirstPage';
+import DetailsPage from './DetailsPage';
+import PasswordReq from './PasswordReq';
 
 import styles from './styles.scss';
 import DetailsSecondPage from './DetailsSecondPage';
@@ -393,9 +393,11 @@ class Login extends React.PureComponent<Props, State> {
     };
 
     private signupRegion = (value: SignupRegion) => {
-        this.setState({ municipalityId: value.municipalityId,
+        this.setState({
+            municipalityId: value.municipalityId,
             districtId: value.districtId,
-            provinceId: value.provinceId });
+            provinceId: value.provinceId,
+        });
     };
 
     private uploadedLetter = (file: File) => {
@@ -639,7 +641,7 @@ class Login extends React.PureComponent<Props, State> {
                                                             className={styles.icon}
                                                             name="externalLink"
                                                         />
-                                                 MDSA
+                                                        MDSA
                                                     </div>
                                                 </a>
                                             </div>

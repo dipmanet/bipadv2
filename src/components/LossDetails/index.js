@@ -6,8 +6,8 @@ import { _cs, isDefined } from '@togglecorp/fujs';
 import StatOutput from '#components/StatOutput';
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types

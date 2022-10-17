@@ -18,8 +18,8 @@ import DateOutput from '#components/DateOutput';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loss from '#components/Loss';
 
-import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
+import styles from './styles.scss';
 
 const emptyObject = {};
 const emptyList = [];
