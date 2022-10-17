@@ -6,7 +6,19 @@
 import React, { useEffect } from 'react';
 import styles from './styles.scss';
 
-const FilterRadio = (props) => {
+interface FilterRadioProps {
+    regionRadio: {
+        name: string;
+        id: number;
+    };
+    setRegionRadio: (value: string, id: number) => void;
+    regionFilter: {
+        adminLevel: number;
+        geoarea: number;
+    };
+}
+
+const FilterRadio = (props: FilterRadioProps) => {
     const { regionRadio, setRegionRadio, regionFilter } = props;
 
     useEffect(() => {
@@ -40,7 +52,7 @@ const FilterRadio = (props) => {
                         type="radio"
                         value={item.name}
                         onChange={e => setRegionRadio(e.target.value, item.id)}
-                        checked={regionRadio.name && regionRadio.name === item.name}
+                        checked={regionRadio.name === item.name}
                     />
                     <label className={styles.radioItems}>
                         {item.name}
