@@ -496,9 +496,15 @@ class NewCompare extends React.PureComponent {
                                         ) : <div />
                                     }
                                 </div>
-                                <p className={styles.hazardText}>
-                                    Data source : nepal police,drr portal
-                                </p>
+                                {
+                                    (region1Incidents.length > 0 || region2Incidents.length > 0)
+                                    && (
+                                        <p className={styles.hazardText}>
+                                            Data source : nepal police,drr portal
+                                        </p>
+                                    )
+                                }
+
                             </div>
                         </div>
                     )}
