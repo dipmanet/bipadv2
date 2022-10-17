@@ -116,7 +116,7 @@ import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
 import visualization from '#resources/icons/visualization.svg';
 import helipad from '#resources/icons/heli.svg';
-import search from '#resources/icons/search-contact.svg';
+import search from '#resources/icons/search-manual.svg';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
@@ -2384,7 +2384,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { showSearchModal, PreserveresourceCollection, showTooltip, selectedCategoryId } = this.state;
         const data = PreserveresourceCollection[resourceType].filter(i => i.resourceType === resourceType);
         const isCheckboxChecked = this.verifyCheckboxChecked(name);
-        if (data.length && isCheckboxChecked) {
+        if ((data.length && isCheckboxChecked)) {
             this.setState({
                 showSearchModal: !showSearchModal,
                 filteredSearchResource: data,
@@ -2402,7 +2402,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     private searchedResourceCoordinateData = (data) => {
         const { map } = this.context;
-        map.flyTo({ center: data, zoom: 15 });
+        map.flyTo({ center: data, zoom: 22 });
     }
 
 
@@ -2634,7 +2634,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                             role="button"
                                                             tabIndex={0}
                                                             // eslint-disable-next-line max-len
-                                                            onClick={(item.Category || item.subCategory.length) ? () => this.handleSubCategory(item.name, showSubCategory) : () => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
+                                                            onClick={(item.Category || item.subCategory.length)
+                                                                ? () => this.handleSubCategory(item.name, showSubCategory)
+                                                                // : () => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)
+                                                                : ''
+                                                            }
                                                             onKeyDown={undefined}
                                                             className={styles.individualCategories}
                                                         >
@@ -2654,48 +2658,49 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                 </h3>
                                                             </div>
 
-                                                            {
-                                                                item.resourceType === 'warehouse' ? ''
 
-                                                                    : (
-                                                                        <div style={{
-                                                                            display: 'flex',
-                                                                            alignItems: 'center',
-                                                                            marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px',
-                                                                        }}
-                                                                        >
-                                                                            {item.level === 1 ? (
-                                                                                <>
-                                                                                    <div style={{ position: 'relative' }}>
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            style={{
-                                                                                                cursor: 'pointer',
-                                                                                                backgroundColor: resourceCategory.find(res => res === item.name)
-                                                                                                    ? '#ddf2fd' : 'white',
-                                                                                                border: 'none',
-                                                                                            }}
-                                                                                            onClick={() => this.handleSearchResource(item.resourceType, item.id, item.name)}
-                                                                                            title={language === 'en'
-                                                                                                ? `Search ${item.name}'s Resource`
-                                                                                                : `${item.nameNe}को स्रोत खोज्नुहोस्`}
-                                                                                        >
-                                                                                            <ScalableVectorGraphics
-                                                                                                className={styles.icon}
-                                                                                                src={search}
-                                                                                            />
-                                                                                        </button>
-                                                                                        {selectedCategoryId === item.id
-                                                                                            ? (
-                                                                                                <Tooltip
-                                                                                                    show={showTooltip}
-                                                                                                    onClickOutside={() => this.setState({ showTooltip: false })}
-                                                                                                    message={t('Please select resource list to search')}
-                                                                                                />
-                                                                                            ) : ''
-                                                                                        }
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px',
+                                                            }}
+                                                            >
+                                                                {item.level === 1 ? (
+                                                                    <>
+                                                                        <div style={{ position: 'relative' }}>
+                                                                            <button
+                                                                                type="button"
+                                                                                style={{
+                                                                                    cursor: 'pointer',
+                                                                                    backgroundColor: resourceCategory.find(res => res === item.name)
+                                                                                        ? '#ddf2fd' : 'white',
+                                                                                    border: 'none',
+                                                                                }}
+                                                                                onClick={() => this.handleSearchResource(item.resourceType, item.id, item.name)}
+                                                                                title={language === 'en'
+                                                                                    ? `Search ${item.name}'s Resource`
+                                                                                    : `${item.nameNe}को स्रोत खोज्नुहोस्`}
+                                                                            >
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.icon}
+                                                                                    src={search}
+                                                                                />
+                                                                            </button>
+                                                                            {selectedCategoryId === item.id
+                                                                                ? (
+                                                                                    <Tooltip
+                                                                                        show={showTooltip}
+                                                                                        onClickOutside={() => this.setState({ showTooltip: false })}
+                                                                                        message={t('Please select resource list to search')}
+                                                                                    />
+                                                                                ) : ''
+                                                                            }
 
-                                                                                    </div>
+                                                                        </div>
+                                                                        {
+                                                                            item.resourceType === 'warehouse' ? <div style={{ width: '75px' }} />
+
+                                                                                : (
                                                                                     <button
                                                                                         type="button"
                                                                                         style={{ border: 'none', background: 'none', cursor: 'pointer' }}
@@ -2711,22 +2716,23 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                                         />
 
                                                                                     </button>
-                                                                                </>
-                                                                            ) : ''}
-                                                                            {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
-                                                                                ? (
-                                                                                    <Icon
-                                                                                        name="dropdown"
-                                                                                        className={styles.inputIconDropdown}
-                                                                                    />
-                                                                                ) : (
-                                                                                    <Icon
-                                                                                        name="dropRight"
-                                                                                        className={styles.inputIconDropdown}
-                                                                                    />
-                                                                                ) : ''}
-                                                                        </div>
-                                                                    )}
+                                                                                )}
+                                                                    </>
+                                                                ) : ''}
+                                                                {item.resourceType === 'warehouse' ? '' : (item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
+                                                                    ? (
+                                                                        <Icon
+                                                                            name="dropdown"
+                                                                            className={styles.inputIconDropdown}
+                                                                        />
+                                                                    ) : (
+                                                                        <Icon
+                                                                            name="dropRight"
+                                                                            className={styles.inputIconDropdown}
+                                                                        />
+                                                                    ) : ''}
+                                                            </div>
+
                                                         </div>
 
                                                     </div>
