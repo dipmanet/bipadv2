@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
@@ -11,9 +11,9 @@ interface DropDownOption {
     key: string;
     label: string;
 }
+
 interface DropDownProps {
-    dropDownClickHandler(
-        item: { key: string, label: string },
+    dropDownClickHandler: (item: DropDownOption,
         index: number, elemName: string | undefined) => void;
     setSelectOption: (name: string, key: string) => void;
     icon?: boolean;
@@ -43,10 +43,9 @@ const Dropdown = (props: DropDownProps) => {
         deleteicon,
         clearValues } = props;
 
-    console.log(className, 'props');
-
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
-    const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState<string | null | undefined>(placeholder);
+    // eslint-disable-next-line max-len
+    const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState<string | undefined | null>(placeholder);
     // eslint-disable-next-line no-unused-expressions
     useEffect(() => {
         if (selectOption && setSelectOption) {
@@ -73,8 +72,7 @@ const Dropdown = (props: DropDownProps) => {
         setShowOption(state => !state);
     };
 
-    const onOptionClick = (item: any, index: number) => {
-        console.log(item, index, 'option');
+    const onOptionClick = (item: DropDownOption, index: number) => {
         dropDownClickHandler(item, index, elementName);
         if (dropDownPlaceHolder) {
             setdropDownPlaceHolder(null);
