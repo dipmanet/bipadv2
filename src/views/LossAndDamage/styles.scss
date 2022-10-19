@@ -9,7 +9,6 @@
         flex-direction: column;
         width: 100%;
         align-items: center;
-        margin-top: 15px;
 
         .showheader {
             display: flex;
@@ -143,9 +142,7 @@
 
     .radioAndCompare{
         display: flex;
-        width: 95%;
-        justify-content: space-between;
-        margin-bottom: 10px;
+        margin-right: auto;
     }
 
     .actions {

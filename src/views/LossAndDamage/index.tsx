@@ -212,7 +212,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const { filters } = this.props;
         const { rangeInDays } = filters.dataDateRange;
         if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
-            console.log(rangeInDays, 'filter changed');
             if (rangeInDays !== 'custom') {
                 const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
                 this.handleStartDateChange(encodeDate(startDateFromFilter));
@@ -573,13 +572,56 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </div>
                                     )
                                 }
-                                {/* <DateRangeInfo
+                            </div>
+
+                            {/* <DateRangeInfo
                                         className={styles.dateRange}
                                         startDate={startDate}
                                         endDate={endDate}
                                     /> */}
-                                {/* </span> */}
-                                {/* <ModalButton
+                            {/* </span> */}
+
+                            <div className={styles.actions}>
+                                <div className={styles.radioAndCompare}>
+                                    <FilterRadio
+                                        regionRadio={regionRadio}
+                                        setRegionRadio={setRegionRadio}
+                                        data={filteredData}
+                                        valueOnclick={valueOnclick}
+                                        regionFilter={regionFilter}
+                                    />
+                                </div>
+                                <ModalButton
+                                    disabled={pending}
+                                    className={styles.modalButton}
+                                    modal={(
+                                        <NewCompare
+                                            lossAndDamageList={incidentList}
+                                            getDataAggregatedByYear={this.getDataAggregatedByYear}
+                                            getHazardsCount={this.getHazardsCount}
+                                            hazardTypes={hazardTypes}
+                                            selectOption={selectOption}
+                                            valueOnclick={valueOnclick}
+                                            currentSelection={selectOption}
+                                            handleSaveClick={this.handleSaveClick}
+                                        />
+                                    )}
+                                >
+                                    Compare regions
+                                </ModalButton>
+                                <ModalButton
+                                    title="View Tabular Data"
+                                    className={styles.showTableButton}
+                                    iconName="table"
+                                    transparent
+                                    modal={(
+                                        <DataTable
+                                            incidentList={filteredData}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            {/* <ModalButton
                                         className={styles.modalButton}
                                         transparent
                                         disabled={pending}
@@ -592,38 +634,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         View tabular data
                                     </ModalButton> */}
 
-                            </div>
                             <div className={styles.container}>
-
-                                <div className={styles.radioAndCompare}>
-                                    <FilterRadio
-                                        regionRadio={regionRadio}
-                                        setRegionRadio={setRegionRadio}
-                                        data={filteredData}
-                                        valueOnclick={valueOnclick}
-                                        regionFilter={regionFilter}
-                                    />
-                                    <ModalButton
-                                        disabled={pending}
-                                        transparent
-                                        className={styles.modalButton}
-                                        modal={(
-                                            <NewCompare
-                                                lossAndDamageList={incidentList}
-                                                getDataAggregatedByYear={this.getDataAggregatedByYear}
-                                                getHazardsCount={this.getHazardsCount}
-                                                hazardTypes={hazardTypes}
-                                                selectOption={selectOption}
-                                                valueOnclick={valueOnclick}
-                                                currentSelection={selectOption}
-                                                handleSaveClick={this.handleSaveClick}
-
-                                            />
-                                        )}
-                                    >
-                                        Compare regions
-                                    </ModalButton>
-                                </div>
                                 <Dropdown
                                     dropDownClickHandler={dropDownClickHandler}
                                     selectOption={selectOption}
