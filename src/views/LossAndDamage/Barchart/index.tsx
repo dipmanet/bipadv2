@@ -95,11 +95,11 @@ const BarChartVisual = (props: BarchartProps) => {
     }, [regionRadio, valueOnclick, data]);
 
     function nameReturn(region: RadioValue) {
-        if (region.name === 'district' || region.name === 'municipality') return `${regionRadio.name}wise distribution (Top 10)`;
-        if (region.name === 'province') return `${regionRadio.name}wise distribution`;
-        if (region.adminLevel === 1) return 'ProvinceWise distribution';
-        if (region.adminLevel === 2) return 'DistrictWise distribution';
-        return 'MunicipalityWise distribution';
+        if (region.name === 'district' || region.name === 'municipality') return `${regionRadio.name}-wise distribution (Top 10)`;
+        if (region.name === 'province') return `${regionRadio.name}-wise distribution`;
+        if (region.adminLevel === 1) return 'Province-Wise distribution';
+        if (region.adminLevel === 2) return 'District-Wise distribution';
+        return 'Municipality-Wise distribution';
     }
 
     function CustomTooltip({ payload, active }: TooltipInterface) {
