@@ -55,10 +55,6 @@ import LossDetails from '#components/LossDetails';
 import Loading from '#components/Loading';
 import Page from '#components/Page';
 
-import TabularView from './TabularView';
-import Comparative from './Comparative';
-import { getSanitizedIncidents } from './common';
-
 import {
     getResults,
     getPending,
@@ -69,6 +65,12 @@ import {
     transformDataRangeLocaleToFilter,
     pastDaysToDateRange,
 } from '#utils/transformations';
+import DateRangeInfo from '#components/DateRangeInfo';
+import { setIncidentListActionIP } from '#actionCreators';
+import TabularView from './TabularView';
+import Comparative from './Comparative';
+import { getSanitizedIncidents } from './common';
+
 
 import Overview from './Overview';
 import Dropdown from './DropDown';
@@ -76,9 +78,7 @@ import BarChartVisual from './Barchart';
 import AreaChartVisual from './AreaChart';
 import HazardWise from './HazardWise';
 import DataTable from './DataTable';
-import DateRangeInfo from '#components/DateRangeInfo';
 import FilterRadio from './FilterRadio';
-import { setIncidentListActionIP } from '#actionCreators';
 import NewCompare from './NewCompare';
 
 import styles from './styles.scss';
@@ -205,6 +205,24 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         selectOption: { name: 'Incidents', key: 'count' },
         valueOnclick: { value: 'count', index: 0 },
         regionRadio: { name: 'province', id: 1 },
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    componentDidUpdate(prevProps, prevState) {
+        const { filters } = this.props;
+        const { rangeInDays } = filters.dataDateRange;
+        if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
+            console.log(rangeInDays, 'filter changed');
+            if (rangeInDays !== 'custom') {
+                const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
+                this.handleStartDateChange(encodeDate(startDateFromFilter));
+                this.handleEndDateChange(encodeDate(endDateFromFilter));
+            } else {
+                const { startDate: startDateFromFilter, endDate: endDateFromFilter } = filters.dataDateRange;
+                this.handleStartDateChange(startDateFromFilter);
+                this.handleEndDateChange(endDateFromFilter);
+            }
+        }
     }
 
     private handleSaveClick = (domId, saveName) => {
@@ -367,8 +385,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
-            // startDate,
-            // endDate,
+            startDate,
+            endDate,
             submittedStartDate,
             submittedEndDate,
             Null_check_estimatedLoss,
@@ -401,14 +419,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             this.setState({ regionRadio: { name: val, id } });
         };
 
-        const { rangeInDays } = filters.dataDateRange;
-        let startDate;
-        let endDate;
-        if (rangeInDays !== 'custom') {
-            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
-        } else {
-            ({ startDate, endDate } = filters.dataDateRange);
-        }
         const hazardSummary = this.getHazardsCount(filteredData, hazardTypes);
         const dropDownClickHandler = (item, index) => {
             const { label, key } = item;
@@ -519,17 +529,57 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     )}
                                 />
                             </div> */}
-                            <div className={styles.container}>
 
-                                <div className={styles.showheader}>
-                                    {/* <span className={styles.textHead}> */}
-                                    <DateRangeInfo
+                            <div className={styles.dataDetails}>
+                                <div className={styles.dateDetails}>
+                                    <div className={styles.infoIconContainer}>
+                                        <Icon
+                                            className={styles.infoIcon}
+                                            name="info"
+                                        />
+                                    </div>
+                                    <div className={styles.label}>
+                                        Showing Data From
+                                    </div>
+                                    <DateInput
+                                        showLabel={false}
+                                        showHintAndError={false}
+                                        className={styles.dateFrom}
+                                        value={startDate}
+                                        onChange={this.handleStartDateChange}
+                                    />
+                                    <div className={styles.label}>
+                                        to
+                                    </div>
+                                    <DateInput
+                                        showLabel={false}
+                                        showHintAndError={false}
+                                        className={styles.dateTo}
+                                        value={endDate}
+                                        onChange={this.handleEndDateChange}
+                                    />
+                                    <div
+                                        className={styles.submitButton}
+                                        onClick={this.handleSubmitClick}
+                                        role="presentation"
+                                    >
+                                        Submit
+                                    </div>
+                                </div>
+                                {startDate > endDate
+                                    && (
+                                        <div className={styles.warningText}>
+                                            WARNING! Start date cannot be greater than End Date
+                                        </div>
+                                    )
+                                }
+                                {/* <DateRangeInfo
                                         className={styles.dateRange}
                                         startDate={startDate}
                                         endDate={endDate}
-                                    />
-                                    {/* </span> */}
-                                    <ModalButton
+                                    /> */}
+                                {/* </span> */}
+                                {/* <ModalButton
                                         className={styles.modalButton}
                                         transparent
                                         disabled={pending}
@@ -540,9 +590,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         )}
                                     >
                                         View tabular data
-                                    </ModalButton>
+                                    </ModalButton> */}
 
-                                </div>
+                            </div>
+                            <div className={styles.container}>
+
                                 <div className={styles.radioAndCompare}>
                                     <FilterRadio
                                         regionRadio={regionRadio}
