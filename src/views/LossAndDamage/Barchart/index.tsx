@@ -6,9 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
-import styles from './styles.scss';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
+import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
 import { BarchartProps, ChartData, TooltipInterface, RadioValue } from './types';
 
@@ -106,8 +106,8 @@ const BarChartVisual = (props: BarchartProps) => {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <span className={styles.label}>{`${payload[0].payload.name} ${regionRadio.name}`}</span>
-                    <span className={styles.label}>{`${selectOption.name}:${payload[0].payload.value}`}</span>
+                    {/* <span className={styles.label}>{`${payload[0].payload.name} ${regionRadio.name}`}</span> */}
+                    <span className={styles.label}>{`${selectOption.name}: ${payload[0].payload.value}`}</span>
                 </div>
             );
         }
@@ -165,7 +165,7 @@ const BarChartVisual = (props: BarchartProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleSaveClick('barChart', 'barChart')}
+                            onClick={() => handleSaveClick('barChart', 'Bar Chart')}
                             iconName="download"
                         />
                     )

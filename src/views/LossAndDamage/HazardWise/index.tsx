@@ -70,8 +70,7 @@ const HazardWise = (props: HazardWiseProps) => {
                                     x={x + width / 7}
                                     y={y + height / 5}
                                     textAnchor="top"
-                                    fill="white"
-                                    stroke="white"
+                                    style={{ fill: '#418fde', stroke: '#418fde' }}
                                     fontWeight={'100'}
                                     fontSize={(height + width) / 28}
                                 >
@@ -81,8 +80,7 @@ const HazardWise = (props: HazardWiseProps) => {
                                     x={x + width / 7}
                                     y={y === 0 ? y + height / 3 : y + height / 2.5}
                                     textAnchor="top"
-                                    fill="white"
-                                    stroke="white"
+                                    style={{ fill: '#418fde', stroke: '#418fde' }}
                                     fontSize={(height + width) / 20}
                                     fontWeight={'300'}
                                 >
@@ -117,7 +115,7 @@ const HazardWise = (props: HazardWiseProps) => {
             const { name, value } = payload[0].payload;
             return (
                 <p className={styles.label}>
-                    {`${name}:${value}`}
+                    {`${name}: ${value}`}
                 </p>
             );
         }
@@ -159,7 +157,7 @@ const HazardWise = (props: HazardWiseProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleSaveClick('treemap', 'treeMap')}
+                            onClick={() => handleSaveClick('treemap', 'Tree Map')}
                             iconName="download"
                         />
                     )

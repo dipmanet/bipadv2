@@ -42,7 +42,7 @@ const AreaChartVisual = (props: BarchartProps) => {
                 <div className={styles.customTooltip}>
                     <span className={styles.label}>
                         {
-                            `${payload[0].name}:${payload[0].value}`
+                            `${payload[0].name}: ${payload[0].value}`
                         }
 
                     </span>
@@ -69,7 +69,7 @@ const AreaChartVisual = (props: BarchartProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleSaveClick('areaChart', 'areaChart')}
+                            onClick={() => handleSaveClick('areaChart', 'Area Chart')}
                             iconName="download"
                         />
                     )
