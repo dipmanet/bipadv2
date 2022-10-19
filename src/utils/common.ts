@@ -213,7 +213,17 @@ export const imageUrlToDataUrl = (url, callback) => {
 };
 
 export function saveChart(elementId: string, name: string, functionData) {
-    domtoimage.toBlob(document.getElementById(elementId))
+    const scale = 2;
+    const domNode = document.getElementById(elementId);
+    domtoimage.toBlob(domNode,
+        {
+            width: domNode.clientWidth * scale,
+            height: domNode.clientHeight * scale,
+            style: {
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+            },
+        })
         .then(blob => (
             saveAs(blob, `${name}.png`)
 
