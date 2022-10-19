@@ -116,6 +116,7 @@ const iconNames = {
     tableView: 'fa fa-list-ul',
     lgprofilePopupDownArrow: 'fa fa-chevron-down',
     lgprofilePopupUpArrow: 'fa fa-chevron-up',
+    fullScreen: 'fa fa-arrows-alt',
 
 
 };

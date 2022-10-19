@@ -2,10 +2,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
 import styles from './styles.scss';
@@ -14,6 +15,7 @@ import { BarchartProps, ChartData, TooltipInterface, RadioValue } from './types'
 
 const BarChartVisual = (props: BarchartProps) => {
     const [chartData, setChartData] = useState<ChartData>([]);
+    // const barRef = useRef();
     const { selectOption,
         regionRadio,
         data,
@@ -21,6 +23,59 @@ const BarChartVisual = (props: BarchartProps) => {
         className,
         handleSaveClick,
         downloadButton } = props;
+
+
+    // const enterFullscreen = (elem, options) => {
+    //     elem[
+    //         ['requestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen', 'webkitRequestFullscreen']
+    //             .find(prop => typeof elem[prop] === 'function')
+    //     ](options);
+    // };
+
+    // function openFullscreen() {
+    //     const elem = document.getElementById('barChart');
+    //     if (elem.requestFullscreen) {
+    //         elem.requestFullscreen();
+    //     } else if (elem.webkitRequestFullscreen) { /* Safari */
+    //         elem.webkitRequestFullscreen();
+    //     } else if (elem.msRequestFullscreen) { /* IE11 */
+    //         elem.msRequestFullscreen();
+    //     }
+    //     elem.style.width = '100%';
+    //     elem.style.height = '100%';
+    // }
+    // const target = document.getElementById('fullScreen');
+    // if (target) {
+    //     target.addEventListener('click', (e) => {
+    //         openFullscreen();
+    //         const bar = barRef.current;
+    //         if (bar) {
+    //             const { container } = bar;
+    //             const svgWrapper = container;
+    //             // container.style.width = '500px';
+    //             console.log(container, 'ref');
+    //         }
+    //         // const barChart = document.getElementById('barChart');
+    //         // const scale = 2;
+    //         // enterFullscreen(barChart);
+    //         // setClicked(!clicked);
+    //         // const Chart = barRef.current;
+    //         // console.log(Chart, 'target');
+    //         // const reChartWrapper = Chart.container.children[0];
+    //         // reChartWrapper.clientWidth = '800px';
+    //         // console.log(Chart.container, 'container');
+    //         // Chart.height = '80%%';
+    //         // Chart.transform = `scale(${scale})`;
+    //         // Chart.transformOrigin = 'top left';
+    //     });
+    // }
+
+    //
+    // style: {
+    //     transform: `scale(${scale})`,
+    //     transformOrigin: 'top left',
+    // },
+
 
     const provinceIndex = data.map(i => ({
         name: i.provinceTitle,
@@ -158,6 +213,14 @@ const BarChartVisual = (props: BarchartProps) => {
                 <p className={styles.text}>
                     {nameReturn(regionRadio)}
                 </p>
+                <Icon
+                    className={styles.fullScreen}
+                    name="fullScreen"
+                    id="fullScreen"
+                />
+                <span className={styles.toolTipItem}>
+                    Enter fullScreen Mode
+                </span>
                 {
                     downloadButton && (
                         <Button
@@ -176,7 +239,7 @@ const BarChartVisual = (props: BarchartProps) => {
                 {
                     chartData.length > 0
                     && (
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ResponsiveContainer width={'100%'} height={300}>
                             <BarChart
                                 data={chartData}
                                 margin={{
@@ -185,6 +248,7 @@ const BarChartVisual = (props: BarchartProps) => {
                                     left: -32,
                                 }}
                                 barSize={20}
+                            // ref={barRef}
                             >
                                 <XAxis
                                     dy={10}

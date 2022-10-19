@@ -1,10 +1,20 @@
-// .container {
-//     display: flex;
-//     flex-direction: column;
-//     width: 100%;
-//     align-items: center;
-//     position: relative;
-//     margin-top: 15px;
+.toolTipItem {
+    display: none;
+    font-size: 0.75rem;
+    font-weight: 400;
+    width: max-content;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 3px;
+    border: 2px solid white;
+    text-transform: capitalize;
+    /* Position the tooltip */
+    position: absolute;
+    right: 0;
+    top: 35px;
+    z-index: 1;
+  }
 
     .wrapper {
         display: flex;
@@ -19,12 +29,27 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            position: relative;
 
             .text {
                 font-size: 14px;
                 font-weight: 600;
                 text-transform: uppercase;
             }
+
+            .fullScreen{
+                font-size: 12px;
+                margin-left: auto;
+                margin-right: 10px;
+                &:hover{
+                    .toolTipItem {
+                        display:block;
+                      }
+                    cursor: pointer;
+                    
+                }
+            }
+
 
             .download-button {
                 padding: 5px;
@@ -34,7 +59,17 @@
         .barChart {
             width:100%;
             justify-self: flex-start;
+            &:fullscreen{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: white;
+                height: 80vh;
+                width: 80vh;
+                margin: auto;
+            }
         }
+
 
     }
 

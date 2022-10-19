@@ -428,7 +428,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
         return (
             <>
-                <Loading pending={pending} />
+                <Loading
+                    pending={pending}
+                    text="Please wait, the system is loading data"
+                />
                 <Page
                     leftContentContainerClassName={styles.left}
                     leftContent={(
@@ -572,6 +575,37 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </div>
                                     )
                                 }
+                                <div className={styles.sourceDetails}>
+                                    <div className={styles.infoIconContainer}>
+                                        <Icon
+                                            className={styles.infoIcon}
+                                            name="info"
+                                        />
+                                    </div>
+                                    <div className={styles.label}>
+                                        Data sources:
+                                    </div>
+                                    <div className={styles.value}>
+                                        <div className={styles.source}>
+                                            Nepal Police
+                                        </div>
+                                        <div className={styles.source}>
+                                            <div className={styles.text}>
+                                                DRR Portal
+                                            </div>
+                                            <a
+                                                className={styles.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href="http://drrportal.gov.np"
+                                            >
+                                                <Icon
+                                                    name="externalLink"
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* <DateRangeInfo
@@ -610,6 +644,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     Compare regions
                                 </ModalButton>
                                 <ModalButton
+                                    disabled={pending}
                                     title="View Tabular Data"
                                     className={styles.showTableButton}
                                     iconName="table"
@@ -671,9 +706,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
                                                 />
-                                                <p className={styles.hazardText}>
+                                                {/* <p className={styles.hazardText}>
                                                     Data source : nepal police,drr portal
-                                                </p>
+                                                </p> */}
                                             </div>
                                         )
                                         : (
