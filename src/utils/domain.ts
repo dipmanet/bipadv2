@@ -159,8 +159,8 @@ export const lossMetrics = [
     { key: 'estimatedLoss', label: 'Estimated loss (NPR)' },
     { key: 'infrastructureDestroyedCount', label: 'Infrastructure destroyed' },
     { key: 'livestockDestroyedCount', label: 'Livestock destroyed' },
-    { key: 'peopleInjuredCount', label: 'Injured' },
-    { key: 'peopleMissingCount', label: 'Missing' },
+    { key: 'peopleInjuredCount', label: 'Injured people' },
+    { key: 'peopleMissingCount', label: 'Missing people' },
 ];
 
 // CONVERSION TO GEOJSON
