@@ -33,6 +33,16 @@ border: 1px solid rgba(255, 255, 255, 0.3);
         }
     }
 
+    .treeMap{
+        width:100%;
+        &:fullscreen{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+    }
+
     .svg {
         filter: invert(49%) sepia(98%) saturate(1378%) hue-rotate(188deg) brightness(92%) contrast(89%);
     }

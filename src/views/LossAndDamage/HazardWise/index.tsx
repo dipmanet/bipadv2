@@ -2,13 +2,14 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable max-len */
 /* eslint-disable no-plusplus */
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
 import { HazardDetail, Summary } from './types';
-import { TooltipInterface } from '../Barchart/types';
+import { ContainerSize, TooltipInterface } from '../Barchart/types';
+import FullScreenIcon from '../FullScreen';
 
 interface HazardWiseProps {
     selectOption: {
@@ -22,13 +23,31 @@ interface HazardWiseProps {
         };
     };
     handleSaveClick: (id: string, fileName: string) => void;
-    downloadButton: boolean | undefined;
+    downloadButton?: boolean | undefined;
+    fullScreenMode?: boolean;
 
 }
 
 const HazardWise = (props: HazardWiseProps) => {
-    const { selectOption, data, handleSaveClick, downloadButton } = props;
+    const { selectOption, data, handleSaveClick, downloadButton, fullScreenMode } = props;
     const treeMapRef = useRef<HTMLDivElement>(null);
+    const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
+
+    const setFullScreenHeightWidth = (width: string, height: string | number) => {
+        setFullScreen({ width, height });
+    };
+
+    function exitHandler() {
+        if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            setFullScreen({ width: '100%', height: 300 });
+        }
+    }
+    if (document.addEventListener) {
+        document.addEventListener('fullscreenchange', exitHandler, false);
+        document.addEventListener('mozfullscreenchange', exitHandler, false);
+        document.addEventListener('MSFullscreenChange', exitHandler, false);
+        document.addEventListener('webkitfullscreenchange', exitHandler, false);
+    }
 
     const hazardWiseData = Object.entries(data).map((item) => {
         const obj = {
@@ -150,6 +169,17 @@ const HazardWise = (props: HazardWiseProps) => {
                     {selectOption.name}
                     {' '}
                 </p>
+
+                {
+                    fullScreenMode
+                    && (
+                        <FullScreenIcon
+                            domElement="treemap"
+                            setFullScreenHeightWidth={setFullScreenHeightWidth}
+                        />
+                    )
+                }
+
                 {
                     downloadButton && (
                         <Button
@@ -164,9 +194,9 @@ const HazardWise = (props: HazardWiseProps) => {
                 }
 
             </div>
-            <div id="treemap" ref={treeMapRef}>
+            <div id="treemap" ref={treeMapRef} className={styles.treeMap}>
                 {hazardWiseData.length > 0 && (
-                    <ResponsiveContainer height={300}>
+                    <ResponsiveContainer height={fullScreen.height} width={fullScreen.width}>
                         <Treemap
                             width={400}
                             height={300}
