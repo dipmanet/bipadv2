@@ -7,7 +7,7 @@
     color: #fff;
     text-align: center;
     padding: 3px;
-    border: 2px solid white;
+    border: 1px solid white;
     text-transform: capitalize;
     /* Position the tooltip */
     position: absolute;
@@ -21,11 +21,8 @@
     font-size: 12px;
     margin-left: auto;
     margin-right: 10px;
-    &:hover{
-        .toolTipItem {
+    cursor: pointer;
+    &:hover + .toolTipItem {
             display:block;
           }
-        cursor: pointer;
-        
-    }
 }

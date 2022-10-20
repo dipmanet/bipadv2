@@ -28,7 +28,7 @@ const FullScreenIcon = ({ domElement, setFullScreenHeightWidth }: Props) => {
                 onClick={openFullscreen}
             />
             <span className={styles.toolTipItem}>
-                Enter fullScreen Mode
+                View in fullScreen
             </span>
         </>
 
