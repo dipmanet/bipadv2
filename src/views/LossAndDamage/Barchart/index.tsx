@@ -2,79 +2,44 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
-import Icon from '#rscg/Icon';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
-import { BarchartProps, ChartData, TooltipInterface, RadioValue } from './types';
+import { BarchartProps, ChartData, TooltipInterface, RadioValue, ContainerSize } from './types';
+import FullScreenIcon from '../FullScreen';
 
 const BarChartVisual = (props: BarchartProps) => {
     const [chartData, setChartData] = useState<ChartData>([]);
-    // const barRef = useRef();
+    const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
     const { selectOption,
         regionRadio,
         data,
         valueOnclick,
         className,
         handleSaveClick,
-        downloadButton } = props;
+        downloadButton,
+        fullScreenMode } = props;
 
+    const setFullScreenHeightWidth = (width: string, height: string | number) => {
+        setFullScreen({ width, height });
+    };
 
-    // const enterFullscreen = (elem, options) => {
-    //     elem[
-    //         ['requestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen', 'webkitRequestFullscreen']
-    //             .find(prop => typeof elem[prop] === 'function')
-    //     ](options);
-    // };
-
-    // function openFullscreen() {
-    //     const elem = document.getElementById('barChart');
-    //     if (elem.requestFullscreen) {
-    //         elem.requestFullscreen();
-    //     } else if (elem.webkitRequestFullscreen) { /* Safari */
-    //         elem.webkitRequestFullscreen();
-    //     } else if (elem.msRequestFullscreen) { /* IE11 */
-    //         elem.msRequestFullscreen();
-    //     }
-    //     elem.style.width = '100%';
-    //     elem.style.height = '100%';
-    // }
-    // const target = document.getElementById('fullScreen');
-    // if (target) {
-    //     target.addEventListener('click', (e) => {
-    //         openFullscreen();
-    //         const bar = barRef.current;
-    //         if (bar) {
-    //             const { container } = bar;
-    //             const svgWrapper = container;
-    //             // container.style.width = '500px';
-    //             console.log(container, 'ref');
-    //         }
-    //         // const barChart = document.getElementById('barChart');
-    //         // const scale = 2;
-    //         // enterFullscreen(barChart);
-    //         // setClicked(!clicked);
-    //         // const Chart = barRef.current;
-    //         // console.log(Chart, 'target');
-    //         // const reChartWrapper = Chart.container.children[0];
-    //         // reChartWrapper.clientWidth = '800px';
-    //         // console.log(Chart.container, 'container');
-    //         // Chart.height = '80%%';
-    //         // Chart.transform = `scale(${scale})`;
-    //         // Chart.transformOrigin = 'top left';
-    //     });
-    // }
-
-    //
-    // style: {
-    //     transform: `scale(${scale})`,
-    //     transformOrigin: 'top left',
-    // },
+    function exitHandler() {
+        if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            setFullScreen({ width: '100%', height: 300 });
+        }
+    }
+    if (document.addEventListener) {
+        document.addEventListener('fullscreenchange', exitHandler, false);
+        document.addEventListener('mozfullscreenchange', exitHandler, false);
+        document.addEventListener('MSFullscreenChange', exitHandler, false);
+        document.addEventListener('webkitfullscreenchange', exitHandler, false);
+    }
 
 
     const provinceIndex = data.map(i => ({
@@ -213,14 +178,16 @@ const BarChartVisual = (props: BarchartProps) => {
                 <p className={styles.text}>
                     {nameReturn(regionRadio)}
                 </p>
-                <Icon
-                    className={styles.fullScreen}
-                    name="fullScreen"
-                    id="fullScreen"
-                />
-                <span className={styles.toolTipItem}>
-                    Enter fullScreen Mode
-                </span>
+                {
+                    fullScreenMode
+                    && (
+                        <FullScreenIcon
+                            domElement="barChart"
+                            setFullScreenHeightWidth={setFullScreenHeightWidth}
+                        />
+                    )
+                }
+
                 {
                     downloadButton && (
                         <Button
@@ -239,7 +206,7 @@ const BarChartVisual = (props: BarchartProps) => {
                 {
                     chartData.length > 0
                     && (
-                        <ResponsiveContainer width={'100%'} height={300}>
+                        <ResponsiveContainer width={fullScreen.width} height={fullScreen.height}>
                             <BarChart
                                 data={chartData}
                                 margin={{

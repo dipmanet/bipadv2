@@ -25,7 +25,8 @@ export interface BarchartProps {
     };
     className: React.CSSProperties;
     handleSaveClick: (id: string, fileName: string) => void;
-    downloadButton: boolean;
+    downloadButton?: boolean;
+    fullScreenMode?: boolean;
 }
 export interface TooltipInterface {
     active: boolean;
@@ -35,4 +36,8 @@ export interface TooltipInterface {
             name: string;
         };
     }[];
+}
+export interface ContainerSize {
+    width: string;
+    height: number | string;
 }

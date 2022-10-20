@@ -33,6 +33,12 @@
     .areaChart {
         width: 100%;
         justify-self: flex-start;
+        &:fullscreen{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
     }
 
 }

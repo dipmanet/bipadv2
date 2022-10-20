@@ -11,7 +11,7 @@ interface Data {
         peopleMissingCount: number;
     };
 }
-export interface BarchartProps {
+export interface AreaChartProps {
     data: Data[];
     selectOption: {
         name: string;
@@ -19,6 +19,7 @@ export interface BarchartProps {
     };
     handleSaveClick: (id: string, fileName: string) => void;
     downloadButton?: boolean;
+    fullScreenMode?: boolean;
 }
 
 export interface TooltipInterface {

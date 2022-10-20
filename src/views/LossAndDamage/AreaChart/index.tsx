@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-undef */
-import React from 'react';
+import React, { useState } from 'react';
 import {
     AreaChart,
     Area,
@@ -13,13 +13,33 @@ import {
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
-import { BarchartProps, TooltipInterface } from './types';
+import { AreaChartProps, TooltipInterface } from './types';
+import { ContainerSize } from '../Barchart/types';
+import FullScreenIcon from '../FullScreen';
 
-const AreaChartVisual = (props: BarchartProps) => {
+const AreaChartVisual = (props: AreaChartProps) => {
+    const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
     const { selectOption: { name, key },
         data,
         handleSaveClick,
-        downloadButton } = props;
+        downloadButton,
+        fullScreenMode } = props;
+
+    const setFullScreenHeightWidth = (width: string, height: string | number) => {
+        setFullScreen({ width, height });
+    };
+
+    function exitHandler() {
+        if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            setFullScreen({ width: '100%', height: 300 });
+        }
+    }
+    if (document.addEventListener) {
+        document.addEventListener('fullscreenchange', exitHandler, false);
+        document.addEventListener('mozfullscreenchange', exitHandler, false);
+        document.addEventListener('MSFullscreenChange', exitHandler, false);
+        document.addEventListener('webkitfullscreenchange', exitHandler, false);
+    }
 
     const chartData = data.map((item) => {
         const date = new Date();
@@ -61,6 +81,17 @@ const AreaChartVisual = (props: BarchartProps) => {
                     {' '}
                     {name}
                 </p>
+
+                {
+                    fullScreenMode
+                    && (
+                        <FullScreenIcon
+                            domElement="areaChart"
+                            setFullScreenHeightWidth={setFullScreenHeightWidth}
+                        />
+                    )
+                }
+
                 {
                     downloadButton
                     && (
@@ -80,7 +111,7 @@ const AreaChartVisual = (props: BarchartProps) => {
             <div className={styles.areaChart} id="areaChart">
                 {
                     chartData && (
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ResponsiveContainer width={fullScreen.width} height={fullScreen.height}>
                             <AreaChart
                                 width={500}
                                 height={200}

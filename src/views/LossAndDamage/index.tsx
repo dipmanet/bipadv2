@@ -693,18 +693,21 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     regionRadio={regionRadio}
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
+                                                    fullScreenMode
                                                 />
                                                 <AreaChartVisual
                                                     selectOption={selectOption}
                                                     data={chartData}
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
+                                                    fullScreenMode
                                                 />
                                                 <HazardWise
                                                     selectOption={selectOption}
                                                     data={hazardSummary}
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
+                                                    fullScreenMode
                                                 />
                                                 {/* <p className={styles.hazardText}>
                                                     Data source : nepal police,drr portal
