@@ -2,7 +2,12 @@ import React from 'react';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
-const FullScreenIcon = ({ domElement, setFullScreenHeightWidth }: { domElement: string }) => {
+interface Props {
+    domElement: string;
+    setFullScreenHeightWidth: (width: string, height: string) => void;
+}
+
+const FullScreenIcon = ({ domElement, setFullScreenHeightWidth }: Props) => {
     function openFullscreen() {
         const element = document.getElementById(domElement);
         if (element.requestFullscreen) {
@@ -12,7 +17,7 @@ const FullScreenIcon = ({ domElement, setFullScreenHeightWidth }: { domElement: 
         } else if (element.msRequestFullscreen) { /* IE11 */
             element.msRequestFullscreen();
         }
-        setFullScreenHeightWidth('80%', '80%');
+        setFullScreenHeightWidth('75%', '75%');
     }
     return (
         <>
