@@ -15,7 +15,7 @@ import { englishToNepaliNumber, nepaliToEnglishNumber } from 'nepali-number';
 import { navigate } from '@reach/router';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import styles from './styles.scss';
+import { FormHelperText } from '@material-ui/core';
 import {
     userSelector,
     bulletinEditDataSelector,
@@ -26,6 +26,7 @@ import {
     setBulletinEditDataAction,
     setBulletinFeedbackAction,
 } from '#actionCreators';
+import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     user: userSelector(state),
@@ -46,6 +47,8 @@ const PDFPreview = (props) => {
     const [municipality, setMunicipality] = useState(null);
     const [ward, setWard] = useState(null);
     const [pending, setPending] = useState(false);
+    const [error, setError] = useState(false);
+
 
     const {
         bulletinData: {
@@ -323,7 +326,7 @@ const PDFPreview = (props) => {
         });
     };
 
-    const savePDf = (zipContent, file) => {
+    const savePDf = (zipContent, file, engToNep, dateNep) => {
         axios
             .post(`${baseUrl}/bipad-bulletin/`, getPostData(zipContent, file), {
                 headers: {
@@ -331,6 +334,7 @@ const PDFPreview = (props) => {
                 },
             }).then((res) => {
                 // doc.save('Bulletin.pdf');
+                saveAs(zipContent, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.zip` : `${dateNep} Daily Bipad Bulletin.zip`);
                 setPending(false);
             })
             .catch((error) => {
@@ -338,13 +342,14 @@ const PDFPreview = (props) => {
             });
     };
 
-    const updatePDF = (zipContent, file, id) => {
+    const updatePDF = (zipContent, file, id, engToNep, dateNep) => {
         axios
             .patch(`${baseUrl}/bipad-bulletin/${id}/`, getPatchData(zipContent, file), {
                 headers: {
                     Accept: 'application/json',
                 },
             }).then((res) => {
+                saveAs(zipContent, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.zip` : `${dateNep} Daily Bipad Bulletin.zip`);
                 setPending(false);
                 setBulletinEditData({});
                 navigate('/admin/bulletin/bulletin-data-table');
@@ -385,6 +390,7 @@ const PDFPreview = (props) => {
     const handleDownload = async (reportType: string) => {
         const pageNumber = 0;
         setPending(true);
+        setError(false);
         const reportContentPage1 = document.getElementById('page1');
         const reportContentPage2 = document.getElementById('page2');
         const reportContentPage3 = document.getElementById('page3');
@@ -431,20 +437,35 @@ const PDFPreview = (props) => {
                     .then((zipContent) => {
                         axios.get(`${baseUrl}/bipad-bulletin/?sitrep=${sitRep}`).then((res) => {
                             if (res.data.results.length === 0) {
-                                savePDf(zipContent, bulletin);
+                                savePDf(zipContent, bulletin, engToNep, dateNep);
+                                reportPDF.save(language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन` : `${dateNep} Daily Bipad Bulletin`);
                             } else {
                                 // const { id } = bulletinEditData;
                                 const { id } = res.data.results[0];
-                                updatePDF(zipContent, bulletin, id);
+                                updatePDF(zipContent, bulletin, id, engToNep, dateNep);
+                                reportPDF.save(language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन` : `${dateNep} Daily Bipad Bulletin`);
                             }
+                        }).catch((err) => {
+                            setError(true);
+                            console.log('This is fatigue error', err);
+                            setPending(false);
                         });
-                        saveAs(zipContent, language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन.zip` : `${dateNep} Daily Bipad Bulletin.zip`);
+                    })
+                    .catch((err) => {
+                        setError(true);
+                        console.log('This is fatigue error', err);
+                        setPending(false);
                     });
             })
-            .save(language === 'np' ? `${engToNep} दैनिक विपद बुलेटिन` : `${dateNep} Daily Bipad Bulletin`);
+            .catch((err) => {
+                setError(true);
+                console.log('This is fatigue error', err);
+                setPending(false);
+            });
     };
 
-
+    console.log('This is error', error);
+    console.log('This pending', pending);
     return (
         <div className={styles.pdfContainer}>
             <div id="bulletinPDFReport">
@@ -508,6 +529,11 @@ const PDFPreview = (props) => {
                 </button>
 
             </div>
+            {error ? (
+                <FormHelperText style={{ color: '#f44336', marginLeft: '14px', marginTop: '20px', fontSize: '16px', textAlign: 'right' }}>
+                    {language === 'np' ? 'केहि समस्या भयो, कृपया पुन: पेश गर्नुहोस्' : 'some problem occured,please submit again'}
+                </FormHelperText>
+            ) : ''}
         </div>
 
     );

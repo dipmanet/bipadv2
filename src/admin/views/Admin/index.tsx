@@ -3,9 +3,9 @@ import AdminTable from 'src/admin/components/AdminTable/index';
 import Navbar from 'src/admin/components/Navbar';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
+import Page from '#components/Page';
 import styles from './styles.module.scss';
 import Ideaicon from '../../resources/ideaicon.svg';
-import Page from '#components/Page';
 
 const DataTable = (props) => {
     const { uri } = props;
