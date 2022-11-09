@@ -45,25 +45,29 @@ export const legendItems = [
 
 ];
 
-const Legend = () => (
-    <div className={styles.container}>
-        <div className={styles.wrapper}>
-            {
-                legendItems.map(item => (
-                    <div className={styles.legendItem} key={item.value}>
-                        <div
-                            className={styles.legendColor}
-                            style={{ background: item.color }}
-                        />
-                        <span className={styles.legendText}>
-                            {item.name}
-                        </span>
-                    </div>
-                ))
-            }
-        </div>
+const Legend = (props) => {
+    const { currentSelection } = props;
+    return (
+        <div className={styles.container}>
+            <p className={styles.currentSelection}>{currentSelection}</p>
+            <div className={styles.wrapper}>
+                {
+                    legendItems.map(item => (
+                        <div className={styles.legendItem} key={item.value}>
+                            <div
+                                className={styles.legendColor}
+                                style={{ background: item.color }}
+                            />
+                            <span className={styles.legendText}>
+                                {item.name}
+                            </span>
+                        </div>
+                    ))
+                }
+            </div>
 
-    </div>
-);
+        </div>
+    );
+};
 
 export default Legend;

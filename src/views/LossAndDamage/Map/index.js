@@ -39,6 +39,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             radioSelect,
             currentSelection,
         } = this.props;
+
         const mapState = generateMapState(geoareas, mapping, metric);
         // const color = generateColor(maxValue, 0, colorGrade);
         const colorRange = [];
@@ -59,7 +60,9 @@ export default class LossAndDamageMap extends React.PureComponent {
                         isTimeline && styles.timeline,
                     )}
                 >
-                    <Legend />
+                    <Legend
+                        currentSelection={currentSelection}
+                    />
                 </div>
                 <ChoroplethMap
                     sourceKey={sourceKey}
