@@ -89,7 +89,7 @@ const HazardWise = (props: HazardWiseProps) => {
                                     x={x + width / 7}
                                     y={y + height / 5}
                                     textAnchor="top"
-                                    style={{ fill: '#418fde', stroke: '#418fde' }}
+                                    style={{ fill: '#FFFFFF', stroke: '#FFFFFF' }}
                                     fontWeight={'100'}
                                     fontSize={(height + width) / 28}
                                 >
@@ -99,7 +99,7 @@ const HazardWise = (props: HazardWiseProps) => {
                                     x={x + width / 7}
                                     y={y === 0 ? y + height / 3 : y + height / 2.5}
                                     textAnchor="top"
-                                    style={{ fill: '#418fde', stroke: '#418fde' }}
+                                    style={{ fill: '#FFFFFF', stroke: '#FFFFFF' }}
                                     fontSize={(height + width) / 20}
                                     fontWeight={'300'}
                                 >
