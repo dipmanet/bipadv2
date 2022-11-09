@@ -659,7 +659,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                             <h4 className={styles.heading}>
                                 <Translation>
                                     {
-                                        t => <span>{t('Earthquake (Richter Scale (ML))')}</span>
+                                        t => <span>{t('Earthquake (ML)')}</span>
                                     }
                                 </Translation>
 
@@ -691,7 +691,7 @@ class RealTimeMonitoring extends React.PureComponent<Props, State> {
                             </div>
                             <a
                                 className={styles.link}
-                                href="https://www.seismonepal.gov.np"
+                                href="http://www.seismonepal.gov.np"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

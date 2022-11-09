@@ -28,7 +28,7 @@ const EarthquakeLegend = () => (
                 alt="Earthquake"
             />
             <h4 className={styles.heading}>
-                    Earthquake (Richter Scale (ML))
+                    Earthquake (ML)
             </h4>
         </header>
         <Legend
@@ -48,7 +48,7 @@ const EarthquakeLegend = () => (
             </div>
             <a
                 className={styles.link}
-                href="https://www.seismonepal.gov.np"
+                href="http://www.seismonepal.gov.np"
                 target="_blank"
                 rel="noopener noreferrer"
             >

@@ -154,7 +154,7 @@ const EarthquakeToolTip = (
                         :
                     </div>
                     <a
-                        href="https://www.seismonepal.gov.np/"
+                        href="http://www.seismonepal.gov.np/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}

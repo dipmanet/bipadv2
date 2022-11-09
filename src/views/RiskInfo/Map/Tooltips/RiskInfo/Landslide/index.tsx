@@ -60,7 +60,7 @@ const LandslideToolTip = (
                 {/* <div className={styles.source}>
                     <div className={styles.title}>SOURCE:</div>
                     <a
-                        href="https://www.seismonepal.gov.np/"
+                        href="http://www.seismonepal.gov.np/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}
