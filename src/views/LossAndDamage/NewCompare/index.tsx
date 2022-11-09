@@ -11,6 +11,7 @@ import {
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
+import * as HtmltoImage from 'html-to-image';
 
 import Button from '#rsca/Button';
 import Modal from '#rscv/Modal';
@@ -31,15 +32,15 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
-import { saveChart } from '#utils/common';
 
+import { createSingleList } from '#components/RegionSelectInput/util.js';
+import ChoroplethMap from '#components/ChoroplethMap';
 import { getSanitizedIncidents, metricMap } from '../common';
 
 import styles from './styles.scss';
 import AreaChartVisual from '../AreaChart';
 import BarChartVisual from '../Barchart';
 import HazardWise from '../HazardWise';
-import { createSingleList } from '#components/RegionSelectInput/util.js';
 import Dropdown from '../DropDown';
 
 import {
@@ -50,7 +51,6 @@ import {
     generateMapState,
     generatePaint,
 } from '../utils/utils';
-import ChoroplethMap from '#components/ChoroplethMap';
 import { legendItems } from '../Legend';
 
 const propTypes = {
@@ -100,7 +100,7 @@ class NewCompare extends React.PureComponent {
 
     constructor(props) {
         super(props);
-
+        this.imageDownloadRef = React.createRef();
         this.state = {
             faramValues: {},
             faramErrors: {},
@@ -209,7 +209,6 @@ class NewCompare extends React.PureComponent {
             setSelectOption,
             setVAlueOnClick,
             currentSelection,
-            handleSaveClick,
         } = this.props;
 
         const {
@@ -217,6 +216,7 @@ class NewCompare extends React.PureComponent {
             faramErrors,
             rightPaneExpanded,
         } = this.state;
+
 
         const {
             region1,
@@ -276,6 +276,21 @@ class NewCompare extends React.PureComponent {
         }
         const colorPaint = generatePaint(colorRange);
 
+        const handleDownload = async () => {
+            if (this.imageDownloadRef.current) {
+                const width = this.imageDownloadRef.current.scrollWidth;
+                const height = this.imageDownloadRef.current.scrollHeight;
+                const image = await HtmltoImage.toPng(this.imageDownloadRef.current,
+                    { width, height }).then((img) => {
+                    const link = document.createElement('a');
+                    link.href = img;
+                    link.download = 'Compare.png';
+                    link.click();
+                });
+            }
+        };
+
+
         return (
             <Modal className={_cs(className, styles.comparative)
             }
@@ -289,7 +304,7 @@ class NewCompare extends React.PureComponent {
                         className={styles.chartDownload}
                         transparent
                         disabled={!region1 && !region2}
-                        onClick={() => handleSaveClick('comparative', 'compare')}
+                        onClick={handleDownload}
                         iconName="download"
                     />
                     <Button
@@ -333,7 +348,7 @@ class NewCompare extends React.PureComponent {
                     {(!region1 && !region2) ? (
                         this.messageForNoData(false)
                     ) : (
-                        <div className={styles.comparisionContainer}>
+                        <div className={styles.comparisionContainer} ref={this.imageDownloadRef}>
                             <div className={styles.mapContainer}>
                                 {isRegionValid(faramValues.region1)
                                     && region1Incidents.length > 0
@@ -413,7 +428,6 @@ class NewCompare extends React.PureComponent {
                             </div>
                             <div
                                 className={styles.visualizations}
-                                id="comparative"
                             >
                                 <div className={styles.otherVisualizations}>
                                     {isRegionValid(faramValues.region1)

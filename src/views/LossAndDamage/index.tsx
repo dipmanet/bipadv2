@@ -637,7 +637,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             selectOption={selectOption}
                                             valueOnclick={valueOnclick}
                                             currentSelection={selectOption}
-                                            handleSaveClick={this.handleSaveClick}
                                         />
                                     )}
                                 >

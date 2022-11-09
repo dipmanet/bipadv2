@@ -172,6 +172,7 @@
         "file-saver": "2.0.2",
         "filefy": "0.1.11",
         "hoist-non-react-statics": "3.3.0",
+        "html-to-image": "^1.10.8",
         "html2canvas": "1.0.0-rc.5",
         "html2canvas-render-offscreen": "0.0.3",
         "immer": "3.2.0",
