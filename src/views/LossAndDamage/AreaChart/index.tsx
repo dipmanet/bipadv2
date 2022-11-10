@@ -16,6 +16,7 @@ import { returnValueByDropdown } from '../utils/utils';
 import { AreaChartProps, TooltipInterface } from './types';
 import { ContainerSize } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
+import { handleDownload } from '../Barchart/util';
 
 const AreaChartVisual = (props: AreaChartProps) => {
     const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
@@ -100,7 +101,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleSaveClick('areaChart', 'Area Chart')}
+                            onClick={() => handleDownload('areaChart', name, 'Area Chart', 0, 20)}
                             iconName="download"
                         />
                     )

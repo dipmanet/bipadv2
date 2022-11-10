@@ -10,6 +10,7 @@ import { returnValueByDropdown } from '../utils/utils';
 import { HazardDetail, Summary } from './types';
 import { ContainerSize, TooltipInterface } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
+import { handleDownload } from '../Barchart/util';
 
 interface HazardWiseProps {
     selectOption: {
@@ -112,11 +113,11 @@ const HazardWise = (props: HazardWiseProps) => {
                                     y={(height + width) <= 150 ? (y + height / 7) : y + height / 1.5}
                                 >
                                     <img
-                                        className={styles.svg}
                                         width={(height + width) <= 150 ? '15px' : (height + width) / 14}
                                         height={(height + width) <= 150 ? '15px' : (height + width) / 14}
                                         src={icon}
                                         alt={name}
+                                        style={{ filter: 'brightness(0) invert(1)' }}
                                     />
                                 </foreignObject>
 
@@ -164,7 +165,7 @@ const HazardWise = (props: HazardWiseProps) => {
         <div className={styles.wrapper}>
             <div className={styles.hazardHead}>
                 <p className={styles.hazardText}>
-                    Hazardwise distribution of
+                    Hazard-wise distribution of
                     {' '}
                     {selectOption.name}
                     {' '}
@@ -187,7 +188,7 @@ const HazardWise = (props: HazardWiseProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleSaveClick('treemap', 'Tree Map')}
+                            onClick={() => handleDownload('treemap', selectOption.name, 'Tree Map', 50, 0)}
                             iconName="download"
                         />
                     )

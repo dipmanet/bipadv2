@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
@@ -12,16 +12,18 @@ import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
 import { BarchartProps, ChartData, TooltipInterface, RadioValue, ContainerSize } from './types';
 import FullScreenIcon from '../FullScreen';
+import { handleDownload } from './util';
+
 
 const BarChartVisual = (props: BarchartProps) => {
     const [chartData, setChartData] = useState<ChartData>([]);
     const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
+    const imageDownloadRef = useRef();
     const { selectOption,
         regionRadio,
         data,
         valueOnclick,
         className,
-        handleSaveClick,
         downloadButton,
         fullScreenMode } = props;
 
@@ -168,6 +170,7 @@ const BarChartVisual = (props: BarchartProps) => {
                 ));
     };
 
+
     return (
         // <div className={styles.container}>
         <div className={className
@@ -195,14 +198,14 @@ const BarChartVisual = (props: BarchartProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleSaveClick('barChart', 'Bar Chart')}
+                            onClick={() => handleDownload('barChart', selectOption.name, 'Bar Chart', 20, 0)}
                             iconName="download"
                         />
                     )
                 }
 
             </div>
-            <div className={styles.barChart} id="barChart">
+            <div className={styles.barChart} id="barChart" ref={imageDownloadRef}>
                 {
                     chartData.length > 0
                     && (
