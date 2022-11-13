@@ -66,7 +66,7 @@ import {
     pastDaysToDateRange,
 } from '#utils/transformations';
 import DateRangeInfo from '#components/DateRangeInfo';
-import { setIncidentListActionIP } from '#actionCreators';
+import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
 import TabularView from './TabularView';
 import Comparative from './Comparative';
 import { getSanitizedIncidents } from './common';
@@ -207,6 +207,24 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         regionRadio: { name: 'province', id: 1 },
     }
 
+
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    componentDidMount() {
+        const { filters, setFilters } = this.props;
+        const sixMonths = {
+            dataDateRange: {
+                rangeInDays: 183,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        };
+
+        setFilters({ filters: sixMonths });
+    }
+
+
     // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
     componentDidUpdate(prevProps, prevState) {
         const { filters } = this.props;
@@ -222,6 +240,22 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.handleEndDateChange(endDateFromFilter);
             }
         }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    componentWillUnmount(): void {
+        const { filters, setFilters } = this.props;
+        const sixMonths = {
+            dataDateRange: {
+                rangeInDays: 7,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        };
+
+        setFilters({ filters: sixMonths });
     }
 
     private handleSaveClick = (domId, saveName) => {
@@ -430,7 +464,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             <>
                 <Loading
                     pending={pending}
-                    text="Please wait, the system is loading data"
                 />
                 <Page
                     leftContentContainerClassName={styles.left}
@@ -846,6 +879,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
+
 });
 
 

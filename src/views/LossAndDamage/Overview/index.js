@@ -13,8 +13,6 @@ import {
 } from '#selectors';
 
 import Map from '../Map';
-import DamageLossTooltip from '../DamageLossTooltip';
-
 // import LeftPane from './LeftPane';
 
 import {
@@ -107,25 +105,21 @@ class Overview extends React.PureComponent {
             });
         }
         return (
-            <>
-                <DamageLossTooltip currentSelection={currentSelection.name} />
-                <Map
-                    geoareas={geoareas}
-                    mapping={mapping}
-                    maxValue={maxValue}
-                    sourceKey="loss-and-damage-overview"
+            <Map
+                geoareas={geoareas}
+                mapping={mapping}
+                maxValue={maxValue}
+                sourceKey="loss-and-damage-overview"
 
-                    metric={selectedMetric.metricFn}
-                    metricName={selectedMetric.label}
-                    metricKey={selectedMetric.key}
-                    radioSelect={radioSelect.id}
-                    currentSelection={currentSelection.name}
+                metric={selectedMetric.metricFn}
+                metricName={selectedMetric.label}
+                metricKey={selectedMetric.key}
+                radioSelect={radioSelect.id}
+                currentSelection={currentSelection.name}
                     // onMetricChange={(m) => {
-                    //     this.setState({ selectedMetricKey: m });
-                    // }}
-                />
-            </>
-
+                //     this.setState({ selectedMetricKey: m });
+                // }}
+            />
         );
     }
 }
