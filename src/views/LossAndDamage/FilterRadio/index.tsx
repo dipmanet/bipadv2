@@ -25,13 +25,13 @@ const FilterRadio = (props: FilterRadioProps) => {
         if (Object.keys(regionFilter).length > 1) {
             switch (regionFilter.adminLevel) {
                 case 1:
-                    setRegionRadio('province', 1);
-                    break;
-                case 2:
                     setRegionRadio('district', 2);
                     break;
-                case 3:
+                case 2:
                     setRegionRadio('municipality', 3);
+                    break;
+                case 3:
+                    setRegionRadio('ward', 4);
                     break;
                 default: setRegionRadio('province', 1);
             }
@@ -42,19 +42,20 @@ const FilterRadio = (props: FilterRadioProps) => {
         { id: 1, name: 'province' },
         { id: 2, name: 'district' },
         { id: 3, name: 'municipality' },
+        { id: 4, name: 'ward' },
     ];
     return (
         <div className={styles.container}>
             {filter.map(item => (
                 <div key={item.id} className={styles.wrapper}>
                     <input
-                        className={styles.radioInput}
+                        className={item.id === 4 ? styles.visibilty : styles.radioInput}
                         type="radio"
                         value={item.name}
                         onChange={e => setRegionRadio(e.target.value, item.id)}
                         checked={regionRadio.name === item.name}
                     />
-                    <label className={styles.radioItems}>
+                    <label className={item.id === 4 ? styles.visibilty : styles.radioItems}>
                         {item.name}
                     </label>
                 </div>

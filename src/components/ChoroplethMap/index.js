@@ -151,7 +151,8 @@ class ChoroplethMap extends React.PureComponent {
         const checkShowBoundary = (condition, isDamageandLoss, type) => {
             if (isDamageandLoss) {
                 if ((type === 'district' && regionLevel === 2)
-                || (type === 'muni' && regionLevel === 3)) {
+                || (type === 'muni' && regionLevel === 3)
+                 || (type === 'ward' && regionLevel === 4)) {
                     return true;
                 }
                 return false;
@@ -163,7 +164,8 @@ class ChoroplethMap extends React.PureComponent {
             if (isDamageandLoss) {
                 if ((type === 'prov' && regionLevel === 1)
                 || (type === 'district' && regionLevel === 2)
-                || (type === 'muni' && regionLevel === 3)) {
+                || (type === 'muni' && regionLevel === 3)
+                || (type === 'ward' && regionLevel === 4)) {
                     return true;
                 }
                 return false;
@@ -242,7 +244,8 @@ class ChoroplethMap extends React.PureComponent {
                 >
                     <MapLayer
                         layerKey="ward-fill"
-
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.ward,

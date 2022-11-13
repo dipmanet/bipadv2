@@ -87,7 +87,8 @@ class Overview extends React.PureComponent {
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
         const geoareas = (
-            (radioSelect.id === 3 && municipalities)
+            (radioSelect.id === 4 && wards)
+            || (radioSelect.id === 3 && municipalities)
             || (radioSelect.id === 2 && districts)
             || (radioSelect.id === 1 && provinces)
         );

@@ -20,7 +20,7 @@ export const estimatedLossValueFormatter = (d) => {
     return number;
 };
 
-export const tooltipRenderer = (props, currentSelection) => {
+export const tooltipRenderer = (props, currentSelection, radioSelect) => {
     const { feature } = props;
     return (
         <>
@@ -32,7 +32,9 @@ export const tooltipRenderer = (props, currentSelection) => {
                 textAlign: 'center',
             }}
             >
-                {feature.properties.title}
+                {radioSelect === 4
+                    ? `Ward No : ${feature.properties.title}`
+                    : feature.properties.title}
 
             </h3>
             <p style={{
