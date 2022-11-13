@@ -62,6 +62,12 @@ const BarChartVisual = (props: BarchartProps) => {
     })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
         .sort((a, b) => a.id - b.id);
 
+    const wardIndex = data.map(i => ({
+        name: i.wardTitle,
+        id: i.ward,
+    })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
+        .sort((a, b) => a.id - b.id);
+
     const distributionCalculate = (typeKey: { name: string; id: number }[], type: string) => {
         const key = lossMetrics.map(item => item.key);
         const filteredData = [];
@@ -110,6 +116,11 @@ const BarChartVisual = (props: BarchartProps) => {
                         .sort((a, b) => b.value - a.value)
                         .slice(0, 10));
                     break;
+                case regionRadio.name === 'ward':
+                    setChartData(distributionCalculate(wardIndex, 'ward')
+                        .sort((a, b) => b.value - a.value)
+                        .slice(0, 10));
+                    break;
                 default:
                     break;
             }
@@ -117,7 +128,7 @@ const BarChartVisual = (props: BarchartProps) => {
     }, [regionRadio, valueOnclick, data]);
 
     function nameReturn(region: RadioValue) {
-        if (region.name === 'district' || region.name === 'municipality') return `${regionRadio.name}-wise distribution (Top 10)`;
+        if (region.name === 'district' || region.name === 'municipality' || region.name === 'ward') return `${regionRadio.name}-wise distribution (Top 10)`;
         if (region.name === 'province') return `${regionRadio.name}-wise distribution`;
         if (region.adminLevel === 1) return 'Province-Wise distribution';
         if (region.adminLevel === 2) return 'District-Wise distribution';
