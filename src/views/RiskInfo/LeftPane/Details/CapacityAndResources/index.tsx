@@ -514,7 +514,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const result1 = a.join('&');
 
             const result2 = resource_type.map(item => `resource_type=${item}`);
-            console.log('This is resource type', resource_type);
+
             return params.filterClickCheckCondition
                 ? `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`
                 : `/resource/?resource_type=${resource_type[0]}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
@@ -882,8 +882,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { faramValues: { region } } = this.props.filters;
         const { carKeys } = this.props;
         const { isFilterClicked, FilterClickedStatus } = this.context;
-        console.log('isFilterClicked', isFilterClicked);
-        console.log('This is car keys', carKeys);
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
