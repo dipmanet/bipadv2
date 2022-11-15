@@ -3059,7 +3059,7 @@ export const capacityResource = [
     {
         id: 29,
         name: 'Ware House',
-        nameNe: 'आपतकालीन सेल्टर',
+        nameNe: 'गोदाम',
         resourceType: 'warehouse',
         attribute: '',
         level: 1,
