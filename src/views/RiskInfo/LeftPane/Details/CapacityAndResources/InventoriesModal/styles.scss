@@ -1,16 +1,30 @@
 .inventories-modal {
     height: 90vh;
+    width: 50%;
+    overflow: none !important;
 
     .modal-body {
         display: flex;
         flex-direction: column;
         padding: 0;
-        overflow: auto;
+        height: 90%;
+
+        .buttonGroup {
+            padding: var(--spacing-medium) var(--spacing-medium-alt);
+            height: 100%;
+        }
+
+        .active {
+            background-color: #216CD7 !important;
+            filter: none;
+            color: white !important;
+        }
 
         .header {
             display: flex;
             justify-content: flex-end;
-            padding: var(--spacing-medium);
+            // padding: var(--spacing-medium);
+            float: right;
         }
 
         .inventory-list {
@@ -38,6 +52,7 @@
             margin-left: var(--spacing-extra-small);
         }
     }
+
     &:hover {
         background-color: var(--color-background-hover);
     }

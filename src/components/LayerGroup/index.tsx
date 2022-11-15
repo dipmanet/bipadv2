@@ -9,8 +9,8 @@ import DefaultLayerSelection from '#components/LayerSelection';
 import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import { LayerHierarchy } from '#types';
 
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;

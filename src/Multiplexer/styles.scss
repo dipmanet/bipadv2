@@ -365,6 +365,7 @@ button {
     .modal {
         border-radius: 5px;
         padding: var(--spacing-small);
+        overflow-y: scroll;
 
         .modal-header {
             border-bottom: none;

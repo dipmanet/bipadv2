@@ -14,8 +14,8 @@ import {
     setLanguageAction,
 } from '#actionCreators';
 
-import styles from './styles.scss';
 import { AppState } from '#types';
+import styles from './styles.scss';
 
 interface ComponentProps {
 }
@@ -24,7 +24,7 @@ interface PropsFromAppState {
     language: PageTypes.Language;
 }
 
-type Props = ComponentProps & PropsFromAppState & PropsFromDispatch ;
+type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
 
 interface PropsFromDispatch {
     setLanguage: typeof setLanguageAction;

@@ -24,7 +24,6 @@ import ListView from '#rscv/List/ListView';
 import { setMapStyleAction } from '#actionCreators';
 import { mapStyleSelector } from '#selectors';
 import { MapChildContext } from '#re-map/context';
-import LayerButton from './LayerButton';
 // Icons
 import OutLineIcon from '#resources/images/outline.png';
 import MapboxLightIcon from '#resources/images/mapbox-light.png';
@@ -32,10 +31,11 @@ import MapboxRoadsIcon from '#resources/images/mapbox-roads.png';
 import MapboxSatelliteIcon from '#resources/images/mapbox-satellite.png';
 import OSMIcon from '#resources/images/osm.png';
 import Button from '#rsca/Button';
-import styles from './styles.scss';
 import SelectInput from '#rsci/SelectInput';
 import MapDownloadButton from '#components/MapDownloadButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
+import styles from './styles.scss';
+import LayerButton from './LayerButton';
 
 const mapStyles = [
     {

@@ -1,0 +1,57 @@
+.inventories-modal {
+    width: 30%;
+    overflow: none !important;
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        padding: var(--spacing-medium) var(--spacing-medium-alt);
+
+        .buttonGroup {
+            padding: var(--spacing-medium) var(--spacing-medium-alt);
+            height: 100%;
+        }
+
+        .active {
+            background-color: #216CD7 !important;
+            filter: none;
+            color: white !important;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            // padding: var(--spacing-medium);
+            float: right;
+        }
+
+        .inventory-list {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}
+
+.inventory {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing-large) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-small));
+
+    .quantity,
+    .created-on {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+
+        .button {
+            margin-left: var(--spacing-extra-small);
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
+}

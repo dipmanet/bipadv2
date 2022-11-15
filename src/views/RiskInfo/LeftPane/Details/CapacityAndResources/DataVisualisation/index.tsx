@@ -328,6 +328,10 @@ const sidepanelLogo = [
         name: 'Evacuation Centre',
         image: evacuationCentre,
     },
+    {
+        name: 'Ware House',
+        image: evacuationCentre,
+    },
 ];
 // const data = [
 //     {

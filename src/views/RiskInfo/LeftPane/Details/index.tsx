@@ -2,16 +2,16 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
-
+import { MapChildContext } from '#re-map/context';
+import { LayerMap, LayerGroup } from '#store/atom/page/types';
+import { AttributeKey } from '#types';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import Hazard from './Hazard';
 import Exposure from './Exposure';
 import Vulnerability from './Vulnerability';
 import Risk from './Risk';
 import CapacityAndResources from './CapacityAndResources';
 import ClimateChange from './ClimateChange';
-import { LayerMap, LayerGroup } from '#store/atom/page/types';
-import { AttributeKey } from '#types';
-
 import styles from './styles.scss';
 
 
@@ -30,6 +30,11 @@ interface State {
 }
 
 export default class Details extends React.PureComponent<Props, State> {
+    private handleMapLayer = (coordinates) => {
+        const { map } = this.context;
+        map.flyTo({ center: coordinates, zoom: 22 });
+    }
+
     private views = {
         hazard: {
             title: 'Hazard',
@@ -79,6 +84,7 @@ export default class Details extends React.PureComponent<Props, State> {
                 handleDroneImage: this.props.handleDroneImage,
                 setResourceId: this.props.setResourceId,
                 droneImagePending: this.props.droneImagePending,
+                searchedResourceCoordinateData: this.handleMapLayer,
             }),
         },
         'climate-change': {
@@ -112,3 +118,4 @@ export default class Details extends React.PureComponent<Props, State> {
         );
     }
 }
+Details.contextType = MapChildContext;

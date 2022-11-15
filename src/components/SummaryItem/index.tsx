@@ -18,7 +18,6 @@ const SummaryItem = (props: Props) => {
             value,
         },
     } = props;
-
     return (
         <div className={_cs(className, styles.summary)}>
             <h2 className={styles.streamValue}>

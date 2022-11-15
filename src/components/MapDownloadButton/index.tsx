@@ -12,7 +12,6 @@ import { MapChildContext } from '#re-map/context';
 import PageContext from '#components/PageContext';
 import { TitleContext } from '#components/TitleContext';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import styles from './styles.scss';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
 import {
@@ -34,6 +33,7 @@ import {
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
+import styles from './styles.scss';
 
 import { getRouteWiseTitleAndSource } from './utils';
 

@@ -1,3 +1,8 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/jsx-indent */
 /* eslint-disable space-infix-ops */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-self-assign */
@@ -28,7 +33,6 @@ import {
     mapToList,
 } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
-
 import Icon from '#rscg/Icon';
 
 import {
@@ -78,7 +82,7 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MultiResponse } from '#store/atom/response/types';
-import { MapChildContext } from '#re-map/context';
+
 import Cloak, { getParams } from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
@@ -113,6 +117,7 @@ import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
 import visualization from '#resources/icons/visualization.svg';
 import helipad from '#resources/icons/heli.svg';
+import search from '#resources/icons/search-manual.svg';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
@@ -131,6 +136,9 @@ import '#resources/openspace-resources/humanitarian-fonts.css';
 import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 
 import DataVisualisation from './DataVisualisation';
+import SearchModal from './SearchModal';
+import Tooltip from './Tooltip';
+
 
 const TableModalButton = modalize(Button);
 
@@ -175,7 +183,8 @@ type toggleValues =
     | 'fire fighting apparatus'
     | 'sanitation'
     | 'watersupply'
-    | 'evacuationcentre';
+    | 'evacuationcentre'
+    | 'warehouse';
 
 const initialActiveLayersIndication = {
     education: false,
@@ -199,6 +208,7 @@ const initialActiveLayersIndication = {
     sanitation: false,
     watersupply: false,
     evacuationcentre: false,
+    warehouse: false,
 
 
 };
@@ -396,6 +406,7 @@ interface ResourceColletion {
     sanitation: PageType.Resource[];
     watersupply: PageType.Resource[];
     evacuationcentre: PageType.Resource[];
+    warehouse: PageType.Resource[];
 }
 
 interface State {
@@ -434,6 +445,7 @@ interface State {
         sanitation: boolean;
         watersupply: boolean;
         evacuationcentre: boolean;
+        warehouse: boolean;
 
     };
 }
@@ -502,6 +514,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const result1 = a.join('&');
 
             const result2 = resource_type.map(item => `resource_type=${item}`);
+            console.log('This is resource type', resource_type);
             return params.filterClickCheckCondition
                 ? `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`
                 : `/resource/?resource_type=${resource_type[0]}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
@@ -695,6 +708,10 @@ const sidepanelLogo = [
         name: 'Evacuation Centre',
         image: evacuationCentre,
     },
+    {
+        name: 'Ware House',
+        image: evacuationCentre,
+    },
 ];
 const indeterminateArray = capacityResource.map(item => item.name);
 
@@ -774,6 +791,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: [],
                 watersupply: [],
                 evacuationcentre: [],
+                warehouse: [],
 
 
             },
@@ -799,6 +817,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: [],
                 watersupply: [],
                 evacuationcentre: [],
+                warehouse: [],
 
             },
             ErrorData: '',
@@ -806,6 +825,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             palikaRedirectState: false,
             isLoggedInUser: false,
             wardsRef: {},
+            showSearchModal: false,
+            filteredSearchResource: [],
+            showTooltip: false,
+            selectedCategoryId: null,
+
         };
 
         const { faramValues: { region } } = filters;
@@ -858,6 +882,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { faramValues: { region } } = this.props.filters;
         const { carKeys } = this.props;
         const { isFilterClicked, FilterClickedStatus } = this.context;
+        console.log('isFilterClicked', isFilterClicked);
+        console.log('This is car keys', carKeys);
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
@@ -887,12 +913,34 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         sanitation: [],
                         watersupply: [],
                         evacuationcentre: [],
+                        warehouse: [],
 
 
                     },
                 });
             }
             if (carKeys.length) {
+                const tempResourceCollection = PreserveresourceCollection;
+                let tempResourcelistKey = Object.keys(tempResourceCollection);
+                tempResourcelistKey = tempResourcelistKey.filter(item => !carKeys.includes(item));
+
+                tempResourcelistKey.map((item, index) => (
+                    tempResourceCollection[item] = []
+
+                ));
+
+                this.setState({
+                    // resourceCollection: {
+                    //     ...this.state.resourceCollection,
+
+                    //     education: [],
+                    // },
+
+                    PreserveresourceCollection: tempResourceCollection,
+
+                });
+
+
                 this.props.requests.resourceGetRequest.do(
                     {
                         region,
@@ -1202,6 +1250,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             sanitation: [],
             watersupply: [],
             evacuationcentre: [],
+            warehouse: [],
         };
         const { resourceType } = resource;
 
@@ -1252,6 +1301,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: false,
                 watersupply: false,
                 evacuationcentre: false,
+                warehouse: false,
             },
         });
         const { handleActiveLayerIndication } = this.props;
@@ -1465,6 +1515,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: false,
                 watersupply: false,
                 evacuationcentre: false,
+                warehouse: false,
             },
         });
         const { handleActiveLayerIndication } = this.props;
@@ -1556,6 +1607,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 sanitation: false,
                 watersupply: false,
                 evacuationcentre: false,
+                warehouse: false,
             },
         });
         setAddResource(true);
@@ -1606,6 +1658,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             showInventoryModal: false,
         });
         // setPalikaRedirect({ showForm: false });
+    }
+
+    private handleSearchModalClose = () => {
+        this.setState({
+            showSearchModal: false,
+        });
     }
 
     private handleIconClick = (key: string) => {
@@ -2341,6 +2399,31 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
+    private verifyCheckboxChecked = (category) => {
+        const { mainCategoryCheckboxChecked } = this.state;
+        const value = !!mainCategoryCheckboxChecked.find(i => i === category);
+        return value;
+    }
+
+    private handleSearchResource = (resourceType, id, name) => {
+        const { showSearchModal, PreserveresourceCollection, showTooltip, selectedCategoryId } = this.state;
+        const data = PreserveresourceCollection[resourceType].filter(i => i.resourceType === resourceType);
+        const isCheckboxChecked = this.verifyCheckboxChecked(name);
+        if ((data.length && isCheckboxChecked)) {
+            this.setState({
+                showSearchModal: !showSearchModal,
+                filteredSearchResource: data,
+
+            });
+        } else {
+            this.setState({
+                showSearchModal: false,
+                showTooltip: true,
+                selectedCategoryId: id,
+            });
+        }
+    }
+
     public render() {
         const {
             className,
@@ -2354,6 +2437,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             carKeys,
             palikaRedirect,
             language: { language },
+            searchedResourceCoordinateData,
         } = this.props;
 
 
@@ -2393,7 +2477,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             lvl2catName,
             disableCheckbox,
             ErrorData,
-
+            showSearchModal,
+            selectedResource,
+            filteredSearchResource,
+            showTooltip,
+            selectedCategoryId,
         } = this.state;
 
         const { addResource, isFilterClicked } = this.context;
@@ -2445,6 +2533,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const sanitationGeoJson = this.getGeojson(resourceCollection.sanitation);
         const waterSupplyGeoJson = this.getGeojson(resourceCollection.watersupply);
         const evacuationcentreGeoJson = this.getGeojson(resourceCollection.evacuationcentre);
+        const warehouseGeojson = this.getGeojson(resourceCollection.warehouse);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -2503,14 +2592,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     {filterPermissionGranted
                                                         ? (
                                                             <Cloak hiddenIf={p => !p.add_resource}>
-                                                                {/* <DangerButton
 
-                                                            onClick={this.handleResourceAdd}
-                                                            className={styles.clearButton}
-                                                            transparent
-                                                        >
-                                             + Add Resource
-                                                        </DangerButton> */}
 
                                                                 <AccentModalButton
                                                                     iconName="add"
@@ -2518,12 +2600,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                     transparent
                                                                     onClick={this.resourceAdd}
 
-                                                                // modal={(
-                                                                //     <AddResourceForm
-                                                                //         onAddSuccess={this.handleResourceAdd}
-                                                                //         onEditSuccess={this.handleResourceEdit}
-                                                                //     />
-                                                                // )}
+
                                                                 >
                                                                     {t('Add Resource')}
                                                                 </AccentModalButton>
@@ -2540,33 +2617,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     >
                                                         {t('Clear')}
                                                     </DangerButton>
-                                                    {/*
-                                                <SummaryButton
-                                                    transparent
-                                                    className={styles.summaryButton}
-                                                    disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
-                                                    modal={(
-                                                        <Summary
-                                                            data={polygonResources}
-                                                            resourceType={activeLayerKey}
-                                                        />
-                                                    )}
-                                                >
-                                                    Show summary
-                                                </SummaryButton>
-                                                         */}
-                                                    {/* <TableModalButton
-                                                modal={(
-                                                    <CapacityResourceTable
-                                                        data={resourceList}
-                                                        name={activeLayerKey}
-                                                    />
-                                                )}
-                                                initialShowModal={false}
-                                                iconName="table"
-                                                transparent
-                                                disabled={pending || !activeLayerKey}
-                                            /> */}
+
                                                 </div>
                                             </header>
                                         )
@@ -2574,160 +2625,189 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                 </Translation>
 
                                 {capacityResource.map((item, idx) => (
-                                    <div key={item.name}>
-                                        <div
-                                            className={resourceCategory.find(res => res === item.name)
-                                                ? styles.categorySelected : styles.categories}
-                                        >
-                                            <div style={{ marginTop: '5px' }}>
-                                                <Checkbox
-                                                    label="Value"
-                                                    value={checked}
-                                                    onChange={() => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
-                                                    checkedCategory={!!mainCategoryCheckboxChecked.find(data => data === item.name)}
-                                                    showIndeterminateButton={showIndeterminateButton}
-                                                    index={this.getIndexArr(indeterminantConditionArray)}
-                                                    checkedMainCategoryIndex={this.getCheckedIndexArr()}
-                                                    ownIndex={idx}
-                                                    disableCheckbox={disableCheckbox}
-
-                                                />
-
-                                                {/* <input type="checkbox" checked={!!mainCategoryCheckboxChecked.find(data => data === item.name)} onClick={() => this.handleMainCategoryCheckBox(item.name)} /> */}
-                                            </div>
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                // eslint-disable-next-line max-len
-                                                onClick={(item.Category || item.subCategory.length) ? () => this.handleSubCategory(item.name, showSubCategory) : () => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
-                                                onKeyDown={undefined}
-                                                className={styles.individualCategories}
-                                            >
-
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-
-
-                                                    <ScalableVectorGraphics
-                                                        className={styles.inputIcon}
-                                                        // className={(test.length && test.find(d => d === item.name)) ? styles.selectedInputIcon : styles.unselectedInputIcon}
-
-
-                                                        src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
-                                                    />
-                                                    <h3 style={{ fontSize: '16px' }}>
-                                                        {language === 'en' ? item.name : item.nameNe}
-                                                    </h3>
-                                                </div>
-
-
-                                                <div style={{ display: 'flex', alignItems: 'center', marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px' }}>
-                                                    {item.level === 1 ? (
-                                                        <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, item.name, item.resourceType, item.level, item.name, item.typeName)}>
-                                                            {/* <Icon
-                                                                name="table"
-                                                                className={styles.inputIcon}
-                                                            /> */}
-                                                            <ScalableVectorGraphics
-                                                                className={styles.visualizationIcon}
-
-
-                                                                src={visualization}
-                                                            />
-
-                                                        </button>
-                                                    ) : ''}
-                                                    {(item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
-                                                        ? (
-                                                            <Icon
-                                                                name="dropdown"
-                                                                className={styles.inputIconDropdown}
-                                                            />
-                                                        ) : (
-                                                            <Icon
-                                                                name="dropRight"
-                                                                className={styles.inputIconDropdown}
-                                                            />
-                                                        ) : ''}
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        {resourceCategory.find(elem => elem === item.name)
-                                            ? item.level === 2
-                                                ? (
-                                                    item.Category.map(data => (
-                                                        <ul key={data.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                            <div
-                                                                style={{ display: 'flex', alignItems: 'center' }}
-                                                                role="button"
-                                                                tabIndex={0}
-                                                                // eslint-disable-next-line max-len
-                                                                onClick={() => this.handleSubCategory(data.name, showSubCategory)}
-                                                                onKeyDown={undefined}
-
-                                                            >
-                                                                <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
-                                                                    {' '}
-                                                                    <h4>{data.name}</h4>
-                                                                </label>
-
-                                                            </div>
-                                                            <button type="button" style={{ border: 'none', marginRight: '35px', fontSize: '16px', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, data.name, data.resourceType, 2, item.name, item.typeName)}>
-                                                                <Icon
-                                                                    name="table"
-                                                                    className={styles.inputIcon}
-                                                                />
-
-                                                            </button>
-                                                            {/* <Checkbox
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <div key={item.name}>
+                                                    <div
+                                                        className={resourceCategory.find(res => res === item.name)
+                                                            ? styles.categorySelected : styles.categories}
+                                                    >
+                                                        <div style={{ marginTop: '5px' }}>
+                                                            <Checkbox
                                                                 label="Value"
                                                                 value={checked}
-                                                                onChange={() => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2)}
-                                                                checkedCategory={!!mainCategoryCheckboxChecked.find(datas => datas === item.name)}
+                                                                onChange={() => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
+                                                                checkedCategory={!!mainCategoryCheckboxChecked.find(data => data === item.name)}
                                                                 showIndeterminateButton={showIndeterminateButton}
                                                                 index={this.getIndexArr(indeterminantConditionArray)}
                                                                 checkedMainCategoryIndex={this.getCheckedIndexArr()}
                                                                 ownIndex={idx}
-                                                            /> */}
+                                                                disableCheckbox={disableCheckbox}
 
-                                                            {/* {resourceCategory.find(itm => itm === data.name)
-                                                                ? data.subCategory && data.subCategory.map(finalitem => (
-                                                                    <ul key={finalitem.id}>
-                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === finalitem.id)} onChange={() => this.handleSubCategoryCheckbox(finalitem.id, item.name, item.resourceType)} />
-                                                                            <label htmlFor="name" style={{ cursor: 'pointer' }} onClick={() => this.handleSubCategoryCheckbox(finalitem.id, item.name, item.resourceType)}>
+                                                            />
+
+                                                            {/* <input type="checkbox" checked={!!mainCategoryCheckboxChecked.find(data => data === item.name)} onClick={() => this.handleMainCategoryCheckBox(item.name)} /> */}
+                                                        </div>
+                                                        <div
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            // eslint-disable-next-line max-len
+                                                            onClick={(item.Category || item.subCategory.length)
+                                                                ? () => this.handleSubCategory(item.name, showSubCategory)
+                                                                // : () => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)
+                                                                : ''
+                                                            }
+                                                            onKeyDown={undefined}
+                                                            className={styles.individualCategories}
+                                                        >
+
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+
+
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.inputIcon}
+                                                                    // className={(test.length && test.find(d => d === item.name)) ? styles.selectedInputIcon : styles.unselectedInputIcon}
+
+
+                                                                    src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
+                                                                />
+                                                                <h3 style={{ fontSize: '16px' }}>
+                                                                    {language === 'en' ? item.name : item.nameNe}
+                                                                </h3>
+                                                            </div>
+
+
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px',
+                                                            }}
+                                                            >
+                                                                {item.level === 1 ? (
+                                                                    <>
+                                                                        <div style={{ position: 'relative' }}>
+                                                                            <button
+                                                                                type="button"
+                                                                                style={{
+                                                                                    cursor: 'pointer',
+                                                                                    backgroundColor: resourceCategory.find(res => res === item.name)
+                                                                                        ? '#ddf2fd' : 'white',
+                                                                                    border: 'none',
+                                                                                }}
+                                                                                onClick={() => this.handleSearchResource(item.resourceType, item.id, item.name)}
+                                                                                title={language === 'en'
+                                                                                    ? `Search ${item.name}'s Resource`
+                                                                                    : `${item.nameNe}को स्रोत खोज्नुहोस्`}
+                                                                            >
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.icon}
+                                                                                    src={search}
+                                                                                />
+                                                                            </button>
+                                                                            {selectedCategoryId === item.id
+                                                                                ? (
+                                                                                    <Tooltip
+                                                                                        show={showTooltip}
+                                                                                        onClickOutside={() => this.setState({ showTooltip: false })}
+                                                                                        message={t('Please select resource list to search')}
+                                                                                    />
+                                                                                ) : ''
+                                                                            }
+
+                                                                        </div>
+                                                                        {
+                                                                            item.resourceType === 'warehouse' ? <div style={{ width: '75px' }} />
+
+                                                                                : (
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                                                                                        onClick={() => this.handleVisualization(true, item.name, item.resourceType,
+                                                                                            item.level, item.name, item.typeName)}
+                                                                                    >
+
+                                                                                        <ScalableVectorGraphics
+                                                                                            className={styles.visualizationIcon}
+
+
+                                                                                            src={visualization}
+                                                                                        />
+
+                                                                                    </button>
+                                                                                )}
+                                                                    </>
+                                                                ) : ''}
+                                                                {item.resourceType === 'warehouse' ? '' : (item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
+                                                                    ? (
+                                                                        <Icon
+                                                                            name="dropdown"
+                                                                            className={styles.inputIconDropdown}
+                                                                        />
+                                                                    ) : (
+                                                                        <Icon
+                                                                            name="dropRight"
+                                                                            className={styles.inputIconDropdown}
+                                                                        />
+                                                                    ) : ''}
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    {resourceCategory.find(elem => elem === item.name)
+                                                        ? item.level === 2
+                                                            ? (
+                                                                item.Category.map(data => (
+                                                                    <ul key={data.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                        <div
+                                                                            style={{ display: 'flex', alignItems: 'center' }}
+                                                                            role="button"
+                                                                            tabIndex={0}
+                                                                            // eslint-disable-next-line max-len
+                                                                            onClick={() => this.handleSubCategory(data.name, showSubCategory)}
+                                                                            onKeyDown={undefined}
+
+                                                                        >
+                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
+                                                                            <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
                                                                                 {' '}
-                                                                                <h3>{finalitem.name}</h3>
+                                                                                <h4>{data.name}</h4>
                                                                             </label>
 
                                                                         </div>
+                                                                        <button type="button" style={{ border: 'none', marginRight: '35px', fontSize: '16px', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, data.name, data.resourceType, 2, item.name, item.typeName)}>
+                                                                            <Icon
+                                                                                name="table"
+                                                                                className={styles.inputIcon}
+                                                                            />
+
+                                                                        </button>
                                                                     </ul>
-                                                                )) : ''
-                                                            } */}
+                                                                )))
+                                                            : (
+                                                                item.subCategory.map(data => (
+                                                                    <ul key={data.id}>
+                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
+                                                                            <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
+                                                                                {' '}
+                                                                                <h4>{language === 'en' ? data.name : data.nameNe}</h4>
+                                                                            </label>
 
-                                                        </ul>
-                                                    )))
-                                                : (
-                                                    item.subCategory.map(data => (
-                                                        <ul key={data.id}>
-                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
-                                                                    {' '}
-                                                                    <h4>{language === 'en' ? data.name : data.nameNe}</h4>
-                                                                </label>
+                                                                        </div>
 
-                                                            </div>
-
-                                                        </ul>
-                                                    ))
+                                                                    </ul>
+                                                                ))
 
 
-                                                )
-                                            : ''}
+                                                            )
+                                                        : ''}
 
-                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </Translation>
                                 ))}
 
                             </>
@@ -2735,28 +2815,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     }
 
 
-                    {/* <SwitchView
-                        activeLayersIndication={activeLayersIndication}
-                        handleToggleClick={this.handleToggleClick}
-                        handleIconClick={this.handleIconClick}
-                        disabled={pending}
-                    />
-                    /> */}
-
-                    {/* for previous radio buttons structure starts */}
-                    {/* <ListView
-                        className={styles.content}
-                        data={resourceTypeList}
-                        keySelector={d => d.title}
-                        renderer={Option}
-                        rendererParams={this.getLayerRendererParams}
-                    /> */}
-                    {/* for previous radio buttons structure ends */}
-                    {/* resourceListInsidePolygon.length !== 0 && (
-                        <div className={styles.polygonSelectedLayerInfo}>
-                            { resourceListInsidePolygon.length }
-                        </div>
-                    ) */}
                     <MapImage
                         url={HealthIcon}
                         name="health"
@@ -2771,19 +2829,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                     {Object.values(activeLayersIndication).some(Boolean) && (
                         <>
-                            {/* <MapShapeEditor
-                                geoJsons={selectedFeatures}
-                                onCreate={this.handlePolygonCreate}
-                                onUpdate={this.handlePolygonUpdate}
-                                onDelete={this.handlePolygonDelete}
-                                drawOptions={{
-                                    displayControlsDefault: false,
-                                    controls: {
-                                        polygon: true,
-                                        trash: true,
-                                    },
-                                }}
-                            /> */}
+
 
                             {/* Education */}
                             {activeLayersIndication.education && (
@@ -3985,6 +4031,98 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             )}
 
 
+                            {/** wareHouseGeoJson */}
+                            {activeLayersIndication.warehouse && (
+                                <>
+                                    <MapSource
+                                        sourceKey="resource-symbol-warehouse"
+                                        sourceOptions={{
+                                            type: 'geojson',
+                                            cluster: true,
+                                            clusterMaxZoom: 10,
+                                        }}
+                                        geoJson={warehouseGeojson}
+                                    >
+                                        <MapLayer
+                                            layerKey="cluster-warehouse"
+                                            onClick={this.handleClusterClick}
+                                            layerOptions={{
+                                                type: 'circle',
+                                                paint:
+                                                    mapStyles.resourceCluster
+                                                        .warehouse,
+                                                filter: ['has', 'point_count'],
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="cluster-count-warehouse"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: ['has', 'point_count'],
+                                                layout: {
+                                                    'text-field':
+                                                        '{point_count_abbreviated}',
+                                                    'text-size': 12,
+                                                },
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="resource-symbol-background-warehouse"
+                                            onClick={this.handleResourceClick}
+                                            onMouserEnter={
+                                                this.handleResourceMouseEnter
+                                            }
+                                            layerOptions={{
+                                                type: 'circle',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                paint:
+                                                    mapStyles.resourcePoint
+                                                        .warehouse,
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="-resourece-symbol-icon-warehouse"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                layout: {
+                                                    'icon-image': 'evacuationcentre',
+                                                    'icon-size': 0.03,
+                                                },
+                                            }}
+                                        />
+
+                                        {resourceLngLat && resourceInfo && (
+                                            <MapTooltip
+                                                coordinates={resourceLngLat}
+                                                tooltipOptions={tooltipOptions}
+                                                onHide={this.handleTooltipClose}
+                                            >
+                                                <ResourceTooltip
+                                                    // FIXME: hide tooltip edit if there is no permission
+                                                    language={language}
+                                                    isLoggedInUser={isLoggedInUser}
+                                                    {...resourceInfo}
+                                                    {...resourceDetails}
+                                                    onEditClick={this.handleEditClick}
+                                                    wardsRef={wardsRef}
+                                                    onShowInventoryClick={this.handleShowInventoryClick}
+                                                    filterPermissionGranted={filterPermissionGranted}
+                                                />
+                                            </MapTooltip>
+                                        )}
+                                    </MapSource>
+
+                                </>
+                            )}
+
+
                             {/* communityspace */}
                             {activeLayersIndication.communityspace && (
                                 <>
@@ -4415,44 +4553,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         </>
                     )}
                 </div>
-
-                {/* {
-                    (palikaRedirectState && palikaRedirect.showModal === 'addResource')
-                    && (
-                        <AddResourceForm
-                            resourceId={isDefined(palikaRedirect.organisationItem)
-                                ? palikaRedirect.organisationItem.id : null
-                            }
-                            resourceDetails={isDefined(palikaRedirect.organisationItem)
-                                ? palikaRedirect.organisationItem : null}
-                            onEditSuccess={this.handleResourceEdit}
-                            closeModal={this.handleEditResourceFormCloseButtonClick}
-                        />
-                    )
-
-                } */}
-
-                { }
-                {/* {
-                    palikaRedirect.showForm && palikaRedirect.showModal === 'inventory'
-                    // && isDefined(inventoryItem)
-                    // && isDefined(inventoryItem.id)
-                    && (
-                        <InventoriesModal
-                            resourceId={palikaRedirect.inventoryItem.resource || ''}
-                            closeModal={this.handleInventoryModalClose}
-                        />
-                    )
-                } */}
-
-                {/* {showResourceForm && resourceDetails && (
-                    <AddResourceForm
-                        resourceId={resourceDetails.id}
-                        resourceDetails={resourceDetails}
-                        onEditSuccess={this.handleResourceEdit}
-                        closeModal={this.handleEditResourceFormCloseButtonClick}
-                    />
-                )} */}
                 {
                     showInventoryModal
                     && isDefined(resourceDetails)
@@ -4462,10 +4562,23 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             resourceId={resourceDetails.id}
                             closeModal={this.handleInventoryModalClose}
                             filterPermissionGranted={filterPermissionGranted}
+                            resourceList={resourceList}
                         />
                     )
                 }
+                {
+                    showSearchModal
+                    && (
+                        <SearchModal
+                            closeModal={this.handleSearchModalClose}
+                            resourceList={filteredSearchResource}
+                            language={language}
+                            searchedResourceCoordinateData={searchedResourceCoordinateData}
+                        />
+                    )
 
+
+                }
                 {
                     activeModal === 'showOpenSpaceInfoModal' ? (
                         <OpenspaceMetaDataModal closeModal={this.handleIconClick} />
@@ -4513,6 +4626,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 }
 CapacityAndResources.contextType = RiskInfoLayerContext;
+
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requestOptions),

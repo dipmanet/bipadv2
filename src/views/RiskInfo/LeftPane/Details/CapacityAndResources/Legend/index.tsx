@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
 import Legend from '#rscz/Legend';
+import { TitleContext, Profile } from '#components/TitleContext';
 import legendItems from './legendItems';
 
-import { TitleContext, Profile } from '#components/TitleContext';
 import OpenspaceLegends from '../OpenspaceModals/OpenspaceLegends/main';
 import styles from './styles.scss';
 import OpenspaceSummary from '../OpenspaceModals/OpenspaceLegends/OpenspaceSummary';
@@ -24,6 +24,7 @@ interface Props {
         communityspace: boolean;
         bridge: boolean;
         evacuationcentre: boolean;
+        warehouse: boolean;
     };
     resourceIdForLegend: number | null;
 }

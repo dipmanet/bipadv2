@@ -50,6 +50,11 @@ import {
     setPalikaRedirectAction,
 } from '#actionCreators';
 
+import { capacityResource } from '#utils/domain';
+import RawFileInput from '#rsci/RawFileInput';
+import Loading from '#components/Loading';
+import NumberInput from '#rsci/NumberInput';
+import { convertDateAccToLanguage } from '#utils/common';
 import EducationFields from './EducationFields';
 import HealthFields from './HealthFields';
 import FinanceFields from './FinanceFields';
@@ -63,8 +68,6 @@ import CommunitySpaceFields from './CommunitySpaceFields';
 import schemaMap, { defaultSchema } from './schema';
 import styles from './styles.scss';
 import HelipadFields from './HelipadFields';
-import { capacityResource } from '#utils/domain';
-import RawFileInput from '#rsci/RawFileInput';
 import BridgeFields from './BridgeFields';
 import ElectricityFields from './ElectricityFields';
 import SanitationFields from './SanitationFields';
@@ -72,11 +75,9 @@ import WaterSupplyInfrastructureFields from './WaterSupplyInfrastructureFields';
 import AirwayFields from './AirwayFields';
 import WaterwayFields from './WaterwayFields';
 import RoadwayFields from './RoadwayFields';
-import Loading from '#components/Loading';
 import FireEngineFields from './FireEngineFields';
 import EvacuationCentreFields from './EvacuationCentreFields';
-import NumberInput from '#rsci/NumberInput';
-import { convertDateAccToLanguage } from '#utils/common';
+import WareHouseFields from './WareHouseFields';
 
 
 const getLocationDetails = (point: unknown, ward?: number) => {
@@ -502,6 +503,16 @@ const ExtraFields = ({
         case 'evacuationcentre':
             return (
                 <EvacuationCentreFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    optionsClassName={styles.optionsClassName}
+                    iconName={iconName}
+                />
+
+            );
+        case 'warehouse':
+            return (
+                <WareHouseFields
                     resourceEnums={resourceEnums}
                     faramValues={faramValues}
                     optionsClassName={styles.optionsClassName}

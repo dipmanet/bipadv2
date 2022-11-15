@@ -1,0 +1,70 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    unicode-range: U+30-39;
+    size-adjust: 85%;
+
+
+}
+
+.languageFont {
+    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
+
+.contacts {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+
+    td,
+    th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        font-weight: bold;
+
+    }
+
+    // td {
+    //   word-break: break-word;
+    // }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    // tr:hover {
+    //   background-color: #ddd;
+    // }
+
+    th {
+        // border: 1px solid #ddd;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        // background-color: #dddddd;
+        // color: black;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+}
+
+table {
+    thead {
+        tr {
+            position: sticky;
+            top: -5px;
+            background-color: white;
+        }
+    }
+
+    tbody {
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+
+            .button {
+                display: flex;
+                margin-left: var(--spacing-extra-small);
+            }
+        }
+    }
+}

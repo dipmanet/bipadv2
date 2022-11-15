@@ -12,7 +12,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import styles from './styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
     resourceTypeListSelector,
@@ -35,6 +34,7 @@ import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import nepDatDownload from '#resources/icons/Download2.svg';
+import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     provinces: provincesSelector(state),
@@ -132,7 +132,7 @@ const NepDataProfile = (props) => {
         const baseUrl = 'https://profile.bipad.gov.np/';
 
         window.open(`${baseUrl}?report_type=${selectedReportType.id}` + `&language=${selectedLanguage.value}` + `&province=${selectedProvince ? selectedProvince.id : ''}` + `&district=${selectedDistrict ? selectedDistrict.id : ''}` + `&municipality=${selectedMunicipality ? selectedMunicipality.id : ''}`
-        + `&start_date=${selectedStartDate}` + `&end_date=${selectedEndDate}` + '&generate_report=Generate+Report', '_blank');
+            + `&start_date=${selectedStartDate}` + `&end_date=${selectedEndDate}` + '&generate_report=Generate+Report', '_blank');
         // axios.get(`${baseUrl}?report_type=${selectedReportType.id}` + `&language=${selectedLanguage.value}` + `&province=${selectedProvince ? selectedProvince.id : ''}` + `&district=${selectedDistrict ? selectedDistrict.id : ''}` + `&municipality=${selectedMunicipality ? selectedMunicipality.id : ''}`
         // + `&start_date=${selectedStartDate}` + `&end_date=${selectedEndDate}` + '&generate_report=Generate+Report')
         //     .then((res) => {
@@ -169,14 +169,14 @@ const NepDataProfile = (props) => {
             </div>
             <div className={styles.content}>
                 <p>
-                The Nep Dat Profile generates disaster reports at national,
-                provincial district, and municipal levels for the selected
-                time frame. The report is generated in both English and Nepali
-                 versions. Using the data available in the BIPAD portal and DRR
-                 portal, the analysis is done to present data in terms of the
-                 number of disaster incidents, people deaths due to disaster
-                 incidents, estimated economic loss, hazard calendar, seasonal
-                 hazards, and most recurrent disasters.
+                    The Nep Dat Profile generates disaster reports at national,
+                    provincial district, and municipal levels for the selected
+                    time frame. The report is generated in both English and Nepali
+                    versions. Using the data available in the BIPAD portal and DRR
+                    portal, the analysis is done to present data in terms of the
+                    number of disaster incidents, people deaths due to disaster
+                    incidents, estimated economic loss, hazard calendar, seasonal
+                    hazards, and most recurrent disasters.
 
                 </p>
             </div>
@@ -317,7 +317,7 @@ const NepDataProfile = (props) => {
                             src={nepDatDownload}
                         />
                     </div>
-                                        GENERATE REPORT
+                    GENERATE REPORT
                 </PrimaryButton>
 
             </div>
