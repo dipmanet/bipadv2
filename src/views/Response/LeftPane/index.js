@@ -22,7 +22,7 @@ import financeIcon from '#resources/icons/University.svg';
 import governanceIcon from '#resources/icons/Government-office.svg';
 import groupIcon from '#resources/icons/group1.svg';
 import openSpaceIcon from '#resources/icons/Soap.svg';
-
+import warehouseIcon from '#resources/icons/newCapResEvacuationcenter.svg';
 import IncidentInfo from '#components/IncidentInfo';
 
 import ResourceGroup from './ResourceGroup';
@@ -137,6 +137,10 @@ const resourceComponentsProps = language => ({
         heading: language === 'en' ? 'Open space' : 'खुल्‍ला ठाउँ',
         icon: openSpaceIcon,
     },
+    warehouse: {
+        heading: language === 'en' ? 'Ware House' : 'गोदाम',
+        icon: warehouseIcon,
+    },
 });
 
 const getResources = (resourceList) => {
@@ -148,6 +152,7 @@ const getResources = (resourceList) => {
         openSpace: [],
         hotel: [],
         governance: [],
+        warehouse: [],
     };
 
     resourceList.forEach((r) => {
@@ -188,6 +193,7 @@ class LeftPane extends React.Component {
         const { language: { language } } = this.props;
         const resources = this.getResources(this.props.resourceList);
         const filteredResources = this.getFilteredResources(this.props.filteredResourceList);
+
         return {
             ...resourceComponentsProps(language)[d],
             type: d,
