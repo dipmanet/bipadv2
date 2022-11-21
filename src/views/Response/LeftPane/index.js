@@ -201,6 +201,7 @@ class LeftPane extends React.Component {
             onFilterShowClick: this.handleFilterClick,
             data: filteredResources[d],
             totalSize: resources[d] ? resources[d].length : 0,
+            language,
         };
     };
 
@@ -316,6 +317,8 @@ class LeftPane extends React.Component {
                                     data={resourceKeys}
                                     renderer={ResourceGroup}
                                     rendererParams={this.getResourceRendererParams}
+
+
                                 />
                             </div>
                             {selectedFilter && (

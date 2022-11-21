@@ -170,7 +170,7 @@ class SuggestedUses extends React.PureComponent<Props, State> {
             pristine: true,
         });
         const { checkedSuggestedUses } = this.state;
-        const { handleTabClick,LoadingSuccessHalt } = this.props;
+        const { handleTabClick, LoadingSuccessHalt } = this.props;
         LoadingSuccessHalt(true)
 
         if (checkedSuggestedUses.length !== 0) {
@@ -240,8 +240,8 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                         paddingBottom: '10px',
 
                                     }}
-                                    className={styles.mainParentCheckBox}
-                                    key={item.id}>
+                                        className={styles.mainParentCheckBox}
+                                        key={item.id}>
                                         <i
                                             className={item.iconName}
                                             style={{
@@ -252,7 +252,7 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <input
-                                            style={{ margin: '0 5px',width:'4%'}}
+                                            style={{ margin: '0 5px', width: '4%' }}
                                             type="checkbox"
                                             defaultChecked={checkDefault && checkDefault}
 
@@ -280,7 +280,7 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                         paddingBottom: '10px',
                                     }}
                                     className={styles.mainParentCheckBox}
-                                    >
+                                >
                                     <i
                                         className={item.iconName}
                                         style={{
@@ -291,11 +291,11 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                         }}
                                     />
                                     <input
-                                        style={{ margin: '0 5px',width:'4%' }}
+                                        style={{ margin: '0 5px', width: '4%' }}
                                         type="checkbox"
                                         onClick={e => this.handleSuggestedChange(e, item.id)}
                                         className={styles.checkBox}
-                                        
+
                                     />
                                     <p
                                         style={{

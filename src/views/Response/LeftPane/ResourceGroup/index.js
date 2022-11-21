@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
@@ -47,7 +48,12 @@ export default class ResourceGroup extends React.PureComponent {
         this.state = { showResources: true };
     }
 
-    getResourceElementRendererParams = (_, d) => d
+    getResourceElementRendererParams = (_, d) => {
+        const { language } = this.props;
+        return ({
+            ...d, language,
+        });
+    }
 
     handleExpandToggleClick = () => {
         const { showResources } = this.state;
