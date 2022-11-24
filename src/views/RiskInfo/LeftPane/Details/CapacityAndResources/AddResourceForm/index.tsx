@@ -264,6 +264,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 });
             }
         },
+        extras: { hasFile: true },
     },
 };
 
