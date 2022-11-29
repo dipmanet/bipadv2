@@ -739,7 +739,7 @@ const Budget = (props: Props) => {
                                     <ul>
                                         <li className={styles.lighter}>
                                             {/* <span > */}
-                                            {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
+                                            {drrFund && municipalBudget ? (Number(drrFund) / Number(municipalBudget) * 100).toFixed(0) : '-'}
                                             {'%'}
                                             <Gt section={Translations.approx} />
                                             {' '}
@@ -769,7 +769,7 @@ const Budget = (props: Props) => {
                                             <h2>
                                                 <Gt section={Translations.Rupees} />
                                                 {' '}
-                                                {additionalFund || 0}
+                                                {additionalFund || '-'}
                                             </h2>
                                         </li>
                                         <li>

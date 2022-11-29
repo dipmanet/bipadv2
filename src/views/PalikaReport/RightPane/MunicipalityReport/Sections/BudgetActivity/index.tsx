@@ -9,7 +9,6 @@ import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { PieChart, Pie, Cell } from 'recharts';
 import Loader from 'react-loader';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
-import styles from './styles.scss';
 import Gt from '#views/PalikaReport/utils';
 import Translations from '#views/PalikaReport/Constants/Translations';
 import priorityData from '#views/PalikaReport/Constants/PriorityDropdownSelectData';
@@ -22,7 +21,6 @@ import {
     methods,
 } from '#request';
 import 'react-datepicker/dist/react-datepicker.css';
-import NextPrevBtns from '../../NextPrevBtns';
 
 import {
     setBudgetActivityDataAction,
@@ -38,6 +36,8 @@ import {
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
+import NextPrevBtns from '../../NextPrevBtns';
+import styles from './styles.scss';
 
 
 const mapStateToProps = state => ({
@@ -69,7 +69,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             // offset: params.offset,
         }),
         method: methods.GET,
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, params }) => {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
@@ -398,18 +398,20 @@ const BudgetActivity = (props: Props) => {
         setPriorityAction('');
         setPriorityActivity('');
         setBudgetActivityId(null);
-        BudgetActivityGetRequest.do({
-            province,
-            district,
-            municipality,
-            annualBudget: budgetId.id,
-            budgetActivities: handleBudgetActivities,
-            paginationParameters: handlePaginationParameters,
-            id: '-id',
-            page: paginationQueryLimit,
-            handlePendingState: handlePending,
-            setErrors: handleErrors,
-        });
+        if (budgetId.id) {
+            BudgetActivityGetRequest.do({
+                province,
+                district,
+                municipality,
+                annualBudget: budgetId.id,
+                budgetActivities: handleBudgetActivities,
+                paginationParameters: handlePaginationParameters,
+                id: '-id',
+                page: paginationQueryLimit,
+                handlePendingState: handlePending,
+                setErrors: handleErrors,
+            });
+        }
         setEditBudgetActivity(false);
     };
 
@@ -472,23 +474,42 @@ const BudgetActivity = (props: Props) => {
         setCurrentPageNumber(selectedPage);
     };
 
-
     useEffect(() => {
-        BudgetActivityGetRequest.do({
-            offset,
-            page: paginationQueryLimit,
-            fiscalYear: generalData.fiscalYear,
-            district,
-            municipality,
-            province,
-            id: '-id',
-            handlePendingState: handlePending,
-            setErrors: handleErrors,
+        if (budgetId.id) {
+            BudgetActivityGetRequest.do({
+                province,
+                district,
+                municipality,
+                annualBudget: budgetId.id,
+                budgetActivities: handleBudgetActivities,
+                paginationParameters: handlePaginationParameters,
+                id: '-id',
+                handlePendingState: handlePending,
+                setErrors: handleErrors,
+            });
+        } else {
+            handlePending(false);
+            handleBudgetActivities([]);
+        }
+    }, []);
 
 
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
+    // useEffect(() => {
+    //     BudgetActivityGetRequest.do({
+    //         offset,
+    //         page: paginationQueryLimit,
+    //         fiscalYear: generalData.fiscalYear,
+    //         district,
+    //         municipality,
+    //         province,
+    //         id: '-id',
+    //         handlePendingState: handlePending,
+    //         setErrors: handleErrors,
+
+
+    //     });
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [offset]);
     useEffect(() => {
         if (budgetData.additionalFund && parseInt(budgetData.additionalFund, 10) > 0) {
             setSourceType(true);
@@ -556,7 +577,7 @@ const BudgetActivity = (props: Props) => {
     };
 
     useEffect(() => {
-        if (dataSubmittedResponse) {
+        if (dataSubmittedResponse && budgetId.id) {
             BudgetActivityGetRequest.do({
                 province,
                 district,
@@ -1765,15 +1786,11 @@ const BudgetActivity = (props: Props) => {
                                            <li>
                                                <span className={styles.bigerNum}>
                                                    {
-                                                       (typeof additionalDrrBudget === 'number'
-                                                       && typeof totDrrBudget === 'number')
+                                                       additionalDrrBudget && totDrrBudget
                                                            ? ((Number(totDrrBudget)
                                                    / (Number(totDrrBudget)
                                                    + Number(additionalDrrBudget))
-                                                   * 100).toFixed(0)) : '-'
-                                                   }
-                                                   {
-                                                       totDrrBudget && '%'
+                                                   * 100).toFixed(0)) : '- %'
                                                    }
 
                                                </span>
@@ -1798,13 +1815,10 @@ const BudgetActivity = (props: Props) => {
                                                <span className={styles.bigerNum}>
 
                                                    {
-                                                       typeof additionalDrrBudget === 'number' ? ((Number(additionalDrrBudget)
+                                                       additionalDrrBudget && totDrrBudget ? ((Number(additionalDrrBudget)
                                                    / (Number(totDrrBudget)
                                                    + Number(additionalDrrBudget))
-                                                   * 100).toFixed(0)) : '-'
-                                                   }
-                                                   {
-                                                       typeof additionalDrrBudget === 'number' && '%'
+                                                   * 100).toFixed(0)) : '- %'
                                                    }
                                                </span>
                                            </li>
