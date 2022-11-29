@@ -20,13 +20,10 @@ import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import styles from './styles.scss';
 import programAndPolicyLogo from '#resources/palikaicons/program.svg';
 import editIcon from '#resources/palikaicons/edit.svg';
 import addRelief from '#resources/palikaicons/add.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Gt from '../../../../utils';
-import Translations from '../../../../Constants/Translations';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -42,7 +39,6 @@ import { provincesSelector,
     generalDataSelector,
     palikaLanguageSelector,
     wardsSelector } from '#selectors';
-import NextPrevBtns from '../../NextPrevBtns';
 import {
     setDrrmProgressAction,
 } from '#actionCreators';
@@ -59,6 +55,10 @@ import HouseDmgIcon from '#resources/palikaicons/house_complete.svg';
 import family from '#resources/palikaicons/family.svg';
 import male from '#resources/palikaicons/male.svg';
 import female from '#resources/palikaicons/female.svg';
+import NextPrevBtns from '../../NextPrevBtns';
+import Translations from '../../../../Constants/Translations';
+import Gt from '../../../../utils';
+import styles from './styles.scss';
 
 
 interface Props{
@@ -1042,8 +1042,10 @@ const Relief = (props: Props) => {
         if (fetchedData.length > 0) {
             console.log('fetchedData.length ', fetchedData);
             return [
-                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
-                (ADToBS(fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn.split('T')[0]) || '-'),
+                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0]
+                    ? fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title : '-'),
+                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0]
+                    ? ADToBS(fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn.split('T')[0]) : '-'),
             ];
         }
 
