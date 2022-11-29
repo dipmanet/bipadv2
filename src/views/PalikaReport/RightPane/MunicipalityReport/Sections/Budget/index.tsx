@@ -6,10 +6,7 @@ import { connect } from 'react-redux';
 // import Loader from 'react-loader-spinner';
 import Loader from 'react-loader';
 import { ADToBS } from 'bikram-sambat-js';
-import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
-import Gt from '../../../../utils';
-import Translations from '../../../../Constants/Translations';
 
 import {
     createConnectedRequestCoordinator,
@@ -33,8 +30,11 @@ import {
     drrmProgresSelector,
     palikaLanguageSelector,
 } from '#selectors';
-import NextPrevBtns from '../../NextPrevBtns';
 import Icon from '#rscg/Icon';
+import NextPrevBtns from '../../NextPrevBtns';
+import Translations from '../../../../Constants/Translations';
+import Gt from '../../../../utils';
+import styles from './styles.scss';
 
 
 interface Props{
@@ -286,7 +286,7 @@ const Budget = (props: Props) => {
     };
 
     const handleNextClick = () => {
-        if (municipalBudget && drrFund && additionalFund) {
+        if (municipalBudget) {
             if (!annualBudgetData.length) {
                 BudgetPostRequest.do({
                     body: {
