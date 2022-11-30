@@ -9,17 +9,6 @@ import {
     isDefined,
     listToMap,
 } from '@togglecorp/fujs';
-import {
-    ResponsiveContainer,
-    AreaChart,
-    Area,
-    XAxis,
-    YAxis,
-    Tooltip,
-    CartesianGrid,
-    Brush,
-} from 'recharts';
-
 import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -51,7 +40,6 @@ import {
     methods,
 } from '#request';
 
-import LossDetails from '#components/LossDetails';
 import Loading from '#components/Loading';
 import Page from '#components/Page';
 
@@ -65,13 +53,9 @@ import {
     transformDataRangeLocaleToFilter,
     pastDaysToDateRange,
 } from '#utils/transformations';
-import DateRangeInfo from '#components/DateRangeInfo';
 import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
 import TabularView from './TabularView';
-import Comparative from './Comparative';
 import { getSanitizedIncidents } from './common';
-
-
 import Overview from './Overview';
 import Dropdown from './DropDown';
 import BarChartVisual from './Barchart';
@@ -470,102 +454,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
-                            {/* <div className={styles.dataDetails}>
-                                <div className={styles.dateDetails}>
-                                    <div className={styles.infoIconContainer}>
-                                        <Icon
-                                            className={styles.infoIcon}
-                                            name="info"
-                                        />
-                                    </div>
-                                    <div className={styles.label}>
-                                        Showing data from
-                                    </div>
-                                    <DateInput
-                                        showLabel={false}
-                                        showHintAndError={false}
-                                        className={styles.dateFromInput}
-                                        value={startDate}
-                                        onChange={this.handleStartDateChange}
-                                    />
-                                    <div className={styles.label}>
-                                        to
-                                    </div>
-                                    <DateInput
-                                        showLabel={false}
-                                        showHintAndError={false}
-                                        className={styles.dateToInput}
-                                        value={endDate}
-                                        onChange={this.handleEndDateChange}
-                                    />
-                                    <div
-                                        className={styles.submitButton}
-                                        onClick={this.handleSubmitClick}
-                                        role="presentation"
-                                    >
-                                        Submit
-                                    </div>
-                                </div>
-                                {startDate > endDate
-                                    && (
-                                        <div className={styles.warningText}>
-                                            WARNING! Start date cannot be greater than End Date
-                                        </div>
-                                    )
-                                }
-                                <div className={styles.sourceDetails}>
-                                    <div className={styles.infoIconContainer}>
-                                        <Icon
-                                            className={styles.infoIcon}
-                                            name="info"
-                                        />
-                                    </div>
-                                    <div className={styles.label}>
-                                        Data sources:
-                                    </div>
-                                    <div className={styles.value}>
-                                        <div className={styles.source}>
-                                            Nepal Police
-                                        </div>
-                                        <div className={styles.source}>
-                                            <div className={styles.text}>
-                                                DRR Portal
-                                            </div>
-                                            <a
-                                                className={styles.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                href="http://drrportal.gov.np"
-                                            >
-                                                <Icon
-                                                    name="externalLink"
-                                                />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.actions}>
-                                <ModalButton
-                                    disabled={pending}
-                                    className={styles.compareButton}
-                                    modal={<Comparative lossAndDamageList={incidentList} />}
-                                >
-                                    Compare regions
-                                </ModalButton>
-                                <ModalButton
-                                    title="Show data in tabular format"
-                                    className={styles.showTableButton}
-                                    iconName="table"
-                                    transparent
-                                    modal={(
-                                        <IncidentTableModal
-                                            incidentList={filteredData}
-                                        />
-                                    )}
-                                />
-                            </div> */}
-
                             <div className={styles.dataDetails}>
                                 <div className={styles.dateDetails}>
                                     <div className={styles.infoIconContainer}>
@@ -641,14 +529,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* <DateRangeInfo
-                                        className={styles.dateRange}
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                    /> */}
-                            {/* </span> */}
-
                             <div className={styles.actions}>
                                 <div className={styles.radioAndCompare}>
                                     <FilterRadio
@@ -689,19 +569,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     )}
                                 />
                             </div>
-                            {/* <ModalButton
-                                        className={styles.modalButton}
-                                        transparent
-                                        disabled={pending}
-                                        modal={(
-                                            <DataTable
-                                                incidentList={filteredData}
-                                            />
-                                        )}
-                                    >
-                                        View tabular data
-                                    </ModalButton> */}
-
                             <div className={styles.container}>
                                 <Dropdown
                                     dropDownClickHandler={dropDownClickHandler}
@@ -742,9 +609,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     downloadButton
                                                     fullScreenMode
                                                 />
-                                                {/* <p className={styles.hazardText}>
-                                                    Data source : nepal police,drr portal
-                                                </p> */}
                                             </div>
                                         )
                                         : (
@@ -757,102 +621,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         )
                                 }
                             </div>
-
-
-                            {/* <div className={styles.mainContent}>
-                                <LossDetails
-                                    className={styles.lossDetails}
-                                    data={filteredData}
-                                    nullCondition={Null_check_estimatedLoss}
-                                />
-                                <Button
-                                    title="Download Chart"
-                                    className={styles.downloadButton}
-                                    transparent
-                                    disabled={pending}
-                                    onClick={this.handleSaveClick}
-                                    iconName="download"
-                                />
-
-
-                                <div
-                                    className={styles.chartList}
-                                    id="chartList"
-                                >
-                                    {Object.values(incidentMetricChartParams).map(metric => (
-                                        <div
-                                            key={metric.dataKey}
-                                            className={styles.chartContainer}
-                                        >
-                                            <h4 className={styles.heading}>
-                                                {metric.title}
-                                            </h4>
-                                            <div className={styles.content}>
-                                                <ResponsiveContainer>
-                                                    <AreaChart
-                                                        data={chartData}
-                                                        syncId="lndChart"
-                                                        margin={chartMargin}
-                                                    >
-                                                        <defs>
-                                                            <linearGradient id={`${metric.dataKey}-color`} y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor={metric.color} stopOpacity={0.8} />
-                                                                <stop offset="95%" stopColor={metric.color} stopOpacity={0} />
-                                                            </linearGradient>
-                                                        </defs>
-                                                        <CartesianGrid strokeDasharray="3 3" />
-                                                        <XAxis
-                                                            type="number"
-                                                            dataKey="incidentMonthTimestamp"
-                                                            domain={['dataMin', 'dataMax']}
-                                                            allowDecimals={false}
-                                                            hide
-                                                        />
-                                                        <YAxis
-                                                            hide
-                                                            type="number"
-                                                            domain={['dataMin', 'dataMax']}
-                                                        />
-                                                        <Area
-                                                            type="monotone"
-                                                            fill={`url(#${metric.dataKey}-color)`}
-                                                            dataKey={metric.dataKey}
-                                                            stroke={metric.color}
-                                                        />
-                                                        <Tooltip
-                                                            labelFormatter={() => null}
-                                                            formatter={(value, name, p) => [value, `${metric.title} in ${timeTickFormatter(p.payload.incidentMonthTimestamp)}`]}
-                                                        />
-                                                    </AreaChart>
-                                                </ResponsiveContainer>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <div className={styles.axis}>
-                                        <ResponsiveContainer>
-                                            <AreaChart
-                                                data={chartData}
-                                                margin={chartMargin}
-                                                syncId="lndChart"
-                                            >
-                                                <XAxis
-                                                    tickFormatter={timeTickFormatter}
-                                                    scale="time"
-                                                    dataKey="incidentMonthTimestamp"
-                                                    domain={['dataMin', 'dataMax']}
-                                                    allowDecimals={false}
-                                                    interval="preserveStartEnd"
-                                                    angle={-30}
-                                                />
-                                                <Brush
-                                                    dataKey="incidentMonthTimestamp"
-                                                    tickFormatter={timeTickFormatter}
-                                                />
-                                            </AreaChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                </div>
-                            </div> */}
                         </>
                     )}
                     mainContent={(

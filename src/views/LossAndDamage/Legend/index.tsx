@@ -65,7 +65,7 @@ const Legend = (props: LegendProp) => {
             <p className={styles.currentSelection}>{`No. of ${currentSelection}`}</p>
             <div className={styles.wrapper}>
                 {
-                    filteredLegendItems.length < 0
+                    filteredLegendItems.length > 0
                         ? filteredLegendItems.map((item, index) => (
                             <div
                                 className={styles.legendItem}
