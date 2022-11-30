@@ -1,3 +1,4 @@
+import Spinner from '#rscv/Spinner';
 import React from 'react';
 import styles from './styles.scss';
 
@@ -58,29 +59,36 @@ const Legend = (props: LegendProp) => {
     const Maxvalue = mapState.reduce((a, b) => (a.value > b.value ? a : b)).value;
     const RoundedMaxValue = Math.ceil(Maxvalue / 100) * 100;
     const filteredLegendItems = legendItems.filter(item => item.value < RoundedMaxValue);
+    console.log(filteredLegendItems, 'state');
     return (
         <div className={styles.container}>
             <p className={styles.currentSelection}>{`No. of ${currentSelection}`}</p>
             <div className={styles.wrapper}>
                 {
-                    filteredLegendItems.map((item, index) => (
-                        <div
-                            className={styles.legendItem}
-                            key={item.value}
-                            style={index % 2 !== 0
-                                ? { justifySelf: 'flex-end' }
-                                : { marginRight: 'auto' }
-                            }
-                        >
+                    filteredLegendItems.length < 0
+                        ? filteredLegendItems.map((item, index) => (
                             <div
-                                className={styles.legendColor}
-                                style={{ background: item.color }}
+                                className={styles.legendItem}
+                                key={item.value}
+                                style={index % 2 !== 0
+                                    ? { justifySelf: 'flex-end' }
+                                    : { marginRight: 'auto' }
+                                }
+                            >
+                                <div
+                                    className={styles.legendColor}
+                                    style={{ background: item.color }}
+                                />
+                                <span className={styles.legendText}>
+                                    {item.name}
+                                </span>
+                            </div>
+                        ))
+                        : (
+                            <Spinner
+                                className={styles.spinner}
                             />
-                            <span className={styles.legendText}>
-                                {item.name}
-                            </span>
-                        </div>
-                    ))
+                        )
                 }
             </div>
 

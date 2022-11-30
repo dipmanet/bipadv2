@@ -23,6 +23,12 @@
         width: 260px;
         padding: 5px 10px 10px 5px;
 
+        .spinner{
+            font-size: 24px;
+            color: red;
+            padding: 10px;
+        }
+
 
         .legendItem {
             width: 42%;
@@ -41,4 +47,6 @@
             }
         }
     }
+
+  
 }

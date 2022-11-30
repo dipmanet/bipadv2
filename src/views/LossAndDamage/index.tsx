@@ -464,6 +464,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             <>
                 <Loading
                     pending={pending}
+                    text="Please wait, the system is loading data"
                 />
                 <Page
                     leftContentContainerClassName={styles.left}
