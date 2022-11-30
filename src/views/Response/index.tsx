@@ -36,7 +36,7 @@ import styles from './styles.scss';
 
 const emptyObject = {};
 
-const DEFAULT_RESOURCES_DISTANCE = 12 * 1000; // distance in meter
+const DEFAULT_RESOURCES_DISTANCE = 12 * 10000; // distance in meter
 
 interface Props {
 }
