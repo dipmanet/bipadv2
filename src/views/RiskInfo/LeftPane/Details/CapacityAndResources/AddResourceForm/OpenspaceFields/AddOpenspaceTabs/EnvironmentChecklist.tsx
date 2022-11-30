@@ -138,7 +138,7 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
     private postEia = () => {
         const { allEiaToPost } = this.state;
         const {
-            handleTabClick,LoadingSuccessHalt
+            handleTabClick, LoadingSuccessHalt
         } = this.props;
         LoadingSuccessHalt(true)
         if (allEiaToPost.length !== 0) {
@@ -223,28 +223,28 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
                         ))
 
                     ) : (
-                            allEia && singleEiaList && allEia.map((listItem: EnvironmentAttribute) => {
-                                const eiaAvailability = singleEiaList && singleEiaList.filter(el => el.eia === listItem.id);
-                                return (
-                                    <React.Fragment key={listItem.id}>
-                                        <div className={styles.environmentCheckDiv}>
-                                            {listItem.name}
-                                            <label className={styles.switch}>
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    defaultChecked={eiaAvailability.length !== 0 ? eiaAvailability[0].isAvailable : false}
-                                                    onClick={e => this.handleEditEiaChange(e, listItem, eiaAvailability[0])}
-                                                />
-                                                <span className={styles.slider} />
-                                            </label>
-                                        </div>
-                                        <hr />
-                                    </React.Fragment>
-                                );
-                            })
+                        allEia && singleEiaList && allEia.map((listItem: EnvironmentAttribute) => {
+                            const eiaAvailability = singleEiaList && singleEiaList.filter(el => el.eia === listItem.id);
+                            return (
+                                <React.Fragment key={listItem.id}>
+                                    <div className={styles.environmentCheckDiv}>
+                                        {listItem.name}
+                                        <label className={styles.switch}>
+                                            <input
+                                                type="checkbox"
+                                                value=""
+                                                defaultChecked={eiaAvailability.length !== 0 ? eiaAvailability[0].isAvailable : false}
+                                                onClick={e => this.handleEditEiaChange(e, listItem, eiaAvailability[0])}
+                                            />
+                                            <span className={styles.slider} />
+                                        </label>
+                                    </div>
+                                    <hr />
+                                </React.Fragment>
+                            );
+                        })
 
-                        )}
+                    )}
 
 
                 <div className={styles.stepButtons}>

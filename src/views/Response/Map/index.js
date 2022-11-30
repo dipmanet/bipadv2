@@ -30,6 +30,7 @@ import educationIcon from '#resources/icons/Education.svg';
 import governanceIcon from '#resources/icons/Government-office.svg';
 import openSpaceIcon from '#resources/icons/Soap.svg';
 import hinduTemplateIcon from '#resources/icons/Hindu-temple.svg';
+import warehouseIcon from '#resources/icons/newCapResEvacuationcenter.svg';
 import satelliteIcon from '#resources/icons/Satellite-dish.svg';
 import buildingIcon from '#resources/icons/Building.svg';
 import mapIcon from '#resources/icons/Map.svg';
@@ -49,6 +50,7 @@ const resourceImages = [
     { name: 'openSpace', icon: openSpaceIcon },
     { name: 'tourism', icon: mapIcon },
     { name: 'volunteer', icon: groupIcon },
+    { name: 'warehouse', icon: warehouseIcon },
 ];
 
 const mapStateToProps = state => ({

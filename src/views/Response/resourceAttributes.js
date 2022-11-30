@@ -57,21 +57,21 @@ const healthAttributes = [
         label: 'ICU',
         labelNe: 'आईसीयू',
         type: 'boolean',
-        filter: { },
+        filter: {},
     },
     {
         key: 'nicu',
         label: 'NICU',
         labelNe: 'एनआईसीयू',
         type: 'boolean',
-        filter: { },
+        filter: {},
     },
     {
         key: 'emergencyService',
         label: 'Emergency Service',
         labelNe: 'आपतकालीन सेवा',
         type: 'boolean',
-        filter: { },
+        filter: {},
     },
     { key: 'operatingTheatre', label: 'Operating Theatre', labelNe: 'सञ्चालन थिएटर', type: 'boolean' },
     { key: 'ambulanceService', label: 'Ambulance Service', labelNe: 'एम्बुलेन्स सेवा', type: 'boolean' },
@@ -172,6 +172,14 @@ const governanceAttributes = [
     { key: 'source', label: 'Source', labelNe: 'स्रोत', type: 'string' },
     // { key: 'staffCount', label: 'Staffs', type: 'number' },
 ];
+const warehouseAttribute = [{
+    key: 'hasDisableFriendlyInfrastructure',
+    label: 'Has Disable Friendly Infrastructure?',
+    labelNe: 'असक्षम मैत्री पूर्वाधार छ?',
+    type: 'boolean',
+    filter: {},
+
+}];
 
 const resourceAttributes = {
     health: healthAttributes,
@@ -181,6 +189,7 @@ const resourceAttributes = {
     openSpace: openSpaceAttributes,
     hotel: hotelAttributes,
     governance: governanceAttributes,
+    warehouse: warehouseAttribute,
 };
 
 export default resourceAttributes;

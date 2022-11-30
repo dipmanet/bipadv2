@@ -150,6 +150,7 @@ class Response extends React.PureComponent<Props, State> {
                 openSpace: { show: true },
                 hotel: { show: true },
                 governance: { show: true },
+                warehouse: { show: true },
             },
 
             leftPaneExpanded: true,
@@ -209,7 +210,7 @@ class Response extends React.PureComponent<Props, State> {
         return (
             <React.Fragment>
                 <Loading pending={pending} />
-                { incident.id && (
+                {incident.id && (
                     <React.Fragment>
                         <Map
                             incident={incident}
@@ -242,7 +243,7 @@ class Response extends React.PureComponent<Props, State> {
                                     className={styles.stockPileFilter}
                                     setStockPileFilter={this.setStockPileFilter}
                                     stockPileFilter={stockPileFilter}
-                                    // TODO: inject stockPileFilter
+                                // TODO: inject stockPileFilter
                                 />
                             ) : null}
                         />
