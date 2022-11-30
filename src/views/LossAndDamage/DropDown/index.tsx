@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -5,8 +6,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
+import HumanDeath from '#resources/icons/damage-and-loss/Human death.svg';
+import EstimatedLoss from '#resources/icons/damage-and-loss/Estimated loss.svg';
+import InfrastructureDestroyed from '#resources/icons/damage-and-loss/Infrastructure destroyed.svg';
+import InjuredPerson from '#resources/icons/damage-and-loss/Injured person.svg';
+import LiveStockDestroyed from '#resources/icons/damage-and-loss/Livestock destroyed.svg';
+import MissingPerson from '#resources/icons/damage-and-loss/Missing person.svg';
 import styles from './styles.scss';
 import { DropDownOption, DropDownProps } from './types';
+
+const Icons = [
+    { id: 1, name: 'Incidents', icon: '' },
+    { id: 2, name: 'Human death', icon: HumanDeath },
+    { id: 3, name: 'Estimated loss (NPR)', icon: EstimatedLoss },
+    { id: 4, name: 'Infrastructure destroyed', icon: InfrastructureDestroyed },
+    { id: 5, name: 'Livestock destroyed', icon: LiveStockDestroyed },
+    { id: 6, name: 'Injured people', icon: InjuredPerson },
+    { id: 7, name: 'Missing people', icon: MissingPerson },
+];
 
 
 const Dropdown = (props: DropDownProps) => {
@@ -23,6 +40,7 @@ const Dropdown = (props: DropDownProps) => {
         elementName,
         deleteicon,
         clearValues } = props;
+
 
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
     // eslint-disable-next-line max-len
@@ -89,11 +107,23 @@ const Dropdown = (props: DropDownProps) => {
                     >
                         {icon
                             && (
-                                <Icon
-                                    className={styles.icon}
-                                    name="warning"
-                                />
-                            )}
+                                Icons.filter(item => item.name === selectName)[0].name === 'Incidents'
+                                    ? (
+                                        <Icon
+                                            className={styles.icon}
+                                            name="warning"
+                                        />
+                                    ) : (
+                                        <span
+                                            style={{ padding: '6px 12px' }}
+                                        >
+                                            <img
+                                                style={{ width: '20px', height: '20px' }}
+                                                src={Icons.filter(item => item.name === selectName)[0].icon}
+                                                alt={Icons.filter(item => item.name === selectName)[0].name}
+                                            />
+                                        </span>
+                                    ))}
                         <div
                             className={styles.selectField}
                         >
@@ -139,10 +169,25 @@ const Dropdown = (props: DropDownProps) => {
                                     {
                                         icon
                                         && (
-                                            <Icon
-                                                className={styles.icon}
-                                                name="warning"
-                                            />
+                                            index === 0
+                                                ? (
+                                                    <Icon
+                                                        className={styles.icon}
+                                                        name="warning"
+                                                    />
+                                                )
+                                                : (
+                                                    <span
+                                                        style={{ padding: '6px 12px' }}
+                                                    >
+                                                        <img
+                                                            style={{ width: '20px', height: '20px' }}
+                                                            src={Icons[index].icon}
+                                                            alt={Icons[index].name}
+                                                        />
+                                                    </span>
+
+                                                )
                                         )
                                     }
                                     <p className={styles.optionName}>{item.label}</p>
