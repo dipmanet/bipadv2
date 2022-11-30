@@ -62,6 +62,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                 >
                     <Legend
                         currentSelection={currentSelection}
+                        mapState={mapState}
                     />
                 </div>
                 <ChoroplethMap

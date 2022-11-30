@@ -1,6 +1,14 @@
 import React from 'react';
 import styles from './styles.scss';
 
+interface LegendProp {
+    currentSelection: string;
+    mapState: {
+        id: number;
+        value: number;
+    }[];
+}
+
 export const legendItems = [
     {
         name: '0-100',
@@ -45,15 +53,25 @@ export const legendItems = [
 
 ];
 
-const Legend = (props) => {
-    const { currentSelection } = props;
+const Legend = (props: LegendProp) => {
+    const { currentSelection, mapState } = props;
+    const Maxvalue = mapState.reduce((a, b) => (a.value > b.value ? a : b)).value;
+    const RoundedMaxValue = Math.ceil(Maxvalue / 100) * 100;
+    const filteredLegendItems = legendItems.filter(item => item.value < RoundedMaxValue);
     return (
         <div className={styles.container}>
-            <p className={styles.currentSelection}>{currentSelection}</p>
+            <p className={styles.currentSelection}>{`No. of ${currentSelection}`}</p>
             <div className={styles.wrapper}>
                 {
-                    legendItems.map(item => (
-                        <div className={styles.legendItem} key={item.value}>
+                    filteredLegendItems.map((item, index) => (
+                        <div
+                            className={styles.legendItem}
+                            key={item.value}
+                            style={index % 2 !== 0
+                                ? { justifySelf: 'flex-end' }
+                                : { marginRight: 'auto' }
+                            }
+                        >
                             <div
                                 className={styles.legendColor}
                                 style={{ background: item.color }}
