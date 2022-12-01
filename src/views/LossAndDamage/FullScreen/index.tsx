@@ -12,7 +12,8 @@ const FullScreenIcon = ({ domElement,
     setFullScreenHeightWidth,
     setBarAllDataOnFullScreen }: Props) => {
     function openFullscreen() {
-        setBarAllDataOnFullScreen(true);
+        if (setBarAllDataOnFullScreen) setBarAllDataOnFullScreen(true);
+
         const element = document.getElementById(domElement);
         if (element.requestFullscreen) {
             element.requestFullscreen();
