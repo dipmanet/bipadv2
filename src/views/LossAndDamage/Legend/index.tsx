@@ -59,7 +59,6 @@ const Legend = (props: LegendProp) => {
     const Maxvalue = mapState.reduce((a, b) => (a.value > b.value ? a : b)).value;
     const RoundedMaxValue = Math.ceil(Maxvalue / 100) * 100;
     const filteredLegendItems = legendItems.filter(item => item.value < RoundedMaxValue);
-    console.log(filteredLegendItems, 'state');
     return (
         <div className={styles.container}>
             <p className={styles.currentSelection}>{`No. of ${currentSelection}`}</p>

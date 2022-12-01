@@ -10,9 +10,9 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
+import DownloadButton from '#components/DownloadButton';
 import { mainHeading, bodyheader } from './headers';
 import { estimatedLossValueFormatter } from '../utils/utils';
-import DownloadButton from '#components/DownloadButton';
 import { returnDataByFormat } from './util';
 import { Data } from '../types';
 import { Sorted } from './types';
@@ -98,7 +98,17 @@ const DataTable = ({ closeModal, incidentList }: TableProps) => {
                     if (elemCur.key.split('').includes('.')) {
                         const requiredKey = elemCur.key.replace('.', ' ').split(' ')[0];
                         const requiredKey1 = elemCur.key.replace('.', ' ').split(' ')[1];
-                        obj[elemCur.name] = returnDataByFormat(elemCur.key, element[requiredKey][requiredKey1]);
+                        let elementValue;
+                        if (element[requiredKey]) {
+                        // eslint-disable-next-line no-prototype-builtins
+                            if (element[requiredKey].hasOwnProperty(requiredKey1)) {
+                                elementValue = element[requiredKey][requiredKey1];
+                            }
+                        } else {
+                            elementValue = 0;
+                        }
+
+                        obj[elemCur.name] = returnDataByFormat(elemCur.key, elementValue);
                     } else {
                         obj[elemCur.name] = returnDataByFormat(elemCur.key, element[elemCur.key]);
                     }
