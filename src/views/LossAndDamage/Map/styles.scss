@@ -5,6 +5,7 @@
     // padding: var(--spacing-medium);
     // width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 110px);
     width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 80px);
+    display: flex;
 
     .heading {
         padding-bottom: var(--spacing-medium);
