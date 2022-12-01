@@ -54,6 +54,7 @@ import {
     pastDaysToDateRange,
 } from '#utils/transformations';
 import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
+import Spinner from '#rscv/Spinner';
 import TabularView from './TabularView';
 import { getSanitizedIncidents } from './common';
 import Overview from './Overview';
@@ -613,10 +614,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         )
                                         : (
                                             <div className={styles.dataUnavailable}>
-                                                <h3 className={styles.headerText}>No data are available</h3>
-                                                <p className={styles.textOption}>
-                                                    Try selecting different parameters.
-                                                </p>
+                                                <h3 className={styles.headerText}>Please wait, the system is loading data</h3>
+                                                <Spinner
+                                                    className={styles.spinner}
+                                                />
                                             </div>
                                         )
                                 }

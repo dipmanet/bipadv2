@@ -117,12 +117,35 @@
                         flex-shrink: 0;
                     }
                 }
-                .hazardText {
-                    text-transform: uppercase;
-                    font-size: 14px;
-                    font-weight: 600;
-                    margin-top: 45px;
-                            }               
+                .value {
+                    display: flex;
+                    align-items: center;
+                    padding: 10px 0px;
+                    .label{
+                        padding-right: 10px;
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+                    .source {
+                        display: flex;
+                        align-items: center;
+                        padding: 0 var(--spacing-extra-small-alt);
+                        font-size: 14px;
+                        font-weight: bold;
+    
+                        &:not(:last-child) {
+                            &:after {
+                                content: ',';
+                            }
+                        }
+    
+                        .link {
+                            margin: 0 var(--spacing-small);
+                            color: var(--color-accent);
+                            font-size: var(--font-size-large);
+                        }
+                    }
+                }              
             }
         }
     }

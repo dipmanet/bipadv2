@@ -35,6 +35,7 @@ import {
 
 import { createSingleList } from '#components/RegionSelectInput/util.js';
 import ChoroplethMap from '#components/ChoroplethMap';
+import Icon from '#rscg/Icon';
 import { getSanitizedIncidents, metricMap } from '../common';
 
 import styles from './styles.scss';
@@ -513,9 +514,30 @@ class NewCompare extends React.PureComponent {
                                 {
                                     (region1Incidents.length > 0 || region2Incidents.length > 0)
                                     && (
-                                        <p className={styles.hazardText}>
-                                            Data source : nepal police,drr portal
-                                        </p>
+                                        <div className={styles.value}>
+                                            <span className={styles.label}>
+                                        Data sources:
+                                            </span>
+                                            <span className={styles.source}>
+                                            Nepal Police
+                                            </span>
+                                            <div className={styles.source}>
+                                                <span className={styles.text}>
+                                                DRR Portal
+                                                </span>
+                                                <a
+                                                    className={styles.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    href="http://drrportal.gov.np"
+                                                >
+                                                    <Icon
+                                                        name="externalLink"
+                                                    />
+                                                </a>
+                                            </div>
+                                        </div>
+
                                     )
                                 }
 
