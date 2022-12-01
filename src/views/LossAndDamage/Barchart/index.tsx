@@ -18,6 +18,7 @@ import { handleDownload } from './util';
 const BarChartVisual = (props: BarchartProps) => {
     const [chartData, setChartData] = useState<ChartData>([]);
     const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
+    const [isAllBarData, setAllBarData] = useState(false);
     const imageDownloadRef = useRef();
     const { selectOption,
         regionRadio,
@@ -30,10 +31,14 @@ const BarChartVisual = (props: BarchartProps) => {
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
         setFullScreen({ width, height });
     };
+    const setBarAllDataOnFullScreen = (value: boolean) => {
+        setAllBarData(value);
+    };
 
     function exitHandler() {
         if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
             setFullScreen({ width: '100%', height: 300 });
+            setAllBarData(false);
         }
     }
     if (document.addEventListener) {
@@ -107,25 +112,36 @@ const BarChartVisual = (props: BarchartProps) => {
                         .sort((a, b) => b.value - a.value));
                     break;
                 case regionRadio.adminLevel === 2 || regionRadio.name === 'district':
-                    setChartData(distributionCalculate(districtIndex, 'district')
-                        .sort((a, b) => b.value - a.value)
-                        .slice(0, 10));
+                    // eslint-disable-next-line no-case-declarations
+                    const AlldistrictData = distributionCalculate(districtIndex, 'district')
+                        .sort((a, b) => b.value - a.value);
+                    // eslint-disable-next-line no-case-declarations
+                    const TopTendistrictData = distributionCalculate(districtIndex, 'district')
+                        .sort((a, b) => b.value - a.value).slice(0, 10);
+                    setChartData(isAllBarData ? AlldistrictData : TopTendistrictData);
                     break;
                 case regionRadio.adminLevel === 3 || regionRadio.name === 'municipality':
-                    setChartData(distributionCalculate(municipalityIndex, 'municipality')
-                        .sort((a, b) => b.value - a.value)
-                        .slice(0, 10));
+                    // eslint-disable-next-line no-case-declarations
+                    const muniData = distributionCalculate(municipalityIndex, 'municipality').sort((a, b) => b.value - a.value);
+                    // eslint-disable-next-line no-case-declarations
+                    const TopTenMuniData = distributionCalculate(municipalityIndex, 'municipality')
+                        .sort((a, b) => b.value - a.value).slice(0, 10);
+                    setChartData(isAllBarData ? muniData : TopTenMuniData);
                     break;
                 case regionRadio.name === 'ward':
-                    setChartData(distributionCalculate(wardIndex, 'ward')
-                        .sort((a, b) => b.value - a.value)
-                        .slice(0, 10));
+                    // eslint-disable-next-line no-case-declarations
+                    const wardData = distributionCalculate(wardIndex, 'ward').sort((a, b) => b.value - a.value);
+                    // eslint-disable-next-line no-case-declarations
+                    const TopTenwardData = distributionCalculate(wardIndex, 'ward')
+                        .sort((a, b) => b.value - a.value).slice(0, 10);
+                    setChartData(isAllBarData ? wardData : TopTenwardData);
+
                     break;
                 default:
                     break;
             }
         }
-    }, [regionRadio, valueOnclick, data]);
+    }, [regionRadio, valueOnclick, data, isAllBarData]);
 
     function nameReturn(region: RadioValue) {
         if (region.name === 'district' || region.name === 'municipality' || region.name === 'ward') return `${regionRadio.name}-wise distribution (Top 10)`;
@@ -139,7 +155,10 @@ const BarChartVisual = (props: BarchartProps) => {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    {/* <span className={styles.label}>{`${payload[0].payload.name} ${regionRadio.name}`}</span> */}
+                    {
+                        isAllBarData
+                    && <span className={styles.label}>{`${regionRadio.name}: ${payload[0].payload.name}`}</span>
+                    }
                     <span className={styles.label}>{`${selectOption.name}: ${payload[0].payload.value}`}</span>
                 </div>
             );
@@ -165,7 +184,7 @@ const BarChartVisual = (props: BarchartProps) => {
                         angle={-30}
                         width={100}
                     >
-                        {payload.value}
+                        {!isAllBarData ? payload.value : ''}
 
                     </Text>
                 ) : (
@@ -198,6 +217,7 @@ const BarChartVisual = (props: BarchartProps) => {
                         <FullScreenIcon
                             domElement="barChart"
                             setFullScreenHeightWidth={setFullScreenHeightWidth}
+                            setBarAllDataOnFullScreen={setBarAllDataOnFullScreen}
                         />
                     )
                 }

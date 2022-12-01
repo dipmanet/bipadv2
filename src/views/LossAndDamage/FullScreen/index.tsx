@@ -5,10 +5,14 @@ import styles from './styles.scss';
 interface Props {
     domElement: string;
     setFullScreenHeightWidth: (width: string, height: string) => void;
+    setBarAllDataOnFullScreen: (val: boolean) => void;
 }
 
-const FullScreenIcon = ({ domElement, setFullScreenHeightWidth }: Props) => {
+const FullScreenIcon = ({ domElement,
+    setFullScreenHeightWidth,
+    setBarAllDataOnFullScreen }: Props) => {
     function openFullscreen() {
+        setBarAllDataOnFullScreen(true);
         const element = document.getElementById(domElement);
         if (element.requestFullscreen) {
             element.requestFullscreen();
