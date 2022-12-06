@@ -631,6 +631,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             endDate={submittedEndDate}
                             radioSelect={regionRadio}
                             currentSelection={selectOption}
+                            pending={pending}
                         />
                     )}
                 />

@@ -66,6 +66,7 @@ class Overview extends React.PureComponent {
             endDate,
             currentSelection,
             radioSelect,
+            pending,
         } = this.props;
         // const {
         //     selectedMetricKey = 'count',
@@ -117,6 +118,7 @@ class Overview extends React.PureComponent {
                 metricKey={selectedMetric.key}
                 radioSelect={radioSelect.id}
                 currentSelection={currentSelection.name}
+                pending={pending}
                     // onMetricChange={(m) => {
                 //     this.setState({ selectedMetricKey: m });
                 // }}

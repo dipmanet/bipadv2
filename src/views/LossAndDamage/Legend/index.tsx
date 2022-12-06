@@ -4,71 +4,62 @@ import styles from './styles.scss';
 
 interface LegendProp {
     currentSelection: string;
-    mapState: {
-        id: number;
-        value: number;
+    legend: {
+        name: string;
+        color: string;
     }[];
+    pending: boolean;
 }
 
 export const legendItems = [
     {
         name: '0-100',
-        color: '#f7d8bf',
-        value: 0,
+        color: '#f1d9c1',
     },
     {
         name: '100-200',
-        color: '#f3c7a6',
-        value: 100,
+        color: '#e7bca4',
     },
     {
         name: '200-300',
-        color: '#eeb191',
-        value: 200,
+        color: '#db9d85',
     },
     {
         name: '300-400',
-        color: '#e79b7a',
-        value: 300,
+        color: '#d38871',
     },
     {
         name: '400-500',
-        color: '#e08466',
-        value: 400,
+        color: '#c96c54',
     },
     {
         name: '500-600',
-        color: '#e08466',
-        value: 500,
+        color: '#be4b2f',
     },
     {
         name: '600-700',
-        color: '#db6e51',
-        value: 600,
+        color: '#cb6125',
     },
     {
         name: '700-more',
-        color: '#d4543d',
-        value: 700,
+        color: '#e05c12',
     },
 
 ];
 
 const Legend = (props: LegendProp) => {
-    const { currentSelection, mapState } = props;
-    const Maxvalue = mapState.reduce((a, b) => (a.value > b.value ? a : b)).value;
-    const RoundedMaxValue = Math.ceil(Maxvalue / 100) * 100;
-    const filteredLegendItems = legendItems.filter(item => item.value < RoundedMaxValue);
+    const { currentSelection, legend, pending } = props;
+
     return (
         <div className={styles.container}>
             <p className={styles.currentSelection}>{`No. of ${currentSelection}`}</p>
             <div className={styles.wrapper}>
                 {
-                    filteredLegendItems.length > 0
-                        ? filteredLegendItems.map((item, index) => (
+                    !pending
+                        ? legend.map((item, index) => (
                             <div
                                 className={styles.legendItem}
-                                key={item.value}
+                                key={item.name}
                                 style={index % 2 !== 0
                                     ? { justifySelf: 'flex-end' }
                                     : { marginRight: 'auto' }
