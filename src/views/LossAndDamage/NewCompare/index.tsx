@@ -183,7 +183,7 @@ class NewCompare extends React.PureComponent {
                 <h3 className={styles.headerText}>{noData ? '' : noOptionSelected}</h3>
                 <p className={styles.textOption}>
                     {
-                        `Try selecting ${noData ? 'a region' : 'different section'} to compare`
+                        `Select ${noData ? 'a region' : 'different sections'} to compare`
                     }
                 </p>
             </div>
