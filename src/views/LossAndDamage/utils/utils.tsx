@@ -44,7 +44,7 @@ export const tooltipRenderer = (props, currentSelection, radioSelect) => {
                 textAlign: 'center',
             }}
             >
-                {`No of ${currentSelection}: ${feature.state.value}`}
+                {`No of ${currentSelection}: ${estimatedLossValueFormatter(feature.state.value)}`}
             </p>
 
         </>
@@ -139,14 +139,16 @@ export const generatePaintLegendByInterval = (data, parts, color) => {
         if (index === 1) {
             colorInterval.push(color[index - 1]);
             colorInterval.push(dat);
-            colorLegend.push({ name: `${min} - ${dat}`, range: [min, dat], color: color[index - 1] });
+            colorLegend.push({ name: `${estimatedLossValueFormatter(min)} - ${estimatedLossValueFormatter(dat)}`, range: [min, dat], color: color[index - 1] });
         } else if (dat <= max) {
             colorInterval.push(color[index - 1]);
             colorInterval.push(dat + interval + 1);
             dat += 1;
-            colorLegend.push({ name: `${dat} - ${dat + interval > max ? max : dat + interval}`,
-                color: color[index - 1],
-                range: [dat, dat + interval > max ? max : dat + interval] });
+            colorLegend.push({ name: `${estimatedLossValueFormatter(dat)} - ${dat + interval > max
+                ? estimatedLossValueFormatter(max)
+                : estimatedLossValueFormatter(dat + interval)}`,
+            color: color[index - 1],
+            range: [dat, dat + interval > max ? max : dat + interval] });
             dat += interval;
         }
     }
