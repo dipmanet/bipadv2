@@ -24,7 +24,7 @@ interface TableProps {
 }
 
 const DataTable = ({ closeModal, incidentList }: TableProps) => {
-    const [focus, setFocus] = useState({ id: 1, name: 'Incident wise details' });
+    const [focus, setFocus] = useState({ id: 1, name: 'Incident-wise details' });
     const [data, setData] = useState<Sorted[] | []>([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
     const [sortDirection, setSortDirection] = useState(false);

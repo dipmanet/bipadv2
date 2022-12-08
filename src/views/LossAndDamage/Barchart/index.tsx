@@ -39,6 +39,8 @@ const BarChartVisual = (props: BarchartProps) => {
         if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
             setFullScreen({ width: '100%', height: 300 });
             setAllBarData(false);
+            const titleHeading = document.getElementById('titleHeading');
+            titleHeading.remove();
         }
     }
     if (document.addEventListener) {
@@ -218,6 +220,7 @@ const BarChartVisual = (props: BarchartProps) => {
                             domElement="barChart"
                             setFullScreenHeightWidth={setFullScreenHeightWidth}
                             setBarAllDataOnFullScreen={setBarAllDataOnFullScreen}
+                            selectOption={selectOption.name}
                         />
                     )
                 }
@@ -236,7 +239,12 @@ const BarChartVisual = (props: BarchartProps) => {
                 }
 
             </div>
-            <div className={styles.barChart} id="barChart" ref={imageDownloadRef}>
+            <div
+                className={styles.barChart}
+                id="barChart"
+                ref={imageDownloadRef}
+                style={{ display: 'flex', flexDirection: 'column' }}
+            >
                 {
                     chartData.length > 0
                     && (

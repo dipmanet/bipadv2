@@ -1,13 +1,13 @@
 
 export const mainHeading = [
-    { id: 1, name: 'Incident wise details' },
-    { id: 2, name: 'Hazardwise summary' },
+    { id: 1, name: 'Incident-wise details' },
+    { id: 2, name: 'Hazard-wise summary' },
     { id: 3, name: 'Temporal summary' },
-    { id: 4, name: 'Locationwise summary' },
+    { id: 4, name: 'Location-wise summary' },
 ];
 
 export const bodyheader = {
-    'Incident wise details':
+    'Incident-wise details':
         [
             { id: 1, name: 'Verified', type: 'string', key: 'verified' },
             { id: 2, name: 'Title', type: 'string', key: 'title' },
@@ -42,7 +42,7 @@ export const bodyheader = {
             { id: 31, name: 'Unknown - People Injured', type: 'numeric', key: 'loss.peopleInjuredUnknownCount' },
             { id: 32, name: 'Disabled - People Injured', type: 'numeric', key: 'loss.peopleInjuredDisabledCount' },
         ],
-    'Hazardwise summary':
+    'Hazard-wise summary':
         [
             { id: 1, name: 'Hazard Type', key: 'hazardInfo.title', type: 'string' },
             { id: 2, name: 'Number of incident', key: 'numberOfIncident', type: 'numeric' },
@@ -64,7 +64,7 @@ export const bodyheader = {
             { id: 7, name: 'House affected', key: 'loss.infrastructureAffectedHouseCount', type: 'numeric' },
             { id: 8, name: 'Livestock destroyed', key: 'loss.livestockDestroyedCount', type: 'numeric' },
         ],
-    'Locationwise summary':
+    'Location-wise summary':
         [
             { id: 1, name: 'Province', key: 'provinceTitle', type: 'string' },
             { id: 2, name: 'Number of incident', key: 'numberOfIncident', type: 'numeric' },

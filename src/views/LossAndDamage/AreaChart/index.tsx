@@ -33,6 +33,8 @@ const AreaChartVisual = (props: AreaChartProps) => {
     function exitHandler() {
         if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
             setFullScreen({ width: '100%', height: 300 });
+            const titleHeading = document.getElementById('titleHeading');
+            titleHeading.remove();
         }
     }
     if (document.addEventListener) {
@@ -89,6 +91,8 @@ const AreaChartVisual = (props: AreaChartProps) => {
                         <FullScreenIcon
                             domElement="areaChart"
                             setFullScreenHeightWidth={setFullScreenHeightWidth}
+                            selectOption={name}
+
                         />
                     )
                 }

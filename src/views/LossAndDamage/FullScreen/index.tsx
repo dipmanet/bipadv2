@@ -6,15 +6,26 @@ interface Props {
     domElement: string;
     setFullScreenHeightWidth: (width: string, height: string) => void;
     setBarAllDataOnFullScreen: (val: boolean) => void;
+    selectOption: string;
 }
 
 const FullScreenIcon = ({ domElement,
     setFullScreenHeightWidth,
-    setBarAllDataOnFullScreen }: Props) => {
+    setBarAllDataOnFullScreen, selectOption }: Props) => {
     function openFullscreen() {
         if (setBarAllDataOnFullScreen) setBarAllDataOnFullScreen(true);
-
         const element = document.getElementById(domElement);
+        const text = `No. of ${selectOption}`;
+        const tag = document.createElement('p');
+        tag.setAttribute('id', 'titleHeading');
+        tag.style.fontSize = `${14}px`;
+        tag.style.fontWeight = 700;
+        tag.style.textTransform = 'capitalize';
+        tag.style.position = 'absolute';
+        tag.style.top = `${50}px`;
+        const textContent = document.createTextNode(text);
+        tag.appendChild(textContent);
+        element.appendChild(tag);
         if (element.requestFullscreen) {
             element.requestFullscreen();
         } else if (element.webkitRequestFullscreen) { /* Safari */
