@@ -75,6 +75,12 @@ const AreaChartVisual = (props: AreaChartProps) => {
         return null;
     }
 
+    const downloadProps = { domElement: 'areaChart',
+        selectOption: name,
+        headerText: 'Temporal distribution',
+        fileName: 'Area Chart',
+        height: 0,
+        width: 30 };
 
     return (
         <div className={styles.wrapper}>
@@ -92,7 +98,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
                             domElement="areaChart"
                             setFullScreenHeightWidth={setFullScreenHeightWidth}
                             selectOption={name}
-
+                            headerText={'Temporal distribution'}
                         />
                     )
                 }
@@ -105,7 +111,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleDownload('areaChart', name, 'Area Chart', 0, 20)}
+                            onClick={() => handleDownload(downloadProps)}
                             iconName="download"
                         />
                     )

@@ -162,6 +162,13 @@ const HazardWise = (props: HazardWiseProps) => {
         treemapHighlight(name, fill);
     };
 
+    const downloadProps = { domElement: 'treemap',
+        selectOption: selectOption.name,
+        headerText: 'Hazard-wise distribution',
+        fileName: 'Tree Map',
+        height: 50,
+        width: 0 };
+
 
     return (
         <div className={styles.wrapper}>
@@ -180,6 +187,7 @@ const HazardWise = (props: HazardWiseProps) => {
                             domElement="treemap"
                             setFullScreenHeightWidth={setFullScreenHeightWidth}
                             selectOption={selectOption.name}
+                            headerText={'Hazard-wise distribution'}
                         />
                     )
                 }
@@ -191,7 +199,7 @@ const HazardWise = (props: HazardWiseProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleDownload('treemap', selectOption.name, 'Tree Map', 50, 0)}
+                            onClick={() => handleDownload(downloadProps)}
                             iconName="download"
                         />
                     )

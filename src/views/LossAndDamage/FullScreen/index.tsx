@@ -7,15 +7,16 @@ interface Props {
     setFullScreenHeightWidth: (width: string, height: string) => void;
     setBarAllDataOnFullScreen: (val: boolean) => void;
     selectOption: string;
+    headerText: string;
 }
 
 const FullScreenIcon = ({ domElement,
     setFullScreenHeightWidth,
-    setBarAllDataOnFullScreen, selectOption }: Props) => {
+    setBarAllDataOnFullScreen, selectOption, headerText }: Props) => {
     function openFullscreen() {
         if (setBarAllDataOnFullScreen) setBarAllDataOnFullScreen(true);
         const element = document.getElementById(domElement);
-        const text = `No. of ${selectOption}`;
+        const text = `${headerText.replace(' (Top 10)', '')} of ${selectOption}`;
         const tag = document.createElement('p');
         tag.setAttribute('id', 'titleHeading');
         tag.style.fontSize = `${14}px`;

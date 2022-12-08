@@ -41,40 +41,25 @@ export default class LossAndDamageMap extends React.PureComponent {
         const colors = legendItems.map(item => item.color);
         const returnDataInterval = (data, parts, color) => {
             const newData = [...data];
-            const arrayData = newData.map(item => item.value).sort((a, b) => a - b);
+            const arrayData = [...new Set(newData.map(item => item.value).sort((a, b) => a - b))];
             const max = Math.floor(arrayData.reduce((a, b) => (a > b ? a : b)));
+            const min = Math.floor(arrayData.reduce((a, b) => (a < b ? a : b)));
             const interval = Math.floor(max / parts);
             const colorInterval = [];
             const colorLegend = [];
-            let dat = interval;
+            let dat = interval < min ? min + interval : interval;
             // eslint-disable-next-line no-plusplus
             for (let index = 1; index <= parts; index++) {
-                // eslint-disable-next-line no-loop-func
-                if (index === parts) {
-                    colorInterval.push(color[index - 1]);
-                    colorInterval.push(max);
-                    colorLegend.push(
-                        { name: `${dat - interval} - ${max}`,
-                            color: color[index - 1] },
-                    );
-                    console.log(dat, max, 'running');
-                } else {
+                if (index === 1) {
                     colorInterval.push(color[index - 1]);
                     colorInterval.push(dat);
-                    if (dat < max) {
-                        if (index === 1) {
-                            colorLegend.push(
-                                { name: `0 - ${dat}`,
-                                    color: color[index - 1] },
-                            );
-                        } else {
-                            colorLegend.push(
-                                { name: `${dat - interval} - ${dat}`,
-                                    color: color[index - 1] },
-                            );
-                        }
-                    }
-                    dat = dat + interval + 1;
+                    colorLegend.push({ name: `${min} - ${dat}`, color: color[index - 1] });
+                } else if (dat <= max) {
+                    colorInterval.push(color[index - 1]);
+                    colorInterval.push(dat + interval + 1);
+                    dat += 1;
+                    colorLegend.push({ name: `${dat} - ${dat + interval > max ? max : dat + interval}`, color: color[index - 1] });
+                    dat += interval;
                 }
             }
 
@@ -93,7 +78,8 @@ export default class LossAndDamageMap extends React.PureComponent {
                     1,
                 ],
             };
-            console.log(paintColor, [...new Set(newData)], 'paint');
+            console.log(paintColor, colorLegend, 'paint');
+            console.log(arrayData, 'data');
             return { paintColor, colorLegend };
         };
 
@@ -120,7 +106,6 @@ export default class LossAndDamageMap extends React.PureComponent {
             ],
         };
 
-        console.log(mapState, 'data');
         const { paintColor, colorLegend } = returnDataInterval(mapState, colors.length, colors);
         return (
             <React.Fragment>

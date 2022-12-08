@@ -202,6 +202,13 @@ const BarChartVisual = (props: BarchartProps) => {
                 ));
     };
 
+    const downloadProps = { domElement: 'barChart',
+        selectOption: selectOption.name,
+        headerText: nameReturn(regionRadio),
+        fileName: 'Bar Chart',
+        height: 20,
+        width: 0 };
+
 
     return (
         // <div className={styles.container}>
@@ -221,6 +228,7 @@ const BarChartVisual = (props: BarchartProps) => {
                             setFullScreenHeightWidth={setFullScreenHeightWidth}
                             setBarAllDataOnFullScreen={setBarAllDataOnFullScreen}
                             selectOption={selectOption.name}
+                            headerText={nameReturn(regionRadio)}
                         />
                     )
                 }
@@ -232,7 +240,7 @@ const BarChartVisual = (props: BarchartProps) => {
                             className={styles.downloadButton}
                             transparent
                             // disabled={pending}
-                            onClick={() => handleDownload('barChart', selectOption.name, 'Bar Chart', 20, 0)}
+                            onClick={() => handleDownload(downloadProps)}
                             iconName="download"
                         />
                     )
