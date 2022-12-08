@@ -124,3 +124,47 @@ export const returnValueByDropdown = (name, val) => {
     if (name === 'Estimated loss (NPR)') return estimatedLossValueFormatter(val);
     return val;
 };
+
+export const generatePaintLegendByInterval = (data, parts, color) => {
+    const newData = [...data];
+    const arrayData = [...new Set(newData.map(item => item.value).sort((a, b) => a - b))];
+    const max = Math.floor(arrayData.reduce((a, b) => (a > b ? a : b)));
+    const min = Math.floor(arrayData.reduce((a, b) => (a < b ? a : b)));
+    const interval = Math.floor(max / parts);
+    const colorInterval = [];
+    const colorLegend = [];
+    let dat = interval < min ? min + interval : interval;
+    // eslint-disable-next-line no-plusplus
+    for (let index = 1; index <= parts; index++) {
+        if (index === 1) {
+            colorInterval.push(color[index - 1]);
+            colorInterval.push(dat);
+            colorLegend.push({ name: `${min} - ${dat}`, range: [min, dat], color: color[index - 1] });
+        } else if (dat <= max) {
+            colorInterval.push(color[index - 1]);
+            colorInterval.push(dat + interval + 1);
+            dat += 1;
+            colorLegend.push({ name: `${dat} - ${dat + interval > max ? max : dat + interval}`,
+                color: color[index - 1],
+                range: [dat, dat + interval > max ? max : dat + interval] });
+            dat += interval;
+        }
+    }
+
+    const paintColor = {
+        'fill-color': [
+            'step',
+            ['feature-state', 'value'],
+            ...colorInterval.slice(0, -1),
+        ],
+        'fill-opacity': [
+            'case',
+            ['==', ['feature-state', 'value'], null],
+            0,
+            ['==', ['feature-state', 'hovered'], true],
+            0.5,
+            1,
+        ],
+    };
+    return { paintColor, colorLegend };
+};

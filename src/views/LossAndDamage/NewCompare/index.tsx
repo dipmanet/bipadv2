@@ -269,6 +269,7 @@ class NewCompare extends React.PureComponent {
 
             return mapState;
         };
+
         const colorRange = [];
         // eslint-disable-next-line no-restricted-syntax
         for (const item of legendItems) {

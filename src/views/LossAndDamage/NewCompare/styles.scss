@@ -109,6 +109,7 @@
                 .other-visualizations {
                     display: flex;
                     justify-content: space-between;
+                    white-space: nowrap;
 
                     .region1-container,
                     .region2-container {
@@ -120,6 +121,7 @@
                 .value {
                     display: flex;
                     align-items: center;
+                    white-space: nowrap;
                     padding: 10px 0px;
                     .label{
                         padding-right: 10px;
@@ -132,20 +134,20 @@
                         padding: 0 var(--spacing-extra-small-alt);
                         font-size: 14px;
                         font-weight: bold;
-    
+
                         &:not(:last-child) {
                             &:after {
                                 content: ',';
                             }
                         }
-    
+
                         .link {
                             margin: 0 var(--spacing-small);
                             color: var(--color-accent);
                             font-size: var(--font-size-large);
                         }
                     }
-                }              
+                }
             }
         }
     }

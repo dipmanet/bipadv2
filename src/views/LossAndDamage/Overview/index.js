@@ -35,7 +35,6 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
     regionLevel: regionLevelSelector(state, props),
-
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
 });
