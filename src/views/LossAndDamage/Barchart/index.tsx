@@ -219,6 +219,10 @@ const BarChartVisual = (props: BarchartProps) => {
             <div className={styles.firstDiv}>
                 <p className={styles.text}>
                     {nameReturn(regionRadio)}
+                    {' '}
+                    of
+                    {' '}
+                    {selectOption.name}
                 </p>
                 {
                     fullScreenMode
