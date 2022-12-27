@@ -281,7 +281,7 @@ class NewCompare extends React.PureComponent {
             if (this.imageDownloadRef.current) {
                 const width = this.imageDownloadRef.current.scrollWidth;
                 const height = this.imageDownloadRef.current.scrollHeight;
-                const image = await HtmltoImage.toPng(this.imageDownloadRef.current,
+                await HtmltoImage.toPng(this.imageDownloadRef.current,
                     { width, height }).then((img) => {
                     const link = document.createElement('a');
                     link.href = img;
