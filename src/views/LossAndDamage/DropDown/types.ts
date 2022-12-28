@@ -18,4 +18,5 @@ export interface DropDownProps {
     deleteicon: boolean;
     elementName?: string | undefined;
     clearValues: (elementName: string | undefined) => void;
+    inputSearch?: boolean;
 }

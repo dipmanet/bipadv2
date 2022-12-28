@@ -1,3 +1,9 @@
+/* eslint-disable jsx-a11y/no-autofocus */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 /* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -39,10 +45,13 @@ const Dropdown = (props: DropDownProps) => {
         className,
         elementName,
         deleteicon,
-        clearValues } = props;
+        clearValues,
+        inputSearch } = props;
 
 
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
+    const [dropDownValues, setDropdownValues] = useState([]);
+
     // eslint-disable-next-line max-len
     const [dropDownPlaceHolder, setdropDownPlaceHolder] = useState<string | undefined | null>(placeholder);
     // eslint-disable-next-line no-unused-expressions
@@ -50,6 +59,7 @@ const Dropdown = (props: DropDownProps) => {
         if (selectOption && setSelectOption) {
             setSelectOption(dropdownOption[0].label, dropdownOption[0].key);
         }
+        setDropdownValues(dropdownOption);
     }, []);
 
     useEffect(() => {
@@ -84,6 +94,16 @@ const Dropdown = (props: DropDownProps) => {
         clearValues(elementName);
         setdropDownPlaceHolder(placeholder);
         setSelectName('');
+        setShowOption(false);
+    };
+
+
+    const searchHandler = (e) => {
+        const val = e.target.value;
+        const str = val.toString();
+        const filteredDropdown = dropdownOption.filter(x => x.label.split(' ')[0].toLowerCase().includes(str));
+        setShowOption(true);
+        setDropdownValues(filteredDropdown);
     };
 
     return (
@@ -95,9 +115,19 @@ const Dropdown = (props: DropDownProps) => {
                 ref={optionShowRef}
             >
                 {label
-                    && <p className={styles.labelText} style={!icon ? { width: '98%' } : {}}>{label}</p>
+                    && (
+                        <p
+                            className={styles.labelText}
+                            style={!icon ? { width: '98%' } : {}}
+                        >
+                            {label}
+                        </p>
+                    )
                 }
-                <div className={styles.mainDiv} style={!icon ? { width: '98%' } : {}}>
+                <div
+                    className={styles.mainDiv}
+                    style={!icon ? { width: '98%' } : {}}
+                >
                     <div
                         className={styles.selectDiv}
                         style={dropDownPlaceHolder
@@ -127,12 +157,15 @@ const Dropdown = (props: DropDownProps) => {
                         <div
                             className={styles.selectField}
                         >
-                            <p className={styles.selectItem}>
+                            <p
+                                className={styles.selectItem}
+                            >
                                 {
                                     dropDownPlaceHolder || selectName
                                 }
 
                             </p>
+
                             {
                                 deleteicon
                                 && (
@@ -155,19 +188,34 @@ const Dropdown = (props: DropDownProps) => {
                         </div>
                     </div>
                 </div>
+
+
                 {
                     showOption && (
                         <div
                             className={styles.optionDiv}
                         >
-                            {dropdownOption.map((item, index) => (
-                                <div
-                                    className={styles.optionField}
-                                    onClick={() => onOptionClick(item, index)}
-                                    key={item.label}
-                                >
-                                    {
-                                        icon
+                            {
+                                inputSearch
+                                && (
+                                    <input
+                                        type="text"
+                                        onChange={searchHandler}
+                                        id="search"
+                                        className={styles.searchBox}
+                                        placeholder="Enter a location"
+                                    />
+                                )
+                            }
+                            <div className={styles.dropDown}>
+                                {dropDownValues.map((item, index) => (
+                                    <div
+                                        className={styles.optionField}
+                                        onClick={() => onOptionClick(item, index)}
+                                        key={item.label}
+                                    >
+                                        {
+                                            icon
                                         && (
                                             index === 0
                                                 ? (
@@ -189,10 +237,11 @@ const Dropdown = (props: DropDownProps) => {
 
                                                 )
                                         )
-                                    }
-                                    <p className={styles.optionName}>{item.label}</p>
-                                </div>
-                            ))}
+                                        }
+                                        <p className={styles.optionName}>{item.label}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )
                 }

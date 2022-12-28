@@ -328,6 +328,7 @@ class NewCompare extends React.PureComponent {
                             dropDownClickHandler={dropDownClickHandler}
                             deleteicon
                             clearValues={clearValues}
+                            inputSearch
                         />
                         <Dropdown
                             elementName="region2"
@@ -339,7 +340,7 @@ class NewCompare extends React.PureComponent {
                             dropDownClickHandler={dropDownClickHandler}
                             deleteicon
                             clearValues={clearValues}
-
+                            inputSearch
                         />
                     </div>
                 </header>

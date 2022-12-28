@@ -45,6 +45,7 @@
                 align-items: center;
                 justify-content: space-between;
                 margin: auto;
+                position: relative;
                 .selectItem {
                     font-size: 14px;
                     font-weight: 600;
@@ -83,33 +84,44 @@
         top: 3.8rem;
         z-index: 999;
         width: 95%;
-        border-radius: 10px;
         margin-top: 3px;
         padding-bottom: 15px;
         cursor: pointer;
-        // box-shadow: 2px 2px 0.5px gray;
         border: 1px solid gray;
-        overflow-y: scroll ;
-        height: 250px;
 
-        .optionField {
-            display: flex;
-            align-items: center;
-            width: auto;
-            height: 40px;
+        .searchBox{
+            width: 100%;
+            padding: 10px;
+            outline: none;
         }
 
-        .icon {
-            padding-left: 10px;
-            cursor: pointer;
-            padding: var(--spacing-small) var(--spacing-medium-alt);
-            font-size: var(--font-size-extra-large);
+        .dropDown{
+            overflow-y: scroll ;
+            height: 250px;
+            border-radius: 10px;
+
+            .optionField {
+                display: flex;
+                align-items: center;
+                padding:7px 5px;
+
+            .icon {
+                padding-left: 10px;
+                cursor: pointer;
+                padding: var(--spacing-small) var(--spacing-medium-alt);
+                font-size: var(--font-size-extra-large);
+            }
+
+            .optionName {
+                font-size: 14px;
+                margin: 0;
+            }
+
+            }
+
         }
 
-        .optionName {
-            font-size: 14px;
-            padding-left: 5px;
-        }
+
 
     }
 }
