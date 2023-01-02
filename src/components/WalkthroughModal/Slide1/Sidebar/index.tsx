@@ -45,17 +45,17 @@ const SidebarLogo = ({ data, selectedCategory, onClick,
                     </>
                 )
 
-                : data.map(item => (
+                : data.length && data.map(item => (
                     <div key={item.id}>
                         <h3>{language === 'en' ? item.nameEn : item.nameNe}</h3>
                         <div className={styles.sidebarCategories}>
-                            {item.data.map(d => (
+                            {item.childs.length && item.childs.map(d => (
                                 <span
                                     key={d.id}
                                     className={selectedCategory === d.id
                                         ? styles.active
                                         : ''}
-                                    onClick={() => onClick(d.id)}
+                                    onClick={() => onClick(item.id, d.id)}
                                 >
                                     {language === 'en' ? d.nameEn : d.nameNe}
 

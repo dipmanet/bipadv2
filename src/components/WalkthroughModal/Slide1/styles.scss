@@ -9,6 +9,15 @@
     opacity: 0.87;
 
 
+    .loader {
+        width: 100% !important;
+        flex-direction: column;
+
+        span {
+            color: black;
+        }
+    }
+
 
     .container {
         padding: 40px;

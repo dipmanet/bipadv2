@@ -28,28 +28,46 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 
 });
 
-
 const About = ({ language: { language } }) => {
     const [selectedCategory, setSelectedCategory] = useState();
     const [filteredCategory, setFilteredCategory] = useState(aboutDescription);
     const [sidebar, setSidebar] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [content, setContent] = useState([]);
+    const [headerCategory, setHeaderCategory] = useState();
     const handleChangeSelectedCategories = (category) => {
         setSelectedCategory(category);
     };
     useEffect(() => {
-        const routeData = aboutSidebar.filter(i => i.route === 'about');
-        setSidebar(routeData);
-        setSelectedCategory(routeData[0].data[0].id);
-    }, []);
-    useEffect(() => {
-        const filteredDescription = aboutDescription.filter(d => d.route === 'about').find(i => i.sidebar === selectedCategory);
-        setFilteredCategory(filteredDescription);
-        setLoader(false);
-    }, [selectedCategory]);
-    const lastPageId = sidebar.length && sidebar[sidebar.length - 1].data[sidebar[sidebar.length - 1].data.length - 1].id;
-    const firstPageId = sidebar.length && sidebar[0].data[0].id;
+        // const routeData = aboutSidebar.filter(i => i.route === 'about');
+        // console.log('This is sidebar', routeData);
+        if (content.length) {
+            setSidebar(content);
+            setSelectedCategory(content[0].childs[0].id);
+            setHeaderCategory(content[0].id);
+        }
+    }, [content]);
 
+    useEffect(() => {
+        if (content.length) {
+            const filteredDescription = sidebar.filter(d => d.id === headerCategory)[0].childs.find(i => i.id === selectedCategory);
+            console.log('This is filtered category', filteredDescription);
+            setFilteredCategory(filteredDescription);
+            setLoader(false);
+        }
+    }, [selectedCategory]);
+    const lastPageId = sidebar.length && sidebar[sidebar.length - 1].childs[sidebar[sidebar.length - 1].childs.length - 1].id;
+    const firstPageId = sidebar.length && sidebar[0].childs[0].id;
+    console.log('This is first page', firstPageId);
+    console.log('This is last page id', lastPageId);
+    console.log('sidebar', sidebar);
+    useEffect(() => {
+        fetch('http://bipaddev.yilab.org.np/api/v1/homepage-about-menu')
+            .then(response => response.json())
+            .then(data => setContent(data.results));
+    }, []);
+    console.log('Content', content);
+    console.log('sidebar', aboutDescription);
     return (
         <>
             <Page
@@ -68,7 +86,7 @@ const About = ({ language: { language } }) => {
 
                 <div className={styles.mainBody}>
                     <Navbar />
-                    {loader ? <LoadingAnimation className={styles.loader} /> : ''}
+                    {loader && <LoadingAnimation className={styles.loader} message="Loading Data,Please Wait..." />}
                     <div className={styles.content}>
                         <h1>
                             {language === 'en'

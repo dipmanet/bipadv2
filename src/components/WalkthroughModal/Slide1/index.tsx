@@ -1,9 +1,10 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable max-len */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, navigate } from '@reach/router';
 
 import { compose } from 'redux';
@@ -57,27 +58,28 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const Slide1 = (props) => {
     const [feedbackSupportBoolean, setFeebbackSupportBoolean] = useState(false);
+    const [content, setContent] = useState([]);
     const { setCloseWalkThrough, setRun, language: { language } } = props;
     const handleClickStart = () => {
         setCloseWalkThrough({ value: true });
         setRun({ value: true });
     };
-
-
+    useEffect(() => {
+        fetch('http://bipaddev.yilab.org.np/api/v1/homepage-content/')
+            .then(response => response.json())
+            .then(data => setContent(data.results));
+    }, []);
+    console.log('data', content);
     return (
         <div className={styles.mainContainer}>
-
-
+            {!content.length && <LoadingAnimation className={styles.loader} message="Loading Data,Please Wait..." />}
             <Navbar />
-
             <div className={styles.container}>
                 {feedbackSupportBoolean && <FeedbackSupport className={undefined} closeModal={() => setFeebbackSupportBoolean(false)} />}
-
                 <div className={styles.content}>
                     <div className={styles.imageLogo}>
                         <img src={gonImage} alt="logo" />
                     </div>
-
                     <div>
                         <p className={styles.welcome}>
                             Welcome to
@@ -87,20 +89,26 @@ const Slide1 = (props) => {
                         <p className={styles.bipadPortal}>
                             BIPAD PORTAL
                         </p>
-                        <p className={styles.paragraph}>
+                        <div
+                            className={styles.paragraph}
+                            dangerouslySetInnerHTML={{
+                                __html: language === 'en'
+                                    ? content.length && content[0].descriptionEn
+                                    : content.length && content[0].descriptionNe,
+                            }}
+                        />
+                        {/* <p className={styles.paragraph}>
                             Building Information Platform Against Disaster (BIPAD) portal is an integrated and
                             comprehensive Disaster Information Management System (DIMS). It is a platform for data partnership.
                             BIPAD portal is built upon the concept of creating a national portal embedded with independent
                             platforms for National, Provincial, and Municipal Governments with bottom-up approach of disaster data partnership.
-
-
                         </p>
                         <p className={styles.paragraph}>
                             BIPAD is developed by pooling all credible digital and spatial data that are available within different government bodies,
                             non-governmental organizations, academic institutions and research organizations on a single platform. The platform has
                             six modules in the portal that has the potential to enhance preparedness and early warning, strengthen disaster communication,
                             strengthen emergency response, enhance coordination post-incident, evidence-based planning, decision making and policy making.
-                        </p>
+                        </p> */}
                         <div className={styles.buttonGroup}>
                             <Link to="/dashboard/">
                                 <div
@@ -117,9 +125,7 @@ const Slide1 = (props) => {
                             // onClick={() => setCloseWalkThrough({ value: true })}
                             >
                                 <h5>{language === 'en' ? 'VIEW DASHBOARD' : 'ड्यासबोर्ड हेर्नुहोस्'}</h5>
-
                             </Link>
-
                         </div>
                         <div className={styles.footer}>
                             <span style={{ marginRight: '20px' }} onClick={() => navigate('/about/')}>

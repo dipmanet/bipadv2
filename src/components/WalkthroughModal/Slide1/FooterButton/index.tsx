@@ -7,10 +7,10 @@ import styles from './styles.scss';
 
 const FooterButton = ({ data, selectedCategory, onClick, lastPageId, firstPageId }) => {
     const sideViewData = [];
-    const sideList = data.map(item => (
-        item.data.map(d => sideViewData.push(d))
+    const sideList = data.length && data.map(item => (
+        item.childs.map(d => sideViewData.push(d))
     ));
-
+    console.log('This is sidevoew data', sideViewData);
     return (
         <div className={selectedCategory === firstPageId
             ? styles.footerButton
@@ -18,10 +18,10 @@ const FooterButton = ({ data, selectedCategory, onClick, lastPageId, firstPageId
                 ? _cs(styles.footerButton, styles.footerButtonLastPage)
                 : _cs(styles.footerButton, styles.footerButtonPreview)}
         >
-            {sideViewData.map((item, i) => (
+            {sideViewData.length && sideViewData.map((item, i) => (
                 selectedCategory !== firstPageId && selectedCategory === item.id ? (
                     <div key={item.id}>
-                        <button type="button" onClick={() => onClick(sideViewData[i - 1].id)}>
+                        <button type="button" onClick={() => onClick(item.parent, sideViewData[i - 1].id)}>
                             <img src={previousArrow} alt="previous" />
                             <span className={styles.nextButtonText}>PREVIOUS</span>
                         </button>
@@ -32,11 +32,11 @@ const FooterButton = ({ data, selectedCategory, onClick, lastPageId, firstPageId
                 ) : ''
             ))
             }
-            {sideViewData.map((item, i) => (
+            {sideViewData.length && sideViewData.map((item, i) => (
                 selectedCategory !== lastPageId && selectedCategory === item.id
                     ? (
                         <div key={item.id}>
-                            <button type="button" onClick={() => onClick(sideViewData[i + 1].id)}>
+                            <button type="button" onClick={() => onClick(item.parent, sideViewData[i + 1].id)}>
                                 <span className={styles.nextButtonText}>NEXT</span>
                                 <img src={nextArrow} alt="next" />
                             </button>
