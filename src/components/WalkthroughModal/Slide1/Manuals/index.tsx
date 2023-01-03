@@ -72,7 +72,7 @@ const Manuals = ({ language: { language } }) => {
                 hideMap
             />
             <div className={styles.mainContainer}>
-                {loader ? <LoadingAnimation /> : ''}
+
 
                 <Sidebar
                     manual
@@ -83,6 +83,7 @@ const Manuals = ({ language: { language } }) => {
 
                 <div className={styles.mainBody}>
                     <Navbar />
+                    {loader ? <LoadingAnimation className={styles.loader} message="Loading Data,Please Wait..." /> : ''}
                     <div className={styles.content}>
                         {manualYearAscendingOrder ? manualYearAscendingOrder.map(item => (
                             <div key={item}>

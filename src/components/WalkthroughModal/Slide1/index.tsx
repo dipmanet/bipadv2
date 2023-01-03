@@ -81,14 +81,32 @@ const Slide1 = (props) => {
                         <img src={gonImage} alt="logo" />
                     </div>
                     <div>
-                        <p className={styles.welcome}>
-                            Welcome to
-                            {' '}
-                            <br />
-                        </p>
-                        <p className={styles.bipadPortal}>
-                            BIPAD PORTAL
-                        </p>
+                        {language === 'en' ? (
+                            <>
+                                <p className={styles.welcome}>
+                                    Welcome to
+                                    {' '}
+                                    <br />
+                                </p>
+                                <p className={styles.bipadPortal}>
+                                    BIPAD PORTAL
+                                </p>
+                            </>
+                        )
+                            : (
+                                <>
+                                    <p className={styles.welcome}>
+                                        बिपद पोर्टलमा
+                                        {' '}
+                                        <br />
+                                    </p>
+                                    <p className={styles.bipadPortal}>
+                                        स्वागत छ
+                                    </p>
+                                </>
+                            )
+                        }
+
                         <div
                             className={styles.paragraph}
                             dangerouslySetInnerHTML={{
@@ -97,18 +115,7 @@ const Slide1 = (props) => {
                                     : content.length && content[0].descriptionNe,
                             }}
                         />
-                        {/* <p className={styles.paragraph}>
-                            Building Information Platform Against Disaster (BIPAD) portal is an integrated and
-                            comprehensive Disaster Information Management System (DIMS). It is a platform for data partnership.
-                            BIPAD portal is built upon the concept of creating a national portal embedded with independent
-                            platforms for National, Provincial, and Municipal Governments with bottom-up approach of disaster data partnership.
-                        </p>
-                        <p className={styles.paragraph}>
-                            BIPAD is developed by pooling all credible digital and spatial data that are available within different government bodies,
-                            non-governmental organizations, academic institutions and research organizations on a single platform. The platform has
-                            six modules in the portal that has the potential to enhance preparedness and early warning, strengthen disaster communication,
-                            strengthen emergency response, enhance coordination post-incident, evidence-based planning, decision making and policy making.
-                        </p> */}
+
                         <div className={styles.buttonGroup}>
                             <Link to="/dashboard/">
                                 <div

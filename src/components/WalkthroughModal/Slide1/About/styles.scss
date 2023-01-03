@@ -14,6 +14,7 @@
 
         .loader {
             width: 100% !important;
+            flex-direction: column;
         }
 
         .content {
@@ -26,12 +27,17 @@
                 text-align: justify;
                 font-weight: 400;
                 color: #0C0C0C;
-                opacity: 0.67;
+                // opacity: 0.67;
                 font-size: 16px;
+
+
             }
+
+
 
             li {
                 font-size: 16px;
+                // opacity: 0.67;
             }
 
             h1 {

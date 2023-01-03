@@ -35,7 +35,8 @@ const About = ({ language: { language } }) => {
     const [loader, setLoader] = useState(true);
     const [content, setContent] = useState([]);
     const [headerCategory, setHeaderCategory] = useState();
-    const handleChangeSelectedCategories = (category) => {
+    const handleChangeSelectedCategories = (mainCategory, category) => {
+        setHeaderCategory(mainCategory);
         setSelectedCategory(category);
     };
     useEffect(() => {
@@ -50,6 +51,7 @@ const About = ({ language: { language } }) => {
 
     useEffect(() => {
         if (content.length) {
+            console.log('This is sidebar', sidebar);
             const filteredDescription = sidebar.filter(d => d.id === headerCategory)[0].childs.find(i => i.id === selectedCategory);
             console.log('This is filtered category', filteredDescription);
             setFilteredCategory(filteredDescription);
@@ -58,16 +60,13 @@ const About = ({ language: { language } }) => {
     }, [selectedCategory]);
     const lastPageId = sidebar.length && sidebar[sidebar.length - 1].childs[sidebar[sidebar.length - 1].childs.length - 1].id;
     const firstPageId = sidebar.length && sidebar[0].childs[0].id;
-    console.log('This is first page', firstPageId);
-    console.log('This is last page id', lastPageId);
-    console.log('sidebar', sidebar);
+
     useEffect(() => {
         fetch('http://bipaddev.yilab.org.np/api/v1/homepage-about-menu')
             .then(response => response.json())
             .then(data => setContent(data.results));
     }, []);
-    console.log('Content', content);
-    console.log('sidebar', aboutDescription);
+
     return (
         <>
             <Page
@@ -107,6 +106,7 @@ const About = ({ language: { language } }) => {
                         onClick={handleChangeSelectedCategories}
                         lastPageId={lastPageId}
                         firstPageId={firstPageId}
+                        language={language}
                     />
                 </div>
             </div>

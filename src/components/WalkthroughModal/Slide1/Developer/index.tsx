@@ -86,7 +86,7 @@ const Developers = ({ language: { language } }) => {
                 />
                 <div className={styles.mainBody}>
                     <Navbar />
-                    {loader ? <LoadingAnimation className={styles.loader} /> : ''}
+                    {loader ? <LoadingAnimation className={styles.loader} message="Loading Data,Please Wait..." /> : ''}
                     <div className={styles.content}>
                         <h1>
                             {language === 'en'
@@ -107,6 +107,7 @@ const Developers = ({ language: { language } }) => {
                         onClick={handleChangeSelectedCategories}
                         lastPageId={lastPageId}
                         firstPageId={firstPageId}
+                        language={language}
                     />
 
                 </div>
