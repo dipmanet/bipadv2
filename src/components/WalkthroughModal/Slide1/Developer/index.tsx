@@ -66,7 +66,7 @@ const Developers = ({ language: { language } }) => {
 
 
     useEffect(() => {
-        fetch('http://bipaddev.yilab.org.np/api/v1/homepage-developers-menu')
+        fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-developers-menu`)
             .then(response => response.json())
             .then(data => setContent(data.results));
     }, []);

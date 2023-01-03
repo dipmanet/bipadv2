@@ -76,7 +76,7 @@ const Faqs = ({ language: { language } }) => {
     const lastPageId = sidebar.length && sidebar[sidebar.length - 1].childs[sidebar[sidebar.length - 1].childs.length - 1].id;
     const firstPageId = sidebar.length && sidebar[0].childs[0].id;
     useEffect(() => {
-        fetch('http://bipaddev.yilab.org.np/api/v1/homepage-faq-menu')
+        fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-faq-menu`)
             .then(response => response.json())
             .then(data => setContent(data.results));
     }, []);

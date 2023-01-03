@@ -62,7 +62,7 @@ const About = ({ language: { language } }) => {
     const firstPageId = sidebar.length && sidebar[0].childs[0].id;
 
     useEffect(() => {
-        fetch('http://bipaddev.yilab.org.np/api/v1/homepage-about-menu')
+        fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-about-menu`)
             .then(response => response.json())
             .then(data => setContent(data.results));
     }, []);
