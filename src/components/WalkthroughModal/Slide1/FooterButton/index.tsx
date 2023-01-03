@@ -10,7 +10,6 @@ const FooterButton = ({ data, selectedCategory, onClick, lastPageId, firstPageId
     const sideList = data.length && data.map(item => (
         item.childs.map(d => sideViewData.push(d))
     ));
-    console.log('This is sidevoew data', sideViewData);
     return (
         <div className={selectedCategory === firstPageId
             ? styles.footerButton
@@ -36,7 +35,6 @@ const FooterButton = ({ data, selectedCategory, onClick, lastPageId, firstPageId
                 selectedCategory !== lastPageId && selectedCategory === item.id
                     ? (
                         <div key={item.id}>
-                            {console.log('This is parent', item.parent)}
                             <button type="button" onClick={() => onClick(sideViewData[i + 1].parent, sideViewData[i + 1].id)}>
                                 <span className={styles.nextButtonText}>NEXT</span>
                                 <img src={nextArrow} alt="next" />

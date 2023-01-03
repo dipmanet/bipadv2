@@ -65,10 +65,7 @@ const Faqs = ({ language: { language } }) => {
     };
     useEffect(() => {
         if (content.length) {
-            console.log('Header category', headerCategory);
-            console.log('sidebar', sidebar);
             const filteredDescription = sidebar.filter(d => d.id === headerCategory)[0].childs.find(i => i.id === selectedCategory);
-            console.log('This is filtered category', filteredDescription);
             setFilteredCategory(filteredDescription);
             setLoader(false);
         }
@@ -80,8 +77,6 @@ const Faqs = ({ language: { language } }) => {
             .then(response => response.json())
             .then(data => setContent(data.results));
     }, []);
-    console.log('sidebar', sidebar);
-    console.log('Filtered category', filteredCategory);
     return (
         <>
             <Page

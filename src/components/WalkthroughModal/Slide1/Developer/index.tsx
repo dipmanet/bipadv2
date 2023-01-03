@@ -37,7 +37,6 @@ const Developers = ({ language: { language } }) => {
     const [loader, setLoader] = useState(true);
     const [headerCategory, setHeaderCategory] = useState();
     const handleChangeSelectedCategories = (mainCategory, category) => {
-        console.log('Main cat id', mainCategory);
         setHeaderCategory(mainCategory);
         setSelectedCategory(category);
     };
@@ -53,10 +52,7 @@ const Developers = ({ language: { language } }) => {
 
     useEffect(() => {
         if (content.length) {
-            console.log('Header category', headerCategory);
-            console.log('sidebar', sidebar);
             const filteredDescription = sidebar.filter(d => d.id === headerCategory)[0].childs.find(i => i.id === selectedCategory);
-            console.log('This is filtered category', filteredDescription);
             setFilteredCategory(filteredDescription);
             setLoader(false);
         }

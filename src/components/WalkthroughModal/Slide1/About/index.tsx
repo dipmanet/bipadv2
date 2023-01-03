@@ -51,9 +51,7 @@ const About = ({ language: { language } }) => {
 
     useEffect(() => {
         if (content.length) {
-            console.log('This is sidebar', sidebar);
             const filteredDescription = sidebar.filter(d => d.id === headerCategory)[0].childs.find(i => i.id === selectedCategory);
-            console.log('This is filtered category', filteredDescription);
             setFilteredCategory(filteredDescription);
             setLoader(false);
         }

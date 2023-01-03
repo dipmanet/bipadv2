@@ -9,48 +9,65 @@ import React from 'react';
 import styles from './styles.scss';
 
 const SidebarLogo = ({ data, selectedCategory, onClick,
-    manual, searchData, handleManualType, language, faqs }) => {
-    console.log('data', data);
-    return (
-        <div className={styles.sidebar}>
-            <div className={styles.sideNavHeading}>
-                <div className={styles.navLeftSide}>
-                    <div className={styles.navLogo}>
-                        <div className={styles.colorBar} />
-                        <Link to="/">
-                            <div className={styles.bipdLogoName}>BIPAD Portal</div>
-                        </Link>
+    manual, searchData, handleManualType, language, faqs }) => (
+    <div className={styles.sidebar}>
+        <div className={styles.sideNavHeading}>
+            <div className={styles.navLeftSide}>
+                <div className={styles.navLogo}>
+                    <div className={styles.colorBar} />
+                    <Link to="/">
+                        <div className={styles.bipdLogoName}>BIPAD Portal</div>
+                    </Link>
 
-                    </div>
                 </div>
             </div>
-            <div className={styles.mainSideBarBody}>
-                {manual
-                    ? (
-                        <>
-                            <h3>{language === 'en' ? 'Manuals' : 'पुस्तिकाहरू'}</h3>
-                            <div className={styles.sidebarCategories}>
-                                <>
-                                    <input
-                                        className={styles.search}
-                                        name="search"
-                                        type="text"
-                                        placeholder={language === 'en' ? 'Search' : 'खोज्नुहोस्'}
-                                        onChange={e => searchData(e)}
-                                    />
-                                    <select name="type" id="manual" onChange={handleManualType}>
-                                        <option value="">{language === 'en' ? 'Type of Document' : 'डक्यूमेन्टको प्रकार'}</option>
-                                        <option value="Technical Manual">{language === 'en' ? 'Technical Manual' : 'प्राविधिक पुस्तिका'}</option>
-                                        <option value="User Manual">{language === 'en' ? 'User Manual' : 'प्रयोगकर्ता पुस्तिका'}</option>
+        </div>
+        <div className={styles.mainSideBarBody}>
+            {manual
+                ? (
+                    <>
+                        <h3>{language === 'en' ? 'Manuals' : 'पुस्तिकाहरू'}</h3>
+                        <div className={styles.sidebarCategories}>
+                            <>
+                                <input
+                                    className={styles.search}
+                                    name="search"
+                                    type="text"
+                                    placeholder={language === 'en' ? 'Search' : 'खोज्नुहोस्'}
+                                    onChange={e => searchData(e)}
+                                />
+                                <select name="type" id="manual" onChange={handleManualType}>
+                                    <option value="">{language === 'en' ? 'Type of Document' : 'डक्यूमेन्टको प्रकार'}</option>
+                                    <option value="Technical Manual">{language === 'en' ? 'Technical Manual' : 'प्राविधिक पुस्तिका'}</option>
+                                    <option value="User Manual">{language === 'en' ? 'User Manual' : 'प्रयोगकर्ता पुस्तिका'}</option>
 
-                                    </select>
-                                </>
-                            </div>
-                        </>
-                    )
-                    : faqs ? (data.length && data.map(item => (
+                                </select>
+                            </>
+                        </div>
+                    </>
+                )
+                : faqs ? (data.length && data.map(item => (
+                    <div key={item.id}>
+                        <h3>{language === 'en' ? item.questionEn : item.questionNe}</h3>
+                        <div className={styles.sidebarCategories}>
+                            {item.childs.length && item.childs.map(d => (
+                                <span
+                                    key={d.id}
+                                    className={selectedCategory === d.id
+                                        ? styles.active
+                                        : ''}
+                                    onClick={() => onClick(item.id, d.id)}
+                                >
+                                    {language === 'en' ? d.questionEn : d.questionNe}
+
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )))
+                    : (data.length && data.map(item => (
                         <div key={item.id}>
-                            <h3>{language === 'en' ? item.questionEn : item.questionNe}</h3>
+                            <h3>{language === 'en' ? item.nameEn : item.nameNe}</h3>
                             <div className={styles.sidebarCategories}>
                                 {item.childs.length && item.childs.map(d => (
                                     <span
@@ -60,35 +77,15 @@ const SidebarLogo = ({ data, selectedCategory, onClick,
                                             : ''}
                                         onClick={() => onClick(item.id, d.id)}
                                     >
-                                        {language === 'en' ? d.questionEn : d.questionNe}
+                                        {language === 'en' ? d.nameEn : d.nameNe}
 
                                     </span>
                                 ))}
                             </div>
                         </div>
-                    )))
-                        : (data.length && data.map(item => (
-                            <div key={item.id}>
-                                <h3>{language === 'en' ? item.nameEn : item.nameNe}</h3>
-                                <div className={styles.sidebarCategories}>
-                                    {item.childs.length && item.childs.map(d => (
-                                        <span
-                                            key={d.id}
-                                            className={selectedCategory === d.id
-                                                ? styles.active
-                                                : ''}
-                                            onClick={() => onClick(item.id, d.id)}
-                                        >
-                                            {language === 'en' ? d.nameEn : d.nameNe}
-
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )))}
-            </div>
+                    )))}
         </div>
-    );
-};
+    </div>
+);
 
 export default SidebarLogo;

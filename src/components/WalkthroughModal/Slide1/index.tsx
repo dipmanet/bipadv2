@@ -65,11 +65,11 @@ const Slide1 = (props) => {
         setRun({ value: true });
     };
     useEffect(() => {
-        fetch('http://bipaddev.yilab.org.np/api/v1/homepage-content/')
+        fetch(`${process.env.REACT_APP_API_SERVER_URL}/homepage-content`)
             .then(response => response.json())
             .then(data => setContent(data.results));
     }, []);
-    console.log('data', content);
+
     return (
         <div className={styles.mainContainer}>
             {!content.length && <LoadingAnimation className={styles.loader} message="Loading Data,Please Wait..." />}
