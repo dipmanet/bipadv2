@@ -98,7 +98,7 @@ const routeSettings: SomeRoute[] = [
         path: '/data-archive/',
         iconName: 'clipboard',
         load: () => import('../views/DataArchive'),
-        navbar: false,
+        navbar: true,
     },
     {
         name: 'profile',

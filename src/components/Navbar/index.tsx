@@ -364,7 +364,7 @@ class Navbar extends React.PureComponent<Props, State> {
                         handleActiveGroupButton={this.handleActiveGroupButton}
                         disableOutsideDivClick={disableOutsideDivClick}
                     >
-                        <Translation>
+                        {/* <Translation>
                             {
                                 t => (
                                     <ModalButton
@@ -381,9 +381,9 @@ class Navbar extends React.PureComponent<Props, State> {
                                         }}
                                     />
                                 )}
-                        </Translation>
+                        </Translation> */}
 
-                        {authenticated && (
+                        {/* {authenticated && (
                             <Translation>
                                 {
                                     t => (
@@ -402,9 +402,9 @@ class Navbar extends React.PureComponent<Props, State> {
                                         />
                                     )}
                             </Translation>
-                        )}
+                        )} */}
 
-                        {authenticated && (
+                        {/* {authenticated && (
                             <Translation>
                                 {
                                     t => (
@@ -423,7 +423,7 @@ class Navbar extends React.PureComponent<Props, State> {
                                         />
                                     )}
                             </Translation>
-                        )}
+                        )} */}
 
 
                         <Translation>
@@ -453,7 +453,7 @@ class Navbar extends React.PureComponent<Props, State> {
                             iconName="aboutUs"
                             modal={<AboutModal />}
                         /> */}
-                        <MenuItemLikeButton
+                        {/* <MenuItemLikeButton
                             className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
                             title={language === 'en' ? 'Data Archive' : 'डाटा संग्रह'}
                             iconName="clipboard"
@@ -462,7 +462,7 @@ class Navbar extends React.PureComponent<Props, State> {
                                 navigate('/data-archive/');
                             }}
 
-                        />
+                        /> */}
                     </GroupMenuListContainer>
                     {!authenticated && (
                         <Translation>
