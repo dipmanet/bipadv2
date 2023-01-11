@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -24,6 +25,11 @@ const Manuals = ({ language: { language } }) => {
     const [loader, setLoader] = useState(true);
     const [manual, setManual] = useState([]);
     const [backupManualList, setBackupManualList] = useState([]);
+    const [yearSelection, setYearSelection] = useState([]);
+    const [filterManualTypeKey, setFilterManualTypeKey] = useState('');
+    const [filterYearKey, setFilterYearKey] = useState('');
+
+
     const handleChangeSelectedCategories = (category) => {
         setSelectedCategory(category);
     };
@@ -32,6 +38,10 @@ const Manuals = ({ language: { language } }) => {
             await fetch(`${process.env.REACT_APP_API_SERVER_URL}/manual/`)
                 .then(res => res.json())
                 .then((data) => {
+                    const yearData = data.results.map(i => i.year);
+                    const finalYearList = [...new Set(yearData)];
+                    console.log('final year', finalYearList);
+                    setYearSelection(finalYearList);
                     setManual(data.results);
                     setBackupManualList(data.results);
                     setLoader(false);
@@ -59,12 +69,51 @@ const Manuals = ({ language: { language } }) => {
 
     const handleManualType = (e) => {
         if (e.target.value) {
-            const filteredManual = backupManualList.length ? backupManualList.filter(i => i.manualType === e.target.value) : [];
-            setManual(filteredManual);
+            setFilterManualTypeKey(e.target.value);
+            if (filterYearKey) {
+                const filteredManual = backupManualList.length ? backupManualList.filter(i => i.manualType === e.target.value)
+                    .filter(d => d.year === Number(filterYearKey)) : [];
+                setManual(filteredManual);
+            } else {
+                const filteredManual = backupManualList.length ? backupManualList.filter(i => i.manualType === e.target.value) : [];
+                setManual(filteredManual);
+            }
         } else {
-            setManual(backupManualList);
+            const filteredManual = filterYearKey ? backupManualList.filter(i => i.year === Number(filterYearKey)) : backupManualList;
+            setFilterManualTypeKey('');
+            setManual(filteredManual);
         }
     };
+    const handleYearFilter = (e) => {
+        if (e.target.value) {
+            setFilterYearKey(e.target.value);
+            if (filterManualTypeKey) {
+                const filteredManual = manual.length ? manual.filter(i => i.year === Number(e.target.value))
+                    .filter(d => d.manualType === filterManualTypeKey)
+                    : [];
+                setManual(filteredManual);
+            } else {
+                const filteredManual = backupManualList.length ? backupManualList.filter(i => i.year === Number(e.target.value)) : [];
+                setManual(filteredManual);
+            }
+        } else {
+            const filteredManual = filterManualTypeKey ? backupManualList.filter(i => i.manualType === filterManualTypeKey) : backupManualList;
+            setFilterYearKey('');
+            setManual(filteredManual);
+        }
+        console.log('this is e.target', e.target.value);
+    };
+
+    const handleReset = (manualRef, yearRef) => {
+        console.log('manual ref', manualRef.current.value);
+        manualRef.current.value = '';
+        yearRef.current.value = '';
+        setManual(backupManualList);
+        setFilterYearKey('');
+        setFilterManualTypeKey('');
+    };
+
+    console.log('This is manual', manual);
     return (
         <>
             <Page
@@ -78,7 +127,13 @@ const Manuals = ({ language: { language } }) => {
                     manual
                     searchData={searchData}
                     handleManualType={handleManualType}
+                    handleYearFilter={handleYearFilter}
+                    handleReset={handleReset}
                     language={language}
+                    yearSelection={yearSelection}
+                    filterYearKey={filterYearKey}
+                    filterManualTypeKey={filterManualTypeKey}
+
                 />
 
                 <div className={styles.mainBody}>

@@ -376,14 +376,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
             elementStatus: false,
             steps: [
                 {
-                    content: 'BIPAD Portal is an Integrated Disaster Information Management System of Nepal and is led by the National Disaster Risk Reduction and Management Authority of Nepal.',
+                    content: 'Welcome to BIPAD Portal Walkthrough. This walkthorough navigates you to each module and feature of BIPAD portal and provided easiness to your userexpereince.',
                     title: 'Let\'s take BIPAD Portal Tour!',
                     locale: { skip: <strong aria-label="skip">SKIP</strong> },
                     placement: 'center',
                     target: 'body',
                 },
                 {
-                    content: 'This Module provides geospatial data of the alerts of flood war flood warnings, heavy rainfall, earthquake, and air pollution.',
+                    content: 'Dashboard module provides geospatial data of the alerts of flood warning, heavy rainfall, earthquake and air pollution.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -394,7 +394,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Dashboard',
                 },
                 {
-                    content: 'This module displays the geospatial data of the hazard incidents from the year 2011 reported by Nepal Police.',
+                    content: 'Incident module displays the geospatial data of the hazard incidents along with damage and loss information reported by Nepal Police.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -405,7 +405,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Incident module',
                 },
                 {
-                    content: 'Visualizes historic loss and damage data caused by various hazard incidents.',
+                    content: 'Damage and Loss module visualizes historic loss and damage data caused by various hazard incidents.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -416,7 +416,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Damage & Loss module',
                 },
                 {
-                    content: 'This module provides the real data on rainfall and river watch, earthquake, air pollution, and forest fires along with streamflow forecast.',
+                    content: 'Real time module provides the near real-time data on rainfall and river watch, earthquake, air pollution, and forest fires along with streamflow forecast.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -427,7 +427,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Real Time Module',
                 },
                 {
-                    content: 'This module displays the records of DRRM documents, status of DRRM projects, contact information of DRR focal persons and disaster reports at national, provincial district, and municipal levels for the selected time frame.',
+                    content: 'Profile module displays the records of DRRM documents, status of DRRM projects, contact information of DRR focal persons and disaster reports at national, provincial district, and municipal levels for the selected time frame.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -438,7 +438,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Profile module',
                 },
                 {
-                    content: 'This module provides information on Hazard, Exposure, Vulnerability, Risk, Climate Change, and Capacity and Resources.',
+                    content: 'Risk Info module provides information on Hazard, Exposure, Vulnerability, Risk, Climate Change, and Capacity and Resources.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -449,7 +449,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Risk Info module',
                 },
                 {
-                    content: 'You can log in to the portal using the login credentials provided or request a username and password.',
+                    content: 'Clicking on this feature, you can login into the portal entering the provided login credentials or request for a new user name and password.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -460,7 +460,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Login',
                 },
                 {
-                    content: 'Filters allow you to choose the location (for e.g., province, district, municipality) hazard of interest and time frame of the data.',
+                    content: 'Filters allow you to choose and visualize the data based on the location (for e.g., province, district, municipality), hazard and time frame of interest.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -471,7 +471,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Filters',
                 },
                 {
-                    content: 'You can click here to download the map in various resolutions.',
+                    content: 'Click here to download the map in various resolution.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -482,7 +482,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Map Download',
                 },
                 {
-                    content: 'The base map layer can be selected to change the type of base layers.',
+                    content: 'Click here to change the type of base layer map.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -493,7 +493,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Map Layout',
                 },
                 {
-                    content: 'Here you can choose to display the administrative boundaries of the province, district, municipality, or wards.',
+                    content: 'Click here to display the administrative boundaries of the province, district, municipality and ward in a map.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -504,7 +504,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Administrative Boundary',
                 },
                 {
-                    content: 'This toolbar provides option to zoom in into a desired area, to locate your current location, and search a location by its coordinates.',
+                    content: 'Zoom toolbar provides option to zoom-in into a desired area, locate your current location, and search a location by its coordinates.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -515,7 +515,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Zoom Toolbar',
                 },
                 {
-                    content: 'This section defines features in a map. It simply displays the symbol followed by a text description of what that symbol represents.',
+                    content: 'Legend defines features in a map. It simply displays the symbol followed by a text description of what that symbol represents.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -526,7 +526,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Legend Section',
                 },
                 {
-                    content: 'It provides the starting and end date of the data being displayed.',
+                    content: 'Date range provides the starting and end data of the data being displayed.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -548,7 +548,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Data Source ',
                 },
                 {
-                    content: 'In this section, the alerts generated for various hazards are enlisted.',
+                    content: 'Click here to view the list of alerts generated for different hazards.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -559,7 +559,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Alert ',
                 },
                 {
-                    content: 'This section provides a summary of the number of alerts generated for each hazard.',
+                    content: 'Click here to view the summary of the number of alerts generated for each hazard in the form of infographics.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -570,7 +570,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Visualization',
                 },
                 {
-                    content: 'This section provides detailed information on the alerts in tabular format.',
+                    content: 'Click here to view and download details data in a tabular format.',
                     placement: 'bottom',
                     styles: {
                         options: {
@@ -581,7 +581,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     title: 'Table Data',
                 },
                 {
-                    content: 'Thankyou for visiting BIPAD Portal Tour!',
+                    content: 'Thank you for visiting to BIPAD Portal walkthrough.',
                     locale: { skip: <strong aria-label="skip">SKIP</strong> },
                     placement: 'center',
                     target: 'body',
