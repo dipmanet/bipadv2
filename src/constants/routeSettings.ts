@@ -91,15 +91,7 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         id: 'navbar-realtime',
     },
-    {
-        name: 'dataArchive',
-        title: 'Data Archive',
-        titleNep: 'डाटा संग्रह',
-        path: '/data-archive/',
-        iconName: 'clipboard',
-        load: () => import('../views/DataArchive'),
-        navbar: true,
-    },
+
     {
         name: 'profile',
         title: 'Profile',
@@ -120,6 +112,15 @@ const routeSettings: SomeRoute[] = [
         disabled: false,
         iconName: 'riskInfoSvg',
         id: 'navbar-riskinfo',
+    },
+    {
+        name: 'dataArchive',
+        title: 'Data Archive',
+        titleNep: 'डाटा संग्रह',
+        path: '/data-archive/',
+        iconName: 'clipboard',
+        load: () => import('../views/DataArchive'),
+        navbar: true,
     },
     // {
     //     name: 'feedbackAndSupport',
