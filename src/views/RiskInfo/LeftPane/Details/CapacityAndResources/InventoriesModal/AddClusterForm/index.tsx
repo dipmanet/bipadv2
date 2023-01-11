@@ -198,7 +198,7 @@ class AddClusterForm extends React.PureComponent<Props, State> {
         addClusterPostRequest.do({
             body: {
                 ...faramValues,
-                resource: resourceId,
+                // resource: resourceId,
             },
             setFaramErrors: this.handleFaramValidationFailure,
         });

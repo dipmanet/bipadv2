@@ -158,9 +158,12 @@ class AddStockInForm extends React.PureComponent<Props, State> {
             ...otherValues
         } = props.value || {};
 
+        const { resourceId } = props;
+
         this.state = {
             faramValues: {
                 ...otherValues,
+                resource: resourceId,
             },
             faramErrors: {},
             pristine: true,
@@ -228,6 +231,12 @@ class AddStockInForm extends React.PureComponent<Props, State> {
     };
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        const {
+
+            resourceId,
+        } = this.props;
+        console.log('This is resource id', resourceId);
+        console.log('This is faram vlues', faramValues);
         this.setState({
             faramValues,
             faramErrors,
@@ -236,6 +245,7 @@ class AddStockInForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
+        console.log('error', faramErrors);
         this.setState({
             faramErrors,
         });
@@ -247,7 +257,7 @@ class AddStockInForm extends React.PureComponent<Props, State> {
             resourceId,
         } = this.props;
 
-
+        console.log('Entered or not');
         addStockOutPostRequest.do({
             body: {
                 ...faramValues,

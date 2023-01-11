@@ -158,9 +158,12 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
             ...otherValues
         } = props.value || {};
 
+        const { resourceId } = props;
+
         this.state = {
             faramValues: {
                 ...otherValues,
+                resource: resourceId,
             },
             faramErrors: {},
             pristine: true,
@@ -176,7 +179,7 @@ class AddOrganizationForm extends React.PureComponent<Props, State> {
             shortName: [],
             longName: [],
             description: [],
-            incidentVerificationDuration: [requiredCondition],
+            // incidentVerificationDuration: [requiredCondition],
             location: [],
             wards: [],
         },
