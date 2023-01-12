@@ -228,7 +228,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         resource,
         (value, key) => ({ label: key, value }),
     );
-
+    console.log('This is data', data);
     const rendererParams = (_: string, item: PageType.Resource) => ({
         className: styles.item,
         labelClassName: styles.label,
@@ -256,7 +256,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         }
         return r;
     });
-
+    console.log('Initial filter', filtered);
     // showing only some specific fields on openspace popup
     if (resourceDetails.resourceType === 'openspace' || resourceDetails.resourceType === 'communityspace') {
         filtered = data.filter(x => x.label === 'resourceType'
@@ -290,12 +290,14 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             const element = filtered[1];
             filtered.splice(1, 1);
             filtered.splice(2, 0, element);
+            filtered.splice(1, 0, { label: 'Data Source', value: resource.dataSource || null });
         }
     }
 
     const resourceKeySelector = (d: typeof filtered) => d.label;
 
-
+    console.log('This is resource', resource);
+    console.log('This is filtered map', filtered);
     return (
         <Translation>
             {
