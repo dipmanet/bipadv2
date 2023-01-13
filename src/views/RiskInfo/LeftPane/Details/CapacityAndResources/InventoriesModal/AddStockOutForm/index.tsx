@@ -158,9 +158,12 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
             ...otherValues
         } = props.value || {};
 
+        const { resourceId } = props;
+
         this.state = {
             faramValues: {
                 ...otherValues,
+                resource: resourceId,
             },
             faramErrors: {},
             pristine: true,

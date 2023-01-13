@@ -6,9 +6,6 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { Tabs } from '@material-ui/core';
-import styles from './styles.scss';
-import Info from './Info';
-import Media from './Media';
 import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
@@ -17,9 +14,6 @@ import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import SubHeader from './SubHeader';
-import EiaComponent from './EIA';
-import GenericTable from './GenericTable';
 import {
     createRequestClient,
     ClientAttributes,
@@ -31,6 +25,12 @@ import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
 
 import defaultImage from '#resources/images/openspace-images/default_image.png';
+import GenericTable from './GenericTable';
+import EiaComponent from './EIA';
+import SubHeader from './SubHeader';
+import Media from './Media';
+import Info from './Info';
+import styles from './styles.scss';
 
 interface State {
     currentView: string;

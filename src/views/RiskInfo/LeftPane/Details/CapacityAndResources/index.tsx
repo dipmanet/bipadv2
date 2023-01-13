@@ -145,7 +145,7 @@ const TableModalButton = modalize(Button);
 const AccentModalButton = modalize(AccentButton);
 
 const camelCaseToSentence = (text: string) => {
-    const result = text.replace(/([A-Z])/g, ' $1');
+    const result = text.replace(/([A-Z])/g, '$1');
     const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
 
     return finalResult;
@@ -290,6 +290,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             const element = filtered[1];
             filtered.splice(1, 1);
             filtered.splice(2, 0, element);
+            filtered.splice(1, 0, { label: 'Data Source', value: resource.dataSource || null });
         }
     }
 

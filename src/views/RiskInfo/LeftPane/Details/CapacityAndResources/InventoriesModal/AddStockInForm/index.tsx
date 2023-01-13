@@ -158,9 +158,12 @@ class AddStockInForm extends React.PureComponent<Props, State> {
             ...otherValues
         } = props.value || {};
 
+        const { resourceId } = props;
+
         this.state = {
             faramValues: {
                 ...otherValues,
+                resource: resourceId,
             },
             faramErrors: {},
             pristine: true,
@@ -228,6 +231,11 @@ class AddStockInForm extends React.PureComponent<Props, State> {
     };
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        const {
+
+            resourceId,
+        } = this.props;
+
         this.setState({
             faramValues,
             faramErrors,
