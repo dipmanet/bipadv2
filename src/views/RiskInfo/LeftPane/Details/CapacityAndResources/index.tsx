@@ -145,7 +145,7 @@ const TableModalButton = modalize(Button);
 const AccentModalButton = modalize(AccentButton);
 
 const camelCaseToSentence = (text: string) => {
-    const result = text.replace(/([A-Z])/g, ' $1');
+    const result = text.replace(/([A-Z])/g, '$1');
     const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
 
     return finalResult;
