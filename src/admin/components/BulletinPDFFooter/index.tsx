@@ -4,10 +4,10 @@ import Temperatures from 'src/admin/components/BulletinForm/Temperatures';
 // import tempMin from 'src/admin/resources/tempMin.png';
 // import tempMax from 'src/admin/resources/tempMax.png';
 import { Translation } from 'react-i18next';
-import styles from './styles.scss';
 import {
     bulletinPageSelector, languageSelector,
 } from '#selectors';
+import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TextField from '@mui/material/TextField';
@@ -11,17 +12,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from '@reach/router';
 // import { useSelector } from 'react-redux';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import {
+    healthInfrastructurePageSelector,
+    userSelector,
+} from '#selectors';
 import { FormDataType, institutionDetails } from '../utils';
 import NextButton from '../../NextButton';
 
 import AccentHeading from '../../AccentHeading';
 import styles from './styles.module.scss';
 
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import {
-    healthInfrastructurePageSelector,
-    userSelector,
-} from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -32,10 +33,10 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
 });
 
-type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-| SelectChangeEvent<string>;
+type EventTarget = React.ChangeEvent<HTMLInputElement
+    | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
-interface Props{
+interface Props {
     handleFormData: (e: EventTarget, fN: string) => void;
     formData: FormDataType;
     progress: number;
@@ -99,7 +100,7 @@ const Verification = (props: Props): JSX.Element => {
                     className={styles.viewTablebtn}
                     onClick={handleViewTableBtn}
                 >
-View Data Table
+                    View Data Table
                 </button>
             </div>
             <div className={styles.rowTitle2}>

@@ -22,10 +22,20 @@ import TextField from '@material-ui/core/TextField';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 import Loader from 'react-loader';
+import Page from '#components/Page';
+import {
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    wardsSelector,
+    epidemicsPageSelector,
+    userSelector,
+} from '#selectors';
+import { setCountryListAction, SetEpidemicsPageAction } from '#actionCreators';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
-import Page from '#components/Page';
 import {
     lossFormDataInitial,
     incidentFormDataInitial,
@@ -39,17 +49,7 @@ import {
     injuredDisabledInitial,
 } from './utils';
 
-import {
-    districtsSelector,
-    municipalitiesSelector,
-    provincesSelector,
-    wardsSelector,
-    epidemicsPageSelector,
-    userSelector,
-} from '#selectors';
-import { setCountryListAction, SetEpidemicsPageAction } from '#actionCreators';
 
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import General from './General';
 import PeopleLoss from './PeopleLoss';
 import FamilyLoss from './FamilyLoss';

@@ -12,9 +12,6 @@ import Navbar from 'src/admin/components/Navbar';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
 import { useForm, Controller } from 'react-hook-form';
-import styles from './styles.module.scss';
-import Ideaicon from '../../resources/ideaicon.svg';
-import UploadIcon from '../../resources/uploadIcon.svg';
 // import { covidPostIndividualBulkData, covidGetIndividualBulkData, covidPostGroupBulkData, covidGetGroupBulkData } from '../../Redux/covidActions/covidActions';
 // import { RootState } from '../../Redux/store';
 
@@ -22,6 +19,9 @@ import { ClientAttributes, createConnectedRequestCoordinator, createRequestClien
 import { SetCovidPageAction } from '#actionCreators';
 import { covidPageSelector, userSelector } from '#selectors';
 import Page from '#components/Page';
+import UploadIcon from '../../resources/uploadIcon.svg';
+import Ideaicon from '../../resources/ideaicon.svg';
+import styles from './styles.module.scss';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -223,7 +223,7 @@ const CovidBulkUpload = (props) => {
         } else {
             props.requests.uploadGroupData.do({ setLoading });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formtoggler]);
 
     // template download
@@ -255,22 +255,22 @@ const CovidBulkUpload = (props) => {
                                 formtoggler === 'Individual Form'
                                     ? (
                                         <p className={styles.shortDescription}>
-                                        To upload a list of individual COVID data, kindly download
-                                        the template sheet, fill the data in the required heading,
-                                        and upload it below. Do make sure that the data are in excel (.xsls)
-                                        format and headings provided in the template are unchanged before uploading
-                                        it. The bulk data uploaded will be processed, and verified by the system
-                                        before integrating into HEOC and the user will be notified about the status
-                                        of the bulk upload.
+                                            To upload a list of individual COVID data, kindly download
+                                            the template sheet, fill the data in the required heading,
+                                            and upload it below. Do make sure that the data are in excel (.xsls)
+                                            format and headings provided in the template are unchanged before uploading
+                                            it. The bulk data uploaded will be processed, and verified by the system
+                                            before integrating into HEOC and the user will be notified about the status
+                                            of the bulk upload.
                                         </p>
                                     )
                                     : (
                                         <p className={styles.shortDescription}>
-                                        To upload group COVID data in bulk, kindly download the template sheet,
-                                        fill the data in the required heading, and upload it below. Do make sure
-                                        that the data are in excel (.xsls) format and headings provided in the template
-                                        are unchanged before uploading it. The bulk data uploaded will be processed,
-                                        and verified by the system before integrating into HEOC and the user will be notified about the status of the bulk upload.
+                                            To upload group COVID data in bulk, kindly download the template sheet,
+                                            fill the data in the required heading, and upload it below. Do make sure
+                                            that the data are in excel (.xsls) format and headings provided in the template
+                                            are unchanged before uploading it. The bulk data uploaded will be processed,
+                                            and verified by the system before integrating into HEOC and the user will be notified about the status of the bulk upload.
                                         </p>
                                     )
                             }
@@ -299,7 +299,7 @@ const CovidBulkUpload = (props) => {
                         disabled={getDisabled()}
                         type="button"
                     >
-                    Download the Template
+                        Download the Template
                     </button>
                 </div>
 
@@ -421,7 +421,7 @@ const CovidBulkUpload = (props) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { (formtoggler === 'Individual Form' ? covid19BulkIndividualData : covid19BulkGroupData).map((data, i) => (
+                                            {(formtoggler === 'Individual Form' ? covid19BulkIndividualData : covid19BulkGroupData).map((data, i) => (
                                                 <tr className={styles.row} key={data.id}>
                                                     <td className={styles.cell}>{i + 1}</td>
                                                     <td className={styles.cell}>{data.title || '-'}</td>

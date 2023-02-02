@@ -4,9 +4,9 @@ import Table from 'src/admin/components/CovidTable';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Navbar from 'src/admin/components/Navbar';
 import Footer from 'src/admin/components/Footer';
+import Page from '#components/Page';
 import styles from './styles.module.scss';
 import Ideaicon from '../../resources/ideaicon.svg';
-import Page from '#components/Page';
 
 const Covid19Table = (props) => {
     const [formtoggler, setformToggler] = useState('Individual Form');

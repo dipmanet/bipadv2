@@ -10,7 +10,6 @@ import Loader from 'react-loader';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import styles from './styles.scss';
 import Page from '#components/Page';
 import {
     createConnectedRequestCoordinator,
@@ -26,6 +25,7 @@ import {
     userSelector,
 } from '#selectors';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 interface Props {
 

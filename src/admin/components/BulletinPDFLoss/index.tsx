@@ -22,17 +22,17 @@ import GovLogo from 'src/admin/resources/govtLogo.svg';
 import NepaliDate from 'src/admin/components/NepaliDate';
 import { Translation } from 'react-i18next';
 import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
-import styles from './styles.scss';
-import { lossObj } from './loss';
-import LossItem from './LossItem';
-import { nepaliRef, provincesRef } from '../BulletinForm/formFields';
-import IncidentMap from './IncidentMap/index';
 import {
     bulletinPageSelector, hazardTypeListSelector,
     languageSelector,
 } from '#selectors';
 import IncidentLegend from '#rscz/Legend';
 import HazardsLegend from '#components/HazardsLegend';
+import styles from './styles.scss';
+import { lossObj } from './loss';
+import LossItem from './LossItem';
+import { nepaliRef, provincesRef } from '../BulletinForm/formFields';
+import IncidentMap from './IncidentMap/index';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),

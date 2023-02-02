@@ -29,9 +29,7 @@ interface Centroid {
     coordinates: [number, number];
 }
 type BBox = [number, number, number, number];
-export interface Language {
-    language: string;
-}
+
 
 type DrrmProgress = number;
 
@@ -1100,10 +1098,6 @@ export interface SetLanguage {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
-}
-
-export interface SetLanguage {
-    language: Language;
 }
 
 export interface SetBulletinData {

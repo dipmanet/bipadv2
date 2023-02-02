@@ -13,12 +13,12 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import AccentHeading from 'src/admin/components/AccentHeading';
 import { navigate } from '@reach/router';
 import { connect, useSelector } from 'react-redux';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 import NextButton from '../../NextButton';
 import { FormDataType, institutionDetails } from '../utils';
 import styles from './styles.module.scss';
 
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
-interface Props{
+interface Props {
     handleFormData?: (e: EventTarget, fN: string) => void;
     handleSelectGroup?: (e: SelectChangeEvent<string>, fN: string) => void;
     formData?: FormDataType;
@@ -119,7 +119,7 @@ const DisasterManagement = (props: Props): JSX.Element => {
             <div className={styles.containerForm}>
 
                 <h2>
-                Disaster Management Information
+                    Disaster Management Information
                 </h2>
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -157,23 +157,23 @@ const DisasterManagement = (props: Props): JSX.Element => {
                 </FormControl>
                 {
                     formData.has_disable_friendly_infrastructure && (
-                    <>
-                        <h2>Please specify</h2>
-                        <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                            <TextField
-                                disabled={getDisabled('specify_infrastructure')}
-                                id="specify_infrastructureID"
-                                label="Please specify"
-                                variant="filled"
-                                value={formData.specify_infrastructure}
-                                onChange={e => handleFormData(e, 'specify_infrastructure')}
-                                InputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #d5d5d5' }}
-                            />
-                        </FormControl>
-                    </>
+                        <>
+                            <h2>Please specify</h2>
+                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                <TextField
+                                    disabled={getDisabled('specify_infrastructure')}
+                                    id="specify_infrastructureID"
+                                    label="Please specify"
+                                    variant="filled"
+                                    value={formData.specify_infrastructure}
+                                    onChange={e => handleFormData(e, 'specify_infrastructure')}
+                                    InputProps={{
+                                        disableUnderline: true,
+                                    }}
+                                    style={{ border: '1px solid #d5d5d5' }}
+                                />
+                            </FormControl>
+                        </>
                     )
                 }
                 <div className={styles.row1}>

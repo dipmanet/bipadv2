@@ -21,7 +21,6 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useDispatch, connect } from 'react-redux';
 // import { getInventoryItem } from '../../../../Redux/actions';
-import styles from './styles.module.scss';
 
 
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
@@ -30,6 +29,7 @@ import {
     userSelector,
 } from '#selectors';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -64,7 +64,7 @@ interface Props {
     handleClose: () => void;
     unit: string;
     open: boolean;
-    inventoryItem: {title: string; quantity: number; description: string; unit: string};
+    inventoryItem: { title: string; quantity: number; description: string; unit: string };
     inventoryData: array[];
     units: string[];
     resourceID: string;
@@ -189,7 +189,7 @@ const EditModal = (props: Props) => {
                         </FormControl>
                     </div>
                     <button onClick={() => handleInvEdit()} type="button">
-                       Update and Close
+                        Update and Close
                     </button>
                 </div>
             </Box>

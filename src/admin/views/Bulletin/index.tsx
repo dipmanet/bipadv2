@@ -32,6 +32,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         },
     },
 };
+
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
@@ -45,7 +46,7 @@ const Bulletin = (props: Props) => {
                 language: urlLanguage,
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     language: languageSelector(state),

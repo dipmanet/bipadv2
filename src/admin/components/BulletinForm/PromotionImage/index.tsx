@@ -8,9 +8,9 @@ import { connect } from 'react-redux';
 import Placeholder from 'src/admin/resources/placeholder.png';
 import { Translation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
-import styles from './styles.scss';
 import { setBulletinEditDataAction } from '#actionCreators';
 import { bulletinEditDataSelector } from '#selectors';
+import styles from './styles.scss';
 
 interface Props {
 

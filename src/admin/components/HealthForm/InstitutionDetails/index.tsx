@@ -21,13 +21,13 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from '@reach/router';
 import { connect, useSelector } from 'react-redux';
 import AccentHeading from 'src/admin/components/AccentHeading';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 import { FormDataType, instDetail, institutionDetails } from '../utils';
 import NextButton from '../../NextButton';
 
 import styles from './styles.module.scss';
 
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),

@@ -6,9 +6,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
-import styles from './styles.module.scss';
 import { userSelector, adminMenuSelector, bulletinEditDataSelector } from '#selectors';
 import { SetAdminMenuAction, setBulletinEditDataAction } from '#actionCreators';
+import styles from './styles.module.scss';
 
 interface Props {
     currentPage?: MenuItem;
@@ -46,6 +46,7 @@ const MenuCommon = (props: Props) => {
     const [Menu, setMenu] = useState<MenuItem[] | undefined>([]);
     const [active, setActive] = useState<number | undefined>(undefined);
     const currentPageSlug = useRef(null);
+
 
     const handleMenuItemClick = (menuItem: MenuItem) => {
         const { setBulletinEditData } = props;

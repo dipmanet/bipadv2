@@ -15,10 +15,10 @@ import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import Loader from 'react-loader';
 import Modal from 'src/admin/components/Modal';
 import Box from '@mui/material/Box';
-import styles from '../styles.module.scss';
-import Ideaicon from '../../../resources/ideaicon.svg';
 import { createConnectedRequestCoordinator } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
+import styles from '../styles.module.scss';
+import Ideaicon from '../../../resources/ideaicon.svg';
 import PeopleLossTable from './Table';
 import DataEntryForm from './DataEntryForm';
 

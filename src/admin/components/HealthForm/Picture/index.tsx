@@ -5,6 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from '@reach/router';
 import { connect } from 'react-redux';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import {
+    healthInfrastructurePageSelector,
+    userSelector,
+} from '#selectors';
 import styles from './styles.module.scss';
 
 import AccentHeading from '../../AccentHeading';
@@ -15,12 +20,6 @@ import NextButton from '../../NextButton';
 import FileUploader from '../../FileUploader';
 
 
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import {
-    healthInfrastructurePageSelector,
-    userSelector,
-} from '#selectors';
-
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
     userDataMain: userSelector(state),
@@ -30,10 +29,9 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
 });
 
-type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-| SelectChangeEvent<string>;
+type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
-interface Props{
+interface Props {
     formData: FormDataType;
     progress: number;
     getActiveMenu: (e: number) => void;
@@ -86,7 +84,7 @@ const Picture = (props: Props): JSX.Element => {
         } else {
             setDisableFields(allFields);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const showPic = () => {
@@ -119,7 +117,7 @@ const Picture = (props: Props): JSX.Element => {
             setpicLink(formData.picture);
             handleFile(null, 'picture');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -127,10 +125,10 @@ const Picture = (props: Props): JSX.Element => {
             <div id="pictureContainer" className={styles.picture}>
                 {
                     picFromEdit && (
-                    <>
-                        <h2>Current Picture</h2>
-                        <img src={picLink} alt="" />
-                    </>
+                        <>
+                            <h2>Current Picture</h2>
+                            <img src={picLink} alt="" />
+                        </>
                     )
                 }
             </div>

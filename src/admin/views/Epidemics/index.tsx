@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
@@ -16,10 +18,20 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TextField from '@material-ui/core/TextField';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
+import Page from '#components/Page';
+import {
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    wardsSelector,
+    epidemicsPageSelector,
+    userSelector,
+} from '#selectors';
+import { SetEpidemicsPageAction } from '#actionCreators';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
-import Page from '#components/Page';
 
 import {
     lossFormDataInitial,
@@ -33,18 +45,6 @@ import {
     injuredOtherInitial,
     injuredDisabledInitial,
 } from './utils';
-
-import {
-    districtsSelector,
-    municipalitiesSelector,
-    provincesSelector,
-    wardsSelector,
-    epidemicsPageSelector,
-    userSelector,
-} from '#selectors';
-import { SetEpidemicsPageAction } from '#actionCreators';
-
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 
 
 const mapStateToProps = (state, props) => ({
@@ -677,12 +677,12 @@ const Epidemics = (props) => {
             lossError,
             incidentEditData,
         },
-    user,
-    provinces,
-    districts,
-    municipalities,
-    wards,
-    uri } = props;
+        user,
+        provinces,
+        districts,
+        municipalities,
+        wards,
+        uri } = props;
 
     useEffect(() => {
         if (user && user.profile && user.profile.province && provinces && provinces.length > 0) {
@@ -764,7 +764,7 @@ const Epidemics = (props) => {
         if (provinceName) {
             setprovinceId(province);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceName]);
 
     useEffect(() => {
@@ -774,7 +774,7 @@ const Epidemics = (props) => {
         if (districtName) {
             setdistrictId(district);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [districtName]);
 
     useEffect(() => {
@@ -784,7 +784,7 @@ const Epidemics = (props) => {
         if (municipalityName) {
             setmunicipalityId(municipality);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [municipalityName]);
 
     useEffect(() => {
@@ -793,7 +793,7 @@ const Epidemics = (props) => {
                 .map(item => item.centroid.coordinates)[0];
             setprovinceCentriodForMap(temp);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceId]);
 
     useEffect(() => {
@@ -803,7 +803,7 @@ const Epidemics = (props) => {
             setwardId(id);
             setEditWardId(id);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
 
     const handleVerifiedChange = () => {
@@ -887,7 +887,7 @@ const Epidemics = (props) => {
             // dispatch(clearFormEditEpidemic());
             props.setEpidemicsPage({ incidentEditData: {} });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [incidentEditData]);
 
     const handleEpidemicFormSubmit = async () => {
@@ -972,7 +972,8 @@ const Epidemics = (props) => {
             }
         } else if (uniqueId) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-            const data = { ...incidentFormDataInitial,
+            const data = {
+                ...incidentFormDataInitial,
                 title,
                 incidentOn: reportedDate,
                 cause,
@@ -986,10 +987,11 @@ const Epidemics = (props) => {
                     type: 'Point',
                     coordinates: [longitude, lattitude],
                 },
-                wards: [editWardId] };
+                wards: [editWardId],
+            };
             if (user
-                    && user.profile
-                    && user.profile.role === 'validator'
+                && user.profile
+                && user.profile.role === 'validator'
             ) {
                 const verify = {
                     verified,
@@ -1013,44 +1015,60 @@ const Epidemics = (props) => {
                 deadDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && !item.gender && item.disability === 1)[0].id,
             };
 
-            const deadMale = { ...deadMaleInitial,
+            const deadMale = {
+                ...deadMaleInitial,
                 loss: editLossId,
-                count: deadFormMale };
+                count: deadFormMale,
+            };
             props.requests.lossDeadMaleUpdate.do({ id: obj.deadMale, body: deadMale });
             // dispatch(lossPeopleUpdateData(obj.deadMale, deadMale));
-            const deadFemale = { ...deadFemaleInitial,
+            const deadFemale = {
+                ...deadFemaleInitial,
                 loss: editLossId,
-                count: deadFormFemale };
+                count: deadFormFemale,
+            };
             props.requests.lossDeadFemaleUpdate.do({ id: obj.deadFemale, body: deadFemale });
             // dispatch(lossPeopleUpdateData(obj.deadFemale, deadFemale));
-            const deadOther = { ...deadOtherInitial,
+            const deadOther = {
+                ...deadOtherInitial,
                 loss: editLossId,
-                count: deadFormOther };
+                count: deadFormOther,
+            };
             props.requests.lossDeadOtherUpdate.do({ id: obj.deadOther, body: deadOther });
             // dispatch(lossPeopleUpdateData(obj.deadOther, deadOther));
-            const deadDisabled = { ...deadDisabledInitial,
+            const deadDisabled = {
+                ...deadDisabledInitial,
                 loss: editLossId,
-                count: deadFormDisabled };
+                count: deadFormDisabled,
+            };
             props.requests.lossDeadDisabledUpdate.do({ id: obj.deadDisabled, body: deadDisabled });
             // dispatch(lossPeopleUpdateData(obj.deadDisabled, deadDisabled));
-            const injuredMale = { ...injuredMaleInitial,
+            const injuredMale = {
+                ...injuredMaleInitial,
                 loss: editLossId,
-                count: injuredFormMale };
+                count: injuredFormMale,
+            };
             props.requests.lossInjuredMaleUpdate.do({ id: obj.injuredMale, body: injuredMale });
             // dispatch(lossPeopleUpdateData(obj.injuredMale, injuredMale));
-            const injuredFemale = { ...injuredFemaleInitial,
+            const injuredFemale = {
+                ...injuredFemaleInitial,
                 loss: editLossId,
-                count: injuredFormFemale };
+                count: injuredFormFemale,
+            };
             props.requests.lossInjuredFemaleUpdate.do({ id: obj.injuredFemale, body: injuredFemale });
             // dispatch(lossPeopleUpdateData(obj.injuredFemale, injuredFemale));
-            const injuredOther = { ...injuredOtherInitial,
+            const injuredOther = {
+                ...injuredOtherInitial,
                 loss: editLossId,
-                count: injuredFormOther };
+                count: injuredFormOther,
+            };
             props.requests.lossInjuredOtherUpdate.do({ id: obj.injuredOther, body: injuredOther });
             // dispatch(lossPeopleUpdateData(obj.injuredOther, injuredOther));
-            const injuredDisabled = { ...injuredDisabledInitial,
+            const injuredDisabled = {
+                ...injuredDisabledInitial,
                 loss: editLossId,
-                count: injuredFormDisabled };
+                count: injuredFormDisabled,
+            };
             props.requests.lossInjuredDisabledUpdate.do({ id: obj.injuredDisabled, body: injuredDisabled });
             // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
             if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
@@ -1066,7 +1084,8 @@ const Epidemics = (props) => {
     useEffect(() => {
         if (lossID) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-            const data = { ...incidentFormDataInitial,
+            const data = {
+                ...incidentFormDataInitial,
                 loss: lossID,
                 title,
                 incidentOn: reportedDate,
@@ -1080,46 +1099,63 @@ const Epidemics = (props) => {
                     type: 'Point',
                     coordinates: [longitude, lattitude],
                 },
-                wards: [wardId] };
+                wards: [wardId],
+            };
             props.requests.incident.do({ body: data });
-            const deadMale = { ...deadMaleInitial,
+            const deadMale = {
+                ...deadMaleInitial,
                 loss: lossID,
-                count: deadFormMale };
+                count: deadFormMale,
+            };
             props.requests.lossDeadMale.do({ body: deadMale });
-            const deadFemale = { ...deadFemaleInitial,
+            const deadFemale = {
+                ...deadFemaleInitial,
                 loss: lossID,
-                count: deadFormFemale };
+                count: deadFormFemale,
+            };
             props.requests.lossDeadFemale.do({ body: deadFemale });
-            const deadOther = { ...deadOtherInitial,
+            const deadOther = {
+                ...deadOtherInitial,
                 loss: lossID,
-                count: deadFormOther };
+                count: deadFormOther,
+            };
             props.requests.lossDeadOther.do({ body: deadOther });
-            const deadDisabled = { ...deadDisabledInitial,
+            const deadDisabled = {
+                ...deadDisabledInitial,
                 loss: lossID,
-                count: deadFormDisabled };
+                count: deadFormDisabled,
+            };
             props.requests.lossDeadDisabled.do({ body: deadDisabled });
-            const injuredMale = { ...injuredMaleInitial,
+            const injuredMale = {
+                ...injuredMaleInitial,
                 loss: lossID,
-                count: injuredFormMale };
+                count: injuredFormMale,
+            };
             props.requests.lossInjuredMale.do({ body: injuredMale });
-            const injuredFemale = { ...injuredFemaleInitial,
+            const injuredFemale = {
+                ...injuredFemaleInitial,
                 loss: lossID,
-                count: injuredFormFemale };
+                count: injuredFormFemale,
+            };
             props.requests.lossInjuredFemale.do({ body: injuredFemale });
-            const injuredOther = { ...injuredOtherInitial,
+            const injuredOther = {
+                ...injuredOtherInitial,
                 loss: lossID,
-                count: injuredFormOther };
+                count: injuredFormOther,
+            };
             props.requests.lossInjuredOther.do({ body: injuredOther });
-            const injuredDisabled = { ...injuredDisabledInitial,
+            const injuredDisabled = {
+                ...injuredDisabledInitial,
                 loss: lossID,
-                count: injuredFormDisabled };
+                count: injuredFormDisabled,
+            };
             props.requests.lossInjuredDisabled.do({ body: injuredDisabled });
             setAdded(true);
         }
         if (lossPeopleError || incidentError || lossError) {
             setError(true);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossID]);
     return (
         <>
@@ -1161,9 +1197,9 @@ const Epidemics = (props) => {
                         <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.ideaPara}>
-                                    The epidemics form consists of the details of the epidemics,
-                                    geographical information of the affected area, and the
-                                    casualty details disaggregated by gender and disability.
+                                The epidemics form consists of the details of the epidemics,
+                                geographical information of the affected area, and the
+                                casualty details disaggregated by gender and disability.
 
                             </p>
                         </div>
@@ -1450,7 +1486,7 @@ const Epidemics = (props) => {
                             <div className={styles.infoBarCasuality}>
                                 <p className={styles.instInfo}>
                                     <span style={{ color: '#003572' }} />
-                                        Verification of the data
+                                    Verification of the data
                                 </p>
                             </div>
                             <div className={styles.checkBoxArea}>
@@ -1521,7 +1557,7 @@ const Epidemics = (props) => {
                                 </div>
                             </div>
                             <div className={styles.saveOrAddButtons}>
-                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New' }</button>
+                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
                             </div>
                         </div>
                     </div>

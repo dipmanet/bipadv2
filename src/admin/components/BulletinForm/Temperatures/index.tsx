@@ -19,11 +19,11 @@ import TemperatureMax from 'src/admin/components/BulletinForm/TemperaturesMax';
 import TemperatureMin from 'src/admin/components/BulletinForm/TemperaturesMin';
 import RainSummaryPic from 'src/admin/components/BulletinForm/RainSummaryPic';
 import { Translation } from 'react-i18next';
-import styles from './styles.scss';
 import {
     bulletinEditDataSelector,
     bulletinPageSelector, languageSelector,
 } from '#selectors';
+import styles from './styles.scss';
 import PromotionImage from '../PromotionImage';
 
 const mapStateToProps = state => ({

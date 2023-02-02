@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
@@ -34,17 +35,17 @@ import Loader from 'react-loader';
 import { ActionCreator, Dispatch } from 'redux';
 import DeleteIconSvg from 'src/admin/resources/deleteicon.svg';
 import SearchIcon from 'src/admin/resources/searchicon.svg';
-import styles from './styles.module.scss';
-import { tableTitleRef, institutionDetails, downloadedTitle } from './utils';
-import HealthForm from '../HealthForm';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
-// import { getHealthTable, deleteHealthTable, formDataForEdit, setInventoryItem, healthDataLoading } from '../../Redux/actions';
-
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
 import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import styles from './styles.module.scss';
+import { tableTitleRef, institutionDetails, downloadedTitle } from './utils';
+import HealthForm from '../HealthForm';
+// import { getHealthTable, deleteHealthTable, formDataForEdit, setInventoryItem, healthDataLoading } from '../../Redux/actions';
+
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -120,9 +121,9 @@ function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
 ): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
-    ) => number {
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
+) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);

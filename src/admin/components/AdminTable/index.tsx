@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { alpha } from '@mui/material/styles';
@@ -26,13 +27,12 @@ import Modal from '@mui/material/Modal';
 // from '../../Redux/adminActions/adminActions';
 // import { RootState, store } from '../../Redux/store';
 import AdminForm from 'src/admin/components/AdminForm/index';
-import styles from './styles.module.scss';
-import EditIcon from '../../resources/editicon.svg';
-import DeleteIconSvg from '../../resources/deleteicon.svg';
-
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetAdminPageAction } from '#actionCreators';
 import { adminPageSelector, userSelector, provincesSelector, districtsSelector } from '#selectors';
+import styles from './styles.module.scss';
+import EditIcon from '../../resources/editicon.svg';
+import DeleteIconSvg from '../../resources/deleteicon.svg';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -97,9 +97,9 @@ function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
 ): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
-    ) => number {
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
+) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
@@ -296,7 +296,7 @@ const AdminTable = (props) => {
             municipality: userDataMain.profile.municipality,
             setLoading,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -389,7 +389,7 @@ const AdminTable = (props) => {
                                         onSelectAllClick={handleSelectAllClick}
                                     />
                                     <TableBody>
-                                        { adminDataMain && stableSort(adminDataMain, getComparator(order, orderBy))
+                                        {adminDataMain && stableSort(adminDataMain, getComparator(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row, index) => {
                                                 const isItemSelected = isSelected(row.province);
@@ -467,7 +467,7 @@ const AdminTable = (props) => {
                             <button className={styles.submitButtons} onClick={toggleAdminForm} type="submit">Add New User</button>
                         </div>
                     </Box>
-                ) }
+                )}
         </>
     );
 };

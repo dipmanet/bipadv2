@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
@@ -447,25 +450,24 @@ const PDFPreview = (props) => {
                             }
                         }).catch((err) => {
                             setError(true);
-                            console.log('This is fatigue error', err);
+
                             setPending(false);
                         });
                     })
                     .catch((err) => {
                         setError(true);
-                        console.log('This is fatigue error', err);
+
                         setPending(false);
                     });
             })
             .catch((err) => {
                 setError(true);
-                console.log('This is fatigue error', err);
+
                 setPending(false);
             });
     };
 
-    console.log('This is error', error);
-    console.log('This pending', pending);
+
     return (
         <div className={styles.pdfContainer}>
             <div id="bulletinPDFReport">

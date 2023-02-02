@@ -11,14 +11,14 @@ import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
 import { useForm, Controller } from 'react-hook-form';
 import Loader from 'react-loader';
-import styles from './styles.module.scss';
-import Ideaicon from '../../resources/ideaicon.svg';
-import UploadIcon from '../../resources/uploadIcon.svg';
 import Page from '#components/Page';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { epidemicsPageSelector, userSelector } from '#selectors';
+import UploadIcon from '../../resources/uploadIcon.svg';
+import Ideaicon from '../../resources/ideaicon.svg';
+import styles from './styles.module.scss';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -77,7 +77,7 @@ const EpidemicBulkUpload = (props) => {
         } else if (userDataMain && userDataMain.isSuperuser) {
             setRole('superuser');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useState(() => {
@@ -176,7 +176,7 @@ const EpidemicBulkUpload = (props) => {
         axios.get(`${baseUrl}/data_template_file/`)
             .then((file) => {
                 const template = file.data.results.filter(item => item.dataTemplateSlug
-                     === 'heoc_admin_epidemic_group_bulk_upload');
+                    === 'heoc_admin_epidemic_group_bulk_upload');
                 window.open(template[0].file);
             });
     };

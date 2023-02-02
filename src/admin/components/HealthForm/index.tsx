@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import CamelCase from 'snakecase-keys';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector } from '#selectors';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import InstitutionDetails from './InstitutionDetails';
 import DisasterManagement from './DisasterManagement';
 import Contact from './Contact';
@@ -12,9 +15,6 @@ import { institutionDetails, FormDataType } from './utils';
 import Picture from './Picture';
 import Verification from './Verification';
 import styles from './styles.module.scss';
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import { healthInfrastructurePageSelector } from '#selectors';
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 
 interface Props {
     progress: number;
@@ -64,7 +64,7 @@ const HealthForm = (props: Props): JSX.Element => {
             props.requests.inventory.do({ resource: healthFormEditData.id });
             setHealthInfrastructurePage({ healthFormEditData: {} });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [healthFormEditData]);
 
 

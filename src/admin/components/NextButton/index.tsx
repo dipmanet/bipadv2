@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { isList } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import Modal from '../Modal';
-import { FormDataType } from '../HealthForm/utils';
-import styles from './styles.module.scss';
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
 import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 import { AppState } from '#types';
+import Modal from '../Modal';
+import { FormDataType } from '../HealthForm/utils';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -490,54 +490,54 @@ const NextButton = (props) => {
         <>
             {
                 errorNew
-            && <p className={styles.error}>{errorNew}</p>
+                && <p className={styles.error}>{errorNew}</p>
             }
             {
                 success
-            && (
-                <Modal
-                    open={openModal}
-                    title={'Thank you. Your data has been saved sucessfully'}
-                    description={'Please enter Inventory data, if any'}
-                    handleClose={handleClose}
-                />
-            )
+                && (
+                    <Modal
+                        open={openModal}
+                        title={'Thank you. Your data has been saved sucessfully'}
+                        description={'Please enter Inventory data, if any'}
+                        handleClose={handleClose}
+                    />
+                )
             }
             {
                 finish
-            && (
-                <Modal
-                    open={openFinishModal}
-                    title={'Thank you!'}
-                    description={
-                        (Object.keys(userDataMain).length > 0
-                        && userDataMain.profile
-                        && userDataMain.profile.role === 'validator')
-                            ? ''
-                            : 'You can now enter new record'}
-                    handleClose={handleFinishFurther}
-                />
-            )
+                && (
+                    <Modal
+                        open={openFinishModal}
+                        title={'Thank you!'}
+                        description={
+                            (Object.keys(userDataMain).length > 0
+                                && userDataMain.profile
+                                && userDataMain.profile.role === 'validator')
+                                ? ''
+                                : 'You can now enter new record'}
+                        handleClose={handleFinishFurther}
+                    />
+                )
             }
             {
                 update
-            && (
-                <Modal
-                    open={update}
-                    title={'Thank you!'}
-                    description={'Your record has been updated'}
-                    handleClose={handleUpdateSuccess}
-                />
-            )
+                && (
+                    <Modal
+                        open={update}
+                        title={'Thank you!'}
+                        description={'Your record has been updated'}
+                        handleClose={handleUpdateSuccess}
+                    />
+                )
             }
             <div className={styles.nextContainer}>
                 <button
                     type="button"
                     onClick={handlePrevious}
                     className={getPrevDisabled() ? styles.prevDisabled : styles.prevBtn}
-                    // disabled={getPrevDisabled}
+                // disabled={getPrevDisabled}
                 >
-            Previous
+                    Previous
                 </button>
                 <button
                     type="button"

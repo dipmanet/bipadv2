@@ -8,17 +8,16 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { connect, useDispatch, useSelector } from 'react-redux';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
-import styles from './styles.module.scss';
-import HealthOverview from './HealthOverview';
-import EpidemicOverview from './EpidemicOverview';
-
 import {
     covidPageSelector,
     userSelector,
 } from '#selectors';
-
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetCovidPageAction } from '#actionCreators';
+import styles from './styles.module.scss';
+import HealthOverview from './HealthOverview';
+import EpidemicOverview from './EpidemicOverview';
+
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     covidPage: covidPageSelector(state),
@@ -271,7 +270,7 @@ const Overview = (props) => {
                 setLoading,
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClick = (item) => {
@@ -330,7 +329,7 @@ const Overview = (props) => {
                                                             item === 'Daily' ? '7-days'
                                                                 : item === 'Weekly' ? '4-weeks'
                                                                     : item === 'Monthly' ? '12-months'
-                                                                        : '4-years' }
+                                                                        : '4-years'}
                                                     </div>
 
                                                 </button>
@@ -402,10 +401,10 @@ const Overview = (props) => {
                                     </div>
                                 </div>
                                 <p className={styles.additionalDataInfo}>
-                                The graph gives the summary of the total people infected due to COVID (as represented by the blue line),
-                                the total people recovered from COVID (as represented by green line),
-                                and the total people dead due to COIVD (as represented by the red line).
-                                The data can be viewed on a daily, weekly, monthly, and yearly basis.
+                                    The graph gives the summary of the total people infected due to COVID (as represented by the blue line),
+                                    the total people recovered from COVID (as represented by green line),
+                                    and the total people dead due to COIVD (as represented by the red line).
+                                    The data can be viewed on a daily, weekly, monthly, and yearly basis.
                                 </p>
                             </div>
                             <div className={styles.overviewTable}>

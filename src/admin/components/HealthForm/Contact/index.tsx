@@ -17,14 +17,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import AccentHeading from 'src/admin/components/AccentHeading';
 import { connect } from 'react-redux';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 import { FormDataType, institutionDetails, instDetail } from '../utils';
 import NextButton from '../../NextButton';
 
 import styles from './styles.module.scss';
 
-
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import { healthInfrastructurePageSelector, userSelector } from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -37,7 +36,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
-interface Props{
+interface Props {
     handleFormData: (e: EventTarget, fN: string) => void;
     formData: FormDataType;
     progress: number;
@@ -120,7 +119,7 @@ const Contact = (props: Props): JSX.Element => {
             <div className={styles.containerForm}>
 
                 <h2>
-               Contact Information
+                    Contact Information
                 </h2>
 
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>

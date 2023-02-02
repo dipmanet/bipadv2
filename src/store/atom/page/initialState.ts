@@ -637,8 +637,5 @@ const state: PageState = {
         incidentCount: null,
         uploadData: [],
     },
-    language: {
-        language: 'en',
-    },
 };
 export default state;

@@ -13,16 +13,6 @@ import Box from '@mui/material/Box';
 // import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import Modal from 'src/admin/components/Modal';
-import styles from './styles.module.scss';
-import ListSvg from '../../resources/list.svg';
-import PlusSvg from '../../resources/plus.svg';
-import MinusSvg from '../../resources/minus.svg';
-import Ideaicon from '../../resources/ideaicon.svg';
-import Map from '../Mappointpicker/index';
-// import Successfullyaddeddata from '../../Components/SucessfullyAdded/index';
-// import { provinceData, districtData, municipalityData, wardData, covidDataIndividual, covidDataGroup } from '../../Redux/actions';
-// import { RootState } from '../../Redux/store';
-// import { covidDataPutIndividualId, covidDataPutGroupId, covidDataGetClearIndividualId, covidDataGetClearGroupId } from '../../Redux/covidActions/covidActions';
 import { SetCovidPageAction } from '#actionCreators';
 import {
     covidPageSelector,
@@ -35,6 +25,16 @@ import {
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';
 import { propTypes } from '#rsci/MultiSelectInput';
+import styles from './styles.module.scss';
+import ListSvg from '../../resources/list.svg';
+import PlusSvg from '../../resources/plus.svg';
+import MinusSvg from '../../resources/minus.svg';
+import Ideaicon from '../../resources/ideaicon.svg';
+import Map from '../Mappointpicker/index';
+// import Successfullyaddeddata from '../../Components/SucessfullyAdded/index';
+// import { provinceData, districtData, municipalityData, wardData, covidDataIndividual, covidDataGroup } from '../../Redux/actions';
+// import { RootState } from '../../Redux/store';
+// import { covidDataPutIndividualId, covidDataPutGroupId, covidDataGetClearIndividualId, covidDataGetClearGroupId } from '../../Redux/covidActions/covidActions';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     covidPage: covidPageSelector(state),

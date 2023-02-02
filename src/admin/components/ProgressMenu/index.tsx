@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Menu } from './utils';
 import LanguageToggle from '#components/LanguageToggle';
 import { languageSelector } from '#selectors';
 
 import Icon from '#rscg/Icon';
+import { Menu } from './utils';
 // import { useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 import InstituteLogo from '../../resources/institute.svg';

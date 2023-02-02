@@ -12,10 +12,10 @@ import { connect } from 'react-redux';
 import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import Loader from 'react-loader';
 import { FormHelperText } from '@material-ui/core';
-import styles from './styles.module.scss';
 import { createConnectedRequestCoordinator } from '#request';
 import { countryListSelector, epidemicsPageSelector, resourceTypeListSelector } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),

@@ -16,8 +16,6 @@ const emptyList: unknown[] = [];
 
 const dashboardPageSelector = ({ page }: AppState) => page.dashboardPage;
 
-export const languageSelector = ({ page }: AppState) => page.language;
-
 const incidentPageSelector = ({ page }: AppState) => page.incidentPage;
 
 const responsePageSelector = ({ page }: AppState) => page.responsePage;

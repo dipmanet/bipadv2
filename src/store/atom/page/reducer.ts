@@ -2164,14 +2164,6 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
     return newState;
 };
 
-const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
-    const { language } = action;
-    const newState = produce(state, (deferedState) => {
-        // eslint-disable-next-line no-param-reassign
-        deferedState.language = language;
-    });
-    return newState;
-};
 
 export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
     const {
@@ -2240,8 +2232,6 @@ export default function routeReducer(
             return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
-        case Type.PageType.SET_LANGUAGE:
-            return setLanguageLocal(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
             return setInitialPopupHidden(state, action);
         case Type.PageType.SET_BULLETIN_PROMOTION_CHECK:

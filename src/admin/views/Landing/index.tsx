@@ -3,11 +3,11 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent */
 import React from 'react';
+import Page from '#components/Page';
 import MenuCommon from '../../components/MenuCommon';
 import styles from './styles.module.scss';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import Page from '#components/Page';
 
 const Landing = (props) => {
     const { uri, title } = props;

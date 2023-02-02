@@ -6,12 +6,6 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from '@reach/router';
-import styles from './styles.module.scss';
-import Map from '../../Mappointpicker/index';
-import AccentHeading from '../../AccentHeading';
-import NextButton from '../../NextButton';
-
-
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
 import {
     provincesSelector,
@@ -21,6 +15,11 @@ import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import styles from './styles.module.scss';
+import Map from '../../Mappointpicker/index';
+import AccentHeading from '../../AccentHeading';
+import NextButton from '../../NextButton';
+
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -141,7 +140,7 @@ const Location = (props) => {
             const nameOfWard = wardDataMain.filter(item => item.id === userDataMain.profile.ward).map(item => item.title)[0];
             setwardName(nameOfWard);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceData, districtDataMain, municipalityDataMain, userDataMain]);
 
 
@@ -162,7 +161,7 @@ const Location = (props) => {
                 setLattitude(formData.point.coordinates[1]);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resourceID]);
 
 
@@ -184,7 +183,7 @@ const Location = (props) => {
         setdistrictDataIs(districtDataMain);
         setmunicipalityDataIs(municipalityDataMain);
         setwardDataIs(wardDataMain);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -192,7 +191,7 @@ const Location = (props) => {
         if (provinceName) {
             setprovinceId(province);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceName]);
 
 
@@ -201,7 +200,7 @@ const Location = (props) => {
         if (districtName) {
             setdistrictId(district);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [districtName]);
 
 
@@ -210,7 +209,7 @@ const Location = (props) => {
         if (municipalityName) {
             setmunicipalityId(munId);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [municipalityName]);
 
 
@@ -221,7 +220,7 @@ const Location = (props) => {
             setwardId(ward);
             handleFormData(ward, 'ward');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
 
 
@@ -231,7 +230,7 @@ const Location = (props) => {
                 .map(item => item.centroid.coordinates)[0];
             setprovinceCentriodForMap(provinceCentriodForMaps);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceId]);
 
     useEffect(() => {
@@ -240,7 +239,7 @@ const Location = (props) => {
                 .map(item => item.centroid.coordinates)[0];
             setdistrictCentriodForMap(districtCentriodForMaps);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [districtId]);
 
     useEffect(() => {
@@ -249,7 +248,7 @@ const Location = (props) => {
                 .map(item => item.centroid.coordinates)[0];
             setmunicipalityCentriodForMap(municipalityCentriodForMaps);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [municipalityId]);
 
     useEffect(() => {
@@ -258,7 +257,7 @@ const Location = (props) => {
                 .map(item => item.centroid.coordinates)[0];
             setwardCentriodForMap(wardCentriodForMaps);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardId]);
 
 
@@ -283,12 +282,12 @@ const Location = (props) => {
 
     useEffect(() => {
         setPoint(lattitude, 'lat');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lattitude]);
 
     useEffect(() => {
         setPoint(longitude, 'lng');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [longitude]);
 
     return (
@@ -330,99 +329,99 @@ const Location = (props) => {
                 </div>
                 {
                     Object.keys(healthFormEditData).length === 0 && (
-                    <>
-                        <div className={styles.fourInputSections}>
-                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select Province</InputLabel>
-                                <Select
-                                    disabled={getDisabled() || (userDataMain.profile && userDataMain.profile.province)}
-                                    className={styles.adminLvlSelection}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={provinceName}
-                                    error={typeof validationError === 'string'}
-                                    label="Select Province"
-                                    style={(typeof validationError === 'string' && !provinceName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
-                                    disableUnderline
-                                    onChange={e => setprovinceName(e.target.value)}
-                                >
-                                    {provinceDataIs && provinceDataIs.map(item => (
-                                        <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                        <>
+                            <div className={styles.fourInputSections}>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Select Province</InputLabel>
+                                    <Select
+                                        disabled={getDisabled() || (userDataMain.profile && userDataMain.profile.province)}
+                                        className={styles.adminLvlSelection}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={provinceName}
+                                        error={typeof validationError === 'string'}
+                                        label="Select Province"
+                                        style={(typeof validationError === 'string' && !provinceName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
+                                        disableUnderline
+                                        onChange={e => setprovinceName(e.target.value)}
+                                    >
+                                        {provinceDataIs && provinceDataIs.map(item => (
+                                            <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
-                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select District</InputLabel>
-                                <Select
-                                    className={provinceName === '' ? styles.adminLvlSelectionDisabled
-                                        : styles.adminLvlSelection}
-                                    disabled={provinceName === '' || getDisabled() || (userDataMain.profile && userDataMain.profile.district)}
-                                    labelId="demo-simple-select-label"
-                                    error={typeof validationError === 'string'}
-                                    id="demo-simple-select"
-                                    value={districtName}
-                                    label="Select District"
-                                    style={(typeof validationError === 'string' && !districtName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
-                                    disableUnderline
-                                    onChange={e => setdistrictName(e.target.value)}
-                                >
-                                    {districtDataIs && districtDataIs.filter(
-                                        item => item.province === provinceId,
-                                    ).map(item => (
-                                        <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Select District</InputLabel>
+                                    <Select
+                                        className={provinceName === '' ? styles.adminLvlSelectionDisabled
+                                            : styles.adminLvlSelection}
+                                        disabled={provinceName === '' || getDisabled() || (userDataMain.profile && userDataMain.profile.district)}
+                                        labelId="demo-simple-select-label"
+                                        error={typeof validationError === 'string'}
+                                        id="demo-simple-select"
+                                        value={districtName}
+                                        label="Select District"
+                                        style={(typeof validationError === 'string' && !districtName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
+                                        disableUnderline
+                                        onChange={e => setdistrictName(e.target.value)}
+                                    >
+                                        {districtDataIs && districtDataIs.filter(
+                                            item => item.province === provinceId,
+                                        ).map(item => (
+                                            <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
-                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select Municipality</InputLabel>
-                                <Select
-                                    className={districtName === '' ? styles.adminLvlSelectionDisabled
-                                        : styles.adminLvlSelection}
-                                    disabled={districtName === '' || getDisabled() || (userDataMain.profile && userDataMain.profile.municipality)}
-                                    error={typeof validationError === 'string'}
-                                    helperText={typeof validationError === 'string' ? 'This field is required' : null}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={municipalityName}
-                                    label="Select Municipality"
-                                    style={(typeof validationError === 'string' && !municipalityName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
-                                    disableUnderline
-                                    onChange={e => setmunicipalityName(e.target.value)}
-                                >
-                                    {municipalityDataIs && municipalityDataIs.filter(
-                                        item => item.district === districtId,
-                                    ).map(item => (
-                                        <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Select Municipality</InputLabel>
+                                    <Select
+                                        className={districtName === '' ? styles.adminLvlSelectionDisabled
+                                            : styles.adminLvlSelection}
+                                        disabled={districtName === '' || getDisabled() || (userDataMain.profile && userDataMain.profile.municipality)}
+                                        error={typeof validationError === 'string'}
+                                        helperText={typeof validationError === 'string' ? 'This field is required' : null}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={municipalityName}
+                                        label="Select Municipality"
+                                        style={(typeof validationError === 'string' && !municipalityName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
+                                        disableUnderline
+                                        onChange={e => setmunicipalityName(e.target.value)}
+                                    >
+                                        {municipalityDataIs && municipalityDataIs.filter(
+                                            item => item.district === districtId,
+                                        ).map(item => (
+                                            <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
-                            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select Ward</InputLabel>
-                                <Select
-                                    disableUnderline
-                                    error={typeof validationError === 'string'}
-                                    helperText={typeof validationError === 'string' ? 'This field is required' : null}
-                                    disabled={municipalityName === '' || getDisabled()}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={wardName}
-                                    label="Select Ward"
-                                    style={(typeof validationError === 'string' && !wardName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
-                                    onChange={e => setwardName(e.target.value)}
-                                >
-                                    {wardDataIs && wardDataIs.filter(
-                                        item => item.municipality === municipalityId,
-                                    ).map(item => Number(item.title)).sort((a, b) => a - b).map(item => (
-                                        <MenuItem key={item} value={item}>{item}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </div>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Select Ward</InputLabel>
+                                    <Select
+                                        disableUnderline
+                                        error={typeof validationError === 'string'}
+                                        helperText={typeof validationError === 'string' ? 'This field is required' : null}
+                                        disabled={municipalityName === '' || getDisabled()}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={wardName}
+                                        label="Select Ward"
+                                        style={(typeof validationError === 'string' && !wardName) ? { border: '1px solid #ff0000' } : { border: '1px solid #d5d5d5' }}
+                                        onChange={e => setwardName(e.target.value)}
+                                    >
+                                        {wardDataIs && wardDataIs.filter(
+                                            item => item.municipality === municipalityId,
+                                        ).map(item => Number(item.title)).sort((a, b) => a - b).map(item => (
+                                            <MenuItem key={item} value={item}>{item}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
 
-                    </>
+                        </>
                     )}
 
                 <div className={styles.twoInputSections}>

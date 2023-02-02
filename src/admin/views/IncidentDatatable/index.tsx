@@ -16,7 +16,6 @@ import Navbar from 'src/admin/components/Navbar';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
 import IncidentTable from 'src/admin/components/IncidentTable';
-import styles from './styles.module.scss';
 import Page from '#components/Page';
 // import { getHealthTable, setInventoryItem } from '../../Redux/actions';
 
@@ -26,6 +25,7 @@ import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),

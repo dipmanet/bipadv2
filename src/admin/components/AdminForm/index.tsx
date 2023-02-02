@@ -2,16 +2,18 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { MenuItem,
+import {
+    MenuItem,
     FormControl,
     Box,
-    TextField } from '@mui/material';
+    TextField,
+} from '@mui/material';
 
-import styles from './styles.module.scss';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetAdminPageAction } from '#actionCreators';
 import { adminPageSelector, districtsSelector, municipalitiesSelector, provincesSelector, userSelector, wardsSelector } from '#selectors';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     adminPage: adminPageSelector(state),
@@ -126,13 +128,14 @@ const AdminForm = (props) => {
         setProvince(userDataMain.profile.province);
         setDistrict(userDataMain.profile.district);
         setMunicipality(userDataMain.profile.municipality);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         // if (!loadingAdminGetId) {
         if (adminDataMainId.id) {
-            setformDataState({ ...formDataState,
+            setformDataState({
+                ...formDataState,
                 userName: adminDataMainId.username,
                 email: adminDataMainId.email,
                 firstName: adminDataMainId.firstName,
@@ -140,7 +143,8 @@ const AdminForm = (props) => {
                 phoneNumber: adminDataMainId.phoneNumber,
                 role: adminDataMainId.profile.role,
                 institution: adminDataMainId.profile.institution,
-                designation: adminDataMainId.profile.designation });
+                designation: adminDataMainId.profile.designation,
+            });
         }
         // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,7 +164,7 @@ const AdminForm = (props) => {
             setSubfix(`${municipalities.filter(item => item.id === municipality)[0].code}_ward_${wardName}_`);
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [province, district, municipality, ward]);
 
     const userDataPost = {
@@ -250,7 +254,7 @@ const AdminForm = (props) => {
 
     useEffect(() => {
         props.requests.admin.do({ setLoading });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -259,7 +263,7 @@ const AdminForm = (props) => {
                 .filter(item => item.municipality === municipality)
                 .filter(item => item.title === String(wardName))[0].id);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
 
     return (
@@ -276,87 +280,87 @@ const AdminForm = (props) => {
                                 )}
                             <div className={styles.myRow}>
                                 {userDataMain.isSuperuser
-                                && (
-                                <>
-                                    <FormControl fullWidth sx={{ m: 1 }}>
-                                        <TextField
-                                            size="small"
-                                            select
-                                            onChange={e => setProvince(e.target.value)}
-                                            label="Province"
-                                            value={province}
+                                    && (
+                                        <>
+                                            <FormControl fullWidth sx={{ m: 1 }}>
+                                                <TextField
+                                                    size="small"
+                                                    select
+                                                    onChange={e => setProvince(e.target.value)}
+                                                    label="Province"
+                                                    value={province}
 
-                                        >
-                                            {provinces.map(option => (
-                                                <MenuItem key={option.id} value={option.id}>
-                                                    {option.title}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-
-                                    </FormControl>
-                                    <FormControl fullWidth sx={{ m: 1 }}>
-                                        <TextField
-                                            size="small"
-                                            select
-                                            onChange={e => setDistrict(e.target.value)}
-                                            label="District"
-                                            value={district}
-
-                                        >
-                                            {
-                                                districts
-                                                    .filter(item => item.province === province)
-                                                    .map(option => (
+                                                >
+                                                    {provinces.map(option => (
                                                         <MenuItem key={option.id} value={option.id}>
                                                             {option.title}
                                                         </MenuItem>
                                                     ))}
-                                        </TextField>
-                                    </FormControl>
+                                                </TextField>
 
-                                    <FormControl fullWidth sx={{ m: 1 }}>
-                                        <TextField
-                                            size="small"
-                                            select
-                                            onChange={e => setMunicipality(e.target.value)}
-                                            label="Municipality"
-                                            value={municipality}
-                                        >
-                                            {
-                                                municipalities
-                                                    .filter(item => item.district === district)
-                                                    .map(option => (
-                                                        <MenuItem key={option.id} value={option.id}>
-                                                            {option.title}
-                                                        </MenuItem>
-                                                    ))}
-                                        </TextField>
-                                    </FormControl>
-                                </>
-                                )}
+                                            </FormControl>
+                                            <FormControl fullWidth sx={{ m: 1 }}>
+                                                <TextField
+                                                    size="small"
+                                                    select
+                                                    onChange={e => setDistrict(e.target.value)}
+                                                    label="District"
+                                                    value={district}
+
+                                                >
+                                                    {
+                                                        districts
+                                                            .filter(item => item.province === province)
+                                                            .map(option => (
+                                                                <MenuItem key={option.id} value={option.id}>
+                                                                    {option.title}
+                                                                </MenuItem>
+                                                            ))}
+                                                </TextField>
+                                            </FormControl>
+
+                                            <FormControl fullWidth sx={{ m: 1 }}>
+                                                <TextField
+                                                    size="small"
+                                                    select
+                                                    onChange={e => setMunicipality(e.target.value)}
+                                                    label="Municipality"
+                                                    value={municipality}
+                                                >
+                                                    {
+                                                        municipalities
+                                                            .filter(item => item.district === district)
+                                                            .map(option => (
+                                                                <MenuItem key={option.id} value={option.id}>
+                                                                    {option.title}
+                                                                </MenuItem>
+                                                            ))}
+                                                </TextField>
+                                            </FormControl>
+                                        </>
+                                    )}
                                 {(userDataMain.isSuperuser || userDataMain.profile.region === 'municipality')
-                                && (
-                                <>
-                                    <FormControl fullWidth sx={{ m: 1 }}>
-                                        <TextField
-                                            size="small"
-                                            select
-                                            onChange={e => setwardName(e.target.value)}
-                                            label="Ward"
-                                            value={wardName}
-                                        >
-                                            {
-                                                wards
-                                                    .filter(item => item.municipality === municipality)
-                                                    .map(item => Number(item.title)).sort((a, b) => a - b)
-                                                    .map(idx => (
-                                                        <MenuItem key={idx} value={idx}>{idx}</MenuItem>
-                                                    ))}
-                                        </TextField>
-                                    </FormControl>
-                                </>
-                                )}
+                                    && (
+                                        <>
+                                            <FormControl fullWidth sx={{ m: 1 }}>
+                                                <TextField
+                                                    size="small"
+                                                    select
+                                                    onChange={e => setwardName(e.target.value)}
+                                                    label="Ward"
+                                                    value={wardName}
+                                                >
+                                                    {
+                                                        wards
+                                                            .filter(item => item.municipality === municipality)
+                                                            .map(item => Number(item.title)).sort((a, b) => a - b)
+                                                            .map(idx => (
+                                                                <MenuItem key={idx} value={idx}>{idx}</MenuItem>
+                                                            ))}
+                                                </TextField>
+                                            </FormControl>
+                                        </>
+                                    )}
                             </div>
                             <div className={styles.myRow}>
                                 <div className={styles.title}>

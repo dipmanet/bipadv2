@@ -4,12 +4,12 @@ import EpidemicTable from 'src/admin/components/EpidemicsTable';
 import Navbar from 'src/admin/components/Navbar';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
-import styles from './styles.module.scss';
-import Ideaicon from '../../resources/ideaicon.svg';
 import Page from '#components/Page';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { epidemicsPageSelector } from '#selectors';
+import Ideaicon from '../../resources/ideaicon.svg';
+import styles from './styles.module.scss';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -49,7 +49,7 @@ const EpidemmicDataTable = (props) => {
 
     useEffect(() => {
         props.requests.incidents.do({ offset: 0 });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -76,7 +76,7 @@ const EpidemmicDataTable = (props) => {
                                             table is downloadable and data can be edited as well.
                                         </p>
                                     </div>
-                                    { incidentData.length > 0 && <EpidemicTable />}
+                                    {incidentData.length > 0 && <EpidemicTable />}
                                 </div>
                             </div>
                         </div>

@@ -4,11 +4,11 @@ import HealthForm from 'src/admin/components/HealthForm';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
 import Navbar from 'src/admin/components/Navbar';
-import styles from './styles.module.scss';
 import Page from '#components/Page';
+import styles from './styles.module.scss';
 
 const HealthDataStr = (props) => {
-    const [activeMenu, setActiveMenu] = useState<string|undefined>('Institution Details');
+    const [activeMenu, setActiveMenu] = useState<string | undefined>('Institution Details');
     const [progress, setProgress] = useState<number>(0);
     const getActiveMenu = (menuItem: number) => {
         setActiveMenu(menuItem);

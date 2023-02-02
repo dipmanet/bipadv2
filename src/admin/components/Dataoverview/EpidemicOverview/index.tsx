@@ -7,7 +7,6 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
-import styles from './styles.module.scss';
 
 import {
     epidemicsPageSelector,
@@ -16,6 +15,7 @@ import {
 
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     epidemicsPage: epidemicsPageSelector(state),
@@ -235,7 +235,7 @@ const EpidemicOverview = (props) => {
             district: userDataMain.profile.district,
             municipality: userDataMain.profile.municipality,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClick = (item) => {
@@ -304,7 +304,7 @@ const EpidemicOverview = (props) => {
                                                 {item === 'Hourly' ? '24-hrs'
                                                     : item === 'Daily' ? '7-days'
                                                         : item === 'Weekly' ? '4-weeks'
-                                                            : '12-months' }
+                                                            : '12-months'}
                                             </div>
 
                                         </button>
@@ -366,7 +366,7 @@ const EpidemicOverview = (props) => {
                         </div>
 
                         <p className={styles.shortIdeaPara} style={{ color: '#3e3e3e', lineHeight: '26px' }}>
-							The graph gives the summary of people affected (as represented by the blue line) and people dead (as represented by the red line) due to the epidemic. The data can be viewed on a daily, weekly, monthly, and yearly basis.
+                            The graph gives the summary of people affected (as represented by the blue line) and people dead (as represented by the red line) due to the epidemic. The data can be viewed on a daily, weekly, monthly, and yearly basis.
                         </p>
 
                     </div>
@@ -392,7 +392,7 @@ const EpidemicOverview = (props) => {
                                                     {row}
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                    {epidemicTableData[row].totalPeopleDeath ? epidemicTableData[row].totalPeopleDeath : '-' }
+                                                    {epidemicTableData[row].totalPeopleDeath ? epidemicTableData[row].totalPeopleDeath : '-'}
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     {epidemicTableData[row].totalPeopleInjured ? epidemicTableData[row].totalPeopleInjured : '-'}

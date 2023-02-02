@@ -15,11 +15,11 @@ import { createRequestClient, methods } from '@togglecorp/react-rest-request';
 import Loader from 'react-loader';
 import { FormHelperText } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import styles from '../styles.module.scss';
-import Ideaicon from '../../../resources/ideaicon.svg';
 import { createConnectedRequestCoordinator } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { boundsSelector, epidemicsPageSelector } from '#selectors';
+import Ideaicon from '../../../resources/ideaicon.svg';
+import styles from '../styles.module.scss';
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
@@ -28,6 +29,10 @@ import {
     CsvBuilder,
 } from 'filefy';
 import { navigate } from '@reach/router';
+import { SetCovidPageAction } from '#actionCreators';
+import { covidPageSelector } from '#selectors';
+import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { AppState } from '#types';
 import DeleteIconSvg from '../../resources/deleteicon.svg';
 import EditIcon from '../../resources/editicon.svg';
 import SearchIcon from '../../resources/searchicon.svg';
@@ -35,10 +40,6 @@ import styles from './styles.module.scss';
 // import { getAllCovidDataIndividual, covidDataGroup, covidTableData, getAllCovidDataGroup } from '../../Redux/actions';
 // import { RootState } from '../../Redux/store';
 // import { covidDataGetGroupId, covidDataGetIndividualId } from '../../Redux/covidActions/covidActions';
-import { SetCovidPageAction } from '#actionCreators';
-import { covidPageSelector } from '#selectors';
-import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
-import { AppState } from '#types';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     covidPage: covidPageSelector(state),
@@ -143,9 +144,9 @@ function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
 ): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
-    ) => number {
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
+) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
@@ -471,7 +472,7 @@ const CovidTable = (props) => {
             props.requests.covid19Group.do();
             setfilteredRowDatas(covidGroupData);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formtoggler]);
 
     // const navigate = useNavigate();
@@ -640,9 +641,9 @@ const CovidTable = (props) => {
                     }
                     return (
                         [item.id, province, district, municipality, ward, item.localAddress,
-                            item.point.coordinates[1], item.point.coordinates[0], date, item.hazardInducer,
-                            item.currentState, item.age, item.gender, disabled, verified,
-                            item.verificationMessage, approved]
+                        item.point.coordinates[1], item.point.coordinates[0], date, item.hazardInducer,
+                        item.currentState, item.age, item.gender, disabled, verified,
+                        item.verificationMessage, approved]
                     );
                 });
                 return csvData;
@@ -819,7 +820,7 @@ const CovidTable = (props) => {
         } else {
             props.requests.covid19Group.do({ offset });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {

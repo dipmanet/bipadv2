@@ -14,6 +14,12 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from '@reach/router';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import {
+    healthInfrastructurePageSelector,
+    userSelector,
+} from '#selectors';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import AccentHeading from '../../AccentHeading';
 import NextButton from '../../NextButton';
 import { FormDataType, institutionDetails } from '../utils';
@@ -22,13 +28,6 @@ import EditModal from './EditModal';
 
 import styles from './styles.module.scss';
 
-
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
-import {
-    healthInfrastructurePageSelector,
-    userSelector,
-} from '#selectors';
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -70,8 +69,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
-type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-| SelectChangeEvent<string>;
+type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
 interface InventoryItem {
     id: number;
@@ -83,20 +81,20 @@ interface InventoryItem {
     unitNp: string;
 }
 
-interface OurState{
+interface OurState {
     resourceID: number;
     loadingInv: boolean;
     inventoryErr: Record<string, unknown>;
-    inventoryData?: {unit: string | number};
+    inventoryData?: { unit: string | number };
     inventoryItem: Record<string, unknown>;
     invItemSuccess: boolean;
     invItemError: Record<string, unknown>;
-    health: {resourceID: number;inventoryItem: []};
+    health: { resourceID: number; inventoryItem: [] };
 }
 interface Item {
     unit: string | number;
 }
-interface InventoryData{
+interface InventoryData {
     id: number;
     item: InventoryItem;
     itemId: number;
@@ -112,7 +110,7 @@ interface InventoryData{
 }
 
 
-interface Props{
+interface Props {
     formData: FormDataType;
     progress: number;
     getActiveMenu: (e: number) => void;
@@ -198,7 +196,7 @@ const Inventories = (props: Props): JSX.Element => {
             props.requests.getInventoryItem.do();
             props.requests.getInventoryData.do({ resource: resourceID });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resourceID]);
 
     // useEffect(() => {
@@ -241,7 +239,7 @@ const Inventories = (props: Props): JSX.Element => {
             },
         );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -255,7 +253,7 @@ const Inventories = (props: Props): JSX.Element => {
         if (resourceID) {
             props.requests.getInventoryData.do({ resource: resourceID });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleTableClick = () => {

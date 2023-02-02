@@ -41,7 +41,6 @@ class HazardsLegend extends React.PureComponent {
             className,
             hazardTypes,
             filteredHazardTypes,
-            language,
             ...otherProps
         } = this.props;
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import * as React from 'react';
 import { alpha } from '@mui/material/styles';
@@ -25,7 +26,6 @@ import { visuallyHidden } from '@mui/utils';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import DeleteIconSvg from 'src/admin/resources/deleteicon.svg';
 import SearchIcon from 'src/admin/resources/searchicon.svg';
-import styles from './styles.module.scss';
 // import { RootState } from '../../../../Redux/store';
 // import { getAllCovidDataIndividual, covidDataGroup } from '../../../../Redux/actions';
 // import { RootState } from '../../../../Redux';
@@ -36,6 +36,7 @@ import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -86,9 +87,9 @@ function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
 ): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
-    ) => number {
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
+) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
@@ -115,7 +116,7 @@ interface HeadCell {
     numeric: boolean;
 }
 
-interface InventoryData{
+interface InventoryData {
     id: number;
     item: InventoryItem;
     itemId: number;

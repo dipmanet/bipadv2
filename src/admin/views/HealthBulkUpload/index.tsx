@@ -11,14 +11,14 @@ import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
 import { useForm, Controller } from 'react-hook-form';
 import Loader from 'react-loader';
-import styles from './styles.module.scss';
-import Ideaicon from '../../resources/ideaicon.svg';
-import UploadIcon from '../../resources/uploadIcon.svg';
 import Page from '#components/Page';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
 import { healthInfrastructurePageSelector, userSelector } from '#selectors';
+import UploadIcon from '../../resources/uploadIcon.svg';
+import Ideaicon from '../../resources/ideaicon.svg';
+import styles from './styles.module.scss';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -77,7 +77,7 @@ const HealthBulkUpload = (props) => {
         } else if (userDataMain && userDataMain.isSuperuser) {
             setRole('superuser');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useState(() => {
@@ -176,7 +176,7 @@ const HealthBulkUpload = (props) => {
         axios.get(`${baseUrl}/data_template_file/`)
             .then((file) => {
                 const template = file.data.results.filter(item => item.dataTemplateSlug
-                     === 'heoc_admin_health_facility_bulk_upload');
+                    === 'heoc_admin_health_facility_bulk_upload');
                 window.open(template[0].file);
             });
     };
@@ -194,14 +194,14 @@ const HealthBulkUpload = (props) => {
                         <div className={styles.ideaDescription}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.shortDescription}>
-                                        To upload a list of health institution data, kindly
-                                        download the template sheet, fill the data in the required
-                                        heading, and upload it below. Do make sure that the data are
-                                        in excel (.xsls) format and headings provided in the template
-                                        are unchanged before uploading it. The bulk data uploaded will
-                                        be processed, and verified by the system before integrating
-                                        into HEOC and in BIPAD portal and the user will be notified
-                                        about the status of the bulk upload.
+                                To upload a list of health institution data, kindly
+                                download the template sheet, fill the data in the required
+                                heading, and upload it below. Do make sure that the data are
+                                in excel (.xsls) format and headings provided in the template
+                                are unchanged before uploading it. The bulk data uploaded will
+                                be processed, and verified by the system before integrating
+                                into HEOC and in BIPAD portal and the user will be notified
+                                about the status of the bulk upload.
                             </p>
                         </div>
                     </div>

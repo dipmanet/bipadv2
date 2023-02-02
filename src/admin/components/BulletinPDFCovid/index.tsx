@@ -19,17 +19,17 @@ import {
 
 import { nepaliRef, provincesRef, provincesTitleRef } from 'src/admin/components/BulletinForm/formFields';
 import { Translation } from 'react-i18next';
+import {
+    bulletinPageSelector,
+    hazardTypesSelector,
+    languageSelector,
+} from '#selectors';
 import styles from './styles.scss';
 import LossItem from '../BulletinPDFLoss/LossItem';
 import { covidObj24HRs, covidObj24HRsRow2, covidObjTotal, vaccineStatObj } from './covid';
 import GenderStat from './GenderStat';
 import KhopBanner from './KhopBanner';
 
-import {
-    bulletinPageSelector,
-    hazardTypesSelector,
-    languageSelector,
-} from '#selectors';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),

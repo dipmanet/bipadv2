@@ -15,8 +15,6 @@ import {
     Tooltip,
 } from 'recharts';
 import { navigate } from '@reach/router';
-import styles from './styles.module.scss';
-import tableHeadRef from './utils';
 
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
@@ -24,6 +22,8 @@ import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import tableHeadRef from './utils';
+import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -90,7 +90,7 @@ const HealthOverview = (props) => {
             district: userDataMain.profile.district,
             municipality: userDataMain.profile.municipality,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -209,26 +209,26 @@ const HealthOverview = (props) => {
                                         <TableCell align="center">Total Bed Capacity</TableCell>
                                     </TableRow>
                                 </TableHead>
-                                { healthOverviewTableData && Object.keys(healthOverviewTableData).length > 0
-                                && (
-                                    <TableBody>
-                                        {Object.keys(healthOverviewTableData).map((tD, i) => (
-                                            <TableRow key={tD} className={styles.row}>
-                                                <TableCell className={styles.cell}>
-                                                    {tableHeadRef[Object.keys(healthOverviewTableData)[i]]}
-                                                </TableCell>
-                                                {
-                                                    Object.keys(healthOverviewTableData[tD]).map(tC => (
-                                                        <TableCell key={tC} className={styles.cell} align="center">
-                                                            {typeof healthOverviewTableData[tD][tC] === 'number' ? healthOverviewTableData[tD][tC] : '-'}
-                                                        </TableCell>
-                                                    ))
+                                {healthOverviewTableData && Object.keys(healthOverviewTableData).length > 0
+                                    && (
+                                        <TableBody>
+                                            {Object.keys(healthOverviewTableData).map((tD, i) => (
+                                                <TableRow key={tD} className={styles.row}>
+                                                    <TableCell className={styles.cell}>
+                                                        {tableHeadRef[Object.keys(healthOverviewTableData)[i]]}
+                                                    </TableCell>
+                                                    {
+                                                        Object.keys(healthOverviewTableData[tD]).map(tC => (
+                                                            <TableCell key={tC} className={styles.cell} align="center">
+                                                                {typeof healthOverviewTableData[tD][tC] === 'number' ? healthOverviewTableData[tD][tC] : '-'}
+                                                            </TableCell>
+                                                        ))
 
-                                                }
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                )
+                                                    }
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    )
                                 }
                             </Table>
                         </TableContainer>

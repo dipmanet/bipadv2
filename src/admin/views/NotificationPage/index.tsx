@@ -13,12 +13,12 @@ import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import html2canvas from 'html2canvas';
 import JsPDF from 'jspdf';
-import Card from './Card';
-import styles from './style.module.scss';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetNotificationPageAction } from '#actionCreators';
 import { notificationPageSelector, userSelector } from '#selectors';
+import styles from './style.module.scss';
+import Card from './Card';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     notificationPage: notificationPageSelector(state),
@@ -72,7 +72,7 @@ const NotificationPage = (props) => {
     useEffect(() => {
         props.requests.getNotification.do();
         setNotificationPage({ showNotification: false });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleclose = () => {

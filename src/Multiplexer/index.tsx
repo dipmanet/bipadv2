@@ -268,7 +268,6 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    language: languageSelector(state),
     // hazardList: hazardTypeListSelector(state),
 });
 
@@ -277,7 +276,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
     setFilters: params => dispatch(setFiltersAction(params)),
-    setLanguage: params => dispatch(setLanguageAction(params)),
 });
 
 const getMatchingRegion = (
@@ -459,9 +457,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (prevProps.language !== language) {
             i18n.changeLanguage(language);
         }
-        if (language === 'np' && !showLanguageToolbar) {
-            setLanguage({ language: 'en' });
-        }
+        // Disabled for admin portal bulletin english and nepali switch form
+        // if (language === 'np' && !showLanguageToolbar) {
+        //     setLanguage({ language: 'en' });
+        // }
+
 
         // Km to nepali translation//
         // const x = document.getElementsByClassName('mapboxgl-ctrl mapboxgl-ctrl-scale')[0];
