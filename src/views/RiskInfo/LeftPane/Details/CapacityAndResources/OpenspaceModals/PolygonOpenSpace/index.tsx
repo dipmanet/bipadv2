@@ -94,8 +94,6 @@ class Polygon extends React.PureComponent<Props, State> {
 
             },
         } = this.props;
-        // const { coordinates } = JSON.parse(point);
-        // console.log('This coordinates', coordinates);
         const points = JSON.parse(this.props.resourceInfo.resourceInfo.point);
 
 

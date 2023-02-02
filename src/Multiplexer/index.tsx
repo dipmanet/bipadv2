@@ -268,6 +268,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
+    language: languageSelector(state),
     // hazardList: hazardTypeListSelector(state),
 });
 
@@ -276,6 +277,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
     setFilters: params => dispatch(setFiltersAction(params)),
+    setLanguage: params => dispatch(setLanguageAction(params)),
 });
 
 const getMatchingRegion = (

@@ -29,6 +29,9 @@ interface Centroid {
     coordinates: [number, number];
 }
 type BBox = [number, number, number, number];
+export interface Language {
+    language: string;
+}
 
 type DrrmProgress = number;
 
@@ -199,6 +202,8 @@ export interface Bulletin {
         deaths: number;
         recovered: number;
     };
+    yearlyData: object;
+
     covidTotalStat: {
         totalAffected: number;
         totalActive: number;
@@ -248,11 +253,21 @@ export interface Bulletin {
     };
     tempMin: string;
     tempMax: string;
+    rainSummaryFooter: string;
     feedback: string[];
     province: number;
     district: number;
     municipality: number;
     ward: number;
+    hilight: string;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    filterDateType: string;
+    bulletinDate: string;
+    addedHazards: object;
+    cumulative: object;
 }
 
 export interface Province {
@@ -719,7 +734,17 @@ export interface EpidemicPage {
     lossPeopleError: string;
     successMessage: string;
     incidentData: [];
+    peopleLossData: [];
+    familyLossData: [];
+    infrastructureLossData: [];
+    agricultureLossData: [];
+    livestockLossData: [];
     incidentEditData: object;
+    peopleLossEditData: object;
+    familyLossEditData: object;
+    infrastructureLossEditData: object;
+    agricultureLossEditData: object;
+    livestockLossEditData: object;
     incidentUpdateError: string;
     epidemicChartHourlyLoading: boolean;
     epidemicChartHourlyData: [];
@@ -743,10 +768,12 @@ export interface EpidemicPage {
     epidemicTotalData: [];
     epidemicTotalError: object;
     incidentCount: number;
+    uploadData: [];
 }
 
 export interface PageState {
     hidePopup: boolean;
+    isBulletinPromotionPage: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
     carKeys: [];
@@ -762,7 +789,7 @@ export interface PageState {
     daRiverFilter: DARiverFiltersElement;
 
     adminLevelList: AdminLevel[];
-
+    language: Language;
     documentCategoryList: DocumentCategory[];
 
     showProvince: boolean;
@@ -967,6 +994,7 @@ export enum PageType {
     SET_PROGRAM_AND_POLICY_DATA = 'page/DRRM_REPORT/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/DRRM_REPORT/SET_BUDGET_ACTIVITY_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
+    SET_BULLETIN_PROMOTION_CHECK = 'page/SET_BULLETIN_PROMOTION_CHECK',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
@@ -980,7 +1008,7 @@ export enum PageType {
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
     SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
     SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
-
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
     SET_SHOW_PROVINCE = 'page/SET_SHOW_PROVINCE',
     SET_SHOW_DISTRICT = 'page/SET_SHOW_DISTRICT',
     SET_SHOW_MUNICIPALITY = 'page/SET_SHOW_MUNICIPALITY',
@@ -1054,10 +1082,11 @@ export enum PageType {
     // Bulletin
     ADMIN__PORTAL_BULLETIN = 'page/ADMIN__PORTAL_BULLETIN',
     ADMIN__PORTAL_BULLETIN_COVID = 'page/ADMIN__PORTAL_BULLETIN_COVID',
-    ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
     ADMIN__PORTAL_BULLETIN_EDIT_DATA = 'page/ADMIN__PORTAL_BULLETIN_EDIT_DATA',
-
+    ADMIN__PORTAL_BULLETIN_YEARLYDATA = 'page/ADMIN__PORTAL_BULLETIN_YEARLYDATA',
+    ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
+    ADMIN__PORTAL_BULLETIN_CUMULATIVE = 'page/ADMIN__PORTAL_BULLETIN_CUMULATIVE',
     // Epidemics
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
@@ -1071,6 +1100,10 @@ export interface SetLanguage {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
+}
+
+export interface SetLanguage {
+    language: Language;
 }
 
 export interface SetBulletinData {
@@ -1087,8 +1120,17 @@ export interface SetBulletinDataCovid {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_COVID;
     bulletinData: Bulletin;
 }
+
+export interface SetBulletinYearlyData {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA;
+    bulletinData: Bulletin;
+}
 export interface SetBulletinDataFeedback {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinDataCumulative {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_CUMULATIVE;
     bulletinData: Bulletin;
 }
 export interface SetBulletinDataTemperature {
@@ -1179,6 +1221,11 @@ export interface SetProgramAndPolicyData {
 
 export interface SetInitialPopupHidden {
     type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
+    value: boolean;
+}
+
+export interface SetBulletinPromotionCheck {
+    type: typeof PageType.SET_BULLETIN_PROMOTION_CHECK;
     value: boolean;
 }
 
@@ -1504,7 +1551,7 @@ export interface SetEpidemicsPage {
 }
 
 export type PageActionTypes = (
-    SetLanguage | SetRegion | SetInitialPopupHidden |
+    SetLanguage | SetRegion | SetInitialPopupHidden | SetBulletinPromotionCheck | SetBulletinData |
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData | SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
@@ -1522,6 +1569,7 @@ export type PageActionTypes = (
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
+    SetDashboardHazardType | SetBulletinDataCovid | SetBulletinYearlyData |
     SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
     SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |

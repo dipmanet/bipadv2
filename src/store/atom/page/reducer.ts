@@ -8,13 +8,19 @@ import initialState from './initialState';
 import { ModelEnum } from '#types';
 
 // ACTION CREATORS
-
-
 export const setLanguageAction = language => ({
     type: Type.PageType.SET_LANGUAGE,
     language,
 });
 
+export const setBulletinYearlyDataAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
+    bulletinData,
+});
+export const setBulletinCumulativeAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_CUMULATIVE,
+    bulletinData,
+});
 // IBF
 export const setIbfPageAction = ibfPage => ({
     type: Type.PageType.SET_IBF_PAGE,
@@ -24,14 +30,15 @@ export const setBulletinLossAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN,
     bulletinData,
 });
-export const setBulletinCovidAction = bulletinData => ({
-    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
-    bulletinData,
-});
 export const setBulletinFeedbackAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK,
     bulletinData,
 });
+export const setBulletinCovidAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
+    bulletinData,
+});
+
 export const setBulletinTemperatureAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE,
     bulletinData,
@@ -128,6 +135,12 @@ export const setInitialPopupHiddenAction = (
     value,
 });
 
+export const setBulletinPromotionCheckAction = (
+    { value }: { value: boolean },
+) => ({
+    type: Type.PageType.SET_BULLETIN_PROMOTION_CHECK,
+    value,
+});
 export const setHazardTypesAction = (
     { hazardTypes }: { hazardTypes: Type.HazardType[] },
 ) => ({
@@ -618,7 +631,15 @@ const setInitialPopupHidden = (state: Type.PageState, action: Type.SetInitialPop
     });
     return newState;
 };
-
+const setBulletinPromotionCheck = (state: Type.PageState,
+    action: Type.SetBulletinPromotionCheck) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.isBulletinPromotionPage = value;
+    });
+    return newState;
+};
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
     const { hazardTypes: hazardTypesFromAction } = action;
 
@@ -1080,20 +1101,6 @@ function unique<T, W>(
     return newArr;
 }
 
-export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
-    const {
-        resourceList,
-    } = action;
-
-    const newState = produce(state, (deferedState) => {
-        /* eslint-disable no-param-reassign */
-        // FIXME: unique value must be sent from server later
-        deferedState.responsePage.resourceList = unique(resourceList, w => w, w => w.title);
-        /* eslint-enable no-param-reassign */
-    });
-
-    return newState;
-};
 
 export const setInventoryCategoryListAction = (
     state: Type.PageState,
@@ -1845,10 +1852,47 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
         deferedState.bulletinPage.sitRep = bulletinData.sitRep;
+        deferedState.bulletinPage.hilight = bulletinData.hilight;
+        deferedState.bulletinPage.startDate = bulletinData.startDate;
+        deferedState.bulletinPage.endDate = bulletinData.endDate;
+        deferedState.bulletinPage.startTime = bulletinData.startTime;
+        deferedState.bulletinPage.endTime = bulletinData.endTime;
+        deferedState.bulletinPage.filterDateType = bulletinData.filterDateType;
+        deferedState.bulletinPage.bulletinDate = bulletinData.bulletinDate;
+        deferedState.bulletinPage.addedHazards = bulletinData.addedHazards;
     });
 
     return newState;
 };
+export const setCumulative = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.cumulative = bulletinData.cumulative;
+    });
+
+    return newState;
+};
+
+// export const setBulletinFeedback = (
+//     state: Type.PageState,
+//     action: Type.SetBulletinData,
+// ) => {
+//     const {
+//         bulletinData,
+//     } = action;
+//     const newState = produce(state, (deferedState) => {
+//         /* eslint-disable no-param-reassign */
+//         deferedState.bulletinPage.feedback = bulletinData.feedback;
+//     });
+//     return newState;
+// };
 
 export const setBulletinCovid = (
     state: Type.PageState,
@@ -1877,7 +1921,6 @@ export const setBulletinFeedback = (
     const {
         bulletinData,
     } = action;
-
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.bulletinPage.feedback = bulletinData.feedback;
@@ -1899,6 +1942,28 @@ export const setBulletinDataTemperature = (
         deferedState.bulletinPage.tempMin = bulletinData.tempMin;
         deferedState.bulletinPage.tempMax = bulletinData.tempMax;
         deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
+        deferedState.bulletinPage.rainSummaryPic = bulletinData.rainSummaryPic;
+        deferedState.bulletinPage.advertisementFileNe = bulletinData.advertisementFileNe;
+        deferedState.bulletinPage.advertisementFile = bulletinData.advertisementFile;
+        deferedState.bulletinPage.maxTempFooter = bulletinData.maxTempFooter;
+        deferedState.bulletinPage.minTempFooter = bulletinData.minTempFooter;
+        deferedState.bulletinPage.rainSummaryFooter = bulletinData.rainSummaryFooter;
+    });
+
+    return newState;
+};
+
+export const setBulletinYearlyData = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.yearlyData = bulletinData.yearlyData;
     });
 
     return newState;
@@ -1931,7 +1996,17 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         lossPeopleError,
         successMessage,
         incidentData,
+        peopleLossData,
+        familyLossData,
+        infrastructureLossData,
+        agricultureLossData,
+        livestockLossData,
         incidentEditData,
+        peopleLossEditData,
+        familyLossEditData,
+        infrastructureLossEditData,
+        agricultureLossEditData,
+        livestockLossEditData,
         incidentUpdateError,
         epidemicChartHourlyLoading,
         epidemicChartHourlyData,
@@ -1955,6 +2030,7 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         epidemicTotalData,
         epidemicTotalError,
         incidentCount,
+        uploadData,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -1979,8 +2055,38 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         if (incidentData) {
             deferedState.epidemicsPage.incidentData = incidentData;
         }
+        if (peopleLossData) {
+            deferedState.epidemicsPage.peopleLossData = peopleLossData;
+        }
+        if (familyLossData) {
+            deferedState.epidemicsPage.familyLossData = familyLossData;
+        }
+        if (infrastructureLossData) {
+            deferedState.epidemicsPage.infrastructureLossData = infrastructureLossData;
+        }
+        if (agricultureLossData) {
+            deferedState.epidemicsPage.agricultureLossData = agricultureLossData;
+        }
+        if (livestockLossData) {
+            deferedState.epidemicsPage.livestockLossData = livestockLossData;
+        }
         if (incidentEditData) {
             deferedState.epidemicsPage.incidentEditData = incidentEditData;
+        }
+        if (peopleLossEditData) {
+            deferedState.epidemicsPage.peopleLossEditData = peopleLossEditData;
+        }
+        if (familyLossEditData) {
+            deferedState.epidemicsPage.familyLossEditData = familyLossEditData;
+        }
+        if (infrastructureLossEditData) {
+            deferedState.epidemicsPage.infrastructureLossEditData = infrastructureLossEditData;
+        }
+        if (agricultureLossEditData) {
+            deferedState.epidemicsPage.agricultureLossEditData = agricultureLossEditData;
+        }
+        if (livestockLossEditData) {
+            deferedState.epidemicsPage.livestockLossEditData = livestockLossEditData;
         }
         if (incidentUpdateError) {
             deferedState.epidemicsPage.incidentUpdateError = incidentUpdateError;
@@ -2051,15 +2157,45 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         if (incidentCount) {
             deferedState.epidemicsPage.incidentCount = incidentCount;
         }
+        if (uploadData) {
+            deferedState.epidemicsPage.uploadData = uploadData;
+        }
     });
     return newState;
 };
+
+const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
+    const { language } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.language = language;
+    });
+    return newState;
+};
+
+export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
+    const {
+        resourceList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        // FIXME: unique value must be sent from server later
+        deferedState.responsePage.resourceList = unique(resourceList, w => w, w => w.title);
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_LANGUAGE:
+            return setLanguageLocal(state, action);
         case Type.PageType.SET_DRRM_PROGRESS:
             return setDrrmProgress(state, action);
         case Type.PageType.SET_DRRM_REGION:
@@ -2090,12 +2226,16 @@ export default function routeReducer(
             return setIbfPage(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
             return setBulletinEditData(state, action);
-        case Type.PageType.ADMIN__PORTAL_BULLETIN:
-            return setBulletinLoss(state, action);
-        case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
-            return setBulletinCovid(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
             return setBulletinFeedback(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN:
+            return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_CUMULATIVE:
+            return setCumulative(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA:
+            return setBulletinYearlyData(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
+            return setBulletinCovid(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE:
             return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:
@@ -2104,6 +2244,8 @@ export default function routeReducer(
             return setLanguageLocal(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
             return setInitialPopupHidden(state, action);
+        case Type.PageType.SET_BULLETIN_PROMOTION_CHECK:
+            return setBulletinPromotionCheck(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
         case Type.PageType.SET_DASHBOARD_HAZARD_TYPES:

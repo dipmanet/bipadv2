@@ -1,0 +1,255 @@
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+$boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
+
+.dataOverview{
+	padding: 85px 80px;
+	// margin-top: 85px;
+	.dataOverviewTitle{
+		font-family: $Fira;
+		color:#003572 ;
+		font-size: 24px;
+	}
+	.mainOverviewDataArea{
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		.overviewChartArea{
+			width: 60%;
+			height: 482px;
+			margin-top: 40px;
+			box-shadow: rgba(187, 187, 187, 0.2) 0px 2px 8px 0px;
+			.firstRowArea{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin: 1px 31px;
+				height: 66px;
+				.summaryData{
+					font-size: 20px;
+					color:#1C1F37 ;
+					line-height: 24px;
+					font-family: $Fira;
+				}
+				.timeFlowButtons{
+					font-size: 14px;
+					.subTitle{
+						margin: 0 0;
+					}
+					.dailyweeklyMonthlyYearlyActive{
+						font-family: $Fira;
+						// margin: 0px 13px;
+						padding: 8px 33px;
+						color: 
+						#003572;
+						border: none;
+						cursor: pointer;
+						border-radius: 6px;
+						background-color: #F5F7FB;
+						// font-size: 16px;
+					}
+					.dailyweeklyMonthlyYearly{
+						font-family: $Fira;
+						// margin: 0px 13px;
+						padding: 8px 33px;
+						color: #A9ABB0;
+						border: none;
+						cursor: pointer;
+						border-radius: 6px;
+						// background-color: #F5F7FB;
+						background-color: transparent;
+						// font-size: 16px;
+					}
+					
+
+				}
+			}
+			.dummyBar{
+				height: 1px;
+				width: 100%;
+				background-color: #DADADA;
+				opacity: 50%;
+				margin-bottom: 20px;
+			}
+			.mainLineChartSection{
+				display: flex;
+				padding: 13px 28px 13px 0px;
+				.barChart{
+					width: 78%;
+					height: 416px;
+				}
+				.seperatorBar{
+					position: relative;
+					bottom: 34px;
+					height: 415px;
+					width: 1px;
+					background-color: #DADADA;
+					opacity: 50%;
+					margin-bottom: 20;
+					margin-right: 25px;
+				}
+				.covidCasesMain{
+					width: 20%;
+					// height: 303px;
+					// background-color: #F5F7FB;
+					.covidCaseCountSection{
+						position: relative;
+						bottom: 10px;
+						width: 100%;
+						height: 360px;
+						background-color: #F5F7FB;
+						border-radius: 6px;
+						.mainCount{
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: center;
+							width: 100%;
+							height: 33%;
+							.countNumber{
+								color: #3E3E3E;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								font-family: $Fira;
+								font-size: 32px;
+								margin-bottom: 0;
+								// line-height: 45.6px;
+								// margin: 11px 73px 13px 43px ;
+							}
+							.checkingStatus{
+								display: flex;
+								align-items: center;
+							    // margin: 0px 0px 0px 41px;
+								color: #9E9C9C;
+								font-size: 14px;
+								.colorBoxes3{
+									height: 12px;
+									width: 12px;
+									align-items: center;
+									background-color: #003572;
+									border-radius: 4px;
+									margin-right: 5px;
+								}
+							
+
+							}
+							.checkingStatus1{
+								display: flex;
+								align-items: center;
+								// margin: 0px 0px 0px 41px;
+								color: #9E9C9C;
+								font-size: 14px;
+								.colorBoxes1{
+									height: 12px;
+									width: 12px;
+									background-color: #72CCA1;
+									border-radius: 4px;
+									margin-right: 5px;
+								}
+							}
+						}
+						.smallBar{
+							width: 100%;
+							height: 1px;
+							border-bottom: 1px solid #000000;
+							opacity: 5%;
+							
+						}
+						.mainCountThird{
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: center;
+							width: 100%;
+							height: 33%;
+							.countNumber{
+								color: #3E3E3E;
+								font-family: $Fira;
+								justify-content: center;
+								align-items: center;
+								font-size: 32px;
+								margin-bottom: 0;
+								// line-height: 45.6px;
+								// margin: 11px 73px 13px 43px ;
+							}
+							.checkingStatus{
+								display: flex;
+								align-items: center;
+								// margin: 0px 0px 0px 43px ;
+								color: #9E9C9C;
+								font-size: 14px;
+								.colorBoxes2{
+									height: 12px;
+									width: 12px;
+									background-color: #A3301C;
+									border-radius: 4px;
+									margin-right: 5px;
+								}
+
+							}
+						}
+					}
+					.shortInfo{
+						position: relative;
+						bottom: 18px;
+						.shortInfoTitle{
+							font-size: 14px;
+							margin:24px 0px 4px 0px;
+						}
+						.showInfoPara{
+							font-size: 12px;
+							margin: 0;
+						}
+					}
+				}
+			}
+			.shortIdeaPara{
+				font-family: $Fira;
+				font-size: 14px;
+				padding: 0px 20px;
+			}
+			.additionalDataInfo{
+				margin: 0;
+				font-size: 14px;
+				padding: 0px 20px;
+				font-family: $Fira;
+				line-height: 26px;
+				color: #3e3e3e;
+			}
+		}
+		.overviewTable{
+			margin-top: 40px;
+			width: 40%;
+			box-shadow: $boxShadow;
+			padding: 32px;
+			height: 100%;
+			.tableNameAndButton{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 33px;
+				.mainTableName{
+					color: #1C1F37;
+					font-size:20px ;
+					font-family: $Fira;
+					line-height: 29px;
+				}
+				.viewDataTabeleButton{
+					background-color:#F2F4FD ;
+					color: #003572;
+					border-radius: 6px;
+					font-size: 14px;
+					border: none;
+					padding:7px 24px ;
+					cursor: pointer;
+					line-height: 21px;
+
+				}
+			}
+			.mainTable{
+				// overflow-x: scroll;
+			}
+		}
+	}
+}

@@ -16,7 +16,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 // eslint-disable-next-line max-len
-const authRoute = <T extends AuthRouteProps>(redirectLinkIfNoAuth: string = '/login/', redirectLinkIfAuth: string = '/') => (WrappedComponent: React.ComponentType<T>) => {
+const authRoute = <T extends AuthRouteProps>(redirectLinkIfNoAuth: string = '/', redirectLinkIfAuth: string = '/') => (WrappedComponent: React.ComponentType<T>) => {
     interface PropsFromState {
         authState: AuthState;
     }

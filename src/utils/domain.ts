@@ -96,6 +96,20 @@ export const calculateSeverity = (loss: Loss | undefined, scaleFactor: number = 
 
 const severityScaleFactor = 1;
 
+export const BulletinMapCircleRadius = (severity: number): number => {
+    if (!severity) {
+        return 4;
+    }
+    if (severity < 10) {
+        return 6;
+    }
+    if (severity < 100) {
+        return 8;
+    }
+    return 10;
+};
+
+
 export const calculateCategorizedSeverity = (severity: number): string => {
     if (!severity) {
         return 'Minor';
@@ -417,6 +431,8 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
                         hazardIcon: hazard.icon,
                         hazardColor: hazard.color || '#4666b0',
                         incidentOn: new Date(incidentOn).getTime(),
+                        bulletinSeverityRadius: BulletinMapCircleRadius(severityValue),
+                        severityValue,
                     },
                 };
             }

@@ -61,6 +61,13 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             language: { language },
         } = this.props;
 
+
+        const sourceListData = [
+            {
+                id: 'nepal_police',
+                title: 'nepal_police',
+            },
+        ];
         return (
             <Translation>
                 {

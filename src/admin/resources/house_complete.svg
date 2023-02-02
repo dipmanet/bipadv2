@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-house_complete">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="house_complete" clip-path="url(#clip-house_complete)">
+    <g id="house_complete-2" data-name="house_complete" transform="translate(0.33 0.325)">
+      <path id="Path_663" data-name="Path 663" d="M6.52,2.13a4.4,4.4,0,1,0,4.4,4.39,4.4,4.4,0,0,0-4.4-4.39ZM8.59,8a.42.42,0,0,1,0,.62.4.4,0,0,1-.31.13A.43.43,0,0,1,8,8.59L6.52,7.15,5.08,8.59a.43.43,0,0,1-.31.13.4.4,0,0,1-.31-.13.42.42,0,0,1,0-.62L5.9,6.52,4.46,5.08a.44.44,0,1,1,.62-.62L6.52,5.9,8,4.46a.44.44,0,0,1,.62.62L7.15,6.52Z" fill="#66b4c6"/>
+      <path id="Path_664" data-name="Path 664" d="M23.15,12.17,16.91,6.63a.43.43,0,0,0-.56,0l-6.23,5.54a.25.25,0,0,0-.08.17V23.22h4.83V18.83a.88.88,0,0,1,.88-.88h1.76a.87.87,0,0,1,.88.88v4.39h4.83V12.34a.28.28,0,0,0-.07-.17Z" fill="#66b4c6"/>
+    </g>
+  </g>
+</svg>

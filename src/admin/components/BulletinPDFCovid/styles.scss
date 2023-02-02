@@ -1,0 +1,227 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+}
+
+.covidPDFContainer {
+    font-family: "Kalimati Regular" !important;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    border: 1px solid #cecccc;
+    background-color: white;
+    position: relative;
+    padding: 10mm;
+
+    // display: flex;
+    // flex-direction: column;
+    .container1 {
+        display: flex;
+        position: relative;
+        justify-content: space-between;
+        height: 80mm;
+
+        .hazardWiseStats {
+            width: 80mm;
+            height: 80mm;
+            position: absolute;
+            // bottom: 15mm;
+            left: 0mm;
+
+            h2 {
+                font-size: 14px;
+                margin-bottom: 2mm;
+                position: relative;
+                left: 0mm;
+                color: rgb(15, 11, 11);
+            }
+        }
+
+        .genderWiseStats {
+            width: 90mm;
+            height: 70mm;
+            position: absolute;
+            right: 0;
+
+            // border: 1px solid red;
+            .noDataPie {
+                border: 1px dotted rgb(199, 198, 198);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 70mm;
+            }
+
+            h2 {
+                font-size: 14px;
+                margin-bottom: 2mm;
+                position: relative;
+                right: 3mm;
+                color: rgb(15, 11, 11);
+            }
+        }
+    }
+
+    .container2 {
+        display: flex;
+        position: absolute;
+        top: 105mm;
+
+        .covid24 {
+            padding: 5mm 0;
+            width: 87mm;
+            height: fit-content;
+
+            h2 {
+                color: rgb(15, 11, 11);
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+
+            p {
+                color: white;
+                font-size: 11px;
+            }
+
+            .lossIconsRow {
+                display: flex;
+                justify-content: space-between;
+
+                li {
+                    font-size: 14px !important;
+                }
+            }
+
+            .middle {
+                border-left: 1px dotted rgb(3, 102, 160);
+                height: 10mm;
+                position: relative;
+                bottom: 18px;
+                left: 5px;
+                display: none;
+            }
+
+            .genderRow {
+                display: flex;
+                display: none;
+                justify-content: space-between;
+                padding-top: 15px;
+                margin-top: 15px;
+                border-left: 1px dotted rgb(3, 102, 160);
+                border-bottom: 1px dotted rgb(3, 102, 160);
+                width: 50mm;
+                position: relative;
+                bottom: 32px;
+                left: 5px;
+
+                li {
+                    font-size: 14px !important;
+                }
+            }
+
+            .khopContainer {
+                display: none;
+
+                h2 {
+                    color: rgb(15, 11, 11);
+                    font-size: 14px;
+
+                }
+
+                .khopRow {
+                    // height: 40mm;
+                    width: 75mm;
+                    display: flex;
+                    justify-content: space-between;
+
+                    h2 {
+                        color: white;
+
+                    }
+                }
+            }
+
+        }
+
+        .covidTotal {
+            width: 100mm;
+            height: 100mm;
+            padding: 10mm 0 10mm 10mm;
+            position: relative;
+            bottom: 19px;
+
+            h2 {
+                color: rgb(15, 11, 11);
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+
+            div {
+                display: flex;
+
+                li {
+                    font-size: 14px !important;
+                }
+            }
+        }
+    }
+
+    .provinceWiseTotal {
+        display: flex;
+        flex-direction: column !important;
+        height: 85mm;
+        width: 200mm;
+        position: absolute;
+        left: 5mm;
+        bottom: 50mm;
+
+        h2 {
+            left: 10mm;
+            margin-top: 10mm;
+            position: relative;
+            font-size: 14px;
+            color: rgb(15, 11, 11);
+
+        }
+    }
+
+    .provTable {
+        border-collapse: collapse;
+        position: absolute;
+        left: 15mm;
+        width: 180mm;
+        bottom: 22mm;
+
+        td {
+            white-space: nowrap;
+            text-align: left;
+            border: 1px solid rgb(190, 188, 188);
+            padding: 2px 8px;
+            font-size: 10px;
+        }
+
+        th {
+            white-space: nowrap;
+            text-align: left;
+            border: 1px solid rgb(190, 188, 188);
+            padding: 8px 10px;
+            font-size: 10px;
+        }
+
+        tr:first-child th:first-child {
+            border: none;
+        }
+
+        td:first-child {
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+
+    }
+}
+
+.covidPDFContainerEnglish {
+    @extend .covidPDFContainer;
+    font-family: 'Fira Sans' !important;
+}

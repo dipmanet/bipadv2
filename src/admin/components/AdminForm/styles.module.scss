@@ -1,0 +1,48 @@
+$boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
+$theme-accent-color: #002e76;
+$theme-color: #3e3e3e;
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+
+.myForm {
+	background-color: white;
+	width: calc(70% - 60px);
+	position: fixed;
+	left: 15%;
+	top: 5%;
+	padding: 50px;
+
+	.title {
+		font-family: $Fira;
+		display: flex;
+		align-items: center;
+		color: $theme-accent-color;
+	}
+
+	.myRow {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		// justify-content: space-around;  
+		.saveOrAddButtons{
+			justify-content: flex-end;
+			margin-top: 35px;
+			.submitButtons{
+				color: white;
+				background-color: #003572;
+				border: none;
+				outline: none;
+				font-size: 16px;
+				padding: 8px 25px;
+				margin-right: 10px;
+				border-radius: 3px;
+				font-family: $Fira;
+				cursor: pointer;
+				&:hover{
+					background-color: #0a58b1;
+				}
+
+			}
+		}
+	}
+}

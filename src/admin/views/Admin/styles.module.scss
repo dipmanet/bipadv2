@@ -1,0 +1,82 @@
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+$boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
+
+
+
+.dataTable{
+	padding:5vh 5vw;
+	.headerCovid{
+		font-size: 24px;
+		font-weight: 700;
+		font-family: $Fira;
+		color:#003572 ;
+	}
+	.generalInfoAndTableButton{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 15px 0px;
+		.crendential{
+			font-size: 20px;
+			font-weight: 700;
+			font-family: $Fira;
+			color:#003572;
+		}
+		.generalInfo{
+			font-family: $Fira;
+			font-size: 24px;
+			font-weight: 700;
+			color: #3E3E3E;
+		}
+		.maintoggler{
+			padding: 4px;
+			background-color:#EBF4FE ;
+			border-radius: 3px;
+			.togglerIndGro{
+             padding: 8px 16px;
+			//  background-color: transparent;
+			 border: none;
+			 border-radius: 3px;
+			 font-family: $Fira;
+			 font-size: 14px;
+			 color: black;
+			 cursor: pointer;
+			}
+			.togglerIndGroActive{
+				padding: 8px 16px;
+				background-color: #003572;
+				border: none;
+				border-radius: 3px;
+				font-family: $Fira;
+				font-size: 14px;
+				color: #FFFFFF;
+				cursor: pointer;
+			}
+		}
+		.viewDataTable{
+			height: 37px;
+			width: 145px;
+			border-radius: 3px;
+			background-color: #3E3E3E;
+			font-size: 14px;
+			color: white;
+			cursor: pointer;
+		}
+	}
+	.shortGeneralInfo{
+		font-family: $Fira;
+		display: flex;
+		align-items: center;
+		margin: 10px 0px;
+		.ideaIcon{
+			// margin-top: 15px;
+			height: 24px;
+		}
+		.ideaPara{
+			font-family: $Fira;
+			margin-left: 15px ;
+			font-size: 14px;
+		}
+	}
+}

@@ -1,3 +1,9 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
@@ -298,6 +304,7 @@ class TabularView extends React.PureComponent {
         } = this.props;
 
         const incidentListForExport = this.convertValues(incidentList, this.columns);
+
 
         return (
             <div className={_cs(className, styles.tabularView,

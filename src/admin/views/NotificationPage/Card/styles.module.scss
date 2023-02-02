@@ -1,0 +1,35 @@
+.cardContainerInfo{
+    width: 100%;
+    min-width: 200px;
+    background: #E4F1FF;
+    border-radius: 3px;
+    color: #676767;
+    padding: 5px 10px;
+    margin-top: 10px;
+    p{
+        line-height: 1em;
+
+    }
+    .btnContainer{
+        display: flex;
+        justify-content: flex-end;
+        .handleMore{
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #003572;
+    
+        }
+    }
+
+}
+
+.cardContainerError{
+    @extend .cardContainerInfo;
+    background: #FFE0DB;
+    .btnContainer{
+        .handleMore{
+            color:#A3301C;
+        }
+    }
+}
