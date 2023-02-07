@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
         translation: {
@@ -810,7 +812,7 @@ export const enTranslation = {
                 'Drag drop temperature files here, or click to select files': 'Drag drop temperature files here, or click to select files',
                 'Baisakh 1 to': 'Baisakh 1 to',
                 Hazard: 'Hazard',
-                Total: 'Total',
+
                 'No. of Incidents': 'No. of Incidents',
                 'Incident Details': 'Incident Details',
                 'Families Affected': 'Families Affected',
@@ -836,10 +838,9 @@ export const enTranslation = {
                 'National Disaster Risk Reduction and Management Authority': 'National Disaster Risk Reduction and Management Authority',
                 'GPO Box Number': 'GPO Box Number',
                 Phone: 'Phone',
-                Email: 'Email',
+
                 'Daily Temperature and Rain Summary': 'Daily Temperature and Rain Summary',
-                Male: 'Male',
-                Female: 'Female',
+
                 'Percentage of 1st Dosage': 'Percentage of 1st Dosage:',
                 totalAffected: 'Total Affected',
                 totalActive: 'Total Active',
@@ -906,7 +907,6 @@ export const enTranslation = {
                 'Data sources': 'Data sources',
 
 
-                'Nepal Police': 'Nepal Police',
                 'DRR Portal': 'DRR Portal',
                 Incidents: 'Incidents',
                 'People death count': 'People death count',
@@ -978,7 +978,7 @@ export const enTranslation = {
                 'All wards': 'All wards',
                 Location: 'Location',
                 'Reset filters': 'Reset Filters',
-                Hazard: 'Hazard',
+
                 'Data range': 'Data range',
                 Others: 'Others',
                 Natural: 'Natural',
@@ -1037,8 +1037,7 @@ export const enTranslation = {
                 'Reference Number': 'Reference Number',
                 'Please select resource list to search': 'Please select resource list to search',
                 'Earthquake (Richter Scale (ML))': 'Earthquake (Richter Scale (ML))',
-                'Pollution (AQI Value)': 'Pollution (AQI Value)',
-                StreamFlow: 'StreamFlow',
+
         },
 };
 
@@ -1872,7 +1871,7 @@ export const npTranslation = {
                 'Baisakh 1 to': 'बैशाख १ देखि',
                 'Families Affected': 'प्रभावित परिवार',
                 Hazard: 'प्रकोप',
-                Total: 'जम्मा',
+
                 'Incident Details': 'घटना विवरण',
                 'No. of Incidents': 'घटना संख्या',
                 'S.N': 'क्र.स',
@@ -1897,11 +1896,10 @@ export const npTranslation = {
                 'National Disaster Risk Reduction and Management Authority': 'राष्ट्रिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्राधिकरण',
                 'GPO Box Number': 'पोस्ट बक्स नम्बर',
                 Phone: 'फोन',
-                Email: 'ई-मेल',
+
                 'For additional info': 'थप जानकारीको लागि',
                 'Daily Temperature and Rain Summary': 'दैनिक बर्षा र तापक्रमको सारांश',
-                Male: 'पुरुष',
-                Female: 'महिला',
+
                 'Percentage of 1st Dosage': 'पहिलो मात्रा को',
                 'First Dosage Count': 'पहिलो मात्रा खोप लगाएको संख्या',
                 'Second Dosage Count': 'दोस्रो मात्रा खोप लगाएको संख्या',
@@ -1922,7 +1920,7 @@ export const npTranslation = {
                 'Death Count': 'मृत्‍यु संख्या',
                 'Hazard Legend': 'प्रकोप संकेत',
                 death: 'मृत्यु',
-                Death: 'मृत्यु',
+
                 missing: 'बेपत्ता',
                 injured: 'घाइते',
                 'Province-wise death, missing and injured': 'प्रदेश अनुसार कुल संक्रमित संख्याको बर्गीकरण',
@@ -1931,21 +1929,9 @@ export const npTranslation = {
                 'Daily Bipad Bulletin': 'दैनिक विपद् बुलेटिन',
                 'Nepal Government': 'नेपाल सरकार',
                 'Ministry of Home Affairs': 'गृह मन्त्रालय',
-                'Data source': 'डाटा स्रोत',
-                DateRangeInfo: 'देखाइएको डाटा देखी',
+
                 'Disaster Incidents in last 24 hours': '२४ घण्टामा विपद्का विवरणहरु',
-                to: 'सम्म',
-                'Realtime Module': 'रिअलटाईम मोडुल',
-                Alerts: 'चेतावनीहरु',
-                Events: 'घटनाहरु',
-                Visualizations: 'भिजुअलाइजेसन',
-                'New alert': 'नयाँ चेतावनी',
-                'New event': 'नयाँ घटना',
-                'Flood at': 'बाढी',
-                Ma: 'मा',
-                Edit: 'सम्पादन गर्नुहोस्',
-                Delete: 'मेटाउनहोस्',
-                Filters: 'फिल्टरहरु',
+
                 Submit: 'पेस गर्नुहोस्',
                 Dashboard: 'ड्यासबोर्ड',
                 Incident: 'घटना',
@@ -1978,20 +1964,13 @@ export const npTranslation = {
                 'New incident': 'नया घटना थप्न',
                 Feedbacks: 'प्रतिकार्यहरु ',
 
-                'Data sources': 'डाटा स्रोतहरु',
-                'Nepal Police': 'नेपाल प्रहरी',
-                'DRR Portal': 'DRR पोर्टल',
-                Incidents: 'घटनाहरु',
-                'People death count': 'मानिसहरुको मृत्युको गणना',
-                'Hazards Legend': 'जोखिम अनुसूची',
-                'New incident': 'नयाँ घटना',
-                Feedbacks: 'प्रतिक्रियाहरु',
+
                 Source: 'स्रोत',
                 Status: 'स्थिति',
                 Verified: 'प्रमाणित',
                 'Not verified': 'प्रमाणित छैन',
                 'Go to response': 'प्रतिकार्यमा जानुहोस्',
-                'Go to response': 'प्रतिक्रिया मा जानुहोस्',
+
                 'High Altitude': 'उच्च ऊंचाई',
                 Landslide: 'पहिरो',
                 Flood: 'बाढी',
@@ -2050,7 +2029,7 @@ export const npTranslation = {
                 'All wards': 'सबै वार्डहरु',
                 Location: 'स्थान',
                 'Reset filters': 'फिल्टर रिसेट गर्नुहोस्',
-                Hazard: 'प्रकोप',
+
                 'Data range': 'डाटा दायरा',
                 Others: 'अरु',
                 Natural: 'प्राकृतिक',
