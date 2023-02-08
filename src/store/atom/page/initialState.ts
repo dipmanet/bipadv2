@@ -16,7 +16,7 @@ const state: PageState = {
     eventTypes: {},
 
     hidePopup: false,
-
+    isBulletinPromotionPage: false,
     region: {
         adminLevel: undefined,
     },
@@ -440,6 +440,7 @@ const state: PageState = {
     bulletinEditData: {},
     bulletinPage: {
         sitRep: 123,
+        hilight: '',
         incidentSummary: {
             numberOfIncidents: 1,
             numberOfDeath: 5,
@@ -569,12 +570,27 @@ const state: PageState = {
         },
         tempMin: 'http://bipaddev.yilab.org.np/media/bulletin/min/sdN1tB.webp',
         tempMax: 'http://bipaddev.yilab.org.np/media/bulletin/max/sdN1tB.webp',
+        rainSummaryPic: null,
+        maxTempFooter: null,
+        minTempFooter: null,
+        rainSummaryFooter: null,
+        advertisementFileNe: null,
+        advertisementFile: null,
         dailySummary: '',
         feedback: [],
         province: 3,
         district: 27,
+        yearlyData: {},
         municipality: 27006,
         ward: null,
+        startDate: null,
+        endDate: null,
+        startTime: null,
+        endTime: null,
+        filterDateType: null,
+        bulletinDate: null,
+        addedHazards: null,
+        cumulative: null,
     },
 
     epidemicsPage: {
@@ -585,7 +601,17 @@ const state: PageState = {
         lossPeopleError: '',
         successMessage: '',
         incidentData: [],
+        peopleLossData: [],
+        familyLossData: [],
+        infrastructureLossData: [],
+        agricultureLossData: [],
+        livestockLossData: [],
         incidentEditData: {},
+        peopleLossEditData: {},
+        familyLossEditData: {},
+        infrastructureLossEditData: {},
+        agricultureLossEditData: {},
+        livestockLossEditData: {},
         incidentUpdateError: '',
         epidemicChartHourlyLoading: false,
         epidemicChartHourlyData: [],
@@ -609,6 +635,7 @@ const state: PageState = {
         epidemicTotalData: [],
         epidemicTotalError: {},
         incidentCount: null,
+        uploadData: [],
     },
 };
 export default state;

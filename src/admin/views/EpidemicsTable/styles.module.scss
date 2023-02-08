@@ -1,0 +1,58 @@
+$theme-accent-color: #002e76;
+$theme-color: #3e3e3e;
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+$boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
+$theme-accent-color: #002e76;
+$theme-color: #3e3e3e;
+.dataContainer{
+    margin: 0 auto;
+    position: relative;
+    padding: 5% 5%;
+    width: calc(100vw - 63px);
+    font-family: 'Fira Sans';
+    $boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
+    // overflow-x: scroll;
+
+    .tableMenuContainer{
+        min-height: 500px;
+        display: flex;
+        align-items: flex-start;
+        padding-top: 20px;
+        // border: 1px solid gray;
+        // width: 100vw;
+        min-width: 500px;
+        .mainContent{
+            .formDataContainer{
+                background-color: #fefefe;
+                padding: 35px 45px; 
+
+                .shortGeneralInfo{
+                    font-family: $Fira;
+                    display: flex;
+                    align-items: center;
+                    margin: 25px 0px;
+                    .ideaIcon{
+                        // margin-top: 15px;
+                        height: 24px;
+                    }
+                    .ideaPara{
+                        font-family: $Fira;
+                        margin-left: 15px ;
+                        font-size: 14px;
+                    }
+                }
+                .mainHeading{
+                    font-family: $Fira;
+                    color: $theme-accent-color;
+                }
+                .subHeading{
+                    font-family: $Fira;
+                    color: #575656;
+                    font-size: 13px;
+            
+                }
+            }
+        }
+    }
+}

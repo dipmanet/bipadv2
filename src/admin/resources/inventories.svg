@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-inventories">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="inventories" clip-path="url(#clip-inventories)">
+    <g id="_003-shipping" data-name="003-shipping" transform="translate(4.973 4.973)">
+      <path id="Path_673" data-name="Path 673" d="M10.108,13.689A.691.691,0,0,0,9.419,13H5.973v2.757a.919.919,0,0,1-1.838,0V13H.689A.691.691,0,0,0,0,13.689v8.73a.691.691,0,0,0,.689.689h8.73a.691.691,0,0,0,.689-.689Z" transform="translate(0 -1.054)" fill="#405467"/>
+      <path id="Path_674" data-name="Path 674" d="M23.108,13.689A.691.691,0,0,0,22.419,13H18.973v2.757a.919.919,0,0,1-1.838,0V13H13.689a.691.691,0,0,0-.689.689v8.73a.691.691,0,0,0,.689.689h8.73a.691.691,0,0,0,.689-.689Z" transform="translate(-1.054 -1.054)" fill="#405467"/>
+      <path id="Path_675" data-name="Path 675" d="M16.608.689A.692.692,0,0,0,15.919,0H12.473V2.757a.919.919,0,0,1-1.838,0V0H7.189A.691.691,0,0,0,6.5.689v8.73a.691.691,0,0,0,.689.689h8.73a.691.691,0,0,0,.689-.689Z" transform="translate(-0.527)" fill="#405467"/>
+    </g>
+  </g>
+</svg>

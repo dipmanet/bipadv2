@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-add">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="add" clip-path="url(#clip-add)">
+    <path id="Icon_ionic-md-add" data-name="Icon ionic-md-add" d="M22.748,15.816H15.816v6.933H13.683V15.816H6.75V13.683h6.933V6.75h2.133v6.933h6.933Z" transform="translate(-2.749 -2.25)" fill="#fff"/>
+  </g>
+</svg>

@@ -1,0 +1,119 @@
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+$boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
+$theme-accent-color: #002e76;
+$theme-color: #3e3e3e;
+.mainHeading{
+	margin-top: 85px;
+	font-family: $Fira;
+	color:#003572 ;
+	font-size: 24px;
+}
+
+.main{
+display: flex;
+justify-content: space-between;
+font-family: $Fira;
+padding: 0px 0;
+	.chartsContainer{
+		// flex:2;
+		// display:flex;
+		// flex-direction: column;
+		font-size: 12px;
+		// border: 1px solid red;
+		width: 60%;
+		.chartContainer{
+			// flex:1;
+			margin-top: 50px;
+			// width: 80%;
+			height: 20vh;
+		}
+		.textContainer{
+			padding-top: 25px;
+			position: relative;
+			font-family: $Fira;
+			font-size: 14px;
+			margin-top: 70px;
+			padding: 0 20px;
+			line-height: 1.7em;
+			color: $theme-color;
+		}
+	}
+	.overviewTable{
+		margin-top: 40px;
+		width: 40%;
+		box-shadow: $boxShadow;
+		padding: 32px;
+		height: 100%;
+		.tableNameAndButton{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 33px;
+			.mainTableName{
+				color: #1C1F37;
+				font-size:20px ;
+				font-family: $Fira;
+				line-height: 29px;
+			}
+			.viewDataTabeleButton{
+				background-color:#F2F4FD ;
+				color: #003572;
+				border-radius: 6px;
+				font-size: 14px;
+				border: none;
+				padding:7px 24px ;
+				cursor: pointer;
+				line-height: 21px;
+
+			}
+		}
+		.mainTable{
+			// overflow-x: scroll;
+		}
+	}
+	.tablesContainer{
+		flex:1;
+	width: 50%;
+	.table{
+		box-shadow: $boxShadow;
+		border-collapse: collapse;
+		.row{
+			border:none;
+			box-shadow: $boxShadow;
+			h1{
+				font-family: $Fira;
+				font-size: 20px;
+				margin-left: 20px;
+				color: #1C1F37;
+				padding: 15px 0 20px 0;
+			}
+			.btn{
+				font-family: $Fira;
+				border:none;
+				background:#F2F4FD;
+				padding: 10px;
+				cursor: pointer;
+				color:#0c0c0c;
+				border-radius:3px;
+			}
+		}
+		.cell{
+			border: none;
+			text-align:center;
+			padding: 15px 10px;
+
+		}
+		.head{
+			border: none;
+			text-align:center;
+			padding: 15px 10px;
+			background: #DCECFE;
+			// background:#F2F4FD;
+			font-size: 14px;
+			color: $theme-color;
+
+		}
+	}
+	}
+}

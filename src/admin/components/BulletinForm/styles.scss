@@ -1,0 +1,76 @@
+$boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    }
+    .formContainerNepali{
+       
+        input{
+            font-family: 'Kalimati Regular' !important;
+        }
+    }
+    .formContainerEnglish{
+      
+        nput{
+            font-family: 'Fira Sans' !important;
+        }
+    }
+.mainSection{
+    padding: 20px 30px;
+    display: flex;
+    justify-content: center;
+    .leftMenuSection{
+        position: relative;
+        bottom: 28px;
+        // width: 25%;
+        flex: 1;
+
+    }
+    .rightFormSection{
+        min-width: 210mm;
+        // width: 100%;
+        // border: 1px solid red;
+        box-shadow: $boxShadow;
+        background-color: white;
+        flex: 4;
+
+    }
+   
+    .buttonsContainer{
+        width: calc(100% - 60px);
+        min-width: 600px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 60px;
+        .prevBtn{
+            margin-left: 10px;
+            color: #003572;
+            background-color: transparent;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            filter: saturate(100%);
+        }
+        .nextBtn{
+            margin-left: 10px;
+            background: #003572;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            color: rgba(255,255,255,0.95);
+            cursor: pointer;
+              filter: saturate(100%);
+        }
+        .disabledBtn{
+            // @extend .nextBtn;
+            background: #89898a;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            color: rgba(255,255,255,0.95);
+            cursor: not-allowed;
+              filter: saturate(100%);
+        }
+    }
+}

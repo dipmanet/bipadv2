@@ -16,7 +16,6 @@ const emptyList: unknown[] = [];
 
 const dashboardPageSelector = ({ page }: AppState) => page.dashboardPage;
 
-
 const incidentPageSelector = ({ page }: AppState) => page.incidentPage;
 
 const responsePageSelector = ({ page }: AppState) => page.responsePage;
@@ -60,6 +59,7 @@ export const riverStationsSelector = ({ page }: AppState) => page.riverStations;
 // Popup
 
 export const hidePopupSelector = ({ page }: AppState) => page.hidePopup;
+export const bulletinPromotionCheckSelector = ({ page }: AppState) => page.isBulletinPromotionPage;
 
 // geo
 

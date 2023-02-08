@@ -142,6 +142,7 @@ const requestQuery = ({
     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
     ordering: '-incident_on',
+    data_source: 'drr_api',
     // lnd: true,
 });
 

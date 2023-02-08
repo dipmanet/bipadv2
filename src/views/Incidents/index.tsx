@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable no-tabs */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -120,6 +126,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
             limit: -1,
+            data_source: 'drr_api',
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
@@ -248,6 +255,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
 
         const pending = pendingEvents || pendingIncidents;
+
 
         return (
             <div>

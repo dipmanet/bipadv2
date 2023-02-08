@@ -1,0 +1,63 @@
+.nextContainer{
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    justify-content: flex-end;
+    .nextBtn{
+        margin-left: 10px;
+       background: #003572;
+       border: none;
+       padding: 0 12px;
+       border-radius: 3px;
+       color: rgba(255,255,255,0.95);
+       cursor: pointer;
+        
+    }
+    .prevBtn{
+        margin-left: 10px;
+       color: #003572;
+       border: 1px solid #003572;
+       padding: 7px 12px;
+       border-radius: 3px;
+       cursor: pointer;
+       background-color: transparent;
+    }
+    .prevDisabled{
+        margin-left: 10px;
+       color: #8e8f8f;
+       border: 1px solid #8e8f8f;
+       padding: 7px 12px;
+       border-radius: 3px;
+       cursor: pointer;
+       background-color: transparent;
+       cursor: disabled;
+    }
+    .nextDisabled{
+        margin-left: 10px;
+       color: #8e8f8f;
+       border: 1px solid #8e8f8f;
+       padding: 7px 12px;
+       border-radius: 3px;
+       cursor: pointer;
+       background-color: transparent;
+       cursor: disabled;
+
+    }
+
+    
+}
+
+.error{
+    background-color: white;
+    color: rgb(153, 34, 34);
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+.success{
+    background:rgb(95, 160, 79);
+    color: rgb(7, 20, 1);
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    padding: 5px 10px;
+}

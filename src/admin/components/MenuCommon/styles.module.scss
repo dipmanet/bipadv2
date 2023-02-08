@@ -1,0 +1,45 @@
+$font-family-sans-serif: 'Fira Sans', sans-serif;
+.menuCommonContainer{
+    width: calc(100%);
+    position: relative;
+    top: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 320px;
+    padding-left: 5%;
+    color: rgba(255,255,255,0.90);
+    overflow-x: hidden;
+    
+
+    .menuItemContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-width: 150px;
+        min-height: 70px;
+        background-color: #af2000;
+        margin: 0 15px;
+        border-radius: 3px;
+        box-shadow: 0px 2px 5px rgb(36, 36, 36);
+        padding: 0 10px;
+    }
+    .activeMenu{
+       @extend .menuItemContainer;
+       background-color: #002e76; 
+    }
+    .menuItem{
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 75%;
+        .icon{
+            font-size: 16px;
+            color: rgba(255,255,255,0.90);
+            position: relative;
+        }
+     
+    }
+}

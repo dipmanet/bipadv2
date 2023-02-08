@@ -457,9 +457,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (prevProps.language !== language) {
             i18n.changeLanguage(language);
         }
-        if (language === 'np' && !showLanguageToolbar) {
-            setLanguage({ language: 'en' });
-        }
+        // Disabled for admin portal bulletin english and nepali switch form
+        // if (language === 'np' && !showLanguageToolbar) {
+        //     setLanguage({ language: 'en' });
+        // }
+
 
         // Km to nepali translation//
         // const x = document.getElementsByClassName('mapboxgl-ctrl mapboxgl-ctrl-scale')[0];

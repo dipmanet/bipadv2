@@ -1,0 +1,66 @@
+.notificationsSideBar{
+    width: 25vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 30px 2vw;
+    overflow-Y: scroll;
+    .btnContainer{
+        display:flex;
+        // border: 1px solid red;
+        justify-content: flex-end;
+        button{
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    }
+    .topRow{
+        .select{
+            width: 90px;
+            padding: 10px;
+        }
+        // border: 1px solid red;
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .notiBody{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+    
+    .detailItemBox{
+        overflow-y: scroll;
+        position: fixed;
+        width: 70vw;
+        height: 70vh;
+        left: 15vw;
+        top: 15vh;
+        padding: 10px;
+        background-color: white;
+        .btnContainer{
+            display: flex;
+            justify-content: flex-end;
+            button{
+                background: transparent;
+                border: none;
+                cursor: pointer;
+            }
+        }
+        .pdfContainer{
+        padding: 3vh 3vw;
+
+            .titleRow{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+    }

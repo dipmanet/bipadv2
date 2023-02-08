@@ -4,6 +4,11 @@
     top: 10px;
     height: 0px;
 
+    display: flex;
+    align-items: center;
+    // margin-left: 10px;
+    margin-bottom: 30px;
+
     .nepButton {
         background-color: #a6a6a6;
         opacity: 0.67;
@@ -26,7 +31,7 @@
     }
 
     .selectedLanguage {
-        background-color: #216cd7;
+        background-color: #003273;
         opacity: 1 !important;
         width: 22px;
     }
