@@ -5,22 +5,19 @@ import React, { useEffect, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
-import Sidebar from './LeftPane';
 import Page from '#components/Page';
-import styles from './styles.scss';
-import RightPane from './RightPane';
 import Modal from '#rscv/Modal';
-import Translations from './Constants/Translations';
-import Gt from './utils';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
-import { provincesSelector,
+import {
+    provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
     palikaRedirectSelector,
     palikaLanguageSelector,
-    drrmProgresSelector } from '#selectors';
+    drrmProgresSelector
+} from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 import { setPalikaLanguageAction, setPalikaRedirectAction } from '#actionCreators';
@@ -31,6 +28,11 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import Gt from './utils';
+import Translations from './Constants/Translations';
+import RightPane from './RightPane';
+import styles from './styles.scss';
+import Sidebar from './LeftPane';
 
 import PalikaReportTable from './RightPane/Dashboard';
 import TopBar from './TopBar';
@@ -53,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
     setPalikaLanguage: params => dispatch(setPalikaLanguageAction(params)),
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     PalikaReportGetRequest: {
         url: ({ params }) => `${params.url}`,
         query: ({ params }) => {
@@ -69,11 +71,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 };
             }
             // eslint-disable-next-line @typescript-eslint/camelcase
-            return { limit: params.page,
+            return {
+                limit: params.page,
                 offset: params.offset,
 
                 municipality: params.municipality,
-                expand: params.expand };
+                expand: params.expand
+            };
         },
         method: methods.GET,
         onMount: true,
@@ -338,19 +342,19 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
         // postData();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
 
     // Finding Header for table data
     const finalTableHeader = Object.keys(tableHeader).map(item => tableHeader[item].label);
 
     const TableHeaderForTable = finalTableHeader.filter(item => item !== 'ID' && item !== 'Created on'
-     && item !== 'Modified on' && item !== 'Remarks'
-    && item !== 'Created by'
-     && item !== 'Updated by');
+        && item !== 'Modified on' && item !== 'Remarks'
+        && item !== 'Created by'
+        && item !== 'Updated by');
 
     const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
-    && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
+        && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
     const handleCheckFilterDisableButtonForProvince = (province) => {
         if (!province && !dateFrom) {
             setDisableFilterButton(true);
@@ -393,7 +397,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         } else {
             setDisableFilterButton(true);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateFrom]);
 
     const handleSortTitle = (isSort) => {
@@ -554,13 +558,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 const municipalityDetails = municipalities
                     .find(data => data.id === item.municipality);
                 const createdDate = `${(new Date(item.createdOn)).getFullYear()
-                }-${(new Date(item.createdOn)).getMonth() + 1
-                }-${new Date(item.createdOn).getDate()}`;
+                    }-${(new Date(item.createdOn)).getMonth() + 1
+                    }-${new Date(item.createdOn).getDate()}`;
                 const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-                }-${(new Date(item.modifiedOn)).getMonth() + 1
-                }-${new Date(item.modifiedOn).getDate()}`;
+                    }-${(new Date(item.modifiedOn)).getMonth() + 1
+                    }-${new Date(item.modifiedOn).getDate()}`;
                 if (municipalityDetails) {
-                    return { municipality: municipalityDetails.title_en,
+                    return {
+                        municipality: municipalityDetails.title_en,
                         municipalityNp: municipalityDetails.title_ne,
                         province: provinceDetails.title_en,
                         provinceNp: provinceDetails.title_ne,
@@ -570,7 +575,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         fiscalYearNp: item.fiscalYear && fiscalYears.titleNp,
                         createdDate: item.createdOn && createdDate,
                         modifiedDate: item.modifiedOn && modifiedDate,
-                        item };
+                        item
+                    };
                 }
                 if (!provinceDetails) {
                     return {
@@ -584,7 +590,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             finalArr = [...new Set(finalfetchedData)];
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort, submenuId, fetchedData, fiscalYear, language]);
 
 
@@ -606,7 +612,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             expand: 'updated_by',
 
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         if (redirectTo === -2) {
@@ -619,58 +625,58 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             <Page hideMap hideFilter />
             {
                 showModal
-                    && (
-                        <Modal>
-                            <div className={styles.firstPageContainer}>
-                                <div className={styles.languageButton}>
-                                    <button
-                                        onClick={handleLangButton}
-                                        className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}
-                                        type="button"
+                && (
+                    <Modal>
+                        <div className={styles.firstPageContainer}>
+                            <div className={styles.languageButton}>
+                                <button
+                                    onClick={handleLangButton}
+                                    className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}
+                                    type="button"
 
 
-                                    >
-                      EN
-                                    </button>
-                                    <button
-                                        onClick={handleLangButton}
-                                        className={language === 'np' ? _cs(styles.nepButton, styles.selectedLanguage) : styles.nepButton}
+                                >
+                                    EN
+                                </button>
+                                <button
+                                    onClick={handleLangButton}
+                                    className={language === 'np' ? _cs(styles.nepButton, styles.selectedLanguage) : styles.nepButton}
 
-                                        type="button"
-                                    >
-                      ने
-                                    </button>
-                                </div>
-                                <div className={styles.title}>
-                                    <Gt section={Translations.welcomeNoteparagraph1} />
-                                </div>
-                                <p className={styles.description}>
-                                    <Gt section={Translations.welcomeNoteparagraph2} />
-                                </p>
-                                <p className={styles.description}>
-                                    <Gt section={Translations.welcomeNoteparagraph3} />
-                                </p>
-                                <p className={styles.description}>
-                                    <Gt section={Translations.welcomeNoteparagraph4} />
-                                </p>
-
-                                <p className={_cs(styles.description, styles.lastLine)}>
-                                    <Gt section={Translations.welcomeNoteparagraph5} />
-                                </p>
-
-                                <div className={styles.btnContainer}>
-                                    <PrimaryButton
-                                        type="button"
-                                        className={styles.agreeBtn}
-                                        onClick={closeModal}
-                                    >
-                                        <Gt section={Translations.proceedButton} />
-                                    </PrimaryButton>
-                                </div>
-
+                                    type="button"
+                                >
+                                    ने
+                                </button>
                             </div>
-                        </Modal>
-                    )
+                            <div className={styles.title}>
+                                <Gt section={Translations.welcomeNoteparagraph1} />
+                            </div>
+                            <p className={styles.description}>
+                                <Gt section={Translations.welcomeNoteparagraph2} />
+                            </p>
+                            <p className={styles.description}>
+                                <Gt section={Translations.welcomeNoteparagraph3} />
+                            </p>
+                            <p className={styles.description}>
+                                <Gt section={Translations.welcomeNoteparagraph4} />
+                            </p>
+
+                            <p className={_cs(styles.description, styles.lastLine)}>
+                                <Gt section={Translations.welcomeNoteparagraph5} />
+                            </p>
+
+                            <div className={styles.btnContainer}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.agreeBtn}
+                                    onClick={closeModal}
+                                >
+                                    <Gt section={Translations.proceedButton} />
+                                </PrimaryButton>
+                            </div>
+
+                        </div>
+                    </Modal>
+                )
 
 
             }
@@ -678,11 +684,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 <div className={styles.leftContainer}>
                     <div className={styles.heading}>
                         <div className={styles.bipad}>
-                        BIPAD
+                            BIPAD
 
                         </div>
                         <div className={styles.report}>
-                        DRRM Data Profile
+                            DRRM Data Profile
                         </div>
 
                     </div>
@@ -747,54 +753,54 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                                         </div>
                                         {submenuId === 1
-                         && (
-                             <div className={styles.rightContainerFilters}>
-                                 <div className={styles.inputContainer}>
-                                     <StepwiseRegionSelectInput
-                                         className={
-                                             _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                                         faramElementName="region"
-                                         wardsHidden
-                                         onChange={handleFormRegion}
-                                         checkProvince={handleCheckFilterDisableButtonForProvince}
-                                         checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                                         checkMun={handleCheckFilterDisableButtonForMunicipality}
-                                         reset={resetFilterProps}
-                                         provinceInputClassName={styles.snprovinceinput}
-                                         districtInputClassName={styles.sndistinput}
-                                         municipalityInputClassName={styles.snmuniinput}
-                                     />
-                                 </div>
+                                            && (
+                                                <div className={styles.rightContainerFilters}>
+                                                    <div className={styles.inputContainer}>
+                                                        <StepwiseRegionSelectInput
+                                                            className={
+                                                                _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                                            faramElementName="region"
+                                                            wardsHidden
+                                                            onChange={handleFormRegion}
+                                                            checkProvince={handleCheckFilterDisableButtonForProvince}
+                                                            checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                                            checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                                            reset={resetFilterProps}
+                                                            provinceInputClassName={styles.snprovinceinput}
+                                                            districtInputClassName={styles.sndistinput}
+                                                            municipalityInputClassName={styles.snmuniinput}
+                                                        />
+                                                    </div>
 
 
-                                 {!showReportEdit && submenuId === 1 && filtered ? (
-                                     <button
-                                         type="submit"
-                                         className={styles.submitBut}
-                                         onClick={handleSubmit}
-                                     >
-                                         <Gt section={Translations.dashboardReset} />
+                                                    {!showReportEdit && submenuId === 1 && filtered ? (
+                                                        <button
+                                                            type="submit"
+                                                            className={styles.submitBut}
+                                                            onClick={handleSubmit}
+                                                        >
+                                                            <Gt section={Translations.dashboardReset} />
 
-                                     </button>
-                                 )
-                                     : !showReportEdit && submenuId === 1 && (
-                                         <button
-                                             type="submit"
-                                             onClick={handleSubmit}
-                                             className={
-                                                 disableFilterButton
-                                                     ? styles.submitButDisabled : styles.submitBut}
-                                             disabled={disableFilterButton}
-                                         >
-                                             <Gt section={Translations.dashboardFilter} />
-                                         </button>
-                                     )
+                                                        </button>
+                                                    )
+                                                        : !showReportEdit && submenuId === 1 && (
+                                                            <button
+                                                                type="submit"
+                                                                onClick={handleSubmit}
+                                                                className={
+                                                                    disableFilterButton
+                                                                        ? styles.submitButDisabled : styles.submitBut}
+                                                                disabled={disableFilterButton}
+                                                            >
+                                                                <Gt section={Translations.dashboardFilter} />
+                                                            </button>
+                                                        )
 
-                                 }
+                                                    }
 
 
-                             </div>
-                         )}
+                                                </div>
+                                            )}
                                         {loader
                                             ? (
                                                 <>

@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { isDefined, _cs } from '@togglecorp/fujs';
-import styles from './styles.scss';
 
 import {
     setPalikaLanguageAction,
@@ -20,8 +19,9 @@ import * as PageTypes from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
 import Gt from '#views/PalikaReport/utils';
 import Translations from '#views/PalikaReport/Constants/Translations';
+import styles from './styles.scss';
 
-interface Props{
+interface Props {
     palikaLanguage: PageTypes.PalikaLanguage;
     setPalikaLanguage: typeof setPalikaLanguageAction;
     drrmRegion: PageTypes.DrrmRegion;
@@ -133,12 +133,12 @@ const TopBar = (props: Props) => {
                             {municipalityName}
                             {' '}
                             <Gt section={Translations.MunicipalitySingle} />
-                        ,
+                            ,
                             {' '}
                             {districtName}
                             {' '}
                             <Gt section={Translations.dashboardTblHeaderDistrict} />
-                        ,
+                            ,
                             {' '}
                             {provinceName}
                             {' '}
@@ -155,7 +155,7 @@ const TopBar = (props: Props) => {
                         : styles.engButton}
                     type="button"
                 >
-                        EN
+                    EN
                 </button>
                 <button
                     onClick={handleLangButton}
@@ -163,7 +163,7 @@ const TopBar = (props: Props) => {
 
                     type="button"
                 >
-                        ने
+                    ने
                 </button>
             </div>
 

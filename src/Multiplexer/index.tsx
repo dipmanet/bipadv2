@@ -1741,6 +1741,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
         } if (routeName === 'gpdrr') {
             return true;
         }
+        if (routeName === 'DRRM Report') {
+            return true;
+        }
         if (routeName === 'about') {
             return true;
         }
@@ -1938,7 +1941,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
-
+        console.log('This is active route name', activeRouteName);
 
         return (
             <PageContext.Provider value={pageProps}>

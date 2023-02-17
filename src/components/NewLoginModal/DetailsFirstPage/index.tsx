@@ -124,7 +124,7 @@ const DetailsFirstPage = (props: Props) => {
                                             initialLoc={{
                                                 municipality,
                                                 district,
-                                                province
+                                                province,
                                             }}
                                             provinceInputClassName={styles.snprovinceinput}
                                             districtInputClassName={styles.sndistinput}
