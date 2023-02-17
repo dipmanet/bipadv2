@@ -53,8 +53,81 @@ class ProjectsProfile extends React.PureComponent {
             projectMap,
             projectOrganizationPieData,
             pending,
+            showFilterOnly,
+            getSelectedOption,
+            getPriorityOptions,
+            getSubPriorityAction,
+            getPriorityActivity,
         } = this.props;
 
+
+        const ndrrsap = getResults(requests, 'ndrrsapRequest');
+        const drrcycle = getResults(requests, 'drrcycleRequest');
+        const category = getResults(requests, 'categoryRequest');
+        const organization = getResults(requests, 'organizationRequest');
+        const projects = getResults(requests, 'projectRequest');
+        const pending = isAnyRequestPending(requests);
+        const projectsWithOrganizationName = combineEntities(projects, organization);
+        const projectOrganizationGrouped = groupList(
+            projectsWithOrganizationName.filter(e => e.oname),
+            project => project.oname,
+        );
+        // NDRRSAP
+
+        const ndrrsapMap = listToMap(ndrrsap, ndrrsapKeySelector, item => item);
+        const priorityOptions = unflatten(ndrrsap, ndrrsapKeySelector, ndrrsapParentSelector);
+        if (getSubPriorityAction) {
+            getSubPriorityAction(ndrrsap);
+        }
+
+        let subPriorityOptions = emptyList;
+        const selectedPriority = priorityOptions.find(
+            item => ndrrsapKeySelector(item) === faramValues.priority,
+        );
+        if (selectedPriority) {
+            subPriorityOptions = selectedPriority.children;
+        }
+
+        let activityOptions = emptyList;
+        const selectedSubPriority = subPriorityOptions.find(
+            item => ndrrsapKeySelector(item) === faramValues.subPriority,
+        );
+        if (selectedSubPriority) {
+            activityOptions = selectedSubPriority.children;
+        }
+
+        // PROJECTS
+
+        // const realProjects = sanitize(projects, regions, ndrrsapMap);
+        const realProjects = sanitize(projectsWithOrganizationName, regions, ndrrsapMap);
+        const filteredProjects = filter(realProjects, faramValues);
+
+        const drrPieData = drrcycle.map(item => ({
+            key: drrCyclesKeySelector(item),
+            label: drrCyclesLabelSelector(item),
+            value: filteredProjects.filter(p => p.drrcycle[drrCyclesKeySelector(item)]).length,
+            color: getHexFromString(drrCyclesLabelSelector(item)),
+        }));
+
+        const categoryPieData = category.map(item => ({
+            key: categoryKeySelector(item),
+            label: categoryLabelSelector(item),
+            value: filteredProjects.filter(p => p.category[categoryKeySelector(item)]).length,
+            color: getHexFromString(categoryLabelSelector(item)),
+        }));
+
+        const projectOrganizationPieData = projectOrganizationGrouped.map(item => ({
+            key: item.key,
+            label: item.key,
+            value: filteredProjects.filter(p => p.oname === item.key).length,
+            color: getHexFromString(item.key),
+        })).filter(data => data.value !== 0);
+
+        // AGGREGATIONS
+        const organizationMap = listToMap(organization, organizationKeySelector, item => item);
+        const projectMap = listToMap(projects, projectKeySelector, item => item);
+        const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
+        const categoryMap = listToMap(category, categoryKeySelector, item => item);
 
         return (
             <TitleContext.Consumer>
@@ -105,7 +178,8 @@ class ProjectsProfile extends React.PureComponent {
                             /> */}
                         </React.Fragment>
                     );
-                }}
+                }
+                }
             </TitleContext.Consumer>
         );
     }

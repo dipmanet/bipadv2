@@ -101,14 +101,14 @@ const iconNames = {
 
     lock: 'fa fa-unlock-alt',
     times: 'fa fa-times',
-    info: 'fa fa-info-circle',
-
+    info: 'fa  fa-info-circle',
+    arrowDown: 'fa fa-caret-down',
+    plus: 'fa fa-plus',
+    language: 'fa fa-language',
     search: 'fa fa-search',
     home: 'fa fa-home',
-
     sortDown: 'fa fa-angle-down',
     sortUp: 'fa fa-angle-up',
-
     chart: 'fa fa-line-chart',
     cloud: 'fa fa-cloud',
     filePdf: 'fa fa-file-pdf-o',

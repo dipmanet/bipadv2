@@ -1,0 +1,24 @@
+.btnContainer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    // border: 1px solid gray;
+    .savebtn{
+        position: relative;
+        margin-top: 45px;
+        width: fit-content;
+        background-color: rgb(54, 132, 216) !important;
+        border-radius: 4px;
+        color: white; 
+        padding: 8px 18px;
+        cursor: pointer;
+        // border: none;
+        filter: saturate(80%);
+        border: none;
+        margin-right: 10px;
+        margin-bottom: 45px;
+        .plusIcon{
+            padding-right: 4px;
+        }
+    }
+}

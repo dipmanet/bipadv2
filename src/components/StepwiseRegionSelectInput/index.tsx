@@ -10,6 +10,7 @@ import SelectInput from '#rsci/SelectInput';
 import {
     districtsSelector,
     municipalitiesSelector,
+    palikaLanguageSelector,
     provincesSelector,
     selectedProvinceIdSelector,
     wardsSelector,
@@ -29,6 +30,8 @@ import {
 import { AppState } from '#store/types';
 
 import { Language } from '#store/atom/page/types';
+import Translations from '../../views/PalikaReport/Constants/Translations';
+import Gt from '../../views/PalikaReport/utils';
 import styles from './styles.scss';
 
 interface PropsFromState {
@@ -72,6 +75,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalityList: municipalitiesSelector(state),
     wardList: wardsSelector(state),
     language: languageSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -82,7 +86,8 @@ const emptyMunicipalityOptions: MunicipalityElement[] = [];
 const emptyWardOptions: WardElement[] = [];
 
 const regionKeySelector = (r: RegionElement) => r.id;
-
+const regionLabelSelectorEng = (r: RegionElement) => r.title_en;
+const regionLabelSelectorNep = (r: RegionElement) => r.title_ne;
 
 class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -241,6 +246,8 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             districtList,
             municipalityList,
             wardList,
+            selected,
+
         } = this.props;
 
         const newRegionValues = this.getRegionsFromValue(
@@ -259,11 +266,15 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedMunicipalityId: undefined,
             selectedWardId: undefined,
         });
+        const { checkProvince } = this.props;
+
 
         this.handleRegionChange({
             adminLevel: selectedProvinceId ? 1 : undefined,
             geoarea: selectedProvinceId,
         });
+
+        checkProvince(selectedProvinceId);
     }
 
     private handleDistrictChange = (selectedDistrictId: number) => {
@@ -274,11 +285,13 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedProvinceId } = this.state;
+        const { checkDistrict } = this.props;
 
         this.handleRegionChange({
             adminLevel: selectedDistrictId ? 2 : 1,
             geoarea: selectedDistrictId || selectedProvinceId,
         });
+        checkDistrict(selectedDistrictId);
     }
 
     private handleMunicipalityChange = (selectedMunicipalityId: number) => {
@@ -288,10 +301,12 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedDistrictId } = this.state;
+        const { checkMun } = this.props;
         this.handleRegionChange({
             adminLevel: selectedMunicipalityId ? 3 : 2,
             geoarea: selectedMunicipalityId || selectedDistrictId,
         });
+        checkMun(selectedMunicipalityId);
     }
 
     private handleWardChange = (selectedWardId: number) => {
@@ -311,6 +326,18 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
 
     });
 
+    // private handleTest=() => {
+    //     const { reset } = this.props;
+    //     if (reset) {
+    //         this.setState({
+    //             selectedProvinceId: undefined,
+    //             selectedDistrictId: undefined,
+    //             selectedMunicipalityId: undefined,
+    //         });
+    //     }
+    // }
+
+
     public render() {
         const {
             className,
@@ -319,18 +346,25 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             municipalityList,
             wardList,
             disabled,
-
+            reset,
             provinceInputClassName,
             districtInputClassName,
             municipalityInputClassName,
             wardInputClassName,
-
             wardsHidden,
             autoFocus,
             showHintAndError,
             drrmLanguage,
             bulletin,
         } = this.props;
+        console.log('ProvinceList', provinceList);
+        if (reset) {
+            this.setState({
+                selectedProvinceId: undefined,
+                selectedDistrictId: undefined,
+                selectedMunicipalityId: undefined,
+            });
+        }
         const {
             selectedProvinceId,
             selectedDistrictId,
@@ -357,7 +391,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         const shouldDisableDistrictInput = disabled || !selectedProvinceId;
         const shouldDisableMunicipalityInput = disabled || !selectedDistrictId;
         const shouldDisableWardInput = disabled || !selectedMunicipalityId;
-
+        console.log('province option', provinceOptions);
         return (
             <div className={_cs(className, styles.stepwiseRegionSelectInput)}>
                 <Translation>

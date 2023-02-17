@@ -1,0 +1,111 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+    }
+    
+.nep{
+    font-family: "Kalimati Regular"!important;
+   }
+
+
+ul{
+    list-style: none;
+    .errorHeading{
+        font-size: 14px;
+        // color: rgb(224, 67, 67);
+    }
+    li{
+        font-size: 11px;
+        // color: rgb(224, 67, 67);
+        
+    }
+}
+.loaderInfo{
+    position: absolute;
+    top: 54%;
+    left: 55%;
+}
+.updateButtn{
+    cursor: pointer;
+}
+.bulletPoint{
+    height: 20px;
+    cursor: pointer;
+  }
+.editButtn{
+filter: saturate(100%);
+border: none;
+background-color: transparent;
+}
+.txtAreadetails{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    
+    border: none;
+    button{
+        width: fit-content;
+        margin-top: 10px;
+    }
+}
+.savebtn{
+    position: relative;
+    margin-top: 10px;
+    width: fit-content;
+    // background-color: rgb(54, 132, 216) !important;
+    background-color: transparent;
+    border-radius: 4px;
+    color: rgb(54, 132, 216) !important;
+    padding: 8px 8px;
+    cursor: pointer;
+    // border: none;
+    filter: saturate(80%);
+    border: none;
+    margin-right: 10px;
+    white-space: nowrap;
+    .plusIcon{
+        padding-right: 4px;
+    }
+}
+.budgetPreviewContainer{
+    margin-left: 30px;
+    margin-top: 30px;
+    height: 210px;
+    padding-right: 20px;
+
+    h2{
+        font-size: 14px;
+        font-weight: 600;
+        // margin-left: 35px;
+        color: #222;
+        white-space: pre-wrap;
+        margin-bottom: 10px;
+
+    }
+    ul{
+        list-style: square;
+        padding-left: 10px;
+        color: #777;
+        li{
+            font-size: 11px;
+            line-height: 1.7em;
+    
+        }
+    }
+}
+.mainPageDetailsContainer{
+    min-height: 400px !important;
+    display: flex;
+    flex-direction: column;
+    // padding: 50px;
+    td{
+        font-weight: bold;
+    }
+    h2{
+        text-align: left;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+}
+

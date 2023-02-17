@@ -1,4 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
+import { number } from 'prop-types';
 import { Duration } from '@material-ui/core';
 import {
     FiltersElement,
@@ -1122,6 +1123,7 @@ export interface SetDrrmCritical {
     type: typeof PageType.SET_DRRM_CRITICAL;
     drrmCritical: DrrmCritical;
 }
+
 export interface SetDrrmOrg {
     type: typeof PageType.SET_DRRM_ORG;
     drrmOrg: DrrmOrg;

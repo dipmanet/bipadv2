@@ -303,7 +303,6 @@ const BulletinTable = (props) => {
         }
     }, [user]);
 
-
     useEffect(() => {
         if (bulletinTableData[0] && bulletinTableData[0].hazardWiseLoss && Object.keys(bulletinTableData[0].hazardWiseLoss).length > 0) {
             const temp = {};

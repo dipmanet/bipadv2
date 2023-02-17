@@ -4,6 +4,9 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/prop-types */
+/* eslint-disable max-len */
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState, useRef, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import Button from 'src/vendor/react-store/v2/Action/Button';
@@ -75,6 +78,8 @@ const FeedbackSupport = ({ className, closeModal, handledisableOutsideDivClick }
                                         className={styles.tech_btn}
                                         onClick={() => {
                                             setformElementsPosition(0);
+                                            closeModal();
+                                            navigate('/support/');
                                         }}
                                     >
                                         TECHNICAL SUPPORT REQUEST FORM
@@ -94,6 +99,8 @@ const FeedbackSupport = ({ className, closeModal, handledisableOutsideDivClick }
                                         className={styles.feed_btn}
                                         onClick={() => {
                                             setformElementsPosition(1);
+                                            closeModal();
+                                            navigate('/feedback/');
                                         }
                                         }
                                     >

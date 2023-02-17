@@ -1,0 +1,57 @@
+.header{
+    height: 120px !important;
+    display: flex;
+    background-color: rgb(237,237,237);
+    justify-content: space-between;
+    padding: 3% 5%;
+    .leftContainer{
+        display: flex;
+        align-items: center;
+        .logoAndAddress{
+            display:flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex:1;
+            .logo{
+                padding: 0;
+            }
+            .address{
+                border: 1px solid rgb(237,237,237);
+                ul{list-style: none; padding-left: 0}
+                .munTitle{
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+                .desc{
+                    font-size: 14px;
+                    font-weight: 400;
+                }
+            }
+        }
+        .titleAndFY{
+            flex:1;
+
+            border-left: 2px solid green;
+            padding-left: 1%;
+            ul{ 
+                list-style: none;                
+                right: 10%;
+                position: relative;
+            }
+            .title{
+                font-size: 16px;
+                font-weight: 600;
+                text-transform: uppercase;}
+        }
+    }
+   
+    .dates{
+        ul{list-style: none;padding-left: 1%;}
+        white-space: nowrap;
+        display: flex;
+        align-items: flex-end;
+        font-weight: 600;
+        color: #777;
+        padding: 4px 6px;
+    }
+}

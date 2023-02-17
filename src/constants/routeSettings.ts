@@ -1,6 +1,8 @@
 /* eslint-disable no-tabs */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
+import { authStateSelector } from '#selectors';
+
 export interface Route {
     path: string;
     name: string;
@@ -333,32 +335,47 @@ const routeSettings: SomeRoute[] = [
     //     navbar: true,
     //     disabled: false,
     //     iconName: 'chatBoxes',
-    // },
-    {
-        name: 'fourHundredThree',
-        title: '403',
-        path: '/403/',
-        load: () => import('../views/FourHundredThree'),
-        navbar: false,
-        id: 'navbar-fourHundredThree',
+    name: 'DRRM Report',
+    title: 'DRRM Report',
+    path: '/drrm-report/',
+    load: () => import('../views/PalikaReport'),
+    navbar: true,
+    disabled: false,
+    iconName: 'textDocument',
     },
-    {
-        name: 'fourHundredFour',
+// {
+//     name: 'subMenu',
+//     title: 'palikaReport subMenu',
+//     path: '/palika-report/:menu/:subMenu/',
+//     load: () => import('../views/PalikaReport'),
+//     navbar: false,
+
+// },
+{
+    name: 'fourHundredThree',
+        title: '403',
+            path: '/403/',
+                load: () => import('../views/FourHundredThree'),
+                    navbar: false,
+                        id: 'navbar-fourHundredThree',
+    },
+{
+    name: 'fourHundredFour',
         title: '404',
-        load: () => import('../views/FourHundredFour'),
+            load: () => import('../views/FourHundredFour'),
         default: true,
         path: undefined,
-        navbar: false,
-        id: 'navbar-fourHundredFour',
+            navbar: false,
+                id: 'navbar-fourHundredFour',
     },
 
-    {
-        name: 'forgotPassword',
+{
+    name: 'forgotPassword',
         title: 'New Password',
-        load: () => import('../views/ForgotPassword'),
-        path: '/set-new-password/',
-        navbar: false,
-        id: 'navbar-forgetpassword',
+            load: () => import('../views/ForgotPassword'),
+                path: '/set-new-password/',
+                    navbar: false,
+                        id: 'navbar-forgetpassword',
     },
 ];
 

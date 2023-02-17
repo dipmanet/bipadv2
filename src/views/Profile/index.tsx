@@ -12,7 +12,6 @@ import modalize from '#rscg/Modalize';
 import Page from '#components/Page';
 
 
-import styles from './styles.scss';
 import {
     palikaRedirectSelector,
 } from '#selectors';
@@ -20,9 +19,10 @@ import {
 import {
     setPalikaRedirectAction,
 } from '#actionCreators';
-import NepDataProfile from './NepDatProfile';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import nepDat from '#resources/icons/nepdat.svg';
+import NepDataProfile from './NepDatProfile';
+import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     palikaRedirect: palikaRedirectSelector(state),
@@ -42,8 +42,48 @@ interface State {
     activeView: TabKeys;
 }
 
+const IndicatorButton = modalize(AccentButton);
 
 class Profile extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            activeView: 'summary',
+        };
+    }
+
+    public componentDidMount() {
+        const {
+            palikaRedirect,
+            setPalikaRedirect,
+
+        } = this.props;
+
+        if (palikaRedirect.showForm
+            && palikaRedirect.showModal
+            && palikaRedirect.showModal === 'contact') {
+            this.setState({ activeView: 'contact' });
+        }
+    }
+
+    private handleSummaryButtonClick = () => {
+        this.setState({ activeView: 'summary' });
+    }
+
+    private handleProjectButtonClick = () => {
+        this.setState({ activeView: 'projectsProfile' });
+    }
+
+    private handleContactButtonClick = () => {
+        this.setState({ activeView: 'contact' });
+    }
+
+    private handleDocumentButtonClick = () => {
+        this.setState({ activeView: 'document' });
+    }
+
+
     public render() {
         return (
 
@@ -186,4 +226,4 @@ class Profile extends React.PureComponent<Props, State> {
         );
     }
 }
-export default (Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
