@@ -15,7 +15,7 @@ import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import { routeSettings } from '#constants';
-import { authStateSelector } from '#selectors';
+import { authStateSelector, languageSelector } from '#selectors';
 import { setAuthAction, setInitialCloseWalkThroughAction } from '#actionCreators';
 import { AppState } from '#store/types';
 import { AuthState } from '#store/atom/auth/types';
@@ -252,6 +252,7 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState) => ({
     authState: authStateSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -339,31 +340,8 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Situation Report"
-                        id="situation-report"
-                        iconName="textDocument"
-                        modal={<SituationReport />}
-                    />
-                    {authenticated && (
-                        <ModalButton
-                            className={styles.reliefButton}
-                            title="Relief"
-                            iconName="cart"
-                            id="relief"
-                            modal={<Relief />}
-                        />
-                    )}
-                    {authenticated && (
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="Reported incidents"
-                            id="reported-incidents"
-                            iconName="list"
-                            modal={<CitizenReportsModal />}
-                        />
-                    )}
+
+
                     {/* <ModalButton
                         className={styles.reportIncidentButton}
                         title="Report an incident"
@@ -462,7 +440,24 @@ class Navbar extends React.PureComponent<Props, State> {
                             </Translation>
                         )} */}
 
-
+                        {authenticated && (
+                            <ModalButton
+                                className={styles.reliefButton}
+                                title="Relief"
+                                iconName="cart"
+                                id="relief"
+                                modal={<Relief />}
+                            />
+                        )}
+                        {authenticated && (
+                            <ModalButton
+                                className={styles.reportIncidentButton}
+                                title="Reported incidents"
+                                id="reported-incidents"
+                                iconName="list"
+                                modal={<CitizenReportsModal />}
+                            />
+                        )}
                         <Translation>
                             {
                                 t => (
@@ -482,8 +477,31 @@ class Navbar extends React.PureComponent<Props, State> {
 
                                 )}
                         </Translation>
-
-
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="About Us"
+                            id="about-us"
+                            iconName="aboutUs"
+                            modal={<AboutModal />}
+                        />
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="Situation Report"
+                            id="situation-report"
+                            iconName="textDocument"
+                            modal={<SituationReport />}
+                        />
+                        <MenuItemLikeButton
+                            className={styles.logoutButton}
+                            title="Home Page"
+                            iconName="aboutUs"
+                            id="logout"
+                            onClick={() => {
+                                Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
+                                setCloseWalkThroughHomepage({ value: false });
+                                navigate('/');
+                            }}
+                        />
                         {/* <ModalButton
                             className={styles.reportIncidentButton}
                             title="About Us"
@@ -510,20 +528,8 @@ class Navbar extends React.PureComponent<Props, State> {
                             modal={<NewLoginModal />}
                         />
                     )}
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Feedback & Support"
-                        iconName="feedbackIcon"
-                        modal={<FeedbackSupport />}
-                    // onClick={() => navigate('/feedback-support/')}
-                    />
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="About Us"
-                        id="about-us"
-                        iconName="aboutUs"
-                        modal={<AboutModal />}
-                    />
+
+
                     {user && (
                         <MenuItemLikeButton
                             className={styles.logoutButton}
@@ -533,7 +539,7 @@ class Navbar extends React.PureComponent<Props, State> {
                             disabled={logoutRequest.pending}
                         />
                     )}
-                    {authenticated && (
+                    {/* {authenticated && (
                         <MenuItemLikeButton
                             className={styles.logoutButton}
                             title="Logout"
@@ -542,20 +548,9 @@ class Navbar extends React.PureComponent<Props, State> {
                             onClick={logoutRequest.do}
                             disabled={logoutRequest.pending}
                         />
-                    )}
-                    <MenuItemLikeButton
-                        className={styles.logoutButton}
-                        title="Home Page"
-                        iconName="aboutUs"
-                        id="logout"
-                        onClick={() => {
-                            Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
-                            setCloseWalkThroughHomepage({ value: false });
-                            navigate('/');
-                        }}
+                    )} */}
 
-                    />
-
+                    {/*
                     {
                         user && (
                             <Icon
@@ -564,7 +559,7 @@ class Navbar extends React.PureComponent<Props, State> {
                                 name="user"
                             />
                         )
-                    }
+                    } */}
 
                     {
                         authenticated && (
