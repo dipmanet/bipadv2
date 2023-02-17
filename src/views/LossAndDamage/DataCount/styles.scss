@@ -1,0 +1,27 @@
+    .wrapper {
+        width: 95%;
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #ccc;
+
+    }
+
+    .alertText {
+        text-transform: capitalize;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+
+    .alertValue {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px 15px;
+        color: var(--color-logo-blue);
+        border: 1px solid var(--color-logo-blue);
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+    }

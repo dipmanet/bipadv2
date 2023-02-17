@@ -45,6 +45,7 @@ export const convertNormalTableToCsv = (data, headers) => (
                 label,
                 modifier,
             } = header;
+            console.log(header, 'header');
             const value = modifier ? modifier(datum) : datum[key];
             val[label] = value;
         });

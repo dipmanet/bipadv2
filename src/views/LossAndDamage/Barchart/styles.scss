@@ -1,0 +1,59 @@
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        // width: 95%;
+    // justify-content: center;
+    // align-items: center;
+
+        .firstDiv {
+            display: flex;
+            flex-direction:row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+
+            .text {
+                font-size: 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+            .download-button {
+                padding: 5px;
+            }
+        }
+
+        .barChart {
+            width:100%;
+            justify-self: flex-start;
+            &:fullscreen{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: white;
+            }
+        }
+
+
+    }
+
+    .customTooltip{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding:7px;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 10px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(7.3px);
+-webkit-backdrop-filter: blur(7.3px);
+border: 1px solid rgba(255, 255, 255, 0.3);
+        .label{
+            color:black;
+            font-size: 12px;
+            text-transform: capitalize;
+        }
+    }
+
+// }

@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-concat */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { compose } from 'redux';
@@ -44,6 +45,7 @@ import {
     regionFilterSelector,
     regionsSelector,
     languageSelector,
+    filtersSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -53,21 +55,34 @@ import {
     methods,
 } from '#request';
 
-import LossDetails from '#components/LossDetails';
 import Loading from '#components/Loading';
 import Page from '#components/Page';
-
-import TabularView from './TabularView';
-import Comparative from './Comparative';
-import { getSanitizedIncidents } from './common';
 
 import {
     getResults,
     getPending,
 } from '#utils/request';
+import {
+    transformDataRangeToFilter,
+    transformRegionToFilter,
+    transformDataRangeLocaleToFilter,
+    pastDaysToDateRange,
+} from '#utils/transformations';
+import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
+import Spinner from '#rscv/Spinner';
+import TabularView from './TabularView';
+import { getSanitizedIncidents } from './common';
+import Overview from './Overview';
+import Dropdown from './DropDown';
+import BarChartVisual from './Barchart';
+import AreaChartVisual from './AreaChart';
+import HazardWise from './HazardWise';
+import DataTable from './DataTable';
+import FilterRadio from './FilterRadio';
+import NewCompare from './NewCompare';
 
 import styles from './styles.scss';
-import Overview from './Overview';
+import DataCount from './DataCount';
 
 
 const ModalButton = modalize(Button);
@@ -129,13 +144,10 @@ oneYearAgo.setMonth(today.getMonth() - 6);
 const DEFAULT_START_DATE = oneYearAgo;
 const DEFAULT_END_DATE = today;
 
-const requestQuery = ({
-    params: {
-        // startDate = DEFAULT_START_DATE.toISOString(),
-        // endDate = DEFAULT_END_DATE.toISOString(),
-        startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,
-        endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
-    } = {},
+const transformFilters = ({
+    dataDateRange,
+    region,
+    ...otherFilters
 }) => ({
     expand: ['loss.peoples', 'wards'],
     limit: -1,
@@ -144,17 +156,43 @@ const requestQuery = ({
     ordering: '-incident_on',
     data_source: 'drr_api',
     // lnd: true,
+    ...otherFilters,
+    // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
+    ...transformRegionToFilter(region),
 });
 
-const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
+const requestOptions: { [key: string] } = {
     incidentsGetRequest: {
         url: '/incident/',
         method: methods.GET,
-        query: requestQuery,
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: ({ props: { filters } }) => ({
+            ...transformFilters(filters),
+            expand: ['loss', 'event', 'wards'],
+            ordering: '-incident_on',
+            limit: -1,
+        }),
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            interface Response { results }
+            const { results: incidentList = [] } = response as Response;
+            setIncidentList({ incidentList });
+        },
         onMount: true,
-        // extras: { schemaName: 'incidentWithPeopleResponse' },
+        onPropsChanged: {
+            filters: ({
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
+
+                return shouldRequest;
+            },
+        },
+        // extras: { schemaName: 'incidentResponse' },
     },
 };
+
 
 const getDatesInIsoString = (startDate: string, endDate: string) => ({
     startDate: startDate ? (new Date(startDate)).toISOString() : undefined,
@@ -171,35 +209,6 @@ const timeTickFormatter = (timestamp: number, language: string) => {
     date.setTime(timestamp);
     return convertDateAccToLanguage(`${date.getFullYear()}-${date.getMonth() + 1}`, language);
 };
-
-const incidentMetricChartParams = {
-    count: {
-        color: '#ffa600',
-        dataKey: 'summary.count',
-        title: 'No. of incidents',
-    },
-    peopleDeath: {
-        color: '#ff6361',
-        dataKey: 'summary.peopleDeathCount',
-        title: 'People death',
-    },
-    estimatedLoss: {
-        color: '#58508d',
-        dataKey: 'summary.estimatedLoss',
-        title: 'Estimated loss',
-    },
-    infrastructureDestroyed: {
-        color: '#003f5c',
-        dataKey: 'summary.infrastructureDestroyedCount',
-        title: 'Infrastructure destroyed',
-    },
-    livestockDestroyed: {
-        color: '#bc5090',
-        dataKey: 'summary.livestockDestroyedCount',
-        title: 'Livestock destroyed',
-    },
-};
-
 class LossAndDamage extends React.PureComponent<Props, State> {
     public state = {
         startDate: encodeDate(DEFAULT_START_DATE),
@@ -207,10 +216,64 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         submittedStartDate: encodeDate(DEFAULT_START_DATE),
         submittedEndDate: encodeDate(DEFAULT_END_DATE),
         Null_check_estimatedLoss: false,
+        selectOption: { name: 'Incidents', key: 'count' },
+        valueOnclick: { value: 'count', index: 0 },
+        regionRadio: { name: 'province', id: 1 },
     }
 
-    private handleSaveClick = () => {
-        saveChart('chartList', 'lndChart');
+
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    componentDidMount() {
+        const { filters, setFilters } = this.props;
+        const sixMonths = {
+            dataDateRange: {
+                rangeInDays: 183,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        };
+
+        setFilters({ filters: sixMonths });
+    }
+
+
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    componentDidUpdate(prevProps, prevState) {
+        const { filters } = this.props;
+        const { rangeInDays } = filters.dataDateRange;
+        if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
+            if (rangeInDays !== 'custom') {
+                const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
+                this.handleStartDateChange(encodeDate(startDateFromFilter));
+                this.handleEndDateChange(encodeDate(endDateFromFilter));
+            } else {
+                const { startDate: startDateFromFilter, endDate: endDateFromFilter } = filters.dataDateRange;
+                this.handleStartDateChange(startDateFromFilter);
+                this.handleEndDateChange(endDateFromFilter);
+            }
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    componentWillUnmount(): void {
+        const { filters, setFilters } = this.props;
+        const sixMonths = {
+            dataDateRange: {
+                rangeInDays: 7,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        };
+
+        setFilters({ filters: sixMonths });
+    }
+
+    private handleSaveClick = (domId, saveName) => {
+        saveChart(domId, saveName);
     }
 
     private calculateSummary = (data) => {
@@ -374,6 +437,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regionFilter,
             regions,
             language: { language },
+            filters,
         } = this.props;
 
         const {
@@ -382,6 +446,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             submittedStartDate,
             submittedEndDate,
             Null_check_estimatedLoss,
+            valueOnclick,
+            selectOption,
+            regionRadio,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -396,12 +463,33 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         );
         const chartData = this.getDataAggregatedByYear(filteredData);
 
+        const setVAlueOnClick = (dat) => {
+            this.setState({ valueOnclick: dat });
+        };
+
+        const setSelectOption = (name, key) => {
+            this.setState({ selectOption: { name, key } });
+        };
+
+        const setRegionRadio = (val, id) => {
+            this.setState({ regionRadio: { name: val, id } });
+        };
+
+        const hazardSummary = this.getHazardsCount(filteredData, hazardTypes);
+        const dropDownClickHandler = (item, index) => {
+            const { label, key } = item;
+            setVAlueOnClick({ value: key, index });
+            setSelectOption(label, key);
+        };
+
 
         return (
             <>
-                <Loading pending={pending} />
+                <Loading
+                    pending={pending}
+                    text="Please wait, the system is loading data"
+                />
                 <Page
-                    hideDataRangeFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
@@ -414,11 +502,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     <div className={styles.label}>
-                                        <Translation>
-                                            {
-                                                t => <span>{t('DateRangeInfo')}</span>
-                                            }
-                                        </Translation>
+                                        Showing Data From
                                     </div>
                                     <DateInput
                                         showLabel={false}
@@ -468,11 +552,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 {startDate > endDate
                                     && (
                                         <div className={styles.warningText}>
-                                            <Translation>
-                                                {
-                                                    t => <span>{t('DateMismatchWarning')}</span>
-                                                }
-                                            </Translation>
+                                            WARNING! Start date cannot be greater than End Date
                                         </div>
                                     )
                                 }
@@ -522,10 +602,29 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 </div>
                             </div>
                             <div className={styles.actions}>
+                                <div className={styles.radioAndCompare}>
+                                    <FilterRadio
+                                        regionRadio={regionRadio}
+                                        setRegionRadio={setRegionRadio}
+                                        data={filteredData}
+                                        valueOnclick={valueOnclick}
+                                        regionFilter={regionFilter}
+                                    />
+                                </div>
                                 <ModalButton
                                     disabled={pending}
-                                    className={styles.compareButton}
-                                    modal={<Comparative lossAndDamageList={incidentList} />}
+                                    className={styles.modalButton}
+                                    modal={(
+                                        <NewCompare
+                                            lossAndDamageList={incidentList}
+                                            getDataAggregatedByYear={this.getDataAggregatedByYear}
+                                            getHazardsCount={this.getHazardsCount}
+                                            hazardTypes={hazardTypes}
+                                            selectOption={selectOption}
+                                            valueOnclick={valueOnclick}
+                                            currentSelection={selectOption}
+                                        />
+                                    )}
                                 >
                                     <Translation>
                                         {
@@ -533,134 +632,70 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         }
                                     </Translation>
                                 </ModalButton>
-                                <Translation>
-                                    {
-                                        t => (
-                                            <ModalButton
-                                                title={t('Show data in tabular format')}
-                                                className={styles.showTableButton}
-                                                iconName="table"
-                                                transparent
-                                                modal={(
-                                                    <IncidentTableModal
-                                                        incidentList={filteredData}
-                                                    />
-                                                )}
-                                            />
-                                        )
-                                    }
-                                </Translation>
-                            </div>
-                            <div className={styles.mainContent}>
-                                <LossDetails
-                                    className={styles.lossDetails}
-                                    data={filteredData}
-                                    nullCondition={Null_check_estimatedLoss}
-                                />
-                                <Button
-                                    title="Download Chart"
-                                    className={styles.downloadButton}
-                                    transparent
+                                <ModalButton
                                     disabled={pending}
-                                    onClick={this.handleSaveClick}
-                                    iconName="download"
+                                    title="View Tabular Data"
+                                    className={styles.showTableButton}
+                                    iconName="table"
+                                    transparent
+                                    modal={(
+                                        <DataTable
+                                            incidentList={filteredData}
+                                        />
+                                    )}
                                 />
-                                <div
-                                    className={styles.chartList}
-                                    id="chartList"
-                                >
-                                    {Object.values(incidentMetricChartParams).map(metric => (
-                                        <div
-                                            key={metric.dataKey}
-                                            className={styles.chartContainer}
-                                        >
-                                            <h4 className={styles.heading}>
-                                                <Translation>
-                                                    {
-                                                        t => <span>{t(`${metric.title}`)}</span>
-                                                    }
-                                                </Translation>
-                                            </h4>
-                                            <div className={styles.content}>
-                                                <Translation>
-                                                    {
-                                                        t => (
-                                                            <ResponsiveContainer>
-                                                                <AreaChart
-                                                                    data={chartData}
-                                                                    syncId="lndChart"
-                                                                    margin={chartMargin}
-                                                                >
-                                                                    <defs>
-                                                                        <linearGradient id={`${metric.dataKey}-color`} y1="0" x2="0" y2="1">
-                                                                            <stop offset="5%" stopColor={metric.color} stopOpacity={0.8} />
-                                                                            <stop offset="95%" stopColor={metric.color} stopOpacity={0} />
-                                                                        </linearGradient>
-                                                                    </defs>
-                                                                    <CartesianGrid strokeDasharray="3 3" />
-                                                                    <XAxis
-                                                                        type="number"
-                                                                        dataKey="incidentMonthTimestamp"
-                                                                        domain={['dataMin', 'dataMax']}
-                                                                        allowDecimals={false}
-                                                                        hide
-                                                                    />
-                                                                    <YAxis
-                                                                        hide
-                                                                        type="number"
-                                                                        domain={['dataMin', 'dataMax']}
-                                                                    />
-                                                                    <Area
-                                                                        type="monotone"
-                                                                        fill={`url(#${metric.dataKey}-color)`}
-                                                                        dataKey={metric.dataKey}
-                                                                        stroke={metric.color}
-                                                                    />
-                                                                    <Tooltip
-                                                                        labelFormatter={() => null}
-                                                                        formatter={(value, name, p) => [value, `${t(`${metric.title}`)} ${t('in')}
-                                                                        ${timeTickFormatter(p.payload.incidentMonthTimestamp, language)}`]}
-                                                                    />
-
-                                                                </AreaChart>
-                                                            </ResponsiveContainer>
-                                                        )
-                                                    }
-                                                </Translation>
-
+                            </div>
+                            <div className={styles.container}>
+                                <Dropdown
+                                    dropDownClickHandler={dropDownClickHandler}
+                                    selectOption={selectOption}
+                                    setSelectOption={setSelectOption}
+                                    dropdownOption={lossMetrics}
+                                    icon
+                                />
+                                <DataCount
+                                    data={filteredData}
+                                    value={selectOption}
+                                />
+                                {
+                                    filteredData.length > 0
+                                        ? (
+                                            <div style={{ width: '95%' }}>
+                                                <BarChartVisual
+                                                    filter={regionFilter}
+                                                    data={filteredData}
+                                                    selectOption={selectOption}
+                                                    valueOnclick={valueOnclick}
+                                                    regionRadio={regionRadio}
+                                                    handleSaveClick={this.handleSaveClick}
+                                                    downloadButton
+                                                    fullScreenMode
+                                                />
+                                                <AreaChartVisual
+                                                    selectOption={selectOption}
+                                                    data={chartData}
+                                                    handleSaveClick={this.handleSaveClick}
+                                                    downloadButton
+                                                    fullScreenMode
+                                                />
+                                                <HazardWise
+                                                    selectOption={selectOption}
+                                                    data={hazardSummary}
+                                                    handleSaveClick={this.handleSaveClick}
+                                                    downloadButton
+                                                    fullScreenMode
+                                                />
                                             </div>
-                                        </div>
-                                    ))}
-                                    <div className={styles.axis}>
-                                        <ResponsiveContainer>
-                                            <AreaChart
-                                                data={chartData}
-                                                margin={chartMargin}
-                                                syncId="lndChart"
-                                            >
-                                                <XAxis
-                                                    tickFormatter={date => timeTickFormatter(
-                                                        date,
-                                                        language,
-                                                    )}
-                                                    scale="time"
-                                                    dataKey="incidentMonthTimestamp"
-                                                    domain={['dataMin', 'dataMax']}
-                                                    allowDecimals={false}
-                                                    interval="preserveStartEnd"
-                                                    angle={-30}
+                                        )
+                                        : (
+                                            <div className={styles.dataUnavailable}>
+                                                <h3 className={styles.headerText}>Please wait, the system is loading data</h3>
+                                                <Spinner
+                                                    className={styles.spinner}
                                                 />
-                                                <Brush
-                                                    dataKey="incidentMonthTimestamp"
-                                                    tickFormatter={date => timeTickFormatter(
-                                                        date,
-                                                        language,
-                                                    )}
-                                                />
-                                            </AreaChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                </div>
+                                            </div>
+                                        )
+                                }
                             </div>
                         </>
                     )}
@@ -669,6 +704,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             lossAndDamageList={filteredData}
                             startDate={submittedStartDate}
                             endDate={submittedEndDate}
+                            radioSelect={regionRadio}
+                            currentSelection={selectOption}
+                            pending={pending}
                         />
                     )}
                 />
@@ -683,10 +721,18 @@ const mapStateToProps = state => ({
     regionFilter: regionFilterSelector(state),
     regions: regionsSelector(state),
     language: languageSelector(state),
+    filters: filtersSelector(state),
 });
 
+const mapDispatchToProps = dispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
+
+});
+
+
 export default compose(
-    connect(mapStateToProps, null),
+    connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ComponentProps>(),
     createRequestClient(requestOptions),
 )(LossAndDamage);

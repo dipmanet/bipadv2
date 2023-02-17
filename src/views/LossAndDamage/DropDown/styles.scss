@@ -1,0 +1,127 @@
+.selectContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+
+    .labelText{
+        font-size: 14px;
+        font-weight: bold;
+        width: 95%;
+        padding-bottom: 5px;
+        margin: 0;
+    }
+
+    .mainDiv {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 95%;
+
+        .selectDiv {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            background-color: #f4f4f4;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 10px;
+
+            .icon {
+                cursor: pointer;
+                padding: var(--spacing-small) var(--spacing-medium-alt);
+                font-size: var(--font-size-extra-large);
+            }
+
+
+            .selectField {
+                display: flex;
+                width: 92%;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin: auto;
+                position: relative;
+                .selectItem {
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+
+                .cross-icon{
+                    margin-left: auto;
+                    margin-right: 10px;
+                    font-size: 14px;
+                    display:none;
+                }
+
+                .selectIcon {
+                    justify-self: flex-end;
+                    width: 20px;
+                    height: 20px;
+                    background-image: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.127L12 18.127L20 10.127H4Z" fill="black"/></svg>');
+                    background-repeat: no-repeat;
+                    background-position-y: 50%;
+                    background-position-x: 98%;
+                    color: black;
+                }
+
+                &:hover .cross-icon{
+                    display: block;
+                }
+
+            }
+        }
+
+    }
+
+    .optionDiv {
+        position: absolute;
+        background-color: white;
+        top: 3.8rem;
+        z-index: 999;
+        width: 95%;
+        margin-top: 3px;
+        padding-bottom: 15px;
+        cursor: pointer;
+        border: 1px solid gray;
+
+        .searchBox{
+            width: 100%;
+            padding: 10px;
+            outline: none;
+        }
+
+        .dropDown{
+            overflow-y: scroll ;
+            height: 250px;
+            border-radius: 10px;
+
+            .optionField {
+                display: flex;
+                align-items: center;
+                padding:7px 5px;
+
+            .icon {
+                padding-left: 10px;
+                cursor: pointer;
+                padding: var(--spacing-small) var(--spacing-medium-alt);
+                font-size: var(--font-size-extra-large);
+            }
+
+            .optionName {
+                font-size: 14px;
+                margin: 0;
+            }
+
+            }
+
+        }
+
+
+
+    }
+}

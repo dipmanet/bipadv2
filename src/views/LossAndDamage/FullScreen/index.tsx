@@ -1,0 +1,55 @@
+import React from 'react';
+import Icon from '#rscg/Icon';
+import styles from './styles.scss';
+
+interface Props {
+    domElement: string;
+    setFullScreenHeightWidth: (width: string, height: string) => void;
+    setBarAllDataOnFullScreen: (val: boolean) => void;
+    selectOption: string;
+    headerText: string;
+}
+
+const FullScreenIcon = ({ domElement,
+    setFullScreenHeightWidth,
+    setBarAllDataOnFullScreen, selectOption, headerText }: Props) => {
+    function openFullscreen() {
+        if (setBarAllDataOnFullScreen) setBarAllDataOnFullScreen(true);
+        const element = document.getElementById(domElement);
+        const text = `${headerText.replace(' (Top 10)', '')} of ${selectOption}`;
+        const tag = document.createElement('p');
+        tag.setAttribute('id', 'titleHeading');
+        tag.style.fontSize = `${14}px`;
+        tag.style.fontWeight = 700;
+        tag.style.textTransform = 'capitalize';
+        tag.style.position = 'absolute';
+        tag.style.top = `${50}px`;
+        const textContent = document.createTextNode(text);
+        tag.appendChild(textContent);
+        element.appendChild(tag);
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.webkitRequestFullscreen) { /* Safari */
+            element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) { /* IE11 */
+            element.msRequestFullscreen();
+        }
+        setFullScreenHeightWidth('75%', '75%');
+    }
+    return (
+        <>
+            <Icon
+                className={styles.fullScreen}
+                name="fullScreen"
+                id="fullScreen"
+                onClick={openFullscreen}
+            />
+            <span className={styles.toolTipItem}>
+                View in fullScreen
+            </span>
+        </>
+
+    );
+};
+
+export default FullScreenIcon;

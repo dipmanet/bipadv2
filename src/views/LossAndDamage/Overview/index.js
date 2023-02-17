@@ -1,7 +1,5 @@
 import React from 'react';
-import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-import { listToMap } from '@togglecorp/fujs';
 import { TitleContext } from '#components/TitleContext';
 
 import {
@@ -19,11 +17,9 @@ import Map from '../Map';
 
 import {
     metricMap,
-    getGroupMethod,
-    getGroupedIncidents,
-    getAggregatedStats,
     getSanitizedIncidents,
 } from '../common';
+import { generateOverallDataset } from '../utils/utils';
 
 import styles from './styles.scss';
 
@@ -39,7 +35,6 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
     regionLevel: regionLevelSelector(state, props),
-
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
 });
@@ -56,37 +51,9 @@ class Overview extends React.PureComponent {
 
     static contextType = TitleContext;
 
-    generateOverallDataset = memoize((incidents, regionLevel) => {
-        if (!incidents || incidents.length <= 0) {
-            return {
-                mapping: [],
-                aggregatedStat: {},
-            };
-        }
-
-        const groupFn = getGroupMethod(regionLevel + 1);
-        const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
-        const aggregatedStat = getAggregatedStats(regionGroupedIncidents.flat());
-
-        const listToMapGroupedItem = groupedIncidents => (
-            listToMap(
-                groupedIncidents,
-                incident => incident.key,
-                incident => incident,
-            )
-        );
-        const mapping = listToMapGroupedItem(regionGroupedIncidents);
-
-        return {
-            mapping,
-            aggregatedStat,
-        };
-    })
-
     render() {
         const {
             lossAndDamageList,
-            regionLevel,
             provinces,
             districts,
             municipalities,
@@ -96,10 +63,13 @@ class Overview extends React.PureComponent {
             hazardTypes,
             startDate,
             endDate,
+            currentSelection,
+            radioSelect,
+            pending,
         } = this.props;
-        const {
-            selectedMetricKey = 'count',
-        } = this.state;
+        // const {
+        //     selectedMetricKey = 'count',
+        // } = this.state;
 
 
         const sanitizedList = getSanitizedIncidents(
@@ -111,16 +81,16 @@ class Overview extends React.PureComponent {
         const {
             mapping,
             aggregatedStat,
-        } = this.generateOverallDataset(sanitizedList, regionLevel);
+        } = generateOverallDataset(sanitizedList, radioSelect.id);
 
-        const selectedMetric = metricMap[selectedMetricKey];
+        const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
         const geoareas = (
-            (regionLevel === 3 && wards)
-            || (regionLevel === 2 && municipalities)
-            || (regionLevel === 1 && districts)
-            || provinces
+            (radioSelect.id === 4 && wards)
+            || (radioSelect.id === 3 && municipalities)
+            || (radioSelect.id === 2 && districts)
+            || (radioSelect.id === 1 && provinces)
         );
 
         const { setDamageAndLoss } = this.context;
@@ -128,14 +98,13 @@ class Overview extends React.PureComponent {
         if (setDamageAndLoss) {
             setDamageAndLoss((prevState) => {
                 if (prevState.mainModule !== selectedMetric.label
-                || prevState.startDate !== startDate
-                || prevState.endDate !== endDate) {
+                    || prevState.startDate !== startDate
+                    || prevState.endDate !== endDate) {
                     return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
                 }
                 return prevState;
             });
         }
-
         return (
             <Map
                 geoareas={geoareas}
@@ -146,9 +115,12 @@ class Overview extends React.PureComponent {
                 metric={selectedMetric.metricFn}
                 metricName={selectedMetric.label}
                 metricKey={selectedMetric.key}
-                onMetricChange={(m) => {
-                    this.setState({ selectedMetricKey: m });
-                }}
+                radioSelect={radioSelect.id}
+                currentSelection={currentSelection.name}
+                pending={pending}
+                    // onMetricChange={(m) => {
+                //     this.setState({ selectedMetricKey: m });
+                // }}
             />
         );
     }
