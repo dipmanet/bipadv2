@@ -6,12 +6,6 @@ import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
 // import { NepaliDatePicker } from 'datepicker-nepali-reactjs';
 import { _cs } from '@togglecorp/fujs';
-import styles from './styles.scss';
-import Gt from '../../../../utils';
-import Translations from '../../../../Constants/Translations';
-import NextPrevBtns from '../../NextPrevBtns';
-import 'nepali-datepicker-reactjs/dist/index.css';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -31,8 +25,12 @@ import {
     userSelector,
     palikaLanguageSelector,
 } from '#selectors';
-
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
+import Gt from '../../../../utils';
+import Translations from '../../../../Constants/Translations';
+import NextPrevBtns from '../../NextPrevBtns';
+import 'nepali-datepicker-reactjs/dist/index.css';
 
 
 const mapStateToProps = state => ({
@@ -52,7 +50,7 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     MunContacts: {
         url: '/municipality-contact/',
         query: ({ params, props }) => {
@@ -68,11 +66,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
 
 
-            return { limit: params.page,
+            return {
+                limit: params.page,
                 offset: params.offset,
 
 
-                meta: params.meta };
+                meta: params.meta,
+            };
         },
         method: methods.GET,
         onMount: true,
@@ -118,7 +118,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 
-export interface GeneralData{
+export interface GeneralData {
     reportTitle?: string;
     fiscalYear: string;
     mayor: string;
@@ -128,7 +128,7 @@ export interface GeneralData{
     committeeMembers: number;
 }
 
-interface Props{
+interface Props {
     reportTitle: string;
     datefrom: string;
     dateTo: string;
@@ -139,7 +139,7 @@ interface Props{
     memberCount: string;
 }
 
-interface Location{
+interface Location {
     municipalityId: number;
     districtId: number;
     provinceId: number;
@@ -199,7 +199,7 @@ const General = (props: Props) => {
         if (!generalData.item && generalData.fiscalYear) {
             setfiscalYear(generalData.fiscalYear);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     // if (!generalData.data) {
     //     // we are in edit mode
@@ -218,7 +218,6 @@ const General = (props: Props) => {
     }
 
     const handleSelectChange = (fiscal: any) => {
-        console.log('fiscal.target.value', fiscal.target.value);
         setfiscalYear(fiscal.target.value);
         const title = fiscalYearList
             .filter(data => Number(data.id) === Number(fiscal.target.value));
@@ -299,9 +298,6 @@ const General = (props: Props) => {
             setShowInfo(true);
         }
     }, [cao, focalPerson, mayor]);
-    useEffect(() => {
-        console.log('This fiscal year list', (fiscalYearList));
-    });
 
     const validationErrs = () => {
         if (!generalData.item && generalData.fiscalYear) {
@@ -333,9 +329,9 @@ const General = (props: Props) => {
         if (generalData.fiscalYear) {
             setFiscalYearTitle(generalData.fiscalYear);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log('general data', generalData);
+
     const handleDataSave = () => {
         if (!validationErrs() && fiscalYear !== '') {
             props.setGeneralDatapp({
@@ -374,7 +370,7 @@ const General = (props: Props) => {
 
             ) : (
                 <>
-                    { props.annex
+                    {props.annex
                         ? ''
                         : (
                             <h2>
@@ -401,7 +397,7 @@ const General = (props: Props) => {
 
                                     <select
                                         value={Number(fiscalYear)}
-                                    // defaultValue={fiscalYear}
+                                        // defaultValue={fiscalYear}
                                         onChange={handleSelectChange}
                                         className={styles.inputElement}
                                         disabled={disabled}
@@ -446,289 +442,289 @@ const General = (props: Props) => {
                     <div className={styles.formColumn}>
                         {
                             !props.annex
-                    && (
-                        <h3 style={{ marginBottom: '10px' }}>
-                            <strong>
-                                <Gt
-                                    section={Translations.MunicipalDRR}
-                                />
-                            </strong>
-                        </h3>
-                    )
+                            && (
+                                <h3 style={{ marginBottom: '10px' }}>
+                                    <strong>
+                                        <Gt
+                                            section={Translations.MunicipalDRR}
+                                        />
+                                    </strong>
+                                </h3>
+                            )
                         }
                         <div className={styles.personalDetailsrow}>
                             <div className={styles.personalDetails}>
                                 {
                                     !props.annex
-                            && (
-                                <table className={drrmLanguage.language === 'np' && styles.nep} id="table-to-xls">
-                                    <tbody>
-                                        <tr>
-
-                                            <th>
-                                                <Gt
-                                                    section={Translations.GeneralPosition}
-                                                />
-                                            </th>
-                                            <th>
-                                                <Gt
-                                                    section={Translations.Name}
-                                                />
-                                            </th>
-                                            <th>
-                                                <Gt
-                                                    section={Translations.Email}
-                                                />
-                                            </th>
-                                            <th>
-                                                <Gt
-                                                    section={Translations.PhoneNumber}
-                                                />
-                                            </th>
-                                            { !props.annex
                                     && (
-                                        <th>
-                                            {
-                                                <Gt
-                                                    section={Translations.AddEdit}
-                                                />
-                                            }
-                                        </th>
+                                        <table className={drrmLanguage.language === 'np' && styles.nep} id="table-to-xls">
+                                            <tbody>
+                                                <tr>
+
+                                                    <th>
+                                                        <Gt
+                                                            section={Translations.GeneralPosition}
+                                                        />
+                                                    </th>
+                                                    <th>
+                                                        <Gt
+                                                            section={Translations.Name}
+                                                        />
+                                                    </th>
+                                                    <th>
+                                                        <Gt
+                                                            section={Translations.Email}
+                                                        />
+                                                    </th>
+                                                    <th>
+                                                        <Gt
+                                                            section={Translations.PhoneNumber}
+                                                        />
+                                                    </th>
+                                                    {!props.annex
+                                                        && (
+                                                            <th>
+                                                                {
+                                                                    <Gt
+                                                                        section={Translations.AddEdit}
+                                                                    />
+                                                                }
+                                                            </th>
+                                                        )
+                                                    }
+                                                </tr>
+                                                <tr>
+                                                    {
+                                                        fetchedData
+                                                            && fetchedData
+                                                                .filter(item => item.position === 'Mayor').length > 0
+                                                            ? fetchedData
+                                                                .filter(item => item.position === 'Mayor').map(item => (
+                                                                    <>
+                                                                        <td>
+                                                                            {
+                                                                                <Gt
+                                                                                    section={Translations.MayororChairperson}
+                                                                                />
+
+                                                                            }
+
+                                                                        </td>
+                                                                        <td>{item.name || '-'}</td>
+                                                                        <td>{item.email || '-'}</td>
+                                                                        <td>{item.mobileNumber || '-'}</td>
+                                                                        {
+                                                                            !props.annex
+                                                                            && (
+                                                                                <td>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        onClick={() => handleEditContacts(item)}
+                                                                                        className={styles.addEditBtn}
+                                                                                    >
+                                                                                        <Icon
+                                                                                            name="edit"
+                                                                                            className={styles.addEditIcon}
+                                                                                        />
+                                                                                    </button>
+
+
+                                                                                </td>
+                                                                            )
+                                                                        }
+                                                                    </>
+                                                                ))
+                                                            : (
+                                                                <>
+                                                                    <td>
+                                                                        {
+                                                                            <Gt
+                                                                                section={Translations.MayororChairperson}
+                                                                            />
+                                                                        }
+
+                                                                    </td>
+                                                                    <td>{'-'}</td>
+                                                                    <td>{'-'}</td>
+                                                                    <td>{'-'}</td>
+                                                                    {
+                                                                        !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
+
+                                                                            </td>
+                                                                        )
+                                                                    }
+                                                                </>
+                                                            )
+                                                    }
+
+
+                                                </tr>
+                                                <tr>
+                                                    {
+                                                        fetchedData
+                                                            && fetchedData
+                                                                .filter(item => item.position === 'Chief Administrative Officer').length > 0
+                                                            ? fetchedData
+                                                                .filter(item => item.position === 'Chief Administrative Officer').map(item => (
+                                                                    <>
+                                                                        <td>
+                                                                            {
+                                                                                <Gt
+                                                                                    section={Translations.ChiefAdminstrative}
+                                                                                />
+
+                                                                            }
+
+                                                                        </td>
+                                                                        <td>{item.name || '-'}</td>
+                                                                        <td>{item.email || '-'}</td>
+                                                                        <td>{item.mobileNumber || '-'}</td>
+                                                                        {
+                                                                            !props.annex
+                                                                            && (
+                                                                                <td>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        onClick={() => handleEditContacts(item)}
+                                                                                        className={styles.addEditBtn}
+                                                                                    >
+                                                                                        <Icon
+                                                                                            name="edit"
+                                                                                            className={styles.addEditIcon}
+                                                                                        />
+                                                                                    </button>
+
+
+                                                                                </td>
+                                                                            )
+                                                                        }
+                                                                    </>
+                                                                ))
+                                                            : (
+                                                                <>
+                                                                    <td>
+                                                                        {
+                                                                            <Gt
+                                                                                section={Translations.ChiefAdminstrative}
+                                                                            />
+                                                                        }
+
+                                                                    </td>
+                                                                    <td>{'-'}</td>
+                                                                    <td>{'-'}</td>
+                                                                    <td>{'-'}</td>
+                                                                    {
+                                                                        !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
+
+                                                                            </td>
+                                                                        )
+                                                                    }
+                                                                </>
+                                                            )
+                                                    }
+
+
+                                                </tr>
+
+                                                <tr>
+                                                    {
+                                                        fetchedData
+                                                            && fetchedData
+                                                                .filter(item => item.isDrrFocalPerson === true).length > 0
+                                                            ? fetchedData
+                                                                .filter(item => item.isDrrFocalPerson === true).map(item => (
+                                                                    <>
+                                                                        <td>{'DRR Focal Person'}</td>
+                                                                        <td>{item.name || '-'}</td>
+                                                                        <td>{item.email || '-'}</td>
+                                                                        <td>{item.mobileNumber || '-'}</td>
+                                                                        {
+                                                                            !props.annex
+                                                                            && (
+                                                                                <td>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        onClick={() => handleEditContacts(item)}
+                                                                                        className={styles.addEditBtn}
+                                                                                    >
+                                                                                        <Icon
+                                                                                            name="edit"
+                                                                                            className={styles.addEditIcon}
+                                                                                        />
+                                                                                    </button>
+
+
+                                                                                </td>
+                                                                            )
+                                                                        }
+                                                                    </>
+                                                                ))
+                                                            : (
+                                                                <>
+                                                                    <td>
+                                                                        {
+                                                                            <Gt
+                                                                                section={Translations.DRRfocal}
+                                                                            />
+
+                                                                        }
+
+                                                                    </td>
+                                                                    <td>{'-'}</td>
+                                                                    <td>{'-'}</td>
+                                                                    <td>{'-'}</td>
+                                                                    {
+                                                                        !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
+
+                                                                            </td>
+                                                                        )
+                                                                    }
+                                                                </>
+                                                            )
+                                                    }
+
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
                                     )
-                                            }
-                                        </tr>
-                                        <tr>
-                                            {
-                                                fetchedData
-                                                && fetchedData
-                                                    .filter(item => item.position === 'Mayor').length > 0
-                                                    ? fetchedData
-                                                        .filter(item => item.position === 'Mayor').map(item => (
-                                                            <>
-                                                                <td>
-                                                                    {
-                                                                        <Gt
-                                                                            section={Translations.MayororChairperson}
-                                                                        />
-
-                                                                    }
-
-                                                                </td>
-                                                                <td>{item.name || '-'}</td>
-                                                                <td>{item.email || '-'}</td>
-                                                                <td>{item.mobileNumber || '-'}</td>
-                                                                {
-                                                                    !props.annex
-                                                                                && (
-                                                                                    <td>
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            onClick={() => handleEditContacts(item)}
-                                                                                            className={styles.addEditBtn}
-                                                                                        >
-                                                                                            <Icon
-                                                                                                name="edit"
-                                                                                                className={styles.addEditIcon}
-                                                                                            />
-                                                                                        </button>
-
-
-                                                                                    </td>
-                                                                                )
-                                                                }
-                                                            </>
-                                                        ))
-                                                    : (
-                                                        <>
-                                                            <td>
-                                                                {
-                                                                    <Gt
-                                                                        section={Translations.MayororChairperson}
-                                                                    />
-                                                                }
-
-                                                            </td>
-                                                            <td>{'-'}</td>
-                                                            <td>{'-'}</td>
-                                                            <td>{'-'}</td>
-                                                            {
-                                                                !props.annex
-                                                                        && (
-                                                                            <td>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={styles.addEditBtn}
-                                                                                    onClick={handleAddContact}
-                                                                                >
-                                                                                    <Icon
-                                                                                        name="plus"
-                                                                                        className={styles.addEditIcon}
-                                                                                    />
-                                                                                </button>
-
-                                                                            </td>
-                                                                        )
-                                                            }
-                                                        </>
-                                                    )
-                                            }
-
-
-                                        </tr>
-                                        <tr>
-                                            {
-                                                fetchedData
-                                                && fetchedData
-                                                    .filter(item => item.position === 'Chief Administrative Officer').length > 0
-                                                    ? fetchedData
-                                                        .filter(item => item.position === 'Chief Administrative Officer').map(item => (
-                                                            <>
-                                                                <td>
-                                                                    {
-                                                                        <Gt
-                                                                            section={Translations.ChiefAdminstrative}
-                                                                        />
-
-                                                                    }
-
-                                                                </td>
-                                                                <td>{item.name || '-'}</td>
-                                                                <td>{item.email || '-'}</td>
-                                                                <td>{item.mobileNumber || '-'}</td>
-                                                                {
-                                                                    !props.annex
-                                                                                && (
-                                                                                    <td>
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            onClick={() => handleEditContacts(item)}
-                                                                                            className={styles.addEditBtn}
-                                                                                        >
-                                                                                            <Icon
-                                                                                                name="edit"
-                                                                                                className={styles.addEditIcon}
-                                                                                            />
-                                                                                        </button>
-
-
-                                                                                    </td>
-                                                                                )
-                                                                }
-                                                            </>
-                                                        ))
-                                                    : (
-                                                        <>
-                                                            <td>
-                                                                {
-                                                                    <Gt
-                                                                        section={Translations.ChiefAdminstrative}
-                                                                    />
-                                                                }
-
-                                                            </td>
-                                                            <td>{'-'}</td>
-                                                            <td>{'-'}</td>
-                                                            <td>{'-'}</td>
-                                                            {
-                                                                !props.annex
-                                                                        && (
-                                                                            <td>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={styles.addEditBtn}
-                                                                                    onClick={handleAddContact}
-                                                                                >
-                                                                                    <Icon
-                                                                                        name="plus"
-                                                                                        className={styles.addEditIcon}
-                                                                                    />
-                                                                                </button>
-
-                                                                            </td>
-                                                                        )
-                                                            }
-                                                        </>
-                                                    )
-                                            }
-
-
-                                        </tr>
-
-                                        <tr>
-                                            {
-                                                fetchedData
-                                                && fetchedData
-                                                    .filter(item => item.isDrrFocalPerson === true).length > 0
-                                                    ? fetchedData
-                                                        .filter(item => item.isDrrFocalPerson === true).map(item => (
-                                                            <>
-                                                                <td>{'DRR Focal Person'}</td>
-                                                                <td>{item.name || '-'}</td>
-                                                                <td>{item.email || '-'}</td>
-                                                                <td>{item.mobileNumber || '-'}</td>
-                                                                {
-                                                                    !props.annex
-                                                                                && (
-                                                                                    <td>
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            onClick={() => handleEditContacts(item)}
-                                                                                            className={styles.addEditBtn}
-                                                                                        >
-                                                                                            <Icon
-                                                                                                name="edit"
-                                                                                                className={styles.addEditIcon}
-                                                                                            />
-                                                                                        </button>
-
-
-                                                                                    </td>
-                                                                                )
-                                                                }
-                                                            </>
-                                                        ))
-                                                    : (
-                                                        <>
-                                                            <td>
-                                                                {
-                                                                    <Gt
-                                                                        section={Translations.DRRfocal}
-                                                                    />
-
-                                                                }
-
-                                                            </td>
-                                                            <td>{'-'}</td>
-                                                            <td>{'-'}</td>
-                                                            <td>{'-'}</td>
-                                                            {
-                                                                !props.annex
-                                                                        && (
-                                                                            <td>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={styles.addEditBtn}
-                                                                                    onClick={handleAddContact}
-                                                                                >
-                                                                                    <Icon
-                                                                                        name="plus"
-                                                                                        className={styles.addEditIcon}
-                                                                                    />
-                                                                                </button>
-
-                                                                            </td>
-                                                                        )
-                                                            }
-                                                        </>
-                                                    )
-                                            }
-
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            )
 
                                 }
                                 {
@@ -746,87 +742,87 @@ const General = (props: Props) => {
                         </div>
                         {
                             !props.annex
-                    && (
-                        <div className={styles.localComitteeData}>
-                            <h3>
-                                <strong>
-                                    <Gt
-                                        section={Translations.LocalDisaster}
-                                    />
-                                </strong>
-                            </h3>
-                            <div className={styles.localComitteeDetail}>
-                                <div className={styles.inputContainer}>
-
-                                    <span className={styles.labelDate}>
-                                        <Gt
-                                            section={Translations.FormationDateTitle}
-                                        />
-                                    </span>
-                                    <NepaliDatePicker
-                                        inputClassName={styles.formControl}
-                                        className={styles.datepicker}
-                                        value={formationDate}
-                                        onChange={(value: string) => setformationDate(value)}
-                                                            // placeholder="sdfsdfs"
-                                        options={{
-                                            closeOnSelect: true,
-                                            calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                            valueLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                        }}
-                                    />
-
-
-                                </div>
-                                <div className={styles.inputContainer}>
-
-                                    <span className={styles.labelDate}>
-                                        <Gt
-                                            section={Translations.Numberofmembers}
-                                        />
-                                    </span>
-                                    <input
-                                        className={styles.comitteeMembers}
-                                        onChange={handleCommitteeMembers}
-                                        value={committeeMembers}
-                                        type="number"
-                                        placeholder="Enter the number of members"
-                                    />
-
-                                </div>
-                            </div>
-                        </div>
-
-                    )
-                        }
-
-                        <div className={styles.row}>
-                            { !props.annex
                             && (
-                                <>
-
+                                <div className={styles.localComitteeData}>
                                     <h3>
                                         <strong>
                                             <Gt
-                                                section={Translations.Committeemembers}
+                                                section={Translations.LocalDisaster}
                                             />
                                         </strong>
-
                                     </h3>
-                                </>
+                                    <div className={styles.localComitteeDetail}>
+                                        <div className={styles.inputContainer}>
+
+                                            <span className={styles.labelDate}>
+                                                <Gt
+                                                    section={Translations.FormationDateTitle}
+                                                />
+                                            </span>
+                                            <NepaliDatePicker
+                                                inputClassName={styles.formControl}
+                                                className={styles.datepicker}
+                                                value={formationDate}
+                                                onChange={(value: string) => setformationDate(value)}
+                                                // placeholder="sdfsdfs"
+                                                options={{
+                                                    closeOnSelect: true,
+                                                    calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                    valueLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                }}
+                                            />
+
+
+                                        </div>
+                                        <div className={styles.inputContainer}>
+
+                                            <span className={styles.labelDate}>
+                                                <Gt
+                                                    section={Translations.Numberofmembers}
+                                                />
+                                            </span>
+                                            <input
+                                                className={styles.comitteeMembers}
+                                                onChange={handleCommitteeMembers}
+                                                value={committeeMembers}
+                                                type="number"
+                                                placeholder="Enter the number of members"
+                                            />
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             )
+                        }
+
+                        <div className={styles.row}>
+                            {!props.annex
+                                && (
+                                    <>
+
+                                        <h3>
+                                            <strong>
+                                                <Gt
+                                                    section={Translations.Committeemembers}
+                                                />
+                                            </strong>
+
+                                        </h3>
+                                    </>
+                                )
                             }
                             {
                                 props.annex
-                            && (
-                                <h3>
-                                    <strong>
-                                        <Gt
-                                            section={Translations.FormationDateTitle}
-                                        />
-                                    </strong>
-                                </h3>
-                            )
+                                && (
+                                    <h3>
+                                        <strong>
+                                            <Gt
+                                                section={Translations.FormationDateTitle}
+                                            />
+                                        </strong>
+                                    </h3>
+                                )
                             }
                             <table className={drrmLanguage.language === 'np' ? _cs(styles.reportTable, styles.nep) : styles.reportTable} id="table-to-xls">
                                 <tbody>
@@ -853,21 +849,21 @@ const General = (props: Props) => {
                                         </th>
                                         {
                                             !props.annex
-                                    && (
-                                        <th>
-                                            <Gt
-                                                section={Translations.AddEdit}
-                                            />
-                                        </th>
-                                    )
+                                            && (
+                                                <th>
+                                                    <Gt
+                                                        section={Translations.AddEdit}
+                                                    />
+                                                </th>
+                                            )
                                         }
 
                                     </tr>
 
                                     {
                                         fetchedData
-                                     && fetchedData
-                                         .filter(member => member.committee === 'LDMC').length > 0
+                                            && fetchedData
+                                                .filter(member => member.committee === 'LDMC').length > 0
                                             ? fetchedData
                                                 .filter(availableMembers => availableMembers.committee === 'LDMC').map((mem, i) => (
                                                     <tr key={mem.id}>
@@ -877,22 +873,22 @@ const General = (props: Props) => {
                                                         <td>{mem.mobileNumber || '-'}</td>
                                                         {
                                                             !props.annex
-                                                        && (
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => handleEditContacts(mem)}
-                                                                    className={styles.addEditBtn}
-                                                                >
-                                                                    <Icon
-                                                                        name="edit"
-                                                                        className={styles.addEditIcon}
-                                                                    />
-                                                                </button>
+                                                            && (
+                                                                <td>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleEditContacts(mem)}
+                                                                        className={styles.addEditBtn}
+                                                                    >
+                                                                        <Icon
+                                                                            name="edit"
+                                                                            className={styles.addEditIcon}
+                                                                        />
+                                                                    </button>
 
 
-                                                            </td>
-                                                        )
+                                                                </td>
+                                                            )
                                                         }
                                                     </tr>
                                                 ))
@@ -904,72 +900,72 @@ const General = (props: Props) => {
                                                     <td>{'-'}</td>
                                                     {
                                                         !props.annex
-                                                                        && (
-                                                                            <td>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={styles.addEditBtn}
-                                                                                    onClick={handleAddContact}
-                                                                                >
-                                                                                    <Icon
-                                                                                        name="plus"
-                                                                                        className={styles.addEditIcon}
-                                                                                    />
-                                                                                </button>
+                                                        && (
+                                                            <td>
+                                                                <button
+                                                                    type="button"
+                                                                    className={styles.addEditBtn}
+                                                                    onClick={handleAddContact}
+                                                                >
+                                                                    <Icon
+                                                                        name="plus"
+                                                                        className={styles.addEditIcon}
+                                                                    />
+                                                                </button>
 
-                                                                            </td>
-                                                                        )
+                                                            </td>
+                                                        )
                                                     }
                                                 </tr>
                                             )
                                     }
                                     {!props.annex
-                                && (
-                                    <tr>
-                                        <td />
-                                        <td>
-                                            {' '}
-                                            <button
-                                                type="button"
-                                                className={styles.savebtnInfo}
-                                                onClick={handleAddContact}
-                                            >
-                                                <Icon
-                                                    name="plus"
-                                                    className={styles.plusIcon}
-                                                />
-                                                <Gt
-                                                    section={Translations.AddMember}
-                                                />
-                                                {/* Add */}
-                                            </button>
-                                        </td>
-                                        <td />
-                                        <td />
-                                        <td />
+                                        && (
+                                            <tr>
+                                                <td />
+                                                <td>
+                                                    {' '}
+                                                    <button
+                                                        type="button"
+                                                        className={styles.savebtnInfo}
+                                                        onClick={handleAddContact}
+                                                    >
+                                                        <Icon
+                                                            name="plus"
+                                                            className={styles.plusIcon}
+                                                        />
+                                                        <Gt
+                                                            section={Translations.AddMember}
+                                                        />
+                                                        {/* Add */}
+                                                    </button>
+                                                </td>
+                                                <td />
+                                                <td />
+                                                <td />
 
-                                    </tr>
-                                )
+                                            </tr>
+                                        )
                                     }
 
                                 </tbody>
                             </table>
                             {
                                 !props.annex
-                            && (
-                                <>
-                                    <h5>
-                                        {' '}
-                                        <i>
-                                            <Gt
-                                                section={Translations.GeneralPleaseClick}
-                                            />
-                                        </i>
-                                    </h5>
+                                && (
+                                    <>
+                                        <h5>
+                                            {' '}
+                                            <i>
+                                                <Gt
+                                                    section={Translations.GeneralPleaseClick}
+                                                />
+                                            </i>
+                                        </h5>
 
 
-                                </>
-                            )
+                                    </>
+                                )
                             }
                         </div>
 
@@ -977,13 +973,13 @@ const General = (props: Props) => {
 
                     {
                         !props.annex
-                && (
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={handleDataSave}
-                        firstpage
-                    />
-                )
+                        && (
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={handleDataSave}
+                                firstpage
+                            />
+                        )
                     }
                 </>
             )}

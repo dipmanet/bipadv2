@@ -16,9 +16,9 @@ const state: PageState = {
     eventTypes: {},
 
     hidePopup: false,
-    isBulletinPromotionPage: false,
     closeWalkThrough: true,
     run: false,
+    isBulletinPromotionPage: false,
     region: {
         adminLevel: undefined,
     },
@@ -395,6 +395,7 @@ const state: PageState = {
     },
     drrmProgress: -1,
 
+    // IBF initial state
 
     ibfPage: {
         demo: 1,
@@ -405,13 +406,17 @@ const state: PageState = {
         returnPeriod: 0,
         leadTime: 0,
         overallFloodHazard: [],
-        filter: { district: '', municipality: '', ward: '' },
+        filter: { district: '', municipality: [], ward: '' },
         householdJson: [],
         showHouseHold: 0,
         selectedIndicator: '',
         householdDistrictAverage: {},
         selectedLegend: '',
+        indicators: [],
+        wtChange: 0,
+        weights: [],
     },
+
     bulletinEditData: {},
     bulletinPage: {
         sitRep: 123,

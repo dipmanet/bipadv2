@@ -16,7 +16,6 @@ import incidentLogo from '#resources/palikaicons/incident.svg';
 import simulationLogo from '#resources/palikaicons/simulation.svg';
 import dashboardLogo from '#resources/palikaicons/dashboard.svg';
 import myreport from '#resources/palikaicons/drrmreport.svg';
-import Gt from '../utils';
 import SidebarMenu from '#views/PalikaReport/Constants/MenuItems';
 import * as PageTypes from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
@@ -43,8 +42,9 @@ import {
 } from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
-import Translations from '../Constants/Translations';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+import Translations from '../Constants/Translations';
+import Gt from '../utils';
 import styles from './styles.scss';
 
 
@@ -70,13 +70,13 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
 });
 
-interface MenuItems{
+interface MenuItems {
     key: number;
     content: string;
     contentNp: string;
 }
 
-interface MunicipalityName{
+interface MunicipalityName {
     title_en: string;
     title_ne: string;
 }
@@ -89,7 +89,7 @@ interface PropsFromDispatch {
 }
 
 
-interface Props{
+interface Props {
     municipalityName: MunicipalityName;
     showReportEdit: boolean;
     handleMenuClick: (menuItems: MenuItems[]) => void;
@@ -198,7 +198,7 @@ const Sidebar = (props: Props) => {
             redirectTo: -2,
         });
     };
-    console.log('Selected tab value', selectedTab);
+
     const handleMyPalikaClickReport = () => {
         handleMyPalikaSelect(false);
     };
@@ -221,7 +221,7 @@ const Sidebar = (props: Props) => {
             getsubmenuId(selectedSubMenuId);
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSubMenuId]);
 
     useEffect(() => {
@@ -232,7 +232,7 @@ const Sidebar = (props: Props) => {
         };
         InitialRender();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedMenuId]);
     const handleAdd = () => {
         handleAddButton(true, true, true);
@@ -261,124 +261,124 @@ const Sidebar = (props: Props) => {
     return (
         <div>
             {showReportEdit
-            && (
-                <>
-                    <div className={styles.breadcrumbRow}>
+                && (
+                    <>
+                        <div className={styles.breadcrumbRow}>
 
-                        <button
-                            className={styles.breadcrumb}
-                            type="button"
-                            onClick={handleMyPalikaClick}
-                        >
-                            <Gt section={Translations.breadcrumb1} />
-                         &gt;
-                        </button>
+                            <button
+                                className={styles.breadcrumb}
+                                type="button"
+                                onClick={handleMyPalikaClick}
+                            >
+                                <Gt section={Translations.breadcrumb1} />
+                                &gt;
+                            </button>
 
-                        <button
-                            className={_cs(styles.breadcrumb, styles.rightCrumb)}
-                            type="button"
-                            onClick={handleMyPalikaClickReport}
-                        >
-                            <Gt section={Translations.breadcrumb2} />
-                        </button>
+                            <button
+                                className={_cs(styles.breadcrumb, styles.rightCrumb)}
+                                type="button"
+                                onClick={handleMyPalikaClickReport}
+                            >
+                                <Gt section={Translations.breadcrumb2} />
+                            </button>
 
-                    </div>
+                        </div>
 
-                    <div className={styles.reportSidebarMainContainer}>
-                        <h2>
-                            <Gt section={Translations.sidebarTitle} />
+                        <div className={styles.reportSidebarMainContainer}>
+                            <h2>
+                                <Gt section={Translations.sidebarTitle} />
 
-                            {' '}
-                            <Icon
-                                name="info"
-                                className={styles.infoIcon}
-                                title={drrmLanguage.language === 'np' ? Translations.CreateReportInformationButtom.np : Translations.CreateReportInformationButtom.en}
-                            />
+                                {' '}
+                                <Icon
+                                    name="info"
+                                    className={styles.infoIcon}
+                                    title={drrmLanguage.language === 'np' ? Translations.CreateReportInformationButtom.np : Translations.CreateReportInformationButtom.en}
+                                />
 
-                        </h2>
-                        <ul className={styles.menuList}>
-                            {menuItems.map((item) => {
-                                if (item.key < menuItems.length - 1) {
+                            </h2>
+                            <ul className={styles.menuList}>
+                                {menuItems.map((item) => {
+                                    if (item.key < menuItems.length - 1) {
+                                        return (
+                                            <li>
+                                                <button
+                                                    key={item.key}
+                                                    className={selectedTab === item.key ? styles.selected : styles.notSelected}
+                                                    onClick={() => handleMenuItemClick(item.key)}
+                                                    type="button"
+                                                    disabled={drrmProgress < item.key}
+                                                >
+                                                    <span className={styles.iconandMenu}>
+
+                                                        <ScalableVectorGraphics
+                                                            className={styles.bulletPoint}
+                                                            src={icons[item.key]}
+                                                            alt="Bullet Point"
+                                                        />
+                                                        {
+                                                            drrmLanguage.language === 'en'
+                                                                ? item.content
+                                                                : item.contentNp
+                                                        }
+                                                    </span>
+                                                    <span>
+                                                        {
+                                                            drrmProgress >= item.key
+
+                                                                ? (
+                                                                    <Icon
+                                                                        name="check"
+                                                                        className={styles.progressDone}
+                                                                    />
+                                                                )
+                                                                : (
+                                                                    <Icon
+                                                                        name="circle"
+                                                                        className={drrmProgress + 1 === item.key
+                                                                            ? styles.progressNotDone
+                                                                            : styles.progressNotDone}
+                                                                    />
+                                                                )
+                                                        }
+                                                    </span>
+                                                </button>
+                                            </li>
+                                        );
+                                    }
                                     return (
                                         <li>
                                             <button
                                                 key={item.key}
-                                                className={selectedTab === item.key ? styles.selected : styles.notSelected}
+                                                className={
+                                                    drrmProgress === 9
+                                                        ? styles.createReportDisabled
+                                                        : styles.createReport
+                                                }
                                                 onClick={() => handleMenuItemClick(item.key)}
                                                 type="button"
-                                                disabled={drrmProgress < item.key}
+                                                disabled={drrmProgress === item.key}
                                             >
-                                                <span className={styles.iconandMenu}>
-
-                                                    <ScalableVectorGraphics
-                                                        className={styles.bulletPoint}
-                                                        src={icons[item.key]}
-                                                        alt="Bullet Point"
-                                                    />
-                                                    {
-                                                        drrmLanguage.language === 'en'
-                                                            ? item.content
-                                                            : item.contentNp
-                                                    }
-                                                </span>
-                                                <span>
-                                                    {
-                                                        drrmProgress >= item.key
-
-                                                            ? (
-                                                                <Icon
-                                                                    name="check"
-                                                                    className={styles.progressDone}
-                                                                />
-                                                            )
-                                                            : (
-                                                                <Icon
-                                                                    name="circle"
-                                                                    className={drrmProgress + 1 === item.key
-                                                                        ? styles.progressNotDone
-                                                                        : styles.progressNotDone}
-                                                                />
-                                                            )
-                                                    }
-                                                </span>
+                                                {
+                                                    drrmLanguage.language === 'en'
+                                                        ? item.content
+                                                        : item.contentNp
+                                                }
                                             </button>
                                         </li>
-                                    );
-                                }
-                                return (
-                                    <li>
-                                        <button
-                                            key={item.key}
-                                            className={
-                                                drrmProgress === 9
-                                                    ? styles.createReportDisabled
-                                                    : styles.createReport
-                                            }
-                                            onClick={() => handleMenuItemClick(item.key)}
-                                            type="button"
-                                            disabled={drrmProgress === item.key}
-                                        >
-                                            {
-                                                drrmLanguage.language === 'en'
-                                                    ? item.content
-                                                    : item.contentNp
-                                            }
-                                        </button>
-                                    </li>
 
-                                );
-                            })}
-                            {
-                                showErr
-            && (
-                <span className={styles.error}>
-                    <Gt section={Translations.validationErrSidebar} />
-                </span>
-            )}
-                        </ul>
-                    </div>
-                </>
-            )
+                                    );
+                                })}
+                                {
+                                    showErr
+                                    && (
+                                        <span className={styles.error}>
+                                            <Gt section={Translations.validationErrSidebar} />
+                                        </span>
+                                    )}
+                            </ul>
+                        </div>
+                    </>
+                )
             }
 
             {
@@ -400,7 +400,7 @@ const Sidebar = (props: Props) => {
                                                     type="button"
                                                     className={
                                                         isIndicatorClicked
-                                                             && selectedSubMenuId === data.id
+                                                            && selectedSubMenuId === data.id
                                                             ? styles.selected
                                                             : styles.notSelected}
 
@@ -440,55 +440,55 @@ const Sidebar = (props: Props) => {
                         </ul>
                         <div className={styles.addButnDiv}>
                             {selectedSubMenuId === 2
-                        && (
-                            <button
-                                type="submit"
-                                className={styles.addButn}
-                                onClick={handleAdd}
-                            >
-                                <Gt section={Translations.dashboardReportGenerateButton} />
-                                {' '}
-
-                            </button>
-                        )
-                            }
-                            {user && user.isSuperuser
-                        && (
-                            <>
-
-                                <div className={styles.inputContainer}>
-                                    <h5><Gt section={Translations.dashboardSidebarSelectMunicipalityHeader} /></h5>
-                                    <StepwiseRegionSelectInput
-                                        className={
-                                            styles.stepwiseRegionSelectInput}
-                                        faramElementName="region"
-                                        wardsHidden
-                                        checkProvince={handleCheckFilterDisableButtonForProvince}
-                                        checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                                        checkMun={handleCheckFilterDisableButtonForMunicipality}
-                                        provinceInputClassName={styles.snprovinceinput}
-                                        districtInputClassName={styles.sndistinput}
-                                        municipalityInputClassName={styles.snmuniinput}
-                                    />
-
-
-                                </div>
-                                <div className={styles.butnDiv}>
+                                && (
                                     <button
                                         type="submit"
                                         className={styles.addButn}
                                         onClick={handleAdd}
-                                        disabled={!drrmRegion.municipality}
                                     >
                                         <Gt section={Translations.dashboardReportGenerateButton} />
                                         {' '}
 
                                     </button>
-                                </div>
+                                )
+                            }
+                            {user && user.isSuperuser
+                                && (
+                                    <>
+
+                                        <div className={styles.inputContainer}>
+                                            <h5><Gt section={Translations.dashboardSidebarSelectMunicipalityHeader} /></h5>
+                                            <StepwiseRegionSelectInput
+                                                className={
+                                                    styles.stepwiseRegionSelectInput}
+                                                faramElementName="region"
+                                                wardsHidden
+                                                checkProvince={handleCheckFilterDisableButtonForProvince}
+                                                checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                                checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                                provinceInputClassName={styles.snprovinceinput}
+                                                districtInputClassName={styles.sndistinput}
+                                                municipalityInputClassName={styles.snmuniinput}
+                                            />
 
 
-                            </>
-                        )
+                                        </div>
+                                        <div className={styles.butnDiv}>
+                                            <button
+                                                type="submit"
+                                                className={styles.addButn}
+                                                onClick={handleAdd}
+                                                disabled={!drrmRegion.municipality}
+                                            >
+                                                <Gt section={Translations.dashboardReportGenerateButton} />
+                                                {' '}
+
+                                            </button>
+                                        </div>
+
+
+                                    </>
+                                )
                             }
                         </div>
                     </div>

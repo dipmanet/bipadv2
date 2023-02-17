@@ -70,7 +70,11 @@
         .report-incident-button,
         .reliefButton {
             padding: var(--spacing-medium) 0;
-            width: 33%;
+
+        }
+
+        .insideContainerComponent {
+            width: 33%
         }
 
         .buttomGroup {
@@ -80,6 +84,7 @@
 
         .logout-button {
             padding: var(--spacing-medium) 0;
+
 
 
         }

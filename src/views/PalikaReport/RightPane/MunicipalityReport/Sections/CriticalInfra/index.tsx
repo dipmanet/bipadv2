@@ -10,7 +10,6 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import Loader from 'react-loader';
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -18,14 +17,15 @@ import {
     methods,
 } from '#request';
 import editIcon from '#resources/palikaicons/edit.svg';
-import { provincesSelector,
+import {
+    provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
     drrmRegionSelector,
     drrmProgresSelector,
-    palikaLanguageSelector } from '#selectors';
-import NextPrevBtns from '../../NextPrevBtns';
+    palikaLanguageSelector,
+} from '#selectors';
 import {
     setPalikaRedirectAction,
     setDrrmCriticalAction,
@@ -33,10 +33,12 @@ import {
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import NextPrevBtns from '../../NextPrevBtns';
+import styles from './styles.scss';
 import Gt from '../../../../utils';
 import Translations from '../../../../Constants/Translations';
 
-interface Props{
+interface Props {
     width: string;
     height?: string;
 
@@ -57,7 +59,7 @@ const mapStateToProps = (state, props) => ({
     drrmProgress: drrmProgresSelector(state),
     drrmLanguage: palikaLanguageSelector(state),
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     PalikaResources: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
@@ -74,11 +76,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
 
 
-            return { limit: params.page,
+            return {
+                limit: params.page,
                 offset: params.offset,
 
 
-                meta: params.meta };
+                meta: params.meta,
+            };
         },
         method: methods.GET,
         onMount: true,
@@ -201,7 +205,7 @@ const CriticalInfra = (props: Props) => {
         PalikaResources.do({
             offset,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
     // Finding Header for table data
 
@@ -212,7 +216,6 @@ const CriticalInfra = (props: Props) => {
             setFilteredData(fetchedData);
         }
         if (fetchedData.length > 0 && chartData.length === 0) {
-            console.log('fetchedData res', fetchedData);
             setChartData(
                 [
 
@@ -311,13 +314,13 @@ const CriticalInfra = (props: Props) => {
             {
                 !props.previewDetails
 
-        && (
-            <div className={styles.tabsPageContainer}>
-                <h2>
-                    <Gt section={Translations.ResourcesHeading} />
-                </h2>
-                <div className={styles.palikaTable}>
-                    {/* {
+                && (
+                    <div className={styles.tabsPageContainer}>
+                        <h2>
+                            <Gt section={Translations.ResourcesHeading} />
+                        </h2>
+                        <div className={styles.palikaTable}>
+                            {/* {
                         !props.annex
                         && (
                             <>
@@ -337,167 +340,167 @@ const CriticalInfra = (props: Props) => {
                             </>
                         )
                     } */}
-                    <table id="table-to-xls">
-                        <tbody>
-                            <tr>
-                                {!props.annex && filteredtData.length
-                                    ? (
-                                        <th>
-                                            <input
-                                                type="checkbox"
-                                                onChange={handleCheckAll}
-                                                checked={checkedAll}
-                                                defaultChecked
-                                                className={styles.checkBox}
-                                            />
-                                        </th>
-                                    ) : null}
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesSerialNumber} />
-                                </th>
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesName} />
-                                </th>
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesType} />
-                                </th>
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesOperatorType} />
-                                </th>
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesNumberOfMaleEmployee} />
-                                </th>
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesNumberOfFemaleEmployee} />
-                                </th>
-                                <th>
-                                    {' '}
-                                    <Gt section={Translations.ResourcesNumberOfTotalEmployee} />
-                                </th>
-                                {
-                                    !props.annex && filteredtData.length
-                                        ? (
-                                            <th>
-                                                {' '}
-                                                <Gt section={Translations.ResourcesAction} />
-                                            </th>
-                                        ) : null
-                                }
-                            </tr>
-                            {loader ? (
-                                <>
-                                    {' '}
-                                    <Loader
-                                        top="50%"
-                                        left="60%"
-                                    />
-                                    <p className={styles.loaderInfo}>Loading...Please Wait</p>
-                                </>
-                            )
-                                : (
-                                    <>
-                                        {filteredtData && filteredtData.map((item, i) => (
-                                            <tr key={item.id}>
-                                                <td>
+                            <table id="table-to-xls">
+                                <tbody>
+                                    <tr>
+                                        {!props.annex && filteredtData.length
+                                            ? (
+                                                <th>
                                                     <input
                                                         type="checkbox"
-                                                        checked={checkedRows.indexOf(i) !== -1}
-
-                                                            // defaultChecked
-                                                        onChange={e => handleCheck(i, e)}
+                                                        onChange={handleCheckAll}
+                                                        checked={checkedAll}
+                                                        defaultChecked
                                                         className={styles.checkBox}
-                                                        key={item.id}
                                                     />
-                                                </td>
-                                                <td>{i + 1}</td>
-                                                <td>{item.title ? item.title : '-'}</td>
-                                                <td>{item.resourceType ? item.resourceType : '-'}</td>
-                                                <td>{item.operatorType ? item.operatorType : '-'}</td>
-                                                <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
-                                                <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
-                                                <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
-                                                {
-                                                    !props.annex
+                                                </th>
+                                            ) : null}
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesSerialNumber} />
+                                        </th>
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesName} />
+                                        </th>
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesType} />
+                                        </th>
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesOperatorType} />
+                                        </th>
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesNumberOfMaleEmployee} />
+                                        </th>
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesNumberOfFemaleEmployee} />
+                                        </th>
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesNumberOfTotalEmployee} />
+                                        </th>
+                                        {
+                                            !props.annex && filteredtData.length
+                                                ? (
+                                                    <th>
+                                                        {' '}
+                                                        <Gt section={Translations.ResourcesAction} />
+                                                    </th>
+                                                ) : null
+                                        }
+                                    </tr>
+                                    {loader ? (
+                                        <>
+                                            {' '}
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    )
+                                        : (
+                                            <>
+                                                {filteredtData && filteredtData.map((item, i) => (
+                                                    <tr key={item.id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={checkedRows.indexOf(i) !== -1}
+
+                                                                // defaultChecked
+                                                                onChange={e => handleCheck(i, e)}
+                                                                className={styles.checkBox}
+                                                                key={item.id}
+                                                            />
+                                                        </td>
+                                                        <td>{i + 1}</td>
+                                                        <td>{item.title ? item.title : '-'}</td>
+                                                        <td>{item.resourceType ? item.resourceType : '-'}</td>
+                                                        <td>{item.operatorType ? item.operatorType : '-'}</td>
+                                                        <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
+                                                        <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
+                                                        <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
+                                                        {
+                                                            !props.annex
+                                                            && (
+                                                                <td>
+                                                                    <button
+                                                                        className={styles.editButtn}
+                                                                        type="button"
+                                                                        onClick={() => handleEditResource(item)}
+                                                                        title={drrmLanguage.language === 'np'
+                                                                            ? Translations.ResourcesEditTooltip.np
+                                                                            : Translations.ResourcesEditTooltip.en}
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={editIcon}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
+                                                                </td>
+                                                            )
+                                                        }
+                                                    </tr>
+                                                ))}
+                                            </>
+                                        )}
+                                    {!props.annex && !loader
                                         && (
-                                            <td>
-                                                <button
-                                                    className={styles.editButtn}
-                                                    type="button"
-                                                    onClick={() => handleEditResource(item)}
-                                                    title={drrmLanguage.language === 'np'
-                                                        ? Translations.ResourcesEditTooltip.np
-                                                        : Translations.ResourcesEditTooltip.en}
-                                                >
-                                                    <ScalableVectorGraphics
-                                                        className={styles.bulletPoint}
-                                                        src={editIcon}
-                                                        alt="editPoint"
-                                                    />
-                                                </button>
-                                            </td>
-                                        )
-                                                }
+                                            <tr>
+                                                <td />
+                                                <td />
+                                                <td>
+                                                    <button
+                                                        type="button"
+                                                        className={styles.savebtn}
+                                                        onClick={handleAddResource}
+                                                    >
+                                                        <Icon
+                                                            name="plus"
+                                                            className={styles.plusIcon}
+                                                        />
+                                                        <Gt section={Translations.ResourcesAddButton} />
+                                                    </button>
+                                                </td>
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
                                             </tr>
-                                        ))}
-                                    </>
-                                )}
-                            {!props.annex && !loader
-&& (
-    <tr>
-        <td />
-        <td />
-        <td>
-            <button
-                type="button"
-                className={styles.savebtn}
-                onClick={handleAddResource}
-            >
-                <Icon
-                    name="plus"
-                    className={styles.plusIcon}
-                />
-                <Gt section={Translations.ResourcesAddButton} />
-            </button>
-        </td>
-        <td />
-        <td />
-        <td />
-        <td />
-        <td />
-        <td />
-    </tr>
-)
+                                        )
+
+                                    }
+                                </tbody>
+                            </table>
+                            {!loader && filteredtData.length === 0
+                                && <h2><Gt section={Translations.ResourcesNoDataMessage} /></h2>
 
                             }
-                        </tbody>
-                    </table>
-                    {!loader && filteredtData.length === 0
-                                 && <h2><Gt section={Translations.ResourcesNoDataMessage} /></h2>
+                            {!loader && !props.annex
+                                && (
+                                    <>
 
-                    }
-                    {!loader && !props.annex
-                                 && (
-                                     <>
-
-                                         <NextPrevBtns
-                                             handlePrevClick={props.handlePrevClick}
-                                             handleNextClick={handleNext}
-                                         />
-                                     </>
-                                 )
-                    }
+                                        <NextPrevBtns
+                                            handlePrevClick={props.handlePrevClick}
+                                            handleNextClick={handleNext}
+                                        />
+                                    </>
+                                )
+                            }
 
 
-                </div>
+                        </div>
 
-            </div>
-        )
+                    </div>
+                )
             }
             {
                 props.previewDetails

@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import styles from './styles.scss';
 import {
     generalDataSelector,
     budgetDataSelector,
@@ -10,11 +9,12 @@ import {
     programAndPolicySelector,
 
 } from '#selectors';
+import style from '#mapStyles/rasterStyle';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import styles from './styles.scss';
 import Relief from '../../Relief';
 import Leadership from './Leadership';
 import Footer from './Footer';
-import style from '#mapStyles/rasterStyle';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 
 const mapStateToProps = state => ({
@@ -24,11 +24,11 @@ const mapStateToProps = state => ({
     budgetActivityData: budgetActivityDataSelector(state),
 });
 
-interface Props{
+interface Props {
     reportData: Element[];
 }
 
-export interface GeneralData{
+export interface GeneralData {
     reportTitle?: string;
     fiscalYear: string;
     mayor: string;
@@ -38,19 +38,19 @@ export interface GeneralData{
     committeeMembers: number;
 }
 
-export interface BudgetData{
+export interface BudgetData {
     totMunBudget: number;
     totDrrBudget: number;
     additionalDrrBudget: number;
 }
 
-export interface ProgramAndPolicyData{
+export interface ProgramAndPolicyData {
     pointOne: string;
     pointTwo: string;
     pointThree: string;
 }
 
-export interface BudgetActivityData{
+export interface BudgetActivityData {
     name: string;
     fundSource: string;
     additionalDrrBudget: string;
@@ -109,11 +109,11 @@ const Preview = (props: Props) => {
                     <Relief
                         previewDetails
                         reportData={''}
-                        tableHeader={() => {}}
-                        updateTab={() => {}}
+                        tableHeader={() => { }}
+                        updateTab={() => { }}
                         page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
+                        handlePrevClick={() => { }}
+                        handleNextClick={() => { }}
                     />
 
                 </div>
@@ -121,11 +121,11 @@ const Preview = (props: Props) => {
                     <Relief
                         hazardwiseImpact
                         reportData={''}
-                        tableHeader={() => {}}
-                        updateTab={() => {}}
+                        tableHeader={() => { }}
+                        updateTab={() => { }}
                         page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
+                        handlePrevClick={() => { }}
+                        handleNextClick={() => { }}
                     />
                 </div>
 

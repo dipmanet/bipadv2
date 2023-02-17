@@ -87,6 +87,7 @@ const GroupMenuListContainer = ({
             setShowInfo1(false);
         }
     }, [disableOutsideDivClick]);
+
     return (
         <div className={styles.container}>
             <div className={styles.infoBoxWrapper}>
@@ -161,6 +162,7 @@ const MenuItemLikeButton = ({
         title={title}
         id={id}
     >
+
         {image ? (
             <ScalableVectorGraphics
                 className={styles.infoIconMax}
@@ -296,13 +298,14 @@ class Navbar extends React.PureComponent<Props, State> {
     }
 
     private menuRendererParams = (_: string, data: Menu) => ({
-        title: data.title,
+        title: this.props.language.language === 'en' ? data.title : data.titleNep,
         link: data.path,
         disabled: data.disabled,
         iconName: data.iconName,
         className: styles.menuItem,
         id: data.id ? data.id : null,
     });
+
 
     private handleActiveGroupButton = (data: boolean) => {
         this.setState({ activeGroupButton: data });
@@ -328,7 +331,7 @@ class Navbar extends React.PureComponent<Props, State> {
         const { activeGroupButton, disableOutsideDivClick } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        const GroupMenuListRoutes = ['dataArchive'];
+        const GroupMenuListRoutes = ['dataArchive', 'droughtWatch'];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
 
         return (
@@ -441,29 +444,60 @@ class Navbar extends React.PureComponent<Props, State> {
                             </Translation>
                         )} */}
 
+                        <Translation>
+                            {
+                                t => (
+
+                                    <MenuItemLikeButton
+                                        className={_cs(styles.logoutButton, styles.insideContainerComponent)}
+                                        title={t('Home Page')}
+                                        iconName="aboutUs"
+                                        id="logout"
+                                        onClick={() => {
+                                            Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
+                                            setCloseWalkThroughHomepage({ value: false });
+                                            navigate('/');
+                                        }}
+                                    />
+                                )}
+                        </Translation>
                         {authenticated && (
-                            <ModalButton
-                                className={styles.reliefButton}
-                                title="Relief"
-                                iconName="cart"
-                                id="relief"
-                                modal={<Relief />}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+
+                                        <ModalButton
+                                            className={_cs(styles.reliefButton, styles.insideContainerComponent)}
+                                            title={t('Relief')}
+                                            iconName="cart"
+                                            id="relief"
+                                            modal={<Relief />}
+                                        />
+                                    )}
+                            </Translation>
+
                         )}
                         {authenticated && (
-                            <ModalButton
-                                className={styles.reportIncidentButton}
-                                title="Reported incidents"
-                                id="reported-incidents"
-                                iconName="list"
-                                modal={<CitizenReportsModal />}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+
+                                        <ModalButton
+                                            className={_cs(styles.reportIncidentButton, styles.insideContainerComponent)}
+                                            title={t('Reported incidents')}
+                                            id="reported-incidents"
+                                            iconName="list"
+                                            modal={<CitizenReportsModal />}
+                                        />
+                                    )}
+                            </Translation>
+
                         )}
                         <Translation>
                             {
                                 t => (
                                     <ModalButton
-                                        className={styles.reportIncidentButton}
+                                        className={_cs(styles.reportIncidentButton, styles.insideContainerComponent)}
                                         title="Feedback and support"
                                         iconName="feedbackIcon"
                                         modal={(
@@ -478,31 +512,35 @@ class Navbar extends React.PureComponent<Props, State> {
 
                                 )}
                         </Translation>
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="About Us"
-                            id="about-us"
-                            iconName="aboutUs"
-                            modal={<AboutModal />}
-                        />
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="Situation Report"
-                            id="situation-report"
-                            iconName="textDocument"
-                            modal={<SituationReport />}
-                        />
-                        <MenuItemLikeButton
-                            className={styles.logoutButton}
-                            title="Home Page"
-                            iconName="aboutUs"
-                            id="logout"
-                            onClick={() => {
-                                Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
-                                setCloseWalkThroughHomepage({ value: false });
-                                navigate('/');
-                            }}
-                        />
+
+                        <Translation>
+                            {
+                                t => (
+
+                                    <ModalButton
+                                        className={_cs(styles.reportIncidentButton, styles.insideContainerComponent)}
+                                        title={t('About Us')}
+                                        id="about-us"
+                                        iconName="aboutUs"
+                                        modal={<AboutModal />}
+                                    />
+                                )}
+                        </Translation>
+                        <Translation>
+                            {
+                                t => (
+
+                                    <ModalButton
+                                        className={_cs(styles.reportIncidentButton, styles.insideContainerComponent)}
+                                        title={t('Situation Report')}
+                                        id="situation-report"
+                                        iconName="textDocument"
+                                        modal={<SituationReport />}
+                                    />
+                                )}
+                        </Translation>
+
+
                         {/* <ModalButton
                             className={styles.reportIncidentButton}
                             title="About Us"
@@ -521,63 +559,51 @@ class Navbar extends React.PureComponent<Props, State> {
                         /> */}
                     </GroupMenuListContainer>
                     {!authenticated && (
-                        <ModalButton
-                            className={styles.menuItem}
-                            title="Login"
-                            id="login"
-                            iconName="login"
-                            modal={<NewLoginModal />}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.menuItem}
+                                        title={t('Login')}
+                                        iconName="login"
+                                        id="login"
+                                        modal={<NewLoginModal />}
+                                    />
+                                )}
+                        </Translation>
                     )}
-
 
                     {user && (
-                        <MenuItemLikeButton
-                            className={styles.logoutButton}
-                            title="Admin"
-                            iconName="user"
-                            onClick={gotoadmin}
-                            disabled={logoutRequest.pending}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <MenuItemLikeButton
+                                        className={styles.logoutButton}
+                                        title={t('Admin')}
+                                        iconName="user"
+                                        onClick={gotoadmin}
+                                        disabled={logoutRequest.pending}
+                                    />
+                                )
+                            }
+                        </Translation>
+
                     )}
-                    {/* {authenticated && (
-                        <MenuItemLikeButton
-                            className={styles.logoutButton}
-                            title="Logout"
-                            iconName="logout"
-                            // id="logout"
-                            onClick={logoutRequest.do}
-                            disabled={logoutRequest.pending}
-                        />
-                    )} */}
 
-                    {/*
-                    {
-                        user && (
-                            <Icon
-                                className={styles.userIcon}
-                                title={`${user.username}`}
-                                name="user"
-                            />
-                        )
-                    } */}
-
-                    {
-                        authenticated && (
-                            <Translation>
-                                {
-                                    t => (
-                                        <MenuItemLikeButton
-                                            className={styles.logoutButton}
-                                            title={t('Logout')}
-                                            iconName="logout"
-                                            onClick={logoutRequest.do}
-                                            disabled={logoutRequest.pending}
-                                        />
-                                    )}
-                            </Translation>
-                        )
-                    }
+                    {authenticated && (
+                        <Translation>
+                            {
+                                t => (
+                                    <MenuItemLikeButton
+                                        className={styles.logoutButton}
+                                        title={t('Logout')}
+                                        iconName="logout"
+                                        onClick={logoutRequest.do}
+                                        disabled={logoutRequest.pending}
+                                    />
+                                )}
+                        </Translation>
+                    )}
 
 
                 </div>

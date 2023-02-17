@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { ADToBS } from 'bikram-sambat-js';
 import Loader from 'react-loader';
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-import Gt from '../../utils';
 import Translations from '#views/PalikaReport/Constants/Translations';
 import { iconNames } from '#constants';
 import editIcon from '#resources/palikaicons/edit.svg';
@@ -18,6 +16,8 @@ import {
     setGeneralDataAction,
 } from '#actionCreators';
 import { palikaLanguageSelector } from '#selectors';
+import Gt from '../../utils';
+import styles from './styles.scss';
 
 const mapStateToProps = (state, props) => ({
     drrmLanguage: palikaLanguageSelector(state),
@@ -42,7 +42,7 @@ const PalikaReportTable = (props) => {
 
 
     const iconName = 'sort';
-    console.log('submenuid', submenuId);
+
     const handleEditButtonClick = (row) => {
         setGeneralDatapp(row);
         setShowTabs(false, false, true);
@@ -100,7 +100,7 @@ const PalikaReportTable = (props) => {
         }
 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort]);
     const handleClick = (e) => {
         if (e.target.id === 'summaryReport' || e.target.id === 'fullReport') {
@@ -119,7 +119,7 @@ const PalikaReportTable = (props) => {
         return () => {
             document.removeEventListener('mousedown', handleClick);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -246,9 +246,9 @@ const PalikaReportTable = (props) => {
 
                                         </th>
                                     </tr>
-                                    { tableData.length > 0 && tableData.map((item, index) => (
+                                    {tableData.length > 0 && tableData.map((item, index) => (
                                         <tr key={item.item.id}>
-                                            <td>{ index + 1}</td>
+                                            <td>{index + 1}</td>
                                             <td>{item.item.title}</td>
                                             <td>{drrmLanguage.language === 'np' ? item.fiscalYearNp : item.fiscalYear}</td>
                                             <td>{drrmLanguage.language === 'np' ? item.provinceNp : item.province}</td>
@@ -387,7 +387,7 @@ const PalikaReportTable = (props) => {
 
                                     {tableData.length > 0 && tableData.map((data, index) => (
                                         <tr key={data.id}>
-                                            <td>{ index + 1}</td>
+                                            <td>{index + 1}</td>
                                             <td>{data.item.title}</td>
                                             <td>{drrmLanguage.language === 'np' ? data.fiscalYearNp : data.fiscalYear}</td>
                                             <td>{ADToBS(data.createdDate)}</td>
@@ -439,14 +439,14 @@ const PalikaReportTable = (props) => {
                 </table>
 
                 {tableData && tableData.length === 0
-                && (
-                    <p className={styles.dataUnavailable}>
-                        {' '}
-                        <Gt
-                            section={Translations.DashBoardNoDataMessage}
-                        />
-                    </p>
-                )
+                    && (
+                        <p className={styles.dataUnavailable}>
+                            {' '}
+                            <Gt
+                                section={Translations.DashBoardNoDataMessage}
+                            />
+                        </p>
+                    )
 
                 }
             </div>

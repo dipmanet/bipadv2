@@ -102,7 +102,7 @@ const Leadership = (props: Props) => {
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
-    console.log('Hanging error', mayor);
+
     return (
         <div className={styles.leadership}>
             <h2>Municipal DRR Leadership</h2>

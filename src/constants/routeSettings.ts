@@ -403,7 +403,7 @@ const routeSettings: SomeRoute[] = [
         titleNep: 'डिआरआरएम रिपोर्ट',
         path: '/drrm-report/',
         load: () => import('../views/PalikaReport'),
-        navbar: false,
+        navbar: true,
         disabled: false,
         iconName: 'textDocument',
         id: 'drrm',

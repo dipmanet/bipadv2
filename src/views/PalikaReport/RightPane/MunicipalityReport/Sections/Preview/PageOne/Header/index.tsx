@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import govtlogo from '#resources/palikaicons/govtLogo.svg';
 
-import styles from './styles.scss';
 import {
     generalDataSelector,
     userSelector,
@@ -22,6 +21,7 @@ import {
 
 import Gt from '#views/PalikaReport/utils';
 import Translations from '#views/PalikaReport/Constants/Translations';
+import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -33,10 +33,10 @@ const mapStateToProps = state => ({
     drrmLanguage: palikaLanguageSelector(state),
 });
 
-interface Props{
+interface Props {
 
 }
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
     FiscalYearFetch: {
         url: '/nepali-fiscal-year/',
@@ -57,9 +57,9 @@ let municipality = '';
 
 let district = '';
 let province = '';
-let municipalityName = '';
-let provinceName = '';
-let districtName = '';
+// let municipalityName = '';
+// const provinceName = '';
+// const districtName = '';
 
 const Header = (props: Props) => {
     const {
@@ -75,6 +75,30 @@ const Header = (props: Props) => {
 
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
+    const [municipalityName, setmunicipalityName] = useState('');
+    const [provinceName, setprovinceName] = useState('');
+    const [districtName, setdistrictName] = useState('');
+
+    useEffect(() => {
+        if (municipalities && districts && provinces) {
+            const m = municipalities.filter(mun => mun.id === municipality);
+            const d = districts.filter(dis => dis.id === district);
+            const p = provinces.filter(pro => pro.id === province);
+
+            // const municipalityName = m[0].title;
+
+
+            if (drrmLanguage.language === 'en' && m && m[0]) {
+                setmunicipalityName(m[0].title);
+                setprovinceName(p[0].title);
+                setdistrictName(d[0].title);
+            } else if (drrmLanguage.language === 'np' && m && m[0]) {
+                setmunicipalityName(m[0].title_ne);
+                setprovinceName(p[0].title_ne);
+                setdistrictName(d[0].title_ne);
+            }
+        }
+    }, [municipalities, districts, provinces, drrmLanguage.language]);
 
     if (drrmRegion.municipality) {
         municipality = drrmRegion.municipality;
@@ -85,23 +109,11 @@ const Header = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
-    console.log('muns:', municipalities);
-    console.log('mun:', municipality);
-    const m = municipalities.filter(mun => mun.id === municipality);
-    const d = districts.filter(dis => dis.id === district);
-    const p = provinces.filter(pro => pro.id === province);
 
+    // const m = municipalities.filter(mun => mun.id === municipality);
+    // const d = districts.filter(dis => dis.id === district);
+    // const p = provinces.filter(pro => pro.id === province);
 
-    if (drrmLanguage.language === 'en') {
-        municipalityName = m[0].title;
-        provinceName = p[0].title;
-        districtName = d[0].title;
-    } else {
-        municipalityName = m[0].title_ne;
-        provinceName = p[0].title_ne;
-        districtName = d[0].title_ne;
-    }
-    // }
 
     const {
         fiscalYear,
@@ -142,7 +154,7 @@ const Header = (props: Props) => {
                                 {`${districtName}`}
                                 {' '}
                                 <Gt section={Translations.dashboardTblHeaderDistrict} />
-                                    ,
+                                ,
                                 {' '}
                                 {`${provinceName}`}
                                 {' '}

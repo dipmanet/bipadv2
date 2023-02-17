@@ -5,12 +5,10 @@ import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import Loader from 'react-loader';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
-import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Gt from '#views/PalikaReport/utils';
-import Translations from '../../../../Constants/Translations';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -32,11 +30,13 @@ import {
     drrmProgresSelector,
     palikaLanguageSelector,
 } from '#selectors';
-import NextPrevBtns from '../../NextPrevBtns';
 import priorityData from '#views/PalikaReport/Constants/PriorityDropdownSelectData';
 import Icon from '#rscg/Icon';
+import NextPrevBtns from '../../NextPrevBtns';
+import Translations from '../../../../Constants/Translations';
+import styles from './styles.scss';
 
-interface Props{
+interface Props {
     reportTitle: string;
     datefrom: string;
     dateTo: string;
@@ -55,7 +55,7 @@ interface Props{
     setmemberCount: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-interface Location{
+interface Location {
     municipalityId: number;
     districtId: number;
     provinceId: number;
@@ -78,8 +78,9 @@ const mapDispatchToProps = dispatch => ({
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    SimulationGetRequest: { url: '/simulation/',
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    SimulationGetRequest: {
+        url: '/simulation/',
         query: ({ params, props }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
             fiscal_year: params.fiscalYear,
@@ -98,7 +99,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.finalsetSimulationData) {
                 params.finalsetSimulationData(citizenReportList);
             }
-        } },
+        },
+    },
     SimulationPostRequest: {
         url: '/simulation/',
         method: methods.POST,
@@ -125,7 +127,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 
     },
-    PriorityActionGet: { url: '/priority-action/',
+    PriorityActionGet: {
+        url: '/priority-action/',
 
         method: methods.GET,
         onMount: true,
@@ -137,8 +140,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.priorityAction) {
                 params.priorityAction(citizenReportList);
             }
-        } },
-    PriorityActivityGet: { url: '/priority-activity/',
+        },
+    },
+    PriorityActivityGet: {
+        url: '/priority-activity/',
 
         method: methods.GET,
         onMount: true,
@@ -150,8 +155,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.priorityActivity) {
                 params.priorityActivity(citizenReportList);
             }
-        } },
-    PriorityAreaGet: { url: '/priority-area/',
+        },
+    },
+    PriorityAreaGet: {
+        url: '/priority-area/',
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, params }) => {
@@ -162,7 +169,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.priorityArea) {
                 params.priorityArea(citizenReportList);
             }
-        } },
+        },
+    },
 
 };
 
@@ -333,19 +341,19 @@ const Simulation = (props: Props) => {
             setDisablePriorityActivity(true);
         }
     };
-    console.log('Act', disablePriorityAction);
+
     useEffect(() => {
         if (priorityArea) {
             const filteredData = priorityActionFetched.filter(item => item.priorityArea === Number(priorityArea));
             setFilteredpriorityActionFetched(filteredData);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [priorityArea]);
 
     useEffect(() => {
         setFilteredPriorityActivityFetched(priorityActivityFetched);
         setFilteredpriorityActionFetched(priorityActionFetched);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handlePriorityAction = (e) => {
@@ -361,7 +369,7 @@ const Simulation = (props: Props) => {
             const filteredData = priorityActivityFetched.filter(item => item.priorityAction === Number(priorityAction));
             setFilteredPriorityActivityFetched(filteredData);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [priorityAction]);
 
     const handlePriorityActivity = (e) => {
@@ -382,9 +390,7 @@ const Simulation = (props: Props) => {
         }
     };
 
-    console.log('Priority area', priorityAreaFetched);
-    console.log('Priority Activity', priorityActivityFetched);
-    console.log('Priority Action', priorityActionFetched);
+
     useEffect(() => {
         if (simulationData) {
             const finalSimulationData = simulationData.map((data) => {
@@ -407,7 +413,7 @@ const Simulation = (props: Props) => {
             });
             finalArr = [...new Set(finalSimulationData)];
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationData, priorityActionFetched, priorityAreaFetched, priorityActivityFetched, hazardType]);
 
 
@@ -460,7 +466,7 @@ const Simulation = (props: Props) => {
             finalsetSimulationData: handleSavesetSimulationData,
 
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [submittedData]);
     // useEffect(() => {
     //     if (annualBudgetData.length > 0) {
@@ -526,7 +532,7 @@ const Simulation = (props: Props) => {
             setFocusHazard(finalArr[simulationIndex].data.focusHazard);
             setStartDate(ADToBS(finalArr[simulationIndex].data.date));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationIndex, editBtnClicked]);
 
 
@@ -536,462 +542,462 @@ const Simulation = (props: Props) => {
     } else {
         tableStyle = { tableLayout: 'initial' };
     }
-    console.log('That', finalArr);
+
 
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
             {
                 !props.previewDetails
-            && (
-                <div className={styles.mainDiv}>
-                    <h2><Gt section={Translations.SimulationHeading} /></h2>
-                    <div className={styles.palikaTable}>
-                        <table
-                            style={tableStyle}
-                            id="table-to-xls"
-                        >
-                            <tbody>
-                                <>
-                                    <tr>
-                                        <th><Gt section={Translations.SimulationSerialNumber} /></th>
-                                        <th>
-                                            <Gt section={Translations.SimulationExercise} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationDate} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationDescription} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationPriorityArea} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationPriorityAction} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationPriorityActivity} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationOrganizer} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationParticipants} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationHazards} />
-                                        </th>
-                                        {!props.annex && finalArr.length
-                                            ? (
-                                                <th>
-                                                    <Gt section={Translations.SimulationAction} />
-                                                </th>
-                                            ) : null}
+                && (
+                    <div className={styles.mainDiv}>
+                        <h2><Gt section={Translations.SimulationHeading} /></h2>
+                        <div className={styles.palikaTable}>
+                            <table
+                                style={tableStyle}
+                                id="table-to-xls"
+                            >
+                                <tbody>
+                                    <>
+                                        <tr>
+                                            <th><Gt section={Translations.SimulationSerialNumber} /></th>
+                                            <th>
+                                                <Gt section={Translations.SimulationExercise} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationDate} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationDescription} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationPriorityArea} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationPriorityAction} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationPriorityActivity} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationOrganizer} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationParticipants} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.SimulationHazards} />
+                                            </th>
+                                            {!props.annex && finalArr.length
+                                                ? (
+                                                    <th>
+                                                        <Gt section={Translations.SimulationAction} />
+                                                    </th>
+                                                ) : null}
 
 
-                                    </tr>
-                                    {loader ? (
-                                        <>
-                                            {' '}
-                                            <Loader
-                                                top="50%"
-                                                left="60%"
-                                            />
-                                            <p className={styles.loaderInfo}>
-                                                Loading...Please Wait
+                                        </tr>
+                                        {loader ? (
+                                            <>
+                                                {' '}
+                                                <Loader
+                                                    top="50%"
+                                                    left="60%"
+                                                />
+                                                <p className={styles.loaderInfo}>
+                                                    Loading...Please Wait
 
-                                            </p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {finalArr && finalArr.map((item, i) => (
-                                                simulationId === item.data.id
-                                                    ? (
-                                                        <tr>
-                                                            <td>{simulationIndex + 1}</td>
-                                                            <td>
-                                                                <input
-                                                                    type="text"
-                                                                    className={styles.inputElement}
-                                                                    value={simulationName}
-
-                                                                    placeholder={drrmLanguage.language === 'np' ? 'अनुकरणको नाम' : 'Simulation Name'}
-                                                                    onChange={handleSimulationName}
-                                                                />
-                                                                {' '}
-                                                            </td>
-                                                            <td>
-                                                                <NepaliDatePicker
-                                                                    inputClassName="form-control"
-                                                                    className={styles.datepicker}
-                                                                    value={startDate}
-                                                                    onChange={date => setStartDate(date)}
-                                                                    options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
-                                                                />
-                                                            </td>
-                                                            <td>
-                                                                <input
-                                                                    type="text"
-                                                                    className={styles.inputElement}
-                                                                    value={description}
-                                                                    placeholder={drrmLanguage.language === 'np' ? 'अनुकरणको वर्णन' : 'Simulation Description'}
-                                                                    onChange={handleSimulationDescription}
-                                                                />
-                                                                {' '}
-                                                            </td>
-                                                            <td>
-                                                                <select
-                                                                    value={priorityArea}
-                                                                    onChange={handlePriorityArea}
-                                                                    className={styles.inputElement}
-
-                                                                >
-                                                                    <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
-                                                                    {priorityAreaFetched.map(data => (
-                                                                        <option value={data.id}>
-                                                                            {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                                        </option>
-                                                                    ))}
-
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <select
-                                                                    value={priorityAction}
-                                                                    onChange={handlePriorityAction}
-                                                                    className={styles.inputElement}
-                                                                    disabled={disablePriorityAction}
-                                                                >
-                                                                    <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
-                                                                    {filteredpriorityActionFetched.map(data => (
-                                                                        <option value={data.id}>
-                                                                            {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                                        </option>
-                                                                    ))}
-
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <select
-                                                                    value={priorityActivity}
-                                                                    onChange={handlePriorityActivity}
-                                                                    className={styles.inputElement}
-                                                                    disabled={disablePriorityActivity}
-                                                                >
-                                                                    <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
-                                                                    {filteredpriorityActivityFetched.map(data => (
-                                                                        <option value={data.id}>
-                                                                            {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                                        </option>
-                                                                    ))}
-
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <input
-                                                                    type="text"
-                                                                    className={styles.inputElement}
-                                                                    value={organizer}
-                                                                    placeholder={drrmLanguage.language === 'np' ? 'आयोजक' : 'Organizer'}
-                                                                    onChange={handleOrganizer}
-                                                                />
-                                                                {' '}
-                                                            </td>
-                                                            <td>
-                                                                <input
-                                                                    type="number"
-                                                                    className={styles.inputElement}
-                                                                    value={participants}
-                                                                    placeholder={drrmLanguage.language === 'np'
-                                                                        ? 'सहभागीहरूको संख्या'
-                                                                        : 'Number of Participants'}
-                                                                    onChange={handleNumberOfParticipants}
-                                                                />
-                                                                {' '}
-                                                            </td>
-                                                            <td>
-                                                                <select
-                                                                    value={focusHazard}
-                                                                    onChange={handleFocusHazard}
-                                                                    className={styles.inputElement}
-                                                                >
-                                                                    <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
-
-                                                                    {hazardType && hazardType.map(data => (
-                                                                        <option value={data.id}>
-                                                                            {data.titleEn}
-                                                                        </option>
-                                                                    ))}
-
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <button
-                                                                    className={styles.updateButtn}
-                                                                    type="button"
-                                                                    onClick={handleUpdateSimulation}
-                                                                    title={drrmLanguage.language === 'np'
-                                                                        ? Translations.SimulationUpdateButtonTooltip.np
-                                                                        : Translations.SimulationUpdateButtonTooltip.en
-                                                                    }
-                                                                >
-                                                                    <Gt section={Translations.SimulationUpdateButton} />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                    : (
-                                                        <tr key={item.data.id}>
-                                                            <td>{i + 1}</td>
-                                                            <td>{item.data.title}</td>
-                                                            <td>{ADToBS(item.data.date)}</td>
-                                                            <td>{item.data.description}</td>
-                                                            <td>{ drrmLanguage.language === 'np' ? item.PriorityAreaNameNe : item.PriorityAreaNameEn}</td>
-                                                            <td>{drrmLanguage.language === 'np' ? item.PriorityActionNameNe : item.PriorityActionNameEn}</td>
-                                                            <td>{drrmLanguage.language === 'np' ? item.PriorityActivityNameNe : item.PriorityActivityNameEn}</td>
-                                                            <td>{item.data.organizer}</td>
-                                                            <td>{item.data.totalParticipants}</td>
-                                                            <td>{drrmLanguage.language === 'np' ? item.HazardNameNp : item.HazardName}</td>
-                                                            {!props.annex
-                                                            && (
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {finalArr && finalArr.map((item, i) => (
+                                                    simulationId === item.data.id
+                                                        ? (
+                                                            <tr>
+                                                                <td>{simulationIndex + 1}</td>
                                                                 <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        value={simulationName}
+
+                                                                        placeholder={drrmLanguage.language === 'np' ? 'अनुकरणको नाम' : 'Simulation Name'}
+                                                                        onChange={handleSimulationName}
+                                                                    />
                                                                     {' '}
+                                                                </td>
+                                                                <td>
+                                                                    <NepaliDatePicker
+                                                                        inputClassName="form-control"
+                                                                        className={styles.datepicker}
+                                                                        value={startDate}
+                                                                        onChange={date => setStartDate(date)}
+                                                                        options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        value={description}
+                                                                        placeholder={drrmLanguage.language === 'np' ? 'अनुकरणको वर्णन' : 'Simulation Description'}
+                                                                        onChange={handleSimulationDescription}
+                                                                    />
+                                                                    {' '}
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={priorityArea}
+                                                                        onChange={handlePriorityArea}
+                                                                        className={styles.inputElement}
+
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                                        {priorityAreaFetched.map(data => (
+                                                                            <option value={data.id}>
+                                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={priorityAction}
+                                                                        onChange={handlePriorityAction}
+                                                                        className={styles.inputElement}
+                                                                        disabled={disablePriorityAction}
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                                        {filteredpriorityActionFetched.map(data => (
+                                                                            <option value={data.id}>
+                                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={priorityActivity}
+                                                                        onChange={handlePriorityActivity}
+                                                                        className={styles.inputElement}
+                                                                        disabled={disablePriorityActivity}
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                                        {filteredpriorityActivityFetched.map(data => (
+                                                                            <option value={data.id}>
+                                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        value={organizer}
+                                                                        placeholder={drrmLanguage.language === 'np' ? 'आयोजक' : 'Organizer'}
+                                                                        onChange={handleOrganizer}
+                                                                    />
+                                                                    {' '}
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        type="number"
+                                                                        className={styles.inputElement}
+                                                                        value={participants}
+                                                                        placeholder={drrmLanguage.language === 'np'
+                                                                            ? 'सहभागीहरूको संख्या'
+                                                                            : 'Number of Participants'}
+                                                                        onChange={handleNumberOfParticipants}
+                                                                    />
+                                                                    {' '}
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={focusHazard}
+                                                                        onChange={handleFocusHazard}
+                                                                        className={styles.inputElement}
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
+
+                                                                        {hazardType && hazardType.map(data => (
+                                                                            <option value={data.id}>
+                                                                                {data.titleEn}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
                                                                     <button
-                                                                        className={styles.editButtn}
+                                                                        className={styles.updateButtn}
                                                                         type="button"
-                                                                        onClick={() => handleEditSimulation(item.data.id, i)}
+                                                                        onClick={handleUpdateSimulation}
                                                                         title={drrmLanguage.language === 'np'
-                                                                            ? Translations.SimulationEditTooltip.np
-                                                                            : Translations.SimulationEditTooltip.en
+                                                                            ? Translations.SimulationUpdateButtonTooltip.np
+                                                                            : Translations.SimulationUpdateButtonTooltip.en
                                                                         }
                                                                     >
-                                                                        <ScalableVectorGraphics
-                                                                            className={styles.bulletPoint}
-                                                                            src={editIcon}
-                                                                            alt="editPoint"
-                                                                        />
+                                                                        <Gt section={Translations.SimulationUpdateButton} />
                                                                     </button>
-
                                                                 </td>
-                                                            )}
-                                                        </tr>
-                                                    )
-                                            ))}
-                                            {!simulationId && (
-                                                <>
-                                                    {
-                                                        !props.annex
+                                                            </tr>
+                                                        )
+                                                        : (
+                                                            <tr key={item.data.id}>
+                                                                <td>{i + 1}</td>
+                                                                <td>{item.data.title}</td>
+                                                                <td>{ADToBS(item.data.date)}</td>
+                                                                <td>{item.data.description}</td>
+                                                                <td>{drrmLanguage.language === 'np' ? item.PriorityAreaNameNe : item.PriorityAreaNameEn}</td>
+                                                                <td>{drrmLanguage.language === 'np' ? item.PriorityActionNameNe : item.PriorityActionNameEn}</td>
+                                                                <td>{drrmLanguage.language === 'np' ? item.PriorityActivityNameNe : item.PriorityActivityNameEn}</td>
+                                                                <td>{item.data.organizer}</td>
+                                                                <td>{item.data.totalParticipants}</td>
+                                                                <td>{drrmLanguage.language === 'np' ? item.HazardNameNp : item.HazardName}</td>
+                                                                {!props.annex
+                                                                    && (
+                                                                        <td>
+                                                                            {' '}
+                                                                            <button
+                                                                                className={styles.editButtn}
+                                                                                type="button"
+                                                                                onClick={() => handleEditSimulation(item.data.id, i)}
+                                                                                title={drrmLanguage.language === 'np'
+                                                                                    ? Translations.SimulationEditTooltip.np
+                                                                                    : Translations.SimulationEditTooltip.en
+                                                                                }
+                                                                            >
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.bulletPoint}
+                                                                                    src={editIcon}
+                                                                                    alt="editPoint"
+                                                                                />
+                                                                            </button>
+
+                                                                        </td>
+                                                                    )}
+                                                            </tr>
+                                                        )
+                                                ))}
+                                                {!simulationId && (
+                                                    <>
+                                                        {
+                                                            !props.annex
+                                                            && (
+                                                                <tr>
+                                                                    <td>{simulationData.length + 1}</td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            value={simulationName}
+                                                                            placeholder={drrmLanguage.language === 'np'
+                                                                                ? 'अनुकरणको नाम'
+                                                                                : 'Simulation Name'}
+                                                                            onChange={handleSimulationName}
+                                                                        />
+                                                                        {' '}
+                                                                    </td>
+                                                                    <td>
+                                                                        <NepaliDatePicker
+                                                                            inputClassName="form-control"
+                                                                            className={styles.datepicker}
+                                                                            value={startDate}
+                                                                            onChange={date => setStartDate(date)}
+                                                                            options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            value={description}
+                                                                            placeholder={drrmLanguage.language === 'np'
+                                                                                ? 'अनुकरणको वर्णन'
+                                                                                : 'Simulation Description'}
+                                                                            onChange={handleSimulationDescription}
+                                                                        />
+                                                                        {' '}
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={priorityArea}
+                                                                            onChange={handlePriorityArea}
+                                                                            className={styles.inputElement}
+
+                                                                        >
+                                                                            <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                                            {priorityAreaFetched.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={priorityAction}
+                                                                            onChange={handlePriorityAction}
+                                                                            className={styles.inputElement}
+                                                                            disabled={disablePriorityAction}
+                                                                        >
+                                                                            <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                                            {filteredpriorityActionFetched.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={priorityActivity}
+                                                                            onChange={handlePriorityActivity}
+                                                                            className={styles.inputElement}
+                                                                            disabled={disablePriorityActivity}
+                                                                        >
+                                                                            <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                                            {filteredpriorityActivityFetched.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            value={organizer}
+                                                                            placeholder={drrmLanguage.language === 'np' ? 'आयोजक' : 'Organizer'}
+                                                                            onChange={handleOrganizer}
+                                                                        />
+                                                                        {' '}
+                                                                    </td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="number"
+                                                                            className={styles.inputElement}
+                                                                            value={participants}
+                                                                            placeholder={drrmLanguage.language === 'np'
+                                                                                ? 'सहभागीहरूको संख्या'
+                                                                                : 'Number of Participants'}
+                                                                            onChange={handleNumberOfParticipants}
+                                                                        />
+                                                                        {' '}
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={focusHazard}
+                                                                            onChange={handleFocusHazard}
+                                                                            className={styles.inputElement}
+                                                                        >
+                                                                            <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
+                                                                            {hazardType && hazardType.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNe : data.titleEn}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    {!props.annex && simulationData.length ? <td /> : null}
+                                                                </tr>
+                                                            )
+                                                        }
+                                                    </>
+                                                )}
+                                            </>
+                                        )}
+
+                                    </>
+                                    {!props.annex && !loader
                                         && (
                                             <tr>
-                                                <td>{simulationData.length + 1}</td>
+                                                <td />
                                                 <td>
-                                                    <input
-                                                        type="text"
-                                                        className={styles.inputElement}
-                                                        value={simulationName}
-                                                        placeholder={drrmLanguage.language === 'np'
-                                                            ? 'अनुकरणको नाम'
-                                                            : 'Simulation Name'}
-                                                        onChange={handleSimulationName}
-                                                    />
-                                                    {' '}
-                                                </td>
-                                                <td>
-                                                    <NepaliDatePicker
-                                                        inputClassName="form-control"
-                                                        className={styles.datepicker}
-                                                        value={startDate}
-                                                        onChange={date => setStartDate(date)}
-                                                        options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="text"
-                                                        className={styles.inputElement}
-                                                        value={description}
-                                                        placeholder={drrmLanguage.language === 'np'
-                                                            ? 'अनुकरणको वर्णन'
-                                                            : 'Simulation Description'}
-                                                        onChange={handleSimulationDescription}
-                                                    />
-                                                    {' '}
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        value={priorityArea}
-                                                        onChange={handlePriorityArea}
-                                                        className={styles.inputElement}
-
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleAddNew}
+                                                        className={styles.savebtn}
                                                     >
-                                                        <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
-                                                        {priorityAreaFetched.map(data => (
-                                                            <option value={data.id}>
-                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                            </option>
-                                                        ))}
-
-                                                    </select>
+                                                        <Icon
+                                                            name="plus"
+                                                            className={styles.plusIcon}
+                                                        />
+                                                        <Gt section={Translations.SimulationAddButton} />
+                                                    </button>
                                                 </td>
-                                                <td>
-                                                    <select
-                                                        value={priorityAction}
-                                                        onChange={handlePriorityAction}
-                                                        className={styles.inputElement}
-                                                        disabled={disablePriorityAction}
-                                                    >
-                                                        <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
-                                                        {filteredpriorityActionFetched.map(data => (
-                                                            <option value={data.id}>
-                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                            </option>
-                                                        ))}
-
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        value={priorityActivity}
-                                                        onChange={handlePriorityActivity}
-                                                        className={styles.inputElement}
-                                                        disabled={disablePriorityActivity}
-                                                    >
-                                                        <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
-                                                        {filteredpriorityActivityFetched.map(data => (
-                                                            <option value={data.id}>
-                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                            </option>
-                                                        ))}
-
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="text"
-                                                        className={styles.inputElement}
-                                                        value={organizer}
-                                                        placeholder={drrmLanguage.language === 'np' ? 'आयोजक' : 'Organizer'}
-                                                        onChange={handleOrganizer}
-                                                    />
-                                                    {' '}
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="number"
-                                                        className={styles.inputElement}
-                                                        value={participants}
-                                                        placeholder={drrmLanguage.language === 'np'
-                                                            ? 'सहभागीहरूको संख्या'
-                                                            : 'Number of Participants'}
-                                                        onChange={handleNumberOfParticipants}
-                                                    />
-                                                    {' '}
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        value={focusHazard}
-                                                        onChange={handleFocusHazard}
-                                                        className={styles.inputElement}
-                                                    >
-                                                        <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
-                                                        {hazardType && hazardType.map(data => (
-                                                            <option value={data.id}>
-                                                                {drrmLanguage.language === 'np' ? data.titleNe : data.titleEn}
-                                                            </option>
-                                                        ))}
-
-                                                    </select>
-                                                </td>
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
+                                                <td />
                                                 {!props.annex && simulationData.length ? <td /> : null}
                                             </tr>
                                         )
-                                                    }
-                                                </>
-                                            )}
-                                        </>
-                                    )}
 
-                                </>
-                                {!props.annex && !loader
-                            && (
-                                <tr>
-                                    <td />
-                                    <td>
-                                        <button
-                                            type="button"
-                                            onClick={handleAddNew}
-                                            className={styles.savebtn}
-                                        >
-                                            <Icon
-                                                name="plus"
-                                                className={styles.plusIcon}
-                                            />
-                                            <Gt section={Translations.SimulationAddButton} />
-                                        </button>
-                                    </td>
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    {!props.annex && simulationData.length ? <td /> : null}
-                                </tr>
-                            )
-
-                                }
-
-                            </tbody>
-                        </table>
-                        {
-                            Object.keys(postErrors).length > 0
-                            && (
-                                <ul>
-                                    <li>
-                                        <span className={styles.errorHeading}>
-                                    Please fix the following errors:
-                                        </span>
-                                    </li>
-                                    {
-                                        Object.keys(postErrors).map(errorItem => (
-                                            <li>
-                                                {`${errorItem}: ${postErrors[errorItem]}`}
-                                            </li>
-                                        ), // return <li>Please enter valid info in all fields</li>;
-                                        )
                                     }
 
-                                </ul>
-                            )
-                        }
-                        {!simulationId && (
-                            <>
-                                {!loader && (
-                                    <>
+                                </tbody>
+                            </table>
+                            {
+                                Object.keys(postErrors).length > 0
+                                && (
+                                    <ul>
+                                        <li>
+                                            <span className={styles.errorHeading}>
+                                                Please fix the following errors:
+                                            </span>
+                                        </li>
                                         {
-                                            !props.annex
-                          && (
-                              <>
-
-                                  <div className={styles.btns}>
-                                      <NextPrevBtns
-                                          handlePrevClick={props.handlePrevClick}
-                                          handleNextClick={handleNextClick}
-                                      />
-
-                                  </div>
-                              </>
-                          )
+                                            Object.keys(postErrors).map(errorItem => (
+                                                <li>
+                                                    {`${errorItem}: ${postErrors[errorItem]}`}
+                                                </li>
+                                            ), // return <li>Please enter valid info in all fields</li>;
+                                            )
                                         }
-                                    </>
-                                )}
-                            </>
-                        )}
+
+                                    </ul>
+                                )
+                            }
+                            {!simulationId && (
+                                <>
+                                    {!loader && (
+                                        <>
+                                            {
+                                                !props.annex
+                                                && (
+                                                    <>
+
+                                                        <div className={styles.btns}>
+                                                            <NextPrevBtns
+                                                                handlePrevClick={props.handlePrevClick}
+                                                                handleNextClick={handleNextClick}
+                                                            />
+
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
-            )
+                )
             }
 
             {

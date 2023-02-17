@@ -40,7 +40,7 @@ const Manuals = ({ language: { language } }) => {
                 .then((data) => {
                     const yearData = data.results.map(i => i.year);
                     const finalYearList = [...new Set(yearData)];
-                    console.log('final year', finalYearList);
+
                     setYearSelection(finalYearList);
                     setManual(data.results);
                     setBackupManualList(data.results);
@@ -101,11 +101,9 @@ const Manuals = ({ language: { language } }) => {
             setFilterYearKey('');
             setManual(filteredManual);
         }
-        console.log('this is e.target', e.target.value);
     };
 
     const handleReset = (manualRef, yearRef) => {
-        console.log('manual ref', manualRef.current.value);
         manualRef.current.value = '';
         yearRef.current.value = '';
         setManual(backupManualList);
@@ -113,7 +111,7 @@ const Manuals = ({ language: { language } }) => {
         setFilterManualTypeKey('');
     };
 
-    console.log('This is manual', manual);
+
     return (
         <>
             <Page

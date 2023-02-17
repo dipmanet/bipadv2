@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Page from '#components/Page';
 
-import ReportModal from './MunicipalityReport';
 import {
     palikaLanguageSelector,
     userSelector,
@@ -13,6 +12,7 @@ import {
 } from '#selectors';
 import { AppState } from '#store/types';
 import TabContent from '#views/PalikaReport/Constants/TabContent';
+import ReportModal from './MunicipalityReport';
 
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
@@ -35,17 +35,17 @@ interface Props {
 }
 
 type TabContent =
-'General'
-|'Budget Activity'
-|'Programme and Policies'
-|'Organisation'
-|'Inventories'
-|'Resources'
-|'Contacts'
-|'Budget'
-|'Relief'
-|'Simulation'
-|'Preview';
+    'General'
+    | 'Budget Activity'
+    | 'Programme and Policies'
+    | 'Organisation'
+    | 'Inventories'
+    | 'Resources'
+    | 'Contacts'
+    | 'Budget'
+    | 'Relief'
+    | 'Simulation'
+    | 'Preview';
 
 const { tabs } = TabContent;
 
@@ -80,7 +80,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
             getTabSelected(tabSelected - 1);
         }
     };
-    console.log('Tab selected', tabSelected);
+
     return (
         <>
             <Page hideMap hideFilter />

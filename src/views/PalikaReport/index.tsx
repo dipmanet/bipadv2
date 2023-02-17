@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-shadow */
@@ -16,7 +17,7 @@ import {
     userSelector,
     palikaRedirectSelector,
     palikaLanguageSelector,
-    drrmProgresSelector
+    drrmProgresSelector,
 } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
@@ -76,7 +77,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 offset: params.offset,
 
                 municipality: params.municipality,
-                expand: params.expand
+                expand: params.expand,
             };
         },
         method: methods.GET,
@@ -109,6 +110,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 let finalArr = [];
+
 const domain = process.env.REACT_APP_API_SERVER_URL;
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
@@ -575,7 +577,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         fiscalYearNp: item.fiscalYear && fiscalYears.titleNp,
                         createdDate: item.createdOn && createdDate,
                         modifiedDate: item.modifiedOn && modifiedDate,
-                        item
+                        item,
                     };
                 }
                 if (!provinceDetails) {

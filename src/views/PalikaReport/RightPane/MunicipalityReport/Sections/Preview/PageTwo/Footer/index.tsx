@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 import {
     generalDataSelector,
     userSelector,
@@ -17,6 +16,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import styles from './styles.scss';
 import Gt from '../../../../../../utils';
 import Translations from '../../../../../../Constants/Translations';
 
@@ -30,10 +30,10 @@ const mapStateToProps = state => ({
     drrmLanguage: palikaLanguageSelector(state),
 });
 
-interface Props{
+interface Props {
 
 }
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
     FiscalYearFetch: {
         url: '/nepali-fiscal-year/',
@@ -83,16 +83,16 @@ const Footer = (props: Props) => {
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
 
-    console.log();
+
     const m = municipalities.filter(mun => mun.id === municipality);
     const d = districts.filter(dis => dis.id === district);
     const p = provinces.filter(pro => pro.id === province);
 
-    if (drrmLanguage.language === 'en') {
+    if (drrmLanguage.language === 'en' && m && m[0] && p && p[0] && d && d[0]) {
         municipalityName = m[0].title;
         provinceName = p[0].title;
         districtName = d[0].title;
-    } else {
+    } else if (drrmLanguage.language === 'np' && m && m[0] && p && p[0] && d && d[0]) {
         municipalityName = m[0].title_ne;
         provinceName = p[0].title_ne;
         districtName = d[0].title_ne;

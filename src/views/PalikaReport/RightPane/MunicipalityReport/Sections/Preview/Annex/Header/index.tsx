@@ -60,7 +60,9 @@ const Header = (props: Props) => {
     } = props;
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
-
+    const [municipalityName, setmunicipalityName] = useState('');
+    const [provinceName, setprovinceName] = useState('');
+    const [districtName, setdistrictName] = useState('');
     const {
         fiscalYear,
     } = generalData;
@@ -82,14 +84,21 @@ const Header = (props: Props) => {
         province = user.profile.province;
     }
 
+    useEffect(() => {
+        if (municipalities && districts && provinces) {
+            const m = municipalities.filter(mun => mun.id === municipality);
+            const d = districts.filter(dis => dis.id === district);
+            const p = provinces.filter(pro => pro.id === province);
 
-    const m = municipalities.filter(mun => mun.id === municipality);
-    const d = districts.filter(dis => dis.id === district);
-    const p = provinces.filter(pro => pro.id === province);
+            const municipalityName = m[0].title;
+            const provinceName = p[0].title;
+            const districtName = d[0].title;
 
-    const municipalityName = m[0].title;
-    const provinceName = p[0].title;
-    const districtName = d[0].title;
+            setmunicipalityName(municipalityName);
+            setprovinceName(provinceName);
+            setdistrictName(districtName);
+        }
+    }, [municipalities, districts, provinces]);
 
     useEffect(() => {
         if (fiscalYearList.length > 0 && fiscalYear) {

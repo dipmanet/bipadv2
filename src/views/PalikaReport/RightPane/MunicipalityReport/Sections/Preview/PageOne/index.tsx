@@ -1,13 +1,13 @@
 /* eslint-disable no-tabs */
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 import {
     generalDataSelector,
     budgetDataSelector,
     budgetActivityDataSelector,
     programAndPolicySelector,
 } from '#selectors';
+import styles from './styles.scss';
 import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
 import Budget from '../../Budget';
@@ -25,11 +25,11 @@ const mapStateToProps = state => ({
     budgetActivityData: budgetActivityDataSelector(state),
 });
 
-interface Props{
+interface Props {
     reportData: Element[];
 }
 
-export interface GeneralData{
+export interface GeneralData {
     reportTitle?: string;
     fiscalYear: string;
     mayor: string;
@@ -39,19 +39,19 @@ export interface GeneralData{
     committeeMembers: number;
 }
 
-export interface BudgetData{
+export interface BudgetData {
     totMunBudget: number;
     totDrrBudget: number;
     additionalDrrBudget: number;
 }
 
-export interface ProgramAndPolicyData{
+export interface ProgramAndPolicyData {
     pointOne: string;
     pointTwo: string;
     pointThree: string;
 }
 
-export interface BudgetActivityData{
+export interface BudgetActivityData {
     name: string;
     fundSource: string;
     additionalDrrBudget: string;
@@ -74,31 +74,31 @@ const Preview = () => (
                 <Budget
                     previewDetails
                     reportData={''}
-                    tableHeader={() => {}}
-                    updateTab={() => {}}
+                    tableHeader={() => { }}
+                    updateTab={() => { }}
                     page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                 />
                 <BudgetActivity
-                    updateTab={() => {}}
+                    updateTab={() => { }}
                     page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     previewDetails
                 />
                 <BudgetActivity
-                    updateTab={() => {}}
+                    updateTab={() => { }}
                     page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     monitoringDetails
                 />
                 <ProgrammeAndPolicies
-                    updateTab={() => {}}
+                    updateTab={() => { }}
                     page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     previewDetails
                 />
 
@@ -108,34 +108,34 @@ const Preview = () => (
 
                 <CriticalInfra
                     previewDetails
-                    handleNextClick={() => {}}
-                    updateTab={() => {}}
+                    handleNextClick={() => { }}
+                    updateTab={() => { }}
                 />
                 <Inventory
-                    updateTab={() => {}}
+                    updateTab={() => { }}
                     page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     previewDetails
                 />
 
 
                 <Organisation
-                    updateTab={() => {}}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    updateTab={() => { }}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     previewDetails
                 />
                 <Simulation
-                    updateTab={() => {}}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    updateTab={() => { }}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     previewDetails
                 />
                 <Contacts
-                    updateTab={() => {}}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
+                    updateTab={() => { }}
+                    handlePrevClick={() => { }}
+                    handleNextClick={() => { }}
                     previewDetails
                 />
             </div>

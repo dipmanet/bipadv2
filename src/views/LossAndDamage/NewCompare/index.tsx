@@ -32,6 +32,7 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
+import { saveChart } from '#utils/common';
 
 import { createSingleList } from '#components/RegionSelectInput/util.js';
 import ChoroplethMap from '#components/ChoroplethMap';
@@ -283,11 +284,11 @@ class NewCompare extends React.PureComponent {
                 const height = this.imageDownloadRef.current.scrollHeight;
                 await HtmltoImage.toPng(this.imageDownloadRef.current,
                     { width, height }).then((img) => {
-                    const link = document.createElement('a');
-                    link.href = img;
-                    link.download = 'Compare.png';
-                    link.click();
-                });
+                        const link = document.createElement('a');
+                        link.href = img;
+                        link.download = 'Compare.png';
+                        link.click();
+                    });
             }
         };
 
@@ -517,14 +518,14 @@ class NewCompare extends React.PureComponent {
                                     && (
                                         <div className={styles.value}>
                                             <span className={styles.label}>
-                                        Data sources:
+                                                Data sources:
                                             </span>
                                             <span className={styles.source}>
-                                            Nepal Police
+                                                Nepal Police
                                             </span>
                                             <div className={styles.source}>
                                                 <span className={styles.text}>
-                                                DRR Portal
+                                                    DRR Portal
                                                 </span>
                                                 <a
                                                     className={styles.link}

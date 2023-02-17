@@ -57,10 +57,10 @@ export const riverStationsSelector = ({ page }: AppState) => page.riverStations;
 // Popup
 
 export const hidePopupSelector = ({ page }: AppState) => page.hidePopup;
-export const bulletinPromotionCheckSelector = ({ page }: AppState) => page.isBulletinPromotionPage;
 export const closeWalkThroughSelector = ({ page }: AppState) => page.closeWalkThrough;
 export const runSelector = ({ page }: AppState) => page.run;
 
+export const bulletinPromotionCheckSelector = ({ page }: AppState) => page.isBulletinPromotionPage;
 
 // geo
 
@@ -617,6 +617,7 @@ export const drrmContactsSelecter = ({ page }: AppState) => page.drrmContacts;
 export const drrmRegionSelector = ({ page }: AppState) => page.drrmRegion;
 export const drrmProgresSelector = ({ page }: AppState) => page.drrmProgress;
 export const languageSelector = ({ page }: AppState) => page.language;
+
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

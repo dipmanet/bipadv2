@@ -1212,19 +1212,19 @@ const languageTranslations: LanguageEntry = {
     },
     ContactMessageGenerated: {
         en: 'This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/). ',
-        np: 'यो रिपोर्ट विपद पोर्टलको स्वचालित प्रणालीबाट तयार गरिएको हो(https://bipadportal.gov.np/)',
+        np: 'यो रिपोर्ट विपद पोर्टलको स्वचालित प्रणालीबाट तयार गरिएको हो (https://bipadportal.gov.np/)',
     },
     ContactNote: {
         en: 'Note: Please refer to the Annexes for details on each section',
-        np: 'नोट: विस्तृत जानकारीका लागि कृपया अनुसूची खण्ड हेर्नुहोला',
+        np: 'नोट: विस्तृत जानकारीका लागि कृपया अनुसूची खण्डमा हेर्नुहोला',
     },
     MayorNameUnavailable: {
         en: 'Name Unavailable',
         np: 'नाम उपलब्ध छैन',
     },
     MayorEmailUnavailable: {
-        en: 'Mayor Email Unavailable',
-        np: 'मेयरको ईमेल उपलब्ध छैन',
+        en: ' Email Unavailable',
+        np: ' ईमेल उपलब्ध छैन',
     },
     MayorPhoneUnavailable: {
         en: ' Phone No Unavailable',
@@ -1239,7 +1239,7 @@ const languageTranslations: LanguageEntry = {
         np: ' ईमेल उपलब्ध छैन',
     },
     CaoPhoneUnavailable: {
-        en: 'Phone No Unavailable',
+        en: '  Phone No Unavailable',
         np: ' फोन नम्बर उपलब्ध छैन',
     },
     FocalPersonNameUnavailable: {

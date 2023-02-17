@@ -10,7 +10,6 @@ import {
 } from 'recharts';
 import Loader from 'react-loader';
 
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -29,7 +28,6 @@ import {
     palikaLanguageSelector,
 } from '#selectors';
 
-import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
     setGeneralDataAction,
@@ -39,6 +37,8 @@ import {
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
+import NextPrevBtns from '../../NextPrevBtns';
+import styles from './styles.scss';
 import Gt from '../../../../utils';
 import Translations from '../../../../Constants/Translations';
 
@@ -50,7 +50,7 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-interface Props{
+interface Props {
 
 }
 const mapStateToProps = (state, props) => ({
@@ -66,7 +66,7 @@ const mapStateToProps = (state, props) => ({
 
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     PalikaReportOrganizationReport: {
         url: '/resource/',
         query: ({ params, props }) => {
@@ -82,10 +82,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
 
 
-            return { limit: params.page,
+            return {
+                limit: params.page,
                 offset: params.offset,
                 resource_type: params.governance,
-                meta: params.meta };
+                meta: params.meta,
+            };
         },
         method: methods.GET,
         onMount: true,
@@ -145,9 +147,9 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const m = municipalities.filter(mun => mun.id === municipality);
     // const d = districts.filter(dis => dis.id === district);
     // const p = provinces.filter(pro => pro.id === province);
-    if (drrmLanguage.language === 'en') {
+    if (drrmLanguage.language === 'en' && m && m[0]) {
         municipalityName = m[0].title;
-    } else {
+    } else if (drrmLanguage.language === 'np' && m && m[0]) {
         municipalityName = m[0].title_ne;
     }
 
@@ -205,15 +207,13 @@ const Organisation: React.FC<Props> = (props: Props) => {
         PalikaReportOrganizationReport.do({
             offset,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
     // Finding Header for table data
 
     useEffect(() => {
         if (fetchedData.length > 0 && chartData.length === 0) {
             const chartDataArr = [...new Set(fetchedData.map(org => org.operatorType || org.otherOperatorType))];
-            console.log('gfetched data org:', fetchedData);
-            console.log('chart Arr', chartDataArr);
             setChartData(chartDataArr.map(item => ({
                 name: item,
                 Total: fetchedData.filter(organisation => organisation.operatorType === item || organisation.otherOperatorType === item).length,
@@ -224,7 +224,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
             setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData]);
 
     const handleCheckAll = (e) => {
@@ -271,188 +271,188 @@ const Organisation: React.FC<Props> = (props: Props) => {
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
             {!props.previewDetails
-            && (
-                <div className={styles.tabsPageContainer}>
-                    <h2>
-                        <Gt section={Translations.OrganizationHeading} />
-                    </h2>
-                    <div className={styles.palikaTable}>
-                        <table id="table-to-xls">
-                            <tbody>
-                                <tr>
-                                    {
-                                        !props.annex && fetchedData.length
-                                            ? (
-                                                <th>
-                                                    <input
-                                                        type="checkbox"
-                                                        onChange={handleCheckAll}
-                                                        checked={checkedAll}
-                                                    // defaultChecked
-                                                        className={styles.checkBox}
-                                                    />
-                                                </th>
-                                            ) : null
-                                    }
-                                    <th><Gt section={Translations.OrganizationSerialNumber} /></th>
-                                    <th><Gt section={Translations.OrganizationName} /></th>
-                                    <th><Gt section={Translations.OrganizationType} /></th>
-                                    {/* <th>Level (for governmental organization)</th> */}
-                                    <th><Gt section={Translations.OrganizationMaleEmployee} /></th>
-                                    <th><Gt section={Translations.OrganizationFemaleEmployee} /></th>
-                                    {
-                                        !props.annex && fetchedData.length
-                                            ? <th><Gt section={Translations.OrganizationAction} /></th> : null
-                                    }
-                                </tr>
-                                {loader ? (
-                                    <>
-                                        {' '}
-                                        <Loader
-                                            top="50%"
-                                            left="60%"
-                                        />
-                                        <p className={styles.loaderInfo}>Loading...Please Wait</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        {fetchedData && fetchedData.length > 0
-                                            ? fetchedData.map((item, i) => (
-                                                <tr key={item.id}>
-                                                    <td>
+                && (
+                    <div className={styles.tabsPageContainer}>
+                        <h2>
+                            <Gt section={Translations.OrganizationHeading} />
+                        </h2>
+                        <div className={styles.palikaTable}>
+                            <table id="table-to-xls">
+                                <tbody>
+                                    <tr>
+                                        {
+                                            !props.annex && fetchedData.length
+                                                ? (
+                                                    <th>
                                                         <input
                                                             type="checkbox"
-                                                            checked={checkedRows.indexOf(i) !== -1}
-
+                                                            onChange={handleCheckAll}
+                                                            checked={checkedAll}
                                                             // defaultChecked
-                                                            onChange={e => handleCheck(i, e)}
                                                             className={styles.checkBox}
-                                                            key={item.id}
                                                         />
-                                                    </td>
-                                                    <td>{i + 1}</td>
-                                                    <td>{item.title}</td>
-                                                    <td>{item.type}</td>
-                                                    <td>
-                                                        {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
-                                                    </td>
-                                                    <td>
-                                                        {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
-                                                    </td>
-                                                    {
-                                                        !props.annex
-                                                && (
-                                                    <td>
-
-                                                        <button
-                                                            className={styles.editButtn}
-                                                            type="button"
-                                                            onClick={() => handleEditResource(item)}
-                                                            title={drrmLanguage.language === 'np' ? Translations.OrganizationEditTooltip.np : Translations.OrganizationEditTooltip.en}
-                                                        >
-                                                            <ScalableVectorGraphics
-                                                                className={styles.bulletPoint}
-                                                                src={editIcon}
-                                                                alt="editPoint"
-                                                            />
-                                                        </button>
-                                                    </td>
-                                                )
-                                                    }
-                                                </tr>
-                                            )) : ''
+                                                    </th>
+                                                ) : null
                                         }
-                                    </>
-                                )}
-                                {!loader && !props.annex && (
-                                    <tr>
-                                        {fetchedData.length ? <td /> : null}
-                                        <td />
-                                        <td>
-                                            <button
-                                                type="button"
-                                                onClick={handleOrnaisationRedirect}
-                                                className={styles.savebtn}
-                                            >
-                                                <Icon
-                                                    name="plus"
-                                                    className={styles.plusIcon}
-                                                />
-                                                <Gt section={Translations.OrganizationDataAddButton} />
-                                            </button>
-                                        </td>
-
-                                        <td />
-                                        <td />
-                                        <td />
-                                        {fetchedData.length ? <td /> : null}
+                                        <th><Gt section={Translations.OrganizationSerialNumber} /></th>
+                                        <th><Gt section={Translations.OrganizationName} /></th>
+                                        <th><Gt section={Translations.OrganizationType} /></th>
+                                        {/* <th>Level (for governmental organization)</th> */}
+                                        <th><Gt section={Translations.OrganizationMaleEmployee} /></th>
+                                        <th><Gt section={Translations.OrganizationFemaleEmployee} /></th>
+                                        {
+                                            !props.annex && fetchedData.length
+                                                ? <th><Gt section={Translations.OrganizationAction} /></th> : null
+                                        }
                                     </tr>
-                                )
+                                    {loader ? (
+                                        <>
+                                            {' '}
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {fetchedData && fetchedData.length > 0
+                                                ? fetchedData.map((item, i) => (
+                                                    <tr key={item.id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={checkedRows.indexOf(i) !== -1}
 
-                                }
-                            </tbody>
-                        </table>
-                        {!loader && fetchedData.length === 0 && <h2><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
+                                                                // defaultChecked
+                                                                onChange={e => handleCheck(i, e)}
+                                                                className={styles.checkBox}
+                                                                key={item.id}
+                                                            />
+                                                        </td>
+                                                        <td>{i + 1}</td>
+                                                        <td>{item.title}</td>
+                                                        <td>{item.type}</td>
+                                                        <td>
+                                                            {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
+                                                        </td>
+                                                        <td>
+                                                            {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
+                                                        </td>
+                                                        {
+                                                            !props.annex
+                                                            && (
+                                                                <td>
 
-                        {
-                            !props.annex && !loader
-                                ? (
-                                    <div className={styles.btnsCont}>
-                                        <NextPrevBtns
-                                            handlePrevClick={handleNext}
-                                            handleNextClick={handleNext}
-                                        />
-                                    </div>
-                                )
-                                : ''
-                        }
+                                                                    <button
+                                                                        className={styles.editButtn}
+                                                                        type="button"
+                                                                        onClick={() => handleEditResource(item)}
+                                                                        title={drrmLanguage.language === 'np' ? Translations.OrganizationEditTooltip.np : Translations.OrganizationEditTooltip.en}
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={editIcon}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
+                                                                </td>
+                                                            )
+                                                        }
+                                                    </tr>
+                                                )) : ''
+                                            }
+                                        </>
+                                    )}
+                                    {!loader && !props.annex && (
+                                        <tr>
+                                            {fetchedData.length ? <td /> : null}
+                                            <td />
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleOrnaisationRedirect}
+                                                    className={styles.savebtn}
+                                                >
+                                                    <Icon
+                                                        name="plus"
+                                                        className={styles.plusIcon}
+                                                    />
+                                                    <Gt section={Translations.OrganizationDataAddButton} />
+                                                </button>
+                                            </td>
 
+                                            <td />
+                                            <td />
+                                            <td />
+                                            {fetchedData.length ? <td /> : null}
+                                        </tr>
+                                    )
+
+                                    }
+                                </tbody>
+                            </table>
+                            {!loader && fetchedData.length === 0 && <h2><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
+
+                            {
+                                !props.annex && !loader
+                                    ? (
+                                        <div className={styles.btnsCont}>
+                                            <NextPrevBtns
+                                                handlePrevClick={handleNext}
+                                                handleNextClick={handleNext}
+                                            />
+                                        </div>
+                                    )
+                                    : ''
+                            }
+
+
+                        </div>
 
                     </div>
-
-                </div>
-            )
+                )
             }
 
             {props.previewDetails
-        && (
-            <div className={styles.budgetPreviewContainer}>
-                <h2>
-                    <Gt section={Translations.OrganizationHeading} />
-                    {' '}
-                    {municipalityName}
-                </h2>
-                <BarChart
-                    width={350}
-                    height={180}
-                    data={chartData}
-                    // layout="vertical"
-                    margin={{ left: 10, right: 5, top: 10 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <YAxis
-                        type="number"
-                        tick={false}
-                    />
-                    <XAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#777', fontSize: '10px' }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,164,109)"
-                        // barCategoryGap={30}
-                        barCategoryGap={80}
-                        label={{ position: 'top', fill: '#444', fontSize: '10px' }}
-                        tick={{ fill: 'rgb(200,200,200)' }}
-                        cx={90}
-                        cy={105}
-                        barSize={20}
-                    />
-                </BarChart>
-            </div>
-        )
+                && (
+                    <div className={styles.budgetPreviewContainer}>
+                        <h2>
+                            <Gt section={Translations.OrganizationHeading} />
+                            {' '}
+                            {municipalityName}
+                        </h2>
+                        <BarChart
+                            width={350}
+                            height={180}
+                            data={chartData}
+                            // layout="vertical"
+                            margin={{ left: 10, right: 5, top: 10 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <YAxis
+                                type="number"
+                                tick={false}
+                            />
+                            <XAxis
+                                type="category"
+                                dataKey="name"
+                                tick={{ fill: '#777', fontSize: '10px' }}
+                            />
+                            <Bar
+                                dataKey="Total"
+                                fill="rgb(0,164,109)"
+                                // barCategoryGap={30}
+                                barCategoryGap={80}
+                                label={{ position: 'top', fill: '#444', fontSize: '10px' }}
+                                tick={{ fill: 'rgb(200,200,200)' }}
+                                cx={90}
+                                cy={105}
+                                barSize={20}
+                            />
+                        </BarChart>
+                    </div>
+                )
             }
 
         </div>

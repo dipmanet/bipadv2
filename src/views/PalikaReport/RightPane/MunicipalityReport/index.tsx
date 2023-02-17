@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable max-len */
@@ -9,6 +10,8 @@ import { connect } from 'react-redux';
 import { isDefined, _cs } from '@togglecorp/fujs';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import Gt from '#views/PalikaReport/utils';
+import Translations from '#views/PalikaReport/Constants/Translations';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
@@ -21,8 +24,6 @@ import Inventory from './Sections/Inventory';
 import CriticalInfra from './Sections/CriticalInfra';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
-import Gt from '#views/PalikaReport/utils';
-import Translations from '#views/PalikaReport/Constants/Translations';
 import 'react-circular-progressbar/dist/styles.css';
 
 import {
@@ -31,13 +32,15 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { userSelector, palikaRedirectSelector,
+import {
+    userSelector, palikaRedirectSelector,
     generalDataSelector, provincesSelector,
     districtsSelector, municipalitiesSelector,
     palikaLanguageSelector, drrmOrgSelecter,
     drrmInventorySelecter, drrmCriticalSelecter,
     drrmContactsSelecter,
-    drrmRegionSelector } from '#selectors';
+    drrmRegionSelector,
+} from '#selectors';
 import Simulation from './Sections/Simulation';
 
 
@@ -66,7 +69,7 @@ const mapStateToProps = (state, props) => ({
     drrmLanguage: palikaLanguageSelector(state),
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     // PalikaReportGetRequest: {
     //     url: ({ params }) => `${params.url}`,
     //     query: ({ params, props }) => {
@@ -251,17 +254,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
     }, [fiscalYear, fiscalYearList]);
 
-    console.log('This is general data', generalData);
-    console.log('This is general data', disasterProfile);
+
     const handlePreviewBtn = async (reportType: string) => {
-        console.log('fiscal', generalData.fiscalYearTitle);
         setPending(true);
         let pageNumber = 1;
         const doc = new JsPDF('p', 'mm', 'a4');
         const docSummary = new JsPDF('p', 'mm', 'a4');
         let matchedFiscalYear = [];
         matchedFiscalYear = disasterProfile.filter(item => item.fiscalYear === Number(generalData.fiscalYear));
-        console.log('This fiscal year', matchedFiscalYear);
+
         const ids = document.querySelectorAll('.page');
         const { length } = ids;
         for (let i = 0; i < length; i += 1) {
@@ -348,9 +349,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
 
         if (matchedFiscalYear.length) {
-            axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${matchedFiscalYear[0].id}/`, formdata, { headers: {
-                'content-type': 'multipart/form-data',
-            } })
+            axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${matchedFiscalYear[0].id}/`, formdata, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            })
                 .then((response) => {
                     setPending(false);
                     setProgress(100);
@@ -396,9 +399,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     alert('Error occured. Please try again.');
                 });
         } else {
-            axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
-                'content-type': 'multipart/form-data',
-            } })
+            axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            })
                 .then((response) => {
                     setPending(false);
                     setProgress(100);
@@ -419,7 +424,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         }
                     }
                     alert('Your DRRM report has been uploaded sucessfully');
-                    console.log('solved');
                 }).catch((error) => {
                     setPending(false);
                     setProgress(100);
@@ -606,14 +610,14 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         <div className={styles.tabsPageContainer}>
                             {
                                 pending
-                                    && (
+                                && (
 
-                                        <div className={styles.loaderDiv}>
-                                            <div className={styles.loaderContainer}>
-                                                <CircularProgressbar value={progress} />
-                                            </div>
+                                    <div className={styles.loaderDiv}>
+                                        <div className={styles.loaderContainer}>
+                                            <CircularProgressbar value={progress} />
                                         </div>
-                                    )
+                                    </div>
+                                )
                             }
                             <div className={styles.buttonContainer}>
                                 <button
@@ -667,9 +671,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     mayor={mayor}
                                     cao={cao}
                                     focalPerson={focalPerson}
-                                    updateTab={() => {}}
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
+                                    updateTab={() => { }}
+                                    handlePrevClick={() => { }}
+                                    handleNextClick={() => { }}
                                     localMembers={localMembers}
                                 />
 
@@ -684,8 +688,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                                 <Budget
                                     annex
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
+                                    handlePrevClick={() => { }}
+                                    handleNextClick={() => { }}
                                 />
                             </div>
 
@@ -696,8 +700,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                                 <BudgetActivity
                                     annex
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
+                                    handlePrevClick={() => { }}
+                                    handleNextClick={() => { }}
                                 />
                             </div>
 
@@ -707,8 +711,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                 </h1>
                                 <ProgrammeAndPolicies
                                     annex
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
+                                    handlePrevClick={() => { }}
+                                    handleNextClick={() => { }}
                                 />
                             </div>
 
@@ -817,28 +821,28 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         </tr>
 
                                         {!drrmInventory.data
-                                        && drrmInventory
-                                            .filter(inven => inven.selectedRow === true)
-                                            .map((item, i) => (
+                                            && drrmInventory
+                                                .filter(inven => inven.selectedRow === true)
+                                                .map((item, i) => (
 
-                                                <tr>
-                                                    <td>
-                                                        {item.SN}
-                                                    </td>
+                                                    <tr>
+                                                        <td>
+                                                            {item.SN}
+                                                        </td>
 
-                                                    <td>{drrmLanguage.language === 'np' ? item.item.titleNp : item.item.title}</td>
-                                                    <td>{item.quantity || '-'}</td>
-                                                    <td>{drrmLanguage.language === 'np' ? item.item.unitNp : item.item.unit}</td>
-                                                    <td>{item.item.category || '-'}</td>
-                                                    <td>
+                                                        <td>{drrmLanguage.language === 'np' ? item.item.titleNp : item.item.title}</td>
+                                                        <td>{item.quantity || '-'}</td>
+                                                        <td>{drrmLanguage.language === 'np' ? item.item.unitNp : item.item.unit}</td>
+                                                        <td>{item.item.category || '-'}</td>
+                                                        <td>
 
-                                                        {item.resourceName || '-'}
-                                                    </td>
-                                                    <td>{item.organizationType || '-'}</td>
-                                                    <td>{ADToBS(item.createdOn) || '-'}</td>
-                                                    <td>{ADToBS(item.modifiedOn) || '-'}</td>
-                                                </tr>
-                                            ))}
+                                                            {item.resourceName || '-'}
+                                                        </td>
+                                                        <td>{item.organizationType || '-'}</td>
+                                                        <td>{ADToBS(item.createdOn) || '-'}</td>
+                                                        <td>{ADToBS(item.modifiedOn) || '-'}</td>
+                                                    </tr>
+                                                ))}
                                     </tbody>
                                 </table>
                             </div>
@@ -909,13 +913,13 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     <Gt section={Translations.AnnexH} />
                                 </h1>
                                 <Relief
-                                // AnnexDetails
+                                    // AnnexDetails
                                     reportData={''}
-                                    tableHeader={() => {}}
-                                    updateTab={() => {}}
+                                    tableHeader={() => { }}
+                                    updateTab={() => { }}
                                     page={-1}
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
+                                    handlePrevClick={() => { }}
+                                    handleNextClick={() => { }}
                                     annex
                                 />
                             </div>
@@ -1021,19 +1025,19 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         {drrmContacts.ngContacts.length > 0
                                             ? drrmContacts.ngContacts
                                                 .map((cts, i) => (
-                                                    <tr key={cts.item.id}>
+                                                    <tr key={cts.item && cts.item.id}>
                                                         <td>{i + 1}</td>
-                                                        <td>{cts.item.name}</td>
-                                                        <td>{cts.item.typeOfOrganization}</td>
-                                                        <td>{cts.item.nameOfOrganization}</td>
-                                                        <td>{cts.item.position}</td>
-                                                        <td>{cts.item.trainedTitle}</td>
-                                                        <td>{cts.hazardName}</td>
-                                                        <td>{cts.item.trainingActivities}</td>
-                                                        <td>{cts.item.trainingDateFrom}</td>
-                                                        <td>{cts.item.trainingDateTo}</td>
-                                                        <td>{cts.item.contactNumber}</td>
-                                                        <td>{cts.item.email}</td>
+                                                        <td>{cts.item && cts.item.name}</td>
+                                                        <td>{cts.item && cts.item.typeOfOrganization}</td>
+                                                        <td>{cts.item && cts.item.nameOfOrganization}</td>
+                                                        <td>{cts.item && cts.item.position}</td>
+                                                        <td>{cts.item && cts.item.trainedTitle}</td>
+                                                        <td>{cts.item && cts.hazardName}</td>
+                                                        <td>{cts.item && cts.item.trainingActivities}</td>
+                                                        <td>{cts.item && cts.item.trainingDateFrom}</td>
+                                                        <td>{cts.item && cts.item.trainingDateTo}</td>
+                                                        <td>{cts.item && cts.item.contactNumber}</td>
+                                                        <td>{cts.item && cts.item.email}</td>
                                                     </tr>
                                                 ))
                                             : (
@@ -1064,8 +1068,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     <Gt section={Translations.AnnexJ} />
                                 </h1>
                                 <Simulation
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
+                                    handlePrevClick={() => { }}
+                                    handleNextClick={() => { }}
                                     annex
                                 />
                             </div>

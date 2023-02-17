@@ -87,6 +87,9 @@ import {
 } from '#request';
 import ZoomToolBar from '#components/ZoomToolBar';
 import LanguageToggle from '#components/LanguageToggle';
+import i18n from 'i18next';
+import { initReactI18next, Translation } from 'react-i18next';
+import { enTranslation, npTranslation } from '#constants/translations';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
 import styles from './styles.scss';
@@ -609,6 +612,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
         // setCloseWalkThrough({ value: true });
+        // debug true for development
+        i18n.use(initReactI18next).init({
+            lng: 'en',
+            debug: false,
+            fallbackLng: 'en',
+            resources: {
+                en: enTranslation,
+                np: npTranslation,
+            },
+        });
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Props) {
@@ -639,6 +652,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { closeWalkThroughHomepage, language: { language } } = this.props;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
         const isFirstTimeUser = Cookies.get('isFirstTimeUser');
+        if (prevProps.language !== language) {
+            i18n.changeLanguage(language);
+        }
+
         if (activeRouteName === 'homepage' && isFirstTimeUser !== undefined && closeWalkThroughHomepage) {
             navigate('/dashboard/');
         }
@@ -1405,7 +1422,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
         municipalities: Municipality[],
     ) => {
         if (!selectedRegion || !selectedRegion.adminLevel) {
-            return 'National';
+            return (
+                <Translation>
+                    {
+                        t => <span>{t('National')}</span>
+                    }
+                </Translation>
+            );
         }
 
         const adminLevels: {
@@ -1418,13 +1441,38 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const regionList = adminLevels[selectedRegion.adminLevel];
         const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+        const { language: { language } } = this.props;
+        if (currentRegion && language === 'en') {
+            return (
+                <Translation>
+                    {
+                        t => (
+                            `${currentRegion.title} ${t(currentRegion.type)}`
 
-        if (currentRegion) {
-            return currentRegion.title;
+                        )
+                    }
+                </Translation>
+
+
+            );
+        }
+
+        if (currentRegion && language === 'np') {
+            return (
+                <Translation>
+                    {
+                        t => (
+                            `${currentRegion.title_ne} ${t(currentRegion.type)}`
+
+                        )
+                    }
+                </Translation>
+            );
         }
 
         return 'Unknown';
     }
+
 
     private handleToggleLeftContainerVisibilityButtonClick = () => {
         const { toggleLeftPaneButtonStretched } = this.state;
@@ -1769,6 +1817,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             // hazardList,
             run,
             closeWalkThroughHomepage,
+            language: { language },
         } = this.props;
 
         const {
@@ -1941,7 +1990,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
-        console.log('This is active route name', activeRouteName);
+
 
         return (
             <PageContext.Provider value={pageProps}>
@@ -1950,6 +1999,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         styles.multiplexer,
                         leftContainerHidden && styles.leftContainerHidden,
                         mapDownloadPending && styles.downloadingMap,
+                        language === 'np' && styles.languageFont,
                     )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>

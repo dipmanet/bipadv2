@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 import {
     generalDataSelector,
     userSelector,
@@ -15,6 +14,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import styles from './styles.scss';
 import Gt from '../../../../../../utils';
 import Translations from '../../../../../../Constants/Translations';
 
@@ -27,10 +27,10 @@ const mapStateToProps = state => ({
     drrmRegion: drrmRegionSelector(state),
 });
 
-interface Props{
+interface Props {
 
 }
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
     FiscalYearFetch: {
         url: '/nepali-fiscal-year/',
@@ -118,20 +118,20 @@ const Leadership = (props: Props) => {
                         <li>
                             <span className={styles.darker}>
                                 {(mayor && mayor.name)
-                                || <Gt section={Translations.MayorNameUnavailable} />}
+                                    || <Gt section={Translations.MayorNameUnavailable} />}
                                 (
                                 <Gt section={Translations.Mayor} />
-)
+                                )
                             </span>
                         </li>
                         <li>
                             {(mayor && mayor.email)
-                            || <Gt section={Translations.MayorEmailUnavailable} />}
+                                || <Gt section={Translations.MayorEmailUnavailable} />}
 
                         </li>
                         <li>
                             {(mayor && mayor.mobileNumber)
-                            || <Gt section={Translations.MayorPhoneUnavailable} />}
+                                || <Gt section={Translations.MayorPhoneUnavailable} />}
 
                         </li>
                     </ul>
@@ -141,22 +141,22 @@ const Leadership = (props: Props) => {
                         <li>
                             <span className={styles.darker}>
                                 {(cao && cao.name)
-                                || <Gt section={Translations.CaoNameUnavailable} />}
+                                    || <Gt section={Translations.CaoNameUnavailable} />}
                                 (
                                 <Gt section={Translations.ChiefAdminstrative} />
-)
+                                )
 
                             </span>
 
                         </li>
                         <li>
                             {(cao && cao.email)
-                             || <Gt section={Translations.CaoEmailUnavailable} />}
+                                || <Gt section={Translations.CaoEmailUnavailable} />}
 
                         </li>
                         <li>
                             {(cao && cao.mobileNumber)
-                            || <Gt section={Translations.CaoPhoneUnavailable} />}
+                                || <Gt section={Translations.CaoPhoneUnavailable} />}
 
 
                         </li>
@@ -167,20 +167,20 @@ const Leadership = (props: Props) => {
                         <li>
                             <span className={styles.darker}>
                                 {(focalPerson && focalPerson.name)
-                                || <Gt section={Translations.FocalPersonNameUnavailable} />}
+                                    || <Gt section={Translations.FocalPersonNameUnavailable} />}
                                 (
                                 <Gt section={Translations.DRRfocal} />
-)
+                                )
                             </span>
                         </li>
                         <li>
                             {(focalPerson && focalPerson.email)
-                            || <Gt section={Translations.FocalPersonEmailUnavailable} />}
+                                || <Gt section={Translations.FocalPersonEmailUnavailable} />}
 
                         </li>
                         <li>
                             {(focalPerson && focalPerson.mobileNumber)
-                            || <Gt section={Translations.FocalPersonPhoneUnavailable} />}
+                                || <Gt section={Translations.FocalPersonPhoneUnavailable} />}
 
                         </li>
                     </ul>

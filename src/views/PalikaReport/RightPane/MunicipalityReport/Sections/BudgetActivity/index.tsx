@@ -56,8 +56,9 @@ const mapDispatchToProps = dispatch => ({
     setBudgetActivityDatapp: params => dispatch(setBudgetActivityDataAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    BudgetActivityGetRequest: { url: '/annual-budget-activity/',
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    BudgetActivityGetRequest: {
+        url: '/annual-budget-activity/',
         query: ({ params, props }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
             annual_budget: params.annualBudget,
@@ -81,7 +82,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.paginationParameters) {
                 params.paginationParameters(response);
             }
-        } },
+        },
+    },
     BudgetActivityPostRequest: {
         url: '/annual-budget-activity/',
 
@@ -112,7 +114,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
     },
 
-    PriorityActionGet: { url: '/priority-action/',
+    PriorityActionGet: {
+        url: '/priority-action/',
 
         method: methods.GET,
         onMount: true,
@@ -124,8 +127,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.priorityAction) {
                 params.priorityAction(citizenReportList);
             }
-        } },
-    PriorityActivityGet: { url: '/priority-activity/',
+        },
+    },
+    PriorityActivityGet: {
+        url: '/priority-activity/',
 
         method: methods.GET,
         onMount: true,
@@ -137,8 +142,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.priorityActivity) {
                 params.priorityActivity(citizenReportList);
             }
-        } },
-    PriorityAreaGet: { url: '/priority-area/',
+        },
+    },
+    PriorityAreaGet: {
+        url: '/priority-area/',
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, params }) => {
@@ -149,12 +156,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.priorityArea) {
                 params.priorityArea(citizenReportList);
             }
-        } },
+        },
+    },
 
 
 };
 
-interface BudgetActivityData{
+interface BudgetActivityData {
     name: string;
     fundSource: string;
     additionalDrrBudget: string;
@@ -168,7 +176,7 @@ interface BudgetActivityData{
 }
 
 
-interface Props{
+interface Props {
     reportTitle: string;
     datefrom: string;
     dateTo: string;
@@ -187,7 +195,7 @@ interface Props{
     setmemberCount: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-interface Location{
+interface Location {
     municipalityId: number;
     districtId: number;
     provinceId: number;
@@ -337,7 +345,6 @@ const BudgetActivity = (props: Props) => {
     const [chartData, setChartData] = useState([]);
 
     useEffect(() => {
-        console.log('budgetData', budgetData);
         if (budgetData.totDrrBudget) {
             setChartData([
                 { name: 'DRR funding of municipality', value: budgetData.totDrrBudget },
@@ -356,7 +363,7 @@ const BudgetActivity = (props: Props) => {
         setLoader(false);
         setPostErrors(errors);
     };
-    console.log('That', postErrors);
+
     const handleDataSubmittedResponse = (response) => {
         setDataSubmittedResponse(!dataSubmittedResponse);
         setStartDate('');
@@ -591,7 +598,7 @@ const BudgetActivity = (props: Props) => {
 
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
 
 
@@ -632,12 +639,12 @@ const BudgetActivity = (props: Props) => {
             const filteredData = priorityActionFetched.filter(item => item.priorityArea === Number(priorityArea));
             setFilteredpriorityActionFetched(filteredData);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [priorityArea]);
     useEffect(() => {
         setFilteredPriorityActivityFetched(priorityActivityFetched);
         setFilteredpriorityActionFetched(priorityActionFetched);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const handlePriorityAction = (e) => {
         setPriorityAction(Number(e.target.value));
@@ -647,15 +654,13 @@ const BudgetActivity = (props: Props) => {
             setDisablePriorityActivity(true);
         }
     };
-    console.log('Priority area', priorityArea);
-    console.log('Priority Activity', priorityActivity);
-    console.log('Priority Action', priorityAction);
+
     useEffect(() => {
         if (priorityAction) {
             const filteredData = priorityActivityFetched.filter(item => item.priorityAction === Number(priorityAction));
             setFilteredPriorityActivityFetched(filteredData);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [priorityAction]);
     const handlePriorityActivity = (e) => {
         setPriorityActivity(Number(e.target.value));
@@ -738,7 +743,7 @@ const BudgetActivity = (props: Props) => {
             id: budgetActivityId,
         });
     };
-    console.log('Budget act', budgetActivities);
+
     useEffect(() => {
         if (budgetActivities.length > 0) {
             setactivityName(budgetActivities[selectedBudgetActivityIndex].activityName);
@@ -761,7 +766,6 @@ const BudgetActivity = (props: Props) => {
     }, [selectedBudgetActivityIndex, editBtnClicked]);
 
     const handleNext = () => {
-        console.log('What progress', drrmProgress);
         if (drrmProgress < 2) {
             setProgress(2);
         }
@@ -771,10 +775,6 @@ const BudgetActivity = (props: Props) => {
     useEffect(() => {
         if (budgetActivities.length) {
             const finalArrayData = budgetActivities.map((data) => {
-                console.log('hang', data);
-                console.log('this', priorityActionFetched);
-                console.log('area', priorityAreaFetched);
-                console.log('Activity', priorityActivityFetched);
                 const PriorityAreaName = priorityAreaFetched.find(item => item.id === data.priorityArea);
                 const PriorityActionName = priorityActionFetched.find(item => item.id === data.priorityAction);
                 const PriorityActivityName = priorityActivityFetched.find(item => item.id === data.priorityActivity);
@@ -791,946 +791,945 @@ const BudgetActivity = (props: Props) => {
             });
             finalArr = [...new Set(finalArrayData)];
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [budgetActivities, priorityActionFetched, priorityAreaFetched, priorityActivityFetched]);
 
-    console.log('Final arr', finalArr);
-    console.log('Budget Activities', budgetActivities);
+
     return (
         <>
 
 
             <div className={drrmLanguage.language === 'np' && styles.nep}>
                 {!props.previewDetails && !props.monitoringDetails
-                && (
-                    <div className={styles.mainPageDetailsContainer}>
-                        <h2>
-                            <Gt section={Translations.BaTitlePart1} />
-                            {
-                                `
+                    && (
+                        <div className={styles.mainPageDetailsContainer}>
+                            <h2>
+                                <Gt section={Translations.BaTitlePart1} />
+                                {
+                                    `
                         ${generalData.fiscalYearTitle}`
-                            }
-                            <Gt section={Translations.BaTitlePart2} />
+                                }
+                                <Gt section={Translations.BaTitlePart2} />
 
-                        </h2>
-                        <table id="table-to-xls">
-                            <tbody>
-                                <>
-                                    <tr>
+                            </h2>
+                            <table id="table-to-xls">
+                                <tbody>
+                                    <>
+                                        <tr>
 
-                                        <th>
-                                            <Gt section={Translations.dashboardTblHeaderSN} />
+                                            <th>
+                                                <Gt section={Translations.dashboardTblHeaderSN} />
 
-                                        </th>
-
-
-                                        <th>
-                                            <Gt section={Translations.NameofActivity} />
+                                            </th>
 
 
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.PriorityArea} />
+                                            <th>
+                                                <Gt section={Translations.NameofActivity} />
 
 
-                                            <Icon
-                                                name="info"
-                                                className={styles.infoIcon}
-                                                title={drrmLanguage.language === 'en'
-                                                    ? 'The Disaster Risk Reduction National Strategic Plan of Action 2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main guidance, has identified 4 priority areas and 18 priority actions. The activities will be monitored based on the these priorities set. Get the action plan here: '
-                                                    : 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८ – २०३०मा विपद् जोखिम न्यूनीकरणका लागि सेन्डाइ कार्य ढाँचालाई मूल मार्गदर्शनको रुपमा लिई चार प्राथमिकता प्राप्त क्षेत्रहरू र अठार प्राथमिकता प्राप्त कार्यहरू निर्धारण गरेको छ । यी प्राथमिकताहरूको आधारमा क्रियाकलापहरुको अनुगमन गरिनेछ'
-                                                }
-                                            />
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.PriorityAction} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.PriorityArea} />
 
 
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.PriorityActivity} />
+                                                <Icon
+                                                    name="info"
+                                                    className={styles.infoIcon}
+                                                    title={drrmLanguage.language === 'en'
+                                                        ? 'The Disaster Risk Reduction National Strategic Plan of Action 2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main guidance, has identified 4 priority areas and 18 priority actions. The activities will be monitored based on the these priorities set. Get the action plan here: '
+                                                        : 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८ – २०३०मा विपद् जोखिम न्यूनीकरणका लागि सेन्डाइ कार्य ढाँचालाई मूल मार्गदर्शनको रुपमा लिई चार प्राथमिकता प्राप्त क्षेत्रहरू र अठार प्राथमिकता प्राप्त कार्यहरू निर्धारण गरेको छ । यी प्राथमिकताहरूको आधारमा क्रियाकलापहरुको अनुगमन गरिनेछ'
+                                                    }
+                                                />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.PriorityAction} />
 
 
-                                        </th>
-                                        {/* <th>
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.PriorityActivity} />
+
+
+                                            </th>
+                                            {/* <th>
                                            Area of implementation
 
 
                                </th> */}
-                                        <th>
-
-                                            <Gt section={Translations.Fundingtype} />
-
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.Sourceof} />
-
-
-                                        </th>
-                                        {
-                                            showSourceTypeOther
-                                    && (
-                                        <th>
-                                           Other Fund Type
-
-                                        </th>
-                                    )
-                                        }
-                                        <th>
-                                            <Gt section={Translations.Budgetcode} />
-
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.OrganizationNm} />
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.Projectstart} />
-
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.ProjectCompletion} />
-
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.Status} />
-
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.AllocatedProject} />
-
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.Actualexpenditure} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.Remarks} />
-                                        </th>
-                                        {budgetActivities.length > 0 && (
                                             <th>
-                                                <Gt section={Translations.ResourcesAction} />
+
+                                                <Gt section={Translations.Fundingtype} />
+
+
                                             </th>
+                                            <th>
+                                                <Gt section={Translations.Sourceof} />
+
+
+                                            </th>
+                                            {
+                                                showSourceTypeOther
+                                                && (
+                                                    <th>
+                                                        Other Fund Type
+
+                                                    </th>
+                                                )
+                                            }
+                                            <th>
+                                                <Gt section={Translations.Budgetcode} />
+
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationNm} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.Projectstart} />
+
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ProjectCompletion} />
+
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.Status} />
+
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.AllocatedProject} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.Actualexpenditure} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.Remarks} />
+                                            </th>
+                                            {budgetActivities.length > 0 && (
+                                                <th>
+                                                    <Gt section={Translations.ResourcesAction} />
+                                                </th>
+                                            )}
+
+
+                                        </tr>
+                                        {loader ? (
+                                            <>
+                                                <Loader
+                                                    top="50%"
+                                                    left="60%"
+                                                />
+                                                <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                            </>
+                                        ) : (
+                                            budgetId.id
+                                            && (
+                                                <>
+                                                    {finalArr && finalArr.map((data, i) => (
+                                                        data.data.id === budgetActivityId ? (
+                                                            <tr>
+                                                                <td>{selectedBudgetActivityIndex + 1}</td>
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        onChange={handleActivityName}
+                                                                        value={activityName}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Name of Activity'
+                                                                            : 'कार्यक्रमको नाम'
+                                                                        }
+                                                                    />
+                                                                </td>
+
+
+                                                                <td>
+                                                                    <select
+                                                                        value={priorityArea}
+                                                                        onChange={handlePriorityArea}
+                                                                        className={styles.inputElement}
+
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                                        {priorityAreaFetched.map(item => (
+                                                                            <option value={item.id}>
+                                                                                {drrmLanguage.language === 'np' ? item.titleNp : item.title}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={priorityAction}
+                                                                        onChange={handlePriorityAction}
+                                                                        className={styles.inputElement}
+                                                                        disabled={disablePriorityAction}
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                                        {filteredpriorityActionFetched.map(item => (
+                                                                            <option value={item.id}>
+                                                                                {drrmLanguage.language === 'np' ? item.titleNp : item.title}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={priorityActivity}
+                                                                        onChange={handlePriorityActivity}
+                                                                        className={styles.inputElement}
+                                                                        disabled={disablePriorityActivity}
+                                                                    >
+                                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                                        {filteredpriorityActivityFetched.map(item => (
+                                                                            <option value={item.id}>
+                                                                                {drrmLanguage.language === 'np' ? item.titleNp : item.title}
+                                                                            </option>
+                                                                        ))}
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={fundSource}
+                                                                        onChange={handlefundSource}
+                                                                        className={styles.inputElement}
+                                                                    >
+                                                                        <option value="select">
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? 'Select Funding Type'
+                                                                                : 'बजेटको प्रकार चयन गर्नुहोस्'
+                                                                            }
+                                                                        </option>
+                                                                        <option value="DRR Fund of Muicipality">
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? Translations.DRRFundMun.en
+                                                                                : Translations.DRRFundMun.np
+                                                                            }
+
+
+                                                                        </option>
+                                                                        <option value="Other DRR related funding">
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? Translations.OtherDrrFund.en
+                                                                                : Translations.OtherDrrFund.np
+                                                                            }
+
+
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+
+                                                                <td>
+                                                                    {
+                                                                        fundSource === ''
+                                                                        && (
+                                                                            <input
+                                                                                type="text"
+                                                                                className={styles.inputElement}
+                                                                                value={drrmLanguage.language === 'en'
+                                                                                    ? 'Source of Funds'
+                                                                                    : 'बजेटको स्रोत'
+                                                                                }
+                                                                                disabled
+                                                                            />
+                                                                        )}
+
+                                                                    {
+                                                                        fundSource === 'DRR Fund of Muicipality'
+                                                                        && (
+                                                                            <input
+                                                                                type="text"
+                                                                                className={styles.inputElement}
+                                                                                value={'Municipal Government'}
+                                                                                disabled
+                                                                            />
+                                                                        )}
+
+                                                                    {
+                                                                        fundSource === 'Other DRR related funding'
+                                                                        && (
+                                                                            <select
+                                                                                value={fundingType}
+                                                                                onChange={handlefundingType}
+                                                                                className={styles.inputElement}
+                                                                            >
+                                                                                <option value="select">
+                                                                                    <Gt section={Translations.SelectSourceof} />
+                                                                                </option>
+                                                                                <option value="Federal Government">
+                                                                                    <Gt section={Translations.FederalGovernment} />
+                                                                                </option>
+                                                                                <option value="Provincial Government">
+                                                                                    <Gt section={Translations.ProvincialGovernment} />
+
+                                                                                </option>
+                                                                                <option value="INGO">
+                                                                                    <Gt section={Translations.INGO} />
+                                                                                </option>
+                                                                                <option value="Private Sector">
+                                                                                    <Gt section={Translations.PrivateSector} />
+
+                                                                                </option>
+                                                                                <option value="Academia">
+                                                                                    <Gt section={Translations.Academia} />
+
+                                                                                </option>
+                                                                                <option value="Others">
+                                                                                    <Gt section={Translations.Others} />
+
+                                                                                </option>
+                                                                            </select>
+                                                                        )
+                                                                    }
+
+                                                                </td>
+                                                                {
+                                                                    showSourceTypeOther
+                                                                    && (
+                                                                        <td>
+                                                                            <input
+                                                                                type="text"
+                                                                                className={styles.inputElement}
+                                                                                value={otherSubtype}
+                                                                                onChange={handleOtherSubType}
+                                                                                placeholder={drrmLanguage.language === 'en'
+                                                                                    ? 'Please Specify'
+                                                                                    : 'कृपया निर्दिष्ट गर्नुहोस्'
+                                                                                }
+                                                                            />
+                                                                        </td>
+                                                                    )
+                                                                }
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        onChange={handleBudgetCode}
+                                                                        value={budgetCode}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Budget Code (if available)'
+                                                                            : 'बजेट कोड (यदि उपलब्ध छ भने)'
+                                                                        }
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        onChange={handleOrganisationName}
+                                                                        value={organisationName}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Name of Organisation'
+                                                                            : 'संस्थाको नाम'
+                                                                        }
+                                                                    />
+                                                                </td>
+
+
+                                                                <td>
+                                                                    <NepaliDatePicker
+                                                                        inputClassName="form-control"
+                                                                        className={styles.datepicker}
+                                                                        value={projstartDate}
+                                                                        onChange={date => setStartDate(date)}
+                                                                        options={{
+                                                                            calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                            valueLocale: 'en',
+                                                                        }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <NepaliDatePicker
+                                                                        inputClassName="form-control"
+                                                                        className={styles.datepicker}
+                                                                        value={projcompletionDate}
+                                                                        onChange={date => setprojCompletionDate(date)}
+                                                                        options={{
+                                                                            calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                            valueLocale: 'en',
+
+                                                                        }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <select
+                                                                        value={projStatus}
+                                                                        onChange={handleprojStatus}
+                                                                        className={styles.inputElement}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Project Status'
+                                                                            : 'परियोजनाको स्थिति'
+                                                                        }
+                                                                    >
+                                                                        <option value="select">
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? 'Select an Option'
+                                                                                : 'कृपया चयन गर्नुहोस्'
+                                                                            }
+                                                                        </option>
+                                                                        <option value="Started">
+
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? 'Started'
+                                                                                : 'सुरु भएको'
+                                                                            }
+                                                                        </option>
+                                                                        <option value="Ongoing">
+
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? 'Ongoing'
+                                                                                : 'चलिरहेको'
+                                                                            }
+                                                                        </option>
+                                                                        <option value="Completed">
+                                                                            {drrmLanguage.language === 'en'
+                                                                                ? 'Completed'
+                                                                                : 'पूरा भयोको'
+                                                                            }
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        onChange={handleAlocBudget}
+                                                                        value={allocatedBudget}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Allocated Project Budget'
+                                                                            : 'परियोजना बजेट विनियोजित'
+                                                                        }
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        onChange={handleActualExp}
+                                                                        value={actualExp}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Actual Expenditure'
+                                                                            : 'परियोजना बजेट विनियोजित'
+                                                                        }
+                                                                    />
+                                                                </td>
+
+                                                                <td>
+                                                                    {' '}
+                                                                    <input
+                                                                        type="text"
+                                                                        className={styles.inputElement}
+                                                                        onChange={handleRemarks}
+                                                                        value={remarks}
+                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                            ? 'Remarks'
+                                                                            : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
+                                                                        }
+                                                                    />
+
+                                                                </td>
+                                                                <td>
+                                                                    <button
+                                                                        className={styles.updateButtn}
+                                                                        type="button"
+                                                                        onClick={handleUpdateActivity}
+                                                                        title="Update Budget Activity"
+                                                                    >
+                                                                        <Gt section={Translations.Update} />
+                                                                    </button>
+                                                                </td>
+
+
+                                                            </tr>
+                                                        )
+                                                            : (
+                                                                <tr key={data.data.id}>
+
+                                                                    <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
+
+                                                                    <td>{data.data.activityName}</td>
+
+                                                                    <td>
+                                                                        {
+                                                                            drrmLanguage.language === 'np' ? data.PriorityAreaNameNe : data.PriorityAreaNameEn
+
+                                                                        }
+                                                                    </td>
+                                                                    <td>{drrmLanguage.language === 'np' ? data.PriorityActionNameNe : data.PriorityActionNameEn}</td>
+                                                                    <td>{drrmLanguage.language === 'np' ? data.PriorityActivityNameNe : data.PriorityActivityNameEn}</td>
+
+                                                                    <td>{data.data.fundType}</td>
+                                                                    <td>{data.data.otherFundType}</td>
+                                                                    <td>{data.data.donerOrganization}</td>
+                                                                    <td>{data.data.budgetCode}</td>
+                                                                    <td>{ADToBS(data.data.projectStartDate)}</td>
+                                                                    <td>{ADToBS(data.data.projectEndDate)}</td>
+                                                                    <td>{data.data.status}</td>
+                                                                    <td>{data.data.amount}</td>
+                                                                    <td>{data.data.expenditure}</td>
+                                                                    <td>{data.data.remarks}</td>
+                                                                    <td>
+
+                                                                        <button
+                                                                            className={styles.editButtn}
+                                                                            type="button"
+                                                                            onClick={() => handleEditActivity(data.data.id, i)}
+                                                                            title="Edit Budget Activity"
+                                                                        >
+                                                                            <ScalableVectorGraphics
+                                                                                className={styles.bulletPoint}
+                                                                                src={editIcon}
+                                                                                alt="editPoint"
+                                                                            />
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                    ))}
+
+                                                    {!props.annex
+                                                        && (editBudgetActivity ? ''
+                                                            : (
+                                                                <tr>
+                                                                    <td>{budgetActivities.length + 1}</td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            onChange={handleActivityName}
+                                                                            value={activityName}
+                                                                            placeholder={drrmLanguage.language === 'en'
+                                                                                ? 'Name of Activity'
+                                                                                : 'कार्यक्रमको नाम'
+                                                                            }
+                                                                        />
+                                                                    </td>
+
+
+                                                                    <td>
+                                                                        <select
+                                                                            value={priorityArea}
+                                                                            onChange={handlePriorityArea}
+                                                                            className={styles.inputElement}
+
+
+                                                                        >
+                                                                            <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                                            {priorityAreaFetched.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={priorityAction}
+                                                                            onChange={handlePriorityAction}
+                                                                            className={styles.inputElement}
+                                                                            disabled={disablePriorityAction}
+                                                                        >
+                                                                            <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                                            {filteredpriorityActionFetched.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={priorityActivity}
+                                                                            onChange={handlePriorityActivity}
+                                                                            className={styles.inputElement}
+                                                                            disabled={disablePriorityActivity}
+                                                                        >
+                                                                            <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                                            {filteredpriorityActivityFetched.map(data => (
+                                                                                <option value={data.id}>
+                                                                                    {drrmLanguage.language === 'np' ? data.titleNp : data.title}
+                                                                                </option>
+                                                                            ))}
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={fundSource}
+                                                                            onChange={handlefundSource}
+                                                                            className={styles.inputElement}
+                                                                        >
+                                                                            <option value="select">
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? 'Select Funding Type'
+                                                                                    : 'बजेटको प्रकार चयन गर्नुहोस्'
+                                                                                }
+                                                                            </option>
+                                                                            <option value="DRR Fund of Muicipality">
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? Translations.DRRFundMun.en
+                                                                                    : Translations.DRRFundMun.np
+                                                                                }
+
+
+                                                                            </option>
+                                                                            <option value="Other DRR related funding">
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? Translations.OtherDrrFund.en
+                                                                                    : Translations.OtherDrrFund.np
+                                                                                }
+
+
+                                                                            </option>
+                                                                        </select>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {
+                                                                            fundSource === ''
+                                                                            && (
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className={styles.inputElement}
+                                                                                    value={drrmLanguage.language === 'en'
+                                                                                        ? 'Source of Funds'
+                                                                                        : 'बजेटको स्रोत'
+                                                                                    }
+                                                                                    disabled
+                                                                                />
+                                                                            )}
+                                                                        {
+                                                                            fundSource === 'DRR Fund of Muicipality'
+                                                                            && (
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className={styles.inputElement}
+                                                                                    value={drrmLanguage.language === 'en'
+                                                                                        ? 'Municipal Government'
+                                                                                        : 'मनाहानगरपालिका/नगरपालिका/गाउँपालिका'
+                                                                                    }
+                                                                                    disabled
+                                                                                />
+                                                                            )}
+
+                                                                        {
+                                                                            fundSource === 'Other DRR related funding'
+                                                                            && (
+                                                                                <select
+                                                                                    value={fundingType}
+                                                                                    onChange={handlefundingType}
+                                                                                    className={styles.inputElement}
+                                                                                >
+                                                                                    <option value="select">
+                                                                                        <Gt section={Translations.SelectSourceof} />
+                                                                                    </option>
+                                                                                    <option value="Federal Government">
+                                                                                        <Gt section={Translations.FederalGovernment} />
+                                                                                    </option>
+                                                                                    <option value="Provincial Government">
+                                                                                        <Gt section={Translations.ProvincialGovernment} />
+
+                                                                                    </option>
+                                                                                    <option value="INGO">
+                                                                                        <Gt section={Translations.INGO} />
+                                                                                    </option>
+                                                                                    <option value="Private Sector">
+                                                                                        <Gt section={Translations.PrivateSector} />
+
+                                                                                    </option>
+                                                                                    <option value="Academia">
+                                                                                        <Gt section={Translations.Academia} />
+
+                                                                                    </option>
+                                                                                    <option value="Others">
+                                                                                        <Gt section={Translations.Others} />
+
+                                                                                    </option>
+                                                                                </select>
+                                                                            )
+                                                                        }
+
+                                                                    </td>
+                                                                    {
+                                                                        showSourceTypeOther
+                                                                        && (
+                                                                            <td>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className={styles.inputElement}
+                                                                                    value={otherSubtype}
+                                                                                    onChange={handleOtherSubType}
+                                                                                    placeholder={drrmLanguage.language === 'en'
+                                                                                        ? 'Please Specify'
+                                                                                        : 'कृपया निर्दिष्ट गर्नुहोस्'
+                                                                                    }
+                                                                                />
+                                                                            </td>
+                                                                        )
+                                                                    }
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            onChange={handleBudgetCode}
+                                                                            value={budgetCode}
+                                                                            placeholder={drrmLanguage.language === 'en'
+                                                                                ? 'Budget Code (if available)'
+                                                                                : 'बजेट कोड (यदि उपलब्ध छ भने)'
+                                                                            }
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            onChange={handleOrganisationName}
+                                                                            value={organisationName}
+                                                                            placeholder={drrmLanguage.language === 'en'
+                                                                                ? 'Name of Organisation'
+                                                                                : 'संस्थाको नाम'
+                                                                            }
+                                                                        />
+                                                                    </td>
+
+
+                                                                    <td>
+                                                                        <NepaliDatePicker
+                                                                            inputClassName="form-control"
+                                                                            className={styles.datepicker}
+                                                                            value={projstartDate}
+
+                                                                            onChange={date => setStartDate(date)}
+                                                                            options={{
+                                                                                calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                                valueLocale: 'en',
+
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <NepaliDatePicker
+                                                                            inputClassName="form-control"
+                                                                            className={styles.datepicker}
+                                                                            value={projcompletionDate}
+                                                                            onChange={date => setprojCompletionDate(date)}
+                                                                            options={{
+                                                                                calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                                valueLocale: 'en',
+
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <select
+                                                                            value={projStatus}
+                                                                            onChange={handleprojStatus}
+                                                                            className={styles.inputElement}
+                                                                            placeholder={drrmLanguage.language === 'en'
+                                                                                ? 'Project Status'
+                                                                                : 'परियोजनाको स्थिति'
+                                                                            }
+                                                                        >
+                                                                            <option value="select">
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? 'Select an Option'
+                                                                                    : 'कृपया चयन गर्नुहोस्'
+                                                                                }
+                                                                            </option>
+                                                                            <option value="Started">
+
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? 'Started'
+                                                                                    : 'सुरु भएको'
+                                                                                }
+                                                                            </option>
+                                                                            <option value="Ongoing">
+
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? 'Ongoing'
+                                                                                    : 'चलिरहेको'
+                                                                                }
+                                                                            </option>
+                                                                            <option value="Completed">
+                                                                                {drrmLanguage.language === 'en'
+                                                                                    ? 'Completed'
+                                                                                    : 'पूरा भयोको'
+                                                                                }
+                                                                            </option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            onChange={handleAlocBudget}
+                                                                            value={allocatedBudget}
+                                                                            placeholder={drrmLanguage.language === 'en'
+                                                                                ? 'Allocated Project Budget'
+                                                                                : 'परियोजना बजेट विनियोजित'
+                                                                            }
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input
+                                                                            type="text"
+                                                                            className={styles.inputElement}
+                                                                            onChange={handleActualExp}
+                                                                            value={actualExp}
+                                                                            placeholder={drrmLanguage.language === 'en'
+                                                                                ? 'Actual Expenditure'
+                                                                                : 'परियोजना बजेट विनियोजित'
+                                                                            }
+                                                                        />
+                                                                    </td>
+                                                                    {
+                                                                        !props.annex
+                                                                        && (
+                                                                            <>
+                                                                                <td>
+                                                                                    {' '}
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className={styles.inputElement}
+                                                                                        onChange={handleRemarks}
+                                                                                        value={remarks}
+                                                                                        placeholder={drrmLanguage.language === 'en'
+                                                                                            ? 'Remarks'
+                                                                                            : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
+                                                                                        }
+                                                                                    />
+
+                                                                                </td>
+                                                                                <td />
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                </tr>
+
+                                                            )
+
+                                                        )
+                                                    }
+                                                    {!props.annex
+                                                        && (
+                                                            <tr>
+
+                                                                {!editBudgetActivity && (
+                                                                    <>
+                                                                        <td />
+                                                                        <td>
+                                                                            <button
+                                                                                type="button"
+                                                                                className={styles.savebtn}
+                                                                                onClick={handleAddNew}
+                                                                            >
+
+                                                                                <Gt section={Translations.AddnewAct} />
+                                                                            </button>
+                                                                        </td>
+
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                        <td />
+                                                                    </>
+                                                                )
+                                                                }
+
+                                                            </tr>
+                                                        )}
+                                                </>
+                                            )
                                         )}
 
-
-                                    </tr>
-                                    {loader ? (
-                                        <>
-                                            <Loader
-                                                top="50%"
-                                                left="60%"
-                                            />
-                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
-                                        </>
-                                    ) : (
-                                        budgetId.id
-                                             && (
-                                                 <>
-                                                     {finalArr && finalArr.map((data, i) => (
-                                                         data.data.id === budgetActivityId ? (
-                                                             <tr>
-                                                                 <td>{selectedBudgetActivityIndex + 1}</td>
-                                                                 <td>
-                                                                     <input
-                                                                         type="text"
-                                                                         className={styles.inputElement}
-                                                                         onChange={handleActivityName}
-                                                                         value={activityName}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Name of Activity'
-                                                                             : 'कार्यक्रमको नाम'
-                                                                         }
-                                                                     />
-                                                                 </td>
-
-
-                                                                 <td>
-                                                                     <select
-                                                                         value={priorityArea}
-                                                                         onChange={handlePriorityArea}
-                                                                         className={styles.inputElement}
-
-                                                                     >
-                                                                         <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
-                                                                         {priorityAreaFetched.map(item => (
-                                                                             <option value={item.id}>
-                                                                                 {drrmLanguage.language === 'np' ? item.titleNp : item.title}
-                                                                             </option>
-                                                                         ))}
-
-                                                                     </select>
-                                                                 </td>
-                                                                 <td>
-                                                                     <select
-                                                                         value={priorityAction}
-                                                                         onChange={handlePriorityAction}
-                                                                         className={styles.inputElement}
-                                                                         disabled={disablePriorityAction}
-                                                                     >
-                                                                         <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
-                                                                         {filteredpriorityActionFetched.map(item => (
-                                                                             <option value={item.id}>
-                                                                                 {drrmLanguage.language === 'np' ? item.titleNp : item.title}
-                                                                             </option>
-                                                                         ))}
-
-                                                                     </select>
-                                                                 </td>
-                                                                 <td>
-                                                                     <select
-                                                                         value={priorityActivity}
-                                                                         onChange={handlePriorityActivity}
-                                                                         className={styles.inputElement}
-                                                                         disabled={disablePriorityActivity}
-                                                                     >
-                                                                         <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
-                                                                         {filteredpriorityActivityFetched.map(item => (
-                                                                             <option value={item.id}>
-                                                                                 {drrmLanguage.language === 'np' ? item.titleNp : item.title}
-                                                                             </option>
-                                                                         ))}
-
-                                                                     </select>
-                                                                 </td>
-                                                                 <td>
-                                                                     <select
-                                                                         value={fundSource}
-                                                                         onChange={handlefundSource}
-                                                                         className={styles.inputElement}
-                                                                     >
-                                                                         <option value="select">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Select Funding Type'
-                                                                                 : 'बजेटको प्रकार चयन गर्नुहोस्'
-                                                                             }
-                                                                         </option>
-                                                                         <option value="DRR Fund of Muicipality">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? Translations.DRRFundMun.en
-                                                                                 : Translations.DRRFundMun.np
-                                                                             }
-
-
-                                                                         </option>
-                                                                         <option value="Other DRR related funding">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? Translations.OtherDrrFund.en
-                                                                                 : Translations.OtherDrrFund.np
-                                                                             }
-
-
-                                                                         </option>
-                                                                     </select>
-                                                                 </td>
-
-                                                                 <td>
-                                                                     {
-                                                                         fundSource === ''
-                                                    && (
-                                                        <input
-                                                            type="text"
-                                                            className={styles.inputElement}
-                                                            value={drrmLanguage.language === 'en'
-                                                                ? 'Source of Funds'
-                                                                : 'बजेटको स्रोत'
-                                                            }
-                                                            disabled
-                                                        />
-                                                    )}
-
-                                                                     {
-                                                                         fundSource === 'DRR Fund of Muicipality'
-                                                && (
-                                                    <input
-                                                        type="text"
-                                                        className={styles.inputElement}
-                                                        value={'Municipal Government'}
-                                                        disabled
-                                                    />
-                                                )}
-
-                                                                     {
-                                                                         fundSource === 'Other DRR related funding'
-                                                     && (
-                                                         <select
-                                                             value={fundingType}
-                                                             onChange={handlefundingType}
-                                                             className={styles.inputElement}
-                                                         >
-                                                             <option value="select">
-                                                                 <Gt section={Translations.SelectSourceof} />
-                                                             </option>
-                                                             <option value="Federal Government">
-                                                                 <Gt section={Translations.FederalGovernment} />
-                                                             </option>
-                                                             <option value="Provincial Government">
-                                                                 <Gt section={Translations.ProvincialGovernment} />
-
-                                                             </option>
-                                                             <option value="INGO">
-                                                                 <Gt section={Translations.INGO} />
-                                                             </option>
-                                                             <option value="Private Sector">
-                                                                 <Gt section={Translations.PrivateSector} />
-
-                                                             </option>
-                                                             <option value="Academia">
-                                                                 <Gt section={Translations.Academia} />
-
-                                                             </option>
-                                                             <option value="Others">
-                                                                 <Gt section={Translations.Others} />
-
-                                                             </option>
-                                                         </select>
-                                                     )
-                                                                     }
-
-                                                                 </td>
-                                                                 {
-                                                                     showSourceTypeOther
-                                                    && (
-                                                        <td>
-                                                            <input
-                                                                type="text"
-                                                                className={styles.inputElement}
-                                                                value={otherSubtype}
-                                                                onChange={handleOtherSubType}
-                                                                placeholder={drrmLanguage.language === 'en'
-                                                                    ? 'Please Specify'
-                                                                    : 'कृपया निर्दिष्ट गर्नुहोस्'
-                                                                }
-                                                            />
-                                                        </td>
-                                                    )
-                                                                 }
-                                                                 <td>
-                                                                     <input
-                                                                         type="text"
-                                                                         className={styles.inputElement}
-                                                                         onChange={handleBudgetCode}
-                                                                         value={budgetCode}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Budget Code (if available)'
-                                                                             : 'बजेट कोड (यदि उपलब्ध छ भने)'
-                                                                         }
-                                                                     />
-                                                                 </td>
-                                                                 <td>
-                                                                     <input
-                                                                         type="text"
-                                                                         className={styles.inputElement}
-                                                                         onChange={handleOrganisationName}
-                                                                         value={organisationName}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Name of Organisation'
-                                                                             : 'संस्थाको नाम'
-                                                                         }
-                                                                     />
-                                                                 </td>
-
-
-                                                                 <td>
-                                                                     <NepaliDatePicker
-                                                                         inputClassName="form-control"
-                                                                         className={styles.datepicker}
-                                                                         value={projstartDate}
-                                                                         onChange={date => setStartDate(date)}
-                                                                         options={{
-                                                                             calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                                                             valueLocale: 'en',
-                                                                         }}
-                                                                     />
-                                                                 </td>
-                                                                 <td>
-                                                                     <NepaliDatePicker
-                                                                         inputClassName="form-control"
-                                                                         className={styles.datepicker}
-                                                                         value={projcompletionDate}
-                                                                         onChange={date => setprojCompletionDate(date)}
-                                                                         options={{
-                                                                             calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                                                             valueLocale: 'en',
-
-                                                                         }}
-                                                                     />
-                                                                 </td>
-                                                                 <td>
-                                                                     <select
-                                                                         value={projStatus}
-                                                                         onChange={handleprojStatus}
-                                                                         className={styles.inputElement}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Project Status'
-                                                                             : 'परियोजनाको स्थिति'
-                                                                         }
-                                                                     >
-                                                                         <option value="select">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Select an Option'
-                                                                                 : 'कृपया चयन गर्नुहोस्'
-                                                                             }
-                                                                         </option>
-                                                                         <option value="Started">
-
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Started'
-                                                                                 : 'सुरु भएको'
-                                                                             }
-                                                                         </option>
-                                                                         <option value="Ongoing">
-
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Ongoing'
-                                                                                 : 'चलिरहेको'
-                                                                             }
-                                                                         </option>
-                                                                         <option value="Completed">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Completed'
-                                                                                 : 'पूरा भयोको'
-                                                                             }
-                                                                         </option>
-                                                                     </select>
-                                                                 </td>
-                                                                 <td>
-                                                                     <input
-                                                                         type="text"
-                                                                         className={styles.inputElement}
-                                                                         onChange={handleAlocBudget}
-                                                                         value={allocatedBudget}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Allocated Project Budget'
-                                                                             : 'परियोजना बजेट विनियोजित'
-                                                                         }
-                                                                     />
-                                                                 </td>
-                                                                 <td>
-                                                                     <input
-                                                                         type="text"
-                                                                         className={styles.inputElement}
-                                                                         onChange={handleActualExp}
-                                                                         value={actualExp}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Actual Expenditure'
-                                                                             : 'परियोजना बजेट विनियोजित'
-                                                                         }
-                                                                     />
-                                                                 </td>
-
-                                                                 <td>
-                                                                     {' '}
-                                                                     <input
-                                                                         type="text"
-                                                                         className={styles.inputElement}
-                                                                         onChange={handleRemarks}
-                                                                         value={remarks}
-                                                                         placeholder={drrmLanguage.language === 'en'
-                                                                             ? 'Remarks'
-                                                                             : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
-                                                                         }
-                                                                     />
-
-                                                                 </td>
-                                                                 <td>
-                                                                     <button
-                                                                         className={styles.updateButtn}
-                                                                         type="button"
-                                                                         onClick={handleUpdateActivity}
-                                                                         title="Update Budget Activity"
-                                                                     >
-                                                                         <Gt section={Translations.Update} />
-                                                                     </button>
-                                                                 </td>
-
-
-                                                             </tr>
-                                                         )
-                                                             : (
-                                                                 <tr key={data.data.id}>
-
-                                                                     <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
-
-                                                                     <td>{data.data.activityName}</td>
-
-                                                                     <td>
-                                                                         {
-                                                                             drrmLanguage.language === 'np' ? data.PriorityAreaNameNe : data.PriorityAreaNameEn
-
-                                                                         }
-                                                                     </td>
-                                                                     <td>{ drrmLanguage.language === 'np' ? data.PriorityActionNameNe : data.PriorityActionNameEn}</td>
-                                                                     <td>{ drrmLanguage.language === 'np' ? data.PriorityActivityNameNe : data.PriorityActivityNameEn}</td>
-
-                                                                     <td>{data.data.fundType}</td>
-                                                                     <td>{data.data.otherFundType}</td>
-                                                                     <td>{data.data.donerOrganization}</td>
-                                                                     <td>{data.data.budgetCode}</td>
-                                                                     <td>{ADToBS(data.data.projectStartDate)}</td>
-                                                                     <td>{ADToBS(data.data.projectEndDate)}</td>
-                                                                     <td>{data.data.status}</td>
-                                                                     <td>{data.data.amount}</td>
-                                                                     <td>{data.data.expenditure}</td>
-                                                                     <td>{data.data.remarks}</td>
-                                                                     <td>
-
-                                                                         <button
-                                                                             className={styles.editButtn}
-                                                                             type="button"
-                                                                             onClick={() => handleEditActivity(data.data.id, i)}
-                                                                             title="Edit Budget Activity"
-                                                                         >
-                                                                             <ScalableVectorGraphics
-                                                                                 className={styles.bulletPoint}
-                                                                                 src={editIcon}
-                                                                                 alt="editPoint"
-                                                                             />
-                                                                         </button>
-                                                                     </td>
-                                                                 </tr>
-                                                             )
-                                                     ))}
-
-                                                     { !props.annex
-                                             && (editBudgetActivity ? ''
-                                                 : (
-                                                     <tr>
-                                                         <td>{budgetActivities.length + 1}</td>
-                                                         <td>
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 onChange={handleActivityName}
-                                                                 value={activityName}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Name of Activity'
-                                                                     : 'कार्यक्रमको नाम'
-                                                                 }
-                                                             />
-                                                         </td>
-
-
-                                                         <td>
-                                                             <select
-                                                                 value={priorityArea}
-                                                                 onChange={handlePriorityArea}
-                                                                 className={styles.inputElement}
-
-
-                                                             >
-                                                                 <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
-                                                                 {priorityAreaFetched.map(data => (
-                                                                     <option value={data.id}>
-                                                                         {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                                     </option>
-                                                                 ))}
-
-                                                             </select>
-                                                         </td>
-                                                         <td>
-                                                             <select
-                                                                 value={priorityAction}
-                                                                 onChange={handlePriorityAction}
-                                                                 className={styles.inputElement}
-                                                                 disabled={disablePriorityAction}
-                                                             >
-                                                                 <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
-                                                                 {filteredpriorityActionFetched.map(data => (
-                                                                     <option value={data.id}>
-                                                                         {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                                     </option>
-                                                                 ))}
-
-                                                             </select>
-                                                         </td>
-                                                         <td>
-                                                             <select
-                                                                 value={priorityActivity}
-                                                                 onChange={handlePriorityActivity}
-                                                                 className={styles.inputElement}
-                                                                 disabled={disablePriorityActivity}
-                                                             >
-                                                                 <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
-                                                                 {filteredpriorityActivityFetched.map(data => (
-                                                                     <option value={data.id}>
-                                                                         {drrmLanguage.language === 'np' ? data.titleNp : data.title}
-                                                                     </option>
-                                                                 ))}
-
-                                                             </select>
-                                                         </td>
-                                                         <td>
-                                                             <select
-                                                                 value={fundSource}
-                                                                 onChange={handlefundSource}
-                                                                 className={styles.inputElement}
-                                                             >
-                                                                 <option value="select">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Select Funding Type'
-                                                                         : 'बजेटको प्रकार चयन गर्नुहोस्'
-                                                                     }
-                                                                 </option>
-                                                                 <option value="DRR Fund of Muicipality">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? Translations.DRRFundMun.en
-                                                                         : Translations.DRRFundMun.np
-                                                                     }
-
-
-                                                                 </option>
-                                                                 <option value="Other DRR related funding">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? Translations.OtherDrrFund.en
-                                                                         : Translations.OtherDrrFund.np
-                                                                     }
-
-
-                                                                 </option>
-                                                             </select>
-                                                         </td>
-
-                                                         <td>
-                                                             {
-                                                                 fundSource === ''
-                                                   && (
-                                                       <input
-                                                           type="text"
-                                                           className={styles.inputElement}
-                                                           value={drrmLanguage.language === 'en'
-                                                               ? 'Source of Funds'
-                                                               : 'बजेटको स्रोत'
-                                                           }
-                                                           disabled
-                                                       />
-                                                   )}
-                                                             {
-                                                                 fundSource === 'DRR Fund of Muicipality'
-                                                     && (
-                                                         <input
-                                                             type="text"
-                                                             className={styles.inputElement}
-                                                             value={drrmLanguage.language === 'en'
-                                                                 ? 'Municipal Government'
-                                                                 : 'मनाहानगरपालिका/नगरपालिका/गाउँपालिका'
-                                                             }
-                                                             disabled
-                                                         />
-                                                     )}
-
-                                                             {
-                                                                 fundSource === 'Other DRR related funding'
-                                                         && (
-                                                             <select
-                                                                 value={fundingType}
-                                                                 onChange={handlefundingType}
-                                                                 className={styles.inputElement}
-                                                             >
-                                                                 <option value="select">
-                                                                     <Gt section={Translations.SelectSourceof} />
-                                                                 </option>
-                                                                 <option value="Federal Government">
-                                                                     <Gt section={Translations.FederalGovernment} />
-                                                                 </option>
-                                                                 <option value="Provincial Government">
-                                                                     <Gt section={Translations.ProvincialGovernment} />
-
-                                                                 </option>
-                                                                 <option value="INGO">
-                                                                     <Gt section={Translations.INGO} />
-                                                                 </option>
-                                                                 <option value="Private Sector">
-                                                                     <Gt section={Translations.PrivateSector} />
-
-                                                                 </option>
-                                                                 <option value="Academia">
-                                                                     <Gt section={Translations.Academia} />
-
-                                                                 </option>
-                                                                 <option value="Others">
-                                                                     <Gt section={Translations.Others} />
-
-                                                                 </option>
-                                                             </select>
-                                                         )
-                                                             }
-
-                                                         </td>
-                                                         {
-                                                             showSourceTypeOther
-                                                     && (
-                                                         <td>
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 value={otherSubtype}
-                                                                 onChange={handleOtherSubType}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Please Specify'
-                                                                     : 'कृपया निर्दिष्ट गर्नुहोस्'
-                                                                 }
-                                                             />
-                                                         </td>
-                                                     )
-                                                         }
-                                                         <td>
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 onChange={handleBudgetCode}
-                                                                 value={budgetCode}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Budget Code (if available)'
-                                                                     : 'बजेट कोड (यदि उपलब्ध छ भने)'
-                                                                 }
-                                                             />
-                                                         </td>
-                                                         <td>
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 onChange={handleOrganisationName}
-                                                                 value={organisationName}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Name of Organisation'
-                                                                     : 'संस्थाको नाम'
-                                                                 }
-                                                             />
-                                                         </td>
-
-
-                                                         <td>
-                                                             <NepaliDatePicker
-                                                                 inputClassName="form-control"
-                                                                 className={styles.datepicker}
-                                                                 value={projstartDate}
-
-                                                                 onChange={date => setStartDate(date)}
-                                                                 options={{
-                                                                     calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                                                     valueLocale: 'en',
-
-                                                                 }}
-                                                             />
-                                                         </td>
-                                                         <td>
-                                                             <NepaliDatePicker
-                                                                 inputClassName="form-control"
-                                                                 className={styles.datepicker}
-                                                                 value={projcompletionDate}
-                                                                 onChange={date => setprojCompletionDate(date)}
-                                                                 options={{
-                                                                     calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                                                     valueLocale: 'en',
-
-                                                                 }}
-                                                             />
-                                                         </td>
-                                                         <td>
-                                                             <select
-                                                                 value={projStatus}
-                                                                 onChange={handleprojStatus}
-                                                                 className={styles.inputElement}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Project Status'
-                                                                     : 'परियोजनाको स्थिति'
-                                                                 }
-                                                             >
-                                                                 <option value="select">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Select an Option'
-                                                                         : 'कृपया चयन गर्नुहोस्'
-                                                                     }
-                                                                 </option>
-                                                                 <option value="Started">
-
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Started'
-                                                                         : 'सुरु भएको'
-                                                                     }
-                                                                 </option>
-                                                                 <option value="Ongoing">
-
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Ongoing'
-                                                                         : 'चलिरहेको'
-                                                                     }
-                                                                 </option>
-                                                                 <option value="Completed">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Completed'
-                                                                         : 'पूरा भयोको'
-                                                                     }
-                                                                 </option>
-                                                             </select>
-                                                         </td>
-                                                         <td>
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 onChange={handleAlocBudget}
-                                                                 value={allocatedBudget}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Allocated Project Budget'
-                                                                     : 'परियोजना बजेट विनियोजित'
-                                                                 }
-                                                             />
-                                                         </td>
-                                                         <td>
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 onChange={handleActualExp}
-                                                                 value={actualExp}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Actual Expenditure'
-                                                                     : 'परियोजना बजेट विनियोजित'
-                                                                 }
-                                                             />
-                                                         </td>
-                                                         {
-                                                             !props.annex
-                                                 && (
-                                                     <>
-                                                         <td>
-                                                             {' '}
-                                                             <input
-                                                                 type="text"
-                                                                 className={styles.inputElement}
-                                                                 onChange={handleRemarks}
-                                                                 value={remarks}
-                                                                 placeholder={drrmLanguage.language === 'en'
-                                                                     ? 'Remarks'
-                                                                     : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
-                                                                 }
-                                                             />
-
-                                                         </td>
-                                                         <td />
-                                                     </>
-                                                 )
-                                                         }
-                                                     </tr>
-
-                                                 )
-
-                                             )
-                                                     }
-                                                     {!props.annex
-                                                      && (
-                                                          <tr>
-
-                                                              {!editBudgetActivity && (
-                                                                  <>
-                                                                      <td />
-                                                                      <td>
-                                                                          <button
-                                                                              type="button"
-                                                                              className={styles.savebtn}
-                                                                              onClick={handleAddNew}
-                                                                          >
-
-                                                                              <Gt section={Translations.AddnewAct} />
-                                                                          </button>
-                                                                      </td>
-
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                      <td />
-                                                                  </>
-                                                              )
-                                                              }
-
-                                                          </tr>
-                                                      )}
-                                                 </>
-                                             )
-                                    )}
-
-                                </>
-
-
-                            </tbody>
-
-                        </table>
-                        {!loader && !budgetId.id && !props.annex && (
-                            <h2 className={styles.emptyTable}>
-                                <Gt section={Translations.EnterBudget} />
-                            </h2>
-                        )}
-
-
-                        {
-                            Object.keys(postErrors).length > 0
-                            && (
-                                <ul>
-                                    <li>
-                                        <span className={styles.errorHeading}>
-                                    Please fix the following errors:
-                                        </span>
-                                    </li>
+                                    </>
+
+
+                                </tbody>
+
+                            </table>
+                            {!loader && !budgetId.id && !props.annex && (
+                                <h2 className={styles.emptyTable}>
+                                    <Gt section={Translations.EnterBudget} />
+                                </h2>
+                            )}
+
+
+                            {
+                                Object.keys(postErrors).length > 0
+                                && (
+                                    <ul>
+                                        <li>
+                                            <span className={styles.errorHeading}>
+                                                Please fix the following errors:
+                                            </span>
+                                        </li>
+                                        {
+                                            Object.keys(postErrors.response).map(errorItem => (
+                                                <li>
+                                                    {`${errorItem}: ${postErrors.response[errorItem]}`}
+                                                </li>
+                                            ), // return <li>Please enter valid info in all fields</li>;
+                                            )
+                                        }
+
+                                    </ul>
+                                )
+                            }
+                            {!loader && (
+                                <>
                                     {
-                                        Object.keys(postErrors.response).map(errorItem => (
-                                            <li>
-                                                {`${errorItem}: ${postErrors.response[errorItem]}`}
-                                            </li>
-                                        ), // return <li>Please enter valid info in all fields</li>;
+                                        !props.annex
+                                        && (!budgetId.id
+                                            ? (
+                                                <div className={styles.btns}>
+
+                                                    <NextPrevBtns
+                                                        handlePrevClick={props.handlePrevClick}
+                                                        handleNextClick={handleNext}
+                                                    />
+
+
+                                                </div>
+                                            ) : (
+                                                <div className={styles.btns}>
+
+
+                                                    <NextPrevBtns
+                                                        handlePrevClick={props.handlePrevClick}
+                                                        handleNextClick={handleNext}
+                                                    />
+
+
+                                                </div>
+                                            )
                                         )
                                     }
-
-                                </ul>
-                            )
-                        }
-                        {!loader && (
-                            <>
-                                {
-                                    !props.annex
-                       && (!budgetId.id
-                           ? (
-                               <div className={styles.btns}>
-
-                                   <NextPrevBtns
-                                       handlePrevClick={props.handlePrevClick}
-                                       handleNextClick={handleNext}
-                                   />
-
-
-                               </div>
-                           ) : (
-                               <div className={styles.btns}>
-
-
-                                   <NextPrevBtns
-                                       handlePrevClick={props.handlePrevClick}
-                                       handleNextClick={handleNext}
-                                   />
-
-
-                               </div>
-                           )
-                       )
-                                }
-                            </>
-                        )}
-                    </div>
-                )
+                                </>
+                            )}
+                        </div>
+                    )
 
                 }
 
@@ -1839,83 +1838,83 @@ const BudgetActivity = (props: Props) => {
                 }
 
                 {props.monitoringDetails
-                  && (
-                      <div className={styles.budgetActPreviewContainer}>
+                    && (
+                        <div className={styles.budgetActPreviewContainer}>
 
 
-                          <ul>
-                              {/* <li>
+                            <ul>
+                                {/* <li>
                                   <span className={styles.darkerText}>
                                       <Gt section={Translations.MonitoringAct} />
                                   </span>
                               </li> */}
-                              <li>
-                                  <span className={styles.darkerText}>
-                                      <Gt section={Translations.DisasterRiskStrategic} />
-                                  </span>
-                              </li>
-                          </ul>
+                                <li>
+                                    <span className={styles.darkerText}>
+                                        <Gt section={Translations.DisasterRiskStrategic} />
+                                    </span>
+                                </li>
+                            </ul>
 
-                          <div className={styles.monitoringRow}>
-                              <div className={styles.monitoringItem}>
-                                  <span className={styles.monTitle}><Gt section={Translations.Area1} /></span>
-                                  <span className={styles.monDesc}>
-                                      {' '}
-                                      <Gt section={Translations.PA1} />
-                                  </span>
-                                  <div className={styles.scorePatch}>
-                                      {budgetActivities.length > 0
-                                          ? budgetActivities.filter(item => item.priorityArea === 1).length
-                                          : 0
-                                      }
-                                  </div>
-                              </div>
-                              <div className={styles.monitoringItem}>
-                                  <span className={styles.monTitle}><Gt section={Translations.Area2} /></span>
-                                  <span className={styles.monDesc}>
-                                      {' '}
-                                      <Gt section={Translations.PA2} />
-                                  </span>
-                                  <div className={styles.scorePatch}>
-                                      {budgetActivities.length > 0
-                                          ? budgetActivities.filter(item => item.priorityArea === 2).length
-                                          : 0
-                                      }
-                                  </div>
-                              </div>
-                          </div>
-                          <div className={styles.monitoringRow}>
-                              <div className={styles.monitoringItem}>
-                                  <span className={styles.monTitle}><Gt section={Translations.Area3} /></span>
-                                  <span className={styles.monDesc}>
-                                      <Gt section={Translations.PA3} />
-                                  </span>
-                                  <div className={styles.scorePatch}>
-                                      {budgetActivities.length > 0
+                            <div className={styles.monitoringRow}>
+                                <div className={styles.monitoringItem}>
+                                    <span className={styles.monTitle}><Gt section={Translations.Area1} /></span>
+                                    <span className={styles.monDesc}>
+                                        {' '}
+                                        <Gt section={Translations.PA1} />
+                                    </span>
+                                    <div className={styles.scorePatch}>
+                                        {budgetActivities.length > 0
+                                            ? budgetActivities.filter(item => item.priorityArea === 1).length
+                                            : 0
+                                        }
+                                    </div>
+                                </div>
+                                <div className={styles.monitoringItem}>
+                                    <span className={styles.monTitle}><Gt section={Translations.Area2} /></span>
+                                    <span className={styles.monDesc}>
+                                        {' '}
+                                        <Gt section={Translations.PA2} />
+                                    </span>
+                                    <div className={styles.scorePatch}>
+                                        {budgetActivities.length > 0
+                                            ? budgetActivities.filter(item => item.priorityArea === 2).length
+                                            : 0
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.monitoringRow}>
+                                <div className={styles.monitoringItem}>
+                                    <span className={styles.monTitle}><Gt section={Translations.Area3} /></span>
+                                    <span className={styles.monDesc}>
+                                        <Gt section={Translations.PA3} />
+                                    </span>
+                                    <div className={styles.scorePatch}>
+                                        {budgetActivities.length > 0
 
-                                          ? budgetActivities.filter(item => item.priorityArea === 3).length
-                                          : 0
-                                      }
-                                  </div>
-                              </div>
-                              <div className={styles.monitoringItem}>
-                                  <span className={styles.monTitle}>
-                                      <Gt section={Translations.Area4} />
-                                  </span>
-                                  <span className={styles.monDesc}>
-                                      <Gt section={Translations.PA4} />
-                                  </span>
-                                  <div className={styles.scorePatch}>
-                                      {budgetActivities.length > 0
-                                          ? budgetActivities.filter(item => item.priorityArea === 4).length
-                                          : 0
-                                      }
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                                            ? budgetActivities.filter(item => item.priorityArea === 3).length
+                                            : 0
+                                        }
+                                    </div>
+                                </div>
+                                <div className={styles.monitoringItem}>
+                                    <span className={styles.monTitle}>
+                                        <Gt section={Translations.Area4} />
+                                    </span>
+                                    <span className={styles.monDesc}>
+                                        <Gt section={Translations.PA4} />
+                                    </span>
+                                    <div className={styles.scorePatch}>
+                                        {budgetActivities.length > 0
+                                            ? budgetActivities.filter(item => item.priorityArea === 4).length
+                                            : 0
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                  )
+                    )
 
                 }
 

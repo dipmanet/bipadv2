@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
     ClientAttributes,
     methods,
 } from '#request';
-import { provincesSelector,
+import {
+    provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
@@ -19,8 +20,8 @@ import { provincesSelector,
     generalDataSelector,
     drrmRegionSelector,
     drrmProgresSelector,
-    palikaLanguageSelector } from '#selectors';
-import NextPrevBtns from '../../NextPrevBtns';
+    palikaLanguageSelector,
+} from '#selectors';
 
 import {
     setPalikaRedirectAction,
@@ -30,6 +31,8 @@ import {
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
+import NextPrevBtns from '../../NextPrevBtns';
+import styles from './styles.scss';
 import Gt from '../../../../utils';
 import Translations from '../../../../Constants/Translations';
 
@@ -39,7 +42,7 @@ const mapDispatchToProps = dispatch => ({
     setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
-interface Props{
+interface Props {
 
 }
 
@@ -56,7 +59,7 @@ const mapStateToProps = (state, props) => ({
 
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
@@ -71,11 +74,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
 
 
-            return { limit: params.page,
+            return {
+                limit: params.page,
                 offset: params.offset,
 
 
-                meta: params.meta };
+                meta: params.meta,
+            };
         },
         method: methods.GET,
         onMount: true,
@@ -253,8 +258,8 @@ const Contacts = (props: Props) => {
         NonGovPostRequest,
         NonGovPutRequest,
     },
-    setDrrmContacts, drrmRegion, drrmProgress,
-    user, generalData, setProgress, drrmLanguage } = props;
+        setDrrmContacts, drrmRegion, drrmProgress,
+        user, generalData, setProgress, drrmLanguage } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
     if (drrmRegion.municipality) {
@@ -487,7 +492,7 @@ const Contacts = (props: Props) => {
             }).filter(contact => contact !== null).map(e => arr.push(...e));
             setTrainingsList(arr);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mergedData]);
 
     useEffect(() => {
@@ -519,18 +524,20 @@ const Contacts = (props: Props) => {
                 return null;
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, orgList, trainedContacts]);
 
     useEffect(() => {
         if (nonGovContacts && hazardDetails.length > 0) {
             const finalfetchedData = nonGovContacts.map((item, i) => {
                 const hazardName = hazardDetails.find(data => data.id === item.focusedHazard);
-                console.log('hazardname', hazardName);
+
                 if (hazardName) {
-                    return { hazardName: hazardName.titleEn,
+                    return {
+                        hazardName: hazardName.titleEn,
                         hazardNameNp: hazardName.titleNe,
-                        item };
+                        item,
+                    };
                 }
 
                 return null;
@@ -642,7 +649,7 @@ const Contacts = (props: Props) => {
                                                         type="checkbox"
                                                         onChange={handleCheckAll}
                                                         checked={checkedAll}
-                                                    // defaultChecked
+                                                        // defaultChecked
                                                         className={styles.checkBox}
                                                     />
                                                 </th>
@@ -677,7 +684,7 @@ const Contacts = (props: Props) => {
                                                                 type="checkbox"
                                                                 checked={checkedRows.indexOf(i) !== -1}
 
-                                                            // defaultChecked
+                                                                // defaultChecked
                                                                 onChange={e => handleCheck(i, e)}
                                                                 className={styles.checkBox}
                                                                 key={item.id}
@@ -756,7 +763,7 @@ const Contacts = (props: Props) => {
                                 </tbody>
                             </table>
                             {!loader && mergedData.length === 0
-                                 && <h2><Gt section={Translations.ContactNoDataMessage} /></h2>
+                                && <h2><Gt section={Translations.ContactNoDataMessage} /></h2>
 
                             }
 
@@ -777,7 +784,7 @@ const Contacts = (props: Props) => {
                                                             type="checkbox"
                                                             onChange={handleCheckAllNg}
                                                             checked={checkedAllNg}
-                                                    // defaultChecked
+                                                            // defaultChecked
                                                             className={styles.checkBox}
                                                         />
                                                     </th>
@@ -1010,7 +1017,7 @@ const Contacts = (props: Props) => {
                                         {!nonGovContactId && (
                                             <>
                                                 <tr>
-                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null }
+                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null}
 
                                                     <td>{nonGovContacts.length + 1}</td>
                                                     <td>
@@ -1128,65 +1135,65 @@ const Contacts = (props: Props) => {
                                                             placeholder={drrmLanguage.language === 'np' ? 'ईमेल' : 'Email'}
                                                         />
                                                     </td>
-                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null }
+                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null}
                                                 </tr>
                                             </>
                                         )}
                                         {!props.annex && !loader
-                                    && (
-                                        <tr>
-                                            {!props.annex && finalArr.length ? <td>{''}</td> : null }
-                                            <td />
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleAddNonGovContacts()}
-                                                    className={styles.savebtn}
-                                                >
-                                                    <Icon
-                                                        name="plus"
-                                                        className={styles.plusIcon}
-                                                    />
-                                                    <Gt section={Translations.ContactAddButton} />
-                                                </button>
-                                            </td>
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                            <td />
-                                        </tr>
-                                    )
+                                            && (
+                                                <tr>
+                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null}
+                                                    <td />
+                                                    <td>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleAddNonGovContacts()}
+                                                            className={styles.savebtn}
+                                                        >
+                                                            <Icon
+                                                                name="plus"
+                                                                className={styles.plusIcon}
+                                                            />
+                                                            <Gt section={Translations.ContactAddButton} />
+                                                        </button>
+                                                    </td>
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                </tr>
+                                            )
                                         }
 
                                     </tbody>
                                 </table>
                                 {
                                     Object.keys(postErrors).length > 0
-                        && (
-                            <ul>
-                                <li>
-                                    <span className={styles.errorHeading}>
-                                        <Gt section={Translations.ContactErrorHeading} />
-                                    </span>
-                                </li>
-                                {
-                                    Object.keys(postErrors.response).map(errorItem => (
-                                        <li>
-                                            {`${errorItem}: ${postErrors.response[errorItem]}`}
-                                        </li>
-                                    ), // return <li>Please enter valid info in all fields</li>;
-                                    )
-                                }
+                                    && (
+                                        <ul>
+                                            <li>
+                                                <span className={styles.errorHeading}>
+                                                    <Gt section={Translations.ContactErrorHeading} />
+                                                </span>
+                                            </li>
+                                            {
+                                                Object.keys(postErrors.response).map(errorItem => (
+                                                    <li>
+                                                        {`${errorItem}: ${postErrors.response[errorItem]}`}
+                                                    </li>
+                                                ), // return <li>Please enter valid info in all fields</li>;
+                                                )
+                                            }
 
-                            </ul>
-                        )
+                                        </ul>
+                                    )
                                 }
                                 {!loader && !nonGovContactId
                                     && (
@@ -1244,11 +1251,11 @@ const Contacts = (props: Props) => {
                                 <div className={styles.simElements}>
                                     <ul>
                                         {trainingsList.length > 0
-                                    && trainingsList.map(item => (
-                                        <li key={Math.random()}>
-                                            {item}
-                                        </li>
-                                    ))
+                                            && trainingsList.map(item => (
+                                                <li key={Math.random()}>
+                                                    {item}
+                                                </li>
+                                            ))
 
                                         }
                                     </ul>

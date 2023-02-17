@@ -129,9 +129,9 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
     // private regionLabelSelector = (r: RegionElement) => r.title;
 
 
-    private regionLabelSelector = (r: RegionElement, bulletin: boolean) => {
+    private regionLabelSelector = (r: RegionElement) => {
         const { language: { language } } = this.props;
-        if (bulletin && language === 'np') {
+        if (language === 'np') {
             return r.title_ne;
         }
         return r.title;
@@ -357,7 +357,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             drrmLanguage,
             bulletin,
         } = this.props;
-        console.log('ProvinceList', provinceList);
+
         if (reset) {
             this.setState({
                 selectedProvinceId: undefined,
@@ -391,7 +391,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         const shouldDisableDistrictInput = disabled || !selectedProvinceId;
         const shouldDisableMunicipalityInput = disabled || !selectedDistrictId;
         const shouldDisableWardInput = disabled || !selectedMunicipalityId;
-        console.log('province option', provinceOptions);
+
         return (
             <div className={_cs(className, styles.stepwiseRegionSelectInput)}>
                 <Translation>
@@ -399,7 +399,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                         t => (
                             <SelectInput
                                 className={_cs(provinceInputClassName, styles.provinceInput)}
-                                label={bulletin ? t('Province') : 'Province'}
+                                label={bulletin ? t('Province') : t('Province')}
                                 options={provinceOptions}
                                 keySelector={regionKeySelector}
                                 labelSelector={d => this.regionLabelSelector(d, bulletin)}
@@ -407,7 +407,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                                 onChange={this.handleProvinceChange}
                                 disabled={shouldDisableProvinceInput}
                                 showHintAndError={showHintAndError}
-                                placeholder={bulletin ? t('All provinces') : 'All provinces'}
+                                placeholder={bulletin ? t('All provinces') : t('All provinces')}
                                 autoFocus={autoFocus}
                             />
                         )
@@ -418,7 +418,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                         t => (
                             <SelectInput
                                 className={_cs(districtInputClassName, styles.districtInput)}
-                                label={bulletin ? t('District') : 'District'}
+                                label={bulletin ? t('District') : t('District')}
                                 options={districtOptions}
                                 keySelector={regionKeySelector}
                                 labelSelector={d => this.regionLabelSelector(d, bulletin)}
@@ -426,7 +426,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                                 onChange={this.handleDistrictChange}
                                 disabled={shouldDisableDistrictInput}
                                 showHintAndError={showHintAndError}
-                                placeholder={bulletin ? t('All districts') : 'All districts'}
+                                placeholder={bulletin ? t('All districts') : t('All districts')}
                             />
                         )
                     }
@@ -438,7 +438,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                                 className={
                                     _cs(municipalityInputClassName, styles.municipalityInput)
                                 }
-                                label={bulletin ? t('Municipality') : 'Municipality'}
+                                label={bulletin ? t('Municipality') : t('Municipality')}
                                 options={municipalityOptions}
                                 keySelector={regionKeySelector}
                                 labelSelector={d => this.regionLabelSelector(d, bulletin)}
@@ -446,7 +446,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                                 onChange={this.handleMunicipalityChange}
                                 disabled={shouldDisableMunicipalityInput}
                                 showHintAndError={showHintAndError}
-                                placeholder={bulletin ? t('All municipalities') : 'All municipalities'}
+                                placeholder={bulletin ? t('All municipalities') : t('All municipalities')}
                             />
                         )
                     }

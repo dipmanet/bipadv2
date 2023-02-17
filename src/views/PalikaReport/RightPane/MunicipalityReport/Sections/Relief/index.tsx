@@ -4,13 +4,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
-import { BarChart,
+import {
+    BarChart,
     Bar, Cell,
     XAxis, YAxis,
     CartesianGrid, Tooltip,
     Legend, PieChart,
     Pie, Line,
-    ComposedChart } from 'recharts';
+    ComposedChart,
+} from 'recharts';
 import { encodeDate, _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
@@ -61,7 +63,7 @@ import Gt from '../../../../utils';
 import styles from './styles.scss';
 
 
-interface Props{
+interface Props {
 
 }
 const mapStateToProps = (state, props) => ({
@@ -88,7 +90,7 @@ const genderWiseDeathData = [
 ];
 
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
@@ -104,9 +106,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     incident_on__lt: params.date[1],
                 };
             }
-            return { limit: params.Ward,
+            return {
+                limit: params.Ward,
                 resource_type: params.inventories,
-                expand: params.fields };
+                expand: params.fields,
+            };
         },
         method: methods.GET,
         onMount: false,
@@ -127,7 +131,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         onMount: false,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, params }) => {
-            console.log('Reponse', response);
             if (params && params.savedCause) {
                 params.savedCause(response);
             }
@@ -366,10 +369,7 @@ const Relief = (props: Props) => {
         const dateItem = new Date(date);
         return dateItem.toLocaleString('default', { month: 'long' });
     };
-    const getNpValFromDate = (date: string) => {
-        console.log('va ret: ', ADToBS(date), 'date:', date, 'val clalc:', Number(ADToBS(date).split('-')[1]));
-        return Number(ADToBS(date).split('-')[1]);
-    };
+    const getNpValFromDate = (date: string) => Number(ADToBS(date).split('-')[1]);
 
     useEffect(() => {
         if (reliefDate) {
@@ -414,7 +414,7 @@ const Relief = (props: Props) => {
                         .numberOfBeneficiaryFamily
                     : 0,
             }));
-            console.log('relief chart data:', reliefChart);
+
             setReliefChartData(reliefChart);
         }
     }, [drrmLanguage.language, reliefData]);
@@ -460,7 +460,6 @@ const Relief = (props: Props) => {
     };
 
     const handleReliefAdd = (data) => {
-        console.log('This data', data);
         setShowRelief(true);
         setCurrentRelief(data);
         setPostButton(true);
@@ -469,7 +468,6 @@ const Relief = (props: Props) => {
         setSelectedIncidentTitle(data.title);
     };
     const handleFilteredViewRelief = (response) => {
-        console.log('response', response);
         setfamiliesBenefited(response[0].numberOfBeneficiaryFamily ? response[0].numberOfBeneficiaryFamily : '-');
         setnamesofBeneficiaries(response[0].nameOfBeneficiary ? response[0].nameOfBeneficiary : '-');
         setreliefDate(response[0].dateOfReliefDistribution ? ADToBS(response[0].dateOfReliefDistribution) : '-');
@@ -566,12 +564,11 @@ const Relief = (props: Props) => {
                 date: getdateTimeFromFs(generalData.fiscalYearTitle),
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fiscalYearObj]);
 
 
     const handleReliefEdit = (data, item) => {
-        console.log('This data', data);
         setSelectedIncidentTitle(data.title);
         setLoader(false);
         setReliefId(data.id);
@@ -603,7 +600,6 @@ const Relief = (props: Props) => {
                 .filter(item => item !== undefined)
                 .map(item => item.estimatedLoss)
                 .filter(item => item !== undefined);
-            console.log('estimated loss obj', estimatedLoss);
             if (estimatedLoss.length > 0) {
                 estimatedLoss.reduce((a, b) => Number(a) + Number(b));
                 setTotalEstimatedLoss(estimatedLoss);
@@ -681,7 +677,7 @@ const Relief = (props: Props) => {
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathMaleCount)
                 .filter(item => item !== undefined);
-            console.log('death male data', deathMaleData);
+
             if (deathMaleData.length > 0) {
                 const count = deathMaleData.reduce((a, b) => a + Number(b) || 0);
                 setMaleDeath(count);
@@ -745,7 +741,7 @@ const Relief = (props: Props) => {
                             return `Ward ${filtered[0].title}`;
                         }
                         if (drrmLanguage.language === 'np') {
-                            return `वोडा ${filtered[0].title}`;
+                            return `वडा ${filtered[0].title}`;
                         }
                     }
                 }
@@ -769,20 +765,26 @@ const Relief = (props: Props) => {
                     return getWardWiseDatum(filteredArr, ward);
                 }
                 if (filteredArr.length === 1) {
-                    return { ward,
+                    return {
+                        ward,
                         peopleDeathCount: filteredArr[0].loss.peopleDeathCount,
                         peopleInjuredCount: filteredArr[0].loss.peopleInjuredCount,
-                        peopleMissingCount: filteredArr[0].loss.peopleMissingCount };
+                        peopleMissingCount: filteredArr[0].loss.peopleMissingCount,
+                    };
                 }
-                chartArr.push({ ward,
+                chartArr.push({
+                    ward,
                     peopleDeathCount: 0,
                     peopleInjuredCount: 0,
-                    peopleMissingCount: 0 });
+                    peopleMissingCount: 0,
+                });
 
-                return { ward,
+                return {
+                    ward,
                     peopleDeathCount: 0,
                     peopleInjuredCount: 0,
-                    peopleMissingCount: 0 };
+                    peopleMissingCount: 0,
+                };
             });
 
 
@@ -1040,7 +1042,6 @@ const Relief = (props: Props) => {
 
     const getIncidentTitle = (item) => {
         if (fetchedData.length > 0) {
-            console.log('fetchedData.length ', fetchedData);
             return [
                 (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0]
                     ? fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title : '-'),
@@ -1122,13 +1123,17 @@ const Relief = (props: Props) => {
                 const hazardName = hazardDetails.find(data => data.id === item.hazard);
 
                 if (hazardName) {
-                    tempArr.push({ hazardName: hazardName.titleEn,
+                    tempArr.push({
+                        hazardName: hazardName.titleEn,
                         hazardNameNp: hazardName.titleNe,
-                        item });
+                        item,
+                    });
 
-                    return { hazardName: hazardName.titleEn,
+                    return {
+                        hazardName: hazardName.titleEn,
                         hazardNameNp: hazardName.titleNe,
-                        item };
+                        item,
+                    };
                 }
 
                 return tempArr;
@@ -1136,7 +1141,7 @@ const Relief = (props: Props) => {
 
             finalArr = [...new Set(tempArr)];
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, hazardTypes]);
 
     const handleNext = () => {
@@ -1179,7 +1184,6 @@ const Relief = (props: Props) => {
         // });
     };
     const handleSaveIncidentCause = () => {
-        console.log('what');
         setLoader(true);
 
         setPostErrors('');
@@ -1222,7 +1226,6 @@ const Relief = (props: Props) => {
     };
 
     const handleFilteredViewCause = (response) => {
-        console.log('response', response);
         setCauseData(response[0].cause ? response[0].cause : '-');
         setShowRelief(true);
     };
@@ -1232,10 +1235,8 @@ const Relief = (props: Props) => {
         setUpdateButton(true);
         setIncidentId(data.id);
         setSelectedIncidentTitle(data.title);
-        console.log(data.title);
     };
     const handleCauseView = (data) => {
-        console.log(data);
         // setShowRelief(true);
         // setDisableInput(true);
         setSelectedIncidentTitle(data.title);
@@ -1263,155 +1264,155 @@ const Relief = (props: Props) => {
         <>
 
             {!props.previewDetails && !props.hazardwiseImpact
-         && (
-             <div className={styles.tabsWardContainer}>
-                 {!showRelief
                 && (
-                    <>
-                        {' '}
-                        {
-                            !props.annex
+                    <div className={styles.tabsWardContainer}>
+                        {!showRelief
+                            && (
+                                <>
+                                    {' '}
+                                    {
+                                        !props.annex
 
-                                ? (
-                                    <h2>
-                                        <Gt section={Translations.IncidentReliefHeading} />
-                                    </h2>
-                                )
-                                : (
-                                    <h2>
-                                        <Gt section={Translations.IncidentHeading} />
-                                    </h2>
-                                )
-                        }
-                        <div className={styles.palikaTable}>
-                            <table id="table-to-xls">
-                                <tbody>
-                                    <tr>
-                                        <th>
-                                            <Gt section={Translations.IncidentSerialNumber} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentTitle} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentHazard} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentOn} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentReportedOn} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentTotalDeath} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentTotalInjured} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentTotalMissing} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentFamilyAffected} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentInfrastructureAffected} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentInfrastructureDestroyed} />
-                                        </th>
-                                        <th>
-                                            <Gt section={Translations.IncidentLiveStockLoss} />
-                                        </th>
+                                            ? (
+                                                <h2>
+                                                    <Gt section={Translations.IncidentReliefHeading} />
+                                                </h2>
+                                            )
+                                            : (
+                                                <h2>
+                                                    <Gt section={Translations.IncidentHeading} />
+                                                </h2>
+                                            )
+                                    }
+                                    <div className={styles.palikaTable}>
+                                        <table id="table-to-xls">
+                                            <tbody>
+                                                <tr>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentSerialNumber} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTitle} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentHazard} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentOn} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentReportedOn} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTotalDeath} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTotalInjured} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTotalMissing} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentFamilyAffected} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentInfrastructureAffected} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentInfrastructureDestroyed} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentLiveStockLoss} />
+                                                    </th>
 
-                                        <th>
-                                            <Gt section={Translations.IncidentCause} />
-                                        </th>
-
-
-                                        { !props.annex
-                                        && (
-                                            <th>
-                                                <Gt section={Translations.IncidentRelief} />
-                                            </th>
-                                        )
-                                        }
-                                    </tr>
-                                    {loader ? (
-                                        <>
-                                            {' '}
-                                            <Loader
-                                                top="50%"
-                                                left="60%"
-                                            />
-                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {finalArr && finalArr.map((item, i) => (
-
-                                                <tr key={item.item.id}>
-                                                    <td>{i + 1}</td>
-                                                    <td>{item.item.title || '-'}</td>
-                                                    <td>{drrmLanguage.language === 'np' ? item.hazardNameNp : item.hazardName || '-'}</td>
-                                                    {/* <td>{item.hazardName || '-'}</td> */}
-                                                    <td>{ADToBS(item.item.incidentOn.split('T')[0]) || '-'}</td>
-                                                    <td>{ADToBS(item.item.reportedOn.split('T')[0]) || '-'}</td>
-                                                    <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
-                                                    <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
-                                                    <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>
-                                                    <td>{item.item.loss ? item.item.loss.familyAffectedCount : 0}</td>
-                                                    <td>
-                                                        {Number(item.item.loss
-                                                            ? item.item.loss.infrastructureAffectedBridgeCount : 0)
-                                        + Number(item.item.loss
-                                            ? item.item.loss.infrastructureAffectedElectricityCount : 0)
-                                        + Number(item.item.loss ? item.item.loss.infrastructureAffectedHouseCount : 0)
-                                        + Number(item.item.loss ? item.item.loss.infrastructureAffectedRoadCount : 0)}
-                                                    </td>
-                                                    <td>{item.item.loss ? item.item.loss.infrastructureDestroyedCount : 0}</td>
-                                                    <td>{item.item.loss ? item.item.loss.livestockDestroyedCount : 0}</td>
-
-                                                    <td>
-                                                        {!props.annex && item.item.cause
-                                                            ? (
+                                                    <th>
+                                                        <Gt section={Translations.IncidentCause} />
+                                                    </th>
 
 
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => handleCauseEdit(item.item)}
-                                                                    className={styles.reliefBtn}
-                                                                    title={drrmLanguage.language === 'np' ? 'कारण सम्पादन गर्नुहोस्' : 'Edit Cause'}
-                                                                >
-                                                                    <Gt section={Translations.IncidentEditCauseTooltip} />
+                                                    {!props.annex
+                                                        && (
+                                                            <th>
+                                                                <Gt section={Translations.IncidentRelief} />
+                                                            </th>
+                                                        )
+                                                    }
+                                                </tr>
+                                                {loader ? (
+                                                    <>
+                                                        {' '}
+                                                        <Loader
+                                                            top="50%"
+                                                            left="60%"
+                                                        />
+                                                        <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {finalArr && finalArr.map((item, i) => (
 
-                                                                </button>
+                                                            <tr key={item.item.id}>
+                                                                <td>{i + 1}</td>
+                                                                <td>{item.item.title || '-'}</td>
+                                                                <td>{drrmLanguage.language === 'np' ? item.hazardNameNp : item.hazardName || '-'}</td>
+                                                                {/* <td>{item.hazardName || '-'}</td> */}
+                                                                <td>{ADToBS(item.item.incidentOn.split('T')[0]) || '-'}</td>
+                                                                <td>{ADToBS(item.item.reportedOn.split('T')[0]) || '-'}</td>
+                                                                <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
+                                                                <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
+                                                                <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>
+                                                                <td>{item.item.loss ? item.item.loss.familyAffectedCount : 0}</td>
+                                                                <td>
+                                                                    {Number(item.item.loss
+                                                                        ? item.item.loss.infrastructureAffectedBridgeCount : 0)
+                                                                        + Number(item.item.loss
+                                                                            ? item.item.loss.infrastructureAffectedElectricityCount : 0)
+                                                                        + Number(item.item.loss ? item.item.loss.infrastructureAffectedHouseCount : 0)
+                                                                        + Number(item.item.loss ? item.item.loss.infrastructureAffectedRoadCount : 0)}
+                                                                </td>
+                                                                <td>{item.item.loss ? item.item.loss.infrastructureDestroyedCount : 0}</td>
+                                                                <td>{item.item.loss ? item.item.loss.livestockDestroyedCount : 0}</td>
 
-                                                            )
-                                                            : (!props.annex
-                                                                && (
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => handleAddCause(item.item)}
-                                                                        className={styles.addReliefBttn}
-                                                                        title={drrmLanguage.language === 'np' ? Translations.IncidentAddCauseTooltip.np : Translations.IncidentAddCauseTooltip.en}
-                                                                    >
-                                                                        <Gt section={Translations.IncidentAddCauseTooltip} />
-                                                                    </button>
-                                                                )
-                                                            )
-                                                        }
+                                                                <td>
+                                                                    {!props.annex && item.item.cause
+                                                                        ? (
 
 
-                                                        {props.annex ? item.item.cause ? item.item.cause : '-' : ''}
-                                                    </td>
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => handleCauseEdit(item.item)}
+                                                                                className={styles.reliefBtn}
+                                                                                title={drrmLanguage.language === 'np' ? 'कारण सम्पादन गर्नुहोस्' : 'Edit Cause'}
+                                                                            >
+                                                                                <Gt section={Translations.IncidentEditCauseTooltip} />
 
-                                                    {!props.annex && reliefData
-                                           && reliefData.find(data => data.incident === item.item.id)
-                                                        ? reliefData.filter(data => data.incident === item.item.id).map(data => (
-                                                            <td>
-                                                                <div className={styles.buttonDiv}>
-                                                                    {/* <button
+                                                                            </button>
+
+                                                                        )
+                                                                        : (!props.annex
+                                                                            && (
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => handleAddCause(item.item)}
+                                                                                    className={styles.addReliefBttn}
+                                                                                    title={drrmLanguage.language === 'np' ? Translations.IncidentAddCauseTooltip.np : Translations.IncidentAddCauseTooltip.en}
+                                                                                >
+                                                                                    <Gt section={Translations.IncidentAddCauseTooltip} />
+                                                                                </button>
+                                                                            )
+                                                                        )
+                                                                    }
+
+
+                                                                    {props.annex ? item.item.cause ? item.item.cause : '-' : ''}
+                                                                </td>
+
+                                                                {!props.annex && reliefData
+                                                                    && reliefData.find(data => data.incident === item.item.id)
+                                                                    ? reliefData.filter(data => data.incident === item.item.id).map(data => (
+                                                                        <td>
+                                                                            <div className={styles.buttonDiv}>
+                                                                                {/* <button
                                                                         type="button"
                                                                         onClick={() => handleReliefView(item.item)}
                                                                         className={styles.reliefBtn}
@@ -1439,358 +1440,358 @@ const Relief = (props: Props) => {
                                                                             alt="editPoint"
                                                                         />
                                                                     </button> */}
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => handleReliefEdit(data, item.item)}
-                                                                        className={styles.reliefBtn}
-                                                                        title={drrmLanguage.language === 'np' ? 'राहत सम्पादन गर्नुहोस्' : 'Edit Relief'}
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => handleReliefEdit(data, item.item)}
+                                                                                    className={styles.reliefBtn}
+                                                                                    title={drrmLanguage.language === 'np' ? 'राहत सम्पादन गर्नुहोस्' : 'Edit Relief'}
 
-                                                                    >
-                                                                        <Gt section={Translations.IncidentEditReliefTooltip} />
+                                                                                >
+                                                                                    <Gt section={Translations.IncidentEditReliefTooltip} />
 
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        ))
-
-
-                                                        : (
-                                                            <td>
-                                                                { !props.annex
-                                                       && (
-
-                                                           <button
-                                                               type="button"
-                                                               onClick={() => handleReliefAdd(item.item)}
-                                                               className={styles.addReliefBttn}
-                                                               title={drrmLanguage.language === 'np' ? Translations.IncidentAddReliefTooltip.np : Translations.IncidentAddReliefTooltip.en}
-                                                           >
-                                                               <Gt section={Translations.IncidentAddReliefTooltip} />
-
-                                                           </button>
-
-                                                       )}
-                                                            </td>
-                                                        )
-
-                                                    }
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    ))
 
 
-                                                </tr>
+                                                                    : (
+                                                                        <td>
+                                                                            {!props.annex
+                                                                                && (
+
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        onClick={() => handleReliefAdd(item.item)}
+                                                                                        className={styles.addReliefBttn}
+                                                                                        title={drrmLanguage.language === 'np' ? Translations.IncidentAddReliefTooltip.np : Translations.IncidentAddReliefTooltip.en}
+                                                                                    >
+                                                                                        <Gt section={Translations.IncidentAddReliefTooltip} />
+
+                                                                                    </button>
+
+                                                                                )}
+                                                                        </td>
+                                                                    )
+
+                                                                }
 
 
-                                            ))}
-                                        </>
-                                    )}
-                                </tbody>
+                                                            </tr>
 
 
-                            </table>
-                            {
-                                props.annex
-                                && (
-                                    <>
-                                        <h2>
-                                            <Gt section={Translations.Relief} />
-                                        </h2>
-                                        <table
-                                            style={{ tableLayout: 'fixed' }}
-                                            id="table-to-xls"
-                                        >
-                                            <tbody>
-                                                <tr>
-                                                    <th>
-                                                        <Gt section={Translations.dashboardTblHeaderSN} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBeneficiary} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefDistributionDate} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefAmount} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleMale} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleFemale} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleDalit} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleMinorities} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleMadhesi} />
-
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleDisable} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.ReliefBenefitedPeopleJanajati} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.Incident} />
-                                                    </th>
-                                                    <th>
-                                                        <Gt section={Translations.IncidentOn} />
-                                                    </th>
-
-                                                </tr>
-
-                                                {reliefData && reliefData.map((item, i) => (
-
-                                                    <tr key={item.id}>
-                                                        <td>{i + 1}</td>
-                                                        <td>{item.numberOfBeneficiaryFamily}</td>
-                                                        <td>{ADToBS(item.dateOfReliefDistribution)}</td>
-                                                        <td>{item.reliefAmountNpr}</td>
-                                                        <td>{item.totalMaleBenefited}</td>
-                                                        <td>{item.totalFemaleBenefited}</td>
-                                                        <td>{item.totalDalitBenefited}</td>
-                                                        <td>{item.totalMinoritiesBenefited}</td>
-                                                        <td>{item.totalMadhesiBenefited}</td>
-                                                        <td>{item.totalDisabledBenefited}</td>
-                                                        <td>{item.totalJanjatiBenefited}</td>
-                                                        <td>
-                                                            {getIncidentTitle(item)[0]}
-                                                        </td>
-                                                        <td>
-                                                            {getIncidentTitle(item)[1]}
-
-                                                        </td>
-                                                    </tr>
-
-
-                                                ))}
+                                                        ))}
+                                                    </>
+                                                )}
                                             </tbody>
 
 
                                         </table>
+                                        {
+                                            props.annex
+                                            && (
+                                                <>
+                                                    <h2>
+                                                        <Gt section={Translations.Relief} />
+                                                    </h2>
+                                                    <table
+                                                        style={{ tableLayout: 'fixed' }}
+                                                        id="table-to-xls"
+                                                    >
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>
+                                                                    <Gt section={Translations.dashboardTblHeaderSN} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBeneficiary} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefDistributionDate} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefAmount} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleMale} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleFemale} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleDalit} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleMinorities} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleMadhesi} />
 
-                                    </>
-                                )
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleDisable} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.ReliefBenefitedPeopleJanajati} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.Incident} />
+                                                                </th>
+                                                                <th>
+                                                                    <Gt section={Translations.IncidentOn} />
+                                                                </th>
 
-                            }
-                        </div>
-                        {!loader && fetchedData.length === 0 && <h2 style={{ display: 'flex', justifyContent: 'center' }}><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
-                        {!loader && (
-                            <>
-                                {
-                                    !props.annex
-                            && (
-                                <NextPrevBtns
-                                    handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={handleNext}
-                                />
+                                                            </tr>
+
+                                                            {reliefData && reliefData.map((item, i) => (
+
+                                                                <tr key={item.id}>
+                                                                    <td>{i + 1}</td>
+                                                                    <td>{item.numberOfBeneficiaryFamily}</td>
+                                                                    <td>{ADToBS(item.dateOfReliefDistribution)}</td>
+                                                                    <td>{item.reliefAmountNpr}</td>
+                                                                    <td>{item.totalMaleBenefited}</td>
+                                                                    <td>{item.totalFemaleBenefited}</td>
+                                                                    <td>{item.totalDalitBenefited}</td>
+                                                                    <td>{item.totalMinoritiesBenefited}</td>
+                                                                    <td>{item.totalMadhesiBenefited}</td>
+                                                                    <td>{item.totalDisabledBenefited}</td>
+                                                                    <td>{item.totalJanjatiBenefited}</td>
+                                                                    <td>
+                                                                        {getIncidentTitle(item)[0]}
+                                                                    </td>
+                                                                    <td>
+                                                                        {getIncidentTitle(item)[1]}
+
+                                                                    </td>
+                                                                </tr>
+
+
+                                                            ))}
+                                                        </tbody>
+
+
+                                                    </table>
+
+                                                </>
+                                            )
+
+                                        }
+                                    </div>
+                                    {!loader && fetchedData.length === 0 && <h2 style={{ display: 'flex', justifyContent: 'center' }}><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
+                                    {!loader && (
+                                        <>
+                                            {
+                                                !props.annex
+                                                && (
+                                                    <NextPrevBtns
+                                                        handlePrevClick={props.handlePrevClick}
+                                                        handleNextClick={handleNext}
+                                                    />
+                                                )
+                                            }
+                                        </>
+                                    )}
+                                </>
                             )
-                                }
-                            </>
-                        )}
-                    </>
+                        }
+
+                        {showRelief
+                            && (
+                                <>
+                                    {' '}
+                                    <h3>Incident Selected</h3>
+                                    <div className={styles.incidentDetails}>
+                                        <table id="table-to-xls">
+                                            <tbody>
+                                                <tr>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTitle} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentHazard} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentOn} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentReportedOn} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTotalDeath} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTotalInjured} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentTotalMissing} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentFamilyAffected} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentInfrastructureAffected} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentInfrastructureDestroyed} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentLiveStockLoss} />
+                                                    </th>
+                                                </tr>
+
+                                                <tr key={currentRelief.id}>
+                                                    <td>{currentRelief.title}</td>
+                                                    <td>{currentRelief.hazard}</td>
+                                                    <td>{ADToBS(currentRelief.incidentOn.split('T')[0])}</td>
+                                                    <td>{ADToBS(currentRelief.reportedOn.split('T')[0])}</td>
+                                                    <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
+                                                    <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
+                                                    <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
+                                                    <td>{currentRelief.loss ? currentRelief.loss.familyAffectedCount : 0}</td>
+                                                    <td>
+                                                        {Number(currentRelief.loss
+                                                            ? currentRelief.loss.infrastructureAffectedBridgeCount : 0)
+                                                            + Number(currentRelief.loss
+                                                                ? currentRelief.loss.infrastructureAffectedElectricityCount : 0)
+                                                            + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedHouseCount : 0)
+                                                            + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedRoadCount : 0)}
+                                                    </td>
+                                                    <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
+                                                    <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    )
+
+
+                                </>
+                            )
+                        }
+
+                    </div>
                 )
-                 }
-
-                 {showRelief
-                      && (
-                          <>
-                              {' '}
-                              <h3>Incident Selected</h3>
-                              <div className={styles.incidentDetails}>
-                                  <table id="table-to-xls">
-                                      <tbody>
-                                          <tr>
-                                              <th>
-                                                  <Gt section={Translations.IncidentTitle} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentHazard} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentOn} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentReportedOn} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentTotalDeath} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentTotalInjured} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentTotalMissing} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentFamilyAffected} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentInfrastructureAffected} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentInfrastructureDestroyed} />
-                                              </th>
-                                              <th>
-                                                  <Gt section={Translations.IncidentLiveStockLoss} />
-                                              </th>
-                                          </tr>
-
-                                          <tr key={currentRelief.id}>
-                                              <td>{currentRelief.title}</td>
-                                              <td>{currentRelief.hazard}</td>
-                                              <td>{ADToBS(currentRelief.incidentOn.split('T')[0])}</td>
-                                              <td>{ADToBS(currentRelief.reportedOn.split('T')[0])}</td>
-                                              <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
-                                              <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
-                                              <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
-                                              <td>{currentRelief.loss ? currentRelief.loss.familyAffectedCount : 0}</td>
-                                              <td>
-                                                  {Number(currentRelief.loss
-                                                      ? currentRelief.loss.infrastructureAffectedBridgeCount : 0)
-                                        + Number(currentRelief.loss
-                                            ? currentRelief.loss.infrastructureAffectedElectricityCount : 0)
-                                        + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedHouseCount : 0)
-                                        + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedRoadCount : 0)}
-                                              </td>
-                                              <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
-                                              <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
-                                          </tr>
-
-                                      </tbody>
-                                  </table>
-                              </div>
-
-
-                              )
-
-
-                          </>
-                      )
-                 }
-
-             </div>
-         )
             }
 
             {
                 props.previewDetails
-            && (
-                <>
-                    <div className={styles.budgetPreviewContainer}>
-                        <h2><Gt section={Translations.DisasterIncidentSummary} /></h2>
-                        <div className={styles.lossRow}>
+                && (
+                    <>
+                        <div className={styles.budgetPreviewContainer}>
+                            <h2><Gt section={Translations.DisasterIncidentSummary} /></h2>
+                            <div className={styles.lossRow}>
 
-                            <div className={styles.lossSection}>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={styles.lossIcon}
-                                        src={IncidentIcon}
-                                        alt="Bullet Point"
-                                    />
+                                <div className={styles.lossSection}>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={styles.lossIcon}
+                                            src={IncidentIcon}
+                                            alt="Bullet Point"
+                                        />
 
-                                    <ul>
-                                        <p className={styles.darkerText}>{Number(incidentCount)}</p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.Incident} />
-                                        </p>
-                                    </ul>
-                                </div>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={styles.lossIcon}
-                                        src={moneyBag}
-                                        alt="Bullet Point"
-                                    />
-                                    <ul>
-                                        <p className={styles.darkerText}>
-                                            { getELWithUnit(totalEstimatedLoss)}
-                                        </p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.EstimatedLoss} />
-                                        </p>
-                                    </ul>
-                                </div>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={_cs(styles.lossIcon, styles.deathL)}
-                                        src={DeathIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <ul>
-                                        <p className={styles.darkerText}>{Number(deathCount)}</p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.Death} />
+                                        <ul>
+                                            <p className={styles.darkerText}>{Number(incidentCount)}</p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.Incident} />
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={styles.lossIcon}
+                                            src={moneyBag}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <p className={styles.darkerText}>
+                                                {getELWithUnit(totalEstimatedLoss)}
+                                            </p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.EstimatedLoss} />
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={_cs(styles.lossIcon, styles.deathL)}
+                                            src={DeathIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <p className={styles.darkerText}>{Number(deathCount)}</p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.Death} />
 
-                                        </p>
-                                    </ul>
-                                </div>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={_cs(styles.lossIcon, styles.deathL)}
-                                        src={MissingIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <ul>
-                                        <p className={styles.darkerText}>{Number(missing)}</p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.Missing} />
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={_cs(styles.lossIcon, styles.deathL)}
+                                            src={MissingIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <p className={styles.darkerText}>{Number(missing)}</p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.Missing} />
 
-                                        </p>
-                                    </ul>
-                                </div>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={styles.lossIcon}
-                                        src={InjredIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <ul>
-                                        <p className={styles.darkerText}>{Number(injured)}</p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.Injured} />
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={styles.lossIcon}
+                                            src={InjredIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <p className={styles.darkerText}>{Number(injured)}</p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.Injured} />
 
-                                        </p>
-                                    </ul>
-                                </div>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={styles.lossIcon}
-                                        src={InfraIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <ul>
-                                        <p className={styles.darkerText}>{Number(infraDestroyed)}</p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.IncidentInfrastructureDestroyed} />
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={styles.lossIcon}
+                                            src={InfraIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <p className={styles.darkerText}>{Number(infraDestroyed)}</p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.IncidentInfrastructureDestroyed} />
 
-                                        </p>
-                                    </ul>
-                                </div>
-                                <div className={styles.lossElement}>
-                                    <ScalableVectorGraphics
-                                        className={_cs(styles.lossIcon, styles.deathL)}
-                                        src={LivestockIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <ul>
-                                        <p className={styles.darkerText}>{Number(livestockDestroyed)}</p>
-                                        <p className={styles.smallerText}>
-                                            <Gt section={Translations.LiveStockLossDestroyed} />
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.lossElement}>
+                                        <ScalableVectorGraphics
+                                            className={_cs(styles.lossIcon, styles.deathL)}
+                                            src={LivestockIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <p className={styles.darkerText}>{Number(livestockDestroyed)}</p>
+                                            <p className={styles.smallerText}>
+                                                <Gt section={Translations.LiveStockLossDestroyed} />
 
-                                        </p>
-                                    </ul>
+                                            </p>
+                                        </ul>
+                                    </div>
                                 </div>
+
                             </div>
 
                         </div>
-
-                    </div>
-                </>
-            )}
+                    </>
+                )}
 
             {
                 props.hazardwiseImpact
@@ -1853,7 +1854,7 @@ const Relief = (props: Props) => {
                                                     <li>
 
                                                         <span className={styles.bigerNum}>
-                                                            { getMaleDeath(maleDeath, femaleDeath)
+                                                            {getMaleDeath(maleDeath, femaleDeath)
 
                                                             }
                                                         </span>
@@ -1880,7 +1881,7 @@ const Relief = (props: Props) => {
 
                                                         <span className={styles.bigerNum}>
 
-                                                            { getFemaleDeath(maleDeath, femaleDeath)
+                                                            {getFemaleDeath(maleDeath, femaleDeath)
 
                                                             }
                                                         </span>
@@ -2021,14 +2022,14 @@ const Relief = (props: Props) => {
                                     <YAxis
                                         scale="auto"
                                         yAxisId="left"
-                                        // label={{ value: 'No of Beneficiaries', angle: -90, position: 'insideLeft' }}
+                                    // label={{ value: 'No of Beneficiaries', angle: -90, position: 'insideLeft' }}
                                     />
                                     <YAxis
                                         width={80}
                                         yAxisId="right"
                                         orientation="right"
                                         tick={{ fontSize: 10 }}
-                                        // label={{ value: 'Relief Distributed (NPR)', angle: -90, position: 'right' }}
+                                    // label={{ value: 'Relief Distributed (NPR)', angle: -90, position: 'right' }}
 
                                     />
                                     <Tooltip />
@@ -2224,7 +2225,7 @@ const Relief = (props: Props) => {
                             </h2>
                             <h3 style={{ marginLeft: '10px', marginBottom: '20px' }}>
                                 <Gt section={Translations.IncidentTitle} />
-:
+                                :
                                 {' '}
                                 {selectedIncidentTitle}
                             </h3>
@@ -2257,7 +2258,7 @@ const Relief = (props: Props) => {
                                 <button
                                     type="button"
                                     className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
+                                    // onClick={() => setShowRelief(false)}
                                     onClick={handleSaveIncidentCause}
                                 >
                                     <Gt section={Translations.ReliefDataSaveButton} />
@@ -2300,7 +2301,7 @@ const Relief = (props: Props) => {
                             </h2>
                             <h3 style={{ marginLeft: '10px', marginBottom: '20px' }}>
                                 <Gt section={Translations.IncidentTitle} />
-:
+                                :
                                 {' '}
                                 {selectedIncidentTitle}
                             </h3>
@@ -2453,17 +2454,17 @@ const Relief = (props: Props) => {
                             </div> */}
                             {
                                 (postErrors)
-                            && (
-                                <ul>
+                                && (
+                                    <ul>
 
 
-                                    <li>
-                                        {postErrors}
-                                    </li>
+                                        <li>
+                                            {postErrors}
+                                        </li>
 
 
-                                </ul>
-                            )
+                                    </ul>
+                                )
                             }
                             <div className={styles.butnGroup}>
                                 <button
@@ -2478,7 +2479,7 @@ const Relief = (props: Props) => {
                                     <button
                                         type="button"
                                         className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
+                                        // onClick={() => setShowRelief(false)}
                                         onClick={handleSaveRelief}
                                     >
                                         <Gt section={Translations.ReliefDataSaveButton} />
@@ -2490,7 +2491,7 @@ const Relief = (props: Props) => {
                                     <button
                                         type="button"
                                         className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
+                                        // onClick={() => setShowRelief(false)}
                                         onClick={handleUpdateRelief}
                                     >
                                         <Gt section={Translations.ReliefDataSaveButton} />

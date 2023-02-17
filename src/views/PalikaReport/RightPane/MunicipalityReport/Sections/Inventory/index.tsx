@@ -6,8 +6,6 @@ import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
 
 import { ADToBS } from 'bikram-sambat-js';
-import NextPrevBtns from '../../NextPrevBtns';
-import styles from './styles.scss';
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
@@ -18,13 +16,15 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { provincesSelector,
+import {
+    provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
     palikaRedirectSelector,
     drrmRegionSelector,
-    palikaLanguageSelector } from '#selectors';
+    palikaLanguageSelector,
+} from '#selectors';
 import {
     setPalikaRedirectAction,
     setDrrmInventoryAction,
@@ -33,11 +33,13 @@ import {
 } from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
+import styles from './styles.scss';
+import NextPrevBtns from '../../NextPrevBtns';
 import Gt from '../../../../utils';
 import Translations from '../../../../Constants/Translations';
 import ReportChart from './ReportChart';
 
-interface Props{
+interface Props {
     handleNextClick: () => void;
     previewDetails: any;
     annex: any;
@@ -47,7 +49,7 @@ interface Props{
     rows: number;
 }
 
-interface Params{
+interface Params {
     province: PageTypes.Province;
     district: PageTypes.District;
     municipality: PageTypes.Municipality;
@@ -103,7 +105,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params }) => {
@@ -118,11 +120,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     meta: params.meta,
                 };
             }
-            return { limit: params.page,
+            return {
+                limit: params.page,
                 offset: params.offset,
                 resource_type: params.inventories,
                 expand: params.fields,
-                meta: params.meta };
+                meta: params.meta,
+            };
         },
         method: methods.GET,
         onMount: true,
@@ -309,142 +313,142 @@ const Inventory: React.FC<Props> = (props: NewProps) => {
 
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
-            { !previewDetails
-            && (
-                <div className={styles.tabsPageContainer}>
-                    <h2 className={styles.invenTitle}>
-                        <Gt section={Translations.InventoryHeading} />
-                    </h2>
-                    <div className={styles.palikaTable}>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    {
-                                        !annex && finalInventoriesData.length
-                                            ? (
-                                                <th>
-                                                    <input
-                                                        type="checkbox"
-                                                        onChange={handleCheckAll}
-                                                        checked={checkedAll}
-                                                        className={styles.checkBox}
-                                                    />
-                                                </th>
-                                            ) : null
-                                    }
-                                    <th>
-                                        {' '}
-                                        <Gt section={Translations.InventorySerialNumber} />
-                                    </th>
-                                    <th><Gt section={Translations.InventoryResourceName} /></th>
-                                    <th><Gt section={Translations.InventoryResourceQuantity} /></th>
-                                    <th><Gt section={Translations.InventoryResourceUnit} /></th>
-                                    <th><Gt section={Translations.InventoryResourceCategory} /></th>
-                                    <th><Gt section={Translations.InventoryResourceOwnerOrganization} /></th>
-                                    <th><Gt section={Translations.InventoryResourceOwnerOrganizationType} /></th>
-                                    <th><Gt section={Translations.InventoryResourceAddedDate} /></th>
-                                    <th><Gt section={Translations.InventoryResourceUpdatedDate} /></th>
-                                    {
-                                        !annex && finalInventoriesData.length
-                                            ? <th><Gt section={Translations.InventoryAction} /></th> : null
-                                    }
+            {!previewDetails
+                && (
+                    <div className={styles.tabsPageContainer}>
+                        <h2 className={styles.invenTitle}>
+                            <Gt section={Translations.InventoryHeading} />
+                        </h2>
+                        <div className={styles.palikaTable}>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        {
+                                            !annex && finalInventoriesData.length
+                                                ? (
+                                                    <th>
+                                                        <input
+                                                            type="checkbox"
+                                                            onChange={handleCheckAll}
+                                                            checked={checkedAll}
+                                                            className={styles.checkBox}
+                                                        />
+                                                    </th>
+                                                ) : null
+                                        }
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.InventorySerialNumber} />
+                                        </th>
+                                        <th><Gt section={Translations.InventoryResourceName} /></th>
+                                        <th><Gt section={Translations.InventoryResourceQuantity} /></th>
+                                        <th><Gt section={Translations.InventoryResourceUnit} /></th>
+                                        <th><Gt section={Translations.InventoryResourceCategory} /></th>
+                                        <th><Gt section={Translations.InventoryResourceOwnerOrganization} /></th>
+                                        <th><Gt section={Translations.InventoryResourceOwnerOrganizationType} /></th>
+                                        <th><Gt section={Translations.InventoryResourceAddedDate} /></th>
+                                        <th><Gt section={Translations.InventoryResourceUpdatedDate} /></th>
+                                        {
+                                            !annex && finalInventoriesData.length
+                                                ? <th><Gt section={Translations.InventoryAction} /></th> : null
+                                        }
 
-                                </tr>
-                                {loader ? (
-                                    <>
-                                        {' '}
-                                        <Loader
-                                            top="50%"
-                                            left="60%"
-                                        />
-                                        <p className={styles.loaderInfo}>Loading...Please Wait</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        {finalInventoriesData && finalInventoriesData.map((item, i) => (
+                                    </tr>
+                                    {loader ? (
+                                        <>
+                                            {' '}
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {finalInventoriesData && finalInventoriesData.map((item, i) => (
 
-                                            <tr>
-                                                <td>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={checkedRows.indexOf(i) !== -1}
+                                                <tr>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={checkedRows.indexOf(i) !== -1}
 
                                                             // defaultChecked
-                                                        onChange={e => handleCheck(i, e)}
-                                                        className={styles.checkBox}
-                                                        key={item.id}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    {item.SN}
-                                                </td>
-                                                <td>{drrmLanguage.language === 'np' ? item.item.titleNp : item.item.title}</td>
-                                                <td>{item.quantity}</td>
-                                                <td>{drrmLanguage.language === 'np' ? item.item.unitNp : item.item.unit}</td>
-                                                <td>{item.item.category}</td>
-                                                <td>
-
-                                                    {item.resourceName}
-                                                </td>
-                                                <td>{item.organizationType}</td>
-                                                <td>{ADToBS(item.createdOn.split('T')[0])}</td>
-                                                <td>{ADToBS(item.modifiedOn.split('T')[0])}</td>
-
-
-                                                {
-                                                    !annex
-                                            && (
-                                                <td>
-                                                    <button
-                                                        className={styles.editButtn}
-                                                        type="button"
-                                                        onClick={() => handleEditInventory(item)}
-                                                        title={drrmLanguage.language === 'np' ? Translations.InventoryEditTooltip.np : Translations.InventoryEditTooltip.en}
-                                                    >
-                                                        <ScalableVectorGraphics
-                                                            className={styles.bulletPoint}
-                                                            src={editIcon}
-                                                            alt="editPoint"
+                                                            onChange={e => handleCheck(i, e)}
+                                                            className={styles.checkBox}
+                                                            key={item.id}
                                                         />
-                                                    </button>
-                                                </td>
-                                            )
-                                                }
-                                            </tr>
-                                        ))}
-                                    </>
-                                )}
-                            </tbody>
-                        </table>
-                        {!loader && finalInventoriesData.length === 0
-                                 && <h2><Gt section={Translations.InventoryNoDataMessage} /></h2>
+                                                    </td>
+                                                    <td>
+                                                        {item.SN}
+                                                    </td>
+                                                    <td>{drrmLanguage.language === 'np' ? item.item.titleNp : item.item.title}</td>
+                                                    <td>{item.quantity}</td>
+                                                    <td>{drrmLanguage.language === 'np' ? item.item.unitNp : item.item.unit}</td>
+                                                    <td>{item.item.category}</td>
+                                                    <td>
 
-                        }
-                        {!loader && (
-                            <>
+                                                        {item.resourceName}
+                                                    </td>
+                                                    <td>{item.organizationType}</td>
+                                                    <td>{ADToBS(item.createdOn.split('T')[0])}</td>
+                                                    <td>{ADToBS(item.modifiedOn.split('T')[0])}</td>
 
 
-                                {
-                                    !annex
-                            && (
-                                <NextPrevBtns
-                                    handleNextClick={handleNext}
-                                />
-                            )
-                                }
-                            </>
-                        )}
+                                                    {
+                                                        !annex
+                                                        && (
+                                                            <td>
+                                                                <button
+                                                                    className={styles.editButtn}
+                                                                    type="button"
+                                                                    onClick={() => handleEditInventory(item)}
+                                                                    title={drrmLanguage.language === 'np' ? Translations.InventoryEditTooltip.np : Translations.InventoryEditTooltip.en}
+                                                                >
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.bulletPoint}
+                                                                        src={editIcon}
+                                                                        alt="editPoint"
+                                                                    />
+                                                                </button>
+                                                            </td>
+                                                        )
+                                                    }
+                                                </tr>
+                                            ))}
+                                        </>
+                                    )}
+                                </tbody>
+                            </table>
+                            {!loader && finalInventoriesData.length === 0
+                                && <h2><Gt section={Translations.InventoryNoDataMessage} /></h2>
+
+                            }
+                            {!loader && (
+                                <>
+
+
+                                    {
+                                        !annex
+                                        && (
+                                            <NextPrevBtns
+                                                handleNextClick={handleNext}
+                                            />
+                                        )
+                                    }
+                                </>
+                            )}
+                        </div>
+
                     </div>
-
-                </div>
-            )
+                )
             }
-            { previewDetails
-            && (
-                <ReportChart
-                    chartData={chartData}
-                />
-            )
+            {previewDetails
+                && (
+                    <ReportChart
+                        chartData={chartData}
+                    />
+                )
             }
 
         </div>

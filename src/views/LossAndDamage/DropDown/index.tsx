@@ -105,8 +105,7 @@ const Dropdown = (props: DropDownProps) => {
         setShowOption(true);
         setDropdownValues(filteredDropdown);
     };
-    console.log('icon', icon);
-    console.log('Icon', Icons, selectName);
+
     return (
         <>
             <div

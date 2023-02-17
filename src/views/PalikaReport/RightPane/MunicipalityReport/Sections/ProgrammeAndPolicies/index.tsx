@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -14,7 +13,6 @@ import {
     setProgramAndPolicyDataAction,
     setDrrmProgressAction,
 } from '#actionCreators';
-import Gt from '../../../../utils';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
@@ -25,11 +23,14 @@ import {
     drrmProgresSelector,
     palikaLanguageSelector,
 } from '#selectors';
-import NextPrevBtns from '../../NextPrevBtns';
 import Translations from '#views/PalikaReport/Constants/Translations';
+import NextPrevBtns from '../../NextPrevBtns';
+import Gt from '../../../../utils';
+import styles from './styles.scss';
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    PolicyGetRequest: { url: '/annual-policy-program/',
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    PolicyGetRequest: {
+        url: '/annual-policy-program/',
         query: ({ params, props }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
             fiscal_year: params.fiscalYear,
@@ -53,7 +54,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.paginationParameters) {
                 params.paginationParameters(response);
             }
-        } },
+        },
+    },
     PolicyPostRequest: {
         url: '/annual-policy-program/',
         method: methods.POST,
@@ -95,7 +97,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-interface Props{
+interface Props {
 
 }
 
@@ -202,7 +204,7 @@ const ProgramPolicies = (props: Props) => {
             });
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
     // eslint-disable-next-line max-len
     const handleEditActivity = (id, index) => {
@@ -236,7 +238,7 @@ const ProgramPolicies = (props: Props) => {
         if (finalPolicyData.length > 0) {
             setPoint(finalPolicyData[policyIndex].point);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [policyIndex, editBtnClicked]);
 
     const handleNext = () => {
@@ -248,193 +250,193 @@ const ProgramPolicies = (props: Props) => {
 
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
-            { !props.previewDetails
-            && (
-                <div className={styles.mainPageDetailsContainer}>
-                    <h2>
-                        <Gt section={Translations.PapTitlePart1} />
-                        {''}
-                        {
-                            ` ${generalData.fiscalYearTitle} `
-                        }
-                        {''}
-                        <Gt section={Translations.PapTitlePart2} />
-
-                    </h2>
-                    <table>
-                        <tbody>
-                            <tr>
-
-
-                                <th><Gt section={Translations.dashboardTblHeaderSN} /></th>
-                                <th><Gt section={Translations.points} /></th>
-
-                                {finalPolicyData.length > 0
-                                    ? (
-                                        <th>
-                                            <Gt section={Translations.dashboardTblHeaderLastAction} />
-                                        </th>
-                                    )
-                                    : ''}
-
-                            </tr>
-                            {loader ? (
-                                <>
-                                    <Loader
-                                        top="50%"
-                                        left="60%"
-                                    />
-                                    <p className={styles.loaderInfo}>Loading...Please Wait</p>
-                                </>
-                            ) : (
-                                <>
-                                    {finalPolicyData.length > 0
-                                     && finalPolicyData.map((item, i) => (
-                                         policyId === item.id
-                                             ? (
-                                                 <tr>
-                                                     <td>{policyIndex + 1}</td>
-                                                     <td>
-                                                         <textarea
-                                                             value={point}
-                                                             placeholder={drrmLanguage.language === 'en'
-                                                                 ? 'DRR programmes listed in the annual policy and programme'
-                                                                 : 'विपद् जोखिम न्यूनीकरण सम्बन्धि  वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू'
-                                                             }
-
-
-                                                             onChange={handleChangePoint}
-                                                             rows="4"
-                                                             cols="100"
-                                                         />
-                                                     </td>
-                                                     <td>
-                                                         <button
-                                                             className={styles.updateButtn}
-                                                             type="button"
-                                                             onClick={handleUpdateActivity}
-                                                             title="Update Policy"
-                                                         >
-                                                             <Gt section={Translations.Update} />
-
-                                                         </button>
-                                                     </td>
-
-
-                                                 </tr>
-                                             )
-                                             : (
-                                                 <tr key={item.id}>
-                                                     <td>
-                                                         {i + 1}
-                                                     </td>
-                                                     <td>{item.point}</td>
-                                                     <td>
-                                                         <button
-                                                             className={styles.editButtn}
-                                                             type="button"
-                                                             onClick={() => handleEditActivity(item.id, i)}
-                                                             title="Edit Policy"
-                                                         >
-                                                             <ScalableVectorGraphics
-                                                                 className={styles.bulletPoint}
-                                                                 src={editIcon}
-                                                                 alt="editPoint"
-                                                             />
-                                                         </button>
-
-                                                     </td>
-                                                 </tr>
-                                             )
-                                     ))
-                                    }
-                                </>
-                            )}
-
-
-                        </tbody>
-                    </table>
-
-                    {!loader && (
-                        <>
-
+            {!props.previewDetails
+                && (
+                    <div className={styles.mainPageDetailsContainer}>
+                        <h2>
+                            <Gt section={Translations.PapTitlePart1} />
+                            {''}
                             {
-                                !props.annex
-                        && (
-                            <>
-                                {editPolicy ? ''
-                                    : (
-                                        <div className={styles.txtAreadetails}>
-                                            <textarea
-                                                value={point}
-                                                placeholder={drrmLanguage.language === 'en'
-                                                    ? 'Please enter the DRR related points in this fiscal year Annual Policy and Programme of the municipality'
-                                                    : 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा उल्लेखीत विपद् जोखिम न्यूनीकरण सम्बन्धित क्रियाकलापहरु प्रविष्ट गर्नुहोस् ।'
-                                                }
-                                                onChange={handleChangePoint}
-                                                rows="4"
-                                                cols="100"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={handleSubmit}
-                                                className={styles.savebtn}
-                                            >
-                                                <Gt section={Translations.PaPAddbtn} />
+                                ` ${generalData.fiscalYearTitle} `
+                            }
+                            {''}
+                            <Gt section={Translations.PapTitlePart2} />
 
-                                            </button>
-                                        </div>
+                        </h2>
+                        <table>
+                            <tbody>
+                                <tr>
+
+
+                                    <th><Gt section={Translations.dashboardTblHeaderSN} /></th>
+                                    <th><Gt section={Translations.points} /></th>
+
+                                    {finalPolicyData.length > 0
+                                        ? (
+                                            <th>
+                                                <Gt section={Translations.dashboardTblHeaderLastAction} />
+                                            </th>
+                                        )
+                                        : ''}
+
+                                </tr>
+                                {loader ? (
+                                    <>
+                                        <Loader
+                                            top="50%"
+                                            left="60%"
+                                        />
+                                        <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        {finalPolicyData.length > 0
+                                            && finalPolicyData.map((item, i) => (
+                                                policyId === item.id
+                                                    ? (
+                                                        <tr>
+                                                            <td>{policyIndex + 1}</td>
+                                                            <td>
+                                                                <textarea
+                                                                    value={point}
+                                                                    placeholder={drrmLanguage.language === 'en'
+                                                                        ? 'DRR programmes listed in the annual policy and programme'
+                                                                        : 'विपद् जोखिम न्यूनीकरण सम्बन्धि  वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू'
+                                                                    }
+
+
+                                                                    onChange={handleChangePoint}
+                                                                    rows="4"
+                                                                    cols="100"
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <button
+                                                                    className={styles.updateButtn}
+                                                                    type="button"
+                                                                    onClick={handleUpdateActivity}
+                                                                    title="Update Policy"
+                                                                >
+                                                                    <Gt section={Translations.Update} />
+
+                                                                </button>
+                                                            </td>
+
+
+                                                        </tr>
+                                                    )
+                                                    : (
+                                                        <tr key={item.id}>
+                                                            <td>
+                                                                {i + 1}
+                                                            </td>
+                                                            <td>{item.point}</td>
+                                                            <td>
+                                                                <button
+                                                                    className={styles.editButtn}
+                                                                    type="button"
+                                                                    onClick={() => handleEditActivity(item.id, i)}
+                                                                    title="Edit Policy"
+                                                                >
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.bulletPoint}
+                                                                        src={editIcon}
+                                                                        alt="editPoint"
+                                                                    />
+                                                                </button>
+
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                            ))
+                                        }
+                                    </>
+                                )}
+
+
+                            </tbody>
+                        </table>
+
+                        {!loader && (
+                            <>
+
+                                {
+                                    !props.annex
+                                    && (
+                                        <>
+                                            {editPolicy ? ''
+                                                : (
+                                                    <div className={styles.txtAreadetails}>
+                                                        <textarea
+                                                            value={point}
+                                                            placeholder={drrmLanguage.language === 'en'
+                                                                ? 'Please enter the DRR related points in this fiscal year Annual Policy and Programme of the municipality'
+                                                                : 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा उल्लेखीत विपद् जोखिम न्यूनीकरण सम्बन्धित क्रियाकलापहरु प्रविष्ट गर्नुहोस् ।'
+                                                            }
+                                                            onChange={handleChangePoint}
+                                                            rows="4"
+                                                            cols="100"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleSubmit}
+                                                            className={styles.savebtn}
+                                                        >
+                                                            <Gt section={Translations.PaPAddbtn} />
+
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
+                                            {
+                                                (postErrors)
+                                                && (
+                                                    <ul>
+                                                        <li>
+                                                            <span className={styles.errorHeading}>
+                                                                Please fix the following errors:
+                                                            </span>
+                                                        </li>
+
+                                                        <li>
+                                                            {postErrors}
+                                                        </li>
+
+
+                                                    </ul>
+                                                )
+                                            }
+                                            <NextPrevBtns
+                                                handlePrevClick={props.handlePrevClick}
+                                                handleNextClick={handleNext}
+                                            />
+                                        </>
                                     )
                                 }
-                                {
-                                    (postErrors)
-                            && (
-                                <ul>
-                                    <li>
-                                        <span className={styles.errorHeading}>
-                                    Please fix the following errors:
-                                        </span>
-                                    </li>
-
-                                    <li>
-                                        {postErrors}
-                                    </li>
-
-
-                                </ul>
-                            )
-                                }
-                                <NextPrevBtns
-                                    handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={handleNext}
-                                />
                             </>
-                        )
+                        )}
+                    </div>
+                )}
+
+            {props.previewDetails
+                && (
+                    <div className={styles.budgetPreviewContainer}>
+                        <h2>
+                            <Gt section={Translations.DRRprogrammeslisted} />
+
+                        </h2>
+                        <ul>
+                            {finalPolicyData.length > 0
+                                && finalPolicyData.slice(0, 2).map(item => (
+                                    <li key={item.id}>
+                                        {item.point}
+                                    </li>
+                                ))
+
                             }
-                        </>
-                    )}
-                </div>
-            )}
-
-            { props.previewDetails
-            && (
-                <div className={styles.budgetPreviewContainer}>
-                    <h2>
-                        <Gt section={Translations.DRRprogrammeslisted} />
-
-                    </h2>
-                    <ul>
-                        {finalPolicyData.length > 0
-                        && finalPolicyData.slice(0, 2).map(item => (
-                            <li key={item.id}>
-                                {item.point}
-                            </li>
-                        ))
-
-                        }
-                    </ul>
-                </div>
-            )}
+                        </ul>
+                    </div>
+                )}
 
         </div>
     );

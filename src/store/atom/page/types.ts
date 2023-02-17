@@ -29,7 +29,6 @@ interface Centroid {
 }
 type BBox = [number, number, number, number];
 
-
 type DrrmProgress = number;
 
 export interface BudgetId {
@@ -110,8 +109,12 @@ export interface BudgetActivityData {
     projcompletionDate: string;
     projstartDate: string;
 }
-
+export interface IbfMunicipality {
+    id: number;
+    title: string;
+}
 export interface IbfPage {
+    demo: number;
     stations: object;
     stationDetail: object;
     selectedStation: object;
@@ -121,7 +124,7 @@ export interface IbfPage {
     overallFloodHazard: [];
     filter: {
         district: string;
-        municipality: string;
+        municipality: IbfMunicipality[];
         ward: string;
     };
     householdJson: [];
@@ -129,7 +132,9 @@ export interface IbfPage {
     selectedIndicator: string;
     householdDistrictAverage: object;
     selectedLegend: string;
-    demo: number;
+    indicators: [];
+    wtChange: number;
+    weights: [];
 }
 
 export interface Bulletin {
@@ -766,9 +771,9 @@ export interface EpidemicPage {
 
 export interface PageState {
     hidePopup: boolean;
-    isBulletinPromotionPage: boolean;
     closeWalkThrough: boolean;
     run: boolean;
+    isBulletinPromotionPage: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
     carKeys: [];
@@ -820,6 +825,8 @@ export interface PageState {
     projectsProfilePage: ProjectsProfilePage;
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
+
+    ibfPage: IbfPage;
     generalData: GeneralData;
     palikaRedirect: PalikaRedirect;
     budgetId: BudgetId;
@@ -910,6 +917,8 @@ export interface DataArchiveEarthquakeFilters {
 
 // eslint-disable-next-line import/prefer-default-export
 export enum PageType {
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/DRRM_REPORT/SET_GENERAL_DATA',
     SET_PALIKA_REDIRECT = 'page/DRRM_REPORT/SET_PALIKA_REDIRECT',
@@ -925,9 +934,9 @@ export enum PageType {
     SET_PROGRAM_AND_POLICY_DATA = 'page/DRRM_REPORT/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/DRRM_REPORT/SET_BUDGET_ACTIVITY_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
-    SET_BULLETIN_PROMOTION_CHECK = 'page/SET_BULLETIN_PROMOTION_CHECK',
     SET_INITIAL_CLOSE_WALK_THROUGH = 'page/SET_INITIAL_CLOSE_WALK_THROUGH',
     SET_INITIAL_RUN = 'page/SET_INITIAL_RUN',
+    SET_BULLETIN_PROMOTION_CHECK = 'page/SET_BULLETIN_PROMOTION_CHECK',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
@@ -1035,6 +1044,7 @@ export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
 }
+
 
 export interface SetBulletinData {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN;
@@ -1154,12 +1164,6 @@ export interface SetInitialPopupHidden {
     type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
     value: boolean;
 }
-
-export interface SetBulletinPromotionCheck {
-    type: typeof PageType.SET_BULLETIN_PROMOTION_CHECK;
-    value: boolean;
-}
-
 export interface SetInitialCloseWalkThrough {
     type: typeof PageType.SET_INITIAL_CLOSE_WALK_THROUGH;
     value: boolean;
@@ -1168,6 +1172,12 @@ export interface SetInitialRun {
     type: typeof PageType.SET_INITIAL_RUN;
     value: boolean;
 }
+
+export interface SetBulletinPromotionCheck {
+    type: typeof PageType.SET_BULLETIN_PROMOTION_CHECK;
+    value: boolean;
+}
+
 export interface SetHazardType {
     type: typeof PageType.SET_HAZARD_TYPES;
     hazardTypes: HazardType[];
@@ -1504,20 +1514,22 @@ export type PageActionTypes = (
     SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList | SetRealTimeDuration |
     SetRealTimeFireList | SetRealTimePollutionList | SetLossAndDamageFilters |
+    SetRealTimeFilters | SetEventList | SetProjectsProfileFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
-    SetDashboardHazardType | SetBulletinDataCovid | SetBulletinYearlyData |
-    SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
+    SetDashboardHazardType | SetBulletinYearlyData |
+    SetDataArchivePollutionList | SetDataArchiveEarthquakeList |
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
     SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |
     SetDataArchiveRainFilters | SetDataArchiveRiverFilters |
     SetDataArchiveRainStations | SetDataArchiveRiverStations |
+    SetIbfPage | SetBulletinDataCovid | SetBulletinDataFeedback | SetBulletinDataTemperature |
+    SetEpidemicsPage | SetBulletinEditData |
     SetDashboardHazardType | SetIbfPage |
     SetDashboardHazardType | SetBulletinDataCovid
     | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage |
     SetBulletinEditData |
-    SetInitialCloseWalkThrough | SetInitialRun |
-    SetDataArchiveRainStations | SetDataArchiveRiverStations
+    SetInitialCloseWalkThrough | SetInitialRun
 );

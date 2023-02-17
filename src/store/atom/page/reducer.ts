@@ -6,9 +6,8 @@ import { ModelEnum } from '#types';
 import * as Type from './types';
 import initialState from './initialState';
 
+
 // ACTION CREATORS
-
-
 export const setBulletinYearlyDataAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
     bulletinData,
@@ -134,12 +133,6 @@ export const setInitialPopupHiddenAction = (
     value,
 });
 
-export const setBulletinPromotionCheckAction = (
-    { value }: { value: boolean },
-) => ({
-    type: Type.PageType.SET_BULLETIN_PROMOTION_CHECK,
-    value,
-});
 
 export const setInitialCloseWalkThroughAction = (
     { value }: { value: boolean },
@@ -151,6 +144,12 @@ export const setInitialRunAction = (
     { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_INITIAL_RUN,
+    value,
+});
+export const setBulletinPromotionCheckAction = (
+    { value }: { value: boolean },
+) => ({
+    type: Type.PageType.SET_BULLETIN_PROMOTION_CHECK,
     value,
 });
 export const setHazardTypesAction = (
@@ -644,15 +643,6 @@ const setInitialPopupHidden = (state: Type.PageState, action: Type.SetInitialPop
     });
     return newState;
 };
-const setBulletinPromotionCheck = (state: Type.PageState,
-    action: Type.SetBulletinPromotionCheck) => {
-    const { value } = action;
-    const newState = produce(state, (deferedState) => {
-        // eslint-disable-next-line no-param-reassign
-        deferedState.isBulletinPromotionPage = value;
-    });
-    return newState;
-};
 const setInitialCloseWalkThrough = (state: Type.PageState,
     action: Type.SetInitialCloseWalkThrough) => {
     const { value } = action;
@@ -672,6 +662,15 @@ const setInitialRun = (state: Type.PageState, action: Type.SetInitialRun) => {
 };
 
 
+const setBulletinPromotionCheck = (state: Type.PageState,
+    action: Type.SetBulletinPromotionCheck) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.isBulletinPromotionPage = value;
+    });
+    return newState;
+};
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
     const { hazardTypes: hazardTypesFromAction } = action;
 
@@ -1690,6 +1689,9 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
             selectedIndicator,
             householdDistrictAverage,
             selectedLegend,
+            indicators,
+            wtChange,
+            weights,
         } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -1747,6 +1749,18 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
         if (selectedLegend === '') {
             deferedState.ibfPage.selectedLegend = selectedLegend;
         }
+        if (indicators) {
+            deferedState.ibfPage.indicators = indicators;
+        }
+        if (wtChange) {
+            deferedState.ibfPage.wtChange = wtChange;
+        }
+        if (wtChange === 0) {
+            deferedState.ibfPage.wtChange = wtChange;
+        }
+        if (weights) {
+            deferedState.ibfPage.weights = weights;
+        }
         if (filter) {
             if (filter.district) {
                 deferedState.ibfPage.filter.district = filter.district;
@@ -1797,10 +1811,10 @@ const setPalikaRedirect = (state: Type.PageState, action: Type.SetPalikaRedirect
 };
 
 const setPalikaLanguage = (state: Type.PageState, action: Type.SetPalikaLanguage) => {
-    const { language } = action;
+    const { palikaLanguage } = action;
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
-        deferedState.palikaLanguage = language;
+        deferedState.palikaLanguage = palikaLanguage;
     });
     return newState;
 };
@@ -2211,14 +2225,13 @@ export const setResourceList = (state: Type.PageState, action: Type.SetResourceL
     return newState;
 };
 
-
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
-        case Type.PageType.SET_LANGUAGE:
-            return setLanguageLocal(state, action);
+        case Type.PageType.SET_IBF_PAGE:
+            return setIbfPage(state, action);
         case Type.PageType.SET_DRRM_PROGRESS:
             return setDrrmProgress(state, action);
         case Type.PageType.SET_DRRM_REGION:
@@ -2245,8 +2258,6 @@ export default function routeReducer(
             return setBudgetData(state, action);
         case Type.PageType.SET_GENERAL_DATA:
             return setGeneralData(state, action);
-        case Type.PageType.SET_IBF_PAGE:
-            return setIbfPage(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
             return setBulletinEditData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
@@ -2265,12 +2276,12 @@ export default function routeReducer(
             return setRegion(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
             return setInitialPopupHidden(state, action);
-        case Type.PageType.SET_BULLETIN_PROMOTION_CHECK:
-            return setBulletinPromotionCheck(state, action);
         case Type.PageType.SET_INITIAL_CLOSE_WALK_THROUGH:
             return setInitialCloseWalkThrough(state, action);
         case Type.PageType.SET_INITIAL_RUN:
             return setInitialRun(state, action);
+        case Type.PageType.SET_BULLETIN_PROMOTION_CHECK:
+            return setBulletinPromotionCheck(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
         case Type.PageType.SET_DASHBOARD_HAZARD_TYPES:
@@ -2279,6 +2290,8 @@ export default function routeReducer(
             return setEventTypes(state, action);
         case Type.PageType.SET_MAP_STYLES:
             return setMapStyles(state, action);
+        case Type.PageType.SET_LANGUAGE:
+            return setLanguageLocal(state, action);
         case Type.PageType.SET_MAP_STYLE:
             return setMapStyle(state, action);
         case Type.PageType.SET_PROVINCES:
