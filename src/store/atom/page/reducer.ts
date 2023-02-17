@@ -7,10 +7,7 @@ import * as Type from './types';
 import initialState from './initialState';
 
 // ACTION CREATORS
-export const setLanguageAction = language => ({
-    type: Type.PageType.SET_LANGUAGE,
-    language,
-});
+
 
 export const setBulletinYearlyDataAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
@@ -141,8 +138,8 @@ export const setBulletinPromotionCheckAction = (
     { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_BULLETIN_PROMOTION_CHECK,
-    value
-})
+    value,
+});
 
 export const setInitialCloseWalkThroughAction = (
     { value }: { value: boolean },
@@ -1648,16 +1645,6 @@ export const setProfileContactFilters = (
     return newState;
 };
 
-const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
-    const { language } = action;
-    const newState = produce(state, (deferedState) => {
-        // eslint-disable-next-line no-param-reassign
-        deferedState.language = language;
-    });
-    return newState;
-};
-
-
 const setGeneralData = (state: Type.PageState, action: Type.SetGeneralData) => {
     const { generalData } = action;
     const newState = produce(state, (deferedState) => {
@@ -2292,8 +2279,6 @@ export default function routeReducer(
             return setEventTypes(state, action);
         case Type.PageType.SET_MAP_STYLES:
             return setMapStyles(state, action);
-        case Type.PageType.SET_LANGUAGE:
-            return setLanguageLocal(state, action);
         case Type.PageType.SET_MAP_STYLE:
             return setMapStyle(state, action);
         case Type.PageType.SET_PROVINCES:
