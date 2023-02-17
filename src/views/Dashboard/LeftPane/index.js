@@ -300,7 +300,7 @@ class LeftPane extends React.PureComponent {
                 />
 
 
-                <div className={styles.sourceDetails}>
+                <div className={_cs(styles.sourceDetails, 'source-tour')}>
 
 
                     <div className={styles.infoIconContainer}>
@@ -342,7 +342,7 @@ class LeftPane extends React.PureComponent {
                 <header className={styles.header}>
                     <div className={styles.tabs}>
                         <div
-                            className={_cs(styles.tab, activeView === 'alerts' && styles.active)}
+                            className={_cs(styles.tab, activeView === 'alerts' && styles.active, 'alert-tour')}
                             onClick={this.handleAlertsButtonClick}
                             role="presentation"
                         >
@@ -380,7 +380,7 @@ class LeftPane extends React.PureComponent {
                             </div>
                         </div>
                         <div
-                            className={_cs(styles.tab, activeView === 'visualizations' && styles.active)}
+                            className={_cs(styles.tab, activeView === 'visualizations' && styles.active, 'visualization-tour')}
                             role="presentation"
                             onClick={this.handleVisualizationsButtonClick}
                         >
@@ -434,7 +434,7 @@ class LeftPane extends React.PureComponent {
                         )}
                         <AlertTableModalButton
                             title="Show data in tabular format"
-                            className={styles.showTableButton}
+                            className={_cs(styles.showTableButton, 'tabular-data-tour')}
                             iconName="table"
                             transparent
                             modal={(

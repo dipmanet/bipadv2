@@ -5,16 +5,17 @@ import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
 
 import { navigate } from '@reach/router';
+
+import Cookies from 'js-cookie';
 import ListView from '#rscv/List/ListView';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import { routeSettings } from '#constants';
-import { authStateSelector, languageSelector } from '#selectors';
-import { setAuthAction } from '#actionCreators';
+import { authStateSelector } from '#selectors';
+import { setAuthAction, setInitialCloseWalkThroughAction } from '#actionCreators';
 import { AppState } from '#store/types';
 import { AuthState } from '#store/atom/auth/types';
-
 import { getAuthState } from '#utils/session';
 import {
     createConnectedRequestCoordinator,
@@ -30,19 +31,21 @@ import NewLoginModal from '#components/NewLoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
-
+import FeedbackSupport from '#views/FeedbackSupport';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
 import Dashboard from '#views/Dashboard';
 
+
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
+
 interface Menu {
     title: string;
-    titleNep: string;
     name: string;
     path: string;
     iconName: string;
     disabled: boolean;
+    id: string;
 }
 
 const MenuItemLikeButton = ({
@@ -51,18 +54,21 @@ const MenuItemLikeButton = ({
     onClick,
     iconName,
     disabled,
+    id,
 }: {
     title: string;
     className?: string;
     onClick: () => void;
     iconName?: string;
     disabled?: boolean;
+    id: string;
 }) => (
     <div
         role="presentation"
         className={_cs(styles.menuItemLikeButton, className)}
         onClick={!disabled ? onClick : undefined}
         title={title}
+        id={id}
     >
         <Icon
             className={styles.icon}
@@ -99,11 +105,11 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState) => ({
     authState: authStateSelector(state),
-    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAuth: params => dispatch(setAuthAction(params)),
+    setCloseWalkThroughHomepage: params => dispatch(setInitialCloseWalkThroughAction(params)),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -133,13 +139,13 @@ const gotoadmin = () => navigate('/admin');
 
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
-        title: this.props.language.language === 'en' ? data.title : data.titleNep,
+        title: data.title,
         link: data.path,
         disabled: data.disabled,
         iconName: data.iconName,
         className: styles.menuItem,
-
-    })
+        id: data.id ? data.id : null,
+    });
 
     public render() {
         const {
@@ -148,6 +154,7 @@ class Navbar extends React.PureComponent<Props, State> {
             requests: {
                 logoutRequest,
             },
+            setCloseWalkThroughHomepage,
         } = this.props;
 
         const { authenticated, user } = authState;
@@ -163,79 +170,61 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
-                    <Translation>
-                        {
-                            t => (
-                                <ModalButton
-                                    className={styles.reportIncidentButton}
-                                    title={t('Situation Report')}
-                                    iconName="textDocument"
-                                    modal={<SituationReport />}
-                                />
-                            )}
-                    </Translation>
-
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="Situation Report"
+                        id="situation-report"
+                        iconName="textDocument"
+                        modal={<SituationReport />}
+                    />
                     {authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <ModalButton
-                                        className={styles.reliefButton}
-                                        title={t('Relief')}
-                                        iconName="cart"
-                                        modal={<Relief />}
-                                    />
-                                )}
-                        </Translation>
+                        <ModalButton
+                            className={styles.reliefButton}
+                            title="Relief"
+                            iconName="cart"
+                            id="relief"
+                            modal={<Relief />}
+                        />
                     )}
                     {authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <ModalButton
-                                        className={styles.reportIncidentButton}
-                                        title={t('Reported incidents')}
-                                        iconName="list"
-                                        modal={<CitizenReportsModal />}
-                                    />
-                                )}
-                        </Translation>
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="Reported incidents"
+                            id="reported-incidents"
+                            iconName="list"
+                            modal={<CitizenReportsModal />}
+                        />
                     )}
-                    <Translation>
-                        {
-                            t => (
-                                <ModalButton
-                                    className={styles.reportIncidentButton}
-                                    title={t('Report an incident')}
-                                    iconName="telephone"
-                                    modal={<CitizenReportFormModal />}
-                                />
-                            )}
-                    </Translation>
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="Report an incident"
+                        id="report-an-incident"
+                        iconName="telephone"
+                        modal={<CitizenReportFormModal />}
+                    />
                     {!authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <ModalButton
-                                        className={styles.menuItem}
-                                        title={t('Login')}
-                                        iconName="login"
-                                        modal={<NewLoginModal />}
-                                    />
-                                )}
-                        </Translation>
+                        <ModalButton
+                            className={styles.menuItem}
+                            title="Login"
+                            id="login"
+                            iconName="login"
+                            modal={<NewLoginModal />}
+                        />
                     )}
-                    <Translation>
-                        {
-                            t => (
-                                <ModalButton
-                                    className={styles.reportIncidentButton}
-                                    title={t('About Us')}
-                                    iconName="aboutUs"
-                                    modal={<AboutModal />}
-                                />
-                            )}
-                    </Translation>
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="Feedback & Support"
+                        iconName="feedbackIcon"
+                        modal={<FeedbackSupport />}
+                    // onClick={() => navigate('/feedback-support/')}
+                    />
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="About Us"
+                        id="about-us"
+                        iconName="aboutUs"
+                        modal={<AboutModal />}
+                    />
                     {user && (
                         <MenuItemLikeButton
                             className={styles.logoutButton}
@@ -246,19 +235,27 @@ class Navbar extends React.PureComponent<Props, State> {
                         />
                     )}
                     {authenticated && (
-                        <Translation>
-                            {
-                                t => (
-                                    <MenuItemLikeButton
-                                        className={styles.logoutButton}
-                                        title={t('Logout')}
-                                        iconName="logout"
-                                        onClick={logoutRequest.do}
-                                        disabled={logoutRequest.pending}
-                                    />
-                                )}
-                        </Translation>
+                        <MenuItemLikeButton
+                            className={styles.logoutButton}
+                            title="Logout"
+                            iconName="logout"
+                            // id="logout"
+                            onClick={logoutRequest.do}
+                            disabled={logoutRequest.pending}
+                        />
                     )}
+                    <MenuItemLikeButton
+                        className={styles.logoutButton}
+                        title="Home Page"
+                        iconName="aboutUs"
+                        id="logout"
+                        onClick={() => {
+                            Cookies.set('isFirstTimeUser', undefined, { path: '/', domain: '.yilab.org.np', expires: 365 });
+                            setCloseWalkThroughHomepage({ value: false });
+                            navigate('/');
+                        }}
+
+                    />
                 </div>
             </nav>
         );

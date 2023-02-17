@@ -1,0 +1,53 @@
+.mainContainer {
+    // width: calc(100vw - 60px);
+    height: 100%;
+    overflow: scroll;
+    color: black;
+    display: flex;
+    background-color: white;
+    width: 100vw;
+
+
+    .mainBody {
+        flex: 6;
+        overflow: scroll;
+
+        .loader {
+            width: 100% !important;
+            flex-direction: column;
+        }
+
+        .content {
+            margin-top: 100px;
+            margin-left: 100px;
+            margin-right: 400px;
+            margin-bottom: 100px;
+
+            p {
+                text-align: justify;
+                font-weight: 400;
+                color: #0C0C0C;
+                // opacity: 0.67;
+                font-size: 16px;
+
+
+            }
+
+
+
+            li {
+                font-size: 16px;
+                // opacity: 0.67;
+            }
+
+            h1 {
+                font-weight: 500;
+                color: #0C0C0C;
+                opacity: 0.87;
+            }
+        }
+    }
+
+
+
+}

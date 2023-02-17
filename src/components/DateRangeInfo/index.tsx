@@ -32,7 +32,7 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
         } = this.props;
 
         return (
-            <div className={_cs(className, styles.dateDetails)}>
+            <div className={_cs(className, styles.dateDetails, 'date-range-tour')}>
                 <div className={styles.infoIconContainer}>
                     <Icon
                         className={styles.infoIcon}
