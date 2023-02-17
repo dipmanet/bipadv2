@@ -28,8 +28,8 @@ import {
 
 import { AppState } from '#store/types';
 
-import styles from './styles.scss';
 import { Language } from '#store/atom/page/types';
+import styles from './styles.scss';
 
 interface PropsFromState {
     provinceList: ProvinceElement[];

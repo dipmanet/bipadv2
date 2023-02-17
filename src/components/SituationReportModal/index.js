@@ -70,6 +70,7 @@ class SituationReportModal extends React.PureComponent {
                 },
             },
             language: { language },
+            handledisableOutsideDivClick,
         } = this.props;
         const { selectedReport } = this.state;
         const selectedReportDetails = this.getSelectedReportDetails(response, selectedReport);
@@ -88,7 +89,10 @@ class SituationReportModal extends React.PureComponent {
                                     <DangerButton
                                         transparent
                                         iconName="close"
-                                        onClick={closeModal}
+                                        onClick={() => {
+                                            handledisableOutsideDivClick(false);
+                                            closeModal();
+                                        }}
                                         title="Close Modal"
                                     />
                                 )}

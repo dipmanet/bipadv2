@@ -1,4 +1,7 @@
-import React from 'react';
+/* eslint-disable no-unused-expressions */
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+import React, { useEffect, useState } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
@@ -32,9 +35,14 @@ import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
 import FeedbackSupport from '#views/FeedbackSupport';
-import MenuItem from './MenuItem';
-import styles from './styles.scss';
 import Dashboard from '#views/Dashboard';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import ButtonGroupLogo from '#resources/icons/sidebarGroupButtons.svg';
+import PageContext from '#components/PageContext';
+import ReportIncidentIcon from '#resources/icons/reportIncident.svg';
+import styles from './styles.scss';
+import MenuItem from './MenuItem';
+import GroupMenuContainer from './GroupMenuContainer';
 
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
@@ -47,6 +55,82 @@ interface Menu {
     disabled: boolean;
     id: string;
 }
+const GroupMenuListContainer = ({
+    title,
+    className,
+    onClick,
+    iconName,
+    disabled,
+    id,
+    image,
+    handleActiveGroupButton,
+    children,
+    disableOutsideDivClick,
+}: {
+    title: string;
+    className?: string;
+    handleActiveGroupButton: () => void;
+    onClick: () => void;
+    iconName?: string;
+    disabled?: boolean;
+    id: string;
+    image?: boolean;
+    children: JSX.Element;
+}) => {
+    const [showInfo1, setShowInfo1] = useState<boolean>(false);
+    useEffect(() => {
+        handleActiveGroupButton(showInfo1);
+    }, [handleActiveGroupButton, showInfo1]);
+    useEffect(() => {
+        if (!disableOutsideDivClick) {
+            setShowInfo1(false);
+        }
+    }, [disableOutsideDivClick]);
+    return (
+        <div className={styles.container}>
+            <div className={styles.infoBoxWrapper}>
+
+                <div
+                    role="presentation"
+                    className={_cs(styles.menuItemLikeButton, className)}
+                    onClick={() => {
+                        setShowInfo1(true);
+                    }}
+                    title={title}
+                    id={id}
+                >
+                    {image ? (
+                        <ScalableVectorGraphics
+                            className={styles.infoIconMax}
+                            src={iconName}
+                        />
+                    ) : (
+                        <Icon
+                            className={styles.icon}
+                            name={iconName}
+                        />
+                    )}
+
+                    <div className={styles.title}>
+                        {title}
+                    </div>
+                </div>
+
+                <GroupMenuContainer
+                    show={showInfo1}
+                    onClickOutside={() => {
+                        !disableOutsideDivClick ? setShowInfo1(false) : '';
+                    }}
+                >
+                    {children}
+
+                </GroupMenuContainer>
+
+            </div>
+        </div>
+    );
+};
+
 
 const MenuItemLikeButton = ({
     title,
@@ -55,6 +139,8 @@ const MenuItemLikeButton = ({
     iconName,
     disabled,
     id,
+    image,
+    onDisableClick,
 }: {
     title: string;
     className?: string;
@@ -62,6 +148,51 @@ const MenuItemLikeButton = ({
     iconName?: string;
     disabled?: boolean;
     id: string;
+    image?: boolean;
+}) => (
+    <div
+        role="presentation"
+        className={_cs(styles.menuItemLikeButton, className)}
+        onClick={!disabled ? () => {
+            onClick();
+            onDisableClick();
+        } : undefined}
+        title={title}
+        id={id}
+    >
+        {image ? (
+            <ScalableVectorGraphics
+                className={styles.infoIconMax}
+                src={iconName}
+            />
+        ) : (
+            <Icon
+                className={styles.icon}
+                name={iconName}
+            />
+        )}
+
+        <div className={styles.title}>
+            {title}
+        </div>
+    </div>
+);
+const ReportIncidentButton = ({
+    title,
+    className,
+    onClick,
+    iconName,
+    disabled,
+    id,
+    image,
+}: {
+    title: string;
+    className?: string;
+    onClick: () => void;
+    iconName?: string;
+    disabled?: boolean;
+    id: string;
+    image?: boolean;
 }) => (
     <div
         role="presentation"
@@ -70,16 +201,32 @@ const MenuItemLikeButton = ({
         title={title}
         id={id}
     >
-        <Icon
-            className={styles.icon}
-            name={iconName}
-        />
-        <div className={styles.title}>
+        <div className={styles.reportIncidentTitle}>
             {title}
         </div>
+
+        {image ? (
+            <div className={styles.incidentButtonImagePart}>
+                {' '}
+                <ScalableVectorGraphics
+                    className={styles.infoIconMax}
+                    src={iconName}
+                />
+            </div>
+        ) : (
+            <div>
+                {' '}
+                <Icon
+                    className={styles.icon}
+                    name={iconName}
+                />
+            </div>
+        )}
+
+
     </div>
 );
-
+const ReportIncidentModalButton = modalize(ReportIncidentButton);
 const ModalButton = modalize(MenuItemLikeButton);
 
 interface State {
@@ -138,6 +285,14 @@ const menuKeySelector = (d: { name: string }) => d.name;
 const gotoadmin = () => navigate('/admin');
 
 class Navbar extends React.PureComponent<Props, State> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeGroupButton: false,
+            disableOutsideDivClick: false,
+        };
+    }
+
     private menuRendererParams = (_: string, data: Menu) => ({
         title: data.title,
         link: data.path,
@@ -147,6 +302,16 @@ class Navbar extends React.PureComponent<Props, State> {
         id: data.id ? data.id : null,
     });
 
+    private handleActiveGroupButton = (data: boolean) => {
+        this.setState({ activeGroupButton: data });
+    }
+
+    private handledisableOutsideDivClick = (boolean) => {
+        this.setState({
+            disableOutsideDivClick: boolean,
+        });
+    }
+
     public render() {
         const {
             className,
@@ -155,10 +320,14 @@ class Navbar extends React.PureComponent<Props, State> {
                 logoutRequest,
             },
             setCloseWalkThroughHomepage,
+            language: { language },
         } = this.props;
-
+        const { activeRouteDetails } = this.context;
+        const { activeGroupButton, disableOutsideDivClick } = this.state;
         const { authenticated, user } = authState;
-        // <Logo />
+        const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        const GroupMenuListRoutes = ['dataArchive'];
+        const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
 
         return (
             <nav className={_cs(styles.navbar, className)}>
@@ -195,13 +364,143 @@ class Navbar extends React.PureComponent<Props, State> {
                             modal={<CitizenReportsModal />}
                         />
                     )}
-                    <ModalButton
+                    {/* <ModalButton
                         className={styles.reportIncidentButton}
                         title="Report an incident"
                         id="report-an-incident"
                         iconName="telephone"
                         modal={<CitizenReportFormModal />}
-                    />
+                    /> */}
+
+
+                    {activeRouteName === 'incident'
+                        ? (
+                            <Translation>
+                                {
+                                    t => (
+
+                                        <ReportIncidentModalButton
+                                            className={styles.reportIncident}
+                                            title={t('Report an incident')}
+                                            id="report-an-incident"
+                                            iconName={ReportIncidentIcon}
+                                            image
+                                            modal={<CitizenReportFormModal />}
+                                        />
+                                    )}
+                            </Translation>
+                        )
+
+                        : ''}
+                    <GroupMenuListContainer
+                        className={(activeGroupButton || isRoutedListedHere)
+                            ? styles.logoutButtonActive : styles.buttomGroup}
+                        title=""
+                        iconName={ButtonGroupLogo}
+                        image
+                        handleActiveGroupButton={this.handleActiveGroupButton}
+                        disableOutsideDivClick={disableOutsideDivClick}
+                    >
+                        {/* <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.reportIncidentButton}
+                                        title={t('Situation Report')}
+                                        iconName="textDocument"
+                                        modal={(
+                                            <SituationReport
+                                                handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                            />
+                                        )}
+                                        onDisableClick={() => {
+                                            this.setState({ disableOutsideDivClick: true });
+                                        }}
+                                    />
+                                )}
+                        </Translation> */}
+
+                        {/* {authenticated && (
+                            <Translation>
+                                {
+                                    t => (
+                                        <ModalButton
+                                            className={styles.reliefButton}
+                                            title={t('Relief')}
+                                            iconName="cart"
+                                            modal={(
+                                                <Relief
+                                                    handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                                />
+                                            )}
+                                            onDisableClick={() => {
+                                                this.setState({ disableOutsideDivClick: true });
+                                            }}
+                                        />
+                                    )}
+                            </Translation>
+                        )} */}
+
+                        {/* {authenticated && (
+                            <Translation>
+                                {
+                                    t => (
+                                        <ModalButton
+                                            className={styles.reportIncidentButton}
+                                            title={t('Reported incidents')}
+                                            iconName="list"
+                                            modal={(
+                                                <CitizenReportsModal
+                                                    handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                                />
+                                            )}
+                                            onDisableClick={() => {
+                                                this.setState({ disableOutsideDivClick: true });
+                                            }}
+                                        />
+                                    )}
+                            </Translation>
+                        )} */}
+
+
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.reportIncidentButton}
+                                        title="Feedback and support"
+                                        iconName="feedbackIcon"
+                                        modal={(
+                                            <FeedbackSupport
+                                                handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                            />
+                                        )}
+                                        onDisableClick={() => {
+                                            this.setState({ disableOutsideDivClick: true });
+                                        }}
+                                    />
+
+                                )}
+                        </Translation>
+
+
+                        {/* <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="About Us"
+                            iconName="aboutUs"
+                            modal={<AboutModal />}
+                        /> */}
+                        {/* <MenuItemLikeButton
+                            className={activeRouteName === 'dataArchive' ? styles.selectedButtonActive : styles.reportIncidentButton}
+                            title={language === 'en' ? 'Data Archive' : 'डाटा संग्रह'}
+                            iconName="clipboard"
+                            id="logout"
+                            onClick={() => {
+                                navigate('/data-archive/');
+                            }}
+
+                        /> */}
+                    </GroupMenuListContainer>
                     {!authenticated && (
                         <ModalButton
                             className={styles.menuItem}
@@ -256,12 +555,41 @@ class Navbar extends React.PureComponent<Props, State> {
                         }}
 
                     />
+
+                    {
+                        user && (
+                            <Icon
+                                className={styles.userIcon}
+                                title={`${user.username}`}
+                                name="user"
+                            />
+                        )
+                    }
+
+                    {
+                        authenticated && (
+                            <Translation>
+                                {
+                                    t => (
+                                        <MenuItemLikeButton
+                                            className={styles.logoutButton}
+                                            title={t('Logout')}
+                                            iconName="logout"
+                                            onClick={logoutRequest.do}
+                                            disabled={logoutRequest.pending}
+                                        />
+                                    )}
+                            </Translation>
+                        )
+                    }
+
+
                 </div>
             </nav>
         );
     }
 }
-
+Navbar.contextType = PageContext;
 // check for map styles
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(

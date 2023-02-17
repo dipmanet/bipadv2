@@ -22,8 +22,8 @@ import ModalBody from '#rscv/Modal/Body';
 import { KeyValue } from '#types';
 import SummaryItem from '#components/SummaryItem';
 
-import styles from './styles.scss';
 import { filterDataByReturnPeriod } from '#views/RealTimeMonitoring/utils';
+import styles from './styles.scss';
 
 interface OwnProps {
     handleModalClose: () => void;
@@ -125,7 +125,6 @@ class StreamflowDetails extends React.PureComponent<Props> {
 
         const minDate = Math.min(...chartData.map(meanData => meanData.date));
         const maxDate = Math.max(...chartData.map(meanData => meanData.date));
-
         const data = [
             {
                 type: 'scatter', // all "bar" chart attributes: #bar

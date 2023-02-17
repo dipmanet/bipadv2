@@ -15,7 +15,7 @@ button {
 
     .navbar {
         flex-shrink: 0;
-        z-index: 1;
+        z-index: 999;
         box-shadow: -3px 0 5px -3px rgba(0, 0, 0, 0.3);
     }
 
@@ -316,10 +316,13 @@ button {
     }
 
     .mapboxgl-ctrl-bottom-right {
+        z-index: auto;
+
         .mapboxgl-ctrl-attrib {
             // display: none;
             // margin-right: var(--spacing-medium)!important;
             // padding: 0!important;
+
         }
     }
 

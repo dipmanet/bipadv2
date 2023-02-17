@@ -52,10 +52,10 @@ import {
 
 import Loading from '#components/Loading';
 
+import { languageSelector } from '#selectors';
 import ClimateChangeTable from './ClimateChangeTable';
 
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
 
 const DataTableModalButton = modalize(Button);
 

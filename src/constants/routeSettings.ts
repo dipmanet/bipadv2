@@ -34,6 +34,15 @@ export interface FallbackRoute {
 export type SomeRoute = Route | NavbarRoute | FallbackRoute;
 
 const routeSettings: SomeRoute[] = [
+    // {
+    //     name: 'homepage',
+    //     title: 'Homepage',
+    //     path: '/',
+    //     load: () => import('../views/Homepage'),
+    //     navbar: false,
+    //     iconName: 'dashboard',
+    //     id: 'home-page',
+    // },
     {
         name: 'homepage',
         title: 'Homepage',
@@ -240,6 +249,28 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         id: 'navbar-realtime',
     },
+
+    {
+        name: 'profile',
+        title: 'Profile',
+        titleNep: 'प्रोफाइल',
+        path: '/profile/',
+        iconName: 'profile',
+        load: () => import('../views/Profile'),
+        navbar: true,
+        id: 'navbar-profile',
+    },
+    {
+        name: 'riskInfo',
+        title: 'Risk Info',
+        titleNep: 'जोखिम जानकारी',
+        path: '/risk-info/',
+        load: () => import('../views/RiskInfo'),
+        navbar: true,
+        disabled: false,
+        iconName: 'riskInfoSvg',
+        id: 'navbar-riskinfo',
+    },
     {
         name: 'dataArchive',
         title: 'Data Archive',
@@ -315,6 +346,7 @@ const routeSettings: SomeRoute[] = [
     // {
     //     name: 'feedbackAndSupport',
     //     title: 'Feedback & Support',
+    //     titleNep: 'Feedback & Support',
     //     path: '/feedback-support/',
     //     load: () => import('../views/FeedbackSupport'),
     //     navbar: true,
