@@ -36,18 +36,10 @@ export interface FallbackRoute {
 export type SomeRoute = Route | NavbarRoute | FallbackRoute;
 
 const routeSettings: SomeRoute[] = [
-    // {
-    //     name: 'homepage',
-    //     title: 'Homepage',
-    //     path: '/',
-    //     load: () => import('../views/Homepage'),
-    //     navbar: false,
-    //     iconName: 'dashboard',
-    //     id: 'home-page',
-    // },
     {
         name: 'homepage',
         title: 'Homepage',
+        titleNep: 'गृहपृष्‍ठ',
         path: '/',
         load: () => import('../views/Homepage'),
         navbar: false,
@@ -57,93 +49,127 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'dashboard',
         title: 'Dashboard',
+        titleNep: 'ड्यासबोर्ड',
         path: '/dashboard/',
         load: () => import('../views/Dashboard'),
         navbar: true,
         iconName: 'dashboard',
         id: 'navbar-dashboard',
     },
+
     {
         name: 'admin',
         title: 'Admin',
+        titleNep: 'प्रशासक',
         path: '/admin',
         load: () => import('../admin/views/Landing'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'admin',
     },
+
     {
         name: 'admin',
         title: 'Admin',
+        titleNep: 'प्रशासक',
         path: '/admin/admin',
         load: () => import('../admin/views/Admin'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'admin-admin',
     },
+
     {
         name: 'bulletin',
         title: 'Bulletin (Nepali)',
+        titleNep: 'बुलेटिन (नेपाली)',
         path: '/admin/bulletin/add-new-bulletin-nepali',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'bulletin-ne',
     },
+
     {
         name: 'bulletin',
         title: 'Bulletin (English)',
+        titleNep: 'बुलेटिन (अंग्रेजी)',
         path: '/admin/bulletin/add-new-bulletin-english',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'bulletin-en',
     },
+
     {
         name: 'bulletin',
         title: 'Bulletin',
+        titleNep: 'बुलेटिन',
         path: '/admin/bulletin/bulletin-data-table',
         load: () => import('../admin/views/BulletinTable'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'bulletin-table',
     },
+
     {
         name: 'edit bulletin',
         title: 'Edit Bulletin',
+        titleNep: 'बुलेटिन सम्पादन गर्नुहोस्',
         path: '/admin/bulletin/edit-bulletin/:urlLanguage/:id',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'edit-bulletin',
     },
+
 
     {
         name: 'Covid-19',
         title: 'Covid-19 Form',
+        titleNep: 'कोभिड-१९ फारम',
         path: '/admin/covid-19/add-new-covid-19',
         load: () => import('../admin/views/Covid19'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'covid',
     },
+
     {
         name: 'Covid-19-data-table',
         title: 'Covid-19 Data Table',
+        titleNep: 'कोभिड-१९ डाटा तालिका',
         path: '/admin/covid-19/covid-19-data-table',
         load: () => import('../admin/views/Covid19Table'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'covid-table',
     },
+
+
     {
         name: 'Covid-19',
         title: 'Covid-19 Bulk Upload',
+        titleNep: 'कोभिड-१९ बल्क अपलोड',
         path: '/admin/covid-19/covid-19-bulk-upload',
         load: () => import('../admin/views/Covid19BulkUpload'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'covid-bulk-upload',
     },
+
+
     {
         name: 'epidemics',
         title: 'Epidemics Form',
+        titleNep: 'महामारी फारम',
         path: '/admin/epidemics/add-new-epidemics',
         load: () => import('../admin/views/Epidemics'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'epidemics',
     },
+
     {
         name: 'incident',
         title: 'Incident Form',
@@ -152,6 +178,7 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
+
     {
         name: 'incident-upload',
         title: 'Incident Bulk Upload',
@@ -160,63 +187,84 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
+
     {
         name: 'epidemics-data-table',
         title: 'Epidemics Data Table',
+        titleNep: 'महामारी डाटा तालिका',
         path: '/admin/epidemics/epidemics-data-table',
         load: () => import('../admin/views/EpidemicsTable'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'epidemics-table',
     },
+
     {
         name: 'epidemics-upload',
         title: 'Epidemics Bulk Upload',
+        titleNep: 'महामारी बल्क अपलोड',
         path: '/admin/epidemics/epidemics-bulk-upload',
         load: () => import('../admin/views/EpidemicBulkUpload'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'epidemics-upload',
     },
+
     {
         name: 'healthinfrastructure',
         title: 'Health Infrastructure Form',
+        titleNep: 'स्वास्थ्य पूर्वाधार फारम',
         path: '/admin/health-infrastructure/add-new-health-infrastructure',
         load: () => import('../admin/views/HealthDataStr'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'health-infra',
     },
+
     {
         name: 'healthinfrastructure-data-table',
         title: 'Health Infrastructure Data Table',
+        titleNep: 'स्वास्थ्य पूर्वाधार डाटा तालिका',
         path: '/admin/health-infrastructure/health-infrastructure-data-table',
         load: () => import('../admin/views/HealthDataTable'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'health-infra-table',
     },
+
     {
         name: 'healthinfrastructure-upload',
         title: 'Health Infrastructure Bulk Upload',
+        titleNep: 'स्वास्थ्य पूर्वाधार बल्क अपलोड',
         path: '/admin/health-infrastructure/health-infrastructure-bulk-upload',
         load: () => import('../admin/views/HealthBulkUpload'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'health-bulk-upload',
     },
+
     {
         name: 'overview',
         title: 'Overview',
+        titleNep: 'सिंहावलोकन',
         path: '/admin/overview',
         load: () => import('../admin/views/Overview'),
         navbar: false,
         disableIfNoAuth: true,
+        id: 'overview',
     },
+
     {
         name: 'incident',
         title: 'Incident',
+        titleNep: 'घटना',
         path: '/incidents/',
         load: () => import('../views/Incidents'),
         navbar: true,
         iconName: 'incidents',
         id: 'navbar-incident',
     },
+
     {
         name: 'incident-data-table',
         title: 'Incident Data Table',
@@ -225,32 +273,39 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
+
     {
         name: 'response',
         title: 'Incident Response',
+        titleNep: 'घटना रिपोर्ट',
         path: '/incidents/:incidentId/response/',
         load: () => import('../views/Response'),
         navbar: false,
         id: 'navbar-response',
     },
+
     {
         name: 'lossAndDamage',
         title: 'Damage & Loss',
+        titleNep: 'क्षति र नोक्सान',
         path: '/damage-and-loss/',
         load: () => import('../views/LossAndDamage'),
         navbar: true,
         iconName: 'lossAndDamange',
         id: 'navbar-lossDamage',
     },
+
     {
         name: 'realtime',
         title: 'Realtime',
+        titleNep: 'वास्तविक समय',
         path: '/realtime/',
         iconName: 'realtime',
         load: () => import('../views/RealTimeMonitoring'),
         navbar: true,
         id: 'navbar-realtime',
     },
+
 
     {
         name: 'profile',
@@ -262,6 +317,7 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         id: 'navbar-profile',
     },
+
     {
         name: 'riskInfo',
         title: 'Risk Info',
@@ -273,14 +329,17 @@ const routeSettings: SomeRoute[] = [
         iconName: 'riskInfoSvg',
         id: 'navbar-riskinfo',
     },
+
     {
         name: 'dataArchive',
         title: 'Data Archive',
+        titleNep: 'डाटा संग्रह',
         path: '/data-archive/',
         iconName: 'clipboard',
         load: () => import('../views/DataArchive'),
         navbar: true,
     },
+
     {
         name: 'about',
         title: 'About',
@@ -290,6 +349,7 @@ const routeSettings: SomeRoute[] = [
         disabled: false,
         iconName: 'eye',
     },
+
     {
         name: 'developers',
         title: 'Developers',
@@ -299,6 +359,7 @@ const routeSettings: SomeRoute[] = [
         disabled: false,
         iconName: 'eye',
     },
+
     // {
     //     name: 'technicalsupport',
     //     title: 'Technical Support',
@@ -326,6 +387,7 @@ const routeSettings: SomeRoute[] = [
         disabled: false,
         iconName: 'eye',
     },
+
     // {
     //     name: 'feedbackAndSupport',
     //     title: 'Feedback & Support',
@@ -338,12 +400,15 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'DRRM Report',
         title: 'DRRM Report',
+        titleNep: 'डिआरआरएम रिपोर्ट',
         path: '/drrm-report/',
         load: () => import('../views/PalikaReport'),
-        navbar: true,
+        navbar: false,
         disabled: false,
         iconName: 'textDocument',
+        id: 'drrm',
     },
+
     // {
     //     name: 'subMenu',
     //     title: 'palikaReport subMenu',

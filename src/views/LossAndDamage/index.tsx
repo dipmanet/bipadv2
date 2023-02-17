@@ -149,18 +149,12 @@ const transformFilters = ({
     region,
     ...otherFilters
 }) => ({
-    expand: ['loss.peoples', 'wards'],
-    limit: -1,
-    incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
-    incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-    ordering: '-incident_on',
-    data_source: 'drr_api',
-    // lnd: true,
     ...otherFilters,
     // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
+
 
 const requestOptions: { [key: string] } = {
     incidentsGetRequest: {

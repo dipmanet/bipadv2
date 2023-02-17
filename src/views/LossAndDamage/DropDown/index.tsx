@@ -23,7 +23,7 @@ import { DropDownOption, DropDownProps } from './types';
 
 const Icons = [
     { id: 1, name: 'Incidents', icon: '' },
-    { id: 2, name: 'Human death', icon: HumanDeath },
+    { id: 2, name: 'People death', icon: HumanDeath },
     { id: 3, name: 'Estimated loss (NPR)', icon: EstimatedLoss },
     { id: 4, name: 'Infrastructure destroyed', icon: InfrastructureDestroyed },
     { id: 5, name: 'Livestock destroyed', icon: LiveStockDestroyed },
@@ -105,7 +105,8 @@ const Dropdown = (props: DropDownProps) => {
         setShowOption(true);
         setDropdownValues(filteredDropdown);
     };
-
+    console.log('icon', icon);
+    console.log('Icon', Icons, selectName);
     return (
         <>
             <div
@@ -216,27 +217,27 @@ const Dropdown = (props: DropDownProps) => {
                                     >
                                         {
                                             icon
-                                        && (
-                                            index === 0
-                                                ? (
-                                                    <Icon
-                                                        className={styles.icon}
-                                                        name="warning"
-                                                    />
-                                                )
-                                                : (
-                                                    <span
-                                                        style={{ padding: '6px 12px' }}
-                                                    >
-                                                        <img
-                                                            style={{ width: '20px', height: '20px' }}
-                                                            src={Icons[index].icon}
-                                                            alt={Icons[index].name}
+                                            && (
+                                                index === 0
+                                                    ? (
+                                                        <Icon
+                                                            className={styles.icon}
+                                                            name="warning"
                                                         />
-                                                    </span>
+                                                    )
+                                                    : (
+                                                        <span
+                                                            style={{ padding: '6px 12px' }}
+                                                        >
+                                                            <img
+                                                                style={{ width: '20px', height: '20px' }}
+                                                                src={Icons[index].icon}
+                                                                alt={Icons[index].name}
+                                                            />
+                                                        </span>
 
-                                                )
-                                        )
+                                                    )
+                                            )
                                         }
                                         <p className={styles.optionName}>{item.label}</p>
                                     </div>
