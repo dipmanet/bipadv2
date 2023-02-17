@@ -1783,13 +1783,39 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     };
 
+
+    private hideLanguageToggleButton = (routeName) => {
+        if (routeName === 'admin') {
+            return true;
+        } if (routeName === 'healthinfrastructure-data-table') {
+            return true;
+        }
+        if (routeName === 'healthinfrastructure') {
+            return true;
+        } if (routeName === 'healthinfrastructure-upload') {
+            return true;
+        }
+        if (routeName === 'bulletin') {
+            return true;
+        } if (routeName === 'incident-data-table') {
+            return true;
+        }
+        if (routeName === 'incident') {
+            return true;
+        } if (routeName === 'incident-upload') {
+            return true;
+        }
+        if (routeName === 'DRRM Report') {
+            return true;
+        }
+        return false;
+    }
+
+
     private hiddenNavRouteName = (routeName) => {
         if (routeName === 'homepage') {
             return true;
         } if (routeName === 'gpdrr') {
-            return true;
-        }
-        if (routeName === 'DRRM Report') {
             return true;
         }
         if (routeName === 'about') {
@@ -1991,7 +2017,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-
+        console.log('active route name', activeRouteName);
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>
@@ -2189,7 +2215,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     {rightContent}
                                                 </div>
                                             )}
-                                            {!this.hiddenNavRouteName(activeRouteName) && <LanguageToggle />}
+                                            {!this.hideLanguageToggleButton(activeRouteName)
+                                                && !this.hiddenNavRouteName(activeRouteName) && <LanguageToggle />}
                                             {!hideFilter && (
                                                 <Filters
                                                     className={styles.filters}
