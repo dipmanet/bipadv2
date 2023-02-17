@@ -47,9 +47,6 @@ export default class Page extends React.PureComponent<Props, State> {
             showDataRangeFilter,
             hideDataRangeFilter,
         } = this.context;
-
-
-
         this.transferContents(this.props, this.context);
         this.syncMapVisibility(shouldHideMap, hideMap, showMap);
         this.syncFilterVisibility(
