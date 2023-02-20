@@ -94,21 +94,21 @@ const SupportOne = (props) => {
         fullName: true,
         designation: true,
         nameOfInstitution: true,
-        email: true
+        email: true,
       });
       setError({
         ...error,
         fullNameError: '',
         designationError: '',
         nameOfTheInstitutionError: '',
-        emailError: ''
+        emailError: '',
       });
       setData({
         ...data,
         fullName: '',
         designation: '',
         nameOfTheInstitution: '',
-        email: ''
+        email: '',
       });
     }
     if (!data.isAnonymous) {
@@ -117,7 +117,7 @@ const SupportOne = (props) => {
         fullName: false,
         designation: false,
         nameOfInstitution: false,
-        email: false
+        email: false,
       });
     }
   }, [data.isAnonymous]);
