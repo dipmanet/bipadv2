@@ -1,5 +1,5 @@
-import Spinner from '#rscv/Spinner';
 import React from 'react';
+import Spinner from '#rscv/Spinner';
 import styles from './styles.scss';
 
 interface LegendProp {
@@ -10,7 +10,7 @@ interface LegendProp {
         range: [number, number];
 
     }[];
-    mapState: {id: number; value: number}[];
+    mapState: { id: number; value: number }[];
     pending: boolean;
 }
 
