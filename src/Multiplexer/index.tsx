@@ -21,6 +21,8 @@ import mapboxgl from 'mapbox-gl';
 import Joyride, { CallBackProps, STATUS } from 'react-joyride';
 import Cookies from 'js-cookie';
 
+import i18n from 'i18next';
+import { initReactI18next, Translation } from 'react-i18next';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
@@ -87,8 +89,6 @@ import {
 } from '#request';
 import ZoomToolBar from '#components/ZoomToolBar';
 import LanguageToggle from '#components/LanguageToggle';
-import i18n from 'i18next';
-import { initReactI18next, Translation } from 'react-i18next';
 import { enTranslation, npTranslation } from '#constants/translations';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
