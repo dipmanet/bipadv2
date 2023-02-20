@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './styles.scss';
+import { Translation } from 'react-i18next';
 import { nullCheck } from '#utils/common';
+import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
 import { Data } from '../types';
 
@@ -10,20 +11,32 @@ interface DataCountProps {
         name: string;
         key: string;
     };
+    language?: string;
 }
 
 const DataCount = (props: DataCountProps) => {
-    const { data, value } = props;
+    const { data, value, language } = props;
     const { name, key } = value;
     const nullCondition = false;
     const dataValue = nullCheck(nullCondition, data, key);
     return (
         <div className={styles.wrapper}>
-            <p className={styles.alertText}>
+            <Translation>
                 {
-                    `Total number of ${name}`
+                    t => (
+                        <p className={styles.alertText}>
+                            {
+                            }
+                            { language === 'en'
+                                ? `Total number of ${name}`
+                                : `${t(name)}को कुल संख्या`
+
+                            }
+                        </p>
+                    )
                 }
-            </p>
+            </Translation>
+
             {
                 data.length > 0
                 && (

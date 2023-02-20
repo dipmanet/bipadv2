@@ -1,5 +1,10 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Spinner from '#rscv/Spinner';
+import {
+    languageSelector,
+} from '#selectors';
 import styles from './styles.scss';
 
 interface LegendProp {
@@ -58,8 +63,12 @@ export const legendItems = [
 
 ];
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 const Legend = (props: LegendProp) => {
-    const { currentSelection, legend, pending, mapState } = props;
+    const { currentSelection, legend, pending, mapState, language: { language } } = props;
 
     const rangeExist = (min: number, max: number) => {
         const value = mapState.length > 0 && mapState.filter(i => i.value >= min && i.value <= max);
@@ -68,7 +77,20 @@ const Legend = (props: LegendProp) => {
 
     return (
         <div className={styles.container}>
-            <p className={styles.currentSelection}>{`No. of ${currentSelection}`}</p>
+            <Translation>
+                {
+                    t => (
+                        <p className={styles.currentSelection}>
+                            { language === 'en'
+                                ? `No. of ${currentSelection}`
+                                : `${t(currentSelection)}को संख्या`
+                            }
+
+                        </p>
+                    )
+                }
+            </Translation>
+
             <div className={styles.wrapper}>
                 {
                     !pending
@@ -107,4 +129,5 @@ const Legend = (props: LegendProp) => {
     );
 };
 
-export default Legend;
+
+export default connect(mapStateToProps)(Legend);

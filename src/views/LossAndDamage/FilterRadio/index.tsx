@@ -16,10 +16,11 @@ interface FilterRadioProps {
         adminLevel: number;
         geoarea: number;
     };
+    language?: string;
 }
 
 const FilterRadio = (props: FilterRadioProps) => {
-    const { regionRadio, setRegionRadio, regionFilter } = props;
+    const { regionRadio, setRegionRadio, regionFilter, language } = props;
 
     useEffect(() => {
         if (Object.keys(regionFilter).length > 1) {
@@ -39,10 +40,10 @@ const FilterRadio = (props: FilterRadioProps) => {
     }, [regionFilter]);
 
     const filter = [
-        { id: 1, name: 'province' },
-        { id: 2, name: 'district' },
-        { id: 3, name: 'municipality' },
-        { id: 4, name: 'ward' },
+        { id: 1, name: 'province', nameNe: 'प्रदेश' },
+        { id: 2, name: 'district', nameNe: 'जिल्‍ला' },
+        { id: 3, name: 'municipality', nameNe: 'नगरपालिका' },
+        { id: 4, name: 'ward', nameNe: 'वार्ड' },
     ];
     return (
         <div className={styles.container}>
@@ -56,7 +57,7 @@ const FilterRadio = (props: FilterRadioProps) => {
                         checked={regionRadio.name === item.name}
                     />
                     <label className={item.id === 4 ? styles.visibilty : styles.radioItems}>
-                        {item.name}
+                        {language === 'en' ? item.name : item.nameNe}
                     </label>
                 </div>
             ))}

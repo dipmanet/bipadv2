@@ -11,6 +11,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 import HumanDeath from '#resources/icons/damage-and-loss/Human death.svg';
 import EstimatedLoss from '#resources/icons/damage-and-loss/Estimated loss.svg';
@@ -116,12 +117,19 @@ const Dropdown = (props: DropDownProps) => {
             >
                 {label
                     && (
-                        <p
-                            className={styles.labelText}
-                            style={!icon ? { width: '98%' } : {}}
-                        >
-                            {label}
-                        </p>
+
+                        <Translation>
+                            {
+                                t => (
+                                    <p
+                                        className={styles.labelText}
+                                        style={!icon ? { width: '98%' } : {}}
+                                    >
+                                        {t(label)}
+                                    </p>
+                                )
+                            }
+                        </Translation>
                     )
                 }
                 <div
@@ -157,14 +165,21 @@ const Dropdown = (props: DropDownProps) => {
                         <div
                             className={styles.selectField}
                         >
-                            <p
-                                className={styles.selectItem}
-                            >
+                            <Translation>
                                 {
-                                    dropDownPlaceHolder || selectName
-                                }
+                                    t => (
+                                        <p
+                                            className={styles.selectItem}
+                                        >
+                                            {
+                                                t(dropDownPlaceHolder) || t(selectName)
+                                            }
 
-                            </p>
+                                        </p>
+                                    )
+                                }
+                            </Translation>
+
 
                             {
                                 deleteicon
@@ -238,7 +253,19 @@ const Dropdown = (props: DropDownProps) => {
                                                     )
                                             )
                                         }
-                                        <p className={styles.optionName}>{item.label}</p>
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <p className={styles.optionName}>
+                                                        {
+                                                            t(item.label)
+                                                        }
+
+                                                    </p>
+                                                )
+                                            }
+                                        </Translation>
+
                                     </div>
                                 ))}
                             </div>

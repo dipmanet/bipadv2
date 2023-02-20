@@ -10,6 +10,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts';
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown } from '../utils/utils';
@@ -63,12 +64,19 @@ const AreaChartVisual = (props: AreaChartProps) => {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <span className={styles.label}>
+                    <Translation>
                         {
-                            `${payload[0].name}: ${payload[0].value}`
+                            t => (
+                                <span className={styles.label}>
+                                    {
+                                        `${t(payload[0].name)}: ${payload[0].value}`
+                                    }
+                                </span>
+                            )
                         }
+                    </Translation>
 
-                    </span>
+
                 </div>
             );
         }

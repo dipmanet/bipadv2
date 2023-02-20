@@ -5,6 +5,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
@@ -26,7 +27,7 @@ const BarChartVisual = (props: BarchartProps) => {
         valueOnclick,
         className,
         downloadButton,
-        fullScreenMode } = props;
+        fullScreenMode, language } = props;
 
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
         setFullScreen({ width, height });
@@ -50,27 +51,30 @@ const BarChartVisual = (props: BarchartProps) => {
         document.addEventListener('webkitfullscreenchange', exitHandler, false);
     }
 
-
     const provinceIndex = data.map(i => ({
         name: i.provinceTitle,
+        nameNe: i.provinceTitleNe,
         id: i.province,
     })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
         .sort((a, b) => a.id - b.id);
 
     const districtIndex = data.map(i => ({
         name: i.districtTitle,
+        nameNe: i.districtTitleNe,
         id: i.district,
     })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
         .sort((a, b) => a.id - b.id);
 
     const municipalityIndex = data.map(i => ({
         name: i.municipalityTitle,
+        nameNe: i.municipalityTitleNe,
         id: i.municipality,
     })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
         .sort((a, b) => a.id - b.id);
 
     const wardIndex = data.map(i => ({
         name: i.wardTitle,
+        nameNe: i.wardTitleNe,
         id: i.ward,
     })).filter((element, index, array) => array.findIndex(newEl => (newEl.id === element.id)) === index)
         .sort((a, b) => a.id - b.id);
@@ -92,7 +96,7 @@ const BarChartVisual = (props: BarchartProps) => {
             for (let j = 0; j < key.length; j++) {
                 regionWiseData.push({ [key[j]]: nullCheck(false, filteredData[i], key[j]) });
             }
-            regiondata.push({ [typeKey[i].name]: regionWiseData });
+            regiondata.push({ [language === 'en' ? typeKey[i].name : typeKey[i].nameNe]: regionWiseData });
         }
 
         const finalRegionData = regiondata.map((item) => {
@@ -143,7 +147,7 @@ const BarChartVisual = (props: BarchartProps) => {
                     break;
             }
         }
-    }, [regionRadio, valueOnclick, data, isAllBarData]);
+    }, [regionRadio, valueOnclick, data, isAllBarData, language]);
 
     function nameReturn(region: RadioValue) {
         if (region.name === 'district' || region.name === 'municipality' || region.name === 'ward') return `${regionRadio.name}-wise distribution (Top 10)`;
@@ -159,9 +163,25 @@ const BarChartVisual = (props: BarchartProps) => {
                 <div className={styles.customTooltip}>
                     {
                         isAllBarData
-                    && <span className={styles.label}>{`${regionRadio.name}: ${payload[0].payload.name}`}</span>
+                    && (
+                        <Translation>
+                            {
+                                t => (
+                                    <span className={styles.label}>{`${t(regionRadio.name)}: ${payload[0].payload.name}`}</span>
+
+                                )
+                            }
+                        </Translation>
+                    )
                     }
-                    <span className={styles.label}>{`${selectOption.name}: ${payload[0].payload.value}`}</span>
+                    <Translation>
+                        {
+                            t => (
+                                <span className={styles.label}>{`${t(selectOption.name)}: ${payload[0].payload.value}`}</span>
+
+                            )
+                        }
+                    </Translation>
                 </div>
             );
         }

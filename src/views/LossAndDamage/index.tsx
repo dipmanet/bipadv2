@@ -481,7 +481,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             <>
                 <Loading
                     pending={pending}
-                    text="Please wait, the system is loading data"
+                    text={language === 'en'
+                        ? 'Please wait, the system is loading data'
+                        : 'कृपया पर्खनुहोस्, प्रणाली डेटा लोड गर्दैछ'}
                 />
                 <Page
                     leftContentContainerClassName={styles.left}
@@ -603,6 +605,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         data={filteredData}
                                         valueOnclick={valueOnclick}
                                         regionFilter={regionFilter}
+                                        language={language}
                                     />
                                 </div>
                                 <ModalButton
@@ -650,6 +653,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 <DataCount
                                     data={filteredData}
                                     value={selectOption}
+                                    language={language}
                                 />
                                 {
                                     filteredData.length > 0
@@ -664,6 +668,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
                                                     fullScreenMode
+                                                    language={language}
+
                                                 />
                                                 <AreaChartVisual
                                                     selectOption={selectOption}
@@ -671,6 +677,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
                                                     fullScreenMode
+                                                    language={language}
+
                                                 />
                                                 <HazardWise
                                                     selectOption={selectOption}
@@ -678,12 +686,18 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     handleSaveClick={this.handleSaveClick}
                                                     downloadButton
                                                     fullScreenMode
+                                                    language={language}
+
                                                 />
                                             </div>
                                         )
                                         : (
                                             <div className={styles.dataUnavailable}>
-                                                <h3 className={styles.headerText}>Please wait, the system is loading data</h3>
+                                                <h3 className={styles.headerText}>
+                                                    {language === 'en'
+                                                        ? 'Please wait, the system is loading data'
+                                                        : 'कृपया पर्खनुहोस्, प्रणाली डेटा लोड गर्दैछ'}
+                                                </h3>
                                                 <Spinner
                                                     className={styles.spinner}
                                                 />

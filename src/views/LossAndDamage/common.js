@@ -92,9 +92,13 @@ const getRegionInfoFromWard = (wardId, regions) => {
         province: provinceId,
 
         wardTitle: ward.title,
+        wardTitleNe: ward.title_ne,
         municipalityTitle: municipality.title,
+        municipalityTitleNe: municipality.title_ne,
         districtTitle: district.title,
+        districtTitleNe: district.title_ne,
         provinceTitle: province.title,
+        provinceTitleNe: province.title_ne,
     };
 };
 
