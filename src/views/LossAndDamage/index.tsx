@@ -497,9 +497,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             name="info"
                                         />
                                     </div>
-                                    <div className={styles.label}>
+                                    {language === 'en'
+                                    && (
+                                        <div className={styles.label}>
                                         Showing Data From
-                                    </div>
+                                        </div>
+                                    )
+                                    }
                                     <DateInput
                                         showLabel={false}
                                         showHintAndError={false}
@@ -527,7 +531,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     {language === 'np'
                                         && (
                                             <span>
-                                                सम्‍म
+                                                सम्‍म को डेटा
                                                 {' '}
                                                 {''}
                                             </span>
@@ -620,6 +624,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             selectOption={selectOption}
                                             valueOnclick={valueOnclick}
                                             currentSelection={selectOption}
+                                            language={language}
+                                            regionRadio={regionRadio}
                                         />
                                     )}
                                 >
@@ -631,13 +637,14 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 </ModalButton>
                                 <ModalButton
                                     disabled={pending}
-                                    title="View Tabular Data"
+                                    title={language === 'en' ? 'View Tabular Data' : 'टेबुलर डाटा हेर्नुहोस्'}
                                     className={styles.showTableButton}
                                     iconName="table"
                                     transparent
                                     modal={(
                                         <DataTable
                                             incidentList={filteredData}
+                                            language={language}
                                         />
                                     )}
                                 />

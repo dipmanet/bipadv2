@@ -10,24 +10,20 @@ import {
     regionLevelSelector,
     hazardTypesSelector,
     regionsSelector,
+    languageSelector,
 } from '#selectors';
 
 import Map from '../Map';
 // import LeftPane from './LeftPane';
 
-import {
-    metricMap,
-    getSanitizedIncidents,
-} from '../common';
+import { metricMap, getSanitizedIncidents } from '../common';
 import { generateOverallDataset } from '../utils/utils';
 
 import styles from './styles.scss';
 
-const propTypes = {
-};
+const propTypes = {};
 
-const defaultProps = {
-};
+const defaultProps = {};
 
 const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
@@ -37,6 +33,7 @@ const mapStateToProps = (state, props) => ({
     regionLevel: regionLevelSelector(state, props),
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
+    language: languageSelector(state),
 });
 
 class Overview extends React.PureComponent {
@@ -66,40 +63,34 @@ class Overview extends React.PureComponent {
             currentSelection,
             radioSelect,
             pending,
+            language: { language },
         } = this.props;
         // const {
         //     selectedMetricKey = 'count',
         // } = this.state;
 
+        const sanitizedList = getSanitizedIncidents(lossAndDamageList, regions, hazardTypes);
 
-        const sanitizedList = getSanitizedIncidents(
-            lossAndDamageList,
-            regions,
-            hazardTypes,
-        );
-
-        const {
-            mapping,
-            aggregatedStat,
-        } = generateOverallDataset(sanitizedList, radioSelect.id);
+        const { mapping, aggregatedStat } = generateOverallDataset(sanitizedList, radioSelect.id);
 
         const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
-        const geoareas = (
-            (radioSelect.id === 4 && wards)
-            || (radioSelect.id === 3 && municipalities)
-            || (radioSelect.id === 2 && districts)
-            || (radioSelect.id === 1 && provinces)
-        );
+        const geoareas =
+            (radioSelect.id === 4 && wards) ||
+            (radioSelect.id === 3 && municipalities) ||
+            (radioSelect.id === 2 && districts) ||
+            (radioSelect.id === 1 && provinces);
 
         const { setDamageAndLoss } = this.context;
 
         if (setDamageAndLoss) {
             setDamageAndLoss((prevState) => {
-                if (prevState.mainModule !== selectedMetric.label
-                    || prevState.startDate !== startDate
-                    || prevState.endDate !== endDate) {
+                if (
+                    prevState.mainModule !== selectedMetric.label ||
+                    prevState.startDate !== startDate ||
+                    prevState.endDate !== endDate
+                ) {
                     return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
                 }
                 return prevState;
@@ -111,14 +102,14 @@ class Overview extends React.PureComponent {
                 mapping={mapping}
                 maxValue={maxValue}
                 sourceKey="loss-and-damage-overview"
-
                 metric={selectedMetric.metricFn}
                 metricName={selectedMetric.label}
                 metricKey={selectedMetric.key}
                 radioSelect={radioSelect.id}
                 currentSelection={currentSelection.name}
                 pending={pending}
-                    // onMetricChange={(m) => {
+                language={language}
+                // onMetricChange={(m) => {
                 //     this.setState({ selectedMetricKey: m });
                 // }}
             />

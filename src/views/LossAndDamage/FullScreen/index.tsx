@@ -10,9 +10,14 @@ interface Props {
     headerText: string;
 }
 
-const FullScreenIcon = ({ domElement,
+const FullScreenIcon = ({
+    domElement,
     setFullScreenHeightWidth,
-    setBarAllDataOnFullScreen, selectOption, headerText }: Props) => {
+    setBarAllDataOnFullScreen,
+    selectOption,
+    headerText,
+    language,
+}: Props) => {
     function openFullscreen() {
         if (setBarAllDataOnFullScreen) setBarAllDataOnFullScreen(true);
         const element = document.getElementById(domElement);
@@ -29,26 +34,22 @@ const FullScreenIcon = ({ domElement,
         element.appendChild(tag);
         if (element.requestFullscreen) {
             element.requestFullscreen();
-        } else if (element.webkitRequestFullscreen) { /* Safari */
+        } else if (element.webkitRequestFullscreen) {
+            /* Safari */
             element.webkitRequestFullscreen();
-        } else if (element.msRequestFullscreen) { /* IE11 */
+        } else if (element.msRequestFullscreen) {
+            /* IE11 */
             element.msRequestFullscreen();
         }
         setFullScreenHeightWidth('75%', '75%');
     }
     return (
         <>
-            <Icon
-                className={styles.fullScreen}
-                name="fullScreen"
-                id="fullScreen"
-                onClick={openFullscreen}
-            />
+            <Icon className={styles.fullScreen} name="fullScreen" id="fullScreen" onClick={openFullscreen} />
             <span className={styles.toolTipItem}>
-                View in fullScreen
+                {language === 'en' ? 'View in fullScreen' : 'फुलस्क्रिनमा हेर्नुहोस्'}
             </span>
         </>
-
     );
 };
 

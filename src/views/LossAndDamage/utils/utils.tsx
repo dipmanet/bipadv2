@@ -1,6 +1,8 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
 import {
     getGroupMethod,
@@ -20,7 +22,7 @@ export const estimatedLossValueFormatter = (d) => {
     return number;
 };
 
-export const tooltipRenderer = (props, currentSelection, radioSelect) => {
+export const tooltipRenderer = (props, currentSelection, radioSelect, language) => {
     const { feature } = props;
     return (
         <>
@@ -33,19 +35,35 @@ export const tooltipRenderer = (props, currentSelection, radioSelect) => {
             }}
             >
                 {radioSelect === 4
-                    ? `Ward No : ${feature.properties.title}`
-                    : feature.properties.title}
+                    ? language === 'en'
+                        ? `Ward No : ${feature.properties.title}`
+                        : `वार्ड नं : ${feature.properties.title}`
+                    : language === 'np'
+                        ? feature.properties.title_ne
+                        : feature.properties.title
+                }
 
             </h3>
-            <p style={{
-                margin: 0,
-                padding: '0 20px 10px 20px',
-                fontSize: '12px',
-                textAlign: 'center',
-            }}
-            >
-                {`No of ${currentSelection}: ${estimatedLossValueFormatter(feature.state.value)}`}
-            </p>
+            <Translation>
+                {
+                    t => (
+                        <p style={{
+                            margin: 0,
+                            padding: '0 20px 10px 20px',
+                            fontSize: '12px',
+                            textAlign: 'center',
+                        }}
+                        >
+                            {
+                                language === 'en'
+                                    ? `No of ${t(currentSelection)}: ${estimatedLossValueFormatter(feature.state.value)}`
+                                    : `${t(currentSelection)}: ${estimatedLossValueFormatter(feature.state.value)}`
+                            }
+                        </p>
+
+                    )
+                }
+            </Translation>
 
         </>
     );

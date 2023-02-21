@@ -11,6 +11,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
 import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 import HumanDeath from '#resources/icons/damage-and-loss/Human death.svg';
@@ -21,6 +22,7 @@ import LiveStockDestroyed from '#resources/icons/damage-and-loss/Livestock destr
 import MissingPerson from '#resources/icons/damage-and-loss/Missing person.svg';
 import styles from './styles.scss';
 import { DropDownOption, DropDownProps } from './types';
+import { languageSelector } from '#selectors';
 
 const Icons = [
     { id: 1, name: 'Incidents', icon: '' },
@@ -31,6 +33,11 @@ const Icons = [
     { id: 6, name: 'Injured people', icon: InjuredPerson },
     { id: 7, name: 'Missing people', icon: MissingPerson },
 ];
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 
 const Dropdown = (props: DropDownProps) => {
@@ -47,7 +54,8 @@ const Dropdown = (props: DropDownProps) => {
         elementName,
         deleteicon,
         clearValues,
-        inputSearch } = props;
+        inputSearch,
+        language: { language } } = props;
 
 
     const [selectName, setSelectName] = useState(dropdownOption[0].label);
@@ -218,7 +226,7 @@ const Dropdown = (props: DropDownProps) => {
                                         onChange={searchHandler}
                                         id="search"
                                         className={styles.searchBox}
-                                        placeholder="Enter a location"
+                                        placeholder={language === 'en' ? 'Enter a location' : 'स्थान प्रविष्ट गर्नुहोस्'}
                                     />
                                 )
                             }
@@ -278,4 +286,4 @@ const Dropdown = (props: DropDownProps) => {
     );
 };
 
-export default Dropdown;
+export default connect(mapStateToProps)(Dropdown);

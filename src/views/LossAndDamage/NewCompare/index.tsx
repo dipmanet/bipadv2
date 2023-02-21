@@ -14,6 +14,7 @@ import Faram, {
 } from '@togglecorp/faram';
 import * as HtmltoImage from 'html-to-image';
 
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import Modal from '#rscv/Modal';
 
@@ -178,14 +179,16 @@ class NewCompare extends React.PureComponent {
         this.setState({ faramErrors });
     }
 
-    messageForNoData = (noData) => {
-        const noOptionSelected = 'No comparison is made';
+    messageForNoData = (noData, language) => {
+        const noOptionSelected = language === 'en' ? 'No comparison is made' : 'तुलना भइरहेको छैन';
         return (
             <div className={styles.preComparisionMessage}>
                 <h3 className={styles.headerText}>{noData ? '' : noOptionSelected}</h3>
                 <p className={styles.textOption}>
                     {
-                        `Select ${noData ? 'a region' : 'different sections'} to compare`
+                       language === 'en' ? `Select ${noData ? 'a region' : 'different sections'} to compare`
+                       : `तुलना गर्न  ${noData ? 'क्षेत्र' : 'विभिन्न खण्डहरू'} चयन गर्नुहोस्`
+
                     }
                 </p>
             </div>
@@ -211,6 +214,8 @@ class NewCompare extends React.PureComponent {
             setSelectOption,
             setVAlueOnClick,
             currentSelection,
+            language,
+            regionRadio,
         } = this.props;
 
         const {
@@ -232,7 +237,7 @@ class NewCompare extends React.PureComponent {
             .map(region => ({
                 adminLevel: region.adminLevel,
                 geoarea: region.id,
-                label: region.title,
+                label: language === 'en' ? region.title : region.title_ne,
             }));
 
         const dropDownClickHandler = (item, index, elementName) => {
@@ -300,10 +305,10 @@ class NewCompare extends React.PureComponent {
             >
                 <div className={styles.regionHead}>
                     <h1 className={styles.compareText}>
-                        COMPARE
+                        {language === 'en' ? 'COMPARE' : 'तुलना गर्नुहोस्'}
                     </h1>
                     <Button
-                        title="Download Chart"
+                        title={language === 'en' ? 'Download Chart' : 'चार्ट डाउनलोड गर्नुहोस्'}
                         className={styles.chartDownload}
                         transparent
                         disabled={!region1 && !region2}
@@ -322,9 +327,9 @@ class NewCompare extends React.PureComponent {
                     >
                         <Dropdown
                             elementName="region1"
-                            label="Enter a Location to compare"
+                            label={language === 'en' ? 'Enter a Location to compare' : 'तुलना गर्न स्थान प्रविष्ट गर्नुहोस्'}
                             className={styles.regionInput}
-                            placeholder="Select an Option"
+                            placeholder={language === 'en' ? 'Select an Option' : 'विकल्प चयन गर्नुहोस्'}
                             dropdownOption={RegionOptions}
                             icon={false}
                             dropDownClickHandler={dropDownClickHandler}
@@ -334,9 +339,9 @@ class NewCompare extends React.PureComponent {
                         />
                         <Dropdown
                             elementName="region2"
-                            label="Enter a Location to compare"
+                            label={language === 'en' ? 'Enter a Location to compare' : 'तुलना गर्न स्थान प्रविष्ट गर्नुहोस्'}
                             className={styles.regionInput}
-                            placeholder="Select an Option"
+                            placeholder={language === 'en' ? 'Select an Option' : 'विकल्प चयन गर्नुहोस्'}
                             dropdownOption={RegionOptions}
                             icon={false}
                             dropDownClickHandler={dropDownClickHandler}
@@ -347,10 +352,10 @@ class NewCompare extends React.PureComponent {
                     </div>
                 </header>
                 <div
-                    className={styles.content}
+                    className={_cs(styles.content, language === 'np' && styles.languageFont)}
                 >
                     {(!region1 && !region2) ? (
-                        this.messageForNoData(false)
+                        this.messageForNoData(false, language)
                     ) : (
                         <div className={styles.comparisionContainer} ref={this.imageDownloadRef}>
                             <div className={styles.mapContainer}>
@@ -385,12 +390,14 @@ class NewCompare extends React.PureComponent {
                                                 tooltipRenderer={prop => tooltipRenderer(
                                                     prop,
                                                     currentSelection.name,
+                                                    regionRadio.id,
+                                                    language,
                                                 )}
                                                 isDamageAndLoss
                                             />
                                         </Map>
                                     )
-                                    : this.messageForNoData(true)
+                                    : this.messageForNoData(true, language)
                                 }
                                 {isRegionValid(faramValues.region2)
                                     && region2Incidents.length > 0
@@ -423,11 +430,13 @@ class NewCompare extends React.PureComponent {
                                                 tooltipRenderer={prop => tooltipRenderer(
                                                     prop,
                                                     currentSelection.name,
+                                                    regionRadio.id,
+                                                    language,
                                                 )}
                                                 isDamageAndLoss
                                             />
                                         </Map>
-                                    ) : this.messageForNoData(true)
+                                    ) : this.messageForNoData(true, language)
                                 }
                             </div>
                             <div
@@ -443,6 +452,7 @@ class NewCompare extends React.PureComponent {
                                                 regionRadio={region1}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
+                                                language={language}
                                             />
                                         )
                                         : <div />
@@ -456,6 +466,8 @@ class NewCompare extends React.PureComponent {
                                                 regionRadio={region2}
                                                 selectOption={selectOption}
                                                 valueOnclick={valueOnclick}
+                                                language={language}
+
                                             />
                                         ) : <div />
                                     }
@@ -468,7 +480,7 @@ class NewCompare extends React.PureComponent {
                                                 <AreaChartVisual
                                                     data={getDataAggregatedByYear(region1Incidents)}
                                                     selectOption={selectOption}
-
+                                                    language={language}
                                                 />
                                             </div>
                                         ) : <div />
@@ -480,7 +492,7 @@ class NewCompare extends React.PureComponent {
                                                 <AreaChartVisual
                                                     data={getDataAggregatedByYear(region2Incidents)}
                                                     selectOption={selectOption}
-
+                                                    language={language}
                                                 />
                                             </div>
                                         ) : <div />
@@ -495,6 +507,7 @@ class NewCompare extends React.PureComponent {
                                                     // eslint-disable-next-line max-len
                                                     data={getHazardsCount(region1Incidents, hazardTypes)}
                                                     selectOption={selectOption}
+                                                    language={language}
 
                                                 />
                                             </div>
@@ -508,7 +521,7 @@ class NewCompare extends React.PureComponent {
                                                     // eslint-disable-next-line max-len
                                                     data={getHazardsCount(region2Incidents, hazardTypes)}
                                                     selectOption={selectOption}
-
+                                                    language={language}
                                                 />
                                             </div>
                                         ) : <div />
@@ -517,29 +530,37 @@ class NewCompare extends React.PureComponent {
                                 {
                                     (region1Incidents.length > 0 || region2Incidents.length > 0)
                                     && (
-                                        <div className={styles.value}>
-                                            <span className={styles.label}>
-                                                Data sources:
-                                            </span>
-                                            <span className={styles.source}>
-                                                Nepal Police
-                                            </span>
-                                            <div className={styles.source}>
-                                                <span className={styles.text}>
-                                                    DRR Portal
-                                                </span>
-                                                <a
-                                                    className={styles.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href="http://drrportal.gov.np"
-                                                >
-                                                    <Icon
-                                                        name="externalLink"
-                                                    />
-                                                </a>
-                                            </div>
-                                        </div>
+                                    <Translation>
+                                        {
+                                                    t => (
+                                                        <div className={styles.value}>
+                                                            <span className={styles.label}>
+                                                                {t('Data sources')}
+:
+                                                            </span>
+                                                            <span className={styles.source}>
+                                                                {t('Nepal Police')}
+                                                            </span>
+                                                            <div className={styles.source}>
+                                                                <span className={styles.text}>
+                                                                    {t('DRR Portal')}
+                                                                </span>
+                                                                <a
+                                                                    className={styles.link}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    href="http://drrportal.gov.np"
+                                                                >
+                                                                    <Icon
+                                                                        name="externalLink"
+                                                                    />
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                    )
+                                                }
+                                    </Translation>
 
                                     )
                                 }

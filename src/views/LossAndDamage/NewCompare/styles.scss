@@ -1,5 +1,16 @@
 @import '~base-scss/base';
 
+@font-face {
+    font-family: 'Kalimati Regular';
+    src: url('../../../resources/fonts/Kalimati\ Regular.ttf') format('truetype');
+    unicode-range: U+30-39;
+    size-adjust: 85%;
+}
+
+.languageFont {
+    font-family: 'Kalimati Regular', 'Fira Sans', sans-serif !important;
+}
+
 .comparative {
     display: flex;
     flex-direction: column;
@@ -8,17 +19,17 @@
     height: 80vh;
     overflow: auto;
 
-    .regionHead{
+    .regionHead {
         width: 95%;
         margin-left: auto;
         margin-right: auto;
         display: flex;
         padding: 25px 5px;
 
-        .chartDownload{
+        .chartDownload {
             margin-left: auto;
         }
-        .compareText{
+        .compareText {
             color: #364553;
             font-size: 18px;
         }
@@ -65,12 +76,12 @@
             flex-grow: 1;
             justify-content: center;
             // opacity: .3;
-            .headerText{
+            .headerText {
                 color: rgb(113, 126, 125);
                 font-size: 14px;
                 font-weight: 600;
             }
-            .textOption{
+            .textOption {
                 color: rgb(113, 126, 125);
                 font-size: 16px;
                 margin: 0;
@@ -84,7 +95,7 @@
             .title-container {
                 display: flex;
 
-                >h2 {
+                > h2 {
                     flex-basis: 50%;
                     flex-shrink: 0;
                     padding: var(--spacing-medium);
@@ -123,7 +134,7 @@
                     align-items: center;
                     white-space: nowrap;
                     padding: 10px 0px;
-                    .label{
+                    .label {
                         padding-right: 10px;
                         font-size: 14px;
                         font-weight: bold;
@@ -152,4 +163,3 @@
         }
     }
 }
-

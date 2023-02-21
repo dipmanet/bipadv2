@@ -1,10 +1,10 @@
+/* eslint-disable max-len */
+/* eslint-disable arrow-parens */
 import React from 'react';
 import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import Spinner from '#rscv/Spinner';
-import {
-    languageSelector,
-} from '#selectors';
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 
 interface LegendProp {
@@ -13,7 +13,6 @@ interface LegendProp {
         name: string;
         color: string;
         range: [number, number];
-
     }[];
     mapState: { id: number; value: number }[];
     pending: boolean;
@@ -60,74 +59,64 @@ export const legendItems = [
         color: '#e05c12',
         value: 700,
     },
-
 ];
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     language: languageSelector(state),
 });
 
 const Legend = (props: LegendProp) => {
-    const { currentSelection, legend, pending, mapState, language: { language } } = props;
+    const {
+        currentSelection,
+        legend,
+        pending,
+        mapState,
+        language: { language },
+    } = props;
 
     const rangeExist = (min: number, max: number) => {
-        const value = mapState.length > 0 && mapState.filter(i => i.value >= min && i.value <= max);
+        // eslint-disable-next-line max-len
+        const value = mapState.length > 0 && mapState.filter((i) => i.value >= min && i.value <= max);
         return value.length > 0;
     };
 
     return (
         <div className={styles.container}>
             <Translation>
-                {
-                    t => (
-                        <p className={styles.currentSelection}>
-                            { language === 'en'
-                                ? `No. of ${currentSelection}`
-                                : `${t(currentSelection)}को संख्या`
-                            }
-
-                        </p>
-                    )
-                }
+                {(t) => (
+                    <p className={styles.currentSelection}>
+                        {language === 'en' ? `No. of ${currentSelection}` : `${t(currentSelection)}को विवरण`}
+                    </p>
+                )}
             </Translation>
 
             <div className={styles.wrapper}>
-                {
-                    !pending
-                        ? legend.map((item, index) => {
-                            if (rangeExist(item.range[0], item.range[1])) {
-                                return (
-                                    <div
-                                        className={styles.legendItem}
-                                        key={item.name}
-                                        style={index % 2 !== 0
+                {!pending ? (
+                    legend.map((item, index) => {
+                        if (rangeExist(item.range[0], item.range[1])) {
+                            return (
+                                <div
+                                    className={styles.legendItem}
+                                    key={item.name}
+                                    style={
+                                        index % 2 !== 0
                                             ? { justifySelf: 'flex-end', marginRight: 'auto' }
                                             : { marginRight: 'auto' }
-                                        }
-                                    >
-                                        <div
-                                            className={styles.legendColor}
-                                            style={{ background: item.color }}
-                                        />
-                                        <span className={styles.legendText}>
-                                            {item.name}
-                                        </span>
-                                    </div>
-                                );
-                            }
-                            return '';
-                        })
-                        : (
-                            <Spinner
-                                className={styles.spinner}
-                            />
-                        )
-                }
+                                    }
+                                >
+                                    <div className={styles.legendColor} style={{ background: item.color }} />
+                                    <span className={styles.legendText}>{item.name}</span>
+                                </div>
+                            );
+                        }
+                        return '';
+                    })
+                ) : (
+                    <Spinner className={styles.spinner} />
+                )}
             </div>
-
         </div>
     );
 };
-
 
 export default connect(mapStateToProps)(Legend);

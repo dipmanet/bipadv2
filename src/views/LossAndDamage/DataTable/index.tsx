@@ -21,9 +21,10 @@ import styles from './styles.scss';
 interface TableProps {
     closeModal: () => void;
     incidentList: Data[];
+    language?: string;
 }
 
-const DataTable = ({ closeModal, incidentList }: TableProps) => {
+const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident-wise details' });
     const [data, setData] = useState<Sorted[] | []>([]);
     const [isSortClicked, setIsSortClicked] = useState(false);
@@ -304,7 +305,7 @@ const DataTable = ({ closeModal, incidentList }: TableProps) => {
                 ref={totalRef}
                 style={focus.id === 1 ? { width: 'fit-content' } : {}}
             >
-                <p className={styles.bodyItem}>Grand Total</p>
+                <p className={styles.bodyItem}>{language === 'en' ? 'Grand Total' : 'कूल जम्मा'}</p>
                 {
                     totalTableData.map(item => (
                         <p className={styles.bodyItem} key={item.id}>
@@ -326,7 +327,7 @@ const DataTable = ({ closeModal, incidentList }: TableProps) => {
     return (
         <>
 
-            <Modal className={styles.lossAndDamageTableModal}>
+            <Modal className={_cs(styles.lossAndDamageTableModal, language === 'np' && styles.languageFont)}>
                 <ModalHeader
                     title={(
                         <Header />
@@ -337,7 +338,7 @@ const DataTable = ({ closeModal, incidentList }: TableProps) => {
                                 value={data}
                                 name="incidents"
                             >
-                                Download csv
+                                {language === 'en' ? 'Download csv' : 'csv डाउनलोड गर्नुहोस्'}
                             </DownloadButton>
                             <DangerButton
                                 transparent

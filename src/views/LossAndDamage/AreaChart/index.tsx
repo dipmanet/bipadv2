@@ -1,15 +1,8 @@
+/* eslint-disable arrow-parens */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-undef */
 import React, { useState } from 'react';
-import {
-    AreaChart,
-    Area,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-} from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
@@ -18,14 +11,21 @@ import { AreaChartProps, TooltipInterface } from './types';
 import { ContainerSize } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
 import { handleDownload } from '../Barchart/util';
+import { convertDateAccToLanguage } from '#utils/common';
 
 const AreaChartVisual = (props: AreaChartProps) => {
-    const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
-    const { selectOption: { name, key },
+    const [fullScreen, setFullScreen] = useState<ContainerSize>({
+        width: '100%',
+        height: 300,
+    });
+    const {
+        selectOption: { name, key },
         data,
         handleSaveClick,
         downloadButton,
-        fullScreenMode } = props;
+        fullScreenMode,
+        language,
+    } = props;
 
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
         setFullScreen({ width, height });
@@ -33,7 +33,10 @@ const AreaChartVisual = (props: AreaChartProps) => {
 
     function exitHandler() {
         if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-            setFullScreen({ width: '100%', height: 300 });
+            setFullScreen({
+                width: '100%',
+                height: 300,
+            });
             const titleHeading = document.getElementById('titleHeading');
             titleHeading.remove();
         }
@@ -49,8 +52,8 @@ const AreaChartVisual = (props: AreaChartProps) => {
         const date = new Date();
         date.setTime(parseInt(item.incidentMonthTimestamp, 10));
         const year = date.getFullYear();
-        const month = date.getMonth();
-        const finalDate = `${year}-${month}`;
+        const month = date.getMonth() === 0 ? 1 : date.getMonth();
+        const finalDate = convertDateAccToLanguage(`${year}-${month}`, language);
         const obj = {
             date: finalDate,
             [name]: item.summary[key],
@@ -65,115 +68,89 @@ const AreaChartVisual = (props: AreaChartProps) => {
             return (
                 <div className={styles.customTooltip}>
                     <Translation>
-                        {
-                            t => (
-                                <span className={styles.label}>
-                                    {
-                                        `${t(payload[0].name)}: ${payload[0].value}`
-                                    }
-                                </span>
-                            )
-                        }
+                        {(t) => <span className={styles.label}>{`${t(payload[0].name)}: ${payload[0].value}`}</span>}
                     </Translation>
-
-
                 </div>
             );
         }
         return null;
     }
 
-    const downloadProps = { domElement: 'areaChart',
+    const downloadProps = {
+        domElement: 'areaChart',
         selectOption: name,
         headerText: 'Temporal distribution',
         fileName: 'Area Chart',
         height: 0,
-        width: 30 };
+        width: 30,
+    };
 
     return (
         <div className={styles.wrapper}>
             <div className={styles.firstDiv}>
-                <p className={styles.text}>
-                    Temporal distribution of
-                    {' '}
-                    {name}
-                </p>
+                <Translation>
+                    {(t) => (
+                        <p className={styles.text}>
+                            {language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को अस्थायी वितरण`}
+                        </p>
+                    )}
+                </Translation>
 
-                {
-                    fullScreenMode
-                    && (
-                        <FullScreenIcon
-                            domElement="areaChart"
-                            setFullScreenHeightWidth={setFullScreenHeightWidth}
-                            selectOption={name}
-                            headerText={'Temporal distribution'}
-                        />
-                    )
-                }
+                {fullScreenMode && (
+                    <FullScreenIcon
+                        domElement="areaChart"
+                        setFullScreenHeightWidth={setFullScreenHeightWidth}
+                        selectOption={name}
+                        headerText={'Temporal distribution'}
+                        language={language}
+                    />
+                )}
 
-                {
-                    downloadButton
-                    && (
-                        <Button
-                            title="Download Chart"
-                            className={styles.downloadButton}
-                            transparent
-                            // disabled={pending}
-                            onClick={() => handleDownload(downloadProps)}
-                            iconName="download"
-                        />
-                    )
-                }
-
-
+                {downloadButton && (
+                    <Button
+                        title={language === 'en' ? 'Download Chart' : 'चार्ट डाउनलोड गर्नुहोस्'}
+                        className={styles.downloadButton}
+                        transparent
+                        // disabled={pending}
+                        onClick={() => handleDownload(downloadProps)}
+                        iconName="download"
+                    />
+                )}
             </div>
             <div className={styles.areaChart} id="areaChart">
-                {
-                    chartData && (
-                        <ResponsiveContainer width={fullScreen.width} height={fullScreen.height}>
-                            <AreaChart
-                                width={500}
-                                height={200}
-                                data={chartData}
-                                margin={{
-                                    top: 5,
-                                    bottom: 45,
-                                    left: -20,
-                                }}
-                            >
-                                <defs>
-                                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#db6e51" stopOpacity={0.8} />
-                                        <stop offset="95%" stopColor="#db6e51" stopOpacity={0} />
-                                    </linearGradient>
-                                </defs>
+                {chartData && (
+                    <ResponsiveContainer width={fullScreen.width} height={fullScreen.height}>
+                        <AreaChart
+                            width={500}
+                            height={200}
+                            data={chartData}
+                            margin={{
+                                top: 5,
+                                bottom: 45,
+                                left: -20,
+                            }}
+                        >
+                            <defs>
+                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#db6e51" stopOpacity={0.8} />
+                                    <stop offset="95%" stopColor="#db6e51" stopOpacity={0} />
+                                </linearGradient>
+                            </defs>
 
-                                <CartesianGrid stroke="#ccc" horizontal vertical={false} />
-                                <XAxis
-                                    tickLine={false}
-                                    dataKey="date"
-                                    dy={15}
-                                    angle={-30}
-                                />
-                                <YAxis
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tickFormatter={CustomizedTick}
-                                />
-                                <Tooltip
-                                    content={CustomTooltip}
-                                />
-                                <Area
-                                    type="monotone"
-                                    dataKey={name}
-                                    stroke="#db6e51"
-                                    fillOpacity={1}
-                                    fill="url(#colorUv)"
-                                />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    )
-                }
+                            <CartesianGrid stroke="#ccc" horizontal vertical={false} />
+                            <XAxis tickLine={false} dataKey="date" dy={15} angle={-30} />
+                            <YAxis axisLine={false} tickLine={false} tickFormatter={CustomizedTick} />
+                            <Tooltip content={CustomTooltip} />
+                            <Area
+                                type="monotone"
+                                dataKey={name}
+                                stroke="#db6e51"
+                                fillOpacity={1}
+                                fill="url(#colorUv)"
+                            />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                )}
             </div>
         </div>
     );

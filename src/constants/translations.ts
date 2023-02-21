@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
         translation: {
+                'Injured people': 'Injured people',
+                'Missing people': 'Missing people',
                 Admin: 'Admin',
                 'Feedback & Support': 'Feedback & Support',
                 'No Deaths Reported': 'No Deaths Reported',
@@ -1049,6 +1051,8 @@ export const enTranslation = {
 export const npTranslation = {
 
         translation: {
+                'Injured people': 'घाइते संख्या',
+                'Missing people': 'हराएको संख्या',
                 'Drought Watch': 'खडेरी अवलोकन',
                 Admin: 'प्रशासक',
                 'Feedback & Support': 'प्रतिक्रिया र समर्थन',
