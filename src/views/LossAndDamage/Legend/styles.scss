@@ -8,11 +8,11 @@
     padding: 5px 10px;
     margin-bottom: 5px;
 
-    .currentSelection{
-            font-size: 14px;
-            font-weight: 600;
-            padding-top: 5px;
-            margin: 0;
+    .currentSelection {
+        font-size: 14px;
+        font-weight: 600;
+        padding-top: 5px;
+        margin: 0;
     }
 
     .wrapper {
@@ -20,15 +20,14 @@
         overflow: hidden;
         flex-wrap: wrap;
         justify-content: space-around;
-        width: 260px;
+        width: 310px;
         padding: 5px 10px 10px 5px;
 
-        .spinner{
+        .spinner {
             font-size: 24px;
             color: red;
             padding: 10px;
         }
-
 
         .legendItem {
             width: 42%;
@@ -40,6 +39,8 @@
             .legendColor {
                 width: 50px;
                 height: 20px;
+                max-width: 50px;
+                min-width: 50px;
             }
 
             .legendText {
@@ -48,6 +49,4 @@
             }
         }
     }
-
-  
 }

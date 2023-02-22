@@ -9,6 +9,7 @@ import {
     getGroupedIncidents,
     getAggregatedStats,
 } from '../common';
+import { DataFormater } from '#utils/common';
 
 export const estimatedLossValueFormatter = (d) => {
     const { number, normalizeSuffix } = Numeral.getNormalizedNumber({
@@ -21,6 +22,13 @@ export const estimatedLossValueFormatter = (d) => {
     }
     return number;
 };
+
+
+export const formatNumeralAccLang = (value, language) => {
+    const { number, normalizeSuffix } = DataFormater(value, language);
+    return `${number}${normalizeSuffix}`;
+};
+
 
 export const tooltipRenderer = (props, currentSelection, radioSelect, language) => {
     const { feature } = props;
@@ -56,8 +64,8 @@ export const tooltipRenderer = (props, currentSelection, radioSelect, language) 
                         >
                             {
                                 language === 'en'
-                                    ? `No of ${t(currentSelection)}: ${estimatedLossValueFormatter(feature.state.value)}`
-                                    : `${t(currentSelection)}: ${estimatedLossValueFormatter(feature.state.value)}`
+                                    ? `No of ${t(currentSelection)}: ${formatNumeralAccLang(feature.state.value, language)}`
+                                    : `${t(currentSelection)}: ${formatNumeralAccLang(feature.state.value, language)}`
                             }
                         </p>
 
@@ -143,7 +151,7 @@ export const returnValueByDropdown = (name, val) => {
     return val;
 };
 
-export const generatePaintLegendByInterval = (data, parts, color) => {
+export const generatePaintLegendByInterval = (data, parts, color, language) => {
     const newData = [...data];
     const arrayData = [...new Set(newData.map(item => item.value).sort((a, b) => a - b))];
     const max = Math.floor(arrayData.reduce((a, b) => (a > b ? a : b)));
@@ -157,14 +165,14 @@ export const generatePaintLegendByInterval = (data, parts, color) => {
         if (index === 1) {
             colorInterval.push(color[index - 1]);
             colorInterval.push(dat);
-            colorLegend.push({ name: `${estimatedLossValueFormatter(min)} - ${estimatedLossValueFormatter(dat)}`, range: [min, dat], color: color[index - 1] });
+            colorLegend.push({ name: `${formatNumeralAccLang(min, language)} - ${formatNumeralAccLang(dat, language)}`, range: [min, dat], color: color[index - 1] });
         } else if (dat <= max) {
             colorInterval.push(color[index - 1]);
             colorInterval.push(dat + interval + 1);
             dat += 1;
-            colorLegend.push({ name: `${estimatedLossValueFormatter(dat)} - ${dat + interval > max
-                ? estimatedLossValueFormatter(max)
-                : estimatedLossValueFormatter(dat + interval)}`,
+            colorLegend.push({ name: `${formatNumeralAccLang(dat, language)} - ${dat + interval > max
+                ? formatNumeralAccLang(max, language)
+                : formatNumeralAccLang(dat + interval, language)}`,
             color: color[index - 1],
             range: [dat, dat + interval > max ? max : dat + interval] });
             dat += interval;

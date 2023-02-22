@@ -2,7 +2,7 @@ import React from 'react';
 import { Translation } from 'react-i18next';
 import { nullCheck } from '#utils/common';
 import styles from './styles.scss';
-import { returnValueByDropdown } from '../utils/utils';
+import { formatNumeralAccLang } from '../utils/utils';
 import { Data } from '../types';
 
 interface DataCountProps {
@@ -41,7 +41,7 @@ const DataCount = (props: DataCountProps) => {
                 data.length > 0
                 && (
                     <span className={styles.alertValue}>
-                        {returnValueByDropdown(name, dataValue)}
+                        {formatNumeralAccLang(dataValue, language)}
                     </span>
                 )
             }

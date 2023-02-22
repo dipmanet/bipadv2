@@ -14,10 +14,11 @@ import DangerButton from '#rsca/Button/DangerButton';
 import DownloadButton from '#components/DownloadButton';
 import { mainHeading, bodyheader } from './headers';
 import { returnDataByFormat } from './util';
+import { formatNumeralAccLang } from '../utils/utils';
 import { Data } from '../types';
 import { Sorted } from './types';
 import styles from './styles.scss';
-import { convertDateAccToLanguage, DataFormater } from '#utils/common';
+import { convertDateAccToLanguage } from '#utils/common';
 
 interface TableProps {
     closeModal: () => void;
@@ -54,10 +55,6 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
         }
     }, [isSortClicked]);
 
-    const formattedData = (value) => {
-        const { number, normalizeSuffix } = DataFormater(value, language);
-        return `${number} ${normalizeSuffix}`;
-    };
 
     const summaryCalculate = (dat) => {
         if (focus.id !== 1) {
@@ -296,7 +293,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                                             {
                                                 // eslint-disable-next-line no-nested-ternary
                                                 typeof (item) === 'number'
-                                                    ? formattedData(item)
+                                                    ? formatNumeralAccLang(item, language)
                                                     : dateRegex.test(item)
                                                         ? convertDateAccToLanguage(item, language)
                                                         : t(item)
@@ -304,7 +301,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                                             <span className={styles.toolTipItem}>
                                                 {
                                                     typeof (item) === 'number'
-                                                        ? formattedData(item)
+                                                        ? formatNumeralAccLang(item, language)
                                                         : t(item)
                                                 }
                                             </span>
@@ -335,7 +332,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                         <p className={styles.bodyItem} key={item.id}>
                             {
                                 typeof (item.val) === 'number'
-                                    ? formattedData(item.val)
+                                    ? formatNumeralAccLang(item.val, language)
                                     : item.val
                             }
 
