@@ -361,14 +361,14 @@ export const DataFormater = (value, lang) => {
         return { number: value, normalizeSuffix: '' };
     }
 
-    if (value > 1000000000) {
+    if (value && value > 1000000000) {
         return { number: (decimalRemoveToComma((value / 1000000000).toFixed(0))), normalizeSuffix: 'B' };
-    } if (value > 1000000) {
+    } if (value && value > 1000000) {
         return { number: (decimalRemoveToComma((value / 1000000).toFixed(0))), normalizeSuffix: 'M' };
-    } if (value > 10000) {
+    } if (value && value > 10000) {
         return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'K' };
     }
-    if (value > 1000) {
+    if (value && value > 1000) {
         return { number: value.toLocaleString(), normalizeSuffix: '' };
     }
     return { number: value, normalizeSuffix: '' };

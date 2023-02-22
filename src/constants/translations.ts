@@ -2,6 +2,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
         translation: {
+                'Incident-wise details': 'Incident-wise details',
+                'Hazard-wise summary': 'Hazard-wise summary',
+                'Temporal summary': 'Temporal summary',
+                'Location-wise summary': 'Location-wise summary',
                 'Injured people': 'Injured people',
                 'Missing people': 'Missing people',
                 Admin: 'Admin',
@@ -1051,6 +1055,10 @@ export const enTranslation = {
 export const npTranslation = {
 
         translation: {
+                'Incident-wise details': 'घटना अनुसार विवरण',
+                'Hazard-wise summary': 'प्रकोप अनुसार विवरण',
+                'Temporal summary': 'समय अनुसार विवरण ',
+                'Location-wise summary': 'स्थान अनुसार विवरण',
                 'Injured people': 'घाइते संख्या',
                 'Missing people': 'हराएको संख्या',
                 'Drought Watch': 'खडेरी अवलोकन',

@@ -6,17 +6,18 @@
 import React, { useState, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { FixedSizeList, FixedSizeList as List } from 'react-window';
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import DownloadButton from '#components/DownloadButton';
 import { mainHeading, bodyheader } from './headers';
-import { estimatedLossValueFormatter } from '../utils/utils';
 import { returnDataByFormat } from './util';
 import { Data } from '../types';
 import { Sorted } from './types';
 import styles from './styles.scss';
+import { convertDateAccToLanguage, DataFormater } from '#utils/common';
 
 interface TableProps {
     closeModal: () => void;
@@ -53,6 +54,10 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
         }
     }, [isSortClicked]);
 
+    const formattedData = (value) => {
+        const { number, normalizeSuffix } = DataFormater(value, language);
+        return `${number} ${normalizeSuffix}`;
+    };
 
     const summaryCalculate = (dat) => {
         if (focus.id !== 1) {
@@ -108,10 +113,16 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                         } else {
                             elementValue = 0;
                         }
-
                         obj[elemCur.name] = returnDataByFormat(elemCur.key, elementValue);
                     } else {
-                        obj[elemCur.name] = returnDataByFormat(elemCur.key, element[elemCur.key]);
+                        // eslint-disable-next-line no-nested-ternary
+                        const elementDesc = language === 'en'
+                            ? elemCur.key
+                            : elemCur.keyNe
+                                ? elemCur.keyNe
+                                : elemCur.key;
+
+                        obj[elemCur.name] = returnDataByFormat(elemCur.key, element[elementDesc]);
                     }
                 }
                 array.push(obj);
@@ -212,7 +223,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                         key={item.id}
                         onClick={() => headerCickHandler(item)}
                     >
-                        {item.name}
+                        {language === 'en' ? item.name : item.nameNe}
                     </p>
 
                 ))
@@ -242,10 +253,10 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                             <p
                                 className={styles.bodyHeaderItem}
                             >
-                                {dat.name}
+                                {language === 'en' ? dat.name : dat.nameNe}
                                 <span className={styles.toolTipItem}>
                                     {
-                                        dat.name
+                                        language === 'en' ? dat.name : dat.nameNe
                                     }
                                 </span>
                             </p>
@@ -272,25 +283,38 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
         >
             <div className={styles.bodyWrapper}>
                 {
-                    Object.values(data[index]).map((item, idx) => (
-                        <p
-                            className={styles.bodyItem}
-                            key={`${index}-${`${idx}-`}`}
-                        >
-                            {
-                                typeof (item) === 'number'
-                                    ? estimatedLossValueFormatter(item)
-                                    : item
-                            }
-                            <span className={styles.toolTipItem}>
+                    Object.values(data[index]).map((item, idx) => {
+                        const dateRegex = new RegExp(/^[0-9]+[0-9]+[0-9]+[0-9]-[0-9]+[0-9]-[0-9]+[0-9]+$/);
+                        return (
+                            <Translation>
                                 {
-                                    typeof (item) === 'number'
-                                        ? estimatedLossValueFormatter(item)
-                                        : item
+                                    t => (
+                                        <p
+                                            className={styles.bodyItem}
+                                            key={`${index}-${`${idx}-`}`}
+                                        >
+                                            {
+                                                // eslint-disable-next-line no-nested-ternary
+                                                typeof (item) === 'number'
+                                                    ? formattedData(item)
+                                                    : dateRegex.test(item)
+                                                        ? convertDateAccToLanguage(item, language)
+                                                        : t(item)
+                                            }
+                                            <span className={styles.toolTipItem}>
+                                                {
+                                                    typeof (item) === 'number'
+                                                        ? formattedData(item)
+                                                        : t(item)
+                                                }
+                                            </span>
+                                        </p>
+
+                                    )
                                 }
-                            </span>
-                        </p>
-                    ))
+                            </Translation>
+                        );
+                    })
                 }
             </div>
         </div>
@@ -311,7 +335,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                         <p className={styles.bodyItem} key={item.id}>
                             {
                                 typeof (item.val) === 'number'
-                                    ? estimatedLossValueFormatter(item.val)
+                                    ? formattedData(item.val)
                                     : item.val
                             }
 
