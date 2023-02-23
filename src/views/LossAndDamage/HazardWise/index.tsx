@@ -5,10 +5,10 @@
 /* eslint-disable no-plusplus */
 import React, { useRef, useState } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
-import { Translation } from 'react-i18next';
+import { Translation, useTranslation } from 'react-i18next';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { returnValueByDropdown } from '../utils/utils';
+import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
 import { HazardDetail, Summary } from './types';
 import { ContainerSize, TooltipInterface } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
@@ -32,6 +32,7 @@ interface HazardWiseProps {
 
 const HazardWise = (props: HazardWiseProps) => {
     const { selectOption, data, handleSaveClick, downloadButton, fullScreenMode, language } = props;
+    const { t } = useTranslation();
     const treeMapRef = useRef<HTMLDivElement>(null);
     const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
 
@@ -117,7 +118,7 @@ const HazardWise = (props: HazardWiseProps) => {
                             fontSize={(height + width) / 20}
                             fontWeight={'300'}
                         >
-                            {height + width > 150 ? returnValueByDropdown(selectOption.name, value) : ''}
+                            {height + width > 150 ? formatNumeralAccLang(value, language) : ''}
                         </text>
                         <foreignObject
                             width={height + width <= 150 ? '15px' : (height + width) / 14}
@@ -168,7 +169,9 @@ const HazardWise = (props: HazardWiseProps) => {
     const downloadProps = {
         domElement: 'treemap',
         selectOption: selectOption.name,
-        headerText: 'Hazard-wise distribution',
+        headerText: language === 'en'
+            ? `Hazard-wise distribution of ${selectOption.name}`
+            : `${t(selectOption.name)}को जोखिम अनुसार वितरण`,
         fileName: 'Tree Map',
         height: 50,
         width: 0,
@@ -178,11 +181,11 @@ const HazardWise = (props: HazardWiseProps) => {
         <div className={styles.wrapper}>
             <div className={styles.hazardHead}>
                 <Translation>
-                    {(t) => (
+                    {(k) => (
                         <p className={styles.hazardText}>
                             {language === 'en'
                                 ? `Hazard-wise distribution of ${selectOption.name}`
-                                : `${t(selectOption.name)}को जोखिम अनुसार वितरण`}
+                                : `${k(selectOption.name)}को जोखिम अनुसार वितरण`}
                         </p>
                     )}
                 </Translation>
@@ -192,7 +195,9 @@ const HazardWise = (props: HazardWiseProps) => {
                         domElement="treemap"
                         setFullScreenHeightWidth={setFullScreenHeightWidth}
                         selectOption={selectOption.name}
-                        headerText={'Hazard-wise distribution'}
+                        headerText={language === 'en'
+                            ? `Hazard-wise distribution of ${selectOption.name}`
+                            : `${t(selectOption.name)}को जोखिम अनुसार वितरण`}
                         language={language}
                     />
                 )}

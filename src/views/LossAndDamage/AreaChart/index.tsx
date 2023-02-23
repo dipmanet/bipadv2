@@ -3,10 +3,10 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Translation } from 'react-i18next';
+import { Translation, useTranslation } from 'react-i18next';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { returnValueByDropdown } from '../utils/utils';
+import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
 import { AreaChartProps, TooltipInterface } from './types';
 import { ContainerSize } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
@@ -26,6 +26,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
         fullScreenMode,
         language,
     } = props;
+    const { t } = useTranslation();
 
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
         setFullScreen({ width, height });
@@ -61,14 +62,14 @@ const AreaChartVisual = (props: AreaChartProps) => {
         return obj;
     });
 
-    const CustomizedTick = (value: number) => returnValueByDropdown(name, value);
+    const CustomizedTick = (value: number) => formatNumeralAccLang(value, language);
 
     function CustomTooltip({ payload, active }: TooltipInterface) {
         if (payload && active && payload.length) {
             return (
                 <div className={styles.customTooltip}>
                     <Translation>
-                        {(t) => <span className={styles.label}>{`${t(payload[0].name)}: ${payload[0].value}`}</span>}
+                        {(k) => <span className={styles.label}>{`${k(payload[0].name)}: ${payload[0].value}`}</span>}
                     </Translation>
                 </div>
             );
@@ -79,7 +80,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
     const downloadProps = {
         domElement: 'areaChart',
         selectOption: name,
-        headerText: 'Temporal distribution',
+        headerText: language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को अस्थायी वितरण`,
         fileName: 'Area Chart',
         height: 0,
         width: 30,
@@ -89,9 +90,9 @@ const AreaChartVisual = (props: AreaChartProps) => {
         <div className={styles.wrapper}>
             <div className={styles.firstDiv}>
                 <Translation>
-                    {(t) => (
+                    {(k) => (
                         <p className={styles.text}>
-                            {language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को अस्थायी वितरण`}
+                            {language === 'en' ? `Temporal distribution of ${name}` : `${k(name)}को अस्थायी वितरण`}
                         </p>
                     )}
                 </Translation>
@@ -101,7 +102,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
                         domElement="areaChart"
                         setFullScreenHeightWidth={setFullScreenHeightWidth}
                         selectOption={name}
-                        headerText={'Temporal distribution'}
+                        headerText={language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को अस्थायी वितरण`}
                         language={language}
                     />
                 )}
@@ -127,7 +128,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
                             margin={{
                                 top: 5,
                                 bottom: 45,
-                                left: -20,
+                                right: 5,
                             }}
                         >
                             <defs>
@@ -139,7 +140,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
 
                             <CartesianGrid stroke="#ccc" horizontal vertical={false} />
                             <XAxis tickLine={false} dataKey="date" dy={15} angle={-30} />
-                            <YAxis axisLine={false} tickLine={false} tickFormatter={CustomizedTick} />
+                            <YAxis axisLine={false} tickLine={false} tickFormatter={CustomizedTick} dx={-10} />
                             <Tooltip content={CustomTooltip} />
                             <Area
                                 type="monotone"

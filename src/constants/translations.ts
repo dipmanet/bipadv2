@@ -2,6 +2,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
         translation: {
+                province: 'province',
+                district: 'district',
+                municipality: 'municipality',
+                ward: 'ward',
                 'Incident-wise details': 'Incident-wise details',
                 'Hazard-wise summary': 'Hazard-wise summary',
                 'Temporal summary': 'Temporal summary',
@@ -1055,6 +1059,10 @@ export const enTranslation = {
 export const npTranslation = {
 
         translation: {
+                province: 'प्रदेश',
+                district: 'जिल्‍ला',
+                municipality: 'नगरपालिका',
+                ward: 'वार्ड',
                 'Incident-wise details': 'घटना अनुसार विवरण',
                 'Hazard-wise summary': 'प्रकोप अनुसार विवरण',
                 'Temporal summary': 'समय अनुसार विवरण ',

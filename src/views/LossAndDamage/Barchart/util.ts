@@ -24,7 +24,6 @@ export const handleDownload = async (props: DownloadProps) => {
         const clone = doc.cloneNode(true);
         const width = doc.clientWidth + w;
         const height = doc.clientHeight + h;
-        const text = `${headerText.replace(' (Top 10)', '')} of ${selectOption}`;
         const para = document.createElement('p');
         para.style.fontSize = '12px';
         para.style.textAlign = 'center';
@@ -32,7 +31,7 @@ export const handleDownload = async (props: DownloadProps) => {
         para.style.marginBottom = '0';
         para.style.overflow = 'hidden';
         para.style.textTransform = 'capitalize';
-        const textNode = document.createTextNode(text);
+        const textNode = document.createTextNode(headerText);
         para.appendChild(textNode);
         const mainDiv = document.createElement('div');
         mainDiv.style.overflow = 'visible';

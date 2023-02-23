@@ -21,7 +21,6 @@ const FullScreenIcon = ({
     function openFullscreen() {
         if (setBarAllDataOnFullScreen) setBarAllDataOnFullScreen(true);
         const element = document.getElementById(domElement);
-        const text = `${headerText.replace(' (Top 10)', '')} of ${selectOption}`;
         const tag = document.createElement('p');
         tag.setAttribute('id', 'titleHeading');
         tag.style.fontSize = `${14}px`;
@@ -29,7 +28,7 @@ const FullScreenIcon = ({
         tag.style.textTransform = 'capitalize';
         tag.style.position = 'absolute';
         tag.style.top = `${50}px`;
-        const textContent = document.createTextNode(text);
+        const textContent = document.createTextNode(headerText);
         tag.appendChild(textContent);
         element.appendChild(tag);
         if (element.requestFullscreen) {

@@ -5,17 +5,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Text } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
+import { Translation, useTranslation } from 'react-i18next';
 import Button from '#rsca/Button';
 import { nullCheck } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
 import styles from './styles.scss';
-import { returnValueByDropdown } from '../utils/utils';
+import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
 import { BarchartProps, ChartData, TooltipInterface, RadioValue, ContainerSize } from './types';
 import FullScreenIcon from '../FullScreen';
 import { handleDownload } from './util';
 
+
 const BarChartVisual = (props: BarchartProps) => {
+    const { t } = useTranslation();
     const [chartData, setChartData] = useState<ChartData>([]);
     const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
     const [isAllBarData, setAllBarData] = useState(false);
@@ -177,17 +179,17 @@ const BarChartVisual = (props: BarchartProps) => {
                 <div className={styles.customTooltip}>
                     {isAllBarData && (
                         <Translation>
-                            {t => (
+                            {k => (
                                 <span className={styles.label}>
-                                    {`${t(regionRadio.name)}: ${payload[0].payload.name}`}
+                                    {`${k(regionRadio.name)}: ${payload[0].payload.name}`}
                                 </span>
                             )}
                         </Translation>
                     )}
                     <Translation>
-                        {t => (
+                        {k => (
                             <span className={styles.label}>
-                                {`${t(selectOption.name)}: ${payload[0].payload.value}`}
+                                {`${k(selectOption.name)}: ${payload[0].payload.value}`}
                             </span>
                         )}
                     </Translation>
@@ -216,7 +218,7 @@ const BarChartVisual = (props: BarchartProps) => {
             </Text>
         ) : (
             <Text dy={dy} dx={dx} x={x} y={y}>
-                {returnValueByDropdown(selectOption.name, payload.value)}
+                {formatNumeralAccLang(payload.value, language)}
             </Text>
         );
     };
@@ -224,7 +226,9 @@ const BarChartVisual = (props: BarchartProps) => {
     const downloadProps = {
         domElement: 'barChart',
         selectOption: selectOption.name,
-        headerText: nameReturn(regionRadio),
+        headerText: language === 'en'
+            ? `${nameReturn(regionRadio)} of ${selectOption.name}`
+            : `${nameReturn(regionRadio)} को ${t(selectOption.name)}`,
         fileName: 'Bar Chart',
         height: 20,
         width: 0,
@@ -236,12 +240,12 @@ const BarChartVisual = (props: BarchartProps) => {
             <div className={styles.firstDiv}>
                 <Translation>
                     {
-                        t => (
+                        k => (
                             <p className={styles.text}>
                                 {
                                     language === 'en'
                                         ? `${nameReturn(regionRadio)} of ${selectOption.name}`
-                                        : `${nameReturn(regionRadio)} को ${t(selectOption.name)}`
+                                        : `${nameReturn(regionRadio)} को ${k(selectOption.name)}`
                                 }
 
                             </p>
@@ -255,7 +259,9 @@ const BarChartVisual = (props: BarchartProps) => {
                         setFullScreenHeightWidth={setFullScreenHeightWidth}
                         setBarAllDataOnFullScreen={setBarAllDataOnFullScreen}
                         selectOption={selectOption.name}
-                        headerText={nameReturn(regionRadio)}
+                        headerText={language === 'en'
+                            ? `${nameReturn(regionRadio)} of ${selectOption.name}`
+                            : `${nameReturn(regionRadio)} को ${t(selectOption.name)}`}
                         language={language}
                     />
                 )}
@@ -282,16 +288,16 @@ const BarChartVisual = (props: BarchartProps) => {
                         <BarChart
                             data={chartData}
                             margin={{
-                                top: 5,
+                                top: 10,
                                 bottom: 45,
-                                left: -32,
+                                left: -15,
                             }}
+                            padding={{ top: 10 }}
                             barSize={20}
-                            // ref={barRef}
                         >
                             <XAxis
                                 dy={10}
-                                dx={5}
+                                dx={10}
                                 tickLine={false}
                                 dataKey="name"
                                 scale="auto"
@@ -299,7 +305,12 @@ const BarChartVisual = (props: BarchartProps) => {
                                 interval={0}
                                 tick={<CustomizedLabel />}
                             />
-                            <YAxis axisLine={false} tickLine={false} tick={<CustomizedLabel />} />
+                            <YAxis
+                                axisLine={false}
+                                tickLine={false}
+                                tick={<CustomizedLabel />}
+                                dx={-30}
+                            />
                             <Tooltip cursor={false} content={<CustomTooltip />} />
                             <CartesianGrid stroke="#ccc" horizontal vertical={false} />
                             <Bar dataKey="value" fill="#db6e51" minPointSize={3} />

@@ -74,8 +74,6 @@ const Legend = (props: LegendProp) => {
         language: { language },
     } = props;
 
-    console.log(props, 'props');
-
     const rangeExist = (min: number, max: number) => {
         // eslint-disable-next-line max-len
         const value = mapState.length > 0 && mapState.filter((i) => i.value >= min && i.value <= max);
