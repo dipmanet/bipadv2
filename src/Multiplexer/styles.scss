@@ -1,14 +1,13 @@
 @font-face {
-    font-family: "Kalimati Regular";
-    src: url("../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    font-family: 'Kalimati Regular';
+    src: url('../resources/fonts/Kalimati\ Regular.ttf') format('truetype');
     unicode-range: U+30-39;
     size-adjust: 85%;
 }
 
 .languageFont {
-    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+    font-family: 'Kalimati Regular', 'Fira Sans', sans-serif !important;
 }
-
 
 button {
     outline: none;
@@ -37,7 +36,6 @@ button {
         flex-grow: 1;
         overflow: auto;
 
-
         .halfPageLeftPane {
             display: flex;
             flex-direction: column;
@@ -46,7 +44,7 @@ button {
             box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.3);
             width: 48%;
             overflow: auto;
-            transition: margin-left .3s ease-in-out;
+            transition: margin-left 0.3s ease-in-out;
 
             &.hidden {
                 // margin-left: calc(-1 * var(--width-left-panel));
@@ -54,7 +52,7 @@ button {
                 // display: none;
                 // width: 0px;
                 // transition: 0.3s width ease-in-out;
-                transition: margin-left .3s ease-in-out;
+                transition: margin-left 0.3s ease-in-out;
             }
 
             .brand {
@@ -160,7 +158,6 @@ button {
             }
 
             .map {
-
                 flex-grow: 1;
                 background-color: transparent;
 
@@ -256,8 +253,6 @@ button {
                     }
                 }
             }
-
-
         }
 
         .right {
@@ -323,6 +318,22 @@ button {
 }
 
 :global {
+    .nepaliDatePicker,
+    .nepaliEndDatePicker {
+        opacity: 0;
+        padding: 0;
+        height: 0;
+        width: 0;
+    }
+
+    @media only screen and (min-width: 1200px) {
+        .dateCalender {
+            .calender {
+                width: 588px;
+            }
+        }
+    }
+
     .mapboxgl-ctrl-top-left {
         top: 36px !important;
     }
@@ -334,7 +345,6 @@ button {
             // display: none;
             // margin-right: var(--spacing-medium)!important;
             // padding: 0!important;
-
         }
     }
 
@@ -415,7 +425,6 @@ button {
         background-repeat: no-repeat no-repeat;
         background-position: center center;
         background-size: contain;
-
     }
 
     .riverIcon {
@@ -434,8 +443,6 @@ button {
         background-repeat: no-repeat no-repeat;
         background-position: center center;
         background-size: contain;
-        // padding: 2px 5px; 
+        // padding: 2px 5px;
     }
-
-
 }
