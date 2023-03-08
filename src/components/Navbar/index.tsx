@@ -444,7 +444,7 @@ class Navbar extends React.PureComponent<Props, State> {
                             </Translation>
                         )} */}
 
-                        <Translation>
+                        {/* <Translation>
                             {
                                 t => (
 
@@ -460,7 +460,7 @@ class Navbar extends React.PureComponent<Props, State> {
                                         }}
                                     />
                                 )}
-                        </Translation>
+                        </Translation> */}
                         {authenticated && (
                             <Translation>
                                 {

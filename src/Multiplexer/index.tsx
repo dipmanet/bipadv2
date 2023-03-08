@@ -2029,7 +2029,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>
-                            <Joyride
+                            {/* <Joyride
                                 callback={this.handleJoyrideCallback}
                                 continuous
                                 // getHelpers={this.getHelpers}
@@ -2043,7 +2043,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                         zIndex: 10000,
                                     },
                                 }}
-                            />
+                            /> */}
                             {/* {closeWalkThrough ? ''
                                 : isFirstTimeUser === undefined ? (
                                     <WalkThrough

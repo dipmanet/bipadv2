@@ -36,21 +36,21 @@ export interface FallbackRoute {
 export type SomeRoute = Route | NavbarRoute | FallbackRoute;
 
 const routeSettings: SomeRoute[] = [
-    {
-        name: 'homepage',
-        title: 'Homepage',
-        titleNep: 'गृहपृष्‍ठ',
-        path: '/',
-        load: () => import('../views/Homepage'),
-        navbar: false,
-        iconName: 'dashboard',
-        id: 'home-page',
-    },
+    // {
+    //     name: 'homepage',
+    //     title: 'Homepage',
+    //     titleNep: 'गृहपृष्‍ठ',
+    //     path: '/',
+    //     load: () => import('../views/Homepage'),
+    //     navbar: false,
+    //     iconName: 'dashboard',
+    //     id: 'home-page',
+    // },
     {
         name: 'dashboard',
         title: 'Dashboard',
         titleNep: 'ड्यासबोर्ड',
-        path: '/dashboard/',
+        path: '/',
         load: () => import('../views/Dashboard'),
         navbar: true,
         iconName: 'dashboard',
