@@ -44,6 +44,7 @@ import RouteSetting from '#constants/routeSettings';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
 import GroupMenuContainer from './GroupMenuContainer';
+import PalikaReport from '#views/PalikaReport';
 
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
@@ -331,7 +332,9 @@ class Navbar extends React.PureComponent<Props, State> {
         const { activeGroupButton, disableOutsideDivClick } = this.state;
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        const GroupMenuListRoutes = ['dataArchive', 'droughtWatch'];
+        const GroupMenuListRoutes = ['droughtWatch',
+            'DRRM Report',
+        ];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
 
         return (
@@ -536,6 +539,20 @@ class Navbar extends React.PureComponent<Props, State> {
                                         id="situation-report"
                                         iconName="textDocument"
                                         modal={<SituationReport />}
+                                    />
+                                )}
+                        </Translation>
+                        <Translation>
+                            {
+                                t => (
+
+                                    <ModalButton
+                                        className={isRoutedListedHere && activeRouteName === 'DRRM Report' ? _cs(styles.reportIncidentutton, styles.insideContainerComponent) : (styles.insideContainerComponent)}
+                                        title={t('DRRM Report')}
+                                        id="drrm"
+                                        iconName="textDocument"
+                                        modal={<PalikaReport />}
+                                        onClick={() => navigate('/drrm-report/')}
                                     />
                                 )}
                         </Translation>
