@@ -1,5 +1,6 @@
 @import '~base-scss/base';
-.customTooltip{
+
+.customTooltip {
     background-color: rgb(233, 232, 232) !important;
     color: #444;
     box-shadow: 0 -2px 4px -3px #000;
@@ -8,7 +9,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    h2{
+
+    h2 {
         color: rgb(41, 40, 40) !important;
         font-size: 12px !important;
         line-height: 1em;
@@ -17,26 +19,30 @@
         justify-content: center;
 
     }
-    p{
+
+    p {
         color: rgb(41, 40, 40) !important;
         line-height: 0.7em !important;
-        font-size:12px !important;
+        font-size: 12px !important;
         display: flex;
         justify-content: center;
     }
 }
+
 .visualizations {
     padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
-    
+
     .hazard-statistics-chart {
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             .heading {
                 padding: 0 $spacing-medium;
                 color: $color-accent;
             }
+
             .chart-download {
                 padding: 0 $spacing-medium;
             }
@@ -46,6 +52,39 @@
             height: 320px;
             background-color: #fff;
         }
+    }
+
+    .alert-summary {
+        .header {
+            .heading {
+                padding: var(--spacing-medium) var(--spacing-large);
+            }
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+
+            .summary-item {
+                flex-basis: calc(100% / 3);
+                flex-grow: 1;
+                padding: var(--spacing-small) calc(var(--spacing-large) - var(--spacing-medium));
+
+                .label {
+                    padding: 0 var(--spacing-medium);
+                    color: var(--color-text-label);
+                    font-weight: var(--font-weight-bold);
+                }
+
+                .value {
+                    padding: 0 var(--spacing-medium);
+                    color: var(--color-accent);
+                    font-size: var(--font-size-super-large);
+                }
+            }
+        }
+
+
     }
 
     .container {

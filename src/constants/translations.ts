@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
         translation: {
+                DateRangeInfo: 'Showing Data From',
                 province: 'province',
                 district: 'district',
                 municipality: 'municipality',
