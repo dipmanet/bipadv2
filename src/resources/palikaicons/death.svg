@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-death">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="death" clip-path="url(#clip-death)">
+    <g id="death-2" data-name="death" transform="translate(0.715 0.132)">
+      <path id="Path_661" data-name="Path 661" d="M15.9,6.48c-3.35,0-5.9,2.33-5.9,5.42a.91.91,0,0,0,1.81,0,3.35,3.35,0,0,1,1.8-3.05V22.73a.91.91,0,1,0,1.81,0V16h.9v6.77a.91.91,0,1,0,1.81,0V8.85A3.35,3.35,0,0,1,20,11.9a.91.91,0,0,0,1.81,0A5.591,5.591,0,0,0,15.9,6.48Z" fill="#16b57e"/>
+      <circle id="Ellipse_16" data-name="Ellipse 16" cx="1.81" cy="1.81" r="1.81" transform="translate(14.09 1.96)" fill="#16b57e"/>
+      <path id="Path_662" data-name="Path 662" d="M6.42,2A3.62,3.62,0,1,0,10,5.58,3.62,3.62,0,0,0,6.42,2ZM8.1,6.61a.48.48,0,0,1,0,.65.5.5,0,0,1-.32.13.48.48,0,0,1-.32-.13l-1-1-1,1a.456.456,0,1,1-.64-.65l1-1-1-1a.453.453,0,1,1,.64-.64l1,1,1-1a.45.45,0,0,1,.64,0,.47.47,0,0,1,0,.64l-1,1Z" fill="#16b57e"/>
+    </g>
+  </g>
+</svg>

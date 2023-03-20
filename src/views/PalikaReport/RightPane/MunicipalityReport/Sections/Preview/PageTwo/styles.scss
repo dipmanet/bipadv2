@@ -1,0 +1,57 @@
+.previewContainer{
+    background: white;
+    margin-top: 60px;
+    padding: 0px 10px 0 10px;
+
+
+.rowOne{
+    height: 12%;
+    display: flex;
+}
+
+.rowTwo{
+   height: 12%;
+   display: flex;
+}
+.rowFour{
+   height: 12%;
+   display: flex;
+   margin: 20px 0;
+}
+.rowFive{
+   height: 12%;
+   display: flex;
+   flex-direction: column;
+ ul{
+     color: #777;
+     font-size: 11px;
+     list-style: disc;
+     text-align: left;
+     width: 90%;
+     .smallNote{
+         font-size: 10px;
+         font-style: italic;
+
+     }
+ }
+}
+
+
+.rowThree{
+    height: 12%;
+    display: flex;
+
+    
+}
+
+.rowFour{
+   height: 12%;
+    display: flex;
+    justify-content: space-between;
+}
+
+}
+
+
+
+

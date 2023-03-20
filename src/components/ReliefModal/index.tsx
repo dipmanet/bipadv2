@@ -10,11 +10,11 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
+import { languageSelector } from '#selectors';
 import Flow from './Flow';
 import Release from './Release';
 
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
 
 
 const mapStateToProps = state => ({
@@ -79,6 +79,7 @@ class ReliefModal extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
+            handledisableOutsideDivClick,
         } = this.props;
 
         const { currentView } = this.state;
@@ -96,7 +97,10 @@ class ReliefModal extends React.PureComponent<Props, State> {
                                     <DangerButton
                                         transparent
                                         iconName="close"
-                                        onClick={closeModal}
+                                        onClick={() => {
+                                            handledisableOutsideDivClick(false);
+                                            closeModal();
+                                        }}
                                         title={t('Close Modal')}
                                     />
                                 )}

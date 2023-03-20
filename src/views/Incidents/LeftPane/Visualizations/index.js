@@ -127,7 +127,6 @@ class Visualizations extends React.PureComponent {
             hazardTypes,
             language: { language },
         } = this.props;
-
         const severitySummary = this.getSeveritySummary(incidentList);
         const hazardSummary = this.getHazardSummary(incidentList, language);
         const lifeLossSummary = this.getLifeLossSummary(incidentList, language);

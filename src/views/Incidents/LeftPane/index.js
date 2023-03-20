@@ -28,14 +28,15 @@ import {
 } from '#actionCreators';
 import Cloak from '#components/Cloak';
 
+import {
+    pastDaysToDateRange,
+} from '#utils/transformations';
 import Visualizations from './Visualizations';
 import IncidentListView from './ListView';
 import IncidentTable from './TabularView';
 import AddIncidentForm from './AddIncidentForm';
 
-import {
-    pastDaysToDateRange,
-} from '#utils/transformations';
+
 import { convertDateAccToLanguage } from '#utils/common';
 import styles from './styles.scss';
 

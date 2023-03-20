@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-simulation">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="simulation" clip-path="url(#clip-simulation)">
+    <g id="_005-whistle" data-name="005-whistle" transform="translate(4.042 -24.9)">
+      <path id="Path_677" data-name="Path 677" d="M364.8,32.268h1.613v1.787H364.8Z" transform="translate(-347.758 0)" fill="#405467"/>
+      <path id="Path_678" data-name="Path 678" d="M20.055,32.268v3.188H15.639V32.268H10.351a7.538,7.538,0,0,0-7.4,6.129H0V46.84a6.336,6.336,0,0,0,6.329,6.329H8.437V48.954H6.329A4.934,4.934,0,0,1,1.4,44.026V41.211H2.946A7.537,7.537,0,0,0,17.887,39.8l6.029-3.014V32.268ZM6.329,50.355h.707v1.413H6.329A4.937,4.937,0,0,1,1.6,48.228a6.315,6.315,0,0,0,4.729,2.127Zm4.021-5.328A5.222,5.222,0,1,1,15.573,39.8,5.228,5.228,0,0,1,10.351,45.027Z" transform="translate(0)" fill="#405467"/>
+      <circle id="Ellipse_28" data-name="Ellipse 28" cx="3.821" cy="3.821" r="3.821" transform="translate(5.361 41.873) rotate(-67.486)" fill="#405467"/>
+    </g>
+  </g>
+</svg>

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { _cs, listToMap } from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 import memoize from 'memoize-one';
 import { Translation } from 'react-i18next';
 import SelectInput from '#rsci/SelectInput';
 import SearchSelectInput from '#rsci/SearchSelectInput';
+import { createSingleList } from './util';
 // import SegmentInput from '#rsci/SegmentInput';
 
 import {
@@ -19,7 +20,6 @@ import {
 
 import styles from './styles.scss';
 
-const adminLevelKeySelector = d => d.id;
 // const adminLevelLabelSelector = d => d.title;
 
 const geoareaKeySelector = d => `${d.adminLevel}-${d.id}`;
@@ -96,43 +96,6 @@ export default class RegionSelectInput extends React.PureComponent {
         }
     }
 
-    createSingleList = memoize((provinces, districts, municipalities) => {
-        const provinceList = provinces.map(province => ({ ...province, adminLevel: 1 }));
-
-        const provinceMap = listToMap(
-            provinces,
-            adminLevelKeySelector,
-            province => province,
-        );
-
-        const districtList = districts.map((district) => {
-            const province = provinceMap[district.province];
-            return {
-                ...district,
-                adminLevel: 2,
-                title: `${district.title}, ${province.title}`,
-            };
-        });
-
-        const districtMap = listToMap(
-            districts,
-            adminLevelKeySelector,
-            province => province,
-        );
-
-        const municipalityList = municipalities.map((municipality) => {
-            const district = districtMap[municipality.district];
-            const province = provinceMap[district.province];
-            return {
-                ...municipality,
-                adminLevel: 3,
-                title: `${municipality.title}, ${district.title}, ${province.title}`,
-            };
-        });
-
-        return [...provinceList, ...districtList, ...municipalityList];
-    })
-
     render() {
         const {
             className: classNameFromProps,
@@ -159,7 +122,7 @@ export default class RegionSelectInput extends React.PureComponent {
             value = `${adminLevel}-${geoarea}`;
         }
 
-        const options = this.createSingleList(provinces, districts, municipalities);
+        const options = createSingleList(provinces, districts, municipalities);
         const Input = maxOptions > 0 ? SearchSelectInput : SelectInput;
         return (
             <div className={_cs(className, styles.regionSelectInput)}>

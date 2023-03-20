@@ -121,9 +121,11 @@ const DetailsFirstPage = (props: Props) => {
                                             faramElementName="region"
                                             wardsHidden
                                             onChange={handleFormRegion}
-                                            initialLoc={{ municipality,
+                                            initialLoc={{
+                                                municipality,
                                                 district,
-                                                province }}
+                                                province,
+                                            }}
                                             provinceInputClassName={styles.snprovinceinput}
                                             districtInputClassName={styles.sndistinput}
                                             municipalityInputClassName={styles.snmuniinput}

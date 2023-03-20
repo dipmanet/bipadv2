@@ -71,7 +71,9 @@ const ZoomToolBar = (props: OwnProps) => {
                 !hideMap && (
                     <>
                         <div
-                            className={styles.zoomToolBar}
+                            className={_cs(styles.zoomToolBar, 'zoomToolbar-tour')}
+
+
                         >
                             <div className={styles.zoomSection}>
                                 <button

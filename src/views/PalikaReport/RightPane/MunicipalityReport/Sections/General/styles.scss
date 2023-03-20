@@ -1,0 +1,332 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+    }
+.calendar-wrapper{
+    width: fit-content;
+}
+h5{
+    opacity: 0.67;
+}
+
+  .buttonDiv{
+    display: flex;
+  }
+.errorMsg{
+    color: red;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+.addEditBtn{
+    background: transparent;
+    border: none;
+    // filter: saturate(100%);
+    cursor: pointer;
+    margin-left: 12px;
+    .addEditIcon{
+        color: rgb(0,92,230);
+        font-size: 20px;
+    }
+        
+    }
+.mainPageDetailsContainer{
+    min-height: 400px !important;
+    display: flex;
+    flex-direction: column;
+    // padding: 50px;
+    td{
+        font-weight: bold;
+    }
+    select{
+        width: 130px;
+        margin-left: 10px;
+        background-color: #e8e8e8;
+    }
+    .localComitteeData{
+        display: flex;
+    }
+    .localComitteeDetail{
+        display: flex;
+        margin-left: auto;
+      
+        .inputContainer{
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            .formControl{
+             
+                    width: 140px;
+               
+                    .calender{
+                        margin-left: -50px;
+                    }
+                
+            }
+            span{
+                margin-right: 10px;
+            }
+            .comitteeMembers{
+                width: 50px;
+            }
+        }
+    }
+  .inputFiscalYear{
+      display: flex;
+      margin-bottom: 10px;
+    
+  }
+    .nep{
+        font-family: "Kalimati Regular"!important;
+       }
+    .loaderInfo{
+        position: absolute;
+        top: 54%;
+        left: 55%;
+    }
+    h2{
+        text-align: left;
+        margin-bottom: 15px;
+    }
+    
+    .formColumn{
+        padding: 0;
+        // border: 1px solid gray;
+        p{
+            font-size: 14px;
+        }
+        .savebtnInfo{
+            position: relative;
+            width: fit-content;
+            // background-color: rgb(54, 132, 216) !important;
+            background-color: transparent;
+            border-radius: 4px;
+            color: rgb(54, 132, 216) !important;
+            padding: 8px 8px;
+            cursor: pointer;
+            // border: none;
+            // filter: saturate(80%);
+            cursor: pointer;
+            border: none;
+            margin-right: 10px;
+            white-space: nowrap;
+            padding-left: 0px;
+            .plusIcon{
+                padding-right: 4px;
+            }
+        }
+        .savebtn{
+            position: relative;
+            margin-top: 10px;
+            width: fit-content;
+            // background-color: rgb(54, 132, 216) !important;
+            background-color: transparent;
+            border-radius: 4px;
+            color: rgb(54, 132, 216) !important;
+            padding: 8px 8px;
+            cursor: pointer;
+            // border: none;
+            // filter: saturate(80%);
+            cursor: pointer;
+            border: none;
+            margin-right: 10px;
+            white-space: nowrap;
+            .plusIcon{
+                padding-right: 4px;
+            }
+        }
+        .row{
+            display: flex;
+            width: 100%;
+            // border: 1px solid red;
+            justify-content: flex-start;
+            flex-direction: column;
+            margin-top: 20px;
+            h3{
+                margin-bottom: 10px;
+            }
+            // .reportTable{
+
+                // table{
+                //     margin: 0;
+                // }
+                // table{
+                //     border-collapse: collapse;
+                //     width: 100%;
+                //     border: 1px solid #e6e6e6;
+                //     margin: 0 0 15px 0;
+                // }
+                th{
+                    padding: 0.5rem;
+                    text-align: left;
+                    color: #777;
+                    font-weight: 400;
+                }
+                td{
+                    // border-top: 1px solid #f5f5f5;
+                    // border-bottom: 1px solid #f5f5f5;
+                    // padding: 0.5rem;
+                    // text-align: left;
+                }
+               
+                .inputContainer{
+                    display: flex;
+                    border-radius: 3px;
+                    background-color: rgb(232,232,232);
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin-bottom: 12px;
+                    padding-left: 10px;
+                    // border: 1px solid blue;
+                    width: 40%;
+                    padding-right: 10px;
+                    cursor: pointer;
+                   
+                    .labelDate{
+                        padding-left: 10px;
+                        color: #777;
+                        width: 100%;
+                        // margin-top: 15px;
+                    }
+                    select{
+                        border: none !important;
+                        padding: 0px 10px;
+                        background: transparent;
+                        // background-color: rgb(232,232,232);
+                        width: 100%;
+                        padding: 15px 10px !important;
+                        color: #777;
+                    }
+                    .label{
+                        padding: 12px 18px 0 15px;
+                        width: 100%;
+                        font-size: 10px;
+                        color: #111;
+                    }
+                    .datepicker{
+                        width: 100%;
+                    }
+                    .addEditBtn{
+                        background-color: transparent;
+                        border: none;
+                        cursor: pointer;
+                        // filter: saturate(100%);
+                        cursor: pointer;
+                        
+                        .addEditIcon{
+                        font-size: 18px;
+                        padding-right: 10px;
+                        color: rgb(49,158,255);
+                    }
+                }
+                
+                .inputElement{
+                    padding: 0;
+                }
+                
+                input::-webkit-input-placeholder{
+                    font-size: 10px;
+                    vertical-align:middle !important;
+                    line-height: 25px !important;
+                }
+                
+                input{
+                    border: none;
+                    padding: 15px 10px !important;
+                    background: transparent;
+                    width: 100%;
+                }
+                input:focus{
+                    outline: none;
+                }
+                input::placeholder{
+                    font-size: 12px;
+                }
+                .inputIcon{
+                    color: rgb(152,152,152);
+                }
+            }
+        }
+        
+        
+        .personalDetailsrow{
+            display: flex;
+            flex-direction: column;
+            // width: 80%;
+            // margin-bottom: 12px;
+            // margin-top: 10px;
+           
+            .personalDetails{
+                // margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 20px;
+                .nep{
+                    font-family: "Kalimati Regular"!important;
+                   }
+                h5{
+                    opacity: 0.67;
+                }
+                // table{
+                    //     border-collapse: collapse;
+                    //     width: 100%;
+                    //     border: 1px solid #e6e6e6;
+                    //     margin: 0 0 15px 0;
+                    // }
+                    // th{
+                        //     padding: 0.5rem;
+                        //     text-align: left;
+                        //     color: #777;
+                        //     font-weight: 400;
+                        // }
+                        // td{
+                            //     border-top: 1px solid #f5f5f5;
+                            //     border-bottom: 1px solid #f5f5f5;
+                            //     padding: 0.5rem;
+                            //     text-align: left;
+                            // }
+                            //     tr:nth-child(odd) {
+                                //     background-color:#f5f5f5
+                                // }
+                                // .titlePersonal{
+                                    //     font-size: 14px;
+                                    //     margin-right: 10px;
+                                    // }
+                                    display: flex;
+                                    ul{
+                                        list-style:none;
+                                        li{
+                                            display: flex;
+                                            align-items: center;
+                                            
+                                            
+                                        }
+                                    }
+                                    .addEditBtn{
+                                        background: transparent;
+                                        border: none;
+                                        // filter: saturate(100%);
+                                        cursor: pointer;
+                                        
+                                        margin-left: 12px;
+                                        .addEditIcon{
+                                            color: rgb(0,92,230);
+                                            font-size: 20px;
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                //     tr:nth-child(even) {
+                //       background-color:#EDEDED;
+                  
+                  
+                //   }
+                //   tr:nth-child(odd) {
+                //       background-color:#FFFFFF;
+                      
+                //       }
+                //               // }
+

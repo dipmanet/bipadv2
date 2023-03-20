@@ -1,0 +1,585 @@
+@font-face {
+  font-family: "Kalimati Regular";
+  src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+  }
+  
+.nep{
+  font-family: "Kalimati Regular"!important;
+ }
+ul{
+  list-style: none;
+  .errorHeading{
+      font-size: 14px;
+  }
+  li{
+      font-size: 11px;
+      
+  }
+}
+.tabsWardContainer{
+  td{
+    font-weight: bold;
+  }
+  h2{
+    margin-bottom: 10px;
+    margin-top: 30px;
+  }
+}
+
+.addReliefBttn{
+  width: 90px;
+  cursor: pointer;
+  background-color: #3684d8 ;
+  border-radius: 5px;
+  border: none;
+ 
+  height: 25px;
+ 
+  filter: saturate(100%);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.inputContainer{
+  
+  display: flex;
+  border-radius: 3px;
+  // background-color: rgb(232,232,232);
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-left: 10px;
+  .dpText{
+    width: 250px;
+  }
+  textarea{
+    padding-top: 10px !important;
+    // text-align: center;
+    font-size: 11px;
+    width: 100%;
+   
+    padding: 5px !important;
+    background-color: rgb(228, 228, 228);
+   
+    border: none !important;
+  }
+  ::placeholder {
+    /* Firefox 18- */
+    // text-align: center;
+    padding-top: 15px !important;
+}
+
+  .labelDate{
+  padding-left: 10px;
+  color: #777;
+  width: 100%;
+  }
+  select{
+  border: none !important;
+  padding: 0px 10px;
+  background: transparent;
+  width: 100%;
+  padding: 15px 10px !important;
+  color: #777;
+  }
+  .label{
+  padding: 12px 18px 0 15px;
+  width: 100%;
+  font-size: 10px;
+  color: #111;
+  }
+  .datepicker{
+  width: 100%;
+ 
+  
+  }
+  .addEditBtn{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  filter: saturate(100%);
+  
+  .addEditIcon{
+  font-size: 18px;
+  padding-right: 10px;
+  color: rgb(49,158,255);
+  }
+  }
+  .inputElement{
+  padding: 0;
+  }
+  
+  input::-webkit-input-placeholder{
+  font-size: 10px;
+  vertical-align:middle !important;
+  line-height: 25px !important;
+  
+  }
+  
+  input{
+  border: none;
+  padding: 15px 10px !important;
+  background-color: rgb(228, 228, 228);
+  width: 100%;
+  }
+  input:focus{
+  outline: none;
+  }
+  input::placeholder{
+  font-size: 12px;
+  }
+  .inputIcon{
+  color: rgb(152,152,152);
+  }
+  }
+.buttonDiv{
+  display: flex;
+}
+
+.reliefReportSection{
+  .reliefdistRow{
+    display:flex;
+    .reliefDataMainContainer{
+      display:flex;
+      flex-direction: column;
+      position: relative;
+      top: 30px;
+      .reliefDistribution{
+          display: flex;
+          flex-direction: column;
+         margin-left: 10px;
+          .distItem{
+              display: flex;
+              align-items: center;
+              ul{list-style: none; padding-left: 0;}
+              .reliefIcon{
+                  width: 50px;
+                  height: 50px;
+                  path{
+                      fill:rgb(0,177,117);
+                  }
+              }
+              .biggerText{
+                  font-size: 16px;
+                  color: #222;
+
+              }
+              .smallerText{
+                  font-size: 10px;
+                  color: #777;
+              }
+          }
+      }
+  .peopleBenefited{
+      display: flex;
+      flex-direction: column;
+      .benefitedRow{
+          display: flex;
+          margin-left: 15px;
+          top: 5px;
+          position: relative;
+          align-items: center;
+          .distItem{
+              display: flex;
+              align-items: center;
+              ul{list-style: none; padding-left: 0;}
+              .reliefIcon{
+                  path{fill: rgb(0,177,117)}
+                  width: 40px;
+                  height: 40px;
+              }
+              .biggerText{
+                  font-size: 16px;
+                  color: #222;
+
+              }
+              .smallerText{
+                  font-size: 10px;
+                  color: #777;
+              }
+          }
+      }
+      .lastRow{
+          ul{list-style: none; 
+              padding-left:10px;
+          }
+          display: flex;
+          .darkerSmText{
+              font-size: 14px;
+              color: #222;
+          }
+          .lighterSmText{
+              font-size: 12px;
+              color: #777;
+          }
+      }
+  }
+}
+  }
+  h2{
+    font-size: 14px;
+    color: #222;
+    font-weight: 600;
+    margin-left: 30px;
+    margin-bottom: 10px;
+  }
+  .incidentImpactRow{
+    display: flex;
+    .incidentSection{
+      display: flex;
+      flex-direction: column;
+      flex: 2;
+      h2{
+        font-size: 14px;
+        color: #222;
+        font-weight: 600;
+        // margin-left: 30px !important;
+      }
+      .chartandlegend{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid red;
+        .legend{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+              .activitiesAmt{
+                  .light{
+                      color: #777;
+                  }
+                  .biggerNum{
+                      font-size: 14px;
+                      font-weight: 600;
+                  }
+              }
+              .bottomRow{
+                  position: relative;
+                  right: 5px;
+              }
+              .legenditem{
+                  display: flex;
+                  justify-content: flex-end;
+                  align-items: flex-start;
+                  .legendColorContainer{
+                      height: 100%;
+                      display: flex;
+                      justify-content: flex-start;
+                      align-items: flex-start;
+                      padding-top: 17px;
+                      padding-right: 2px;
+                      .legendColor{
+                          width: 25px;
+                          height: 25px;
+                          border-radius: 50%;
+                          display: none;
+                      }   
+                  }
+                  .numberRow {
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
+                      .houseIcon{
+                        width: 50px;
+                        height: 50px;
+
+                      }
+                      ul{list-style: none; 
+                          padding-left: 1%;
+                          padding-top: 0;
+                      }
+                      
+                      .bigerNum{
+                          font-size: 18px;
+                      font-weight: 600;
+                      }        
+                      .light{
+                          color: #777;
+          
+                      } 
+                  }     
+              }
+          }
+      }
+   
+    }
+    .incidentMiddleSection{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 1.5;
+      position: relative;
+      left: 15px;
+      h2{
+        font-size: 14px;
+        color: #444;
+        font-weight: 600;
+      align-self: flex-start;  
+      }
+      .chartandlegend{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        .legend{
+          display: flex;
+          position: relative;
+          width: 100%;
+              .activitiesAmt{
+                  .light{
+                      color: #777;
+                  }
+                  .biggerNum{
+                      font-size: 14px;
+                      font-weight: 600;
+                  }
+              }
+              .bottomRow{
+                  position: relative;
+                  right: 5px;
+              }
+              .legenditem{
+                  display: flex;
+                  flex-direction: column;
+                  height: 70px;
+                  width: 70px;
+
+                  .legendColorContainer{
+                      height: 100%;
+                      display: flex;
+                      justify-content: flex-start;
+                      align-items: flex-start;
+                      .legendColor{
+                          width: 15px;
+                          height: 15px;
+                          border-radius: 50%;
+                      }   
+                  }
+                  .numberRow {
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                     flex-direction: column;
+                     position: relative;
+                      ul{list-style: none; 
+                          padding-left: 1%;
+                          padding-top: 0;
+                      }
+                      .houseIcon{
+                        width: 50px;
+                        height: 50px;
+                      }
+                      .bigerNum{
+                          font-size: 18px;
+                      font-weight: 600;
+                      }        
+                      .light{
+                          color: #777;
+          
+                      } 
+                  }     
+              }
+          }
+      }
+      .houseData{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content:  flex-start;
+        position: relative;
+        p{
+          font-size: 12px;
+          color: #222;
+          font-weight: 600;
+          position: relative;
+          top: 15px;
+          margin-left: 10px;
+        }
+        .houseRow{
+          display: flex;
+          flex-direction: row;
+          .houseElement{
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+            .darker{
+              font-size: 12px;
+              font-weight: 600;
+              padding-left: 2px;
+            }
+            .houseIcon{
+              width: 40px;
+              height: 40px;
+              path{
+                fill: rgb(84,174,186);
+              }
+            }
+            ul{
+              list-style: none;
+              padding-left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.budgetPreviewContainer{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 25px;
+  justify-content: center;
+  h2{
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 30px;
+      margin-bottom: 15px;
+      color: #222;
+      position: relative;
+      // border: 1px solid red;
+  }
+  .lossRow{
+    display: flex;
+  justify-content: center;
+
+    margin-bottom: 20px;
+    .lossSection{
+      display: flex;
+      margin: 0 1%;
+      align-items: flex-start;
+      justify-content: flex-start;
+      .lossElement{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 0 15px;
+        background: white;
+        padding: 0;
+        .lossIcon{
+         height: 50px;
+         width: 50px;
+         position: relative;
+          padding: 0;
+          margin: 0;
+
+       
+         path{
+           fill:rgb(0,177,117);
+         }
+        }
+        .deathL{
+          position: relative;
+          right: 7px;
+        }
+        ul{
+          padding-left: 0;
+          padding-top: 0;
+          list-style: none;
+          text-align: center;
+          line-height: 0.9em;
+          height: 0;
+          bottom: 20px;
+          position: relative;
+          .darkerText{
+            font-size: 16px;
+            color: #222;
+            font-weight: 600;
+          }
+          .smallerText{
+            font-size: 10px;
+            color: #777;
+            position: relative;
+            bottom: 7px;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.loaderInfo{
+  position: absolute;
+  top: 54%;
+  left: 55%;
+}
+.savebtn{
+  position: relative;
+  margin-top: 10px;
+  max-width: 100%;
+  background-color:  #3684d8;
+  border-radius: 15px;
+  color: white; 
+  padding: 7px 15px;
+  cursor: pointer;
+  filter: saturate(100%);
+  border: none;
+  margin-right: 10px;
+
+  white-space: nowrap;
+}
+.reliefBtn{
+  width: 90px;
+  cursor: pointer;
+  background-color: #F6F6F6!important;
+  border-radius: 5px;
+  border: none;
+  
+ 
+  height: 25px;
+ 
+  filter: saturate(100%);
+  color: black;
+  opacity: 0.67;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+
+  // white-space: nowrap;
+  // filter: saturate(100%) !important;
+  // border: none !important;
+  // background-color: #EBEBEB !important;
+  // height: 25px;
+  .bulletPoint{
+    height: 25px;
+    cursor: pointer;
+    opacity: 0.67;
+  }
+  .bulletPointaddRelief{
+    height: 25px;
+    cursor: pointer;
+    opacity: 0.67;
+   path{
+     fill: black;
+     fill-opacity: 0.67;
+   }
+
+  }
+}
+.butnGroup{
+  display: flex;
+  justify-content: flex-end;
+  .savebtn{
+    // width: 100px;
+    cursor: pointer;
+    background-color:  #3684d8;
+    border-radius: 5px;
+    border: none;
+   
+    height: 30px;
+    
+    filter: saturate(100%);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+}

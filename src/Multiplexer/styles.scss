@@ -1,14 +1,12 @@
 @font-face {
-    font-family: "Kalimati Regular";
-    src: url("../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    font-family: 'Kalimati Regular';
+    src: url('../resources/fonts/Kalimati\ Regular.ttf') format('truetype');
     unicode-range: U+30-39;
     size-adjust: 85%;
-
-
 }
 
 .languageFont {
-    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+    font-family: 'Kalimati Regular', 'Fira Sans', sans-serif !important;
 }
 
 button {
@@ -28,7 +26,7 @@ button {
 
     .navbar {
         flex-shrink: 0;
-        z-index: 1;
+        z-index: 999;
         box-shadow: -3px 0 5px -3px rgba(0, 0, 0, 0.3);
     }
 
@@ -182,34 +180,41 @@ button {
                 top: 10px;
                 left: 1%;
                 z-index: 1;
+                border: var(--width-separator-medium) solid var(--color-separator);
+                border-radius: 5px;
+                background-color: var(--color-foreground);
 
-                .map-actions {
-                    display: flex;
-                    position: relative;
-                    // top: var(--spacing-medium);
-                    // left: var(--spacing-medium);
-                    // z-index: 1;
-                    border: var(--width-separator-medium) solid var(--color-separator);
-                    border-radius: 5px;
-                    background-color: var(--color-foreground);
+                .map-download-button {
+                    padding: var(--spacing-small) var(--spacing-medium);
+                    font-size: var(--font-size-large);
 
-                    .map-download-button {
-                        padding: var(--spacing-small) var(--spacing-medium);
-                        font-size: var(--font-size-large);
+                    &:hover {
+                        background-color: var(--color-background-hover);
+                    }
+                }
 
-                        &:hover {
-                            background-color: var(--color-background-hover);
+                .map-switch {
+                    text-align: center;
+
+                    :global {
+                        .dropdown-button {
+                            padding: var(--spacing-small) var(--spacing-medium);
+                            font-size: var(--font-size-large);
                         }
                     }
+                }
 
-                    .layer-switch {
-                        text-align: center;
+                .admin-switch {
+                    text-align: center;
+                }
 
-                        :global {
-                            .dropdown-button {
-                                padding: var(--spacing-small) var(--spacing-medium);
-                                font-size: var(--font-size-large);
-                            }
+                .layer-switch {
+                    text-align: center;
+
+                    :global {
+                        .dropdown-button {
+                            padding: var(--spacing-small) var(--spacing-medium);
+                            font-size: var(--font-size-large);
                         }
                     }
                 }
@@ -313,7 +318,6 @@ button {
 }
 
 :global {
-
     .nepaliDatePicker,
     .nepaliEndDatePicker {
         opacity: 0;
@@ -328,7 +332,6 @@ button {
                 width: 588px;
             }
         }
-
     }
 
     .mapboxgl-ctrl-top-left {
@@ -336,6 +339,8 @@ button {
     }
 
     .mapboxgl-ctrl-bottom-right {
+        z-index: auto;
+
         .mapboxgl-ctrl-attrib {
             // display: none;
             // margin-right: var(--spacing-medium)!important;
@@ -348,6 +353,7 @@ button {
             padding: 0;
 
             .mapboxgl-popup-close-button {
+                z-index: 99999;
                 padding: var(--spacing-extra-small) var(--spacing-medium);
                 font-size: var(--font-size-super-large);
             }
@@ -365,7 +371,7 @@ button {
     .modal {
         border-radius: 5px;
         padding: var(--spacing-small);
-        overflow-y: scroll;
+        // overflow-y: scroll;
 
         .modal-header {
             border-bottom: none;
@@ -403,10 +409,6 @@ button {
         display: none !important;
     }
 
-    .modebar-btn--logo {
-        display: none !important;
-    }
-
     .rainIcon {
         background-image: url('../../src/resources/images/rainstation.svg');
         height: 45px;
@@ -423,7 +425,6 @@ button {
         background-repeat: no-repeat no-repeat;
         background-position: center center;
         background-size: contain;
-
     }
 
     .riverIcon {
@@ -442,8 +443,6 @@ button {
         background-repeat: no-repeat no-repeat;
         background-position: center center;
         background-size: contain;
-        // padding: 2px 5px; 
+        // padding: 2px 5px;
     }
-
-
 }

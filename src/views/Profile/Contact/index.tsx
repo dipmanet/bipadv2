@@ -62,10 +62,6 @@ import {
     Municipality,
     Region,
 } from '#store/atom/page/types';
-import phoneContactLogo from '../../../resources/icons/phone-contact.svg';
-import emailContactLogo from '../../../resources/icons/email-logo.svg';
-import tableView from '../../../resources/icons/list-view.svg';
-import listView from '../../../resources/icons/category-view.svg';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -73,17 +69,21 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-
 import { TitleContext, Profile } from '#components/TitleContext';
-
 import { mapStyles } from '#constants';
+import Taebul from '#rscv/Taebul';
+import { checkSameRegionPermission } from '#utils/common';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import phoneContactLogo from '../../../resources/icons/phone-contact.svg';
+import emailContactLogo from '../../../resources/icons/email-logo.svg';
+import tableView from '../../../resources/icons/list-view.svg';
+import listView from '../../../resources/icons/category-view.svg';
+
+
 import ContactItem from './ContactItem';
 import ContactEditForm from './ContactEditForm';
 
 import styles from './styles.scss';
-import Taebul from '#rscv/Taebul';
-import { checkSameRegionPermission } from '#utils/common';
-import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 
 const AccentModalButton = modalize(AccentButton);

@@ -14,6 +14,7 @@ interface Props {
     iconName?: string;
     disabled?: boolean;
     titleClassName?: string;
+    id?: string;
 }
 
 interface State {
@@ -50,12 +51,15 @@ export default class MenuItem extends React.PureComponent<Props, State> {
             link,
             iconName,
             titleClassName,
+            id,
         } = this.props;
+
         return (
             <Link
                 to={link}
                 getProps={this.getProps}
                 title={title}
+                id={id}
             >
                 <Icon
                     className={styles.icon}

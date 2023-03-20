@@ -149,17 +149,43 @@ class ChoroplethMap extends React.PureComponent {
             tooltipRenderer: TooltipRenderer,
             tooltipParams,
             language: { language },
+            isDamageAndLoss,
         } = this.props;
 
-        const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
-        const showDistrict = [1, 2].includes(regionLevel);
-        const showMunicipality = [2, 3].includes(regionLevel);
-        const showWard = [3, 4].includes(regionLevel);
+        const checkShowBoundary = (condition, isDamageandLoss, type) => {
+            if (isDamageandLoss) {
+                if ((type === 'district' && regionLevel === 2)
+                || (type === 'muni' && regionLevel === 3)
+                 || (type === 'ward' && regionLevel === 4)) {
+                    return true;
+                }
+                return false;
+            }
+            return condition;
+        };
 
-        const showProvinceFill = isNotDefined(regionLevel);
-        const showDistrictFill = regionLevel === 1;
-        const showMunicipalityFill = regionLevel === 2;
-        const showWardFill = regionLevel === 3;
+        const checkFillBoundary = (condition, isDamageandLoss, type) => {
+            if (isDamageandLoss) {
+                if ((type === 'prov' && regionLevel === 1)
+                || (type === 'district' && regionLevel === 2)
+                || (type === 'muni' && regionLevel === 3)
+                || (type === 'ward' && regionLevel === 4)) {
+                    return true;
+                }
+                return false;
+            }
+            return condition;
+        };
+
+        const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
+        const showDistrict = checkShowBoundary([1, 2].includes(regionLevel), isDamageAndLoss, 'district');
+        const showMunicipality = checkShowBoundary([2, 3].includes(regionLevel), isDamageAndLoss, 'muni');
+        const showWard = checkShowBoundary([3, 4].includes(regionLevel), isDamageAndLoss, 'ward');
+
+        const showProvinceFill = checkFillBoundary(isNotDefined(regionLevel), isDamageAndLoss, 'prov');
+        const showDistrictFill = checkFillBoundary(regionLevel === 1, isDamageAndLoss, 'district');
+        const showMunicipalityFill = checkFillBoundary(regionLevel === 2, isDamageAndLoss, 'muni');
+        const showWardFill = checkFillBoundary(regionLevel === 3, isDamageAndLoss, 'ward');
 
         const showProvinceLabel = showProvinceFill;
         const showDistrictLabel = showDistrictFill;
@@ -222,7 +248,8 @@ class ChoroplethMap extends React.PureComponent {
                 >
                     <MapLayer
                         layerKey="ward-fill"
-
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.ward,
@@ -257,6 +284,8 @@ class ChoroplethMap extends React.PureComponent {
                     />
                     <MapLayer
                         layerKey="province-fill"
+                        onMouseEnter={isDamageAndLoss && this.handleMouseEnter}
+                        onMouseLeave={isDamageAndLoss && this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.province,

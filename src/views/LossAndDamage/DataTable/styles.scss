@@ -1,0 +1,191 @@
+@import '~base-scss/base';
+
+@font-face {
+    font-family: 'Kalimati Regular';
+    src: url('../../../resources/fonts/Kalimati\ Regular.ttf') format('truetype');
+    unicode-range: U+30-39;
+    size-adjust: 85%;
+}
+
+.languageFont {
+    font-family: 'Kalimati Regular', 'Fira Sans', sans-serif !important;
+}
+
+.toolTipItem {
+    display: none;
+    font-size: 0.75rem;
+    font-weight: 400;
+    width: max-content;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    border: 2px solid white;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.header {
+    display: flex;
+    width: 50vw;
+    justify-content: space-between;
+    align-items: flex-end;
+    overflow: hidden;
+    padding-top: 1.25rem;
+
+    .headerItem {
+        padding: 1.25rem 0.625rem 1.25rem 0px;
+        margin: 0px 0.625rem 0px 0px;
+        display: flex;
+        font-size: 0.875rem;
+        text-align: center;
+        color: #85888a;
+        font-weight: 600;
+        width: auto;
+        text-transform: uppercase;
+        overflow: hidden;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .headerItemActive {
+        @extend .headerItem;
+        padding: 1.25rem 0.625rem 1rem 0px;
+        border-bottom: 4px solid #2470ab;
+    }
+}
+
+.bodyheader {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    margin-bottom: 2px;
+    gap: 15px;
+    background: #ffffff;
+    .headerContent {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        max-width: 10rem;
+        min-width: 10rem;
+        .bodyHeaderItem {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding-right: 3px;
+            text-transform: capitalize;
+            color: #7599b9;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            &:hover {
+                .toolTipItem {
+                    display: block;
+                }
+            }
+        }
+
+        .sort {
+            font-size: 12px;
+            color: #7599b9;
+        }
+    }
+}
+
+.colorOne {
+    background: #f6f6f6;
+}
+.colorTwo {
+    background: #ffffff;
+}
+
+.bodyWrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bodyItem {
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    font-weight: 500;
+    padding-left: 3px;
+    max-width: 10rem;
+    min-width: 10rem;
+    text-align: justify;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover {
+        .toolTipItem {
+            display: block;
+        }
+    }
+}
+
+.totalValues {
+    @extend .bodyWrapper;
+    background: #e5e5e5;
+}
+
+.reactWindow {
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    scroll-behavior: smooth !important;
+}
+
+.loss-and-damage-table-modal {
+    width: 80vw;
+    height: 80vh;
+
+    .modalHeader {
+        padding-top: 0;
+        padding-bottom: 0;
+        border-bottom: 2px solid #aaaaaa;
+        align-items: center;
+    }
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        background: #f6f6f6;
+        overflow: scroll;
+        scroll-behavior: smooth;
+
+        .table {
+            flex-grow: 1;
+        }
+    }
+}
+.loader {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+}
+
+.loader:before,
+.loader:after {
+    content: '';
+    border-radius: 50%;
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.3) inset;
+}
+.loader:after {
+    box-shadow: 0 2px 0 #ff3d00 inset;
+    animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

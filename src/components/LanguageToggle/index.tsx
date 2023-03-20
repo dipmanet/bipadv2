@@ -38,14 +38,14 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const LanguageToggle = (props: Props) => {
-    const { language: { language }, setLanguage } = props;
+    const { language: { language }, setLanguage, className } = props;
 
     const handleLangButton = (val: string) => {
         setLanguage({ language: val });
     };
 
     return (
-        <div className={styles.languageButton}>
+        <div className={_cs(styles.languageButton, className)}>
             <button
                 onClick={() => handleLangButton('en')}
                 className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}

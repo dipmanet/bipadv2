@@ -19,6 +19,42 @@
         flex-direction: column;
         flex-shrink: 0;
 
+
+        .reportIncident {
+            position: absolute;
+            right: 160px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: row;
+
+            .reportIncidentTitle {
+                width: 130px;
+                font-size: 16px;
+                color: #E35163;
+                padding: var(--spacing-extra-small);
+                text-align: center;
+                font-weight: bold;
+
+            }
+
+            .incidentButtonImagePart {
+                display: flex;
+                height: 50px;
+                width: 50px;
+                background-color: white;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                box-shadow: 0 3px 10px #BBBBBA;
+            }
+        }
+
+        .container {
+            position: relative;
+        }
+
+
+
         .menu-item {
             padding: var(--spacing-small-alt) 0;
         }
@@ -32,8 +68,48 @@
         }
 
         .report-incident-button,
+        .reliefButton {
+            padding: var(--spacing-medium) 0;
+
+        }
+
+        .reportIncidentutton {
+            color: #E66677;
+        }
+
+        .insideContainerComponent {
+            width: 33%
+        }
+
+        .buttomGroup {
+            padding: var(--spacing-medium) 0;
+
+        }
+
         .logout-button {
             padding: var(--spacing-medium) 0;
+
+
+
+        }
+
+        .selectedButtonActive {
+            padding: var(--spacing-medium) 0;
+            color: #E66677;
+            width: 33%;
+
+            path {
+                fill: #E66677;
+            }
+        }
+
+        .logoutButtonActive {
+            padding: var(--spacing-medium) 0;
+            color: #E66677;
+
+            path {
+                fill: #E66677;
+            }
         }
     }
 }

@@ -21,9 +21,9 @@ import LayerLegend from '#components/LayerLegend';
 
 import OpacityInput from '#components/OpacityInput';
 
-import styles from './styles.scss';
 import { MapChildContext } from '#re-map/context';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;

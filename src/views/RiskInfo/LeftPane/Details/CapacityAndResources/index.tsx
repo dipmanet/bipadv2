@@ -951,18 +951,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
         }
 
-        const reportWindowSize = () => {
-            const addResBtnElement = document.getElementById('addResourceButton');
-            if (addResBtnElement) {
-                const left = addResBtnElement.offsetLeft;
-                const top = addResBtnElement.offsetTop;
-                positionModal.top = top;
-                positionModal.left = left;
-            }
-        };
-        reportWindowSize();
-        window.addEventListener('resize', reportWindowSize);
-
         if (prevState.PreserveresourceCollection !== this.state.PreserveresourceCollection) {
             if (isFilterClicked) {
                 this.setState({
@@ -999,6 +987,18 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 });
             }
         }
+
+        const reportWindowSize = () => {
+            const addResBtnElement = document.getElementById('addResourceButton');
+            if (addResBtnElement) {
+                const left = addResBtnElement.offsetLeft;
+                const top = addResBtnElement.offsetTop;
+                positionModal.top = top;
+                positionModal.left = left;
+            }
+        };
+        reportWindowSize();
+        window.addEventListener('resize', reportWindowSize);
     }
 
     public componentWillUnmount() {

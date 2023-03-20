@@ -1,0 +1,259 @@
+.breadcrumbRow{
+    display: flex;
+    // justify-content: center;
+    // margin-top: 40px;
+    margin-top: 20px;
+    .breadcrumb{
+        background-color: transparent;
+        border: none;
+        font-size: 12px;
+        color: #777;
+        cursor: pointer;
+        bottom: 10px;
+        position: relative;
+        margin-left: 20px;
+        margin-right: 4px;
+        text-align: left !important;
+    }
+    .rightCrumb{
+        position: relative;
+        right: 30px;
+    }
+}
+
+.reportSidebarMainContainer{
+    display: flex;
+    flex-direction: column;
+    .inputContainer{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        h5{
+           margin-left: 25px;
+        }
+    }
+    .stepwiseRegionSelectInput{
+        display: flex;
+        flex-direction: column;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .infoIcon{
+        font-size: 16px;    
+        float: right;
+        padding-top: 8px;  
+        margin-right: 20px;
+        cursor: pointer;
+    }
+    h2{
+        font-size: 24px;
+        margin-bottom: 10px !important;
+        // margin-bottom: 0px !important;
+        margin-left: 22px !important;
+    }
+    .menuList{
+        // border: 1px solid red;
+        list-style: none;
+        background: rgb(235,235,235);
+        margin-bottom: 20px !important;
+        padding: 0;
+        margin: 0;
+        
+        .error{
+            font-size: 10px;
+            color: red;
+            padding-left: 30px;
+        }
+       .selected{
+            border: none;
+            text-align: left !important;
+            width: 100%;
+            padding: 10px 0;
+            padding-left: 0;
+            background: #e0e7ee;
+            padding-left: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #5a87b9;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            filter: saturate(100%);
+            justify-content: space-between;
+            padding-right: 24px;
+
+            .iconandMenu{
+                display: flex;
+                align-items: center;
+            }
+            .progressDone{
+                color: green;
+                font-size: 14px;
+            }
+            .progressNotDone{
+                color: rgb(83, 144, 235);
+                font-size: 9px;
+            }
+            .progressOngoing{
+                color: rgb(83, 144, 235);
+
+                font-size: 9px;
+            }
+            .bulletPoint{
+                width : 50px;
+                height: 25px;
+                path{
+                    fill: #297EDF;
+                }
+            }
+
+
+        }
+
+        
+        .notSelected{
+            border: none;
+            width: 100%;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            text-align: left !important;
+            background: rgb(235,235,235);
+            padding-left: 10px;
+            font-size: 16px;
+            color: #444;
+            cursor: pointer;
+            filter: saturate(100%);
+            padding-right: 24px;
+             
+            .iconandMenu{
+                display: flex;
+                align-items: center;
+            }
+            .progressDone{
+                color: green;
+                font-size: 14px;
+            }
+            .progressOngoing{
+                color: rgb(83, 144, 235);
+
+                font-size: 9px;
+            }
+            .progressNotDone{
+                color: rgb(182, 181, 181);
+
+                font-size: 9px;
+            }
+            .bulletPoint{
+                width : 50px;
+                height: 25px;
+                path{
+                    fill: rgb(60,81,102)
+                }
+            }
+        } 
+
+        .notSelected:hover{
+            background: rgb(245,245,245);
+            display: flex;
+            align-items: center;
+         
+
+        }
+        .createReport{
+            border: none;
+            width: calc(100% - 60px);
+            padding: 10px 0;
+            background: rgb(0,91,230);
+            background: rgb(140, 140, 141);
+
+            // padding-left: 30px;
+            font-size: 16px;
+            color: white;
+            margin-left: 30px;
+            margin-top: 15px;
+            border-radius: 4px;
+            text-align: center !important;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            filter: saturate(100%);
+        }
+        .createReportDisabled{
+            border: none;
+            width: calc(100% - 60px);
+            padding: 10px 0;
+            background: rgb(140, 140, 141);
+            background: rgb(31,112,227);
+            filter: saturate(100%);
+
+            // padding-left: 30px;
+            font-size: 16px;
+            color: white;
+            margin-left: 30px;
+            margin-top: 15px;
+            border-radius: 4px;
+            text-align: center !important;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+        }
+
+    
+    
+    }
+    .addButnDiv{
+display: flex;
+justify-content: center;
+flex-direction: column;
+
+    }
+.butnDiv{
+    display: flex;
+    justify-content: center;
+    // flex-direction: column;
+    // padding-left: 30px;
+    // border: 1px solid red;
+ 
+   
+}
+    .addButn{
+        margin-left: auto;
+margin-right: auto;
+background-color: #3684d8;
+opacity: 1 ;
+       
+        border: none;
+        cursor: pointer;
+       border-radius: 5px;
+        height: 40px;
+       
+        filter: saturate(100%);
+        color: white;
+        // opacity: 0.87;
+        font-weight: 300;
+      width: 90%;
+        padding: 7px 12px;
+        
+       }
+}
+.menu{
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #405467;
+    opacity: 1;
+    font-weight: bold;
+    width: 100%;
+    filter: saturate(100%);
+}
+
+
+ 

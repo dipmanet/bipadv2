@@ -92,9 +92,13 @@ const getRegionInfoFromWard = (wardId, regions) => {
         province: provinceId,
 
         wardTitle: ward.title,
+        wardTitleNe: ward.title_ne,
         municipalityTitle: municipality.title,
+        municipalityTitleNe: municipality.title_ne,
         districtTitle: district.title,
+        districtTitleNe: district.title_ne,
         provinceTitle: province.title,
+        provinceTitleNe: province.title_ne,
     };
 };
 
@@ -146,6 +150,8 @@ export const getAggregatedStats = incidents => (
                 val.livestockDestroyedCount,
             ),
             peopleDeathCount: Math.max(acc.peopleDeathCount, val.peopleDeathCount),
+            peopleMissingCount: Math.max(acc.peopleMissingCount, val.peopleMissingCount),
+            peopleInjuredCount: Math.max(acc.peopleInjuredCount, val.peopleInjuredCount),
         }),
         {
             count: 0,
@@ -153,6 +159,8 @@ export const getAggregatedStats = incidents => (
             infrastructureDestroyedCount: 0,
             livestockDestroyedCount: 0,
             peopleDeathCount: 0,
+            peopleMissingCount: 0,
+            peopleInjuredCount: 0,
         },
     )
 );

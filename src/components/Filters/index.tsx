@@ -534,6 +534,7 @@ class Filters extends React.PureComponent<Props, State> {
     // }
 
     private handleResetFiltersButtonClick = () => {
+        const path = window.location.pathname.split('/')[1];
         const authState = getAuthState();
         const { setFilters, user, filters, setProjectFilters,
             FilterClickedStatus, setDataArchiveRiverFilter } = this.props;
@@ -586,6 +587,20 @@ class Filters extends React.PureComponent<Props, State> {
 
                 setFilters({ filters: tempF });
                 this.setState({ faramValues: tempF, activeView: undefined });
+            } else if (path === 'damage-and-loss') {
+                this.setState({
+                    activeView: undefined,
+                    faramValues: {
+                        dataDateRange: {
+                            rangeInDays: 183,
+                            startDate: undefined,
+                            endDate: undefined,
+                        },
+                        hazard: [],
+                        region: {},
+                    },
+                });
+                setFilters({ filters: this.state.faramValues });
             } else {
                 const region = {};
                 const tempF = {
@@ -616,6 +631,20 @@ class Filters extends React.PureComponent<Props, State> {
             };
             setFilters({ filters: tempF });
             this.setState({ faramValues: tempF, activeView: undefined });
+        } else if (path === 'damage-and-loss') {
+            this.setState({
+                activeView: undefined,
+                faramValues: {
+                    dataDateRange: {
+                        rangeInDays: 183,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region: {},
+                },
+            });
+            setFilters({ filters: this.state.faramValues });
         } else {
             this.setState({
                 activeView: undefined,
@@ -878,7 +907,7 @@ class Filters extends React.PureComponent<Props, State> {
 
 
         return (
-            <div className={_cs(styles.filters, className)}>
+            <div className={_cs(styles.filters, className)} id="component-filter">
                 <header className={styles.header}>
                     <h3 className={styles.heading}>
                         <Translation>

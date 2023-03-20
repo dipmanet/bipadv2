@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint-disable max-len */
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +10,7 @@ import Faram, {
 } from '@togglecorp/faram';
 import { parseAsync } from '@babel/core';
 import { Translation } from 'react-i18next';
+import { navigate } from '@reach/router';
 import Icon from '#rscg/Icon';
 import DangerButton from '#rsca/Button/DangerButton';
 
@@ -47,7 +49,6 @@ import PasswordReq from './PasswordReq';
 
 import styles from './styles.scss';
 import DetailsSecondPage from './DetailsSecondPage';
-// import style from '#mapStyles/rasterStyle';
 
 interface FaramValues {
     username?: string;
@@ -106,6 +107,7 @@ interface Params {
 interface OwnProps {
     className?: string;
     closeModal?: () => void;
+
 }
 
 interface PropsFromDispatch {
@@ -164,6 +166,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 }
 
                 window.location.reload();
+            }
+            if (params.routeChangeOnLogin) {
+                params.routeChangeOnLogin();
             }
         },
         onFailure: ({ error, params }) => {
@@ -348,11 +353,20 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ faramErrors });
     };
 
+    private handleRouteChangeOnLogin = () => {
+        const { routeName } = this.props;
+        if (routeName === 'homepage') {
+            navigate('/');
+        }
+        return null;
+    }
+
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
             requests: {
                 loginRequest,
             },
+
         } = this.props;
         this.handlePending(true);
         this.setState({ serverErrorMsg: '' });
@@ -365,6 +379,7 @@ class Login extends React.PureComponent<Props, State> {
             handlePending: this.handlePending,
             storeUserName: this.storeUser,
             newPassword: true,
+            routeChangeOnLogin: this.handleRouteChangeOnLogin,
         });
     };
 
@@ -513,6 +528,10 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ feedback: 'Password has been changed successfully! ' });
     };
 
+    private handleModalClose = () => {
+        this.props.setShowLoginForm(false);
+    }
+
     public render() {
         const {
             faramErrors,
@@ -532,13 +551,14 @@ class Login extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
+            setShowLoginForm,
+            homepageLogin,
             requests: {
                 loginRequest: {
                     pending: pendingProp,
                 },
             },
         } = this.props;
-
         let displayElement;
         if (pageAction === 'loginPage') {
             displayElement = (
@@ -654,7 +674,17 @@ class Login extends React.PureComponent<Props, State> {
                                     <div className={styles.pwdRequestContainer}>
 
                                         <div className={styles.closeBtn}>
-                                            <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                            <DangerButton
+                                                className={styles.dangerbtn}
+                                                onClick={() => {
+                                                    if (setShowLoginForm) {
+                                                        setShowLoginForm(false);
+                                                        closeModal();
+                                                    } else {
+                                                        closeModal();
+                                                    }
+                                                }}
+                                            >
                                                 <Icon
                                                     name="times"
                                                     className={styles.settingsBtn}

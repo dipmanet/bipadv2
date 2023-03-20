@@ -45,8 +45,8 @@ import {
     parseInterval,
 } from '#views/DataArchive/Modals/Riverwatch/utils';
 import TableView from '#views/DataArchive/Modals/Riverwatch/TableView';
-import styles from './styles.scss';
 import PeriodSelector from '#views/DataArchive/Modals/Riverwatch/Filters/PeriodSelector';
+import styles from './styles.scss';
 
 
 interface Params { }
