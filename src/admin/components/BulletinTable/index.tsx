@@ -293,6 +293,7 @@ const BulletinTable = (props) => {
 
     useEffect(() => {
         setfilteredRowDatas(props.bulletinTableData);
+        setLoader(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.bulletinTableData]);
 
@@ -386,14 +387,15 @@ const BulletinTable = (props) => {
             link.parentNode.removeChild(link);
         }
     };
+    console.log('This is loader', loader);
     return (
         <>
             {
                 tableShow && (totalRows === 0 || loader)
-                && <h1 className={styles.noDataHeading}>No Table Data</h1>
+                && (filteredRowDatas.length < 1) && <h1 className={styles.noDataHeading}>No Table Data</h1>
             }
-            {
-                tableShow && (filteredRowDatas.length > 0) && (
+            {loader ? <Loader />
+                : tableShow && (filteredRowDatas.length > 0) && (
                     <Box
                         sx={{ width: '100%', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}
                     >
