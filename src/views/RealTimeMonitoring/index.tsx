@@ -53,12 +53,19 @@ import Loading from '#components/Loading';
 import RainIcon from '#resources/icons/Rain.svg';
 import RiverIcon from '#resources/icons/Wave.svg';
 import EarthquakeIcon from '#resources/icons/Earthquake.svg';
-import PollutionIcon from '#resources/icons/AirQuality.svg';
-import FireIcon from '#resources/icons/Forest-fire.svg';
-
 import {
     isAnyRequestPending,
 } from '#utils/request';
+import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
+import {
+    rainLegendItems,
+    newRiverLegendItems,
+    earthquakeLegendItems,
+    forestFireLegendItems,
+    pollutionLegendItems,
+    noLegend,
+} from './legendItems';
+
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
 import MiniRiverWatch from './MiniRiverWatch';
@@ -68,20 +75,6 @@ import MiniPollution from './MiniPollution';
 import MiniFire from './MiniFire';
 
 import styles from './styles.scss';
-import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
-import {
-    rain24LegendItems,
-    rain12LegendItems,
-    rain6LegendItems,
-    rain3LegendItems,
-    rain1LegendItems,
-    newRiverLegendItems,
-    earthquakeLegendItems,
-    forestFireLegendItems,
-    pollutionLegendItems,
-    noLegend,
-} from './legendItems';
-import StreamFlowLegend from '#components/StreamFlowLegend';
 
 interface State {
     activeView?: ActiveView;

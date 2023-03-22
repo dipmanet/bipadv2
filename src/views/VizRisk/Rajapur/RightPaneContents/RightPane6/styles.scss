@@ -1,0 +1,318 @@
+
+    .vrSideBar{
+        position: absolute;
+        background-color:#112330;
+        min-width: 300px;
+        color:#b6d6e4;
+        padding: 70px 0 0 0;
+        // margin-right: 60px;
+        width: 30%;
+        height: 100vh;
+        right: 60px;
+        overflow-y: scroll;
+        .graphContainer{
+            margin: 15px 0;
+        }
+        .referencesBtn{
+            background-color: transparent;
+            border: none;
+            color: white;
+            opacity: 0.87;
+            font-size: 18px;
+            margin-top: 20px;
+            color:white;
+            font-size: 26px;
+            font-family: 'Source Sans Pro';
+            // opacity: 0.67;
+            line-height: 1.4em;
+            padding: 0 30px;
+
+            .referencesText{
+                color:white;
+                font-size: 16px;
+                font-family: 'Source Sans Pro';
+                opacity: 0.67;
+                padding: 0 30px;
+                li{
+                padding: 5px 0;
+
+                }
+            }
+        }
+        .iconRow{
+            display: flex;
+            padding-left: 30px;
+            .infoIconsContainerHidden{
+                visibility: hidden;
+            }
+            .infoIconsContainer{
+                display: flex;
+                margin: 15px 15px 15px 0;
+                flex: 1;
+                .infoIcon{
+                    margin: 0px 15px 0 5px;
+                }
+                .descriptionCotainer{
+                    display: flex;
+                    flex-direction: column;
+                    .iconTitle{
+                    font-size: 20px;
+                    color: #A7B3BB;
+                    font-family: 'Source Sans Pro';
+    
+                    }
+                    .iconText{
+                        font-size: 12px;
+                        color: #A7B3BB;
+                    }
+                }
+            }
+        }
+          
+        .customBarContainer{
+            width: 90%;
+            background: transparent;
+            // border: 1px solid gray;
+            display: flex;
+            flex-direction: column;
+            padding-left: 5%;
+            position: relative;
+            bottom: 10px;
+            .indicatorBar{
+                .avgbar{
+                    left: 70%;
+                    position: relative;
+                    font-size: 8px;
+                    // border: 1px solid gray;
+                }
+                .avgbarLE{
+                    left: 73%;
+                    position: relative;
+                    font-size: 8px;
+                    // border: 1px solid gray;
+                }
+                .rajapurbar{
+                    left: 43%;
+                    bottom: 28px;
+                    position: absolute;
+                    font-size: 8px;
+
+                    // border: 1px solid gray;
+                    
+                }
+            }
+            .upperLabels{
+                .avg{
+                    // left: 48.5%;
+                    position: relative;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 11px;
+                    .avgHDI{
+                        position: relative;
+                        left: 20%;
+                        font-size: 11px;
+
+                    }
+                    .rajapurHDI{
+                        position: absolute;
+                        left: 20%;
+                    font-size: 11px;
+
+                    }
+                    .avgLE{
+                        position: relative;
+                        left: 28%;
+                    font-size: 11px;
+
+                    }
+                    .rajapurLE{
+                        position: absolute;
+                        left: 62%;
+                    font-size: 11px;
+
+                    }
+                    .avgHPI{
+                        position: relative;
+                        left: 20%;
+                    font-size: 11px;
+
+                    }
+                    .rajapurHPI{
+                        position: absolute;
+                        left: 43%;
+                    font-size: 11px;
+
+                    }
+                    .avgPCI{
+                        position: relative;
+                        left: 20%;
+                    font-size: 11px;
+
+                    }
+                    .rajapurPCI{
+                        position: absolute;
+                        left: 35%;
+                    font-size: 11px;
+
+                    }
+                }
+            }
+            .customBarHDI{
+            //    border: 1px solid green;
+               height: 7px;
+               background: rgb(154,226,252);
+               border-radius: 5px;
+               .innerBarHDI{
+                height: 7px;
+                background: rgb(0,174,240);
+                border-radius: 5px 0 0 5px ;
+                width: 24%;
+               }
+            }
+            .customBarLE{
+                //    border: 1px solid green;
+                   height: 7px;
+                   background: rgb(0,102,122);
+                   border-radius: 5px;
+                   .innerBarLE{
+                    height: 7px;
+                    background: rgb(0,177,163);
+                    border-radius: 5px 0 0 5px ;
+                    width: 67.2%;
+                   }
+                }
+            .customBarHPI{
+            //    border: 1px solid green;
+                height: 7px;
+                background: rgb(255,167,212);
+                border-radius: 5px;
+                .innerBarHPI{
+                height: 7px;
+                background: rgb(255,57,163);
+                border-radius: 5px 0 0 5px ;
+                width: 46%;
+            }
+            }
+            .customBarPCI{
+            //    border: 1px solid green;
+                height: 7px;
+                background: rgb(255,195,175);
+                border-radius: 5px;
+                .innerBarPCI{
+                height: 7px;
+                background: rgb(255,95,48);
+                border-radius: 5px 0 0 5px ;
+                width: 40%;
+            }
+                        }
+            .minMaxLabel{
+            //    border: 1px solid red;
+                display: flex;
+                justify-content: space-between;    
+                font-size: 11px;            
+                .min{
+                    
+                }
+                .max{
+
+                }
+                .nationalAvg{
+                    position: absolute;
+                    left: 55%;
+                }
+                .nationalAvgLE{
+                    position: absolute;
+                    left: 66%;
+                }
+            }
+        }
+        .customChartLegend{
+            position: relative;
+            padding: 0;
+        }
+        .profileList{
+         list-style: none;
+         color: white;
+         padding-left: 0;
+        }
+        .iconContainer{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            margin-top: 15px;
+            // bottom: 20px;
+            .bottomInfo{
+                font-size: 9px;
+                color: white;
+                opacity: 0.5;
+                padding-right: 10px;
+                max-height: 0;
+                transform: scaleY(1);   
+                transition: transform 0.26s ease-out;
+                margin-top: 2px;
+            }
+            .bottomInfoHide{
+                transform: scaleY(0);
+                transition: transform 0.26s ease-in;
+                font-size: 9px;
+                color: white;
+                opacity: 0.5;
+                padding-right: 10px;
+                max-height: 0;
+                margin-top: 2px;
+
+
+            }
+            .infoContainerBtn{
+                background-color: transparent;
+                border: none;
+
+                .closeIcon{
+                    color: white;
+                    opacity: 0.87;
+                }
+            }
+        }
+        .chartsContainer{
+            height: 250px;
+            margin-top: 20px;
+            // width:100%;
+            .respContainer{
+                height: 250px;
+            }
+        }
+        h1{
+            font-family: 'Playfair Display';
+            font-size: 46px;
+            color: white;
+            opacity: 0.87;
+            padding: 0 30px;
+            margin-top: 20px;
+            line-height: 1.2em;
+            }
+        h2{
+            font-family: 'Playfair Display';
+            font-size: 30px;
+            color: white;
+            opacity: 0.87;
+            padding: 0 30px;
+            margin-top: 20px;
+            line-height: 1.2em;
+            }
+        p{
+            color:white;
+            font-size: 16px;
+            font-family: 'Source Sans Pro';
+            opacity: 0.87;
+            line-height: 1.4em;
+            padding: 0 30px;
+        }
+    }
+
+
+
+
+
+

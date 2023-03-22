@@ -39,10 +39,6 @@ import {
     riverFiltersSelector, rainStationsSelector,
     languageSelector,
 } from '#selectors';
-import RiverDetails from './RiverDetails';
-import RainDetails from './RainDetails';
-import StreamflowDetails from './StreamflowDetails';
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -50,6 +46,10 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import RiverDetails from './RiverDetails';
+import RainDetails from './RainDetails';
+import StreamflowDetails from './StreamflowDetails';
+import styles from './styles.scss';
 import { checkStreamRiskValue } from '../utils';
 
 

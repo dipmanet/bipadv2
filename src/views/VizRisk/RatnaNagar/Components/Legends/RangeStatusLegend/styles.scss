@@ -1,0 +1,54 @@
+.mainStatusLegendContainer {
+    position: absolute;
+    width: 200px;
+    bottom: 100px;
+    right: 30px;
+    padding: 5px 15px;
+    z-index: 999;
+    background-color: #0e141d99;
+    .reloadAndTitle{
+        display: flex;
+        align-items: center;
+        .titleName{
+            color: white;
+            padding-left: 5px;
+            font-weight: 15px;
+            font-weight: 600;
+        }
+    }
+    .statusSection {
+        display: flex;
+        align-items: center;
+
+        .statusColor {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+        }
+
+        .statusname {
+            padding: 5px 15px;
+            margin: 0;
+            color: white;
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+            &:hover{
+                color : green
+            }
+        }
+        .statusnameActive {
+            padding: 5px 15px;
+            margin: 0;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+        }
+    }
+    .resetIcon{
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+    }
+}

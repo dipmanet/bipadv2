@@ -1,0 +1,112 @@
+.legendContainer {
+    background: #0e141d99;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(12.0px);
+    -webkit-backdrop-filter: blur(12.0px);
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    height: 145px;
+    width: 200px;
+    position: fixed;
+    bottom: 300px;
+    z-index: 99999;
+    right: 95px !important;
+    opacity: 0.87;
+
+    .floodHazard {
+        margin-top: 10px;
+        font-size: 15px;
+        color: white;
+        margin-top: 10px;
+        margin-bottom: 6px;
+        font-size: 10px;
+        text-align: start;
+        margin-left: 5px;
+    }
+
+    .toggleFlood {
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        color: white;
+        opacity: 0.87;
+        text-transform: uppercase;
+
+        .chevrontoggle {
+            font-size: 12px;
+        }
+    }
+
+    .floodMainContainer {
+        display: block;
+
+        .floodItemContainer {
+            margin: 0;
+
+            // height: fit-content;
+            .legendBtn {
+                cursor: pointer;
+                background-color: transparent;
+                font-size: 12px;
+                border: none;
+                color: white;
+                display: flex;
+                align-items: center;
+                margin-bottom: 5px;
+                padding: 5px;
+                // opacity: 0.67;
+
+                .educationHexagon {
+                    width: 12px;
+                    margin: 0 4px 0 5px;
+                }
+
+                .exposedIcons {
+                    margin-right: 10px;
+                    color: rgb(70, 70, 70);
+                    font-size: 12px;
+                }
+
+                .exposedIconsClicked {
+                    margin-right: 10px;
+                    color: rgb(255, 72, 17);
+                    font-size: 12px;
+                }
+            }
+
+            .legendBtnSelected {
+                cursor: pointer;
+                background-color: transparent;
+                font-size: 12px;
+                border: none;
+                color: white;
+                color: #036ef0;
+                filter: saturate(100%);
+                display: flex;
+                align-items: center;
+                margin-bottom: 5px;
+                padding: 5px;
+
+                .educationHexagon {
+                    width: 12px;
+                    margin: 0 4px 0 5px;
+
+                }
+
+                .exposedIcons {
+                    margin-right: 10px;
+                    color: rgb(70, 70, 70);
+                    font-size: 12px;
+                }
+
+                .exposedIconsClicked {
+                    margin-right: 10px;
+                    color: rgb(255, 72, 17);
+                    font-size: 12px;
+                }
+            }
+
+        }
+    }
+}

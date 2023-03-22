@@ -354,7 +354,6 @@ class AlertEventMap extends React.PureComponent {
             alertReferenceData,
             alertCreatedDate,
         } = this.state;
-
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,

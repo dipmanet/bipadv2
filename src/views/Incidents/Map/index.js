@@ -263,7 +263,6 @@ class IncidentMap extends React.PureComponent {
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
-
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
 

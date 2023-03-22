@@ -1,0 +1,60 @@
+.optionDiv {
+    // position: relative;
+    // background-color: #003f5c;
+    top: 40px;
+    z-index: 999;
+    width: 98%;
+    border-radius: 1px;
+    cursor: pointer;
+    border-bottom: 3px solid #3989be;
+    // border: 1px solid white;
+    margin: 5px;
+
+    &:last-child {
+        border: none !important;
+    }
+
+    .optionTitle {
+        background: transparent linear-gradient(139deg, #3989be, #4ba8bf) 0 0 no-repeat padding-box;
+        padding: 5px;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: 8px 0px;
+    }
+
+    .lineDecorator {
+        height: 3px;
+        width: 98%;
+        background-color: #3989be;
+        margin-top: 15px;
+    }
+
+    // border-top: none;
+    .optionField {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        height: 40px;
+        cursor: pointer;
+        background-color: #0c2432;
+        filter: saturate(100%);
+        outline: none;
+        border: none;
+        padding: 20px 8px;
+
+
+        &:hover {
+            background-color: #00000070;
+        }
+    }
+
+    .optionName {
+        width: 100%;
+        padding: 0px !important;
+        margin: 0px !important;
+        color: #fff;
+        filter: saturate(100%);
+        font-size: 14px;
+    }
+
+}

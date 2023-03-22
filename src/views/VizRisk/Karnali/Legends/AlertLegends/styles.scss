@@ -1,0 +1,54 @@
+.mainDivLand {
+    position: fixed;
+    bottom: 60px;
+    right: 81px;
+    z-index: 15;
+    background-color: rgb(19, 32, 55);
+    padding: 7px;
+    border-radius: 10px;
+    width: 190px;
+    box-shadow: rgb(31, 38, 135);
+
+    .landcoverIconContainer {
+        padding: 0;
+        margin: 4px;
+        color: white;
+        // opacity: 0.87;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        opacity: 0.67;
+
+        .fireIcon {
+            color: red;
+            width: 10px;
+            margin-right: 10px;
+        }
+
+        .rainFallIcon {
+            color: #418fde;
+            width: 10px;
+            margin-right: 10px;
+            //    margin-bottom: 5px;
+        }
+
+        .pollutionIcon {
+            color: purple;
+            width: 10px;
+            margin-right: 10px;
+        }
+
+        .floodIcon {
+            color: rgb(0, 0, 139);
+            width: 10px;
+            margin-right: 10px;
+        }
+
+        .earthquakeIcon {
+            color: rgb(93, 64, 55);
+            width: 10px;
+            margin-right: 10px;
+        }
+    }
+
+}

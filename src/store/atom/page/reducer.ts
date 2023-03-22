@@ -6,7 +6,6 @@ import { ModelEnum } from '#types';
 import * as Type from './types';
 import initialState from './initialState';
 
-
 // ACTION CREATORS
 export const setBulletinYearlyDataAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,

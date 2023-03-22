@@ -1,0 +1,186 @@
+$button-color: rgb(0,170,223);
+.landslideCriticalLegend{
+    background: transparent;
+    position: fixed;
+    bottom: 15px;
+    width: calc(70%);
+    left: calc(30% - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .toggleCritical{
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        color: white;
+        opacity: 0.87;
+        text-transform: uppercase;
+        cursor: pointer;
+        width: 30%;
+        .chevrontoggle{
+            font-size: 10px;
+        padding-left: 5px;
+        padding-bottom: 4px;
+    
+        }
+    }
+    p{
+        color: white !important;
+        font-size: 10px;
+    }
+    .criticalIcons{
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(7,32,50);
+    padding: 0 10px;
+
+            .infraIconContainer{
+                text-transform: capitalize;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .allIconSelected{
+                    font-size: 20px;
+                    color: #036ef0;
+                    padding-right: 9px;
+                    padding-left: 7px;
+    
+                }
+                .allIcon{
+                    font-size: 20px;
+                    color: white;
+                    opacity: 0.87;
+                    padding-right: 9px;
+                    padding-left: 7px;
+    
+                }
+                .canalIcon{
+                    border-bottom:2px solid #0670bc;
+                    width: 25px;
+                    margin-right: 12px;
+                    font-size: 15px;
+                    position: relative;
+                    // bottom: 7px;
+                }
+                .roadIcon{
+                    border-bottom:2px solid #a7a5a5;
+                    width: 25px;
+                    margin-right: 12px;
+                    font-size: 15px;
+                    position: relative;
+                    // bottom: 7px;
+                }
+                .criticalButtonSelected{
+                    font-family: 'Source Sans Pro';
+                    background: transparent;
+                    // color: #1664c1;
+                    color: #036ef0;
+                    display: flex;
+                    align-items: center;
+                    border: none;
+                    font-size: 14px;
+                    // opacity: 0.87;
+                    // width: 100%;
+                    cursor: pointer;
+                    filter: saturate(100%);
+                    // border: 1px solid red;
+                    margin: 0;
+                    padding: 0;
+                    height: 28px;
+                    // padding-top: 10px;
+               
+                    .svgIcon{
+                        width: 32px;
+                    }
+                      path{
+                        fill: #1664c1;
+                        // fill: white;
+                    }
+                    polygon{
+                        fill: #1664c1;
+                        // fill: white;
+                    }
+                    
+                    .section{
+                        border: 1px solid $button-color;
+                        padding: 5px;
+                        margin: 0 3px;
+                        .text{
+                            color: white;
+                            font-size: 11px;
+                            font-weight: 600;
+                        }
+                        .underline{
+                            width: 20px;
+                            height: 5px;
+                            width: 100%;
+                        }
+                    }
+                 
+                }
+                .criticalButton{
+                    font-family: 'Source Sans Pro';
+                    background: transparent;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    border: none;
+                    font-size: 14px;
+                    opacity: 0.67;
+                    // width: 100%;
+                    cursor: pointer;
+                    filter: saturate(100%);
+                    // border: 1px solid red;
+                    margin: 0;
+                    padding: 0;
+                    height: 28px;
+                    // padding-top: 10px;
+                  
+                    path{
+                        fill: white;
+                        opacity: 0.87;
+                    }
+                    polygon{
+                        fill: white;
+                        opacity: 0.87;
+    
+                    }
+                    .svgIcon{
+                        width: 32px;
+                    }
+
+                    .section{
+                        margin: 0 3px;
+                        padding: 5px;
+                        .text{
+                            color: white;
+                            font-size: 11px;
+                        }
+                        .underline{
+                            width: 20px;
+                            height: 5px;
+                            width: 100%;
+                        }
+                    }
+                
+                }
+            }
+    }
+    .navbutton{
+        background-color: transparent;
+        border: 1px solid $button-color;
+        filter: saturate(100%);
+        color: $button-color;
+        cursor:pointer;
+        padding: 5px 10px;
+        margin-left: 5px;
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+}
+
+
+

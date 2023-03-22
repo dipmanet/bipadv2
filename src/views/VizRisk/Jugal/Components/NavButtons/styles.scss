@@ -1,0 +1,56 @@
+$button-color: rgb(0,170,223);
+.loaderInfo{
+    position: absolute;
+    top: 54%;
+    left: 55%;
+}
+
+
+.navRow{
+    padding: 0 20px;
+    margin: 25px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .pageIndicator{
+        display: flex;
+        color: white;
+        opacity: 0.77;
+        font-size: 10px;
+
+        .currentPageColor{
+            color: $button-color;
+            padding-left: 10px;
+            font-size: 10px;
+        }
+        .totPages{
+            color: white;
+            opacity: 0.77;
+            font-size: 10px;
+
+        }
+    }
+    .navBtnCont{
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .navbutton{
+            background-color: transparent;
+            border: 1px solid $button-color;
+            filter: saturate(100%);
+            color: $button-color;
+            cursor:pointer;
+            padding: 5px 10px;
+            margin-left: 5px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .btnDisable{
+            @extend .navbutton;
+            color: gray !important;
+            border: 1px solid gray;
+            cursor:not-allowed;
+        }
+    }
+}

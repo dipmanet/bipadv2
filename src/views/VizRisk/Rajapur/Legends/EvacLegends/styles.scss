@@ -1,0 +1,108 @@
+
+.heading{
+    font-size: 12px !important;
+}
+.criticalIcons{
+    .toggleContainer{
+        .infraIconContainer{
+            text-transform: capitalize;
+            margin: 1px 0;
+            .canalIcon{
+                border-bottom:2px solid #0670bc;
+                width: 25px;
+                margin-right: 12px;
+                font-size: 12px;
+                position: relative;
+                // bottom: 7px;
+            }
+            .roadIcon{
+                border-bottom:2px solid #a7a5a5;
+                width: 25px;
+                margin-right: 12px;
+                font-size: 12px;
+                position: relative;
+                // bottom: 7px;
+            }
+            .allIconSelected{
+                font-size: 15px;
+                color: #1664c1;
+                padding-right: 9px;
+                padding-left: 7px;
+
+            }
+            .allIcon{
+                font-size: 15px;
+                color: white;
+                opacity: 0.67;
+                padding-right: 9px;
+                padding-left: 7px;
+
+            }
+            .criticalButtonSelected{
+                font-family: 'Source Sans Pro';
+                background: transparent;
+                color: #1664c1;
+                display: flex;
+                align-items: center;
+                border: none;
+                font-size: 12px;
+                opacity: 0.87;
+                width: 100%;
+                cursor: pointer;
+                filter: saturate(100%);
+                // border: 1px solid red;
+                margin: 0;
+                padding: 0;
+                height: 22px;
+                // padding-top: 10px;
+           
+                .svgIcon{
+                    width: 25px;
+                    height: 25px;
+                }
+                  path{
+                    fill: #1664c1;
+                }
+                polygon{
+                    fill: #1664c1;
+                }
+            }
+            .criticalButton{
+                font-family: 'Source Sans Pro';
+                background: transparent;
+                color: white;
+                display: flex;
+                align-items: center;
+                border: none;
+                font-size: 12px;
+                opacity: 0.68;
+                width: 100%;
+                cursor: pointer;
+                filter: saturate(100%);
+                // border: 1px solid red;
+                margin: 0;
+                padding: 0;
+                height: 22px;
+                // padding-top: 10px;
+              
+                path{
+                    fill: white;
+                    opacity: 0.38;
+                }
+                polygon{
+                    fill: white;
+                    opacity: 0.38;
+
+                }
+                .svgIcon{
+                    width: 25px;
+                    height: 25px;
+                }
+            }
+
+           
+        }
+    }
+}
+
+

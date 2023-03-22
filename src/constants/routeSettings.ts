@@ -470,6 +470,15 @@ const routeSettings: SomeRoute[] = [
 
     // },
     {
+        name: 'visrisk',
+        title: 'VisRisk',
+        path: '/vis-risk/',
+        load: () => import('../views/VizRisk'),
+        navbar: true,
+        disabled: false,
+        iconName: 'eye',
+    },
+    {
         name: 'fourHundredThree',
         title: '403',
         path: '/403/',

@@ -57,7 +57,6 @@ import { FiltersElement, RiverFiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
-
 import { getAuthState } from '#utils/session';
 import { colorScheme } from '#constants';
 import RainBasinSelector from '#views/DataArchive/Filters/Rain/Basin/index';
@@ -967,7 +966,8 @@ class Filters extends React.PureComponent<Props, State> {
                                     onClick={this.handleCloseCurrentFilterButtonClick}
                                 />
                             </header>
-                        )}
+                        )
+                        }
                         <MultiViewContainer
                             views={this.views}
                             active={validActiveView}
@@ -986,7 +986,8 @@ class Filters extends React.PureComponent<Props, State> {
                                 }
                             </Translation>
                         </div>
-                    )}
+                    )
+                    }
                 </div>
             </div>
         );

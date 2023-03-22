@@ -1,0 +1,56 @@
+.selectContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    border: 1px solid white;
+    margin: 25px 0px;
+    cursor: pointer;
+
+    .mainDiv {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        border-bottom: 1px solid white;
+
+        .selectField {
+            display: flex;
+            width: 98%;
+            flex-direction: row;
+            padding: 0;
+            align-items: center;
+            justify-content: space-between;
+
+            .selectItem {
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 0 !important;
+                margin: 8px !important;
+            }
+
+            .selectIcon {
+                justify-self: flex-end;
+                width: 20px;
+                height: 20px;
+                background-image: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.127L12 18.127L20 10.127H4Z" fill="black"/></svg>');
+                background-repeat: no-repeat;
+                background-position-y: 50%;
+                background-position-x: 98%;
+                color: black;
+            }
+
+        }
+
+
+    }
+
+    .mainOptionDiv {
+        width: 100%;
+        max-height: 400px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+}

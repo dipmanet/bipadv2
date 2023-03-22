@@ -57,7 +57,6 @@ import {
 
 import Loading from '#components/Loading';
 import Page from '#components/Page';
-
 import {
     getResults,
     getPending,
@@ -498,11 +497,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     {language === 'en'
-                                    && (
-                                        <div className={styles.label}>
-                                        Showing Data From
-                                        </div>
-                                    )
+                                        && (
+                                            <div className={styles.label}>
+                                                Showing Data From
+                                            </div>
+                                        )
                                     }
                                     <DateInput
                                         showLabel={false}

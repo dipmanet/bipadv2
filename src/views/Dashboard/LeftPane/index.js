@@ -22,17 +22,16 @@ import { getHazardColor } from '#utils/domain';
 import { groupList, convertDateAccToLanguage } from '#utils/common';
 import Cloak from '#components/Cloak';
 import DateRangeInfo from '#components/DateRangeInfo';
-
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
+import { languageSelector } from '#selectors';
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';
 import Visualizations from './Visualizations';
 import AddAlertForm from './AddAlertForm';
 import AddEventForm from './AddEventForm';
 import AlertTable from './AlertTable';
-import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 
 const propTypes = {

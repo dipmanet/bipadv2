@@ -1,0 +1,233 @@
+$button-color: rgb(0, 170, 223);
+
+
+
+@media all and (max-width : 1500px) {
+    .mainTiitleInfo {
+        left: 180px;
+    }
+
+}
+
+.vrSideBar::-webkit-scrollbar {
+    display: none;
+
+}
+
+.heading-style {
+    font-family: 'Playfair Display';
+    font-size: 28px;
+    color: white;
+    line-height: 1.4em;
+}
+
+.para-style {
+    color: white;
+    font-size: 16px;
+    font-family: 'Source Sans Pro';
+    padding: 0 40px 15px 0;
+    text-align: initial;
+    opacity: 0.87;
+    line-height: 1.5em;
+    letter-spacing: 1px;
+    word-spacing: 0.5px;
+
+}
+
+.vrSideBar {
+    scrollbar-width: none;
+    flex-direction: column;
+    background-color: rgb(12, 36, 50);
+    color: #b6d6e4;
+    padding: 95px 18px 60px 18px;
+    width: 100%;
+    left: 0;
+    min-height: 101vh;
+
+    // overflow-y: scroll;
+    .mainIntroHtmlFromAPI {
+        h3 {
+            color: white !important;
+            font-size: 16px;
+        }
+    }
+
+    .leftBottomBar {
+        position: fixed;
+        width: calc(30% - 60px);
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        height: 38px;
+        z-index: 5;
+        background-color: #324052;
+    }
+
+    .climateChart {
+        margin-top: 10px;
+
+        .mainLineChart {
+            margin: 30px 10px 30px -8px;
+            padding: 3px;
+            background-color: #143044;
+
+        }
+    }
+
+
+
+    .chartContainer {
+        margin-top: 20px;
+        position: relative;
+        right: 34px;
+    }
+
+    h1 {
+        @extend .heading-style;
+
+        button {
+            padding: 3px 10px 10px 10px;
+            z-index: 3;
+            opacity: 0.87;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            filter: saturate(100%);
+        }
+    }
+
+    h2 {
+        @extend .heading-style;
+        opacity: 0.9 !important;
+    }
+
+    p {
+        @extend .para-style;
+    }
+
+    .climateLegendContainer {
+        display: flex;
+        justify-content: flex-start;
+        margin-left: 60px;
+        margin-bottom: 15px !important;
+        min-width: 200px;
+
+        .climatelegend {
+            display: flex;
+            padding-right: 20px;
+
+            .legendMax {
+                width: 15px;
+                height: 15px;
+                background-color: #ffbf00;
+                padding-right: 15px;
+                margin-right: 3px;
+            }
+
+            .legendMin {
+                width: 15px;
+                height: 15px;
+                background-color: #347eff;
+                // border: 1px solid #1f59be;
+                margin-right: 3px;
+
+            }
+
+            .legendDaily {
+                width: 15px;
+                height: 15px;
+                background-color: #00d725;
+                // border: 1px solid #047a18;
+                margin-right: 3px;
+
+            }
+
+            .legendText {
+                color: #6490a4;
+                // opacity: 0.45;
+                font-size: 10px;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    $button-color: rgb(0, 170, 223);
+
+    .showBtn {
+        z-index: 500;
+        background-color: transparent;
+        border: 1px solid $button-color;
+        filter: saturate(100%);
+        color: $button-color;
+        cursor: pointer;
+        padding: 5px 10px;
+        margin-left: 5px;
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+}
+
+
+.customTooltip {
+    background-color: #17445e !important;
+    // color: #444;
+    padding-bottom: 1px;
+    border-radius: 10px;
+    text-align: start;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    padding-left: 15px;
+    padding-top: 1px;
+
+    h2 {
+        color: rgb(255, 255, 255) !important;
+        font-size: 12px !important;
+        line-height: 1em;
+        padding: 10px 10px 15px 0px;
+        display: flex;
+        // justify-content: center;
+        text-align: start;
+
+    }
+
+    :nth-child(2) {
+        // padding-left: 10px;
+        padding: 0px 15px 0px 0px;
+        color: #ffbf00 !important;
+        line-height: 0.7em !important;
+        font-size: 12px !important;
+        display: flex;
+        // justify-content: center;
+    }
+
+    :nth-child(3) {
+        padding: 0px 15px 0px 0px;
+        // padding-left: 10px;
+        color: #00d725 !important;
+        line-height: 0.7em !important;
+        font-size: 12px !important;
+        display: flex;
+        // justify-content: center;
+    }
+
+    :nth-child(4) {
+        padding: 0px 15px 0px 0px;
+        // padding-left: 10px;
+        color: #347eff !important;
+        line-height: 0.7em !important;
+        font-size: 12px !important;
+        display: flex;
+        // justify-content: center;
+    }
+}
+
+.recharts-tooltip-wrapper {
+    background-color: white !important;
+    border: 1px solid gray;
+    z-index: 100;
+    color: blue;
+    padding: 0px !important;
+
+}
+

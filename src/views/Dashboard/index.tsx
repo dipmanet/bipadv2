@@ -42,7 +42,6 @@ import {
 } from '#selectors';
 
 import Page from '#components/Page';
-
 import {
     MapStateElement,
     AlertElement,
