@@ -491,56 +491,7 @@ export const incidentPointToGeojsonVR = (
             return {};
         }),
 });
-const getNum = (val) => {
-    const incidentDate = new Date(val).getTime();
-    return incidentDate;
-};
 
-export const incidentPointToGeojsonVR = (
-    incidentList: Incident[],
-    hazards: Obj<HazardType>,
-    year,
-) => ({
-    type: 'FeatureCollection',
-    features: incidentList
-        .filter(incident => (
-            !!incident.point
-            && getNum(incident.incidentOn) > year.ini
-            && getNum(incident.incidentOn) < year.fin))
-        .map(incident => ({
-            ...incident,
-            severityValue: calculateSeverity(incident.loss, severityScaleFactor),
-            dateOccured: incident.incidentOn,
-        }))
-        .sort((a, b) => (b.incidentOn - a.incidentOn))
-        .map((incident) => {
-            const {
-                id,
-                point,
-                hazard: hazardId,
-                incidentOn,
-                severityValue,
-            } = incident;
-
-            const hazard = hazards[hazardId];
-            if (hazard) {
-                return {
-                    id,
-                    type: 'Feature',
-                    geometry: { ...point },
-                    properties: {
-                        incidentId: id,
-                        severity: calculateCategorizedSeverity(severityValue),
-                        hazardTitle: hazard.title,
-                        hazardIcon: hazard.icon,
-                        hazardColor: hazard.color || '#4666b0',
-                        incidentOn: new Date(incidentOn).getTime(),
-                    },
-                };
-            }
-            return {};
-        }),
-});
 
 export const incidentPolygonToGeojson = (incidentList: Incident[], hazards: Obj<HazardType>) => ({
     type: 'FeatureCollection',
