@@ -31,9 +31,6 @@ const PopupOnMapClick = (props: Props) => {
     }, []);
 
 
-    console.log('Rendered');
-
-
     const popUpExposureData = (houseData && Object.keys(houseData).length > 0)
         ? [
             {

@@ -7,9 +7,6 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import Loader from 'react-loader';
 import { getHillShadeLayer, getSingularBuildingData } from '#views/VizRisk/Jugal/utils';
-import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
-import expressions from '../Data/expressions';
-import styles from './styles.scss';
 import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import {
     popupElement,
@@ -23,6 +20,9 @@ import {
     wardsSelector,
 } from '#selectors';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
+import expressions from '../Data/expressions';
+import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -113,7 +113,6 @@ class FloodHistoryMap extends React.Component {
                 features,
             };
             this.setState({ buildingpoints: buildingpointsData });
-            console.log('buildingpointsData', buildingpointsData);
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
                 const { points, buildingpoints } = this.state;
@@ -195,7 +194,6 @@ class FloodHistoryMap extends React.Component {
 
         this.map.on('style.load', () => {
             this.map.on('click', 'buildingPoints', (e) => {
-                console.log(' e.features[0].properties', e);
                 this.setState({ osmID: e.features[0].properties.osmId });
                 const searchTerm = e.features[0].properties.osmId;
                 this.setState({ searchTerm });
@@ -371,9 +369,6 @@ class FloodHistoryMap extends React.Component {
 
 
         if (this.props.buildingVul !== prevProps.buildingVul) {
-            console.log('vul data changed');
-            console.log('vul data', this.props.buildingVul);
-
             const newData = [...this.props.buildings, this.props.buildingVul];
             const features = newData.filter(item => (item.osmId)).map(b => ({
                 type: 'Feature',
@@ -687,66 +682,66 @@ class FloodHistoryMap extends React.Component {
                 <div className={styles.sliderandLegendContainer}>
                     {
                         this.props.sesmicLayer === 'sus'
-                && (
-                    <>
-                        <p className={_cs(styles.sliderLabel)}>
-                            Layer Opacity
-                        </p>
-                        <input
-                            onChange={this.handleInputChange}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={String(this.state.opacitySus)}
-                            className={styles.slider}
-                        />
-                        <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
-                    </>
-                )
+                        && (
+                            <>
+                                <p className={_cs(styles.sliderLabel)}>
+                                    Layer Opacity
+                                </p>
+                                <input
+                                    onChange={this.handleInputChange}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={String(this.state.opacitySus)}
+                                    className={styles.slider}
+                                />
+                                <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                            </>
+                        )
                     }
                     {
                         this.props.sesmicLayer === 'ses'
-                && (
-                    <>
-                        <p className={_cs(styles.sliderLabel)}>
-                            Layer Opacity
-                        </p>
-                        <input
-                            onChange={this.handleInputChangeSes}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={String(this.state.opacitySes)}
-                            className={styles.slider}
-                        />
-                        <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
-                    </>
-                )
+                        && (
+                            <>
+                                <p className={_cs(styles.sliderLabel)}>
+                                    Layer Opacity
+                                </p>
+                                <input
+                                    onChange={this.handleInputChangeSes}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={String(this.state.opacitySes)}
+                                    className={styles.slider}
+                                />
+                                <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                            </>
+                        )
                     }
                     {
                         this.props.sesmicLayer === 'flood'
-                && (
-                    <>
-                        <p className={_cs(styles.sliderLabel)}>
-                            Layer Opacity
-                        </p>
-                        <input
-                            onChange={this.handleInputChangeFlood}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={String(this.state.opacityFlood)}
-                            className={styles.slider}
-                        />
-                        <FloodDepthLegend />
-                    </>
-                )
+                        && (
+                            <>
+                                <p className={_cs(styles.sliderLabel)}>
+                                    Layer Opacity
+                                </p>
+                                <input
+                                    onChange={this.handleInputChangeFlood}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={String(this.state.opacityFlood)}
+                                    className={styles.slider}
+                                />
+                                <FloodDepthLegend />
+                            </>
+                        )
                     }
                 </div>
 

@@ -7,10 +7,10 @@ import {
     ResponsiveContainer,
     XAxis, YAxis, LabelList,
 } from 'recharts';
-import styles from './styles.scss';
 import criticalInfraData from '#views/VizRisk/Tikapur/Data/criticalInfraData';
+import styles from './styles.scss';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -18,7 +18,6 @@ const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'
 const renderCustomizedLabel = (props) => {
     const { x, y, width, height, value } = props;
     const radius = 10;
-    console.log('this props>>>', props);
     return (
         <g>
             <text x={x + width + 10} y={y + height / 2} fill="#fff" textAnchor="middle" dominantBaseline="middle">
@@ -34,18 +33,18 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
                 <p>
-                Tikapur is surrounded by the Karnali river in the east,
-                Janaki Rural Municipality in the north, Mohana River
-                and Indian border in the south, and Bhajani Municipality
-                in the west.  The Karnali river flows to the Terai plains
-                from a narrow gorge at Chisapani, where it bifurcates into
-                Geruwa and Karnali rivers.
+                    Tikapur is surrounded by the Karnali river in the east,
+                    Janaki Rural Municipality in the north, Mohana River
+                    and Indian border in the south, and Bhajani Municipality
+                    in the west.  The Karnali river flows to the Terai plains
+                    from a narrow gorge at Chisapani, where it bifurcates into
+                    Geruwa and Karnali rivers.
                 </p>
                 <p>
-                All of the residential and governmental buildings,
-                religious and cultural sites, banking institutions,
-                critical infrastructures such as hospitals, schools,
-                bridges in Tikapur are at constant threat of flooding every monsoon.
+                    All of the residential and governmental buildings,
+                    religious and cultural sites, banking institutions,
+                    critical infrastructures such as hospitals, schools,
+                    bridges in Tikapur are at constant threat of flooding every monsoon.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>

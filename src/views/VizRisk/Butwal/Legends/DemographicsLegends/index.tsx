@@ -1,6 +1,6 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import Hexagon from 'react-hexagon';
 import { parseStringToNumber } from '../../Functions';
 import styles from './styles.scss';
 

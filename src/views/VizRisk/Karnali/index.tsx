@@ -11,10 +11,6 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import { compose } from 'redux';
-import Leftpane from './LeftPane/index';
-import MultiHazardMap from './MultiHazardMap/index';
-import mapConstants from './Data/mapBoxConstants';
-import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -30,10 +26,14 @@ import {
     userSelector,
 } from '#selectors';
 import { setEventListAction, setIncidentListActionIP } from '#actionCreators';
+import * as PageTypes from '#store/atom/page/types';
+import Leftpane from './LeftPane/index';
+import MultiHazardMap from './MultiHazardMap/index';
+import mapConstants from './Data/mapBoxConstants';
+import styles from './styles.scss';
 import expressions from './Data/expression';
 
 import { provincesSelector } from '../../../store/atom/page/selector';
-import * as PageTypes from '#store/atom/page/types';
 import { alertColorIs } from './Functions';
 
 interface Props {
@@ -61,7 +61,7 @@ interface Alerts {
     createdOn: string;
 }
 
-interface RCPData{
+interface RCPData {
     year: number;
     value: number;
 }
@@ -105,9 +105,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     htmlRequest: {
         url: '/keyvalue-html/',
         method: methods.GET,
-        query: ({ params }) => ({ province: 6,
+        query: ({ params }) => ({
+            province: 6,
             vizrisk_theme__theme_id: 300,
-            limit: -1 }),
+            limit: -1,
+        }),
 
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -365,10 +367,10 @@ export const Karnali = (props: Props) => {
     useEffect(() => {
         if (pending) {
             if (cI.length > 0 && htmlData.length > 0
-				&& jsonData.length > 0 && alerts.length > 0
-				&& contactData.length > 0 && tempData.length > 0
-				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0
-				&& earthquakeData.length > 0) {
+                && jsonData.length > 0 && alerts.length > 0
+                && contactData.length > 0 && tempData.length > 0
+                && lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0
+                && earthquakeData.length > 0) {
                 setpending(false);
             }
         }
@@ -430,8 +432,8 @@ export const Karnali = (props: Props) => {
         tempDataForMapUpto2045,
         tempDataForMapUpto2065,
         prepDataForMapUpto2010,
-	   prepDataForMapUpto2045,
-	   prepDataForMapUpto2065,
+        prepDataForMapUpto2045,
+        prepDataForMapUpto2065,
     };
 
     const handleNext = () => {
@@ -520,7 +522,7 @@ export const Karnali = (props: Props) => {
             clickedCur = [0, 0, 0, 1];
             setclicked(clickedCur);
         } else if (clickedCur[3] === 1 && (clickedCur[0] === 1
-    || clickedCur[2] === 1 || clickedCur[1] === 1)) {
+            || clickedCur[2] === 1 || clickedCur[1] === 1)) {
             clickedCur[3] = 0;
             setclicked(clickedCur);
         } else {
@@ -569,14 +571,14 @@ export const Karnali = (props: Props) => {
         curExposure[i] = curExposure[i] === 1 ? 0 : 1;
 
         if (exposureItem === 'Population Density' && curExposure[1] === 1
-        && curExposure[2] === 1 && curExposure[3] === 1 && curExposure[4] === 1) {
+            && curExposure[2] === 1 && curExposure[3] === 1 && curExposure[4] === 1) {
             curExposure = [1, 0, 0, 0];
             setexposureElementsArr(curExposure);
         } else if (exposureItem === 'Population Density' && curExposure[0] === 1) {
             curExposure = [1, 0, 0, 0];
             setexposureElementsArr(curExposure);
         } else if (curExposure[0] === 1 || curExposure[1] === 1
-|| curExposure[3] === 1) {
+            || curExposure[3] === 1) {
             curExposure[0] = 0;
             setexposureElementsArr(curExposure);
         }
@@ -594,22 +596,22 @@ export const Karnali = (props: Props) => {
 
 
     const { requests:
-{
-    htmlRequest,
-    jsonDataRequest,
-    cIGetRequest,
-    buildingsGetRequest,
-    climateDataRequest,
-    alertsGetRequest,
-    vulnerabilityGetRequest,
-    demographyRequest,
-    contactGetRequest,
-    tempDataGetRequest,
-    precipitationDataGetRequest,
-    damageandLossDataFlood,
-    damageandLossDataLandslide,
-    earthquakeDataRequest,
-} } = props;
+        {
+            htmlRequest,
+            jsonDataRequest,
+            cIGetRequest,
+            buildingsGetRequest,
+            climateDataRequest,
+            alertsGetRequest,
+            vulnerabilityGetRequest,
+            demographyRequest,
+            contactGetRequest,
+            tempDataGetRequest,
+            precipitationDataGetRequest,
+            damageandLossDataFlood,
+            damageandLossDataLandslide,
+            earthquakeDataRequest,
+        } } = props;
 
 
     const THEME_ID = 300;
@@ -736,100 +738,100 @@ export const Karnali = (props: Props) => {
     };
 
     const page1TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page1Legend1TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page1Legend2TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page1Legend3TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page2TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page3TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page3Legend1Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page3Legend2Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page3Legend3Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page3Legend4Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page4TopIntrohtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page4Legend1Introhtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page4Legend2Introhtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page4Legend3Introhtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page5TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page5_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page5_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page6TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page6_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page6_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page7TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page7_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page7_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page8TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page8_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page8_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
 
     const page1Legend1MidClimateData = jsonData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend1_mid_climatedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend1_mid_climatedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page1Legend1BottomTempData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page1_legend1_bottom_temperaturedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend1_bottom_temperaturedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page1Legend2MidLandcoverData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page1_legend2_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend2_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page1Legend3MidPopulationData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page1_legend3_mid_populationdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend3_mid_populationdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
 
     const page3MidLandcoverData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page3_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const page5MidUrbanData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page5_mid_urbandata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page5_mid_urbandata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const populationGridData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_population_grid_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_population_grid_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const populationDensityRange = jsonData.filter(item => item.key
-		 === `${KEYNAME}_population_density_range_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_population_density_range_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const satelliteImageYears = jsonData.filter(item => item.key
-			=== `${KEYNAME}_satellite_image_year_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_satellite_image_year_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const floodHazardLayers = jsonData.filter(item => item.key
-			=== `${KEYNAME}_flood_hazard_layers_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_flood_hazard_layers_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const buildingCountData = jsonData.filter(item => item.key
-			=== `${KEYNAME}_building_count_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_building_count_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
     const mapBoxStyle = jsonData.filter(item => item.key
-		 === `${KEYNAME}_mapbox_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value.layername);
+        === `${KEYNAME}_mapbox_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value.layername);
 
 
     const realTimeDataStationName = String(jsonData.filter(item => item.key
-		=== `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
+        === `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
 
 
     useEffect(() => {
@@ -845,11 +847,13 @@ export const Karnali = (props: Props) => {
     const alertsName = [...new Set(validAlerts.map(item => item.referenceType))];
 
 
-    const populationData = demographicData.map(item => ({ id: item.district.id,
+    const populationData = demographicData.map(item => ({
+        id: item.district.id,
         name: item.district.title,
         MalePop: item.data.malePopulationSum,
         FemalePop: item.data.femalePopulationSum,
-        TotalHousehold: item.data.householdCountSum }));
+        TotalHousehold: item.data.householdCountSum,
+    }));
 
 
     const alertsChartData = [];
@@ -870,23 +874,22 @@ export const Karnali = (props: Props) => {
 
 
     const totalFloodLossData = lossDataFlood.map(item => ({
-		   id: item.district.id,
-		   name: item.district.title,
-		   totalPeopleDeath: item.data && item.data.peopleDeathCountSum,
-		   totalInfraDamage: item.data && item.data.infrastructureAffectedCountSum,
-		   totalEstimatedLoss: isNaN(item.data && item.data.estimatedLoss) ? 0 : item.data && item.data.estimatedLoss,
-		 }));
+        id: item.district.id,
+        name: item.district.title,
+        totalPeopleDeath: item.data && item.data.peopleDeathCountSum,
+        totalInfraDamage: item.data && item.data.infrastructureAffectedCountSum,
+        totalEstimatedLoss: isNaN(item.data && item.data.estimatedLoss) ? 0 : item.data && item.data.estimatedLoss,
+    }));
 
 
     const totalLandslideLossData = lossDataLandslide.map(item => ({
-		   id: item.district.id,
-		   name: item.district.title,
-		   totalPeopleDeath: isNaN(item.data.peopleDeathCountSum) ? 0 : item.data.peopleDeathCountSum,
-		   totalInfraDamage: isNaN(item.data.infrastructureAffectedCountSum) ? 0 : item.data.infrastructureAffectedCountSum,
-		   totalEstimatedLoss: isNaN(item.data.estimatedLoss) ? 0 : item.data.estimatedLoss,
-		 }));
+        id: item.district.id,
+        name: item.district.title,
+        totalPeopleDeath: isNaN(item.data.peopleDeathCountSum) ? 0 : item.data.peopleDeathCountSum,
+        totalInfraDamage: isNaN(item.data.infrastructureAffectedCountSum) ? 0 : item.data.infrastructureAffectedCountSum,
+        totalEstimatedLoss: isNaN(item.data.estimatedLoss) ? 0 : item.data.estimatedLoss,
+    }));
 
-    console.log('contact geojson is', contactGeoJson);
 
     return (
         <>
@@ -896,75 +899,75 @@ export const Karnali = (props: Props) => {
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
                             <p className={styles.loaderText}>
-                            Loading Data...
+                                Loading Data...
                             </p>
                         </div>
                     )
                     : (
                         leftElement < 8
-                            && (
-                                <>
-                                    <MultiHazardMap
-                                        MAINKEYNAME={MAINKEYNAME}
-                                        populationDensityRange={populationDensityRange[0]}
-                                        rightElement={leftElement}
-                                        selectedYear={selectedYear}
-                                        handleyearClick={handleyearClick}
-                                        tempDataForMapUpto2010={tempDataForMapUpto2010}
-                                        tempDataForMapUpto2045={tempDataForMapUpto2045}
-                                        tempDataForMapUpto2065={tempDataForMapUpto2065}
-                                        prepDataForMapUpto2010={prepDataForMapUpto2010}
-                                        prepDataForMapUpto2045={prepDataForMapUpto2045}
-                                        prepDataForMapUpto2065={prepDataForMapUpto2065}
-                                        totalFloodLossData={totalFloodLossData}
-                                        totalLandslideLossData={totalLandslideLossData}
-                                        setclimateLineChartData={setclimateLineChartData}
-                                        earthquakeData={earthquakeData}
-                                        clickedHazardItem={clickedHazardItem}
-                                        clickedFatalityInfraDamage={clickedFatalityInfraDamage}
-                                        mapConstants={mapConstants}
-                                        expressions={expressions}
-                                        vulnerability={vulnerability}
-                                        earthquakeRisk={earthquakeRisk}
-                                        mapboxStyle={mapBoxStyle[0]}
-                                        floodHazardLayersArr={floodHazardLayers[0]}
-                                        leftElement={leftElement}
-                                        CIData={geoJsonCI}
-                                        climateTempData={tempData}
-                                        precipitationData={precipitationData}
-                                        prepSelectedData={prepSelectedData}
-                                        alerts={alertsGeoJson}
-                                        contactGeoJson={contactGeoJson}
-                                        criticalElement={criticalElement}
-                                        satelliteImageYears={satelliteImageYears[0]}
-                                        boundingBox={bbox}
-                                        tempSelectedData={tempSelectedData}
-                                        climateDataType={climateDataType}
-                                        setdistrictIdIs={setdistrictIdIs}
-                                        lng={lng}
-                                        lat={lat}
-                                        municipalityId={49001}
-                                        provinceId={PROVINCEID}
-                                        legendElement={legendElement}
-                                        demographicsData={populationData}
-                                        clickedArr={clicked}
-                                        showCritical={showCritical}
-                                        exposureElementsArr={exposureElementsArr}
-                                        popdensitygeojson={populationGridData[0]}
-                                        floodLayer={floodLayer}
-                                        hazardLegendClickedArr={hazardLegendClickedArr}
-                                        setpending={setpending}
-                                        satelliteYearDisabled={satelliteYearDisabled}
-                                        setsatelliteYearDisabled={setsatelliteYearDisabled}
-                                        setlegentItemDisabled={setlegentItemDisabled}
-                                        exposureElement={exposureElement}
-                                        enableNavBtns={enableNavBtns}
-                                        disableNavBtns={disableNavBtns}
+                        && (
+                            <>
+                                <MultiHazardMap
+                                    MAINKEYNAME={MAINKEYNAME}
+                                    populationDensityRange={populationDensityRange[0]}
+                                    rightElement={leftElement}
+                                    selectedYear={selectedYear}
+                                    handleyearClick={handleyearClick}
+                                    tempDataForMapUpto2010={tempDataForMapUpto2010}
+                                    tempDataForMapUpto2045={tempDataForMapUpto2045}
+                                    tempDataForMapUpto2065={tempDataForMapUpto2065}
+                                    prepDataForMapUpto2010={prepDataForMapUpto2010}
+                                    prepDataForMapUpto2045={prepDataForMapUpto2045}
+                                    prepDataForMapUpto2065={prepDataForMapUpto2065}
+                                    totalFloodLossData={totalFloodLossData}
+                                    totalLandslideLossData={totalLandslideLossData}
+                                    setclimateLineChartData={setclimateLineChartData}
+                                    earthquakeData={earthquakeData}
+                                    clickedHazardItem={clickedHazardItem}
+                                    clickedFatalityInfraDamage={clickedFatalityInfraDamage}
+                                    mapConstants={mapConstants}
+                                    expressions={expressions}
+                                    vulnerability={vulnerability}
+                                    earthquakeRisk={earthquakeRisk}
+                                    mapboxStyle={mapBoxStyle[0]}
+                                    floodHazardLayersArr={floodHazardLayers[0]}
+                                    leftElement={leftElement}
+                                    CIData={geoJsonCI}
+                                    climateTempData={tempData}
+                                    precipitationData={precipitationData}
+                                    prepSelectedData={prepSelectedData}
+                                    alerts={alertsGeoJson}
+                                    contactGeoJson={contactGeoJson}
+                                    criticalElement={criticalElement}
+                                    satelliteImageYears={satelliteImageYears[0]}
+                                    boundingBox={bbox}
+                                    tempSelectedData={tempSelectedData}
+                                    climateDataType={climateDataType}
+                                    setdistrictIdIs={setdistrictIdIs}
+                                    lng={lng}
+                                    lat={lat}
+                                    municipalityId={49001}
+                                    provinceId={PROVINCEID}
+                                    legendElement={legendElement}
+                                    demographicsData={populationData}
+                                    clickedArr={clicked}
+                                    showCritical={showCritical}
+                                    exposureElementsArr={exposureElementsArr}
+                                    popdensitygeojson={populationGridData[0]}
+                                    floodLayer={floodLayer}
+                                    hazardLegendClickedArr={hazardLegendClickedArr}
+                                    setpending={setpending}
+                                    satelliteYearDisabled={satelliteYearDisabled}
+                                    setsatelliteYearDisabled={setsatelliteYearDisabled}
+                                    setlegentItemDisabled={setlegentItemDisabled}
+                                    exposureElement={exposureElement}
+                                    enableNavBtns={enableNavBtns}
+                                    disableNavBtns={disableNavBtns}
 
-                                    />
+                                />
 
-                                </>
-                            )
+                            </>
+                        )
                     )
 
             }
@@ -974,13 +977,13 @@ export const Karnali = (props: Props) => {
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
                             <p className={styles.loaderText}>
-                            Loading Data...
+                                Loading Data...
                             </p>
                         </div>
                     ) : (
 
                         (leftElement === 0 && legendElement === 'Adminstrative Map') && (
-                        // The real html data is started from Array's third element
+                            // The real html data is started from Array's third element
                             <Leftpane
                                 introHtml={page1TopIntrohtml[0]}
                                 page1Legend1InroHtml={page1Legend1TopIntrohtml[0]}

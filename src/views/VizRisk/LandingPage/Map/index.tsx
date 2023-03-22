@@ -72,7 +72,6 @@ const Map = (props: Props) => {
             value: !!array.includes(data.id),
             indicator: checkIndicator(vzRiskMunicipalData, data),
         }));
-
         const allAvialableVizrisks = [...vzRiskMunicipalData, ...vzRiskProvinceData]
             .map(item => item.id);
 
@@ -610,8 +609,6 @@ const Map = (props: Props) => {
 
         const allExposureId = [...proFloodId, ...proLandSlideId, ...proMultiHazardId];
         const allFilteredExposureId = allExposureId.filter(id => id !== 8);
-        console.log('vzLabel', vzLabel);
-
         if (updateMap.current && updateMap.current.isStyleLoaded()) {
             if (vzLabel === 'province') {
                 // showMapLayers('province-outline', updateMap);

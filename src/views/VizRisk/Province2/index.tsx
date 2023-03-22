@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
@@ -777,8 +780,9 @@ export const ProvinceTwo = (props: Props) => {
 
 	const page8TopIntrohtml = htmlData.filter(item => item.key === `${KEYNAME}_page8_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
+	const page1Legend1MidClimateData = jsonData.filter(item => item.key
+		=== `${KEYNAME}_page1_legend1_mid_climatedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
-	const page1Legend1MidClimateData = jsonData.filter(item => item.key === `${KEYNAME}_page1_legend1_mid_climatedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
 	const page1Legend1BottomTempData = jsonData.filter(item => item.key === `${KEYNAME}_page1_legend1_bottom_temperaturedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
@@ -786,8 +790,9 @@ export const ProvinceTwo = (props: Props) => {
 
 	const page1Legend3MidPopulationData = jsonData.filter(item => item.key === `${KEYNAME}_page1_legend3_mid_populationdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
+	const page3MidLandcoverData = jsonData.filter(item => item.key
+		=== `${KEYNAME}_page3_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
-	const page3MidLandcoverData = jsonData.filter(item => item.key === `${KEYNAME}_page3_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
 	const page5MidUrbanData = jsonData.filter(item => item.key === `${KEYNAME}_page5_mid_urbandata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
@@ -803,8 +808,8 @@ export const ProvinceTwo = (props: Props) => {
 
 	const mapBoxStyle = jsonData.filter(item => item.key === `${KEYNAME}_mapbox_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value.layername);
 
-
-	const realTimeDataStationName = String(jsonData.filter(item => item.key === `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
+	const realTimeDataStationName = String(jsonData.filter(item => item.key
+		=== `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
 
 	useEffect(() => {
 		climateDataRequest.setDefaultParams({

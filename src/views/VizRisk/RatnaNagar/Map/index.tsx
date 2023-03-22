@@ -33,6 +33,7 @@ import FloodHazardLegends from '../Components/Legends/FloodHazardLegends';
 import InnundationLegend from '../Components/Legends/InnundationLegend';
 import mapImages from './MapImages';
 import RadioButton from '../Components/RadioButton';
+import InundationLegend from '../Components/Legends/InundationLegendHomepage';
 import { floodHazardLayersArr } from '../expressions';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;

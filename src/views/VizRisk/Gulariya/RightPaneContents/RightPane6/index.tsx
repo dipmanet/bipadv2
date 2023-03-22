@@ -7,13 +7,13 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
+import criticalInfraData from '#views/VizRisk/Gulariya/Data/criticalInfraData';
 import styles from './styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Gulariya/Data/criticalInfraData';
 
 const chartData = criticalInfraData.safeShelterData;
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -39,7 +39,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Evacuation Centers </h1>
                 <p>
-                Evacuation centers provide temporary shelter for people displaced from their homes following a flooding event. The schools and cultural heritage sites can also be used for evacuation during floods. However, their functionality during floods is contingent upon several factors including building types and their exposure, whether they are located in flood-prone or flood safe areas.
+                    Evacuation centers provide temporary shelter for people displaced from their homes following a flooding event. The schools and cultural heritage sites can also be used for evacuation during floods. However, their functionality during floods is contingent upon several factors including building types and their exposure, whether they are located in flood-prone or flood safe areas.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={200}>
                     <BarChart
@@ -73,7 +73,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     type="button"
                     onClick={this.handleRefClick}
                 >
-                References
+                    References
                 </button>
                 {showReferences && (
                     <ul className={styles.referencesText}>
@@ -85,10 +85,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             OpenStreetMap
                         </li>
                         <li>
-                        Department of Hydrology and Meteorology (DHM)
+                            Department of Hydrology and Meteorology (DHM)
                         </li>
                         <li>
-                        Gulariya Municipality Profile, 2021
+                            Gulariya Municipality Profile, 2021
                         </li>
                     </ul>
                 )

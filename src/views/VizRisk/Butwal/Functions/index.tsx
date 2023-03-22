@@ -160,7 +160,8 @@ export function getChartData(clickedItem, incidentFilterYear, incidentList) {
 		value: incidentList.features
 			.filter(
 				ht => ht.properties.hazardTitle === item
-					&& new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
+					&& new Date(ht.properties.incidentOn)
+						.getFullYear() === Number(incidentFilterYear),
 			)
 			.length,
 		color: (incidentList.features.filter(hcolor => hcolor.properties.hazardTitle === item)

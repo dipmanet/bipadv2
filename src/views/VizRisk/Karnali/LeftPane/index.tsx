@@ -182,8 +182,6 @@ function Leftpane(props) {
     }
     function climateLineChartTooltip({ active, payload, label }) {
         if (active && payload && payload.length) {
-            console.log('payload', payload);
-
             return (
                 <div className={styles.customTooltip}>
                     <h2>{`Year:${payload[0].payload.year}`}</h2>
@@ -310,7 +308,6 @@ function Leftpane(props) {
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By District'];
     const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard'];
 
-    console.log('alertsChartData', alertsChartData);
 
     return (
         <>

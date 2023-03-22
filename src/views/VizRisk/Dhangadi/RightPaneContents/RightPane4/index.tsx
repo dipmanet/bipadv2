@@ -5,10 +5,10 @@ import {
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
 import criticalInfraData from '#views/VizRisk/Dhangadi/Data/criticalInfraData';
+import styles from './styles.scss';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;

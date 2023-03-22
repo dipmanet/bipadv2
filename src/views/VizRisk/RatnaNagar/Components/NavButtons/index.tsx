@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import { SlideTitle } from '#views/VizRisk/RatnaNagar/expressions';
 import styles from './styles.scss';
 import BackButton from '../../../Common/Icons/back.svg';
 import ForwardButton from '../../../Common/Icons/forward.svg';
 import { PostionInitialValues } from '../../interfaces';
 import { MainPageDataContext } from '../../context';
-import { SlideTitle } from '#views/VizRisk/RatnaNagar/expressions';
 
 interface Props {
     postionsPerPage: PostionInitialValues;

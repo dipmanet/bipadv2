@@ -1,10 +1,10 @@
 import React from 'react';
 import Icon from '#rscg/Icon';
 
-import styles from './styles.scss';
 import style from '#mapStyles/rasterStyle';
+import styles from './styles.scss';
 
-interface Props{
+interface Props {
     handleNext: () => void;
     handlePrev: () => void;
     disableNavLeftBtn: boolean;
@@ -43,7 +43,7 @@ const NavButtons = (props: Props) => {
                     className={pagenumber === 1 ? styles.btnDisable : styles.navbutton}
                     disabled={pagenumber === 1}
                 >
-                   Previous
+                    Previous
                 </button>
                 <button
                     type="button"
@@ -52,7 +52,7 @@ const NavButtons = (props: Props) => {
                         ? styles.btnDisable : styles.navbutton}
                     disabled={pagenumber === totalPages || pending === true}
                 >
-                  Next
+                    Next
                 </button>
 
             </div>

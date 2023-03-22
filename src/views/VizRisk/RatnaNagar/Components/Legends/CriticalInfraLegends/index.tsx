@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
 import { Item } from 'semantic-ui-react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
@@ -10,15 +9,16 @@ import Culture from '#resources/icons/icon_set_religion.svg';
 import Health from '#resources/icons/icon_set_health-01.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
 import Bank from '#resources/icons/icon_set_bank.svg';
-import Evacuation from '../../../../Common/Icons/IDP-refugee-camp.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Bridge from '#resources/icons/bridge copy.svg';
 import Communication from '#resources/icons/CommunicationVR.svg';
-import Sanitation from '../../../../Common/Icons/sanitationviz.svg';
-import Hotel from '../../../../Common/Icons/hotelci.svg';
 import Industry from '#resources/icons/IndustryVR.svg';
 import Electricity from '#resources/icons/Electricity.svg';
 import Icon from '#rscg/Icon';
+import Hotel from '../../../../Common/Icons/hotelci.svg';
+import Sanitation from '../../../../Common/Icons/sanitationviz.svg';
+import Evacuation from '../../../../Common/Icons/IDP-refugee-camp.svg';
+import styles from './styles.scss';
 import Fireengine from '../../../../Common/Icons/Fireengine.svg';
 import Heli from '../../../../Common/Icons/Heli.svg';
 import Road from '../../../../Common/Icons/road2.svg';

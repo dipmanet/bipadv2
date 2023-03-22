@@ -3,12 +3,12 @@
 
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
-import styles from '../LeftPane/styles.scss';
-import { ChartData } from '../../../DataArchive/Modals/Pollution/types';
 import RainTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Rain';
 import RiverTooltip from '#views/Dashboard/Map/Tooltips/Alerts/River';
 import FireTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Fire';
 import PollutionTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Pollution';
+import { ChartData } from '../../../DataArchive/Modals/Pollution/types';
+import styles from '../LeftPane/styles.scss';
 
 export const parseStringToNumber = (content) => {
     // const changedNumber = parseInt(content, 10);
@@ -42,14 +42,14 @@ export function renderLegendPopulaion() {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-	  Male Pop
+                    Male Pop
                     <sup>n</sup>
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendDaily} />
                 <div className={styles.legendText}>
-	  Female Pop
+                    Female Pop
                     <sup>n</sup>
                 </div>
             </div>
@@ -81,7 +81,7 @@ export function populationCustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
         return (
             <div className={styles.customTooltip}>
-                <h2>{parseStringToNumber(payload[0].payload.name) }</h2>
+                <h2>{parseStringToNumber(payload[0].payload.name)}</h2>
                 <p>{`Male: ${parseStringToNumber(payload[0].payload.MalePop)}`}</p>
                 <p>{`Female: ${parseStringToNumber(payload[0].payload.FemalePop)}`}</p>
                 <p>{`Household: ${parseStringToNumber(payload[0].payload.TotalHousehold)}`}</p>
@@ -157,7 +157,7 @@ export function getChartData(clickedItem, incidentFilterYear, incidentList) {
         value: incidentList.features
             .filter(
                 ht => ht.properties.hazardTitle === item
-			    && new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
+                    && new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
             )
             .length,
         color: (incidentList.features.filter(hcolor => hcolor.properties.hazardTitle === item)
@@ -197,28 +197,28 @@ export function getDescription(props, nonZeroArr, chartData) {
             return nonZeroArr.map((item, i) => {
                 if (
                     i === nonZeroArr.length - 1
-						&& i === 0
-						// && chartData.filter(n => n.name === item)[0]
-						&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+                    && i === 0
+                    // && chartData.filter(n => n.name === item)[0]
+                    && chartData.filter(n => n.name === item)[0].Total !== 0) {
                     return ` ${item} `;
                 }
                 if (
                     i !== nonZeroArr.length - 1
-						&& i === 0
-						// && chartData.filter(n => n.name === item)[0]
-						&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+                    && i === 0
+                    // && chartData.filter(n => n.name === item)[0]
+                    && chartData.filter(n => n.name === item)[0].Total !== 0) {
                     return ` ${item} `;
                 }
                 if (
                     i === nonZeroArr.length - 1
-						// && chartData.filter(n => n.name === item)[0]
-						&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+                    // && chartData.filter(n => n.name === item)[0]
+                    && chartData.filter(n => n.name === item)[0].Total !== 0) {
                     return ` and ${item} `;
                 }
                 if (
                     i !== nonZeroArr.length - 1
-						// && chartData.filter(n => n.name === item)[0]
-						&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+                    // && chartData.filter(n => n.name === item)[0]
+                    && chartData.filter(n => n.name === item)[0].Total !== 0) {
                     return `, ${item} `;
                 }
                 return '';
@@ -433,7 +433,7 @@ export const AlertTooltip = ({ title, description, referenceType, referenceData,
                     {title}
                 </h3>
                 <div className={styles.description}>
-                    { description }
+                    {description}
                 </div>
             </div>
         );

@@ -3,6 +3,14 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Loader from 'react-loader';
 import { isDefined } from '@togglecorp/fujs';
+import Icon from '#rscg/Icon';
+import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -20,15 +28,7 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 import { getgeoJsonLayer } from './utils';
 
 import EvacLegends from './Legends/EvacLegends';
-import Icon from '#rscg/Icon';
-import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
 
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
 
 const rightelements = [
     <RightElement1 />,
@@ -86,7 +86,6 @@ class Tikapur extends React.Component {
 
     public setCI = (cI) => {
         this.setState({ cI });
-        console.log('CI Data:', cI);
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -147,7 +146,7 @@ class Tikapur extends React.Component {
         }
     }
 
-    public handlePopulationChange =(showPopulation) => {
+    public handlePopulationChange = (showPopulation) => {
         this.setState({ showPopulation });
     }
 

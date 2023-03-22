@@ -2,6 +2,14 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
+import Icon from '#rscg/Icon';
+import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 import Map from './Map';
 // import Legends from './Legends';
 
@@ -20,17 +28,8 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 
 
 import EvacLegends from './Legends/EvacLegends';
-import Icon from '#rscg/Icon';
-import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
 import { getgeoJsonLayer } from './utils';
 
-
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
 
 const rightelements = [
     <RightElement1 />,
@@ -225,7 +224,7 @@ class Rajapur extends React.Component {
         // console.log('moveend: ', value);
     }
 
-    public handlePopulationChange =(showPopulation) => {
+    public handlePopulationChange = (showPopulation) => {
         this.setState({ showPopulation });
     }
 
@@ -272,7 +271,6 @@ class Rajapur extends React.Component {
 
     public setCI = (cI) => {
         this.setState({ cI });
-        console.log('CI Data:', cI);
     }
 
     public render() {
@@ -296,7 +294,7 @@ class Rajapur extends React.Component {
 
         return (
             <div>
-                { (
+                {(
                     <div className={styles.navBtnCont}>
                         <button
                             type="button"
@@ -359,13 +357,13 @@ class Rajapur extends React.Component {
                 {rightElement !== 3 && rightElement !== 0 && rightelements[rightElement]}
                 {
                     rightElement === 0
-                && (
-                    <RightElement1
-                        rainFall={rainFall}
-                        waterLevel={waterLevel}
-                        temperature={temperature}
-                    />
-                )}
+                    && (
+                        <RightElement1
+                            rainFall={rainFall}
+                            waterLevel={waterLevel}
+                            temperature={temperature}
+                        />
+                    )}
                 {
                     rightElement === 1
                         ? (
@@ -394,12 +392,12 @@ class Rajapur extends React.Component {
                         <>
                             {
                                 cI.features && cI.features.length > 0
-                            && (
-                                <RightElement4
-                                    criticalInfraData={cI}
-                                />
-                            )}
-,
+                                && (
+                                    <RightElement4
+                                        criticalInfraData={cI}
+                                    />
+                                )}
+                            ,
                             <div className={styles.legends}>
                                 <VRLegend>
                                     <CriticalInfraLegends

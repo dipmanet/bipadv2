@@ -7,17 +7,17 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/Rajapur/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/Rajapur/Icons/male.svg';
 import Female from '#views/VizRisk/Rajapur/Icons/female.svg';
 import Home from '#views/VizRisk/Rajapur/Icons/homeNew.svg';
+import styles from './styles.scss';
 
 import Disclaimer from '../../Components/Disclaimer';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -31,28 +31,28 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Male Pop
+                        Male Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                    Female Pop
+                        Female Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendOther} />
                     <div className={styles.legendText}>
-                    Other Pop
+                        Other Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
-                       Total Household
+                        Total Household
                     </div>
                 </div>
             </div>
@@ -65,16 +65,16 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven with some
-                pockets of dense settlements. This map allows viewing the population
-                distribution within each ward and helps to locate the region of
-                dense and sparse settlements.
+                    Population distribution in the region is largely uneven with some
+                    pockets of dense settlements. This map allows viewing the population
+                    distribution within each ward and helps to locate the region of
+                    dense and sparse settlements.
                 </p>
                 <p>
-                Ward number 4 has the highest population with 1761 households. Notably,
-                these high populations ward lies very close to the western tributary
-                of the Karnali river. Ward number 7 has the least number of households
-                comprising of 885 numbers.
+                    Ward number 4 has the highest population with 1761 households. Notably,
+                    these high populations ward lies very close to the western tributary
+                    of the Karnali river. Ward number 7 has the least number of households
+                    comprising of 885 numbers.
                 </p>
 
                 <div className={styles.iconRow}>
@@ -99,7 +99,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>12,587</div>
                             <div className={styles.iconText}>
-                             Total Household Number
+                                Total Household Number
                             </div>
 
                         </div>
@@ -116,7 +116,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>34,983</div>
                             <div className={styles.iconText}>
-                             Male Population
+                                Male Population
                             </div>
 
                         </div>
@@ -129,7 +129,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>34,260</div>
                             <div className={styles.iconText}>
-                             Female Population
+                                Female Population
                             </div>
 
                         </div>
@@ -142,7 +142,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>3</div>
                             <div className={styles.iconText}>
-                            Other Population
+                                Other Population
                             </div>
 
                         </div>

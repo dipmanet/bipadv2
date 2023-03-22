@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Culture from '../../Icons/icon_set_religion.svg';
 import Safe from '#resources/icons/Safeshelter_Updated.svg';
 
 
 import Icon from '#rscg/Icon';
+import Culture from '../../Icons/icon_set_religion.svg';
+import styles from './styles.scss';
 
 
 const EvacLegends = (props) => {
@@ -21,7 +21,6 @@ const EvacLegends = (props) => {
 
     useEffect(
         () => {
-            console.log('layer in useeffect', evacElement);
             if (evacElement === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
@@ -38,7 +37,6 @@ const EvacLegends = (props) => {
 
 
     const handleEvacclick = (layer) => {
-        console.log('layer in click', layer);
         handleEvac(layer);
         if (layer === 'all') {
             resetCriticalLayers();
@@ -75,7 +73,7 @@ const EvacLegends = (props) => {
                                 className={showAll ? styles.allIconSelected : styles.allIcon}
                             />
 
-                                Show All
+                            Show All
                         </button>
 
                     </div>

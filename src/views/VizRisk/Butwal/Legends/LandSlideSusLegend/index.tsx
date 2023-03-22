@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 
 const LandSlideSusLegend = (props) => {
@@ -46,7 +45,7 @@ const LandSlideSusLegend = (props) => {
                             <div className={styles.populationIndContainerShort}>
 
                                 <div className={styles.populationIndicator1}>
-                                0.08 - 0.13
+                                    0.08 - 0.13
 
                                 </div>
                                 <div className={styles.populationIndicator2}>0.13 - 0.2</div>
@@ -61,33 +60,33 @@ const LandSlideSusLegend = (props) => {
                 )
             }
             {layer === 'sus'
-&& (
-    <div>
+                && (
+                    <div>
 
-        <div className={styles.populationContainer}>
-            <h2>
-                            Landslide Suseptibility
-            </h2>
-            <div className={styles.populationIndContainerShort}>
-                {susep.legends.map(legend => (
-                    <div key={legend.key} className={styles.legendsRow}>
-                        <div
-                            style={{
-                                backgroundColor: legend.color,
-                                marginBottom: 0,
-                            }}
-                            className={styles.populationIndicator2}
-                        >
-                            {legend.label}
+                        <div className={styles.populationContainer}>
+                            <h2>
+                                Landslide Suseptibility
+                            </h2>
+                            <div className={styles.populationIndContainerShort}>
+                                {susep.legends.map(legend => (
+                                    <div key={legend.key} className={styles.legendsRow}>
+                                        <div
+                                            style={{
+                                                backgroundColor: legend.color,
+                                                marginBottom: 0,
+                                            }}
+                                            className={styles.populationIndicator2}
+                                        >
+                                            {legend.label}
+                                        </div>
+
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                     </div>
-                ))}
-            </div>
-        </div>
-
-    </div>
-)
+                )
             }
         </div>
     );

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
@@ -10,13 +11,10 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import { FlyToInterpolator } from 'react-map-gl';
-import { Spring } from 'react-spring/renderprops';
+// import { Spring } from 'react-spring/renderprops';
 // import Locations from './locations';
 
-import Deck from './Deck';
-import Map from './Map';
-import MapWithTimeline from './MapWithTimeline';
-import Legends from './Components/Legends';
+import { Spring } from 'react-spring/renderprops';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -28,25 +26,32 @@ import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import {
     incidentPointToGeojsonVR,
 } from '#utils/domain';
-
-import { hazardTypesSelector,
+import {
+    hazardTypesSelector,
     filtersSelector,
-    regionsSelector } from '#selectors';
-import Locations from './Data/locations';
+    regionsSelector,
+} from '#selectors';
 import {
     transformRegionToFilter,
     transformDataRangeLocaleToFilter,
 } from '#utils/transformations';
-
 import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-import CriticalData from './Data/criticalInfraData';
-
 import {
     setIncidentListActionIP,
     setEventListAction,
 } from '#actionCreators';
+import { getgeoJsonLayer } from '#views/VizRisk/Panchpokhari/utils';
+import Deck from './Deck';
+import Map from './Map';
+import MapWithTimeline from './MapWithTimeline';
+import Legends from './Components/Legends';
+
+import Locations from './Data/locations';
+
+import CriticalData from './Data/criticalInfraData';
+
 import styles from './styles.scss';
 import LandslideData from './Data/librariesData';
 import legendList from './Components/Legends/legends';
@@ -68,7 +73,6 @@ import LeftPane10 from './Narratives/LeftPane10';
 import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
 import CISwitchLegends from './Components/CISwitchLegends';
-import { getgeoJsonLayer } from '#views/VizRisk/Panchpokhari/utils';
 import LandcoverData from './Data/LandCoverChartData';
 import DemoLegends from './Data/demographicsData';
 
@@ -503,7 +507,7 @@ const BarabiseLandslide = (props) => {
 
     return (
         <>
-            { (pending || drawpending)
+            {(pending || drawpending)
                 && (
                     <div className={styles.loaderClass}>
                         <Loader color="#fff" />
@@ -533,7 +537,7 @@ const BarabiseLandslide = (props) => {
 
             {
                 (currentPage === 4
-                || currentPage === 5)
+                    || currentPage === 5)
                 && (
                     <Map
                         population={population}
@@ -595,20 +599,20 @@ const BarabiseLandslide = (props) => {
 
             } */}
 
-
             <Spring
                 from={{ opacity: 0 }}
                 to={{ opacity: 1 }}
                 config={
-                    { duration: 1000,
-                        delay }
+                    {
+                        duration: 1000,
+                        delay,
+                    }
                 }
                 onStart={handleAnimationStart}
                 reset={reAnimate}
             >
                 {
                     springProps => (
-
                         <LeftPaneContainer render={props => (
                             <div className={styles.leftPane}>
                                 {
@@ -731,6 +735,7 @@ const BarabiseLandslide = (props) => {
                                             overallBuildingsCount={defaultBuildcount}
                                         />
                                     )
+
                                 }
                                 <NavButtons
                                     handleNext={handleNext}
@@ -744,9 +749,9 @@ const BarabiseLandslide = (props) => {
                         )}
                         />
                     )
-
                 }
             </Spring>
+
 
             {currentPage === 4
                 && (

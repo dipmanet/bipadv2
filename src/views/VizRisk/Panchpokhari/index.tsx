@@ -5,6 +5,30 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
 import Loader from 'react-loader';
+import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import {
+    incidentPointToGeojson,
+} from '#utils/domain';
+import {
+    regionsSelector,
+    filtersSelector,
+    hazardTypesSelector,
+    incidentListSelectorIP,
+    userSelector,
+} from '#selectors';
+import {
+    setIncidentListActionIP,
+    setEventListAction,
+} from '#actionCreators';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
+import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
+import { checkPermission } from '#views/VizRisk/Common/utils';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -18,39 +42,14 @@ import RightElement7 from './RightPaneContents/RightPane7';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardlegends from './Legends/FloodHazardLegends';
-import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import { getgeoJsonLayer } from './utils';
-import {
-    incidentPointToGeojson,
-} from '#utils/domain';
-import {
-    regionsSelector,
-    filtersSelector,
-    hazardTypesSelector,
-    incidentListSelectorIP,
-    userSelector,
-} from '#selectors';
 
-import {
-    setIncidentListActionIP,
-    setEventListAction,
-} from '#actionCreators';
 
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
-
-import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
-import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';
 import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
 import LandCoverLegends from './Legends/LandCoverLegends';
-import { checkPermission } from '#views/VizRisk/Common/utils';
 
 const rightelements = [
     <RightElement1 />,
@@ -338,15 +337,15 @@ class Jugal extends React.Component {
                 const incidentDetails = inciTotal.reduce((a, b) => ({
                     peopleDeathCount: (a.peopleDeathCount || 0) + (b.peopleDeathCount || 0),
                     infrastructureDestroyedHouseCount:
-                    (a.infrastructureDestroyedHouseCount || 0) + (b.infrastructureDestroyedHouseCount || 0),
+                        (a.infrastructureDestroyedHouseCount || 0) + (b.infrastructureDestroyedHouseCount || 0),
                     infrastructureAffectedHouseCount:
-                    (a.infrastructureAffectedHouseCount || 0) + (b.infrastructureAffectedHouseCount || 0),
+                        (a.infrastructureAffectedHouseCount || 0) + (b.infrastructureAffectedHouseCount || 0),
                     peopleMissingCount:
-                    (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
+                        (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
                     infrastructureEconomicLoss:
-                    (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
+                        (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
                     agricultureEconomicLoss:
-                    (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
+                        (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
                     totalAnnualincidents: inciTotal.length || 0,
                 }));
                 this.setState({ incidentDetailsData: incidentDetails });
@@ -417,7 +416,7 @@ class Jugal extends React.Component {
         }
     }
 
-    public handlePopulationChange =(showPopulation) => {
+    public handlePopulationChange = (showPopulation) => {
         this.setState({ showPopulation });
     }
 
@@ -528,120 +527,120 @@ class Jugal extends React.Component {
                             <div className={styles.loaderInfo}>
                                 <Loader color="#fff" className={styles.loader} />
                                 <p className={styles.loaderText}>
-                                Loading Data...
+                                    Loading Data...
                                 </p>
                             </div>
                         )
                         : rightElement < 5
-                            && (
-                                <Map
-                                    showRaster={showRaster}
-                                    rasterLayer={rasterLayer}
-                                    exposedElement={exposedElement}
-                                    rightElement={rightElement}
-                                    showPopulation={showPopulation}
-                                    criticalElement={criticalElement}
-                                    criticalFlood={criticalFlood}
-                                    evacElement={evacElement}
-                                    disableNavBtns={this.disableNavBtns}
-                                    enableNavBtns={this.enableNavBtns}
-                                    incidentList={pointFeatureCollection}
-                                    CIData={cI}
-                                    clickedItem={clickedIncidentItem}
-                                    incidentFilterYear={incidentFilterYear}
-                                    handleIncidentChange={this.handleIncidentChange}
-                                />
-                            )
+                        && (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                                CIData={cI}
+                                clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
+                            />
+                        )
 
                 }
 
                 {
                     rightElement === 0
-                && (
-                    <>
-                        <RightElement1
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            pending={pending}
-                            totalPages={rightelements.length}
-                        />
-                    </>
-                )
+                    && (
+                        <>
+                            <RightElement1
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                pending={pending}
+                                totalPages={rightelements.length}
+                            />
+                        </>
+                    )
                 }
                 {rightElement === 1
-                && (
-                    <>
-                        <RightElement3
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            totalPages={rightelements.length}
-                            CIData={cI}
-                        />
-                    </>
+                    && (
+                        <>
+                            <RightElement3
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                CIData={cI}
+                            />
+                        </>
 
-                )
+                    )
                 }
                 {rightElement === 2
-                && (
-                    <>
-                        <RightElement2
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            totalPages={rightelements.length}
-                        />
-                    </>
+                    && (
+                        <>
+                            <RightElement2
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                            />
+                        </>
 
-                )
+                    )
                 }
                 {rightElement === 3
-                && (
-                    <>
-                        <RightElement4
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            totalPages={rightelements.length}
-                            CIData={cI}
-                        />
-                    </>
+                    && (
+                        <>
+                            <RightElement4
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                CIData={cI}
+                            />
+                        </>
 
-                )
+                    )
                 }
                 {
                     rightElement === 4
-                && (
-                    <>
+                    && (
+                        <>
 
-                        <RightElement5
-                            incidentDetailsData={incidentDetailsData}
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            totalPages={rightelements.length}
-                            incidentList={pointFeatureCollection}
-                            incidentData={incidentList}
-                            clickedItem={clickedIncidentItem}
-                            handleIncidentItemClick={this.handleIncidentItemClick}
-                            incidentFilterYear={incidentFilterYear}
-                            getIncidentData={this.setIncidentList}
-                            CIData={cI}
+                            <RightElement5
+                                incidentDetailsData={incidentDetailsData}
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                incidentList={pointFeatureCollection}
+                                incidentData={incidentList}
+                                clickedItem={clickedIncidentItem}
+                                handleIncidentItemClick={this.handleIncidentItemClick}
+                                incidentFilterYear={incidentFilterYear}
+                                getIncidentData={this.setIncidentList}
+                                CIData={cI}
 
-                        />
-                    </>
-                )
+                            />
+                        </>
+                    )
                 }
                 {/* {rightelements[rightElement]} */}
 
@@ -683,130 +682,130 @@ class Jugal extends React.Component {
                 }
 
                 {rightElement === 5
-                && (
+                    && (
 
-                    <>
-                        <MapWithDraw
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            clickedItem={clickedIncidentItem}
-                            incidentFilterYear={incidentFilterYear}
-                            handleIncidentChange={this.handleIncidentChange}
-                            handleDrawSelectedData={this.handleDrawSelectedData}
-                            sesmicLayer={sesmicLayer}
-                            CIData={cI}
-                            handleDrawResetData={this.handleDrawResetData}
-                            rasterLayer={rasterLayer}
-                            buildings={buildings}
-                        />
-                        <RightElement6
-                            handleDrawResetData={this.handleDrawResetData}
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            totalPages={rightelements.length}
-                            incidentList={pointFeatureCollection}
-                            clickedItem={clickedIncidentItem}
-                            handleIncidentItemClick={this.handleIncidentItemClick}
-                            incidentFilterYear={incidentFilterYear}
-                            drawChartData={drawChartData}
-                            sesmicLayer={sesmicLayer}
-                            vulData={vulData}
-                            buildings={buildings}
-                            resetDrawData={resetDrawData}
-                            rasterLayer={rasterLayer}
-                            CIData={cI}
-                        />
-                        <VRLegend>
-                            <SesmicHazardLegend
-                                handleSesmicLayerChange={this.handleSesmicLayerChange}
+                        <>
+                            <MapWithDraw
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
+                                handleDrawSelectedData={this.handleDrawSelectedData}
+                                sesmicLayer={sesmicLayer}
+                                CIData={cI}
+                                handleDrawResetData={this.handleDrawResetData}
+                                rasterLayer={rasterLayer}
+                                buildings={buildings}
                             />
-                        </VRLegend>
-                        {
-                            // here
-                            sesmicLayer === 'flood'
+                            <RightElement6
+                                handleDrawResetData={this.handleDrawResetData}
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                handleIncidentItemClick={this.handleIncidentItemClick}
+                                incidentFilterYear={incidentFilterYear}
+                                drawChartData={drawChartData}
+                                sesmicLayer={sesmicLayer}
+                                vulData={vulData}
+                                buildings={buildings}
+                                resetDrawData={resetDrawData}
+                                rasterLayer={rasterLayer}
+                                CIData={cI}
+                            />
+                            <VRLegend>
+                                <SesmicHazardLegend
+                                    handleSesmicLayerChange={this.handleSesmicLayerChange}
+                                />
+                            </VRLegend>
+                            {
+                                // here
+                                sesmicLayer === 'flood'
                                 && (
                                     <FloodHazardlegends
                                         handleFloodChange={this.handleFloodChange}
                                     />
                                 )
-                        }
-                    </>
-                )
+                            }
+                        </>
+                    )
                 }
                 {rightElement === 6
-                && (
+                    && (
 
-                    <>
-                        <MapVenerability
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            clickedItem={clickedIncidentItem}
-                            incidentFilterYear={incidentFilterYear}
-                            handleIncidentChange={this.handleIncidentChange}
-                            handleDrawSelectedData={this.handleDrawSelectedData}
-                            sesmicLayer={sesmicLayerVul}
-                            singularBuilding={this.state.singularBuilding}
-                            setSingularBuilding={this.setSingularBuilding}
-                            setScore={this.setScore}
-                            CIData={cI}
-                            buildings={vulData}
-                            buildinggeojson={buildings}
-                            rasterLayer={rasterLayer}
-                            handleDrawResetData={this.handleDrawResetData}
-                            buildingVul={buildingVul}
-                            showAddForm={this.state.showAddForm}
-                            handleShowAddForm={this.handleShowAddForm}
-                            singularBuldingData={this.state.singularBuldingData}
-                            buildingdataAddPermission={this.state.buildingdataAddPermission}
-                        />
-
-                        <RightElement7
-                            handleDrawResetData={this.handleDrawResetData}
-                            handleNext={this.handleNext}
-                            handlePrev={this.handlePrev}
-                            disableNavLeftBtn={disableNavLeftBtn}
-                            disableNavRightBtn={disableNavRightBtn}
-                            pagenumber={rightElement + 1}
-                            totalPages={rightelements.length}
-                            incidentList={pointFeatureCollection}
-                            clickedItem={clickedIncidentItem}
-                            handleIncidentItemClick={this.handleIncidentItemClick}
-                            incidentFilterYear={incidentFilterYear}
-                            drawChartData={drawChartData}
-                            sesmicLayer={sesmicLayer}
-                            singularBuilding={this.state.singularBuilding}
-                            score={this.state.score}
-                            setSingularBuilding={this.setSingularBuilding}
-                            singularBuldingData={this.state.singularBuldingData}
-                            vulData={vulData}
-                            resetDrawData={resetDrawData}
-                            indexArray={indexArray}
-                            enumData={this.state.enumData}
-                            appendBuildingData={this.appendBuildingData}
-                            handleShowAddForm={this.handleShowAddForm}
-                            showAddForm={this.state.showAddForm}
-                        />
-                        <VRLegend>
-                            <SesmicHazardVULLegend
-                                handleSesmicLayerChange={this.handleSesmicLayerChangeVUL}
+                        <>
+                            <MapVenerability
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
+                                handleDrawSelectedData={this.handleDrawSelectedData}
+                                sesmicLayer={sesmicLayerVul}
+                                singularBuilding={this.state.singularBuilding}
+                                setSingularBuilding={this.setSingularBuilding}
+                                setScore={this.setScore}
+                                CIData={cI}
+                                buildings={vulData}
+                                buildinggeojson={buildings}
+                                rasterLayer={rasterLayer}
+                                handleDrawResetData={this.handleDrawResetData}
+                                buildingVul={buildingVul}
+                                showAddForm={this.state.showAddForm}
+                                handleShowAddForm={this.handleShowAddForm}
+                                singularBuldingData={this.state.singularBuldingData}
+                                buildingdataAddPermission={this.state.buildingdataAddPermission}
                             />
-                        </VRLegend>
-                        {
-                            // here
-                            sesmicLayerVul === 'flood'
+
+                            <RightElement7
+                                handleDrawResetData={this.handleDrawResetData}
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                handleIncidentItemClick={this.handleIncidentItemClick}
+                                incidentFilterYear={incidentFilterYear}
+                                drawChartData={drawChartData}
+                                sesmicLayer={sesmicLayer}
+                                singularBuilding={this.state.singularBuilding}
+                                score={this.state.score}
+                                setSingularBuilding={this.setSingularBuilding}
+                                singularBuldingData={this.state.singularBuldingData}
+                                vulData={vulData}
+                                resetDrawData={resetDrawData}
+                                indexArray={indexArray}
+                                enumData={this.state.enumData}
+                                appendBuildingData={this.appendBuildingData}
+                                handleShowAddForm={this.handleShowAddForm}
+                                showAddForm={this.state.showAddForm}
+                            />
+                            <VRLegend>
+                                <SesmicHazardVULLegend
+                                    handleSesmicLayerChange={this.handleSesmicLayerChangeVUL}
+                                />
+                            </VRLegend>
+                            {
+                                // here
+                                sesmicLayerVul === 'flood'
                                 && (
                                     <FloodHazardlegends
                                         handleFloodChange={this.handleFloodChange}
                                     />
                                 )
-                        }
-                    </>
-                )
+                            }
+                        </>
+                    )
                 }
             </div>
 

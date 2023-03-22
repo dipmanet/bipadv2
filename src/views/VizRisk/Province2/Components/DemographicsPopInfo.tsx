@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import React from 'react';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import styles from '../LeftPane/styles.scss';
 import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
 import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
 import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
+import styles from '../LeftPane/styles.scss';
 import { parseStringToNumber } from '../Functions';
 
 export default function DemographicsPopInfo(props) {
@@ -27,7 +27,7 @@ export default function DemographicsPopInfo(props) {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>{parseStringToNumber(totalPopulation)}</div>
                         <div className={styles.iconText}>
-                                Total Population
+                            Total Population
                         </div>
 
                     </div>
@@ -40,7 +40,7 @@ export default function DemographicsPopInfo(props) {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>{parseStringToNumber(totalFamily)}</div>
                         <div className={styles.iconText}>
-                             Total Family Count
+                            Total Family Count
                         </div>
 
                     </div>
@@ -57,7 +57,7 @@ export default function DemographicsPopInfo(props) {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>{parseStringToNumber(totalMalePop)}</div>
                         <div className={styles.iconText}>
-                             Male Population
+                            Male Population
                         </div>
 
                     </div>
@@ -70,7 +70,7 @@ export default function DemographicsPopInfo(props) {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>{parseStringToNumber(totalFemalePop)}</div>
                         <div className={styles.iconText}>
-                             Female Population
+                            Female Population
                         </div>
 
                     </div>

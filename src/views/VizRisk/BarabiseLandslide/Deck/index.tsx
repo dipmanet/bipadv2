@@ -9,13 +9,13 @@ import { MapboxLayer } from '@deck.gl/mapbox';
 import { Spring } from 'react-spring/renderprops';
 import { connect } from 'react-redux';
 import { DataFilterExtension } from '@deck.gl/extensions';
+import {
+    wardsSelector,
+} from '#selectors';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
 import Locations from '../Data/locations';
 import MapLayers from '../Data/mapLayers';
 // import criticalinfrastructures from '../Data/criticalInfraGeoJSON';
-import {
-    wardsSelector,
-} from '#selectors';
 // import RangeInput from '../Components/RangeInput';
 import styles from './styles.scss';
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -203,7 +203,7 @@ const Deck = (props) => {
         map.on('idle', (e) => {
             getIdle(true);
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -265,7 +265,7 @@ const Deck = (props) => {
             map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 
     return (
@@ -383,7 +383,7 @@ const Deck = (props) => {
                                     onViewStateChange={onViewStateChange}
                                     getTooltip={getToolTip}
                                     glOptions={{
-                                    /* To render vector tile polygons correctly */
+                                        /* To render vector tile polygons correctly */
                                         stencil: true,
                                     }}
                                     width={'70%'}

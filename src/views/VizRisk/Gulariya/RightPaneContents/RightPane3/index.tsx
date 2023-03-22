@@ -8,12 +8,12 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Gulariya/Data/demographicsData';
+import styles from './styles.scss';
 
 import Disclaimer from '../../Components/Disclaimer';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -27,28 +27,28 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Male Pop
+                        Male Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                    Female Pop
+                        Female Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendOther} />
                     <div className={styles.legendText}>
-                    Other Pop
+                        Other Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
-                       Total Family Count
+                        Total Family Count
                     </div>
                 </div>
             </div>
@@ -61,10 +61,10 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Dense settlements exist in some of the core urban areas, especially in ward 4. Most of the region comprises mostly peri-urban and rural settlements with a low density of population.
+                    Dense settlements exist in some of the core urban areas, especially in ward 4. Most of the region comprises mostly peri-urban and rural settlements with a low density of population.
                 </p>
                 <p>
-                Gulariya Municipality has a total population of 71,991. Ward number 4 has the highest population with 1786 families. Ward number 5 has the least population (4335) with 782 families.
+                    Gulariya Municipality has a total population of 71,991. Ward number 4 has the highest population with 1786 families. Ward number 5 has the least population (4335) with 782 families.
                 </p>
 
 
@@ -90,7 +90,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>13,831</div>
                             <div className={styles.iconText}>
-                             Total Household Number
+                                Total Household Number
                             </div>
 
                         </div>
@@ -107,7 +107,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>36,972</div>
                             <div className={styles.iconText}>
-                             Male Population
+                                Male Population
                             </div>
 
                         </div>
@@ -120,7 +120,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>35,019</div>
                             <div className={styles.iconText}>
-                             Female Population
+                                Female Population
                             </div>
 
                         </div>
@@ -133,7 +133,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>0</div>
                             <div className={styles.iconText}>
-                             Other population
+                                Other population
                             </div>
 
                         </div>

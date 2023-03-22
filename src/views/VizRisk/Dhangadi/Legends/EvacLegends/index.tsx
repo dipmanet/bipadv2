@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/SchoolVR.svg';
 import Culture from '#resources/icons/CultureVR.svg';
 import SafeShelter from '#resources/icons/Safeshelter_Updated.svg';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 
 const EvacLegends = (props) => {
@@ -83,7 +83,7 @@ const EvacLegends = (props) => {
                                 className={showAll ? styles.allIconSelected : styles.allIcon}
                             />
 
-                                Show All
+                            Show All
                         </button>
 
                     </div>

@@ -17,7 +17,7 @@ import {
 
 import styles from './styles.scss';
 
-interface Props{
+interface Props {
 
 }
 
@@ -90,12 +90,10 @@ const RealTimeValues = (props: Props) => {
     const setAvg = (averages) => {
         if (averages) {
             setRainFall(averages.filter(item => item.interval === 24)[0].value);
-            console.log('rainfall averages', averages);
         }
     };
 
     const setWaterLevel = (w) => {
-        console.log('waterlevel', w);
         if (w) {
             setWaterLvl(w.toFixed(2));
         }
@@ -124,7 +122,7 @@ const RealTimeValues = (props: Props) => {
         rainRequest.do();
         waterLevelReq.do();
         pollutionReq.do();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -139,7 +137,7 @@ const RealTimeValues = (props: Props) => {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>{`${temperature} ℃`}</div>
                         <div className={styles.iconText}>
-                Temperature (Real Time)
+                            Temperature (Real Time)
                         </div>
 
                     </div>
@@ -155,8 +153,8 @@ const RealTimeValues = (props: Props) => {
                             <div className={styles.descriptionCotainer}>
                                 <div className={styles.iconTitle}>{`${waterLevel} mm`}</div>
                                 <div className={styles.iconText}>
-                Water
-                Level
+                                    Water
+                                    Level
                                 </div>
 
                             </div>
@@ -174,10 +172,10 @@ const RealTimeValues = (props: Props) => {
                         <div className={styles.iconTitle}>
                             {rainFall}
                             {' '}
-mm
+                            mm
                         </div>
                         <div className={styles.iconText}>
-                Rainfall (24 Hrs)
+                            Rainfall (24 Hrs)
                         </div>
 
                     </div>

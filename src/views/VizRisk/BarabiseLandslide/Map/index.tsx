@@ -14,10 +14,10 @@ import {
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
 } from '#selectors';
-import LanduseLayers from '../Data/mapLayers';
 import {
     getWardFilter,
 } from '#utils/domain';
+import LanduseLayers from '../Data/mapLayers';
 import Demographics from '../Data/demographicsData';
 
 const { landuse } = LanduseLayers;

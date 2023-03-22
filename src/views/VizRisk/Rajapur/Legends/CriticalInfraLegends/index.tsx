@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Hexagon from 'react-hexagon';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Icon from '#rscg/Icon';
+import Communication from '#resources/icons/communication.svg';
+import Electricity from '#resources/icons/Electricity.svg';
+import Transportation from '#resources/icons/Transport.svg';
+import Tourism from '#resources/icons/icon_set_hotel.svg';
+import styles from './styles.scss';
 import Education from '../../Icons/icon_set_school.svg';
 import Governance from '../../Icons/icon_set_government.svg';
 import Culture from '../../Icons/icon_set_religion.svg';
@@ -9,11 +14,6 @@ import Health from '../../Icons/icon_set_health-01.svg';
 import Industry from '../../Icons/icon_set_industry.svg';
 import Building from '../../Icons/homeNew.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
-import Icon from '#rscg/Icon';
-import Communication from '#resources/icons/communication.svg';
-import Electricity from '#resources/icons/Electricity.svg';
-import Transportation from '#resources/icons/Transport.svg';
-import Tourism from '#resources/icons/icon_set_hotel.svg';
 
 const LandCoverLegends = (props) => {
     const {
@@ -203,7 +203,7 @@ const LandCoverLegends = (props) => {
                                     name="circle"
                                     className={showAll ? styles.allIconSelected : styles.allIcon}
                                 />
-                            Show All
+                                Show All
                             </button>
 
                         </div>
@@ -220,7 +220,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Education}
                                 />
-                                 Educational Institution
+                                Educational Institution
                             </button>
                         </div>
                         <div className={styles.infraIconContainer}>
@@ -236,7 +236,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Governance}
                                 />
-                                    Government Building
+                                Government Building
                             </button>
 
                         </div>
@@ -253,7 +253,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Communication}
                                 />
-                                    Communication
+                                Communication
                             </button>
 
                         </div>
@@ -270,7 +270,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Bank}
                                 />
-                                    Bank
+                                Bank
                             </button>
 
                         </div>
@@ -286,7 +286,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Culture}
                                 />
-            Culture Site
+                                Culture Site
                             </button>
 
                         </div>
@@ -304,7 +304,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Health}
                                 />
-            Hospital
+                                Hospital
                             </button>
 
                         </div>
@@ -338,7 +338,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Tourism}
                                 />
-                             Tourism
+                                Tourism
                             </button>
 
                         </div>
@@ -355,7 +355,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Electricity}
                                 />
-                           Electricity
+                                Electricity
                             </button>
 
                         </div>
@@ -372,34 +372,34 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Transportation}
                                 />
-                           Transportation
+                                Transportation
                             </button>
 
                         </div>
                         {showBuildingPoints
-                        && (
-                            <div className={styles.infraIconContainer}>
+                            && (
+                                <div className={styles.infraIconContainer}>
 
-                                <button
-                                    type="button"
-                                    className={showBuilding
-                                        ? styles.criticalButtonSelected
-                                        : styles.criticalButton}
-                                    onClick={() => handleCriticalclick('buildings')}
-                                >
-                                    <Hexagon
-                                        style={{
-                                            stroke: showBuilding ? '#036ef0' : '#d3d3d3',
-                                            strokeWidth: 50,
-                                            fill: '#a4a4a2',
-                                        }}
-                                        className={styles.educationHexagon}
-                                    />
-                           Buildings
-                                </button>
+                                    <button
+                                        type="button"
+                                        className={showBuilding
+                                            ? styles.criticalButtonSelected
+                                            : styles.criticalButton}
+                                        onClick={() => handleCriticalclick('buildings')}
+                                    >
+                                        <Hexagon
+                                            style={{
+                                                stroke: showBuilding ? '#036ef0' : '#d3d3d3',
+                                                strokeWidth: 50,
+                                                fill: '#a4a4a2',
+                                            }}
+                                            className={styles.educationHexagon}
+                                        />
+                                        Buildings
+                                    </button>
 
-                            </div>
-                        )
+                                </div>
+                            )
                         }
                     </div>
                 </div>

@@ -9,7 +9,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormatListNumberedRtlOutlined } from '@material-ui/icons';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 import styles from './styles.scss';
 import {
     refData,
@@ -17,12 +22,6 @@ import {
     getSelectTypes,
     getInputTypes,
 } from './formData';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
 
 
 interface Props {
@@ -187,7 +186,7 @@ const HouseholdForm = (props) => {
                 });
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleFoundation = (e, type) => {
@@ -259,9 +258,6 @@ const HouseholdForm = (props) => {
         });
     };
 
-    useEffect(() => {
-        console.log('building form data ', buildingFormData);
-    }, [buildingFormData]);
     const handleSave = () => {
         setFormData({ ...buildingFormData, osmId: parseInt(osmId, 10) });
         if (buildingData && Object.keys(buildingData).length > 0 && buildingData.id) {

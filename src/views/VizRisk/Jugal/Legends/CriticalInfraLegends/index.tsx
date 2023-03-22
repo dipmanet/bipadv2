@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
@@ -11,6 +10,7 @@ import Bank from '#resources/icons/icon_set_bank.svg';
 import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 
 const LandCoverLegends = (props) => {
@@ -171,7 +171,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                Show All
+                                Show All
                             </button>
 
                         </div>
@@ -190,7 +190,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-            Educational Institution
+                                Educational Institution
                             </button>
                         </div>
                         <div className={styles.infraIconContainer}>
@@ -207,7 +207,7 @@ const LandCoverLegends = (props) => {
                                     src={Governance}
                                 />
 
-            Government Building
+                                Government Building
                             </button>
 
                         </div>
@@ -224,7 +224,7 @@ const LandCoverLegends = (props) => {
                                     src={Culture}
                                 />
 
-            Cultural Site
+                                Cultural Site
                             </button>
 
                         </div>
@@ -243,7 +243,7 @@ const LandCoverLegends = (props) => {
                                     src={Health}
                                 />
 
-            Hospital
+                                Hospital
                             </button>
 
                         </div>
@@ -260,7 +260,7 @@ const LandCoverLegends = (props) => {
                                     src={Industry}
                                 />
 
-            Industry
+                                Industry
                             </button>
 
                         </div>
@@ -278,7 +278,7 @@ const LandCoverLegends = (props) => {
                                     src={Tourism}
                                 />
 
-                                 Hotel or Restaurant
+                                Hotel or Restaurant
                             </button>
 
                         </div>
@@ -296,7 +296,7 @@ const LandCoverLegends = (props) => {
                                     src={Bank}
                                 />
 
-                                 Finance
+                                Finance
                             </button>
 
                         </div>
@@ -315,7 +315,7 @@ const LandCoverLegends = (props) => {
                                     src={Water}
                                 />
 
-                                 Water Source
+                                Water Source
                             </button>
 
                         </div>
@@ -334,7 +334,7 @@ const LandCoverLegends = (props) => {
                                     src={Trade}
                                 />
 
-                                 Trade and Business
+                                Trade and Business
                             </button>
 
                         </div>

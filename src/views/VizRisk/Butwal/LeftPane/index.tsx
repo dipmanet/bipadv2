@@ -1,3 +1,6 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable react/no-danger */
+/* eslint-disable indent */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
@@ -8,7 +11,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Label,
     Bar,
@@ -27,33 +30,35 @@ import {
 import Hexagon from 'react-hexagon';
 
 
-import CriticalInfraLegends from '../Legends/CriticalInfraLegends';
-import NavButtons from '../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
-import TempMin from '../../Common/Icons/TempMin.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';
 import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
+import FloodDepthLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
+import CriticalInfraLegends from '../Legends/CriticalInfraLegends';
+import NavButtons from '../Components/NavButtons';
+import TempMin from '../../Common/Icons/TempMin.svg';
 
 import styles from './styles.scss';
 import VRLegend from '../Components/VRLegend/index';
 import DemoGraphicsLegends from '../Legends/DemographicsLegends/index';
 import LandslideLegend from '../Legends/LandslideLegend/index';
-import { renderLegendPopulaion,
+import {
+    renderLegendPopulaion,
     CustomTooltip,
     populationCustomTooltip,
     getChartData,
     getArrforDesc,
     renderLegend,
     landCoverCustomTooltip,
-    urbanCustomTooltip, parseStringToNumber, cITooltip, pastDisasterCustomTooltip } from '../Functions/index';
+    urbanCustomTooltip, parseStringToNumber, cITooltip, pastDisasterCustomTooltip,
+} from '../Functions/index';
 import TempChart from '../Charts/TempChart.tsx';
 import LandCoverChart from '../Charts/LandCoverChart.tsx';
 import PopulationChart from '../Charts/PopulationChart.tsx';
 import LandCoverLegends from '../Legends/LandCoverLegends/index';
 import DemographicsPopInfo from '../Components/DemographicsPopInfo';
 import FloodHistoryLegends from '../Legends/FloodHazardLegends';
-import FloodDepthLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import PopulationDensityLegends from '../Legends/PopulationDensityLegend';
 import BuildingChart from '../Charts/Buildingchart';
 
@@ -62,8 +67,8 @@ interface State {
     showInfo: boolean;
 }
 
-interface Props {}
-interface ComponentProps {}
+interface Props { }
+interface ComponentProps { }
 
 function Leftpane(props) {
     const {
@@ -107,18 +112,18 @@ function Leftpane(props) {
         buildingsChartData,
         landCoverDataInKm,
         realTimeData,
-		 page1Legend1InroHtml,
-		 page1Legend2InroHtml,
-		  page1Legend3InroHtml,
-		  page3Legend1InroHtml,
-		  page3Legend2InroHtml,
-		  page3Legend3InroHtml,
-		  page3Legend4InroHtml,
-		  page4Legend1InroHtml,
-		  page4Legend2InroHtml,
-		  page4Legend3InroHtml,
-		  legentItemDisabled,
-		  CIState,
+        page1Legend1InroHtml,
+        page1Legend2InroHtml,
+        page1Legend3InroHtml,
+        page3Legend1InroHtml,
+        page3Legend2InroHtml,
+        page3Legend3InroHtml,
+        page3Legend4InroHtml,
+        page4Legend1InroHtml,
+        page4Legend2InroHtml,
+        page4Legend3InroHtml,
+        legentItemDisabled,
+        CIState,
 
     } = props;
 
@@ -220,40 +225,40 @@ function Leftpane(props) {
                 return nonZeroArr.map((item, i) => {
                     if (
                         i === nonZeroArr.length - 1
-                            && i === 0 && chartData.map(item => item.value)[0] !== 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        && i === 0 && chartData.map(item => item.value)[0] !== 0
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` ${item} `;
                     }
                     if (
                         i === 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` ${item} ,`;
                     }
                     if (
                         i !== nonZeroArr.length - 1
-                            && i === 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        && i === 0
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` ${item} `;
                     }
                     if (
                         i === nonZeroArr.length - 1
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` and ${item} `;
                     }
                     if (
                         i === 1
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` ${item} `;
                     }
                     if (
                         i !== 0 && i !== nonZeroArr.length - 1 && i > 2
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return `, ${item} `;
                     }
                     return '';
@@ -292,7 +297,7 @@ function Leftpane(props) {
 
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By Ward'];
     const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard', 'Seismic Hazard'];
-    console.log('chartData is ', chartData);
+
 
     return (
         <>
@@ -318,7 +323,7 @@ function Leftpane(props) {
                             <div className={styles.infoIconsContainer}>
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitleDate}>
-									Recorderd Time:
+                                        Recorderd Time:
                                         {'  '}
                                         {realTimeData !== undefined ? realTimeData.recordedDate.slice(0, 10) : 'Nodata'}
                                     </div>
@@ -335,8 +340,8 @@ function Leftpane(props) {
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
 
-                                        {realTimeData !== undefined ? currentAverageTemp(realTimeData.currentTemp) : '- ' }
-℃
+                                        {realTimeData !== undefined ? currentAverageTemp(realTimeData.currentTemp) : '- '}
+                                        ℃
                                     </div>
                                     <div className={styles.iconText}>Current</div>
                                 </div>
@@ -350,7 +355,7 @@ function Leftpane(props) {
                                     <div className={styles.iconTitle}>
 
                                         {realTimeData !== undefined ? realTimeData.maximumTemp : '- '}
-℃
+                                        ℃
                                     </div>
                                     <div className={styles.iconText}>Maximum</div>
                                 </div>
@@ -364,7 +369,7 @@ function Leftpane(props) {
                                     <div className={styles.iconTitle}>
                                         {' '}
                                         {realTimeData !== undefined ? realTimeData.minimumTemp : '- '}
-℃
+                                        ℃
                                     </div>
                                     <div className={styles.iconText}>Minimum</div>
                                 </div>
@@ -381,7 +386,7 @@ function Leftpane(props) {
                                         {' '}
                                         {realTimeData !== undefined ? realTimeData.rainfall : '- '}
                                         {' '}
-mm
+                                        mm
                                     </div>
                                     <div className={styles.iconText}>Daily Rainfall</div>
                                 </div>
@@ -394,9 +399,9 @@ mm
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
                                         {' '}
-                                        { tempData && parseStringToNumber(tempData.filter(rainfall => rainfall.rainfall).map(item => item.rainfall)[0])}
+                                        {tempData && parseStringToNumber(tempData.filter(rainfall => rainfall.rainfall).map(item => item.rainfall)[0])}
                                         {' '}
-mm
+                                        mm
                                     </div>
                                     <div className={styles.iconText}>Annual Rainfall</div>
                                 </div>
@@ -413,7 +418,7 @@ mm
                                     fontSize: '22px',
                                 }}
                             >
-                Temperature
+                                Temperature
                             </p>
                             <TempChart
                                 tempChartData={tempChartData}
@@ -473,41 +478,41 @@ mm
                 {leftElement === 0 && (
                     <VRLegend>
                         <div className={(disableNavLeftBtn || disableNavRightBtn
-						|| legentItemDisabled)
-							 ? styles.incidentsLegendsContainerDisabled : styles.incidentsLegendsContainer}
+                            || legentItemDisabled)
+                            ? styles.incidentsLegendsContainerDisabled : styles.incidentsLegendsContainer}
                         >
                             {firstpageLegendItems.length > 0
-                && firstpageLegendItems.map(
-                	item => (
-                        <div
-                            className={styles.hazardItemContainer}
-                            key={item}
-                        >
-                            <button
-                                key={item}
-                                type="button"
-                                className={
-                					legendElement === item
-                						? styles.legendBtnSelected
-                						: styles.legendBtn
-                				}
-                                onClick={() => handleLegendClicked(item)}
-                                disabled={disableNavLeftBtn || disableNavRightBtn
-									|| legentItemDisabled}
-                            >
-                                <Hexagon
-                                    style={{
-                						stroke: '#fff',
-                						strokeWidth: 50,
-                						fill: legendElement === item ? 'white' : '#036ef0',
-                					}}
-                                    className={styles.educationHexagon}
-                                />
-                                {item}
-                            </button>
-                        </div>
-                	),
-                )}
+                                && firstpageLegendItems.map(
+                                    item => (
+                                        <div
+                                            className={styles.hazardItemContainer}
+                                            key={item}
+                                        >
+                                            <button
+                                                key={item}
+                                                type="button"
+                                                className={
+                                                    legendElement === item
+                                                        ? styles.legendBtnSelected
+                                                        : styles.legendBtn
+                                                }
+                                                onClick={() => handleLegendClicked(item)}
+                                                disabled={disableNavLeftBtn || disableNavRightBtn
+                                                    || legentItemDisabled}
+                                            >
+                                                <Hexagon
+                                                    style={{
+                                                        stroke: '#fff',
+                                                        strokeWidth: 50,
+                                                        fill: legendElement === item ? 'white' : '#036ef0',
+                                                    }}
+                                                    className={styles.educationHexagon}
+                                                />
+                                                {item}
+                                            </button>
+                                        </div>
+                                    ),
+                                )}
                         </div>
                     </VRLegend>
                 )}
@@ -517,7 +522,7 @@ mm
                         <h1>Past Disaster Incidents</h1>
                         {chartData.length > 0 && (
                             <p>
-                                 In the year
+                                In the year
                                 {' '}
                                 {incidentFilterYear}
                                 {' '}
@@ -529,13 +534,13 @@ mm
                                     })).value
                                 }
                                 {' '}
-                                 incidents
+                                incidents
                                 {' '}
                                 {nonZeroArr.length > 0 ? ' of ' : ''}
                                 {getDescription()}
                                 {' '}
-have been reported in Butwal Sub Metropolitian. These incidents
-                                 have caused
+                                have been reported in Butwal Sub Metropolitian. These incidents
+                                have caused
                                 {' '}
                                 {incidentDetailsData.peopleDeathCount}
                                 {' '}
@@ -621,38 +626,38 @@ have been reported in Butwal Sub Metropolitian. These incidents
                                             }}
                                             className={styles.educationHexagon}
                                         />
-                    Showing All
+                                        Showing All
                                     </button>
                                 </div>
                             </div>
 
                             {fullhazardTitle.length > 0
-                && fullhazardTitle.map(item => (
-                    <div className={styles.incidentsLegendsContainer} key={item}>
-                        <div className={styles.hazardItemContainer}>
-                            <button
-                                key={item}
-                                type="button"
-                                className={
-                					clickedItem === item
-                						? styles.legendBtnSelected
-                						: styles.legendBtn
-                				}
-                                onClick={() => handleIncidentItemClick(item)}
-                            >
-                                <Hexagon
-                                    style={{
-                						stroke: '#fff',
-                						strokeWidth: 50,
-                						fill: legendElement === item ? 'white' : '#036ef0',
-                					}}
-                                    className={styles.educationHexagon}
-                                />
-                                {item}
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                                && fullhazardTitle.map(item => (
+                                    <div className={styles.incidentsLegendsContainer} key={item}>
+                                        <div className={styles.hazardItemContainer}>
+                                            <button
+                                                key={item}
+                                                type="button"
+                                                className={
+                                                    clickedItem === item
+                                                        ? styles.legendBtnSelected
+                                                        : styles.legendBtn
+                                                }
+                                                onClick={() => handleIncidentItemClick(item)}
+                                            >
+                                                <Hexagon
+                                                    style={{
+                                                        stroke: '#fff',
+                                                        strokeWidth: 50,
+                                                        fill: legendElement === item ? 'white' : '#036ef0',
+                                                    }}
+                                                    className={styles.educationHexagon}
+                                                />
+                                                {item}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                         </VRLegend>
 
                         {/* <LandslideLegend /> */}
@@ -662,19 +667,19 @@ have been reported in Butwal Sub Metropolitian. These incidents
                 {leftElement === 2 && (
                     <>
                         {[page3Legend1InroHtml, page3Legend3InroHtml,
-						 page3Legend4InroHtml, page3Legend2InroHtml].map((item, i) => (
-                            <div key={item}>
-                                {clickedArr[i] === 1 && (
-                                    <div
-                                        style={{ textAlign: 'initial' }}
-                                        className={styles.mainIntroHtmlFromAPI}
-                                        dangerouslySetInnerHTML={{
-                                            __html: item,
-                                        }}
-                                    />
-                                )}
-                            </div>
-                        ))}
+                            page3Legend4InroHtml, page3Legend2InroHtml].map((item, i) => (
+                                <div key={item}>
+                                    {clickedArr[i] === 1 && (
+                                        <div
+                                            style={{ textAlign: 'initial' }}
+                                            className={styles.mainIntroHtmlFromAPI}
+                                            dangerouslySetInnerHTML={{
+                                                __html: item,
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
                         {(leftElement === 2 && clickedArr[0] === 1) && (
                             <>
                                 <ResponsiveContainer
@@ -721,7 +726,7 @@ have been reported in Butwal Sub Metropolitian. These incidents
                                 </ResponsiveContainer>
                             </>
 
-                        ) }
+                        )}
 
                         <CriticalInfraLegends
                             clickedArr={clickedArr}
@@ -743,7 +748,7 @@ have been reported in Butwal Sub Metropolitian. These incidents
                                 />
                             </>
 
-                        ) }
+                        )}
                         {(leftElement === 2 && clickedArr[2] === 1) && (
                             <>
                                 <BuildingChart
@@ -752,14 +757,14 @@ have been reported in Butwal Sub Metropolitian. These incidents
                                 />
                             </>
 
-                        ) }
+                        )}
 
                         <VRLegend>
-                            { exposureElements.map((item, i) => (
+                            {exposureElements.map((item, i) => (
                                 <div
                                     className={legentItemDisabled
                                         ? styles.incidentsLegendsContainer3Disabled
-								 : styles.incidentsLegendsContainer3}
+                                        : styles.incidentsLegendsContainer3}
                                     key={item}
                                 >
                                     <div className={styles.hazardItemContainer3}>
@@ -780,12 +785,12 @@ have been reported in Butwal Sub Metropolitian. These incidents
                                                     stroke: '#FFFFFF',
                                                     strokeWidth: 30,
                                                     fill:
-													clickedArr[i] === 1 ? 'white' : 'transparent',
+                                                        clickedArr[i] === 1 ? 'white' : 'transparent',
                                                 }}
                                                 className={styles.educationHexagon3}
                                             />
                                             {item}
-                                            {i === 2 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '27.8px', backgroundColor: '#565656', opacity: '0.5' }} className={styles.dummyLine} /> }
+                                            {i === 2 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '27.8px', backgroundColor: '#565656', opacity: '0.5' }} className={styles.dummyLine} />}
                                         </button>
                                     </div>
                                 </div>
@@ -796,33 +801,33 @@ have been reported in Butwal Sub Metropolitian. These incidents
                 )}
 
                 {((leftElement === 2 && clickedArr[1] === 1)
-				  || (leftElement === 3 && exposureElementArr[2] === 1) || (leftElement === 0 && legendElement === 'Landcover'))
-				  && (
-				               <LandCoverLegends
-				          leftElement={leftElement}
-				          clickedArr={clickedArr}
-				          exposureElementArr={exposureElementArr}
-				               />
-				  )
-				  }
+                    || (leftElement === 3 && exposureElementArr[2] === 1) || (leftElement === 0 && legendElement === 'Landcover'))
+                    && (
+                        <LandCoverLegends
+                            leftElement={leftElement}
+                            clickedArr={clickedArr}
+                            exposureElementArr={exposureElementArr}
+                        />
+                    )
+                }
                 {leftElement === 3 && (
                     <>
                         {[page4Legend1InroHtml, page4Legend2InroHtml,
-						 page4Legend3InroHtml].map((item, i) => (
-                            <div key={Math.random()}>
-                                {hazardLegendClickedArr[i] === 1 && (
-                                    <div
+                            page4Legend3InroHtml].map((item, i) => (
+                                <div key={Math.random()}>
+                                    {hazardLegendClickedArr[i] === 1 && (
+                                        <div
 
-                                        className={styles.mainIntroHtmlFromAPI}
-                                        style={{ textAlign: 'initial' }}
-                                        dangerouslySetInnerHTML={{
-                                            __html: item,
-                                        }}
-                                    />
-                                )}
-                            </div>
+                                            className={styles.mainIntroHtmlFromAPI}
+                                            style={{ textAlign: 'initial' }}
+                                            dangerouslySetInnerHTML={{
+                                                __html: item,
+                                            }}
+                                        />
+                                    )}
+                                </div>
 
-                        ))}
+                            ))}
                         <CriticalInfraLegends
                             exposureElementArr={exposureElementArr}
                             clickedArr={clickedArr}
@@ -840,95 +845,95 @@ have been reported in Butwal Sub Metropolitian. These incidents
                                 className={styles.hazardElementHeaderStyle}
                                 style={{ opacity: '0.5', fontWeight: '700' }}
                             >
-                HAZARD LAYERS
+                                HAZARD LAYERS
                             </h4>
                             {hazardIncidentLegendName.length > 0
-                && hazardIncidentLegendName.map(
-                	(item, i) => (
-                        <div
-                            className={legentItemDisabled
-                                ? styles.incidentsLegendsContainer3Disabled
-						 : styles.incidentsLegendsContainer3}
-                            key={item}
-                        >
-                            <div className={styles.hazardItemContainer3}>
-                                <button
-                                    key={item}
-                                    type="button"
-                                    className={
-                						hazardLegendClicked[i] === 1
-                							? styles.legendBtnSelected3
-                							: styles.legendBtn3
-                					}
-                                    onClick={() => handleMultipleHazardLayer(item, i)}
-                                    disabled={legentItemDisabled}
-                                >
-                                    <Hexagon
-                                        style={{
-                							innerHeight: 80,
-                							stroke: '#FFFFFF',
-                							strokeWidth: 30,
-                							fill:
-											hazardLegendClicked[i] === 1
-											    ? 'white'
-											    : 'transparent',
-                						}}
-                                        className={styles.educationHexagon3}
-                                    />
-                                    {item}
-                                </button>
-                            </div>
-                        </div>
-                	),
-                )}
+                                && hazardIncidentLegendName.map(
+                                    (item, i) => (
+                                        <div
+                                            className={legentItemDisabled
+                                                ? styles.incidentsLegendsContainer3Disabled
+                                                : styles.incidentsLegendsContainer3}
+                                            key={item}
+                                        >
+                                            <div className={styles.hazardItemContainer3}>
+                                                <button
+                                                    key={item}
+                                                    type="button"
+                                                    className={
+                                                        hazardLegendClicked[i] === 1
+                                                            ? styles.legendBtnSelected3
+                                                            : styles.legendBtn3
+                                                    }
+                                                    onClick={() => handleMultipleHazardLayer(item, i)}
+                                                    disabled={legentItemDisabled}
+                                                >
+                                                    <Hexagon
+                                                        style={{
+                                                            innerHeight: 80,
+                                                            stroke: '#FFFFFF',
+                                                            strokeWidth: 30,
+                                                            fill:
+                                                                hazardLegendClicked[i] === 1
+                                                                    ? 'white'
+                                                                    : 'transparent',
+                                                        }}
+                                                        className={styles.educationHexagon3}
+                                                    />
+                                                    {item}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ),
+                                )}
                             <h4
                                 className={styles.hazardElementHeaderStyle}
                                 style={{ opacity: '0.5', fontWeight: '700' }}
                             >
-                EXPOSURE ELEMENTS
+                                EXPOSURE ELEMENTS
                             </h4>
                             {hazardIncidentLegendName.length > 0
-                && [
-                	'Population Density',
-                	'Critical Infrastructure',
-                	'Landcover',
-                	'Building Footprint',
-                ].map((item, i) => (
-                    <div
-                        className={legentItemDisabled
-                            ? styles.incidentsLegendsContainer3Disabled
-				 : styles.incidentsLegendsContainer3}
-                        key={item}
-                    >
-                        <div className={styles.hazardItemContainer3}>
-                            <button
-                                key={item}
-                                type="button"
-                                className={
-                					exposureElementArr[i] === 1
-                						? styles.legendBtnSelected3
-                						: styles.legendBtn3
-                				}
-                                onClick={() => handleExposure(item, i)}
-                                disabled={legentItemDisabled}
-                            >
-                                <Hexagon
-                                    style={{
-                						innerHeight: 80,
-                						stroke: '#FFFFFF',
-                						strokeWidth: 30,
-                						fill:
-										exposureElementArr[i] === 1 ? 'white' : 'transparent',
-                					}}
-                                    className={styles.educationHexagon3}
-                                />
-                                {item}
-                                {i === 0 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '26px', backgroundColor: '#565656' }} className={styles.dummyLine} /> }
-                            </button>
+                                && [
+                                    'Population Density',
+                                    'Critical Infrastructure',
+                                    'Landcover',
+                                    'Building Footprint',
+                                ].map((item, i) => (
+                                    <div
+                                        className={legentItemDisabled
+                                            ? styles.incidentsLegendsContainer3Disabled
+                                            : styles.incidentsLegendsContainer3}
+                                        key={item}
+                                    >
+                                        <div className={styles.hazardItemContainer3}>
+                                            <button
+                                                key={item}
+                                                type="button"
+                                                className={
+                                                    exposureElementArr[i] === 1
+                                                        ? styles.legendBtnSelected3
+                                                        : styles.legendBtn3
+                                                }
+                                                onClick={() => handleExposure(item, i)}
+                                                disabled={legentItemDisabled}
+                                            >
+                                                <Hexagon
+                                                    style={{
+                                                        innerHeight: 80,
+                                                        stroke: '#FFFFFF',
+                                                        strokeWidth: 30,
+                                                        fill:
+                                                            exposureElementArr[i] === 1 ? 'white' : 'transparent',
+                                                    }}
+                                                    className={styles.educationHexagon3}
+                                                />
+                                                {item}
+                                                {i === 0 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '26px', backgroundColor: '#565656' }} className={styles.dummyLine} />}
+                                            </button>
 
-                        </div>
-                    </div>
-                ))}
+                                        </div>
+                                    </div>
+                                ))}
                         </VRLegend>
                         <FloodHistoryLegends
                             hazardLegendClickedArr={hazardLegendClickedArr}
@@ -942,14 +947,14 @@ have been reported in Butwal Sub Metropolitian. These incidents
                     </>
                 )}
                 {((leftElement === 2 && clickedArr[3] === 1)
-				  || (leftElement === 3 && exposureElementArr[0] === 1))
-				  && (
-				      <PopulationDensityLegends
-				          populationDensityRange={populationDensityRange}
-				          leftElement={leftElement}
-				          exposureElementArr={exposureElementArr}
-				      />
-				  )}
+                    || (leftElement === 3 && exposureElementArr[0] === 1))
+                    && (
+                        <PopulationDensityLegends
+                            populationDensityRange={populationDensityRange}
+                            leftElement={leftElement}
+                            exposureElementArr={exposureElementArr}
+                        />
+                    )}
 
                 {leftElement === 4 && (
                     <>
@@ -984,29 +989,29 @@ have been reported in Butwal Sub Metropolitian. These incidents
                         </ResponsiveContainer>
                         <VRLegend>
                             {hazardIncidentLegendName.length > 0
-                && ['Landcover Change'].map(item => (
-                    <div className={styles.incidentsLegendsContainer3} key={item}>
-                        <div className={styles.hazardItemContainer3}>
-                            <button
-                                key={item}
-                                type="button"
-                                className={styles.legendBtnSelected3}
-                                onClick={() => handleLegendClicked(item)}
-                            >
-                                <Hexagon
-                                    style={{
-                						innerHeight: 80,
-                						stroke: '#FFFFFF',
-                						strokeWidth: 30,
-                						fill: '#036ef0 ',
-                					}}
-                                    className={styles.educationHexagon3}
-                                />
-                                {item}
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                                && ['Landcover Change'].map(item => (
+                                    <div className={styles.incidentsLegendsContainer3} key={item}>
+                                        <div className={styles.hazardItemContainer3}>
+                                            <button
+                                                key={item}
+                                                type="button"
+                                                className={styles.legendBtnSelected3}
+                                                onClick={() => handleLegendClicked(item)}
+                                            >
+                                                <Hexagon
+                                                    style={{
+                                                        innerHeight: 80,
+                                                        stroke: '#FFFFFF',
+                                                        strokeWidth: 30,
+                                                        fill: '#036ef0 ',
+                                                    }}
+                                                    className={styles.educationHexagon3}
+                                                />
+                                                {item}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                         </VRLegend>
                     </>
                 )}

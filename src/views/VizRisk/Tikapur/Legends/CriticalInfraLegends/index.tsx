@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 import Education from '../../Icons/icon_set_school.svg';
 import Governance from '../../Icons/icon_set_government.svg';
 import Culture from '../../Icons/icon_set_religion.svg';
@@ -8,7 +9,6 @@ import Health from '../../Icons/icon_set_health-01.svg';
 import Industry from '../../Icons/icon_set_industry.svg';
 import Tourism from '../../Icons/icon_set_hotel.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
-import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
     const { handleCritical, criticalFlood } = props;
@@ -161,7 +161,7 @@ const LandCoverLegends = (props) => {
                 className={styles.EducationHexagon}
             /> */}
 
-                Show All
+                                Show All
                             </button>
 
                         </div>
@@ -178,7 +178,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Education}
                                 />
-                                 Educational Institution
+                                Educational Institution
                             </button>
                         </div>
                         {/* <div className={styles.infraIconContainer}>
@@ -210,7 +210,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Culture}
                                 />
-            Cultural Site
+                                Cultural Site
                             </button>
 
                         </div>
@@ -228,7 +228,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Health}
                                 />
-            Hospital
+                                Hospital
                             </button>
 
                         </div>
@@ -279,7 +279,7 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Bank}
                                 />
-                           Bank
+                                Bank
                             </button>
 
                         </div>

@@ -5,12 +5,9 @@ import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
 import * as geojson from 'geojson';
 import { mapSources } from '#constants';
-import demographicsData from '../Data/demographicsData';
-import expressions from '../Data/expressions';
 import * as PageTypes from '#store/atom/page/types';
 import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Jugal/utils';
 import { AppState } from '#store/types';
-import MapConstants from '../Data/mapConstants';
 
 import {
     wardsSelector,
@@ -19,19 +16,22 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
-import Icon from '#rscg/Icon';
+import MapConstants from '../Data/mapConstants';
+import expressions from '../Data/expressions';
+import demographicsData from '../Data/demographicsData';
 
 
-interface State{
+interface State {
     lat: number;
     lng: number;
     zoom: number;
     categoriesCritical: string[];
 }
 
-interface OwnProps{
+interface OwnProps {
     rightElement: number;
     showPopulation: string;
     criticalElement: string;
@@ -53,7 +53,7 @@ interface Region {
     geoarea: number;
 }
 
-interface CIData{
+interface CIData {
     type: geojson.GeoJsonTypes;
     features: Feature[];
 }
@@ -98,10 +98,10 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     wards: wardsSelector(state),
 });
 
-let hoveredWardId: (string | number |undefined);
+let hoveredWardId: (string | number | undefined);
 const { populationWardExpression } = expressions;
 
-function noop() {}
+function noop() { }
 const JugalMap = (props: Props) => {
     const [categoriesCritical, setcategoriesCritical] = useState([]);
     const [incidentsArr, setIncidentsArr] = useState([]);
@@ -518,7 +518,7 @@ const JugalMap = (props: Props) => {
         };
 
         return destroyMap;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -557,7 +557,7 @@ const JugalMap = (props: Props) => {
                 map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [criticalElement]);
 
     useEffect(() => {
@@ -668,7 +668,7 @@ const JugalMap = (props: Props) => {
                 });
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [categoriesCritical, rightElement]);
 
     useEffect(() => {
@@ -693,7 +693,7 @@ const JugalMap = (props: Props) => {
                 map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clickedItem]);
 
 

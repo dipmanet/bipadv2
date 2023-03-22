@@ -4,7 +4,6 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import demographicsData from '../Data/demographicsData';
 import {
     // provincesSelector,
     municipalitiesSelector,
@@ -20,6 +19,7 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import demographicsData from '../Data/demographicsData';
 
 import Evac from '../Data/tikapurGEOJSON';
 
@@ -172,17 +172,14 @@ class FloodHistoryMap extends React.Component {
 
         const featuresArr = cI.features
             .filter(item => item.geometry !== undefined)
-            .map((item) => {
-                console.log(item.geometry);
-                return {
-                    properties: item.properties,
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: item.geometry.coordinates,
-                    },
-                };
-            });
+            .map(item => ({
+                properties: item.properties,
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: item.geometry.coordinates,
+                },
+            }));
         const criticalinfrastructures = {
             type: 'FeatureCollection',
             name: 'CI',
@@ -194,7 +191,6 @@ class FloodHistoryMap extends React.Component {
             features: [...evacCulture, ...evaceducation, ...Evac.evaccenters],
         };
 
-        console.log('evaccenters', evaccenters);
         const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
             item => item.properties.results__r,
         ))];
@@ -298,7 +294,6 @@ class FloodHistoryMap extends React.Component {
             });
             categoriesEvac.map((layer) => {
                 const mapSource = this.map.getSource(`evac-${layer}`);
-                console.log('source', mapSource);
                 if (typeof mapSource === 'undefined') {
                     this.map.addSource(`evac-${layer}`, {
                         type: 'geojson',
@@ -558,8 +553,8 @@ class FloodHistoryMap extends React.Component {
             if (nextProps.showPopulation !== showPopulation) {
                 if (nextProps.showPopulation === 'popdensity') {
                     this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-                // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
+                    // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+                    // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
                 } else {
                     this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
                 }

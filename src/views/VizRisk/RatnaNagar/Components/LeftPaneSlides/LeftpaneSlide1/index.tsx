@@ -14,8 +14,8 @@ import {
 import ReactHtmlParser from 'react-html-parser';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 
-import styles from './styles.scss';
 import { getDataFromKey } from '#views/VizRisk/RatnaNagar/utils';
+import styles from './styles.scss';
 import RenderLegend from '../../Legends/RenderLegend';
 import RenderLegendRainfall from '../../Legends/RenderLegendRailfall';
 

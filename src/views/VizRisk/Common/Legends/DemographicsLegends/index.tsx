@@ -9,7 +9,7 @@ const DemoGraphicsLegends = (props) => {
         handlePopulationChange,
         legends,
     } = props;
-    console.log('legends', legends);
+
     const {
         densityVals,
         populationVals,
@@ -102,7 +102,7 @@ const DemoGraphicsLegends = (props) => {
                             <br />
                             (per 0.06 km
                             <sup>2</sup>
-)
+                            )
                         </h2>
 
                         <div className={styles.populationContainer}>
@@ -149,7 +149,7 @@ const DemoGraphicsLegends = (props) => {
                         }}
                         className={styles.educationHexagon}
                     />
-                            By Ward
+                    By Ward
                 </button>
             </div>
             <div className={styles.hazardItemContainer}>
@@ -169,7 +169,7 @@ const DemoGraphicsLegends = (props) => {
                         className={styles.educationHexagon}
                     />
 
-                           By Density
+                    By Density
                 </button>
             </div>
         </div>

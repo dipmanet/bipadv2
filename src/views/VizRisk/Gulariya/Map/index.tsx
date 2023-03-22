@@ -3,7 +3,6 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import demographicsData from '../Data/demographicsData';
 import {
     wardsSelector,
 } from '#selectors';
@@ -11,8 +10,9 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
-import Evac from '../Data/gulariyaGEOJSON';
 import { popupElementFlood } from '#views/VizRisk/Common/utils';
+import Evac from '../Data/gulariyaGEOJSON';
+import demographicsData from '../Data/demographicsData';
 
 const mapStateToProps = (state, props) => ({
     wards: wardsSelector(state),
@@ -154,17 +154,14 @@ class FloodHistoryMap extends React.Component {
         const evacClusters = [].concat(...arrEvac);
         const featuresArr = cI.features
             .filter(item => item.geometry !== undefined)
-            .map((item) => {
-                console.log(item.geometry);
-                return {
-                    properties: item.properties,
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: item.geometry.coordinates,
-                    },
-                };
-            });
+            .map(item => ({
+                properties: item.properties,
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: item.geometry.coordinates,
+                },
+            }));
         const criticalinfrastructures = {
             type: 'FeatureCollection',
             name: 'CI',
@@ -176,7 +173,7 @@ class FloodHistoryMap extends React.Component {
             features: [...evacCulture, ...Evac.evaccenters],
         };
 
-        console.log('evaccenters', evaccenters);
+
         const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
             item => item.properties.Type,
         ))];
@@ -407,7 +404,6 @@ class FloodHistoryMap extends React.Component {
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const title = e.features[0].properties.Title;
-                    console.log('Title', title);
                     const safeData = Evac.evaccenters.filter(i => i.properties.Title === title)[0];
                     const content = popupElementFlood(safeData.properties);
                     popup.setLngLat(coordinates)
@@ -567,8 +563,8 @@ class FloodHistoryMap extends React.Component {
             if (nextProps.showPopulation !== showPopulation) {
                 if (nextProps.showPopulation === 'popdensity') {
                     this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-                // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
+                    // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+                    // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
                 } else {
                     this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
                 }
@@ -711,9 +707,7 @@ class FloodHistoryMap extends React.Component {
         temp.name = filterBy;
         temp.features = [];
         const ourD = data.features.filter(item => item.properties.Type === filterBy);
-        console.log('filterBy', filterBy);
         temp.features.push(...ourD);
-        console.log('temp', temp);
         return temp;
     }
 

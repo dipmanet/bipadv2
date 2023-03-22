@@ -7,17 +7,17 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Tikapur/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
 import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
 import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
+import styles from './styles.scss';
 
 import Disclaimer from '../../Components/Disclaimer';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -31,28 +31,28 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Male Pop
+                        Male Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                    Female Pop
+                        Female Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendOther} />
                     <div className={styles.legendText}>
-                    Other Pop
+                        Other Pop
                         <sup>n</sup>
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
-                       Total Family Count
+                        Total Family Count
                     </div>
                 </div>
             </div>
@@ -65,22 +65,22 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Ward 1 of the municipality is a planned core-urban
-                area and is densely populated. The rest of the municipality
-                consists of peripheral peri-urban settlements and rural
-                areas with a low density of population.
+                    Ward 1 of the municipality is a planned core-urban
+                    area and is densely populated. The rest of the municipality
+                    consists of peripheral peri-urban settlements and rural
+                    areas with a low density of population.
                 </p>
                 <p>
-                Tikapur Municipality has a total population of  98,651
-                with 50,405 males and 48,246 females. The total household
-                number counts to 18,620. Ward number 1 has the largest
-                household number of 9823, while ward number 9 has the least
-                comprising of only 743 households.
+                    Tikapur Municipality has a total population of  98,651
+                    with 50,405 males and 48,246 females. The total household
+                    number counts to 18,620. Ward number 1 has the largest
+                    household number of 9823, while ward number 9 has the least
+                    comprising of only 743 households.
                 </p>
                 <p>
-                This map allows viewing the population distribution within
-                each ward and helps to locate the region of dense and sparse
-                settlements.
+                    This map allows viewing the population distribution within
+                    each ward and helps to locate the region of dense and sparse
+                    settlements.
                 </p>
 
 
@@ -106,7 +106,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>18,620</div>
                             <div className={styles.iconText}>
-                             Total Family Count
+                                Total Family Count
                             </div>
 
                         </div>
@@ -123,7 +123,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>50,405</div>
                             <div className={styles.iconText}>
-                             Male Population
+                                Male Population
                             </div>
 
                         </div>
@@ -136,7 +136,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>48,246</div>
                             <div className={styles.iconText}>
-                             Female Population
+                                Female Population
                             </div>
 
                         </div>
@@ -149,7 +149,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>0</div>
                             <div className={styles.iconText}>
-                            Other Population
+                                Other Population
                             </div>
 
                         </div>

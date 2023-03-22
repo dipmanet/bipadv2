@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
@@ -12,6 +11,7 @@ import Helipad from '#resources/icons/HelipadVR.svg';
 import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 const LandCoverLegends = (props) => {
     const { handleCritical, criticalElement, hide, right, showHelipad: showHelipadInfo } = props;
@@ -138,10 +138,6 @@ const LandCoverLegends = (props) => {
         }
     };
 
-    useEffect(() => {
-        console.log('hide:', hide);
-    }, [hide]);
-
     const styleLeft = {
         position: 'fixed',
         bottom: '50px',
@@ -212,7 +208,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                              Show All
+                                Show All
                             </button>
 
                         </div>
@@ -231,7 +227,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                                 Educational Institution
+                                Educational Institution
                             </button>
                         </div>
                         <div className={styles.infraIconContainer}>
@@ -299,7 +295,7 @@ const LandCoverLegends = (props) => {
                                     src={Health}
                                 />
 
-                                 Hospital
+                                Hospital
                             </button>
 
                         </div>
@@ -320,7 +316,7 @@ const LandCoverLegends = (props) => {
                                             src={Helipad}
                                         />
 
-                                 Helipad
+                                        Helipad
                                     </button>
 
                                 </div>

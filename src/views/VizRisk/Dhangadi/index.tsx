@@ -1,6 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+import Icon from '#rscg/Icon';
+import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
 import Map from './Map';
 import styles from './styles.scss';
 import RightElement1 from './RightPaneContents/RightPane1';
@@ -14,17 +22,9 @@ import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardLegends from './Legends/FloodHazardLegends';
 import FloodDepthLegend from './Legends/FloodDepthLegend';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
 import { getgeoJsonLayer } from './utils';
 
 import EvacLegends from './Legends/EvacLegends';
-import Icon from '#rscg/Icon';
-import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
 
 const rightelements = [
     <RightElement1 />,
@@ -99,7 +99,7 @@ class Dhangadi extends React.Component {
         });
     }
 
-    public handleCriticalInfraData=(data) => {
+    public handleCriticalInfraData = (data) => {
         this.setState({ criticalInfrastructureData: data });
     }
 
@@ -143,7 +143,7 @@ class Dhangadi extends React.Component {
         }
     }
 
-    public handlePopulationChange =(showPopulation) => {
+    public handlePopulationChange = (showPopulation) => {
         this.setState({ showPopulation });
     }
 
@@ -206,7 +206,7 @@ class Dhangadi extends React.Component {
             cI,
             criticalInfrastructureData,
         } = this.state;
-        console.log('criticalInfrastructureData', criticalInfrastructureData);
+
 
         return (
             <div>

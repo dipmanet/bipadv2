@@ -9,12 +9,12 @@ import mapboxgl from 'mapbox-gl';
 import { Spring } from 'react-spring/renderprops';
 import { connect } from 'react-redux';
 import { DataFilterExtension } from '@deck.gl/extensions';
-import DelayedPointLayer from '../Components/DelayedPointLayer';
-import Locations from '../Data/locations';
-import MapLayers from '../Data/mapLayers';
 import {
     wardsSelector,
 } from '#selectors';
+import DelayedPointLayer from '../Components/DelayedPointLayer';
+import Locations from '../Data/locations';
+import MapLayers from '../Data/mapLayers';
 
 import styles from './styles.scss';
 
@@ -206,7 +206,7 @@ const Deck = (props) => {
         });
 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -310,7 +310,7 @@ const Deck = (props) => {
             });
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 
     // useEffect(() => {
@@ -434,7 +434,7 @@ const Deck = (props) => {
                                     onViewStateChange={onViewStateChange}
                                     getTooltip={getToolTip}
                                     glOptions={{
-                                    /* To render vector tile polygons correctly */
+                                        /* To render vector tile polygons correctly */
                                         stencil: true,
                                     }}
                                     width={'70%'}

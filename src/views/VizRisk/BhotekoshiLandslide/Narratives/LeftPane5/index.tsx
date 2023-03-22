@@ -9,17 +9,17 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from '../../styles.scss';
-import Demo from '../../Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
 import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
 import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
+import Demo from '../../Data/demographicsData';
+import styles from '../../styles.scss';
 
 const demoChartdata = Demo.demographicsData;
 
-interface Props{
+interface Props {
     handleNext: () => void;
     handlePrev: () => void;
     pagenumber: number;
@@ -39,7 +39,7 @@ const LeftPane4 = (props: Props) => {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMale} />
                 <div className={styles.legendText}>
-                       Male Pop
+                    Male Pop
                     <sup>n</sup>
                 </div>
             </div>
@@ -53,7 +53,7 @@ const LeftPane4 = (props: Props) => {
             <div className={styles.climatelegend}>
                 <div className={styles.legendTotHH} />
                 <div className={styles.legendText}>
-                       Total Household
+                    Total Household
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@ const LeftPane4 = (props: Props) => {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>16,631</div>
                         <div className={styles.iconText}>
-                                Total Population
+                            Total Population
                         </div>
 
                     </div>
@@ -91,7 +91,7 @@ const LeftPane4 = (props: Props) => {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>4,183</div>
                         <div className={styles.iconText}>
-                             Total Family Count
+                            Total Family Count
                         </div>
 
                     </div>
@@ -108,7 +108,7 @@ const LeftPane4 = (props: Props) => {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>8,431</div>
                         <div className={styles.iconText}>
-                             Male Population
+                            Male Population
                         </div>
 
                     </div>
@@ -121,7 +121,7 @@ const LeftPane4 = (props: Props) => {
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>8,200</div>
                         <div className={styles.iconText}>
-                             Female Population
+                            Female Population
                         </div>
 
                     </div>

@@ -57,7 +57,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -113,7 +113,6 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
-            console.log('payload', payload);
             // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
@@ -156,7 +155,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public render() {
         const { activeIndex, showInfo } = this.state;
-        console.log('Color', COLORS_CHART);
+
 
         return (
             <div className={styles.vrSideBar}>
@@ -164,9 +163,9 @@ class RightPane extends React.PureComponent<Props, State> {
                 <h1>Land Cover</h1>
 
                 <p>
-                Out of a total area of 260.92 sq. km, 45.8% of the land is covered
-                by Farmland and 34.2% by forests. Other areas are covered by water
-                bodies, grassland, sand, and built-up area.
+                    Out of a total area of 260.92 sq. km, 45.8% of the land is covered
+                    by Farmland and 34.2% by forests. Other areas are covered by water
+                    bodies, grassland, sand, and built-up area.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -203,7 +202,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                     <CustomLabel
                                         value1={`${data[activeIndex].value} sq km`}
                                         value2={` / ${((data[activeIndex].value / 260.919)
-                                             * 100).toFixed(2)}%`}
+                                            * 100).toFixed(2)}%`}
                                     />
                                 )}
                             />

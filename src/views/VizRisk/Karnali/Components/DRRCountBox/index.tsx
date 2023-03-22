@@ -4,8 +4,6 @@ import styles from './styles.scss';
 
 const DRRCountBox = (props: any) => {
     const { title, children, contactData } = props;
-    console.log('contacts', contactData);
-
     return (
         <div className={styles.drrCountBox}>
             <div className={styles.provinceSummary}>

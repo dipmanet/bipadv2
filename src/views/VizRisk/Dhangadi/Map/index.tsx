@@ -205,7 +205,7 @@ class FloodHistoryMap extends React.Component {
         const evacCulture = cI.features.filter(item => item.properties.Type === 'cultural');
         const evaceducation = cI.features.filter(item => item.properties.Type === 'education');
         const safeshelter = cI.features.filter(item => item.properties.Type === 'safeshelter');
-        console.log('map:', this.map);
+
 
         const categoriesEvac = ['cultural', 'education'];
         // const categoriesEvac = [...new Set(evaccenters.features.map(
@@ -234,7 +234,7 @@ class FloodHistoryMap extends React.Component {
         const evaccenters = {
             type: 'FeatureCollection',
             name: 'CI',
-            features: [...evacCulture, ...evaceducation, ...safeshelter],
+            features: [...evacCulture, ...evaceducation],
         };
         const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
             item => item.properties.Type,
@@ -269,10 +269,6 @@ class FloodHistoryMap extends React.Component {
         this.setState({ slideFourLayers });
         this.setState({ slideFiveLayers });
         this.setState({ slideSixLayers });
-
-        console.log('evaccenters', cI);
-
-
         this.map.on('style.load', () => {
             categoriesEvac.map((layer) => {
                 this.map.addSource(`evac-${layer}`, {
@@ -429,8 +425,6 @@ class FloodHistoryMap extends React.Component {
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const ciName = e.features[0].properties.Title;
-                    console.log('ciName', e.features[0]);
-
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                     <p>${ciName}</p>

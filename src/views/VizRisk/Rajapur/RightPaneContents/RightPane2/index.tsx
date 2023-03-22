@@ -48,7 +48,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -104,8 +104,6 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
-            console.log('payload', payload);
-            // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
                     <p>{`${((payload[0].value / 127.02) * 100).toFixed(2)} % `}</p>
@@ -160,9 +158,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Out of a total area of 127.08 sq. km, 74.06% of the land is used
-                for agriculture.Building covers 0.75% of land while water bodies
-                occupy 4.08% of total land in Rajapur.
+                    Out of a total area of 127.08 sq. km, 74.06% of the land is used
+                    for agriculture.Building covers 0.75% of land while water bodies
+                    occupy 4.08% of total land in Rajapur.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -174,7 +172,7 @@ class RightPane extends React.PureComponent<Props, State> {
                             activeIndex={activeIndex}
                             activeShape={this.renderActiveShape}
                             data={data}
-                                // cx={150}
+                            // cx={150}
                             // cy={50}
                             innerRadius={70}
                             outerRadius={90}

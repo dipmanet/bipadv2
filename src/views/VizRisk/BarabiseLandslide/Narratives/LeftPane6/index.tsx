@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import styles from '../../styles.scss';
 
-interface Props{
+interface Props {
     handleNext: () => void;
     handlePrev: () => void;
     pagenumber: number;
@@ -28,7 +28,6 @@ const ciRef = {
 
 const LeftPane6 = (props: Props) => {
     const { ci } = props;
-    console.log('ci in left pane', ci);
     const [ciGeoJson, setCiGeo] = useState([]);
 
     useEffect(() => {

@@ -5,6 +5,31 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
 import Loader from 'react-loader';
+import * as PageTypes from '#store/atom/page/types';
+import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import {
+    incidentPointToGeojson,
+} from '#utils/domain';
+import {
+    regionsSelector,
+    filtersSelector,
+    hazardTypesSelector,
+    incidentListSelectorIP,
+    userSelector,
+} from '#selectors';
+import {
+    setIncidentListActionIP,
+    setEventListAction,
+} from '#actionCreators';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
+import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
+import { checkPermission } from '#views/VizRisk/Common/utils';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -20,39 +45,12 @@ import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';
 import FloodHazardlegends from './Legends/FloodHazardLegends';
-import * as PageTypes from '#store/atom/page/types';
 import { getgeoJsonLayer } from './utils';
 
-import { getSanitizedIncidents } from '#views/LossAndDamage/common';
-import {
-    incidentPointToGeojson,
-} from '#utils/domain';
-import {
-    regionsSelector,
-    filtersSelector,
-    hazardTypesSelector,
-    incidentListSelectorIP,
-    userSelector,
-} from '#selectors';
 
-import {
-    setIncidentListActionIP,
-    setEventListAction,
-} from '#actionCreators';
-
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
-
-import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
-import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
 import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
-import { checkPermission } from '#views/VizRisk/Common/utils';
 
 const rightelements = [
     <RightElement1 />,
@@ -318,15 +316,15 @@ class Jugal extends React.Component {
                 const incidentDetails = inciTotal.reduce((a, b) => ({
                     peopleDeathCount: (a.peopleDeathCount || 0) + (b.peopleDeathCount || 0),
                     infrastructureDestroyedHouseCount:
-                    (a.infrastructureDestroyedHouseCount || 0) + (b.infrastructureDestroyedHouseCount || 0),
+                        (a.infrastructureDestroyedHouseCount || 0) + (b.infrastructureDestroyedHouseCount || 0),
                     infrastructureAffectedHouseCount:
-                    (a.infrastructureAffectedHouseCount || 0) + (b.infrastructureAffectedHouseCount || 0),
+                        (a.infrastructureAffectedHouseCount || 0) + (b.infrastructureAffectedHouseCount || 0),
                     peopleMissingCount:
-                    (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
+                        (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
                     infrastructureEconomicLoss:
-                    (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
+                        (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
                     agricultureEconomicLoss:
-                    (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
+                        (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
                     totalAnnualincidents: inciTotal.length || 0,
                 }));
                 this.setState({ incidentDetailsData: incidentDetails });
@@ -425,7 +423,7 @@ class Jugal extends React.Component {
     }
 
 
-    public handlePopulationChange =(showPopulation) => {
+    public handlePopulationChange = (showPopulation) => {
         this.setState({ showPopulation });
     }
 
@@ -538,7 +536,7 @@ class Jugal extends React.Component {
                             <div className={styles.loaderInfo}>
                                 <Loader color="#fff" className={styles.loader} />
                                 <p className={styles.loaderText}>
-                            Loading Data...
+                                    Loading Data...
                                 </p>
                             </div>
                         )
@@ -737,7 +735,7 @@ class Jugal extends React.Component {
                             <VRLegend>
                                 <SesmicHazardLegend
                                     handleSesmicLayerChange={this.handleSesmicLayerChange}
-                                    // handleFloodLayerChange={this.handleFloodLayerChange}
+                                // handleFloodLayerChange={this.handleFloodLayerChange}
                                 />
                             </VRLegend>
                             {

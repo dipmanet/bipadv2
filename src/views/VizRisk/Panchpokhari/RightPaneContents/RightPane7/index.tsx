@@ -12,9 +12,10 @@ import {
 import { isDefined } from '@togglecorp/fujs';
 import Loader from 'react-loader';
 import NoData from '#views/VizRisk/Common/NoData';
+import Icon from '#rscg/Icon';
+import HouseholdForm from '#views/VizRisk/Common/HouseholdForm';
 import styles from '../styles.scss';
 import NavButtons from '../../Components/NavButtons';
-import Icon from '#rscg/Icon';
 import {
     getbuildingVul,
     getfoundationTypeChartData,
@@ -26,12 +27,10 @@ import {
     getaverageAnnualincomeChartData,
 } from '../../utils';
 
-import HouseholdForm from '#views/VizRisk/Common/HouseholdForm';
-
 
 // const chartData = criticalInfraData.safeShelterData;
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -175,7 +174,7 @@ class SlideFivePane extends React.Component<Props, State> {
         return '-';
     }
 
-    public handleShowForm =(showAddForm: boolean, individualResponse: array) => {
+    public handleShowForm = (showAddForm: boolean, individualResponse: array) => {
         // this.setState({ showAddForm });
         this.props.handleShowAddForm(showAddForm);
         this.setState({ showGetData: true });
@@ -263,7 +262,7 @@ class SlideFivePane extends React.Component<Props, State> {
                         </>
                     )
                 } */}
-                { singularBuilding
+                {singularBuilding
                     && (
                         <>
                             {
@@ -280,7 +279,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                     : (
                                         <>
                                             <h1>
-            Vulnerability of People and Households
+                                                Vulnerability of People and Households
                                                 <button
                                                     type="button"
                                                     onClick={e => e.preventDefault()}
@@ -332,25 +331,25 @@ class SlideFivePane extends React.Component<Props, State> {
                                             <div className={styles.vulScoreRow}>
                                                 <span>VULNERABILITY OF THE HOUSEHOLD</span>
                                                 {singularBuldingData
-                                && isDefined(singularBuldingData.vulnerabilityScore)
+                                                    && isDefined(singularBuldingData.vulnerabilityScore)
                                                     ? this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)
                                                     : '-'
                                                 }
                                             </div>
 
                                             <p>
-                                The physical, social and economic fators were
-                                considered to identify the vulnerability of
-                                the household
+                                                The physical, social and economic fators were
+                                                considered to identify the vulnerability of
+                                                the household
                                             </p>
                                             <p>
-                                PHYSICAL FACTORS
+                                                PHYSICAL FACTORS
                                             </p>
 
                                             <table className={styles.singularPaneTable}>
                                                 <tr>
                                                     <td>
-                                        Foundation Type
+                                                        Foundation Type
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.foundationType) || '-'}
@@ -358,7 +357,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                        Roof Type
+                                                        Roof Type
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.roofType) || '-'}
@@ -366,7 +365,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                    Storey
+                                                        Storey
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.storeys) || '-'}
@@ -374,7 +373,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                    Ground surface
+                                                        Ground surface
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.groundSurface) || '-'}
@@ -382,7 +381,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                    Building condition
+                                                        Building condition
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.buildingCondition) || '-'}
@@ -390,7 +389,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                    Damage Grade
+                                                        Damage Grade
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.damageGrade) || '-'}
@@ -398,7 +397,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                    Distance from road (meter)
+                                                        Distance from road (meter)
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.roadDistance) || '-'}
@@ -406,7 +405,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                    Drinking water distance (minutes)
+                                                        Drinking water distance (minutes)
                                                     </td>
                                                     <td>
                                                         {(singularBuldingData && singularBuldingData.drinkingWaterDistance) || '-'}
@@ -500,7 +499,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                             }
 
                                             <p>
-                                Economic Factors
+                                                Economic Factors
                                             </p>
 
                                             <table className={styles.singularPaneTable}>
@@ -529,7 +528,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     type="button"
                                                     className={styles.backButton}
                                                 >
-                                    Back
+                                                    Back
                                                 </button>
                                             </div>
 
@@ -539,11 +538,11 @@ class SlideFivePane extends React.Component<Props, State> {
                         </>
                     )
                 }
-                { !singularBuilding
+                {!singularBuilding
                     && (
                         <>
                             <h1>
-                          Vulnerability of People and Households
+                                Vulnerability of People and Households
                                 <button
                                     type="button"
                                     onClick={e => e.preventDefault()}
@@ -576,7 +575,7 @@ class SlideFivePane extends React.Component<Props, State> {
                             <div className={styles.buildingClassContainer}>
                                 <div className={styles.levelContainer}>
                                     <span>
-                                         High
+                                        High
                                     </span>
                                     <div className={styles.iconLevel}>
 

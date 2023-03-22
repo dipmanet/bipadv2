@@ -8,11 +8,11 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import Hexagon from 'react-hexagon';
+import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 import styles from '../styles.scss';
 import NavButtons from '../../Components/NavButtons';
-import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -58,26 +58,34 @@ class SlideFourPane extends React.PureComponent<Props, State> {
 
         if (prevProps.incidentFilterYear !== incidentFilterYear) {
             getIncidentData(incidentFilterYear, clickedItem);
-            this.setState({ chartData: this
-                .getChartData(clickedItem, incidentFilterYear, incidentList) });
-            this.setState({ nonZeroArr: this
-                .getArrforDesc(
-                    clickedItem,
-                    this.getChartData(clickedItem, incidentFilterYear, incidentList),
-                    incidentList,
-                ) });
+            this.setState({
+                chartData: this
+                    .getChartData(clickedItem, incidentFilterYear, incidentList),
+            });
+            this.setState({
+                nonZeroArr: this
+                    .getArrforDesc(
+                        clickedItem,
+                        this.getChartData(clickedItem, incidentFilterYear, incidentList),
+                        incidentList,
+                    ),
+            });
         }
         if (prevProps.clickedItem !== clickedItem) {
             // getIncidentData(incidentFilterYear);
             getIncidentData(incidentFilterYear, clickedItem);
-            this.setState({ chartData: this
-                .getChartData(clickedItem, incidentFilterYear, incidentList) });
-            this.setState({ nonZeroArr: this
-                .getArrforDesc(
-                    clickedItem,
-                    this.getChartData(clickedItem, incidentFilterYear, incidentList),
-                    incidentList,
-                ) });
+            this.setState({
+                chartData: this
+                    .getChartData(clickedItem, incidentFilterYear, incidentList),
+            });
+            this.setState({
+                nonZeroArr: this
+                    .getArrforDesc(
+                        clickedItem,
+                        this.getChartData(clickedItem, incidentFilterYear, incidentList),
+                        incidentList,
+                    ),
+            });
         }
     }
 
@@ -96,13 +104,14 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             Total: incidentList.features
                 .filter(
                     ht => ht.properties.hazardTitle === item
-                && new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
+                        && new Date(ht.properties.incidentOn)
+                            .getFullYear() === Number(incidentFilterYear),
                 )
                 .length,
         }));
     }
 
-    public getDescription= () => {
+    public getDescription = () => {
         const { nonZeroArr, chartData } = this.state;
         const { clickedItem } = this.props;
         if (clickedItem === 'all') {
@@ -110,28 +119,28 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 return nonZeroArr.map((item, i) => {
                     if (
                         i === nonZeroArr.length - 1
-                            && i === 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        && i === 0
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].Total !== 0) {
                         return ` ${item} `;
                     }
                     if (
                         i !== nonZeroArr.length - 1
-                            && i === 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        && i === 0
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].Total !== 0) {
                         return ` ${item} `;
                     }
                     if (
                         i === nonZeroArr.length - 1
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].Total !== 0) {
                         return ` and ${item} `;
                     }
                     if (
                         i !== nonZeroArr.length - 1
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        // && chartData.filter(n => n.name === item)[0]
+                        && chartData.filter(n => n.name === item)[0].Total !== 0) {
                         return `, ${item} `;
                     }
                     return '';
@@ -195,33 +204,33 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                                 Pokhari Thangpal Rural Municipality
                             </h1>
                             <p>
-                In the year
+                                In the year
                                 {' '}
                                 {incidentFilterYear}
                                 {' '}
-                , total
+                                , total
 
                                 {' '}
                                 {chartData
                                     .reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
                                 {' '}
-                incidents
+                                incidents
                                 {' '}
                                 {nonZeroArr.length > 0 ? ' of ' : ''}
                                 {
                                     this.getDescription()
                                 }
 
-                have been reported in Panch Pokhari Thangpal Rural Municipality.
-                These incidents have caused
+                                have been reported in Panch Pokhari Thangpal Rural Municipality.
+                                These incidents have caused
                                 {' '}
                                 {incidentDetailsData.peopleDeathCount}
                                 {' '}
-                 deaths and
+                                deaths and
                                 {' '}
                                 {incidentDetailsData.infrastructureDestroyedHouseCount}
                                 {' '}
-                 houses were destroyed.
+                                houses were destroyed.
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
@@ -282,7 +291,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                                     }}
                                     className={styles.educationHexagon}
                                 />
-                            Showing All
+                                Showing All
                             </button>
                         </div>
                         {

@@ -198,12 +198,11 @@ export const getaverageAnnualincomeChartData = (d) => {
 };
 
 export const getsingularAgeGroupsChart = (d) => {
-    console.log('agegroup chart object', d);
     if (
         typeof d === 'object'
-    && d.seniorCitizens !== undefined
-    && d.totalPopulation !== undefined
-    && d.childrenUnderFive !== undefined
+        && d.seniorCitizens !== undefined
+        && d.totalPopulation !== undefined
+        && d.childrenUnderFive !== undefined
     ) {
         const finalData = {
             '>65': d.seniorCitizens || 0,

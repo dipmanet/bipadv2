@@ -1,8 +1,9 @@
+/* eslint-disable import/no-unresolved */
 import React, { useState } from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -33,9 +34,9 @@ const FloodHistoryLegends = (props: Props) => {
                         onClick={handleFloodChange}
                     >
                         <h2 className={styles.floodHazard}>
-                    Flood Hazard
+                            Flood Hazard
                             <br />
-                    in Return Period
+                            in Return Period
                         </h2>
                     </button>
 
@@ -58,8 +59,8 @@ const FloodHistoryLegends = (props: Props) => {
                                     className={styles.educationHexagon}
                                 />
 
-                         5
-                              years
+                                5
+                                years
                                 {' '}
 
                             </button>
@@ -84,8 +85,8 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         10
-                              years
+                                10
+                                years
                                 {' '}
 
                             </button>
@@ -110,7 +111,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         20years
+                                20years
                                 {' '}
 
                             </button>
@@ -134,7 +135,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         50 years
+                                50 years
                             </button>
                         </div>
 
@@ -158,7 +159,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         100 years
+                                100 years
                             </button>
                         </div>
                         <div className={styles.floodItemContainer}>
@@ -180,7 +181,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         200 years
+                                200 years
                             </button>
                         </div>
                         <div className={styles.floodItemContainer}>
@@ -202,7 +203,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         250 years
+                                250 years
                             </button>
                         </div>
                         <div className={styles.floodItemContainer}>
@@ -224,7 +225,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         500 years
+                                500 years
                             </button>
                         </div>
                         <div className={styles.floodItemContainer}>
@@ -246,7 +247,7 @@ const FloodHistoryLegends = (props: Props) => {
                                 />
 
 
-                         1000 years
+                                1000 years
                             </button>
                         </div>
                     </div>

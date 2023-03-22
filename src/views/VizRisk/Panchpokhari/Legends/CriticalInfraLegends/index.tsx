@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
@@ -11,6 +10,7 @@ import Bank from '#resources/icons/icon_set_bank.svg';
 import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 const LandCoverLegends = (props) => {
     const { handleCritical, criticalFlood } = props;
@@ -173,7 +173,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                              Show All
+                                Show All
                             </button>
 
                         </div>
@@ -192,7 +192,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                                 Educational Institution
+                                Educational Institution
                             </button>
                         </div>
                         <div className={styles.infraIconContainer}>
@@ -223,7 +223,7 @@ const LandCoverLegends = (props) => {
                                     src={Cultural}
                                 />
 
-                             Cultural Site
+                                Cultural Site
                             </button>
 
                         </div>
@@ -242,7 +242,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                                 Government Buildings
+                                Government Buildings
                             </button>
                         </div>
 
@@ -260,7 +260,7 @@ const LandCoverLegends = (props) => {
                                     src={Health}
                                 />
 
-                                 Hospital
+                                Hospital
                             </button>
 
                         </div>

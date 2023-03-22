@@ -8,11 +8,6 @@ import { compose } from 'redux';
 import memoize from 'memoize-one';
 import { Item } from 'semantic-ui-react';
 import { centroid } from '@turf/turf';
-import NavButtons from './Components/NavButtons';
-import Leftpane from './LeftPane/index';
-import MultiHazardMap from './MultiHazardMap/index';
-import mapConstants from './Data/mapBoxConstants';
-import styles from './styles.scss';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import {
     createConnectedRequestCoordinator,
@@ -32,10 +27,15 @@ import { setEventListAction, setIncidentListActionIP } from '#actionCreators';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 
 import { incidentPointToGeojson } from '#utils/domain';
+import * as PageTypes from '#store/atom/page/types';
 import expressions from './Data/expression';
 
 import { municipalitiesSelector } from '../../../store/atom/page/selector';
-import * as PageTypes from '#store/atom/page/types';
+import styles from './styles.scss';
+import mapConstants from './Data/mapBoxConstants';
+import MultiHazardMap from './MultiHazardMap/index';
+import Leftpane from './LeftPane/index';
+import NavButtons from './Components/NavButtons';
 
 
 const {
@@ -119,8 +119,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     htmlRequest: {
         url: '/keyvalue-html/',
         method: methods.GET,
-        query: ({ params }) => ({ municipality: params.municipalityId,
-			    limit: -1 }),
+        query: ({ params }) => ({
+            municipality: params.municipalityId,
+            limit: -1,
+        }),
 
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.HtmlData[] }
@@ -258,11 +260,11 @@ export const Butwal = (props) => {
         totalAnnualincidents: 0,
     });
     const { requests:
-		{
+        {
 
-		    incidentsGetRequest,
+            incidentsGetRequest,
 
-		} } = props;
+        } } = props;
     const { incidentList } = props;
     useEffect(() => {
         incidentsGetRequest.setDefaultParams({
@@ -367,7 +369,7 @@ export const Butwal = (props) => {
             clickedCur = [0, 0, 0, 1];
             setclicked(clickedCur);
         } else if (clickedCur[3] === 1 && (clickedCur[0] === 1
-			|| clickedCur[2] === 1 || clickedCur[1] === 1)) {
+            || clickedCur[2] === 1 || clickedCur[1] === 1)) {
             clickedCur[3] = 0;
             setclicked(clickedCur);
         } else {
@@ -411,18 +413,18 @@ export const Butwal = (props) => {
         let curExposure = [...exposureElementsArr];
         curExposure[i] = curExposure[i] === 1 ? 0 : 1;
 
-	    if (exposureItem === 'Population Density' && curExposure[1] === 1
-	   && curExposure[2] === 1 && curExposure[3] === 1 && curExposure[4] === 1) {
-		   curExposure = [1, 0, 0, 0];
-		   setexposureElementsArr(curExposure);
-	  } else if (exposureItem === 'Population Density' && curExposure[0] === 1) {
+        if (exposureItem === 'Population Density' && curExposure[1] === 1
+            && curExposure[2] === 1 && curExposure[3] === 1 && curExposure[4] === 1) {
             curExposure = [1, 0, 0, 0];
             setexposureElementsArr(curExposure);
-	   } else if (curExposure[0] === 1 || curExposure[1] === 1
-		|| curExposure[3] === 1) {
+        } else if (exposureItem === 'Population Density' && curExposure[0] === 1) {
+            curExposure = [1, 0, 0, 0];
+            setexposureElementsArr(curExposure);
+        } else if (curExposure[0] === 1 || curExposure[1] === 1
+            || curExposure[3] === 1) {
             curExposure[0] = 0;
             setexposureElementsArr(curExposure);
-	   }
+        }
         setexposureElementsArr(curExposure);
         if (curExposure[1] === 1) {
             setCIState(true);
@@ -446,15 +448,15 @@ export const Butwal = (props) => {
 
 
     const { requests:
-		{
-		    htmlRequest,
-		    jsonDataRequest,
-		    cIGetRequest,
-		    buildingsGetRequest,
-		    climateDataRequest,
-		    vulnerabilityData,
-		    enumData,
-		} } = props;
+        {
+            htmlRequest,
+            jsonDataRequest,
+            cIGetRequest,
+            buildingsGetRequest,
+            climateDataRequest,
+            vulnerabilityData,
+            enumData,
+        } } = props;
 
 
     const setIncidentList = (year: string, hazard) => {
@@ -475,17 +477,17 @@ export const Butwal = (props) => {
                 const incidentDetails = inciTotal.reduce((a, b) => ({
                     peopleDeathCount: (a.peopleDeathCount || 0) + (b.peopleDeathCount || 0),
                     infrastructureDestroyedHouseCount:
-                    (a.infrastructureDestroyedHouseCount || 0)
-					 + (b.infrastructureDestroyedHouseCount || 0),
+                        (a.infrastructureDestroyedHouseCount || 0)
+                        + (b.infrastructureDestroyedHouseCount || 0),
                     infrastructureAffectedHouseCount:
-                    (a.infrastructureAffectedHouseCount || 0)
-					+ (b.infrastructureAffectedHouseCount || 0),
+                        (a.infrastructureAffectedHouseCount || 0)
+                        + (b.infrastructureAffectedHouseCount || 0),
                     peopleMissingCount:
-                    (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
+                        (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
                     infrastructureEconomicLoss:
-                    (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
+                        (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
                     agricultureEconomicLoss:
-                    (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
+                        (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
                     totalAnnualincidents: inciTotal.length || 0,
                 }));
                 setincidentDetailsData(incidentDetails);
@@ -557,67 +559,67 @@ export const Butwal = (props) => {
     };
 
     const page1TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page1Legend1TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page1Legend2TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page1Legend3TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page2TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page3TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page3Legend1Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page3Legend2Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page3Legend3Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page3Legend4Introhtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page3_legend4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_legend4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page4TopIntrohtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page4Legend1Introhtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_legend1_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page4Legend2Introhtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_legend2_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page4Legend3Introhtml = htmlData.filter(item => item.key
-		 === `${KEYNAME}_page4_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page4_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page5TopIntrohtml = htmlData.filter(item => item.key
-		=== `${KEYNAME}_page5_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page5_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
 
     const page1Legend1MidClimateData = jsonData.filter(item => item.key
-		=== `${KEYNAME}_page1_legend1_mid_climatedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend1_mid_climatedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page1Legend1BottomTempData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page1_legend1_bottom_temperaturedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend1_bottom_temperaturedata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page1Legend2MidLandcoverData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page1_legend2_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend2_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page1Legend3MidPopulationData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page1_legend3_mid_populationdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page1_legend3_mid_populationdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page3MidLandcoverData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page3_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page3_mid_landcoverdata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page5MidUrbanData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_page5_mid_urbandata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_page5_mid_urbandata_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const populationGridData = jsonData.filter(item => item.key
-		 === `${KEYNAME}_population_grid_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_population_grid_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const populationDensityRange = jsonData.filter(item => item.key
-		 === `${KEYNAME}_population_density_range_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
-		 const satelliteImageYears = jsonData.filter(item => item.key
-			=== `${KEYNAME}_satellite_image_year_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
-		 const floodHazardLayers = jsonData.filter(item => item.key
-			=== `${KEYNAME}_flood_hazard_layers_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
-		 const buildingCountData = jsonData.filter(item => item.key
-			=== `${KEYNAME}_building_count_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+        === `${KEYNAME}_population_density_range_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+    const satelliteImageYears = jsonData.filter(item => item.key
+        === `${KEYNAME}_satellite_image_year_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+    const floodHazardLayers = jsonData.filter(item => item.key
+        === `${KEYNAME}_flood_hazard_layers_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+    const buildingCountData = jsonData.filter(item => item.key
+        === `${KEYNAME}_building_count_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const mapBoxStyle = jsonData.filter(item => item.key
-		 === `${KEYNAME}_mapbox_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value.layername);
+        === `${KEYNAME}_mapbox_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value.layername);
 
 
     const realTimeDataStationName = String(jsonData.filter(item => item.key
-		=== `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
+        === `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
 
-		   useEffect(() => {
+    useEffect(() => {
         climateDataRequest.setDefaultParams({
             setRealTimeData,
             realTimeDataStationName,
@@ -626,12 +628,12 @@ export const Butwal = (props) => {
     }, [realTimeDataStationName]);
 
 
-		 useEffect(() => {
+    useEffect(() => {
         if (pending) {
             if (incidentList.length > 0
-				&& cI.length > 0 && htmlData.length > 0
-					 && jsonData.length > 0) {
-							 setpending(false);
+                && cI.length > 0 && htmlData.length > 0
+                && jsonData.length > 0) {
+                setpending(false);
             }
         }
     }, [cI, htmlData, incidentList, jsonData, pending]);
@@ -645,59 +647,59 @@ export const Butwal = (props) => {
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
                             <p className={styles.loaderText}>
-                            Loading Data...
+                                Loading Data...
                             </p>
                         </div>
                     )
                     : (
                         leftElement < 5
-                            && (
-                                <>
-                                    <MultiHazardMap
-                                        MAINKEYNAME={MAINKEYNAME}
-                                        togglingBetweenMun={togglingBetweenMun}
-                                        incidentList={pointFeatureCollectionButwal}
-                                        populationDensityRange={populationDensityRange[0]}
-                                        rightElement={leftElement}
-                                        selectedYear={selectedYear}
-                                        handleyearClick={handleyearClick}
-                                        mapConstants={mapConstants}
-                                        expressions={expressions}
-                                        clickedItem={clickedIncidentItem}
-                                        mapboxStyle={mapBoxStyle[0]}
-                                        incidentFilterYear={incidentFilterYear}
-                                        handleIncidentChange={handleIncidentChange}
-                                        floodHazardLayersArr={floodHazardLayers[0]}
-                                        leftElement={leftElement}
-                                        CIData={geoJsonCI}
-                                        criticalElement={criticalElement}
-                                        satelliteImageYears={satelliteImageYears[0]}
-                                        boundingBox={bbox}
-                                        lng={lng}
-                                        lat={lat}
-                                        municipalityId={municipalityId}
-                                        provinceId={PROVINCEID}
-                                        districtId={DISTRICTID}
-                                        legendElement={legendElement}
-                                        demographicsData={page1Legend3MidPopulationData[0]}
-                                        clickedArr={clicked}
-                                        showCritical={showCritical}
-                                        exposureElementsArr={exposureElementsArr}
-                                        popdensitygeojson={populationGridData[0]}
-                                        floodLayer={floodLayer}
-                                        hazardLegendClickedArr={hazardLegendClickedArr}
-                                        setpending={setpending}
-                                        satelliteYearDisabled={satelliteYearDisabled}
-                                        setsatelliteYearDisabled={setsatelliteYearDisabled}
-                                        setlegentItemDisabled={setlegentItemDisabled}
-                                        exposureElement={exposureElement}
-                                        enableNavBtns={enableNavBtns}
-                                        disableNavBtns={disableNavBtns}
+                        && (
+                            <>
+                                <MultiHazardMap
+                                    MAINKEYNAME={MAINKEYNAME}
+                                    togglingBetweenMun={togglingBetweenMun}
+                                    incidentList={pointFeatureCollectionButwal}
+                                    populationDensityRange={populationDensityRange[0]}
+                                    rightElement={leftElement}
+                                    selectedYear={selectedYear}
+                                    handleyearClick={handleyearClick}
+                                    mapConstants={mapConstants}
+                                    expressions={expressions}
+                                    clickedItem={clickedIncidentItem}
+                                    mapboxStyle={mapBoxStyle[0]}
+                                    incidentFilterYear={incidentFilterYear}
+                                    handleIncidentChange={handleIncidentChange}
+                                    floodHazardLayersArr={floodHazardLayers[0]}
+                                    leftElement={leftElement}
+                                    CIData={geoJsonCI}
+                                    criticalElement={criticalElement}
+                                    satelliteImageYears={satelliteImageYears[0]}
+                                    boundingBox={bbox}
+                                    lng={lng}
+                                    lat={lat}
+                                    municipalityId={municipalityId}
+                                    provinceId={PROVINCEID}
+                                    districtId={DISTRICTID}
+                                    legendElement={legendElement}
+                                    demographicsData={page1Legend3MidPopulationData[0]}
+                                    clickedArr={clicked}
+                                    showCritical={showCritical}
+                                    exposureElementsArr={exposureElementsArr}
+                                    popdensitygeojson={populationGridData[0]}
+                                    floodLayer={floodLayer}
+                                    hazardLegendClickedArr={hazardLegendClickedArr}
+                                    setpending={setpending}
+                                    satelliteYearDisabled={satelliteYearDisabled}
+                                    setsatelliteYearDisabled={setsatelliteYearDisabled}
+                                    setlegentItemDisabled={setlegentItemDisabled}
+                                    exposureElement={exposureElement}
+                                    enableNavBtns={enableNavBtns}
+                                    disableNavBtns={disableNavBtns}
 
-                                    />
+                                />
 
-                                </>
-                            )
+                            </>
+                        )
                     )
 
             }
@@ -707,13 +709,13 @@ export const Butwal = (props) => {
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
                             <p className={styles.loaderText}>
-                            Loading Data...
+                                Loading Data...
                             </p>
                         </div>
                     ) : (
 
                         (leftElement === 0 && legendElement === 'Adminstrative Map') && (
-                        // The real html data is started from Array's third element
+                            // The real html data is started from Array's third element
                             <Leftpane
                                 introHtml={page1TopIntrohtml[0]}
                                 page1Legend1InroHtml={page1Legend1TopIntrohtml[0]}

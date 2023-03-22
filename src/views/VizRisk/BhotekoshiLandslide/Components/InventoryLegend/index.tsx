@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 const colorArr = [
     '#808080',
@@ -68,7 +68,7 @@ const LandCoverLegends = (props) => {
 
     useEffect(() => {
         handleYearSelect([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 

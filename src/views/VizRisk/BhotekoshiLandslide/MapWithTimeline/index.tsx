@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import { mapSources } from '#constants';
-import { drawStyle } from '../Data/mapbox';
-import RiskScores from '../Data/riskScores';
 import {
     framize,
 } from '#utils/common';
@@ -25,6 +23,8 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import RiskScores from '../Data/riskScores';
+import { drawStyle } from '../Data/mapbox';
 
 import TimelineSlider from './TimelineSlider';
 

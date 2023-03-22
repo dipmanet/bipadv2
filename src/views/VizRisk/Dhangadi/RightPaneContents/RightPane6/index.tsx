@@ -6,13 +6,13 @@ import {
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
+import criticalInfraData from '#views/VizRisk/Dhangadi/Data/criticalInfraData';
 import styles from './styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Dhangadi/Data/criticalInfraData';
 
 const chartData = criticalInfraData.safeShelterData;
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -37,15 +37,15 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Evacuation Centers </h1>
                 <p>
-                Evacuation centers provide temporary shelter for people displaced from
-                 their homes following a flooding event.
-                Currently there is one mapped safe shelter in Dhangadhi.
+                    Evacuation centers provide temporary shelter for people displaced from
+                    their homes following a flooding event.
+                    Currently there is one mapped safe shelter in Dhangadhi.
                 </p>
                 <p>
-                The  schools and cultural heritage sites can also be used for
-                 evacuation during floods. However, their functionality during floods are
-                  contingent upon several factors including building types and
-                   their exposure, whether they are located in flood prone or flood safe areas.
+                    The  schools and cultural heritage sites can also be used for
+                    evacuation during floods. However, their functionality during floods are
+                    contingent upon several factors including building types and
+                    their exposure, whether they are located in flood prone or flood safe areas.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={400}>
                     <BarChart
@@ -77,19 +77,19 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     type="button"
                     onClick={this.handleRefClick}
                 >
-                References
+                    References
                 </button>
                 {showReferences && (
                     <ul className={styles.referencesText}>
                         <li>
-                        Modeling Exposure Through Earth Observations Routines (METEOR), UK Space Agency, https://meteor-project.org/
+                            Modeling Exposure Through Earth Observations Routines (METEOR), UK Space Agency, https://meteor-project.org/
                         </li>
                         <li>
-                        OpenStreetMap
+                            OpenStreetMap
                         </li>
                         <li>Department of Hydrology and Meteorology (DHM) </li>
                         <li>
-                        Dhangadhi Sub-Metropolitan City, 2021
+                            Dhangadhi Sub-Metropolitan City, 2021
                         </li>
                     </ul>
                 )

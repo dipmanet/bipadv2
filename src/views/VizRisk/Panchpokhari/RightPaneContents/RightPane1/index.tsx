@@ -1,15 +1,17 @@
 import React from 'react';
-import { CartesianGrid,
+import {
+    CartesianGrid,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis } from 'recharts';
-import NavButtons from '../../Components/NavButtons';
+    Tooltip, XAxis, YAxis,
+} from 'recharts';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';
 import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
+import NavButtons from '../../Components/NavButtons';
 import { lineData, rainfallData } from '../../Data/temperatureData';
 import styles from '../styles.scss';
 
@@ -17,7 +19,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 class Rajapur extends React.PureComponent<Props, State> {
     public renderLegend = () => (
@@ -25,19 +27,19 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Avg Max
+                    Avg Max
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendMin} />
                 <div className={styles.legendText}>
-                       Avg Min
+                    Avg Min
                 </div>
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendDaily} />
                 <div className={styles.legendText}>
-                       Daily Avg
+                    Daily Avg
                 </div>
             </div>
         </div>
@@ -48,7 +50,7 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
                 <div className={styles.legendText}>
-                       Rainfall
+                    Rainfall
                 </div>
             </div>
         </div>
@@ -100,10 +102,10 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Panchpokhari Thangpal Rural Municipality</h1>
                 <p>
-                Panchpokhari Thangpal Rural Municipality is located in
-                the Sindhupalchok district of Bagmati Province. It covers
-                a total area of 187.29 sq km and is situated at an elevation
-                of 850 m to 5800 m  AMSL.
+                    Panchpokhari Thangpal Rural Municipality is located in
+                    the Sindhupalchok district of Bagmati Province. It covers
+                    a total area of 187.29 sq km and is situated at an elevation
+                    of 850 m to 5800 m  AMSL.
                 </p>
 
                 <div className={styles.iconRow}>
@@ -115,9 +117,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>32.1℃</div>
                             <div className={styles.iconText}>
-                            Maximum
+                                Maximum
                                 <br />
-                            Temperature in Summer
+                                Temperature in Summer
                             </div>
 
                         </div>
@@ -130,9 +132,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>4℃</div>
                             <div className={styles.iconText}>
-                            Minimum
+                                Minimum
                                 <br />
-                            Temperature in Winter
+                                Temperature in Winter
                             </div>
 
                         </div>
@@ -147,8 +149,8 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>3949.5 mm</div>
                             <div className={styles.iconText}>
-                            Annual
-                            Rainfall
+                                Annual
+                                Rainfall
                             </div>
 
                         </div>
@@ -161,7 +163,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>142m - 154m</div>
                             <div className={styles.iconText}>
-                            Elevation from Sea Level
+                                Elevation from Sea Level
                             </div>
 
                         </div>

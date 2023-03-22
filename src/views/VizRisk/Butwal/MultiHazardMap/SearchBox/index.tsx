@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import styles from './styles.scss';
 
 
 interface Props {

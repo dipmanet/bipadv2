@@ -17,7 +17,7 @@ import NavButtons from '../../Components/NavButtons';
 
 // const chartData = criticalInfraData.safeShelterData;
 
-interface ComponentProps {}
+interface ComponentProps { }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -103,9 +103,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
         if (resetDrawData !== prevProps.resetDrawData) {
             if (isDefined(CIData.features)
-            && CIData.features.length > 0
-            && buildings.features
-            && resetDrawData === true
+                && CIData.features.length > 0
+                && buildings.features
+                && resetDrawData === true
             ) {
                 const chartDataTitlesUf = [...new Set(CIData
                     .features.map(item => item.properties.CI))];
@@ -135,7 +135,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             drawChartData,
         } = this.props;
 
-        console.log('layer', this.props.sesmicLayer);
+
         const { chartData } = this.state;
 
         return (
@@ -143,23 +143,23 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                 {
                     this.props.sesmicLayer === 'ses'
-                        && (
-                            <>
-                                <h1>Earthquake Exposure in Jugal </h1>
-                                <p>The map shows the exposure of critical infrastructures and assets to earthquake.This visualization allows the super imposition of the seimic hazard map with details of landuse and critical infrastructures. The map shows the peak ground acceleration values due to earthquake ground shaking with 10% probability of exceedance in 50 years. </p>
+                    && (
+                        <>
+                            <h1>Earthquake Exposure in Jugal </h1>
+                            <p>The map shows the exposure of critical infrastructures and assets to earthquake.This visualization allows the super imposition of the seimic hazard map with details of landuse and critical infrastructures. The map shows the peak ground acceleration values due to earthquake ground shaking with 10% probability of exceedance in 50 years. </p>
 
-                                <p>This visualization helps understand the population, critical infrastructures and assets that are at threat to earthquake hazard in the region. </p>
+                            <p>This visualization helps understand the population, critical infrastructures and assets that are at threat to earthquake hazard in the region. </p>
 
-                                <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region. </p>
-                                <p>
+                            <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region. </p>
+                            <p>
                                 ELEMENTS THAT ARE EXPOSED TO EARTHQUAKE WITHIN
-                                    {' '}
-                                    {this.state.areaSelected}
-                                </p>
-                            </>
-                        )
+                                {' '}
+                                {this.state.areaSelected}
+                            </p>
+                        </>
+                    )
                 }
-                { this.props.sesmicLayer === 'sus' && (
+                {this.props.sesmicLayer === 'sus' && (
                     <>
                         <h1>Landslide Exposure in Jugal </h1>
                         <p>The map shows the exposure of critical infrastructures and assets to landslide.  This visualization allows the super imposition of the landslide susceptibility map with details of landuse and critical infrastructures. The map shows the relative indication of the probability of rainfall triggered landslides.</p>
@@ -168,7 +168,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                         <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region.</p>
                         <p>
-                                ELEMENTS THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                            ELEMENTS THAT ARE EXPOSED TO EARTHQUAKE WITHIN
                             {' '}
                             {this.state.areaSelected}
                         </p>
@@ -176,26 +176,26 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 )}
                 {
                     this.props.sesmicLayer === 'flood'
-                        && (
-                            <>
+                    && (
+                        <>
 
-                                <h1>Flood Exposure</h1>
+                            <h1>Flood Exposure</h1>
 
-                                <p>The map shows the exposure of population, critical infrastructures, and assets to flood.</p>
+                            <p>The map shows the exposure of population, critical infrastructures, and assets to flood.</p>
 
-                                <p>This visualization allows the super imposition of the flood hazard map with details of land use and critical infrastructures.</p>
+                            <p>This visualization allows the super imposition of the flood hazard map with details of land use and critical infrastructures.</p>
 
-                                <p>Return period is the probability of experiencing a given water depth within a single year; i.e., ‘1-in-100 year’ means 1 in 100 (1%) chance of occurrence in any given year.</p>
+                            <p>Return period is the probability of experiencing a given water depth within a single year; i.e., ‘1-in-100 year’ means 1 in 100 (1%) chance of occurrence in any given year.</p>
 
-                                <p>This visualization helps understand the population, critical infrastructures and assets that are at threat to flood hazard in the region.</p>
+                            <p>This visualization helps understand the population, critical infrastructures and assets that are at threat to flood hazard in the region.</p>
 
-                                <p>Its impacts can be reduced through risk-sensitive land use planning and the visualization allow re-thinking of long-term spatial planning in the region.</p>
+                            <p>Its impacts can be reduced through risk-sensitive land use planning and the visualization allow re-thinking of long-term spatial planning in the region.</p>
 
 
-                                <p> Source: METEOR Project</p>
+                            <p> Source: METEOR Project</p>
 
-                            </>
-                        )
+                        </>
+                    )
                 }
 
                 {

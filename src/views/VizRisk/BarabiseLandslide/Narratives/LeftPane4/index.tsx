@@ -7,14 +7,14 @@ import {
     ResponsiveContainer,
     Tooltip,
 } from 'recharts';
-import styles from '../../styles.scss';
 import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
 import CustomChartLegend from '#views/VizRisk/Common/ChartComps/CustomChartLegend';
+import styles from '../../styles.scss';
 import LandCover from '../../Data/LandCoverChartData';
 
 const demoChartdata = LandCover.chartData;
 
-interface Data{
+interface Data {
     renderActiveShape: () => void;
     onPieEnter: () => void;
     customTooltip: () => void;
@@ -36,7 +36,7 @@ const LeftPane4 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>
-             Land Cover
+                Land Cover
             </h1>
             <p className={styles.narrativeText}>
                 Out of a total area of 134.65 square km, 63.13 sq km of

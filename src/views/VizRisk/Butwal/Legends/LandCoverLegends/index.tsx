@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import Hexagon from 'react-hexagon';
@@ -12,8 +13,8 @@ const LandCoverLegends = (props) => {
 
 
             <div className={(leftElement === 2 && clickedArr[1] === 1)
-				 ? styles.mainDivLandClicked : (leftElement === 3 && exposureElementArr[2] === 1)
-				  ? styles.mainDivLandEx : styles.mainDivLand}
+                ? styles.mainDivLandClicked : (leftElement === 3 && exposureElementArr[2] === 1)
+                    ? styles.mainDivLandEx : styles.mainDivLand}
             >
                 <p className={styles.landcoverIconContainer}>
                     <span>
@@ -28,7 +29,7 @@ const LandCoverLegends = (props) => {
                             className={styles.buildingIcon}
                         />
                     </span>
-                            Buildings
+                    Buildings
 
                 </p>
                 <p className={styles.landcoverIconContainer}>
@@ -44,7 +45,7 @@ const LandCoverLegends = (props) => {
                         />
 
                     </span>
-                            Water Bodies
+                    Water Bodies
                 </p>
 
                 <p className={styles.landcoverIconContainer}>
@@ -60,7 +61,7 @@ const LandCoverLegends = (props) => {
                         />
 
                     </span>
-                            Agricultural Land
+                    Agricultural Land
                 </p>
                 <p className={styles.landcoverIconContainer}>
                     <span>
@@ -75,19 +76,19 @@ const LandCoverLegends = (props) => {
                         />
 
                     </span>
-                            Forest
+                    Forest
                 </p>
 
 
                 <div className={styles.landcoverIconContainer}>
                     <div className={styles.roadIcon} />
 
-                            Roads
+                    Roads
                 </div>
                 <div className={styles.landcoverIconContainer}>
                     <div className={styles.bridgeLine} />
 
-                            Bridges
+                    Bridges
                 </div>
 
 
@@ -101,7 +102,7 @@ const LandCoverLegends = (props) => {
                         }}
                         className={styles.otherIcon}
                     />
-            Shrubs
+                    Shrubs
                 </p>
                 {/* <p className={styles.landcoverIconContainer}>
                     <Hexagon
@@ -139,7 +140,7 @@ const LandCoverLegends = (props) => {
                         }}
                         className={styles.otherIcon}
                     />
-            Grassland
+                    Grassland
 
                 </p>
                 <p className={styles.landcoverIconContainer}>
@@ -154,7 +155,7 @@ const LandCoverLegends = (props) => {
                             className={styles.otherIcon}
                         />
                     </span>
-                            Other
+                    Other
                 </p>
             </div>
         </>

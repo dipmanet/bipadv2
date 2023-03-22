@@ -307,14 +307,6 @@ const Ratnanagar = (props: any) => {
     };
 
 
-    useEffect(() => {
-        if (currentHeaderVal && selectFieldValue) {
-            console.log('we are changing');
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentRechartsItem]);
-
-
     return (
         <>
             <MainPageDataContext.Provider value={contextValues}>

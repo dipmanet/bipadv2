@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import { mapSources } from '#constants';
-import { drawStyle } from '../Data/mapbox';
-import RiskScores from '../Data/riskScores';
-
 import {
     // provincesSelector,
     municipalitiesSelector,
@@ -18,10 +15,12 @@ import {
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
 } from '#selectors';
-
 import {
     getWardFilter,
 } from '#utils/domain';
+import { drawStyle } from '../Data/mapbox';
+import RiskScores from '../Data/riskScores';
+
 
 import TimelineSlider from './TimelineSlider';
 
