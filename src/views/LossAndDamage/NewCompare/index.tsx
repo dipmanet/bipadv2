@@ -5,14 +5,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {
-    _cs,
-    isNotDefined,
-} from '@togglecorp/fujs';
-import Faram, {
-    requiredCondition,
-} from '@togglecorp/faram';
+import { _cs, isNotDefined } from '@togglecorp/fujs';
+import Faram, { requiredCondition } from '@togglecorp/faram';
 import * as HtmltoImage from 'html-to-image';
+import domtoimage from 'dom-to-image';
 
 import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
@@ -25,13 +21,13 @@ import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 
 import {
-    mapStyleSelector,
-    regionsSelector,
-    provincesSelector,
-    districtsSelector,
-    municipalitiesSelector,
-    wardsSelector,
-    hazardTypesSelector,
+  mapStyleSelector,
+  regionsSelector,
+  provincesSelector,
+  districtsSelector,
+  municipalitiesSelector,
+  wardsSelector,
+  hazardTypesSelector,
 } from '#selectors';
 
 import { saveChart } from '#utils/common';
@@ -48,530 +44,533 @@ import HazardWise from '../HazardWise';
 import Dropdown from '../DropDown';
 
 import {
-    tooltipRenderer,
-    generateOverallDataset,
-    colorGrade,
-    generateColor,
-    generateMapState,
-    generatePaint,
+  tooltipRenderer,
+  generateOverallDataset,
+  colorGrade,
+  generateColor,
+  generateMapState,
+  generatePaint,
 } from '../utils/utils';
 import { legendItems } from '../Legend';
 
-const propTypes = {
-};
+const propTypes = {};
 
-const defaultProps = {
-};
+const defaultProps = {};
 
 const mapStateToProps = state => ({
-    mapStyle: mapStyleSelector(state),
-    regions: regionsSelector(state),
-    provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
-    wards: wardsSelector(state),
-    hazardTypes: hazardTypesSelector(state),
+  mapStyle: mapStyleSelector(state),
+  regions: regionsSelector(state),
+  provinces: provincesSelector(state),
+  districts: districtsSelector(state),
+  municipalities: municipalitiesSelector(state),
+  wards: wardsSelector(state),
+  hazardTypes: hazardTypesSelector(state),
 });
 
 const emptyList = [];
 
 const isValidIncident = (
-    { ward, district, municipality, province },
-    { adminLevel, geoarea },
+  { ward, district, municipality, province },
+  { adminLevel, geoarea },
 ) => {
-    switch (adminLevel) {
-        case 1:
-            return geoarea === province;
-        case 2:
-            return geoarea === district;
-        case 3:
-            return geoarea === municipality;
-        case 4:
-            return geoarea === ward;
-        default:
-            return false;
-    }
+  switch (adminLevel) {
+    case 1:
+      return geoarea === province;
+    case 2:
+      return geoarea === district;
+    case 3:
+      return geoarea === municipality;
+    case 4:
+      return geoarea === ward;
+    default:
+      return false;
+  }
 };
 
-const isRegionValid = region => (
-    region && region.adminLevel && region.geoarea
-);
+const isRegionValid = region => region && region.adminLevel && region.geoarea;
 
 class NewCompare extends React.PureComponent {
-    static propTypes = propTypes;
+  static propTypes = propTypes;
 
-    static defaultProps = defaultProps;
+  static defaultProps = defaultProps;
 
-    constructor(props) {
-        super(props);
-        this.imageDownloadRef = React.createRef();
-        this.state = {
-            faramValues: {},
-            faramErrors: {},
-            rightPaneExpanded: true,
-            // comparisionStarted: false,
-        };
+  constructor(props) {
+    super(props);
+    this.imageDownloadRef = React.createRef();
+    this.state = {
+      faramValues: {},
+      faramErrors: {},
+      rightPaneExpanded: true,
+      // comparisionStarted: false,
+    };
 
-        this.schema = {
-            fields: {
-                region1: [requiredCondition],
-                region2: [requiredCondition],
-            },
-        };
+    this.schema = {
+      fields: {
+        region1: [requiredCondition],
+        region2: [requiredCondition],
+      },
+    };
+  }
+
+  componentDidMount() {
+    const mapControlsBottomRight = document.getElementsByClassName(
+      'mapboxgl-ctrl-bottom-right',
+    )[0];
+    const mapControlsTopLeft = document.getElementsByClassName(
+      'mapboxgl-ctrl-top-left',
+    )[0];
+
+    if (mapControlsBottomRight) {
+      this.mapControlsBottomRight = mapControlsBottomRight;
+      this.previousMapControlBottomRightDisplay = mapControlsBottomRight.style.display;
+      mapControlsBottomRight.style.display = 'none';
     }
 
-    componentDidMount() {
-        const mapControlsBottomRight = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-        const mapControlsTopLeft = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
+    if (mapControlsTopLeft) {
+      this.mapControlsTopLeft = mapControlsTopLeft;
+      this.previousMapControlTopLeftDisplay = mapControlsTopLeft.style.display;
+      mapControlsTopLeft.style.display = 'none';
+    }
+  }
 
-        if (mapControlsBottomRight) {
-            this.mapControlsBottomRight = mapControlsBottomRight;
-            this.previousMapControlBottomRightDisplay = mapControlsBottomRight.style.display;
-            mapControlsBottomRight.style.display = 'none';
-        }
-
-        if (mapControlsTopLeft) {
-            this.mapControlsTopLeft = mapControlsTopLeft;
-            this.previousMapControlTopLeftDisplay = mapControlsTopLeft.style.display;
-            mapControlsTopLeft.style.display = 'none';
-        }
+  componentWillUnmount() {
+    if (this.mapControlsBottomRight) {
+      this.mapControlsBottomRight.style.display = this.previousMapControlBottomRightDisplay;
     }
 
-    componentWillUnmount() {
-        if (this.mapControlsBottomRight) {
-            this.mapControlsBottomRight.style.display = this.previousMapControlBottomRightDisplay;
-        }
-
-        if (this.mapControlsTopLeft) {
-            this.mapControlsTopLeft.style.display = this.previousMapControlTopLeftDisplay;
-        }
+    if (this.mapControlsTopLeft) {
+      this.mapControlsTopLeft.style.display = this.previousMapControlTopLeftDisplay;
     }
+  }
 
-    filterIncidents = (incidents = emptyList, regions, region) => {
-        if (!region) {
-            return [];
-        }
-        const sanitizedIncidents = getSanitizedIncidents(incidents, regions, {}).filter(
-            params => (
-                isNotDefined(region)
-                || isNotDefined(region.adminLevel)
-                || isValidIncident(params, region)
-            ),
+  filterIncidents = (incidents = emptyList, regions, region) => {
+    if (!region) {
+      return [];
+    }
+    const sanitizedIncidents = getSanitizedIncidents(
+      incidents,
+      regions,
+      {},
+    ).filter(
+      params => isNotDefined(region)
+        || isNotDefined(region.adminLevel)
+        || isValidIncident(params, region),
+    );
+    return sanitizedIncidents;
+  };
+
+  handleFaramChange = (faramValues, faramErrors) => {
+    this.setState({
+      faramValues,
+      faramErrors,
+    });
+  };
+
+  handleFaramValidationSuccess = (faramValues) => {
+    this.setState({
+      faramValues,
+      // comparisionStarted: true,
+    });
+  };
+
+  handleFaramValidationFailure = (faramErrors) => {
+    this.setState({ faramErrors });
+  };
+
+  messageForNoData = (noData, language) => {
+    const noOptionSelected = language === 'en' ? 'No comparison is made' : 'तुलना भइरहेको छैन';
+    return (
+        <div className={styles.preComparisionMessage}>
+            <h3 className={styles.headerText}>{noData ? '' : noOptionSelected}</h3>
+            <p className={styles.textOption}>
+                {language === 'en'
+            ? `Select ${noData ? 'a region' : 'different sections'} to compare`
+            : `तुलना गर्न  ${
+                noData ? 'क्षेत्र' : 'विभिन्न खण्डहरू'
+              } छनोट गर्नुहोस्`}
+            </p>
+        </div>
+    );
+  };
+
+  render() {
+    const {
+      className,
+      lossAndDamageList,
+      mapStyle,
+      minDate,
+      regions,
+      closeModal,
+      getDataAggregatedByYear,
+      selectOption,
+      valueOnclick,
+      getHazardsCount,
+      hazardTypes,
+      provinces,
+      municipalities,
+      districts,
+      setSelectOption,
+      setVAlueOnClick,
+      currentSelection,
+      language,
+      regionRadio,
+    } = this.props;
+
+    const { faramValues, faramErrors, rightPaneExpanded } = this.state;
+
+    const { region1, region2 } = faramValues;
+
+    const region1Incidents = this.filterIncidents(
+      lossAndDamageList,
+      regions,
+      region1,
+    );
+    const region2Incidents = this.filterIncidents(
+      lossAndDamageList,
+      regions,
+      region2,
+    );
+
+    const RegionOptions = createSingleList(
+      provinces,
+      districts,
+      municipalities,
+    ).map(region => ({
+      adminLevel: region.adminLevel,
+      geoarea: region.id,
+      label: language === 'en' ? region.title : region.title_ne,
+    }));
+
+    const dropDownClickHandler = (item, index, elementName) => {
+      const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
+      this.setState({ faramValues: { ...faramValues, [elementName]: data } });
+    };
+
+    const clearValues = (element: string) => {
+      this.setState({ faramValues: { ...faramValues, [element]: null } });
+    };
+
+    const filterGeoArea = (value) => {
+      const totalData = createSingleList(provinces, districts, municipalities);
+      if (value) {
+        const filteredData = totalData.filter(
+          item => item.adminLevel === value.adminLevel && item.id === value.geoarea,
         );
-        return sanitizedIncidents;
+
+        return filteredData;
+      }
+      return [];
+    };
+
+    const mapStateValue = (Region, Incidents) => {
+      const geoareas = filterGeoArea(Region);
+      const regionLevel = Region && Region.adminLevel;
+
+      const { mapping, aggregatedStat } = generateOverallDataset(
+        Incidents,
+        regionLevel,
+      );
+
+      const mapState = Object.values(mapping).map(item => ({
+        id: geoareas[0].id,
+        value: item[currentSelection.key],
+      }));
+
+      return mapState;
+    };
+
+    const colorRange = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const item of legendItems) {
+      colorRange.push(item.value, item.color);
     }
+    const colorPaint = generatePaint(colorRange);
 
-    handleFaramChange = (faramValues, faramErrors) => {
-        this.setState({
-            faramValues,
-            faramErrors,
-        });
-    }
+    const handleDownload = async () => {
+        if (this.imageDownloadRef.current) {
+          const width = this.imageDownloadRef.current.scrollWidth;
+          const height = this.imageDownloadRef.current.scrollHeight;
+          try {
+            const img = await HtmltoImage.toPng(this.imageDownloadRef.current, { width, height });
+            const link = document.createElement('a');
+            link.href = img;
+            link.download = 'Compare.png';
+            link.click();
+            console.log(img, 'image');
+          } catch (e) {
+            console.log('Error generating image:', e);
+          }
+        }
+      };
 
-    handleFaramValidationSuccess = (faramValues) => {
-        this.setState({
-            faramValues,
-            // comparisionStarted: true,
-        });
-    }
 
-    handleFaramValidationFailure = (faramErrors) => {
-        this.setState({ faramErrors });
-    }
-
-    messageForNoData = (noData, language) => {
-        const noOptionSelected = language === 'en' ? 'No comparison is made' : 'तुलना भइरहेको छैन';
-        return (
-            <div className={styles.preComparisionMessage}>
-                <h3 className={styles.headerText}>{noData ? '' : noOptionSelected}</h3>
-                <p className={styles.textOption}>
-                    {
-                       language === 'en' ? `Select ${noData ? 'a region' : 'different sections'} to compare`
-                       : `तुलना गर्न  ${noData ? 'क्षेत्र' : 'विभिन्न खण्डहरू'} चयन गर्नुहोस्`
-
-                    }
-                </p>
+    return (
+        <Modal className={_cs(className, styles.comparative)}>
+            <div className={styles.regionHead}>
+                <h1 className={styles.compareText}>
+                    {language === 'en' ? 'COMPARE' : 'तुलना गर्नुहोस्'}
+                </h1>
+                <Button
+                    title={
+              language === 'en' ? 'Download Chart' : 'चार्ट डाउनलोड गर्नुहोस्'
+            }
+                    className={styles.chartDownload}
+                    transparent
+                    disabled={!region1 && !region2}
+                    onClick={handleDownload}
+                    iconName="download"
+                />
+                <Button
+                    onClick={closeModal}
+                    iconName="close"
+                    className={styles.closeButton}
+                />
             </div>
-        );
-    }
-
-    render() {
-        const {
-            className,
-            lossAndDamageList,
-            mapStyle,
-            minDate,
-            regions,
-            closeModal,
-            getDataAggregatedByYear,
-            selectOption,
-            valueOnclick,
-            getHazardsCount,
-            hazardTypes,
-            provinces,
-            municipalities,
-            districts,
-            setSelectOption,
-            setVAlueOnClick,
-            currentSelection,
-            language,
-            regionRadio,
-        } = this.props;
-
-        const {
-            faramValues,
-            faramErrors,
-            rightPaneExpanded,
-        } = this.state;
-
-
-        const {
-            region1,
-            region2,
-        } = faramValues;
-
-        const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
-        const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
-
-        const RegionOptions = createSingleList(provinces, districts, municipalities)
-            .map(region => ({
-                adminLevel: region.adminLevel,
-                geoarea: region.id,
-                label: language === 'en' ? region.title : region.title_ne,
-            }));
-
-        const dropDownClickHandler = (item, index, elementName) => {
-            const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
-            this.setState({ faramValues: { ...faramValues, [elementName]: data } });
-        };
-
-        const clearValues = (element: string) => {
-            this.setState({ faramValues: { ...faramValues, [element]: null } });
-        };
-
-        const filterGeoArea = (value) => {
-            const totalData = createSingleList(provinces, districts, municipalities);
-            if (value) {
-                const filteredData = totalData.filter(item => item.adminLevel === value.adminLevel
-                    && item.id === value.geoarea);
-
-                return filteredData;
-            }
-            return [];
-        };
-
-        const mapStateValue = (Region, Incidents) => {
-            const geoareas = filterGeoArea(Region);
-            const regionLevel = Region && Region.adminLevel;
-
-            const {
-                mapping,
-                aggregatedStat,
-            } = generateOverallDataset(Incidents, regionLevel);
-
-            const mapState = Object.values(mapping).map(item => ({
-                id: geoareas[0].id,
-                value: item[currentSelection.key],
-            }));
-
-            return mapState;
-        };
-
-        const colorRange = [];
-        // eslint-disable-next-line no-restricted-syntax
-        for (const item of legendItems) {
-            colorRange.push(item.value, item.color);
-        }
-        const colorPaint = generatePaint(colorRange);
-
-        const handleDownload = async () => {
-            if (this.imageDownloadRef.current) {
-                const width = this.imageDownloadRef.current.scrollWidth;
-                const height = this.imageDownloadRef.current.scrollHeight;
-                await HtmltoImage.toPng(this.imageDownloadRef.current,
-                    { width, height }).then((img) => {
-                        const link = document.createElement('a');
-                        link.href = img;
-                        link.download = 'Compare.png';
-                        link.click();
-                    });
-            }
-        };
-
-
-        return (
-            <Modal className={_cs(className, styles.comparative)
-            }
+            <header className={styles.header}>
+                <div className={styles.regionSelectionForm}>
+                    <Dropdown
+                        elementName="region1"
+                        label={
+                language === 'en'
+                  ? 'Enter a Location to compare'
+                  : 'स्थान छनोट गर्नुहोस्'
+              }
+                        className={styles.regionInput}
+                        placeholder={
+                language === 'en' ? 'Select an Option' : 'विकल्प छनोट गर्नुहोस्'
+              }
+                        dropdownOption={RegionOptions}
+                        icon={false}
+                        dropDownClickHandler={dropDownClickHandler}
+                        deleteicon
+                        clearValues={clearValues}
+                        inputSearch
+                    />
+                    <Dropdown
+                        elementName="region2"
+                        label={
+                language === 'en'
+                  ? 'Enter a Location to compare'
+                  : 'स्थान छनोट गर्नुहोस्'
+              }
+                        className={styles.regionInput}
+                        placeholder={
+                language === 'en' ? 'Select an Option' : 'विकल्प छनोट गर्नुहोस्'
+              }
+                        dropdownOption={RegionOptions}
+                        icon={false}
+                        dropDownClickHandler={dropDownClickHandler}
+                        deleteicon
+                        clearValues={clearValues}
+                        inputSearch
+                    />
+                </div>
+            </header>
+            <div
+                className={_cs(
+            styles.content,
+          )}
             >
-                <div className={styles.regionHead}>
-                    <h1 className={styles.compareText}>
-                        {language === 'en' ? 'COMPARE' : 'तुलना गर्नुहोस्'}
-                    </h1>
-                    <Button
-                        title={language === 'en' ? 'Download Chart' : 'चार्ट डाउनलोड गर्नुहोस्'}
-                        className={styles.chartDownload}
-                        transparent
-                        disabled={!region1 && !region2}
-                        onClick={handleDownload}
-                        iconName="download"
-                    />
-                    <Button
-                        onClick={closeModal}
-                        iconName="close"
-                        className={styles.closeButton}
-                    />
-                </div>
-                <header className={styles.header}>
-                    <div
-                        className={styles.regionSelectionForm}
+                {!region1 && !region2 ? (
+            this.messageForNoData(false, language)
+          ) : (
+              <div
+                  className={styles.comparisionContainer}
+                  ref={this.imageDownloadRef}
+              >
+                  <div className={styles.mapContainer}>
+                      {isRegionValid(faramValues.region1)
+                && region1Incidents.length > 0 ? (
+                    <Map
+                        mapStyle={mapStyle}
+                        mapOptions={{
+                      logoPosition: 'top-left',
+                      minZoom: 5,
+                    }}
+                    // debug
+
+                        scaleControlShown
+                        scaleControlPosition="bottom-right"
+                        navControlShown
+                        navControlPosition="bottom-right"
                     >
-                        <Dropdown
-                            elementName="region1"
-                            label={language === 'en' ? 'Enter a Location to compare' : 'तुलना गर्न स्थान प्रविष्ट गर्नुहोस्'}
-                            className={styles.regionInput}
-                            placeholder={language === 'en' ? 'Select an Option' : 'विकल्प चयन गर्नुहोस्'}
-                            dropdownOption={RegionOptions}
-                            icon={false}
-                            dropDownClickHandler={dropDownClickHandler}
-                            deleteicon
-                            clearValues={clearValues}
-                            inputSearch
+                        <MapContainer className={styles.map1} />
+                        <ChoroplethMap
+                            sourceKey="comparative-first"
+                            paint={colorPaint}
+                            mapState={mapStateValue(
+                        faramValues.region1,
+                        region1Incidents,
+                      )}
+                            region={faramValues.region1}
+                            tooltipRenderer={prop => tooltipRenderer(
+                          prop,
+                          currentSelection.name,
+                          regionRadio.id,
+                          language,
+                        )
+                      }
+                            isDamageAndLoss
                         />
-                        <Dropdown
-                            elementName="region2"
-                            label={language === 'en' ? 'Enter a Location to compare' : 'तुलना गर्न स्थान प्रविष्ट गर्नुहोस्'}
-                            className={styles.regionInput}
-                            placeholder={language === 'en' ? 'Select an Option' : 'विकल्प चयन गर्नुहोस्'}
-                            dropdownOption={RegionOptions}
-                            icon={false}
-                            dropDownClickHandler={dropDownClickHandler}
-                            deleteicon
-                            clearValues={clearValues}
-                            inputSearch
+                    </Map>
+                ) : (
+                  this.messageForNoData(true, language)
+                )}
+                      {isRegionValid(faramValues.region2)
+                && region2Incidents.length > 0 ? (
+                    <Map
+                        mapStyle={mapStyle}
+                        mapOptions={{
+                      logoPosition: 'top-left',
+                      minZoom: 5,
+                    }}
+                    // debug
+
+                        scaleControlShown
+                        scaleControlPosition="bottom-right"
+                        navControlShown
+                        navControlPosition="bottom-right"
+                    >
+                        <MapContainer className={styles.map2} />
+                        <ChoroplethMap
+                            sourceKey="comparative-second"
+                            paint={colorPaint}
+                            mapState={mapStateValue(
+                        faramValues.region2,
+                        region2Incidents,
+                      )}
+                            region={faramValues.region2}
+                            tooltipRenderer={prop => tooltipRenderer(
+                          prop,
+                          currentSelection.name,
+                          regionRadio.id,
+                          language,
+                        )
+                      }
+                            isDamageAndLoss
                         />
-                    </div>
-                </header>
-                <div
-                    className={_cs(styles.content, language === 'np' && styles.languageFont)}
-                >
-                    {(!region1 && !region2) ? (
-                        this.messageForNoData(false, language)
-                    ) : (
-                        <div className={styles.comparisionContainer} ref={this.imageDownloadRef}>
-                            <div className={styles.mapContainer}>
-                                {isRegionValid(faramValues.region1)
-                                    && region1Incidents.length > 0
-                                    ? (
-                                        <Map
-                                            mapStyle={mapStyle}
-                                            mapOptions={{
-                                                logoPosition: 'top-left',
-                                                minZoom: 5,
-                                            }}
-                                            // debug
-
-                                            scaleControlShown
-                                            scaleControlPosition="bottom-right"
-
-                                            navControlShown
-                                            navControlPosition="bottom-right"
-                                        >
-                                            <MapContainer className={styles.map1} />
-                                            <ChoroplethMap
-                                                sourceKey="comparative-first"
-                                                paint={colorPaint}
-                                                mapState={
-                                                    mapStateValue(
-                                                        faramValues.region1,
-                                                        region1Incidents,
-                                                    )
-                                                }
-                                                region={faramValues.region1}
-                                                tooltipRenderer={prop => tooltipRenderer(
-                                                    prop,
-                                                    currentSelection.name,
-                                                    regionRadio.id,
-                                                    language,
-                                                )}
-                                                isDamageAndLoss
-                                            />
-                                        </Map>
-                                    )
-                                    : this.messageForNoData(true, language)
-                                }
-                                {isRegionValid(faramValues.region2)
-                                    && region2Incidents.length > 0
-                                    ? (
-                                        <Map
-                                            mapStyle={mapStyle}
-                                            mapOptions={{
-                                                logoPosition: 'top-left',
-                                                minZoom: 5,
-                                            }}
-                                            // debug
-
-                                            scaleControlShown
-                                            scaleControlPosition="bottom-right"
-
-                                            navControlShown
-                                            navControlPosition="bottom-right"
-                                        >
-                                            <MapContainer className={styles.map2} />
-                                            <ChoroplethMap
-                                                sourceKey="comparative-second"
-                                                paint={colorPaint}
-                                                mapState={
-                                                    mapStateValue(
-                                                        faramValues.region2,
-                                                        region2Incidents,
-                                                    )
-                                                }
-                                                region={faramValues.region2}
-                                                tooltipRenderer={prop => tooltipRenderer(
-                                                    prop,
-                                                    currentSelection.name,
-                                                    regionRadio.id,
-                                                    language,
-                                                )}
-                                                isDamageAndLoss
-                                            />
-                                        </Map>
-                                    ) : this.messageForNoData(true, language)
-                                }
-                            </div>
-                            <div
-                                className={styles.visualizations}
-                            >
-                                <div className={styles.otherVisualizations}>
-                                    {isRegionValid(faramValues.region1)
-                                        && region1Incidents.length > 0
-                                        ? (
-                                            <BarChartVisual
-                                                className={styles.region1Container}
-                                                data={region1Incidents}
-                                                regionRadio={region1}
-                                                selectOption={selectOption}
-                                                valueOnclick={valueOnclick}
-                                                language={language}
-                                            />
-                                        )
-                                        : <div />
-                                    }
-                                    {isRegionValid(faramValues.region2)
-                                        && region2Incidents.length > 0
-                                        ? (
-                                            <BarChartVisual
-                                                className={styles.region2Container}
-                                                data={region2Incidents}
-                                                regionRadio={region2}
-                                                selectOption={selectOption}
-                                                valueOnclick={valueOnclick}
-                                                language={language}
-
-                                            />
-                                        ) : <div />
-                                    }
-                                </div>
-                                <div className={styles.otherVisualizations}>
-                                    {isRegionValid(faramValues.region1)
-                                        && region1Incidents.length > 0
-                                        ? (
-                                            <div className={styles.region1Container}>
-                                                <AreaChartVisual
-                                                    data={getDataAggregatedByYear(region1Incidents)}
-                                                    selectOption={selectOption}
-                                                    language={language}
-                                                />
-                                            </div>
-                                        ) : <div />
-                                    }
-                                    {isRegionValid(faramValues.region2)
-                                        && region2Incidents.length > 0
-                                        ? (
-                                            <div className={styles.region2Container}>
-                                                <AreaChartVisual
-                                                    data={getDataAggregatedByYear(region2Incidents)}
-                                                    selectOption={selectOption}
-                                                    language={language}
-                                                />
-                                            </div>
-                                        ) : <div />
-                                    }
-                                </div>
-                                <div className={styles.otherVisualizations}>
-                                    {isRegionValid(faramValues.region1)
-                                        && region1Incidents.length > 0
-                                        ? (
-                                            <div className={styles.region1Container}>
-                                                <HazardWise
-                                                    // eslint-disable-next-line max-len
-                                                    data={getHazardsCount(region1Incidents, hazardTypes)}
-                                                    selectOption={selectOption}
-                                                    language={language}
-
-                                                />
-                                            </div>
-                                        ) : <div />
-                                    }
-                                    {isRegionValid(faramValues.region2)
-                                        && region2Incidents.length > 0
-                                        ? (
-                                            <div className={styles.region2Container}>
-                                                <HazardWise
-                                                    // eslint-disable-next-line max-len
-                                                    data={getHazardsCount(region2Incidents, hazardTypes)}
-                                                    selectOption={selectOption}
-                                                    language={language}
-                                                />
-                                            </div>
-                                        ) : <div />
-                                    }
-                                </div>
-                                {
-                                    (region1Incidents.length > 0 || region2Incidents.length > 0)
-                                    && (
-                                    <Translation>
-                                        {
-                                                    t => (
-                                                        <div className={styles.value}>
-                                                            <span className={styles.label}>
-                                                                {t('Data sources')}
+                    </Map>
+                ) : (
+                  this.messageForNoData(true, language)
+                )}
+                  </div>
+                  <div className={styles.visualizations}>
+                      <div className={styles.otherVisualizations}>
+                          {isRegionValid(faramValues.region1)
+                  && region1Incidents.length > 0 ? (
+                      <BarChartVisual
+                          className={styles.region1Container}
+                          data={region1Incidents}
+                          regionRadio={region1}
+                          selectOption={selectOption}
+                          valueOnclick={valueOnclick}
+                          language={language}
+                      />
+                  ) : (
+                      <div />
+                  )}
+                          {isRegionValid(faramValues.region2)
+                  && region2Incidents.length > 0 ? (
+                      <BarChartVisual
+                          className={styles.region2Container}
+                          data={region2Incidents}
+                          regionRadio={region2}
+                          selectOption={selectOption}
+                          valueOnclick={valueOnclick}
+                          language={language}
+                      />
+                  ) : (
+                      <div />
+                  )}
+                      </div>
+                      <div className={styles.otherVisualizations}>
+                          {isRegionValid(faramValues.region1)
+                  && region1Incidents.length > 0 ? (
+                      <div className={styles.region1Container}>
+                          <AreaChartVisual
+                              data={getDataAggregatedByYear(region1Incidents)}
+                              selectOption={selectOption}
+                              language={language}
+                          />
+                      </div>
+                  ) : (
+                      <div />
+                  )}
+                          {isRegionValid(faramValues.region2)
+                  && region2Incidents.length > 0 ? (
+                      <div className={styles.region2Container}>
+                          <AreaChartVisual
+                              data={getDataAggregatedByYear(region2Incidents)}
+                              selectOption={selectOption}
+                              language={language}
+                          />
+                      </div>
+                  ) : (
+                      <div />
+                  )}
+                      </div>
+                      <div className={styles.otherVisualizations}>
+                          {isRegionValid(faramValues.region1)
+                  && region1Incidents.length > 0 ? (
+                      <div className={styles.region1Container}>
+                          <HazardWise
+                        // eslint-disable-next-line max-len
+                              data={getHazardsCount(region1Incidents, hazardTypes)}
+                              selectOption={selectOption}
+                              language={language}
+                          />
+                      </div>
+                  ) : (
+                      <div />
+                  )}
+                          {isRegionValid(faramValues.region2)
+                  && region2Incidents.length > 0 ? (
+                      <div className={styles.region2Container}>
+                          <HazardWise
+                        // eslint-disable-next-line max-len
+                              data={getHazardsCount(region2Incidents, hazardTypes)}
+                              selectOption={selectOption}
+                              language={language}
+                          />
+                      </div>
+                  ) : (
+                      <div />
+                  )}
+                      </div>
+                      {(region1Incidents.length > 0
+                  || region2Incidents.length > 0) && (
+                  <Translation>
+                      {t => (
+                          <div className={styles.value}>
+                              <span className={styles.label}>
+                                  {t('Data sources')}
 :
-                                                            </span>
-                                                            <span className={styles.source}>
-                                                                {t('Nepal Police')}
-                                                            </span>
-                                                            <div className={styles.source}>
-                                                                <span className={styles.text}>
-                                                                    {t('DRR Portal')}
-                                                                </span>
-                                                                <a
-                                                                    className={styles.link}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    href="http://drrportal.gov.np"
-                                                                >
-                                                                    <Icon
-                                                                        name="externalLink"
-                                                                    />
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                    )
-                                                }
-                                    </Translation>
-
-                                    )
-                                }
-
-                            </div>
-                        </div>
+                              </span>
+                              <span className={styles.source}>
+                                  {t('Nepal Police')}
+                              </span>
+                              <div className={styles.source}>
+                                  <span className={styles.text}>{t('DRR Portal')}</span>
+                                  <a
+                                      className={styles.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      href="http://drrportal.gov.np"
+                                  >
+                                      <Icon name="externalLink" />
+                                  </a>
+                              </div>
+                          </div>
                     )}
-                </div>
-            </Modal>
-        );
-    }
+                  </Translation>
+                )}
+                  </div>
+              </div>
+          )}
+            </div>
+        </Modal>
+    );
+  }
 }
 
 export default connect(mapStateToProps)(NewCompare);

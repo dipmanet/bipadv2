@@ -6,6 +6,7 @@
 import React, { useRef, useState } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import { Translation, useTranslation } from 'react-i18next';
+import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
@@ -171,21 +172,21 @@ const HazardWise = (props: HazardWiseProps) => {
         selectOption: selectOption.name,
         headerText: language === 'en'
             ? `Hazard-wise distribution of ${selectOption.name}`
-            : `${t(selectOption.name)}को जोखिम अनुसार वितरण`,
+            : `प्रकोप अनुसार ${t(selectOption.name)}को  विवरण`,
         fileName: 'Tree Map',
         height: 50,
         width: 0,
     };
 
     return (
-        <div className={styles.wrapper}>
+        <div className={_cs(styles.wrapper, language === 'np' && styles.languageNp)}>
             <div className={styles.hazardHead}>
                 <Translation>
                     {(k) => (
                         <p className={styles.hazardText}>
                             {language === 'en'
                                 ? `Hazard-wise distribution of ${selectOption.name}`
-                                : `${k(selectOption.name)}को जोखिम अनुसार वितरण`}
+                                : `प्रकोप अनुसार ${k(selectOption.name)}को विवरण`}
                         </p>
                     )}
                 </Translation>
@@ -197,7 +198,7 @@ const HazardWise = (props: HazardWiseProps) => {
                         selectOption={selectOption.name}
                         headerText={language === 'en'
                             ? `Hazard-wise distribution of ${selectOption.name}`
-                            : `${t(selectOption.name)}को जोखिम अनुसार वितरण`}
+                            : `प्रकोप अनुसार ${t(selectOption.name)}को विवरण`}
                         language={language}
                     />
                 )}

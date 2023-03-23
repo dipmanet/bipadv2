@@ -1,64 +1,65 @@
-// .container {
-//     display: flex;
-//     flex-direction: column;
-//     width: 100%;
-//     align-items: center;
-//     position: relative;
-//     margin-top: 15px;
-
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    // width: 95%;
-    border-top: 1px solid #ccc;
-
-
-    .firstDiv {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        position: relative;
-
-        .text {
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .download-button {
-            padding: 5px;
-        }
-    }
-
-    .areaChart {
-        width: 100%;
-        justify-self: flex-start;
-        &:fullscreen{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: white;
-        }
-    }
-
+@font-face {
+  font-family: "Kalimati Regular";
+  src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+  unicode-range: U+30-39;
+  size-adjust: 85%;
 }
 
-.customTooltip{
+.languageNp {
+  font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  // width: 95%;
+  border-top: 1px solid #ccc;
+
+  .firstDiv {
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 7px;
-    background: rgba(255, 255, 255, 0.2);
-border-radius: 10px;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(7.3px);
--webkit-backdrop-filter: blur(7.3px);
-border: 1px solid rgba(255, 255, 255, 0.3);
-    .label{
-        color:black;
-        font-size: 12px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+
+    .text {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 600;
     }
+
+    .download-button {
+      padding: 5px;
+    }
+  }
+
+  .areaChart {
+    width: 100%;
+    justify-self: flex-start;
+    &:fullscreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;
+    }
+  }
+}
+
+.customTooltip {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.3px);
+  -webkit-backdrop-filter: blur(7.3px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  .label {
+    color: black;
+    font-size: 12px;
+  }
 }
 
 // }

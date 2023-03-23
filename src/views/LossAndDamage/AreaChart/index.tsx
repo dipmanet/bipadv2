@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Translation, useTranslation } from 'react-i18next';
+import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
@@ -80,19 +81,19 @@ const AreaChartVisual = (props: AreaChartProps) => {
     const downloadProps = {
         domElement: 'areaChart',
         selectOption: name,
-        headerText: language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को अस्थायी वितरण`,
+        headerText: language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को समयिक विवरण`,
         fileName: 'Area Chart',
         height: 0,
         width: 30,
     };
 
     return (
-        <div className={styles.wrapper}>
+        <div className={_cs(styles.wrapper, language === 'np' && styles.languageNp)}>
             <div className={styles.firstDiv}>
                 <Translation>
                     {(k) => (
                         <p className={styles.text}>
-                            {language === 'en' ? `Temporal distribution of ${name}` : `${k(name)}को अस्थायी वितरण`}
+                            {language === 'en' ? `Temporal distribution of ${name}` : `${k(name)}को समयिक विवरण`}
                         </p>
                     )}
                 </Translation>
@@ -102,7 +103,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
                         domElement="areaChart"
                         setFullScreenHeightWidth={setFullScreenHeightWidth}
                         selectOption={name}
-                        headerText={language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को अस्थायी वितरण`}
+                        headerText={language === 'en' ? `Temporal distribution of ${name}` : `${t(name)}को समयिक विवरण`}
                         language={language}
                     />
                 )}
