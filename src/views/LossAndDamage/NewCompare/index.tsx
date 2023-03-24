@@ -8,9 +8,9 @@ import { connect } from 'react-redux';
 import { _cs, isNotDefined } from '@togglecorp/fujs';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 import * as HtmltoImage from 'html-to-image';
-import domtoimage from 'dom-to-image';
 
 import { Translation } from 'react-i18next';
+import domtoimage from 'dom-to-image';
 import Button from '#rsca/Button';
 import Modal from '#rscv/Modal';
 
@@ -288,20 +288,17 @@ class NewCompare extends React.PureComponent {
 
     const handleDownload = async () => {
         if (this.imageDownloadRef.current) {
-          const width = this.imageDownloadRef.current.scrollWidth;
-          const height = this.imageDownloadRef.current.scrollHeight;
-          try {
-            const img = await HtmltoImage.toPng(this.imageDownloadRef.current, { width, height });
-            const link = document.createElement('a');
-            link.href = img;
-            link.download = 'Compare.png';
-            link.click();
-            console.log(img, 'image');
-          } catch (e) {
-            console.log('Error generating image:', e);
-          }
+            const width = this.imageDownloadRef.current.scrollWidth;
+            const height = this.imageDownloadRef.current.scrollHeight;
+            await HtmltoImage.toPng(this.imageDownloadRef.current,
+                { width, height }).then((img) => {
+                    const link = document.createElement('a');
+                    link.href = img;
+                    link.download = 'Compare.png';
+                    link.click();
+                });
         }
-      };
+    };
 
 
     return (
@@ -376,9 +373,10 @@ class NewCompare extends React.PureComponent {
           ) : (
               <div
                   className={styles.comparisionContainer}
-                  ref={this.imageDownloadRef}
               >
-                  <div className={styles.mapContainer}>
+                  <div
+                      className={styles.mapContainer}
+                  >
                       {isRegionValid(faramValues.region1)
                 && region1Incidents.length > 0 ? (
                     <Map
@@ -386,6 +384,7 @@ class NewCompare extends React.PureComponent {
                         mapOptions={{
                       logoPosition: 'top-left',
                       minZoom: 5,
+                      preserveDrawingBuffer: true,
                     }}
                     // debug
 
@@ -423,6 +422,7 @@ class NewCompare extends React.PureComponent {
                         mapOptions={{
                       logoPosition: 'top-left',
                       minZoom: 5,
+                      preserveDrawingBuffer: true,
                     }}
                     // debug
 
@@ -454,7 +454,9 @@ class NewCompare extends React.PureComponent {
                   this.messageForNoData(true, language)
                 )}
                   </div>
-                  <div className={styles.visualizations}>
+                  <div
+                      className={styles.visualizations}
+                  >
                       <div className={styles.otherVisualizations}>
                           {isRegionValid(faramValues.region1)
                   && region1Incidents.length > 0 ? (
@@ -486,7 +488,10 @@ class NewCompare extends React.PureComponent {
                       <div className={styles.otherVisualizations}>
                           {isRegionValid(faramValues.region1)
                   && region1Incidents.length > 0 ? (
-                      <div className={styles.region1Container}>
+                      <div
+                          className={styles.region1Container}
+
+                      >
                           <AreaChartVisual
                               data={getDataAggregatedByYear(region1Incidents)}
                               selectOption={selectOption}
@@ -498,7 +503,10 @@ class NewCompare extends React.PureComponent {
                   )}
                           {isRegionValid(faramValues.region2)
                   && region2Incidents.length > 0 ? (
-                      <div className={styles.region2Container}>
+                      <div
+                          className={styles.region2Container}
+
+                      >
                           <AreaChartVisual
                               data={getDataAggregatedByYear(region2Incidents)}
                               selectOption={selectOption}
@@ -509,10 +517,15 @@ class NewCompare extends React.PureComponent {
                       <div />
                   )}
                       </div>
-                      <div className={styles.otherVisualizations}>
+                      <div
+                          className={styles.otherVisualizations}
+
+                      >
                           {isRegionValid(faramValues.region1)
                   && region1Incidents.length > 0 ? (
-                      <div className={styles.region1Container}>
+                      <div
+                          className={styles.region1Container}
+                      >
                           <HazardWise
                         // eslint-disable-next-line max-len
                               data={getHazardsCount(region1Incidents, hazardTypes)}
@@ -525,7 +538,11 @@ class NewCompare extends React.PureComponent {
                   )}
                           {isRegionValid(faramValues.region2)
                   && region2Incidents.length > 0 ? (
-                      <div className={styles.region2Container}>
+                      <div
+                          className={styles.region2Container}
+                          ref={this.imageDownloadRef}
+
+                      >
                           <HazardWise
                         // eslint-disable-next-line max-len
                               data={getHazardsCount(region2Incidents, hazardTypes)}
@@ -541,7 +558,9 @@ class NewCompare extends React.PureComponent {
                   || region2Incidents.length > 0) && (
                   <Translation>
                       {t => (
-                          <div className={styles.value}>
+                          <div
+                              className={styles.value}
+                          >
                               <span className={styles.label}>
                                   {t('Data sources')}
 :

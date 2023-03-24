@@ -121,20 +121,74 @@ const HazardWise = (props: HazardWiseProps) => {
                         >
                             {height + width > 150 ? formatNumeralAccLang(value, language) : ''}
                         </text>
-                        <foreignObject
+                        {/* <foreignObject
                             width={height + width <= 150 ? '15px' : (height + width) / 14}
                             height={height + width <= 150 ? '15px' : (height + width) / 14}
                             x={x + width / 8}
                             y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
+                        > */}
+                        {/* <image
+                            width={height + width <= 150 ? '15px' : (height + width) / 14}
+                            height={height + width <= 150 ? '15px' : (height + width) / 14}
+                            href={icon}
+                            alt={name}
+                            style={{ filter: 'brightness(0) invert(1)' }}
+                            x={x + width / 8}
+                            y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
+                        /> */}
+                        {/* <defs>
+                            <clipPath id={`image${index}`}>
+                                <circle
+                                    cx={x + width / 8}
+                                    cy={height + width <= 150 ? y + height / 7 : y + height / 1.5}
+                                    width={height + width <= 150 ? '15px' : (height + width) / 14}
+                                    height={height + width <= 150 ? '15px' : (height + width) / 14}
+                                    r="125"
+                                    fill="#FFFFFF"
+                                />
+                            </clipPath>
+                        </defs> */}
+
+                        <svg
+                            width={height + width <= 150 ? '15px' : (height + width) / 14}
+                            height={height + width <= 150 ? '15px' : (height + width) / 14}
                         >
-                            <img
+                            <foreignObject
+                                x={x + width / 8}
+                                y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
                                 width={height + width <= 150 ? '15px' : (height + width) / 14}
                                 height={height + width <= 150 ? '15px' : (height + width) / 14}
-                                src={icon}
+                            >
+                                <img
+                                    src={icon}
+                                    alt={name}
+                                    width={height + width <= 150 ? '15px' : (height + width) / 14}
+                                    height={height + width <= 150 ? '15px' : (height + width) / 14}
+                                    style={{ filter: 'brightness(0) invert(1)' }}
+                                />
+                            </foreignObject>
+                        </svg>
+
+
+                        {/* <svg
+                            width={height + width <= 150 ? '15px' : (height + width) / 14}
+                            height={height + width <= 150 ? '15px' : (height + width) / 14}
+                            xmlns="http://www.w3.org/2000/svg"
+                        > */}
+
+                        {/* <image
+                                xlinkHref={icon}
                                 alt={name}
+                                width={height + width <= 150 ? '15px' : (height + width) / 14}
+                                height={height + width <= 150 ? '15px' : (height + width) / 14}
                                 style={{ filter: 'brightness(0) invert(1)' }}
-                            />
-                        </foreignObject>
+                                x={x + width / 8}
+                                y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
+                            /> */}
+                        {/* </svg> */}
+
+
+                        {/* </foreignObject> */}
                     </>
                 ) : null}
             </g>
