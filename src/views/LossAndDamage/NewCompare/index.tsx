@@ -373,6 +373,7 @@ class NewCompare extends React.PureComponent {
           ) : (
               <div
                   className={styles.comparisionContainer}
+                  ref={this.imageDownloadRef}
               >
                   <div
                       className={styles.mapContainer}
@@ -540,8 +541,6 @@ class NewCompare extends React.PureComponent {
                   && region2Incidents.length > 0 ? (
                       <div
                           className={styles.region2Container}
-                          ref={this.imageDownloadRef}
-
                       >
                           <HazardWise
                         // eslint-disable-next-line max-len
