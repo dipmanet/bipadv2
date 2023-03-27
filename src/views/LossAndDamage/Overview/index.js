@@ -76,20 +76,19 @@ class Overview extends React.PureComponent {
         const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
-        const geoareas =
-            (radioSelect.id === 4 && wards) ||
-            (radioSelect.id === 3 && municipalities) ||
-            (radioSelect.id === 2 && districts) ||
-            (radioSelect.id === 1 && provinces);
+        const geoareas = (radioSelect.id === 4 && wards)
+            || (radioSelect.id === 3 && municipalities)
+            || (radioSelect.id === 2 && districts)
+            || (radioSelect.id === 1 && provinces);
 
         const { setDamageAndLoss } = this.context;
 
         if (setDamageAndLoss) {
             setDamageAndLoss((prevState) => {
                 if (
-                    prevState.mainModule !== selectedMetric.label ||
-                    prevState.startDate !== startDate ||
-                    prevState.endDate !== endDate
+                    prevState.mainModule !== selectedMetric.label
+                    || prevState.startDate !== startDate
+                    || prevState.endDate !== endDate
                 ) {
                     return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
                 }

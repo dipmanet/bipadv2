@@ -1,3 +1,5 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable func-names */
 /* eslint-disable arrow-parens */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-closing-tag-location */
@@ -7,6 +9,7 @@ import React, { useRef, useState } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import { Translation, useTranslation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
+import html2canvas from 'html2canvas';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
@@ -33,6 +36,7 @@ interface HazardWiseProps {
 
 const HazardWise = (props: HazardWiseProps) => {
     const { selectOption, data, handleSaveClick, downloadButton, fullScreenMode, language } = props;
+    const [base64, setBase64] = React.useState({});
     const { t } = useTranslation();
     const treeMapRef = useRef<HTMLDivElement>(null);
     const [fullScreen, setFullScreen] = useState<ContainerSize>({ width: '100%', height: 300 });
@@ -82,10 +86,24 @@ const HazardWise = (props: HazardWiseProps) => {
         '#f6d8bf',
     ];
 
+    const SvgToBase64Encoder = async (url: string) => fetch(url)
+        .then(response => response.text())
+        .then(svgText => {
+            const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+            const reader = new FileReader();
+            reader.readAsDataURL(svgBlob);
+            return new Promise((resolve) => {
+                reader.onload = () => resolve(reader.result);
+            });
+        });
+
+
     const CustomizedContent = (prop: any) => {
         const { root, depth, x, y, width, height, index, colors, name, value, icon } = prop;
+        const base64Icon = SvgToBase64Encoder(icon);
+
         return (
-            <g>
+            <g style={{ position: 'relative' }}>
                 <rect
                     id={name}
                     x={x}
@@ -121,74 +139,17 @@ const HazardWise = (props: HazardWiseProps) => {
                         >
                             {height + width > 150 ? formatNumeralAccLang(value, language) : ''}
                         </text>
-                        {/* <foreignObject
+                        <image
                             width={height + width <= 150 ? '15px' : (height + width) / 14}
                             height={height + width <= 150 ? '15px' : (height + width) / 14}
-                            x={x + width / 8}
-                            y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
-                        > */}
-                        {/* <image
-                            width={height + width <= 150 ? '15px' : (height + width) / 14}
-                            height={height + width <= 150 ? '15px' : (height + width) / 14}
-                            href={icon}
-                            alt={name}
+                            // href={'data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ny45Nzk5OCA0OCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiM0MThmZGU7fTwvc3R5bGU+PC9kZWZzPjxnIGlkPSJMYXllcl8yIiBkYXRhLW5hbWU9IkxheWVyIDIiPjxnIGlkPSJJY29ucyI+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzguOTgsOS4wMWE4LjczMTczLDguNzMxNzMsMCwwLDAtMy4xNi41ODAwOGwtLjAxMDY4LjAwNDg4YTExLjQ5LDExLjQ5LDAsMCwwLTIyLjgyMTg0LDEuNzU2NTksNS45NzY2Myw1Ljk3NjYzLDAsMCwwLTcuOTExMiw2LjY4OTk0TDUuMDcsMTguMDRBMy44MTA0MSwzLjgxMDQxLDAsMCwwLDQuNDgsMThhNC41LDQuNSwwLDAsMCwwLDloMzQuNWE5LjAwMzExLDkuMDAzMTEsMCwwLDAsOC44My03LjI0QTkuMjk2OTQsOS4yOTY5NCwwLDAsMCw0Ny45OCwxOCw4Ljk5MjIyLDguOTkyMjIsMCwwLDAsMzguOTgsOS4wMVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yOC40OCwzN0gyMi4xODY1MkwyNS43NTIsMzEuMjk0OTJBMS40OTk5NCwxLjQ5OTk0LDAsMSwwLDIzLjIwOCwyOS43MDUwOGwtNSw4QTEuNDk5NzIsMS40OTk3MiwwLDAsMCwxOS40OCw0MGg2LjI5MzQ2TDIyLjIwOCw0NS43MDUwOEExLjQ5OTk0LDEuNDk5OTQsMCwxLDAsMjQuNzUyLDQ3LjI5NDkybDUtOEExLjQ5OTcyLDEuNDk5NzIsMCwwLDAsMjguNDgsMzdaIi8+PC9nPjwvZz48L3N2Zz4K'}
+                            // href={base64Icon && base64Icon}
+                            href={SvgToBase64Encoder(icon).then((i) => i)}
                             style={{ filter: 'brightness(0) invert(1)' }}
                             x={x + width / 8}
                             y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
-                        /> */}
-                        {/* <defs>
-                            <clipPath id={`image${index}`}>
-                                <circle
-                                    cx={x + width / 8}
-                                    cy={height + width <= 150 ? y + height / 7 : y + height / 1.5}
-                                    width={height + width <= 150 ? '15px' : (height + width) / 14}
-                                    height={height + width <= 150 ? '15px' : (height + width) / 14}
-                                    r="125"
-                                    fill="#FFFFFF"
-                                />
-                            </clipPath>
-                        </defs> */}
-
-                        <svg
-                            width={height + width <= 150 ? '15px' : (height + width) / 14}
-                            height={height + width <= 150 ? '15px' : (height + width) / 14}
-                        >
-                            <foreignObject
-                                x={x + width / 8}
-                                y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
-                                width={height + width <= 150 ? '15px' : (height + width) / 14}
-                                height={height + width <= 150 ? '15px' : (height + width) / 14}
-                            >
-                                <img
-                                    src={icon}
-                                    alt={name}
-                                    width={height + width <= 150 ? '15px' : (height + width) / 14}
-                                    height={height + width <= 150 ? '15px' : (height + width) / 14}
-                                    style={{ filter: 'brightness(0) invert(1)' }}
-                                />
-                            </foreignObject>
-                        </svg>
-
-
-                        {/* <svg
-                            width={height + width <= 150 ? '15px' : (height + width) / 14}
-                            height={height + width <= 150 ? '15px' : (height + width) / 14}
-                            xmlns="http://www.w3.org/2000/svg"
-                        > */}
-
-                        {/* <image
-                                xlinkHref={icon}
-                                alt={name}
-                                width={height + width <= 150 ? '15px' : (height + width) / 14}
-                                height={height + width <= 150 ? '15px' : (height + width) / 14}
-                                style={{ filter: 'brightness(0) invert(1)' }}
-                                x={x + width / 8}
-                                y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
-                            /> */}
-                        {/* </svg> */}
-
-
-                        {/* </foreignObject> */}
+                            id={`base64${name}`}
+                        />
                     </>
                 ) : null}
             </g>
@@ -263,11 +224,12 @@ const HazardWise = (props: HazardWiseProps) => {
                         className={styles.downloadButton}
                         transparent
                         // disabled={pending}
-                        onClick={() => handleDownload(downloadProps)}
+                        onClick={handleDownload}
                         iconName="download"
                     />
                 )}
             </div>
+            <div id="test" />
             <div id="treemap" ref={treeMapRef} className={styles.treeMap}>
                 {hazardWiseData.length > 0 && (
                     <ResponsiveContainer height={fullScreen.height} width={fullScreen.width}>
