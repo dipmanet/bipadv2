@@ -226,7 +226,7 @@ const Dropdown = (props: DropDownProps) => {
                                         onChange={searchHandler}
                                         id="search"
                                         className={styles.searchBox}
-                                        placeholder={language === 'en' ? 'Enter a location' : 'स्थान प्रविष्ट गर्नुहोस्'}
+                                        placeholder={language === 'en' ? 'Enter a location' : 'स्थान छनोट गर्नुहोस्'}
                                     />
                                 )
                             }
