@@ -2085,7 +2085,7 @@ export const npTranslation = {
                 'Station Name': 'स्टेशनको नाम',
                 'WATER LEVEL': 'पानी तह',
                 'People death': 'मृत्यु संख्या',
-                'Estimated loss (NPR)': 'अनुमानित आर्थिक क्षेति (रु )',
+                'Estimated loss (NPR)': 'अनुमानित आर्थिक क्षति (रु )',
                 'Infrastructure destroyed': 'पूर्वाधारको क्षति',
                 'Livestock destroyed': 'पशुचौपाया क्षति',
                 'LEAVE FEEDBACK': 'सुझाव दिनुहोस्',
