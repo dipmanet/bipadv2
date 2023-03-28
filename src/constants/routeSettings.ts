@@ -472,6 +472,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'visrisk',
         title: 'VisRisk',
+        titleNep: 'भिज-रिश्‍क',
         path: '/vis-risk/',
         load: () => import('../views/VizRisk'),
         navbar: true,
