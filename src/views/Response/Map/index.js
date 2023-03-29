@@ -1,43 +1,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
-import MapSource from '#re-map/MapSource';
-import MapLayer from '#re-map/MapSource/MapLayer';
-import MapTooltip from '#re-map/MapTooltip';
+
+import styles from './styles.scss';
 
 import SVGMapIcon from '#components/SVGMapIcon';
 import ZoomMap from '#components/ZoomMap';
 import {
-    mapStyles,
     getMapPaddings,
+    mapStyles,
 } from '#constants';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapTooltip from '#re-map/MapTooltip';
+import buildingIcon from '#resources/icons/Building.svg';
+import educationIcon from '#resources/icons/Education.svg';
+import governanceIcon from '#resources/icons/Government-office.svg';
+import groupIcon from '#resources/icons/group1.svg';
+import healthFacilityIcon from '#resources/icons/health-facility1.svg';
+import hinduTemplateIcon from '#resources/icons/Hindu-temple.svg';
+import mapIcon from '#resources/icons/Map.svg';
+import warehouseIcon from '#resources/icons/newCapResEvacuationcenter.svg';
+import satelliteIcon from '#resources/icons/Satellite-dish.svg';
+import openSpaceIcon from '#resources/icons/Soap.svg';
+import financeIcon from '#resources/icons/University.svg';
 import { hazardTypesSelector, languageSelector } from '#selectors';
-
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
     resourceToGeojson,
 } from '#utils/domain';
-
-import healthFacilityIcon from '#resources/icons/health-facility1.svg';
-import groupIcon from '#resources/icons/group1.svg';
-import financeIcon from '#resources/icons/University.svg';
-import educationIcon from '#resources/icons/Education.svg';
-import governanceIcon from '#resources/icons/Government-office.svg';
-import openSpaceIcon from '#resources/icons/Soap.svg';
-import hinduTemplateIcon from '#resources/icons/Hindu-temple.svg';
-import warehouseIcon from '#resources/icons/newCapResEvacuationcenter.svg';
-import satelliteIcon from '#resources/icons/Satellite-dish.svg';
-import buildingIcon from '#resources/icons/Building.svg';
-import mapIcon from '#resources/icons/Map.svg';
-
 import ResourceItem from '../ResourceItem';
-
-import styles from './styles.scss';
 
 const resourceImages = [
     { name: 'Communication', icon: satelliteIcon },

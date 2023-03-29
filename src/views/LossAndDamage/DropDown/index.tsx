@@ -20,9 +20,9 @@ import InfrastructureDestroyed from '#resources/icons/damage-and-loss/Infrastruc
 import InjuredPerson from '#resources/icons/damage-and-loss/Injured person.svg';
 import LiveStockDestroyed from '#resources/icons/damage-and-loss/Livestock destroyed.svg';
 import MissingPerson from '#resources/icons/damage-and-loss/Missing person.svg';
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 import { DropDownOption, DropDownProps } from './types';
-import { languageSelector } from '#selectors';
 
 const Icons = [
     { id: 1, name: 'Incidents', icon: '' },

@@ -21,17 +21,17 @@ import {
 
 import { languageSelector, realTimeDurationSelector } from '#selectors';
 
-import RainWatch from '../RainWatch';
 import { TitleContext } from '#components/TitleContext';
 import { AppState } from '#store/types';
 
-import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
 
 
 import {
     setRealTimeDurationAction,
 } from '#actionCreators';
+import styles from './styles.scss';
+import RainWatch from '../RainWatch';
 
 interface Props {
     realTimeRain: RealTimeRain[];

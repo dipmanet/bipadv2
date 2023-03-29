@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    Label,
     Bar,
     BarChart,
     CartesianGrid,
     Cell,
+    Label,
     Legend,
     Line,
     LineChart,
@@ -13,6 +13,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+
 import styles from '../LeftPane/styles.scss';
 
 export default function BuildingChart(props) {

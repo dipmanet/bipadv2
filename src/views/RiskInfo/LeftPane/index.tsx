@@ -30,8 +30,6 @@ import {
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
-import Overview from './Overview';
-import Details from './Details';
 import {
     generatePaint,
     getLayerHierarchy,
@@ -48,8 +46,10 @@ import {
     SetLayersAction,
     SetLayerGroupsAction,
 } from '#actionCreators';
-import styles from './styles.scss';
 import { AppState } from '#store/types';
+import styles from './styles.scss';
+import Details from './Details';
+import Overview from './Overview';
 
 interface PropsFromDispatch {
     setIncidentList: typeof setIncidentListActionIP;

@@ -1,28 +1,27 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
-import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
+import { schemeAccent } from 'd3-scale-chromatic';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 import {
-    ResponsiveContainer,
-    BarChart,
-    XAxis,
-    YAxis,
     Bar,
+    BarChart,
     Cell,
     LabelList,
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
 } from 'recharts';
-import { Translation } from 'react-i18next';
+
+
 import Button from '#rsca/Button';
-
-import {
-    saveChart,
-    groupList,
-} from '#utils/common';
-
 import { languageSelector } from '#selectors';
+import {
+    groupList,
+    saveChart,
+} from '#utils/common';
 import styles from './styles.scss';
 
 const propTypes = {

@@ -3,9 +3,9 @@ import React from 'react';
 import DateRangeInfo from '#components/DateRangeInfo';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
+import * as PageType from '#store/atom/page/types';
 import RiverModal from '../Modal';
 
-import * as PageType from '#store/atom/page/types';
 
 import styles from './styles.scss';
 

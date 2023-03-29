@@ -1,10 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
 import ListView from '#rscv/List/ListView';
-
 import styles from './styles.scss';
+
+
 
 const Report = ({
     className,

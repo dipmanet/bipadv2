@@ -1,7 +1,7 @@
 import React from 'react';
+import style from '#mapStyles/rasterStyle';
 import Icon from '#rscg/Icon';
 
-import style from '#mapStyles/rasterStyle';
 import styles from './styles.scss';
 
 interface Props {

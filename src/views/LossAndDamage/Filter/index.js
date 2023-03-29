@@ -1,26 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import Button from '#rsca/Button';
-import DateInput from '#rsci/DateInput';
-import HazardSelectionInput from '#components/HazardSelectionInput';
-import SelectInput from '#rsci/SelectInput';
 
 import {
     setLossAndDamageFiltersAction,
 } from '#actionCreators';
-import {
-    lossAndDamageFiltersSelector,
-    languageSelector,
-} from '#selectors';
-
 import CollapsibleView from '#components/CollapsibleView';
+import HazardSelectionInput from '#components/HazardSelectionInput';
 import RegionSelectInput from '#components/RegionSelectInput';
 import { iconNames } from '#constants';
-
+import Button from '#rsca/Button';
+import DateInput from '#rsci/DateInput';
+import SelectInput from '#rsci/SelectInput';
+import {
+    languageSelector,
+    lossAndDamageFiltersSelector,
+} from '#selectors';
 import styles from './styles.scss';
 
 const propTypes = {

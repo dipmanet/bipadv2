@@ -22,9 +22,9 @@ import {
     convertNormalTableToCsv,
 } from '#utils/table';
 
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 
-import { languageSelector } from '#selectors';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

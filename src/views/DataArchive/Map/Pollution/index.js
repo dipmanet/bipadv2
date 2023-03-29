@@ -1,22 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+
+
+import styles from './styles.scss';
+
 import CommonMap from '#components/CommonMap';
+import {
+    getMapPaddings,
+    mapStyles,
+} from '#constants';
+import { MapChildContext } from '#re-map/context';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import FormattedDate from '#rscv/FormattedDate';
-import { MapChildContext } from '#re-map/context';
-
-import PollutionModal from '../../Modals/Pollution';
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
 import { pollutionFiltersSelector } from '#selectors';
-import styles from './styles.scss';
+import PollutionModal from '../../Modals/Pollution';
 
 const mapStateToProps = state => ({
     pollutionFilters: pollutionFiltersSelector(state),

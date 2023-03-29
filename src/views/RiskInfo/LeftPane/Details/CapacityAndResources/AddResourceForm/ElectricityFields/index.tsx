@@ -8,11 +8,11 @@ import SelectInput from '#rsci/SelectInput';
 
 import { EnumItem, KeyLabel } from '#types';
 import { getAttributeOptions } from '#utils/domain';
-import styles from '../styles.scss';
 import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
 
 import { languageSelector } from '#selectors';
+import styles from '../styles.scss';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

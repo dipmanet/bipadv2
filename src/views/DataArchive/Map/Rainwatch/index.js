@@ -1,23 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import memoize from 'memoize-one';
 import { bbox, lineString } from '@turf/turf';
+import memoize from 'memoize-one';
+
+
+import styles from './styles.scss';
+
 import CommonMap from '#components/CommonMap';
+import {
+    getMapPaddings,
+    mapStyles,
+} from '#constants';
+import { MapChildContext } from '#re-map/context';
+import MapBounds from '#re-map/MapBounds';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import { MapChildContext } from '#re-map/context';
-import MapBounds from '#re-map/MapBounds';
-import { httpGet } from '#utils/common';
-
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
 import { dataArchiveRainListSelector, rainFiltersSelector, rainStationsSelector } from '#selectors';
+import { httpGet } from '#utils/common';
 import RainModal from '../../Modals/Rainwatch';
-import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     rainFilters: rainFiltersSelector(state),

@@ -1,31 +1,26 @@
 import React from 'react';
+import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
-import memoize from 'memoize-one';
 
-import TextOutput from '#components/TextOutput';
-import FormattedDate from '#rscv/FormattedDate';
 import CommonMap from '#components/CommonMap';
+import DataArchiveContext from '#components/DataArchiveContext';
+import TextOutput from '#components/TextOutput';
+import {
+    getMapPaddings,
+    mapStyles,
+} from '#constants';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import DataArchiveContext from '#components/DataArchiveContext';
-
-
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
-
+import FormattedDate from '#rscv/FormattedDate';
 import {
     earthquakeToGeojson,
-    riverToGeojson,
-    rainToGeojson,
     fireToGeojson,
     pollutionToGeojson,
+    rainToGeojson,
+    riverToGeojson,
 } from '#utils/domain';
-
-
 import styles from './styles.scss';
 
 

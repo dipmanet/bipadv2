@@ -1,45 +1,39 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-
+import Faram, {
+    requiredCondition,
+} from '@togglecorp/faram';
 import {
     _cs,
     isNotDefined,
 } from '@togglecorp/fujs';
-import Faram, {
-    requiredCondition,
-} from '@togglecorp/faram';
-
-import { Translation } from 'react-i18next';
-import Button from '#rsca/Button';
-import Modal from '#rscv/Modal';
-
-import LossDetails from '#components/LossDetails';
-import GeoResolve from '#components/GeoResolve';
-
-import Map from '#re-map';
-import MapContainer from '#re-map/MapContainer';
-
-import {
-    mapStyleSelector,
-    regionsSelector,
-    provincesSelector,
-    districtsSelector,
-    municipalitiesSelector,
-    wardsSelector,
-    hazardTypesSelector,
-    languageSelector,
-} from '#selectors';
-
-import CommonMap from '#components/CommonMap';
-import RegionSelectInput from '#components/RegionSelectInput';
-import { saveChart } from '#utils/common';
-
-import { getSanitizedIncidents } from '../common';
 
 
 import Visualizations from './Visualizations';
 
 import styles from './styles.scss';
+
+import CommonMap from '#components/CommonMap';
+import GeoResolve from '#components/GeoResolve';
+import LossDetails from '#components/LossDetails';
+import RegionSelectInput from '#components/RegionSelectInput';
+import Map from '#re-map';
+import MapContainer from '#re-map/MapContainer';
+import Button from '#rsca/Button';
+import Modal from '#rscv/Modal';
+import {
+    districtsSelector,
+    hazardTypesSelector,
+    languageSelector,
+    mapStyleSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    regionsSelector,
+    wardsSelector,
+} from '#selectors';
+import { saveChart } from '#utils/common';
+import { getSanitizedIncidents } from '../common';
 
 const propTypes = {
 };

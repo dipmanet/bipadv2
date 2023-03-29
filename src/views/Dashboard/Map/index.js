@@ -2,46 +2,41 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { unique } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
-import List from '#rscv/List';
-import MapSource from '#re-map/MapSource';
-import MapImage from '#re-map/MapImage';
-import MapLayer from '#re-map/MapSource/MapLayer';
-import MapState from '#re-map/MapSource/MapState';
-import MapTooltip from '#re-map/MapTooltip';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
-import FormattedDate from '#rscv/FormattedDate';
+import FireTooltip from './Tooltips/Alerts/Fire';
+import PollutionTooltip from './Tooltips/Alerts/Pollution';
+import RainTooltip from './Tooltips/Alerts/Rain';
+import RiverTooltip from './Tooltips/Alerts/River';
+
+import styles from './styles.scss';
 
 // import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
-
 import { mapStyles } from '#constants';
-
+import MapImage from '#re-map/MapImage';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
+import MapTooltip from '#re-map/MapTooltip';
+import FormattedDate from '#rscv/FormattedDate';
+import List from '#rscv/List';
+import { hazardTypesSelector, languageSelector } from '#selectors';
+import { framize, getImage,getYesterday } from '#utils/common';
 import {
     alertToConvexPolygonGeojson,
-    alertToPolygonGeojson,
     alertToPointGeojson,
-
+    alertToPolygonGeojson,
     eventToConvexPolygonGeojson,
-    eventToPolygonGeojson,
     eventToPointGeojson,
+    eventToPolygonGeojson,
 } from '#utils/domain';
-import { getYesterday, framize, getImage } from '#utils/common';
-
-import { hazardTypesSelector, languageSelector } from '#selectors';
-
-import RainTooltip from './Tooltips/Alerts/Rain';
-import RiverTooltip from './Tooltips/Alerts/River';
 import EarthquakeTooltip from './Tooltips/Alerts/Earthquake';
-import FireTooltip from './Tooltips/Alerts/Fire';
-import PollutionTooltip from './Tooltips/Alerts/Pollution';
-
-import styles from './styles.scss';
 
 // const AlertTooltip = ({ title, description }) => (
 // <div className={styles.alertTooltip}>

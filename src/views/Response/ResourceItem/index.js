@@ -1,17 +1,16 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
+import { Translation } from 'react-i18next';
+import { _cs } from '@togglecorp/fujs';
 import PropTypes from 'prop-types';
 
-import { _cs } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
-import DistanceOutput from '#components/DistanceOutput';
-
-import { iconNames } from '#constants';
-import TextOutput from '#components/TextOutput';
-
-import resourceAttributes from '../resourceAttributes';
 
 import styles from './styles.scss';
+
+import DistanceOutput from '#components/DistanceOutput';
+import TextOutput from '#components/TextOutput';
+import { iconNames } from '#constants';
+import resourceAttributes from '../resourceAttributes';
 
 const propTypes = {
     className: PropTypes.string,

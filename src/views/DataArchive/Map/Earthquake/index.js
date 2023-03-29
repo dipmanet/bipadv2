@@ -1,25 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import memoize from 'memoize-one';
+
+
+import styles from './styles.scss';
+
 import CommonMap from '#components/CommonMap';
+import {
+    getMapPaddings,
+    mapStyles,
+} from '#constants';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import Tooltip from './Tooltip';
 import {
-    eqFiltersSelector,
-    provincesSelector,
     districtsSelector,
+    eqFiltersSelector,
     municipalitiesSelector,
+    provincesSelector,
 } from '#selectors';
-
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
-
-import styles from './styles.scss';
+import Tooltip from './Tooltip';
 
 const EarthquakeToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />

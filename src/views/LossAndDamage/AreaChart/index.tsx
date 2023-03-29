@@ -6,13 +6,13 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Translation, useTranslation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
+import { convertDateAccToLanguage } from '#utils/common';
 import styles from './styles.scss';
 import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
 import { AreaChartProps, TooltipInterface } from './types';
 import { ContainerSize } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
 import { handleDownload } from '../Barchart/util';
-import { convertDateAccToLanguage } from '#utils/common';
 
 const AreaChartVisual = (props: AreaChartProps) => {
     const [fullScreen, setFullScreen] = useState<ContainerSize>({

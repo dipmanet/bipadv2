@@ -35,8 +35,8 @@ import {
 import { getAuthState } from '#utils/session';
 
 
-import styles from './styles.scss';
 import Alert from '#rscv/Modal/Alert';
+import styles from './styles.scss';
 
 interface FaramValues {
     username?: string;

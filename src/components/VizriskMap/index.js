@@ -1,39 +1,37 @@
-import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { isNotDefined } from '@togglecorp/fujs';
-import { MapChildContext as MapContext } from '#re-map/context';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
+
+import TextOutput from '#components/TextOutput';
+import { mapSources, vizriskmapStyles } from '#constants';
+import { MapChildContext as MapContext } from '#re-map/context';
 import MapBounds from '#re-map/MapBounds';
-import MapState from '#re-map/MapSource/MapState';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
 import Button from '#rsca/Button';
-import { mapSources, vizriskmapStyles } from '#constants';
-import TextOutput from '#components/TextOutput';
-import styles from './styles.scss';
-
 import {
-    getWardFilter,
-    getMunicipalityFilter,
-    getDistrictFilter,
-    getProvinceFilter,
-} from '#utils/domain';
-
-import {
+    boundsSelector,
+    districtsSelector,
     // provincesSelector,
     municipalitiesSelector,
-    districtsSelector,
-    wardsSelector,
-
     regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
+    selectedProvinceIdSelector,
+    wardsSelector,
 } from '#selectors';
+import {
+    getDistrictFilter,
+    getMunicipalityFilter,
+    getProvinceFilter,
+    getWardFilter,
+} from '#utils/domain';
+import styles from './styles.scss';
 
 const propTypes = {
     regionLevelFromAppState: PropTypes.number,

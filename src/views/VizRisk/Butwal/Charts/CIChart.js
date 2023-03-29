@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    Label,
     Bar,
     BarChart,
     CartesianGrid,
     Cell,
+    Label,
     Legend,
     Line,
     LineChart,

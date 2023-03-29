@@ -1,12 +1,11 @@
 import React from 'react';
-import memoize from 'memoize-one';
-import { _cs, mapToList, isNotDefined } from '@togglecorp/fujs';
-
 import { Translation } from 'react-i18next';
-import Numeral from '#rscv/Numeral';
+import { _cs, isNotDefined, mapToList } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+
 
 import ChoroplethMap from '#components/ChoroplethMap';
-
+import Numeral from '#rscv/Numeral';
 import styles from './styles.scss';
 
 const colorGrade = [

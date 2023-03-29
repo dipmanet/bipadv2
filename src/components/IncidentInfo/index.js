@@ -1,23 +1,21 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import PropTypes from 'prop-types';
-
+import { Translation } from 'react-i18next';
+import { Link } from '@reach/router';
 import {
     _cs,
     reverseRoute,
 } from '@togglecorp/fujs';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
 
-import { Translation } from 'react-i18next';
-import FormattedDate from '#rscv/FormattedDate';
-import Icon from '#rscg/Icon';
 
-import AccentButton from '#rsca/Button/AccentButton';
-import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
-import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loss from '#components/Loss';
-
+import TextOutput from '#components/TextOutput';
+import AccentButton from '#rsca/Button/AccentButton';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import Icon from '#rscg/Icon';
+import FormattedDate from '#rscv/FormattedDate';
 import { convertDateAccToLanguage } from '#utils/common';
 import styles from './styles.scss';
 

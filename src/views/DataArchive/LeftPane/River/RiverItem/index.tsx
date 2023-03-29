@@ -1,10 +1,10 @@
 import React from 'react';
 import * as PageType from '#store/atom/page/types';
 
+import { getMonthName, getSpecificDate } from '#views/DataArchive/utils';
 import DateBlock from '../DateBlock';
 import RiverPill from '../RiverPill';
 
-import { getMonthName, getSpecificDate } from '#views/DataArchive/utils';
 import styles from './styles.scss';
 
 interface Props {

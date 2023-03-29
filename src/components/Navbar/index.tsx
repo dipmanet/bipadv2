@@ -41,10 +41,10 @@ import ButtonGroupLogo from '#resources/icons/sidebarGroupButtons.svg';
 import PageContext from '#components/PageContext';
 import ReportIncidentIcon from '#resources/icons/reportIncident.svg';
 import RouteSetting from '#constants/routeSettings';
+import PalikaReport from '#views/PalikaReport';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
 import GroupMenuContainer from './GroupMenuContainer';
-import PalikaReport from '#views/PalikaReport';
 
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];

@@ -14,18 +14,16 @@ import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 
 import Page from '#components/Page';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Button from '#rsca/Button';
+import Demographics from '#views/Profile/DisasterProfile/Demographics';
+import Icon from '#rscg/Icon';
 import DisasterProfile from '../../DisasterProfile';
 import ProjectsProfile from '../../ProjectsProfile';
 import Indicator from '../../Indicator';
 import Contact from '../../Contact';
 import Document from '../../Document';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import styles from '../../styles.scss';
-
-import Button from '#rsca/Button';
-
-import Demographics from '#views/Profile/DisasterProfile/Demographics';
-import Icon from '#rscg/Icon';
 
 
 type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document' | 'nepDatProfile';

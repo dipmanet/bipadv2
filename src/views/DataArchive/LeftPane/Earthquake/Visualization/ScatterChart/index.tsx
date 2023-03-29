@@ -11,9 +11,9 @@ import {
     Legend,
 } from 'recharts';
 import * as PageType from '#store/atom/page/types';
-import { getTemporals } from '../utils';
 import { saveChart, groupList } from '#utils/common';
 import Button from '#rsca/Button';
+import { getTemporals } from '../utils';
 import ToolTip from './Tooltip';
 
 import styles from './styles.scss';

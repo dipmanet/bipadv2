@@ -1,19 +1,19 @@
 /* eslint-disable max-len */
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
-
-import icons from './icons';
-import Option from '../Option';
 import Loading from '#components/Loading';
-import { checkPermission } from '../utils';
-// added
-import { User } from '../../../store/atom/auth/types';
-
 import {
     userSelector,
 } from '#selectors';
 import { AppState } from '#types';
+import styles from './styles.scss';
+
+import icons from './icons';
+import Option from '../Option';
+import { checkPermission } from '../utils';
+// added
+import { User } from '../../../store/atom/auth/types';
+
 
 interface View {
     id: string;

@@ -25,8 +25,8 @@ import {
     convertNormalTableToCsv,
 } from '#utils/table';
 
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 interface Props {
     realTimeRain: RealTimeRain[];

@@ -59,6 +59,7 @@ import FireIcon from '#resources/icons/Forest-fire.svg';
 import {
     isAnyRequestPending,
 } from '#utils/request';
+import StreamFlowLegend from '#components/StreamFlowLegend';
 import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
 import {
     rain24LegendItems,
@@ -73,7 +74,6 @@ import {
     pollutionLegendItems,
     noLegend,
 } from './legendItems';
-import StreamFlowLegend from '#components/StreamFlowLegend';
 
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';

@@ -1,44 +1,42 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import {
     _cs,
     compareDate,
 } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
+import IncidentListView from './ListView';
+import IncidentTable from './TabularView';
+import Visualizations from './Visualizations';
+
+import styles from './styles.scss';
+
+import {
+    patchIncidentActionIP,
+    setIncidentActionIP,
+} from '#actionCreators';
+import Cloak from '#components/Cloak';
+import DateRangeInfo from '#components/DateRangeInfo';
+import LossDetails from '#components/LossDetails';
 import Button from '#rsca/Button';
-import Icon from '#rscg/Icon';
 import AccentButton from '#rsca/Button/AccentButton';
+import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import DateRangeInfo from '#components/DateRangeInfo';
-
-import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
-import LossDetails from '#components/LossDetails';
-
+import ModalHeader from '#rscv/Modal/Header';
 import {
     hazardTypesSelector, languageSelector,
 } from '#selectors';
-import {
-    setIncidentActionIP,
-    patchIncidentActionIP,
-} from '#actionCreators';
-import Cloak from '#components/Cloak';
-
+import { convertDateAccToLanguage } from '#utils/common';
+import { calculateCategorizedSeverity, calculateSeverity,severityScaleFactor } from '#utils/domain';
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
-import Visualizations from './Visualizations';
-import IncidentListView from './ListView';
-import IncidentTable from './TabularView';
 import AddIncidentForm from './AddIncidentForm';
-
-
-import { convertDateAccToLanguage } from '#utils/common';
-import styles from './styles.scss';
 
 const AccentModalButton = modalize(AccentButton);
 const ModalButton = modalize(Button);

@@ -30,14 +30,14 @@ import {
     methods,
 } from '#request';
 
+import { languageSelector } from '#selectors';
+import { AppState } from '#types';
 import GeneralDetails from './General';
 import Loss from './Loss';
 import PeopleLossList from './PeopleLossList';
 import FamiliesLossList from './FamiliesLossList';
 import LivestockLossList from './LivestockLossList';
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
-import { AppState } from '#types';
 
 const mapStateToProps = (state: AppState) => ({
     language: languageSelector(state),

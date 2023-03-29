@@ -7,7 +7,6 @@ import {
     groupList,
     sum,
 } from '#utils/common';
-
 import { lossMetrics } from '#utils/domain';
 
 export const createMetric = type => (val) => {

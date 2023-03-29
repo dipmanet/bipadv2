@@ -8,8 +8,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import Loader from 'react-loader';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
 import {
     createConnectedRequestCoordinator,

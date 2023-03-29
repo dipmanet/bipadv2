@@ -10,10 +10,10 @@ import {
 } from '#request';
 import { MultiResponse } from '#store/atom/response/types';
 
+import Loading from '#components/Loading';
 import DateSelector from './DateSelector';
 import PeriodSelector from './PeriodSelector';
 // import IntervalSelector from './IntervalSelector';
-import Loading from '#components/Loading';
 
 import { getErrors } from '../utils';
 import { ArchiveRain, Errors, FaramValues } from '../types';

@@ -1,42 +1,41 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
+import { Link } from '@reach/router';
 import {
     _cs,
     isDefined,
     reverseRoute,
 } from '@togglecorp/fujs';
-import { Link } from '@reach/router';
-import { Translation } from 'react-i18next';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
+
+import styles from './styles.scss';
+
+import {
+    patchIncidentActionIP,
+    removeIncidentActionIP,
+    setIncidentActionIP,
+} from '#actionCreators';
+import Cloak from '#components/Cloak';
+import DateOutput from '#components/DateOutput';
+import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
+import IncidentFeedbacksModal from '#components/IncidentFeedbacksModal';
+import TextOutput from '#components/TextOutput';
 import {
     createRequestClient,
     methods,
 } from '#request';
-import TextOutput from '#components/TextOutput';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import AccentButton from '#rsca/Button/AccentButton';
-import modalize from '#rscg/Modalize';
-import DateOutput from '#components/DateOutput';
-import IncidentFeedbacksModal from '#components/IncidentFeedbacksModal';
-import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
-
-import { convertDateAccToLanguage, getYesterday } from '#utils/common';
-import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
-import Cloak from '#components/Cloak';
-import { languageSelector, sourcesSelector } from '#selectors';
-
-import {
-    patchIncidentActionIP,
-    setIncidentActionIP,
-    removeIncidentActionIP,
-} from '#actionCreators';
-
 import alertIcon from '#resources/icons/Alert.svg';
-
+import AccentButton from '#rsca/Button/AccentButton';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import modalize from '#rscg/Modalize';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import { languageSelector, sourcesSelector } from '#selectors';
+import { convertDateAccToLanguage, getYesterday } from '#utils/common';
 import AddIncidentForm from '../AddIncidentForm';
-import styles from './styles.scss';
 
 const ModalAccentButton = modalize(AccentButton);
 

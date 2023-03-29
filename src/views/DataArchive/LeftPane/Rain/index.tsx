@@ -7,11 +7,6 @@ import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArc
 import { groupList } from '#utils/common';
 import { getDatesFromFilters } from '#views/DataArchive/utils';
 
-import TopBar from './TopBar';
-import Header from './Header';
-import Note from './Note';
-import RainGroup from './RainGroup';
-import RainItem from './RainItem';
 
 import Message from '#rscv/Message';
 
@@ -46,9 +41,14 @@ import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
 
-import styles from './styles.scss';
 import style from '#mapStyles/rasterStyle';
 import { getCategoryForContinuousColorScheme } from '#rsu/ColorScheme';
+import styles from './styles.scss';
+import RainItem from './RainItem';
+import RainGroup from './RainGroup';
+import Note from './Note';
+import Header from './Header';
+import TopBar from './TopBar';
 
 interface PropsFromDispatch {
     setDataArchiveRainList: typeof setDataArchiveRainListAction;

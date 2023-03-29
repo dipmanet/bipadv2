@@ -12,13 +12,13 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import DownloadButton from '#components/DownloadButton';
+import { convertDateAccToLanguage } from '#utils/common';
 import { mainHeading, bodyheader } from './headers';
 import { returnDataByFormat } from './util';
 import { formatNumeralAccLang } from '../utils/utils';
 import { Data } from '../types';
 import { Sorted } from './types';
 import styles from './styles.scss';
-import { convertDateAccToLanguage } from '#utils/common';
 
 interface TableProps {
     closeModal: () => void;

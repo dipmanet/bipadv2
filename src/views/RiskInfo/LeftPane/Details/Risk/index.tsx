@@ -24,7 +24,6 @@ import LayerSelection from '#components/LayerSelection';
 import Loading from '#components/Loading';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
-import RiskTable from './RiskTable';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
 import { RiskData, LandslideDataGeoJson, LandslideDataFeature } from '#types';
@@ -39,6 +38,7 @@ import {
     generatePaint,
     getLayerHierarchy,
 } from '#utils/domain';
+import RiskTable from './RiskTable';
 
 import styles from './styles.scss';
 

@@ -1,6 +1,8 @@
 import { currentStyle } from '#rsu/styles';
 import styleProperties from './styleProperties';
 
+
+
 const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
 const getMapPaddings = (hasTimeline = false) => {

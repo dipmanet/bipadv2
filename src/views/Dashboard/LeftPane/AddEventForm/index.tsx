@@ -31,8 +31,6 @@ import {
 } from '#utils/common';
 
 
-import styles from './styles.scss';
-
 import {
     createRequestClient,
     NewProps,
@@ -46,6 +44,7 @@ import {
     languageSelector,
 } from '#selectors';
 import { KeyLabel } from '#types';
+import styles from './styles.scss';
 
 interface Tabs {
     general: string;

@@ -33,9 +33,9 @@ import DangerButton from '#rsca/Button/DangerButton';
 
 import Cloak from '#components/Cloak';
 
-import styles from './styles.scss';
 import { MultiResponse } from '#store/atom/response/types';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

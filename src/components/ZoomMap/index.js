@@ -1,12 +1,11 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
+import { mapSources, mapStyles } from '#constants';
 import MapBounds from '#re-map/MapBounds';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
-
-import { mapSources, mapStyles } from '#constants';
 
 const propTypes = {
     boundsPadding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),

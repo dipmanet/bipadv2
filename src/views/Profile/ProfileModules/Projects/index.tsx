@@ -18,13 +18,7 @@ import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import Page from '#components/Page';
-import DisasterProfile from '../../DisasterProfile';
-import ProjectsProfile from '../../ProjectsProfile';
-import Indicator from '../../Indicator';
-import Contact from '../../Contact';
-import Document from '../../Document';
 
-import styles from '../../styles.scss';
 import Button from '#rsca/Button';
 import Filter from '#views/Profile/ProjectsProfile/Filter';
 
@@ -48,6 +42,12 @@ import {
     isAnyRequestPending,
     getResults,
 } from '#utils/request';
+import styles from '../../styles.scss';
+import Document from '../../Document';
+import Contact from '../../Contact';
+import Indicator from '../../Indicator';
+import ProjectsProfile from '../../ProjectsProfile';
+import DisasterProfile from '../../DisasterProfile';
 
 
 type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';

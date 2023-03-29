@@ -8,28 +8,30 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 import React from 'react';
+import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
 import {
-    ResponsiveContainer,
-    Tooltip,
+    Cell,
     Legend,
     Pie,
-    Cell,
     PieChart,
+    ResponsiveContainer,
+    Tooltip,
 } from 'recharts';
 
-import { Translation } from 'react-i18next';
-import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
-import StatOutput from '#components/StatOutput';
-import { saveChart } from '#utils/common';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Project from './ProjectItem';
+
 import styles from './styles.scss';
-import tableView from '#resources/icons/list-view.svg';
+
+import StatOutput from '#components/StatOutput';
 import listView from '#resources/icons/category-view.svg';
-import Icon from '#rscg/Icon';
 import dateCalender from '#resources/icons/date-calender.svg';
+import tableView from '#resources/icons/list-view.svg';
+import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
+import ListView from '#rscv/List/ListView';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import { saveChart } from '#utils/common';
+import Project from './ProjectItem';
 
 const propTypes = {};
 

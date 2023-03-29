@@ -1,54 +1,50 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { isDefined, unique } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
+
+import styles from './styles.scss';
+
+import {
+    patchIncidentActionIP,
+    removeIncidentActionIP,
+    setIncidentActionIP,
+} from '#actionCreators';
+import { getParams } from '#components/Cloak';
+// import SVGMapIcon from '#components/SVGMapIcon';
+import CommonMap from '#components/CommonMap';
+import IncidentInfo from '#components/IncidentInfo';
+import ProvinceMap from '#components/ProvinceMap';
+import { mapStyles } from '#constants';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
-import { getParams } from '#components/Cloak';
-
-// import SVGMapIcon from '#components/SVGMapIcon';
-import CommonMap from '#components/CommonMap';
-import ProvinceMap from '#components/ProvinceMap';
-import {
-    hazardTypesSelector,
-    provincesMapSelector,
-    districtsMapSelector,
-    municipalitiesMapSelector,
-    wardsMapSelector,
-    userSelector,
-    languageSelector,
-} from '#selectors';
-
-import {
-    setIncidentActionIP,
-    patchIncidentActionIP,
-    removeIncidentActionIP,
-} from '#actionCreators';
-
-import { mapStyles } from '#constants';
-import IncidentInfo from '#components/IncidentInfo';
 import {
     createRequestClient,
     methods,
 } from '#request';
 import {
-    getYesterday,
+    districtsMapSelector,
+    hazardTypesSelector,
+    languageSelector,
+    municipalitiesMapSelector,
+    provincesMapSelector,
+    userSelector,
+    wardsMapSelector,
+} from '#selectors';
+import {
     framize,
     getImage,
+    getYesterday,
 } from '#utils/common';
-
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
 } from '#utils/domain';
-
 import AddIncidentForm from '../LeftPane/AddIncidentForm';
-
-import styles from './styles.scss';
 
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types

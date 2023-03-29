@@ -21,8 +21,8 @@ import {
     convertNormalTableToCsv,
 } from '#utils/table';
 
-import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
+import styles from './styles.scss';
 
 interface Props {
     realTimeEarthquake: RealTimeEarthquake[];

@@ -3,14 +3,10 @@ import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 import { groupList } from '#utils/common';
-import TopBar from './TopBar';
 
 // import SegmentInput from '#rsci/SegmentInput';
-import EarthquakeItem from './EarthquakeItem';
 import Message from '#rscv/Message';
 import DataArchiveContext from '#components/DataArchiveContext';
-import ScatterChartViz from './Visualization/ScatterChart';
-import EarthquakeGroup from './EarthquakeGroup';
 
 import {
     createConnectedRequestCoordinator,
@@ -40,9 +36,6 @@ import { DAEarthquakeFiltersElement } from '#types';
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
-import Header from './Header';
-import EarthquakeViz from './Visualization';
-
 import {
     dataArchiveEarthquakeListSelector,
     eqFiltersSelector,
@@ -51,6 +44,13 @@ import {
     provincesSelector,
 } from '#selectors';
 import { TitleContext, DataArchive } from '#components/TitleContext';
+import Header from './Header';
+import EarthquakeViz from './Visualization';
+
+import EarthquakeGroup from './EarthquakeGroup';
+import ScatterChartViz from './Visualization/ScatterChart';
+import EarthquakeItem from './EarthquakeItem';
+import TopBar from './TopBar';
 
 import styles from './styles.scss';
 

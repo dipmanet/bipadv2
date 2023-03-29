@@ -1,24 +1,24 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
-import { connect } from 'react-redux';
-
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+
+import SituationReport from './SituationReport';
+
+import styles from './styles.scss';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
     methods,
 } from '#request';
-import { languageSelector } from '#selectors';
-
-import Modal from '#rscv/Modal';
-import LoadingAnimation from '#rscv/LoadingAnimation';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
-
+import LoadingAnimation from '#rscv/LoadingAnimation';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
+import ModalHeader from '#rscv/Modal/Header';
+import { languageSelector } from '#selectors';
 import SidePane from './SidePane';
-import SituationReport from './SituationReport';
-import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

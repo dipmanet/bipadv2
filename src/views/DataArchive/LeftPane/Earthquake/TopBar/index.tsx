@@ -3,11 +3,11 @@ import React from 'react';
 import DateRangeInfo from '#components/DateRangeInfo';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
-import PollutionModal from '../Modal';
 
 import { pastDaysToDateRange } from '#utils/transformations';
 import { DAEarthquakeFiltersElement } from '#types';
 import * as PageType from '#store/atom/page/types';
+import PollutionModal from '../Modal';
 
 import styles from './styles.scss';
 

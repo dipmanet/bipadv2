@@ -3,53 +3,51 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
-
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
+
+
+import RainDetails from './RainDetails';
+import RiverDetails from './RiverDetails';
+import StreamflowDetails from './StreamflowDetails';
+
+import styles from './styles.scss';
+
+import CommonMap from '#components/CommonMap';
+import TextOutput from '#components/TextOutput';
+import {
+    getMapPaddings,
+    mapStyles,
+} from '#constants';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
-import MapTooltip from '#re-map/MapTooltip';
 import MapState from '#re-map/MapSource/MapState';
-import FormattedDate from '#rscv/FormattedDate';
-
-import TextOutput from '#components/TextOutput';
-import CommonMap from '#components/CommonMap';
-
-
+import MapTooltip from '#re-map/MapTooltip';
 import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
-import {
-    getRasterTile,
-    earthquakeToGeojson,
-    riverToGeojson,
-    rainToGeojson,
-    fireToGeojson,
-    pollutionToGeojson,
-} from '#utils/domain';
-
-import { httpGet } from '#utils/common';
-
-import {
-    realTimeDurationSelector, riverStationsSelector,
-    riverFiltersSelector, rainStationsSelector,
-    languageSelector,
-} from '#selectors';
-import {
+    ClientAttributes,
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
-    ClientAttributes,
     methods,
+    NewProps,
 } from '#request';
-import RiverDetails from './RiverDetails';
-import RainDetails from './RainDetails';
-import StreamflowDetails from './StreamflowDetails';
-import styles from './styles.scss';
+import FormattedDate from '#rscv/FormattedDate';
+import {
+    languageSelector,
+rainStationsSelector,
+    realTimeDurationSelector,     riverFiltersSelector, riverStationsSelector,
+} from '#selectors';
+import { httpGet } from '#utils/common';
+import {
+    earthquakeToGeojson,
+    fireToGeojson,
+    getRasterTile,
+    pollutionToGeojson,
+    rainToGeojson,
+    riverToGeojson,
+} from '#utils/domain';
 import { checkStreamRiskValue } from '../utils';
 
 

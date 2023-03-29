@@ -1,9 +1,9 @@
 import React from 'react';
 
-import styles from './styles.scss';
 import Loading from '#components/Loading';
 
 import Page from '#components/Page';
+import styles from './styles.scss';
 import LandingPage from './LandingPage';
 import RegularPage from './RegularPage';
 

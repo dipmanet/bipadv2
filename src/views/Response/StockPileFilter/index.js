@@ -1,37 +1,33 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
-
+import Faram from '@togglecorp/faram';
 import {
     _cs,
     listToMap,
 } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
-import Faram from '@togglecorp/faram';
 
-import { Translation } from 'react-i18next';
-import SelectInput from '#rsci/SelectInput';
-import NumberInput from '#rsci/NumberInput';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-} from '#request';
+import styles from './styles.scss';
 
 import {
     setInventoryCategoryListActionRP,
     setInventoryItemListActionRP,
 } from '#actionCreators';
-
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+} from '#request';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+import NumberInput from '#rsci/NumberInput';
+import SelectInput from '#rsci/SelectInput';
 import {
     // inventoryCategoryListSelectorRP,
     inventoryItemListSelectorRP,
     languageSelector,
 } from '#selectors';
-
 import { operatorOptions } from '../resourceAttributes';
-import styles from './styles.scss';
 
 const requests = {
     getInventoryCagetoriesRequest: {

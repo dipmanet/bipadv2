@@ -1,36 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
-
-import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Faram, {
     FaramGroup,
 } from '@togglecorp/faram';
+import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
-import { connect } from 'react-redux';
-import { Translation } from 'react-i18next';
+
+import ResourceGroup from './ResourceGroup';
+import { getFilterItems, getSchema } from './utils.js';
+
+import styles from './styles.scss';
+
+import IncidentInfo from '#components/IncidentInfo';
+import educationIcon from '#resources/icons/Education.svg';
+import governanceIcon from '#resources/icons/Government-office.svg';
+import groupIcon from '#resources/icons/group1.svg';
+import healthFacilityIcon from '#resources/icons/health-facility1.svg';
+import warehouseIcon from '#resources/icons/newCapResEvacuationcenter.svg';
+import openSpaceIcon from '#resources/icons/Soap.svg';
+import financeIcon from '#resources/icons/University.svg';
 import Button from '#rsca/Button';
 import Checkbox from '#rsci/Checkbox';
-import ListView from '#rscv/List/ListView';
 import NumberInput from '#rsci/NumberInput';
 import SelectInput from '#rsci/SelectInput';
 import TextInput from '#rsci/TextInput';
-
-import healthFacilityIcon from '#resources/icons/health-facility1.svg';
-import educationIcon from '#resources/icons/Education.svg';
-import financeIcon from '#resources/icons/University.svg';
-import governanceIcon from '#resources/icons/Government-office.svg';
-import groupIcon from '#resources/icons/group1.svg';
-import openSpaceIcon from '#resources/icons/Soap.svg';
-import warehouseIcon from '#resources/icons/newCapResEvacuationcenter.svg';
-import IncidentInfo from '#components/IncidentInfo';
-
-import ResourceGroup from './ResourceGroup';
-import resourceAttributes from '../resourceAttributes';
-import { getFilterItems, getSchema } from './utils.js';
+import ListView from '#rscv/List/ListView';
 import { languageSelector } from '#selectors';
-
-import styles from './styles.scss';
+import resourceAttributes from '../resourceAttributes';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

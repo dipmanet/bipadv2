@@ -6,6 +6,10 @@ import ListView from '#rsu/../v2/View/ListView';
 import { getHashFromBrowser } from '#rscg/HashManager';
 
 import { AttributeKey } from '#types';
+import { AppState } from '#store/types';
+import {
+    languageSelector,
+} from '#selectors';
 import {
     attributeList,
     attributeListKeySelector,
@@ -13,10 +17,6 @@ import {
 } from '../attributes';
 import Attribute from './Attribute';
 import styles from './styles.scss';
-import { AppState } from '#store/types';
-import {
-    languageSelector,
-} from '#selectors';
 
 
 const mapStateToProps = (state: AppState) => ({

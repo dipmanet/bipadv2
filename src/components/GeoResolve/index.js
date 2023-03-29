@@ -1,18 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import { _cs } from '@togglecorp/fujs';
-
 import { Translation } from 'react-i18next';
-import {
-    provincesSelector,
-    districtsSelector,
-    municipalitiesSelector,
-    languageSelector,
-} from '#selectors';
+import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
+import {
+    districtsSelector,
+    languageSelector,
+    municipalitiesSelector,
+    provincesSelector,
+} from '#selectors';
 import styles from './styles.scss';
+
+
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types

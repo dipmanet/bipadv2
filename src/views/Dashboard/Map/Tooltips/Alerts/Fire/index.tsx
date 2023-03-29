@@ -4,8 +4,8 @@ import React from 'react';
 import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
-import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
+import styles from './styles.scss';
 
 interface ReferenceData {
     fields: {

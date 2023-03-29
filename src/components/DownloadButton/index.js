@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { saveAs } from 'file-saver';
 import { doesObjectHaveNoData } from '@togglecorp/fujs';
+import { saveAs } from 'file-saver';
+import PropTypes from 'prop-types';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-
 import { convertJsonToCsv } from '#utils/common';
 
 // FIXME: move this somewhere nice

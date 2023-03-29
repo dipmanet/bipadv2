@@ -1,19 +1,20 @@
 import React from 'react';
 import {
-    Label,
     Bar,
     BarChart,
     CartesianGrid,
     Cell,
+    Label,
+    LabelList,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
-    LabelList,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
+
 import styles from '../LeftPane/styles.scss';
 
 export default function BuildingChart(props) {

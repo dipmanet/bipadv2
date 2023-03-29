@@ -2,8 +2,9 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import TextOutput from '#components/TextOutput';
-
 import styles from './styles.scss';
+
+
 
 const StatOutput = ({ className, language, ...otherProps }) => (
     <TextOutput

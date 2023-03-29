@@ -32,7 +32,6 @@ import {
     encodeTime,
 } from '#utils/common';
 
-import styles from './styles.scss';
 
 import {
     createRequestClient,
@@ -48,6 +47,7 @@ import {
     languageSelector,
 } from '#selectors';
 import { KeyLabel } from '#types';
+import styles from './styles.scss';
 
 interface Params {
     body: object;

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 import SelectInput from '#rsci/SelectInput';
 
+import { PollutionStation } from '#types';
 import styles from './styles.scss';
 
-import { PollutionStation } from '#types';
 
 interface Props {
     onChange: Function;

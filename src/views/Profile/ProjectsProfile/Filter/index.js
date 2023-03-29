@@ -1,23 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import { Translation } from 'react-i18next';
-import SelectInput from '#rsci/SelectInput';
-import MultiSelectInput from '#rsci/MultiSelectInput';
-
-import RegionSelectInput from '#components/RegionSelectInput';
 
 import {
     setProjectsProfileFiltersAction,
 } from '#actionCreators';
+import RegionSelectInput from '#components/RegionSelectInput';
+import MultiSelectInput from '#rsci/MultiSelectInput';
+import SelectInput from '#rsci/SelectInput';
 import {
     languageSelector,
     projectsProfileFiltersSelector,
 } from '#selectors';
-
 import styles from './styles.scss';
 
 const propTypes = {

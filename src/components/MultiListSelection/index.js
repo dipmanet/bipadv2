@@ -1,14 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import Button from '#rsca/Button';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
-
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import styles from './styles.scss';
 
 const propTypes = {

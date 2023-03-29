@@ -16,10 +16,10 @@ import {
     RealTimeRiver as RealTimeRiverOld,
 } from '#store/atom/page/types';
 
-import RiverWatch from '../RiverWatch';
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
 import { convertDateAccToLanguage } from '#utils/common';
+import RiverWatch from '../RiverWatch';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;

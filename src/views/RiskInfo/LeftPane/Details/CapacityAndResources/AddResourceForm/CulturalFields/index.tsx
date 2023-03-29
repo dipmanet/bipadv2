@@ -12,8 +12,8 @@ import NumberInput from '#rsci/NumberInput';
 import TimeInput from '#rsci/TimeInput';
 import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
-import styles from '../styles.scss';
 import { languageSelector } from '#selectors';
+import styles from '../styles.scss';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),
