@@ -23,8 +23,6 @@ import {
 } from 'recharts';
 
 
-import styles from './styles.scss';
-
 import HazardsLegend from '#components/HazardsLegend';
 import LayerLegend from '#components/LayerLegend';
 import ProvinceChoroplethMap from '#components/ProvinceChroplethMap';
@@ -56,6 +54,7 @@ import {
     getSanitizedIncidents,
     getSumStats,
 } from '#views/LossAndDamage/common';
+import styles from './styles.scss';
 import Table from './Table';
 
 const REQUEST_LIMIT = -1;

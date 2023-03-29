@@ -7,7 +7,6 @@ import TextOutput from '#components/TextOutput';
 import styles from './styles.scss';
 
 
-
 const propTypes = {
     className: PropTypes.string,
     titleClassName: PropTypes.string,

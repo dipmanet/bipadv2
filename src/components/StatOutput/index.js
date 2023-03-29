@@ -5,7 +5,6 @@ import TextOutput from '#components/TextOutput';
 import styles from './styles.scss';
 
 
-
 const StatOutput = ({ className, language, ...otherProps }) => (
     <TextOutput
         className={_cs(styles.stat, className)}

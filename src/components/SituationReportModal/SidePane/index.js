@@ -6,7 +6,6 @@ import ListView from '#rscv/List/ListView';
 import styles from './styles.scss';
 
 
-
 const Report = ({
     className,
     title,

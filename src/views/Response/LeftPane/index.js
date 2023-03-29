@@ -9,11 +9,6 @@ import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
 
-import ResourceGroup from './ResourceGroup';
-import { getFilterItems, getSchema } from './utils.js';
-
-import styles from './styles.scss';
-
 import IncidentInfo from '#components/IncidentInfo';
 import educationIcon from '#resources/icons/Education.svg';
 import governanceIcon from '#resources/icons/Government-office.svg';
@@ -29,6 +24,9 @@ import SelectInput from '#rsci/SelectInput';
 import TextInput from '#rsci/TextInput';
 import ListView from '#rscv/List/ListView';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
+import { getFilterItems, getSchema } from './utils.js';
+import ResourceGroup from './ResourceGroup';
 import resourceAttributes from '../resourceAttributes';
 
 const mapStateToProps = state => ({

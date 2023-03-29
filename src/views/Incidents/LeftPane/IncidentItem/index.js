@@ -12,8 +12,6 @@ import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
 
-import styles from './styles.scss';
-
 import {
     patchIncidentActionIP,
     removeIncidentActionIP,
@@ -35,6 +33,7 @@ import modalize from '#rscg/Modalize';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import { languageSelector, sourcesSelector } from '#selectors';
 import { convertDateAccToLanguage, getYesterday } from '#utils/common';
+import styles from './styles.scss';
 import AddIncidentForm from '../AddIncidentForm';
 
 const ModalAccentButton = modalize(AccentButton);

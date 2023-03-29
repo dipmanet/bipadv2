@@ -4,8 +4,6 @@ import { bbox, lineString } from '@turf/turf';
 import memoize from 'memoize-one';
 
 
-import styles from './styles.scss';
-
 import CommonMap from '#components/CommonMap';
 import {
     getMapPaddings,
@@ -18,6 +16,7 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import { dataArchiveRainListSelector, rainFiltersSelector, rainStationsSelector } from '#selectors';
 import { httpGet } from '#utils/common';
+import styles from './styles.scss';
 import RainModal from '../../Modals/Rainwatch';
 
 const mapStateToProps = state => ({

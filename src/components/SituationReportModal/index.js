@@ -3,9 +3,6 @@ import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
-import SituationReport from './SituationReport';
-
-import styles from './styles.scss';
 
 import {
     createConnectedRequestCoordinator,
@@ -18,6 +15,8 @@ import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
+import SituationReport from './SituationReport';
 import SidePane from './SidePane';
 
 const mapStateToProps = state => ({

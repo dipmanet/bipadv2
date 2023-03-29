@@ -23,8 +23,8 @@ import {
     setPalikaRedirectAction,
 } from '#actionCreators';
 import { hazardTypesSelector, languageSelector, palikaRedirectSelector } from '#selectors';
-import styles from './styles.scss';
 import SelectInput from '#rsci/SelectInput';
+import styles from './styles.scss';
 
 const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),

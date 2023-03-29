@@ -5,11 +5,10 @@ import { _cs } from '@togglecorp/fujs';
 import PropTypes from 'prop-types';
 
 
-import styles from './styles.scss';
-
 import DistanceOutput from '#components/DistanceOutput';
 import TextOutput from '#components/TextOutput';
 import { iconNames } from '#constants';
+import styles from './styles.scss';
 import resourceAttributes from '../resourceAttributes';
 
 const propTypes = {

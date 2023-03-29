@@ -7,14 +7,14 @@ import {
     methods,
 } from '#request';
 import * as PageType from '#store/atom/page/types';
-import styles from './styles.scss';
 import MultiViewContainer from '#rscv/MultiViewContainer';
+import ScrollTabs from '#rscv/ScrollTabs';
+import styles from './styles.scss';
 import BasicInfo from './AddOpenspaceTabs/BasicInfo';
 import SuggestedUses from './AddOpenspaceTabs/SuggestedUses';
 import OnSiteAmenities from './AddOpenspaceTabs/OnSiteAmenities';
 import EnvironmentChecklist from './AddOpenspaceTabs/EnvironmentChecklist';
 import Media from './AddOpenspaceTabs/Media';
-import ScrollTabs from '#rscv/ScrollTabs';
 import Details from './AddOpenspaceTabs/Details';
 
 

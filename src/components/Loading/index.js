@@ -6,7 +6,6 @@ import Spinner from '#rsu/../v2/View/Spinner';
 import styles from './styles.scss';
 
 
-
 const Loading = ({ pending, text }) => {
     if (!pending) {
         return null;

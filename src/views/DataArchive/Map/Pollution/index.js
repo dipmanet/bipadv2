@@ -4,8 +4,6 @@ import { _cs } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 
-import styles from './styles.scss';
-
 import CommonMap from '#components/CommonMap';
 import {
     getMapPaddings,
@@ -17,6 +15,7 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import FormattedDate from '#rscv/FormattedDate';
 import { pollutionFiltersSelector } from '#selectors';
+import styles from './styles.scss';
 import PollutionModal from '../../Modals/Pollution';
 
 const mapStateToProps = state => ({

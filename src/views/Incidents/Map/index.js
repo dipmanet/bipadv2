@@ -5,8 +5,6 @@ import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
 
-import styles from './styles.scss';
-
 import {
     patchIncidentActionIP,
     removeIncidentActionIP,
@@ -44,6 +42,7 @@ import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
 } from '#utils/domain';
+import styles from './styles.scss';
 import AddIncidentForm from '../LeftPane/AddIncidentForm';
 
 const propTypes = {

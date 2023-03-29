@@ -13,9 +13,9 @@ import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loading from '#components/Loading';
+import inventoryDefaultImage from '#resources/images/inventory.jpg';
 import styles from './styles.scss';
 import AddInventoryForm from '../AddInventoryForm';
-import inventoryDefaultImage from '#resources/images/inventory.jpg';
 
 const ModalButton = modalize(Button);
 const TableDataList = ({ population, literacy,

@@ -5,14 +5,13 @@ import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
 import PropTypes from 'prop-types';
 
-import { generateMapState, generatePaintLegendByInterval,tooltipRenderer } from '../utils/utils';
-
-import styles from './styles.scss';
 
 import ChoroplethMap from '#components/ChoroplethMap';
 import SegmentInput from '#rsci/SegmentInput';
 import Numeral from '#rscv/Numeral';
 import { generatePaintByQuantile } from '#utils/domain';
+import styles from './styles.scss';
+import { generateMapState, generatePaintLegendByInterval, tooltipRenderer } from '../utils/utils';
 import Legend, { legendItems } from '../Legend';
 
 const propTypes = {

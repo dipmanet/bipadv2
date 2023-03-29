@@ -9,7 +9,6 @@ import IncidentItem from '../IncidentItem';
 import styles from './styles.scss';
 
 
-
 const propTypes = {
     className: PropTypes.string,
     incidentList: PropTypes.arrayOf(PropTypes.object),

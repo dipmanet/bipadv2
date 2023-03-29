@@ -5,13 +5,6 @@ import { _cs } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
-import AddEventForm from './AddEventForm';
-import AlertItem from './AlertItem';
-import AlertTable from './AlertTable';
-import EventItem from './EventItem';
-import Visualizations from './Visualizations';
-
-import styles from './styles.scss';
 
 import Cloak from '#components/Cloak';
 import DateRangeInfo from '#components/DateRangeInfo';
@@ -26,11 +19,17 @@ import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
 import VirtualizedListView from '#rscv/VirtualizedListView';
 import { languageSelector } from '#selectors';
-import { convertDateAccToLanguage,groupList } from '#utils/common';
+import { convertDateAccToLanguage, groupList } from '#utils/common';
 import { getHazardColor } from '#utils/domain';
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
+import styles from './styles.scss';
+import Visualizations from './Visualizations';
+import EventItem from './EventItem';
+import AlertTable from './AlertTable';
+import AlertItem from './AlertItem';
+import AddEventForm from './AddEventForm';
 import AddAlertForm from './AddAlertForm';
 
 const propTypes = {

@@ -2,13 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { TitleContext } from '#components/TitleContext';
-import { getSanitizedIncidents,metricMap } from '../common';
-import Map from '../Map';
-import { generateOverallDataset } from '../utils/utils';
-
-import styles from './styles.scss';
-
-// import LeftPane from './LeftPane';
 import {
     districtsSelector,
     hazardTypesSelector,
@@ -19,6 +12,13 @@ import {
     regionsSelector,
     wardsSelector,
 } from '#selectors';
+import { getSanitizedIncidents, metricMap } from '../common';
+import Map from '../Map';
+import { generateOverallDataset } from '../utils/utils';
+
+import styles from './styles.scss';
+
+// import LeftPane from './LeftPane';
 
 const propTypes = {};
 

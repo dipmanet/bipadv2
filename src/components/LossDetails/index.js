@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import StatOutput from '#components/StatOutput';
 import { languageSelector } from '#selectors';
-import { nullCheck,sum } from '#utils/common';
+import { nullCheck, sum } from '#utils/common';
 import { lossMetrics } from '#utils/domain';
 import styles from './styles.scss';
 

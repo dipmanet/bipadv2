@@ -6,9 +6,7 @@ import { _cs } from '@togglecorp/fujs';
 // import PrivacyPolicy from './PrivacyPolicy';
 // import Metadata from './Metadata';
 // import Disclaimer from './Disclaimer';
-import Manual from './Manual';
 
-import styles from './styles.scss';
 
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
@@ -17,6 +15,8 @@ import ModalHeader from '#rscv/Modal/Header';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import ScrollTabs from '#rscv/ScrollTabs';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
+import Manual from './Manual';
 import About from './About';
 
 const mapStateToProps = state => ({

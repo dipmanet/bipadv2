@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import styles from './styles.scss';
 
 import ToggleCommunitySpace from '#resources/images/openspace-images/image8.png';
 import MapCommunitySpace from '#resources/images/openspace-images/image19.png';
@@ -9,6 +8,7 @@ import ViewDetailCommunitySpace from '#resources/images/openspace-images/image17
 import RouteIconCommunitySpace from '#resources/images/openspace-images/image7.png';
 import AbstractCommunitySpace from '#resources/images/openspace-images/image3.png';
 import MetadataTabCommunitySpace from '#resources/images/openspace-images/image15.png';
+import styles from './styles.scss';
 
 export default class HowToUse extends React.PureComponent {
     public render() {

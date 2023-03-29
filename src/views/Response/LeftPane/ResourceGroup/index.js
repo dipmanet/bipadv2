@@ -4,14 +4,13 @@ import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
 import PropTypes from 'prop-types';
 
-import ResourceItem from '../../ResourceItem';
-
-import styles from './styles.scss';
 
 import TextOutput from '#components/TextOutput';
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 import { groupList } from '#utils/common';
+import styles from './styles.scss';
+import ResourceItem from '../../ResourceItem';
 import resourceAttributes from '../../resourceAttributes';
 
 const propTypes = {

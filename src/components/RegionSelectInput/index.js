@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 
 
 // import SegmentInput from '#rsci/SegmentInput';
-import styles from './styles.scss';
 
 import SearchSelectInput from '#rsci/SearchSelectInput';
 import SelectInput from '#rsci/SelectInput';
@@ -19,6 +18,7 @@ import {
     municipalitiesSelector,
     provincesSelector,
 } from '#selectors';
+import styles from './styles.scss';
 import { createSingleList } from './util';
 
 // const adminLevelLabelSelector = d => d.title;

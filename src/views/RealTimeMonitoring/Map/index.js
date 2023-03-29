@@ -10,12 +10,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 
-import RainDetails from './RainDetails';
-import RiverDetails from './RiverDetails';
-import StreamflowDetails from './StreamflowDetails';
-
-import styles from './styles.scss';
-
 import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
 import {
@@ -37,7 +31,7 @@ import FormattedDate from '#rscv/FormattedDate';
 import {
     languageSelector,
 rainStationsSelector,
-    realTimeDurationSelector,     riverFiltersSelector, riverStationsSelector,
+    realTimeDurationSelector, riverFiltersSelector, riverStationsSelector,
 } from '#selectors';
 import { httpGet } from '#utils/common';
 import {
@@ -48,6 +42,10 @@ import {
     rainToGeojson,
     riverToGeojson,
 } from '#utils/domain';
+import styles from './styles.scss';
+import StreamflowDetails from './StreamflowDetails';
+import RiverDetails from './RiverDetails';
+import RainDetails from './RainDetails';
 import { checkStreamRiskValue } from '../utils';
 
 

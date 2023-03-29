@@ -20,8 +20,6 @@ import {
 } from 'recharts';
 
 
-import styles from './styles.scss';
-
 import StatOutput from '#components/StatOutput';
 import listView from '#resources/icons/category-view.svg';
 import dateCalender from '#resources/icons/date-calender.svg';
@@ -31,6 +29,7 @@ import Icon from '#rscg/Icon';
 import ListView from '#rscv/List/ListView';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import { saveChart } from '#utils/common';
+import styles from './styles.scss';
 import Project from './ProjectItem';
 
 const propTypes = {};

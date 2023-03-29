@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
 
-import styles from './styles.scss';
-
 import CommonMap from '#components/CommonMap';
 import {
     getMapPaddings,
@@ -19,6 +17,7 @@ import {
     municipalitiesSelector,
     provincesSelector,
 } from '#selectors';
+import styles from './styles.scss';
 import Tooltip from './Tooltip';
 
 const EarthquakeToolTip = ({ renderer: Renderer, params }) => (

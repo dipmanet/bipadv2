@@ -9,10 +9,6 @@ import {
 } from '@togglecorp/fujs';
 import { compose } from 'redux';
 
-import LeftPane from './LeftPane';
-import Map from './Map';
-
-import styles from './styles.scss';
 
 import Loading from '#components/Loading';
 import PageContext from '#components/PageContext';
@@ -31,6 +27,9 @@ import {
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
+import styles from './styles.scss';
+import Map from './Map';
+import LeftPane from './LeftPane';
 import ProjectsProfileFilter from './Filter';
 
 const emptyList = [];

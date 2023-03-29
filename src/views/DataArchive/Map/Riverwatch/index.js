@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
 
-import styles from './styles.scss';
-
 import CommonMap from '#components/CommonMap';
 import {
     getMapPaddings,
@@ -17,6 +15,7 @@ import MapTooltip from '#re-map/MapTooltip';
 import { riverFiltersSelector, riverStationsSelector } from '#selectors';
 import { httpGet } from '#utils/common';
 import { getDate, getTime } from '#views/DataArchive/utils';
+import styles from './styles.scss';
 import RiverModal from '../../Modals/Riverwatch';
 
 const mapStateToProps = state => ({

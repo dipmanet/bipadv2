@@ -6,8 +6,6 @@ import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
 
-import styles from './styles.scss';
-
 import SVGMapIcon from '#components/SVGMapIcon';
 import ZoomMap from '#components/ZoomMap';
 import {
@@ -34,6 +32,7 @@ import {
     incidentPolygonToGeojson,
     resourceToGeojson,
 } from '#utils/domain';
+import styles from './styles.scss';
 import ResourceItem from '../ResourceItem';
 
 const resourceImages = [

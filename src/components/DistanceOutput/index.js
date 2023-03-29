@@ -6,7 +6,6 @@ import { iconNames } from '#constants';
 import styles from './styles.scss';
 
 
-
 const propTypes = {
     className: PropTypes.string,
 };

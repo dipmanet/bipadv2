@@ -8,12 +8,6 @@ import { unique } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
-import FireTooltip from './Tooltips/Alerts/Fire';
-import PollutionTooltip from './Tooltips/Alerts/Pollution';
-import RainTooltip from './Tooltips/Alerts/Rain';
-import RiverTooltip from './Tooltips/Alerts/River';
-
-import styles from './styles.scss';
 
 // import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
@@ -27,7 +21,7 @@ import MapTooltip from '#re-map/MapTooltip';
 import FormattedDate from '#rscv/FormattedDate';
 import List from '#rscv/List';
 import { hazardTypesSelector, languageSelector } from '#selectors';
-import { framize, getImage,getYesterday } from '#utils/common';
+import { framize, getImage, getYesterday } from '#utils/common';
 import {
     alertToConvexPolygonGeojson,
     alertToPointGeojson,
@@ -36,6 +30,11 @@ import {
     eventToPointGeojson,
     eventToPolygonGeojson,
 } from '#utils/domain';
+import styles from './styles.scss';
+import RiverTooltip from './Tooltips/Alerts/River';
+import RainTooltip from './Tooltips/Alerts/Rain';
+import PollutionTooltip from './Tooltips/Alerts/Pollution';
+import FireTooltip from './Tooltips/Alerts/Fire';
 import EarthquakeTooltip from './Tooltips/Alerts/Earthquake';
 
 // const AlertTooltip = ({ title, description }) => (

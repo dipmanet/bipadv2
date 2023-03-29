@@ -118,6 +118,7 @@ import waterway from '#resources/icons/waterway.svg';
 import visualization from '#resources/icons/visualization.svg';
 import helipad from '#resources/icons/heli.svg';
 import search from '#resources/icons/search-manual.svg';
+import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
@@ -133,7 +134,6 @@ import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/ma
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
 import '#resources/openspace-resources/humanitarian-fonts.css';
-import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 
 import DataVisualisation from './DataVisualisation';
 import SearchModal from './SearchModal';

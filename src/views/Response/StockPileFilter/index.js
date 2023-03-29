@@ -9,8 +9,6 @@ import {
 import memoize from 'memoize-one';
 
 
-import styles from './styles.scss';
-
 import {
     setInventoryCategoryListActionRP,
     setInventoryItemListActionRP,
@@ -27,6 +25,7 @@ import {
     inventoryItemListSelectorRP,
     languageSelector,
 } from '#selectors';
+import styles from './styles.scss';
 import { operatorOptions } from '../resourceAttributes';
 
 const requests = {

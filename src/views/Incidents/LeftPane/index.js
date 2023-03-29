@@ -8,11 +8,6 @@ import {
 import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 
-import IncidentListView from './ListView';
-import IncidentTable from './TabularView';
-import Visualizations from './Visualizations';
-
-import styles from './styles.scss';
 
 import {
     patchIncidentActionIP,
@@ -32,10 +27,14 @@ import {
     hazardTypesSelector, languageSelector,
 } from '#selectors';
 import { convertDateAccToLanguage } from '#utils/common';
-import { calculateCategorizedSeverity, calculateSeverity,severityScaleFactor } from '#utils/domain';
+import { calculateCategorizedSeverity, calculateSeverity, severityScaleFactor } from '#utils/domain';
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
+import styles from './styles.scss';
+import Visualizations from './Visualizations';
+import IncidentTable from './TabularView';
+import IncidentListView from './ListView';
 import AddIncidentForm from './AddIncidentForm';
 
 const AccentModalButton = modalize(AccentButton);
