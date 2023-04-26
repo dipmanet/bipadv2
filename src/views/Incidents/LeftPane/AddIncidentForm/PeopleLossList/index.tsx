@@ -25,9 +25,9 @@ import Cloak from '#components/Cloak';
 import * as PageType from '#store/atom/page/types';
 import { Header } from '#store/atom/table/types';
 
+import { languageSelector } from '#selectors';
 import AddPeopleLoss from './AddPeopleLoss';
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

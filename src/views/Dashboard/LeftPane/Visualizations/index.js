@@ -1,35 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import { Translation } from 'react-i18next';
-
+import { connect } from 'react-redux';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 import {
+    Bar,
+    BarChart,
+    Cell,
+    LabelList,
+    Legend,
     ResponsiveContainer,
+    Tooltip,
     XAxis,
     YAxis,
-    BarChart,
-    Bar,
-    LabelList,
-    Cell,
-    Tooltip,
-    Legend,
 } from 'recharts';
 
-import { npTranslation } from '#constants/translations';
 
+import { npTranslation } from '#constants/translations';
+import Button from '#rsca/Button';
+import Message from '#rscv/Message';
+import {
+    languageSelector,
+} from '#selectors';
 import {
     groupList,
     saveChart,
 } from '#utils/common';
-import Button from '#rsca/Button';
-import Message from '#rscv/Message';
-
 import styles from './styles.scss';
-
-import {
-    languageSelector,
-} from '#selectors';
 
 
 const mapStateToProps = state => ({

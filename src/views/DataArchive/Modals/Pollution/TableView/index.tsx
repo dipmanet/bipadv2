@@ -3,14 +3,14 @@ import {
     compareString,
     compareNumber,
 } from '@togglecorp/fujs';
-import { FaramValues, ChartData } from '../types';
-import { dateParser } from '../utils';
 import {
     convertNormalTableToCsv,
 } from '#utils/table';
 import Table from '#rscv/Table';
 import DownloadButton from '#components/DownloadButton';
 import Icon from '#rscg/Icon';
+import { dateParser } from '../utils';
+import { FaramValues, ChartData } from '../types';
 
 import NoData from '../NoData';
 import styles from './styles.scss';

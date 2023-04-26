@@ -492,6 +492,7 @@ export const incidentPointToGeojsonVR = (
         }),
 });
 
+
 export const incidentPolygonToGeojson = (incidentList: Incident[], hazards: Obj<HazardType>) => ({
     type: 'FeatureCollection',
     features: incidentList

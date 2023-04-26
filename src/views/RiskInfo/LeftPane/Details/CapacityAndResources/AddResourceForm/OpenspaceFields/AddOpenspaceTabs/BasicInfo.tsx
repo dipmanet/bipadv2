@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TextInput from '#rsci/TextInput';
-import styles from '../styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import { createConnectedRequestCoordinator } from '#request';
 import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
-import RegionSelectInput from './RegionSelectInput';
 import NumberInput from '#rsci/NumberInput';
 import LocationInput from '#components/LocationInput';
+import RegionSelectInput from './RegionSelectInput';
+import styles from '../styles.scss';
 
 interface PropsFromState {
     authState: AuthState;

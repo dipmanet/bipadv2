@@ -1,8 +1,8 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import * as PageType from '#store/atom/page/types';
-import AqiChart from './AqiChart';
 import { groupList } from '#utils/common';
+import AqiChart from './AqiChart';
 import { getPollutionAverage } from './utils';
 import styles from './styles.scss';
 

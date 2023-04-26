@@ -4,12 +4,12 @@ import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
+import { DataFormater } from '#utils/common';
 import {
     getGroupMethod,
     getGroupedIncidents,
     getAggregatedStats,
 } from '../common';
-import { DataFormater } from '#utils/common';
 
 export const estimatedLossValueFormatter = (d) => {
     const { number, normalizeSuffix } = Numeral.getNormalizedNumber({

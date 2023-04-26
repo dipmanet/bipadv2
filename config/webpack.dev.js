@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -166,7 +167,8 @@ module.exports = (env) => {
                         from: 'public/publicFiles',
                         to: 'publicFiles',
                     },
-                ]),
+                ],
+            ),
             new webpack.DefinePlugin({
                 'process.env': ENV_VARS,
             }),

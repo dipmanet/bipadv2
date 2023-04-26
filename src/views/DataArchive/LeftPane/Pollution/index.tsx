@@ -3,14 +3,9 @@ import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
-import PollutionItem from './PollutionItem';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
-import Header from '../Header';
 import Message from '#rscv/Message';
 import { groupList } from '#utils/common';
-import PollutionGroup from './PollutionGroup';
-import TopBar from './TopBar';
-import Note from './Note';
 
 import {
     createConnectedRequestCoordinator,
@@ -36,7 +31,6 @@ import { DAPollutionFiltersElement, PollutionStation } from '#types';
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
-import PollutionViz from './Visualization';
 
 import {
     dataArchivePollutionListSelector,
@@ -44,6 +38,12 @@ import {
     pollutionStationsSelector,
 } from '#selectors';
 import { TitleContext, DataArchive } from '#components/TitleContext';
+import PollutionViz from './Visualization';
+import Note from './Note';
+import TopBar from './TopBar';
+import PollutionGroup from './PollutionGroup';
+import Header from '../Header';
+import PollutionItem from './PollutionItem';
 
 import styles from './styles.scss';
 

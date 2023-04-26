@@ -100,7 +100,6 @@ import { TitleContext, Profile } from '#components/TitleContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import RadioInput from '#components/RadioInput';
-import styles from './styles.scss';
 import iconImage from '#resources/icons/Train.svg';
 import {
     createConnectedRequestCoordinator,
@@ -111,9 +110,10 @@ import {
 } from '#request';
 import { getPending, getResponse } from '#utils/request';
 
-import BarchartVisualization from './BarchartVisualization';
 import ChoroplethMap from '#components/ChoroplethMap';
 import MapTooltip from '#re-map/MapTooltip';
+import BarchartVisualization from './BarchartVisualization';
+import styles from './styles.scss';
 import LGProfileVisualization from './LGProfileVisualization';
 import TableDataLGProfile from './TableDataLGProfile';
 import TableDataCensus from './TableDataCensus';

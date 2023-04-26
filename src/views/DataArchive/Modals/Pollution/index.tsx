@@ -11,6 +11,16 @@ import DangerButton from '#rsca/Button/DangerButton';
 import { MultiResponse } from '#store/atom/response/types';
 import Loading from '#components/Loading';
 
+import osmStyle from '#mapStyles/rasterStyle';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+import { AppState } from '#store/types';
+import { mapStyleSelector } from '#selectors';
 import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
@@ -26,19 +36,9 @@ import {
     arraySorter,
     isEqualObject,
 } from './utils';
-import osmStyle from '#mapStyles/rasterStyle';
 
 import styles from './styles.scss';
 
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    NewProps,
-    ClientAttributes,
-    methods,
-} from '#request';
-import { AppState } from '#store/types';
-import { mapStyleSelector } from '#selectors';
 
 interface Params {}
 

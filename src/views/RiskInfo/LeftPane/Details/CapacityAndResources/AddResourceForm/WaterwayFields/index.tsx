@@ -7,11 +7,11 @@ import DateInput from '#rsci/DateInput';
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import TimeInput from '#rsci/TimeInput';
-import styles from '../styles.scss';
 import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
 
 import { languageSelector } from '#selectors';
+import styles from '../styles.scss';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

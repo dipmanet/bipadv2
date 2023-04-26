@@ -11,11 +11,11 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'src/vendor/react-store/v2/Action/Button';
 import { _cs } from '@togglecorp/fujs';
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
+import styles from './styles.scss';
 
 
 const FeedbackOne = (props) => {

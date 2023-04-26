@@ -1,20 +1,19 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs, compareNumber } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import { Translation } from 'react-i18next';
-import { hazardIcons } from '#resources/data';
+
 import MultiListSelection from '#components/MultiListSelection';
 import PageContext from '#components/PageContext';
+import { hazardIcons } from '#resources/data';
 import {
     hazardTypeListSelector,
     hazardTypesSelector,
     languageSelector,
 } from '#selectors';
-
 import styles from './styles.scss';
 
 const propTypes = {

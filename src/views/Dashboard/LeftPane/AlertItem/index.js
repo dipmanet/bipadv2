@@ -3,24 +3,23 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Button from '#rsca/Button';
-import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
-import alertIcon from '#resources/icons/Alert.svg';
 
-import { convertDateAccToLanguage, convertTimeAccToLanguage, getYesterday } from '#utils/common';
 // import DateOutput from '#components/DateOutput';
 import Cloak from '#components/Cloak';
+import alertIcon from '#resources/icons/Alert.svg';
+import Button from '#rsca/Button';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Icon from '#rscg/Icon';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
     languageSelector,
 } from '#selectors';
-
+import { convertDateAccToLanguage, convertTimeAccToLanguage, getYesterday } from '#utils/common';
 import styles from './styles.scss';
 
 const propTypes = {

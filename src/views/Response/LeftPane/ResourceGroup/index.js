@@ -1,18 +1,17 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
-import { _cs } from '@togglecorp/fujs';
-
 import { Translation } from 'react-i18next';
-import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
-import TextOutput from '#components/TextOutput';
-import { groupList } from '#utils/common';
+import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
+
+import TextOutput from '#components/TextOutput';
+import Button from '#rsca/Button';
+import ListView from '#rscv/List/ListView';
+import { groupList } from '#utils/common';
+import styles from './styles.scss';
 import ResourceItem from '../../ResourceItem';
 import resourceAttributes from '../../resourceAttributes';
-
-import styles from './styles.scss';
 
 const propTypes = {
     heading: PropTypes.string.isRequired,

@@ -18,8 +18,8 @@ import {
     languageSelector,
 } from '#selectors';
 
-import styles from './styles.scss';
 import { convertDateAccToLanguage } from '#utils/common';
+import styles from './styles.scss';
 
 const pastDataKeySelector = d => d.key;
 

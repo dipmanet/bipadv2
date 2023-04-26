@@ -20,9 +20,9 @@ import InfrastructureDestroyed from '#resources/icons/damage-and-loss/Infrastruc
 import InjuredPerson from '#resources/icons/damage-and-loss/Injured person.svg';
 import LiveStockDestroyed from '#resources/icons/damage-and-loss/Livestock destroyed.svg';
 import MissingPerson from '#resources/icons/damage-and-loss/Missing person.svg';
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 import { DropDownOption, DropDownProps } from './types';
-import { languageSelector } from '#selectors';
 
 const Icons = [
     { id: 1, name: 'Incidents', icon: '' },
@@ -226,7 +226,7 @@ const Dropdown = (props: DropDownProps) => {
                                         onChange={searchHandler}
                                         id="search"
                                         className={styles.searchBox}
-                                        placeholder={language === 'en' ? 'Enter a location' : 'स्थान प्रविष्ट गर्नुहोस्'}
+                                        placeholder={language === 'en' ? 'Enter a location' : 'स्थान छनोट गर्नुहोस्'}
                                     />
                                 )
                             }

@@ -4,7 +4,6 @@ import Icon from '#rscg/Icon';
 
 
 import DangerButton from '#rsca/Button/DangerButton';
-import FileUploader from '../FileUploader';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ReCaptcha from '#rsci/ReCaptcha';
@@ -17,6 +16,7 @@ import {
 import {
     NewProps,
 } from '#request';
+import FileUploader from '../FileUploader';
 import styles from './styles.scss';
 
 interface FaramValues {

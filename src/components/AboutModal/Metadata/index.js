@@ -2,22 +2,23 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import SelectInput from '#rsci/SelectInput';
-
 import incidentMetadataList from './metadata/incident';
 import lossAndDamageMetadataList from './metadata/loss-and-damage';
 import {
-    riskInfoHDIMetadataList,
-    riskInfoHouseholdAndIndividualVulnerabalityMetadataList,
+    realtimeEarthquakeMetadataList,
+    realtimeRainfallMetadataList,
+    realtimeWaterLevelMetadataList,
+} from './metadata/realtime';
+import {
     riskInfoEarthquakeRiskModelingMetadataList,
     riskInfoFloodRiskModelingMetadataList,
+    riskInfoHDIMetadataList,
+    riskInfoHouseholdAndIndividualVulnerabalityMetadataList,
 } from './metadata/risk-info';
-import {
-    realtimeWaterLevelMetadataList,
-    realtimeRainfallMetadataList,
-    realtimeEarthquakeMetadataList,
-} from './metadata/realtime';
 
 import styles from './styles.scss';
+
+
 
 export default class Metadata extends React.PureComponent {
     constructor(props) {

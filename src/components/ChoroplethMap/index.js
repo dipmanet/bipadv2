@@ -1,38 +1,34 @@
 /* eslint-disable no-nested-ternary */
-import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { isNotDefined } from '@togglecorp/fujs';
-
-import MapBounds from '#re-map/MapBounds';
-import MapState from '#re-map/MapSource/MapState';
-import MapSource from '#re-map/MapSource';
-import MapLayer from '#re-map/MapSource/MapLayer';
-import MapTooltip from '#re-map/MapTooltip';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
 import { mapSources, mapStyles } from '#constants';
-
+import MapBounds from '#re-map/MapBounds';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
+import MapTooltip from '#re-map/MapTooltip';
 import {
-    getWardFilter,
-    getMunicipalityFilter,
-    getDistrictFilter,
-    getProvinceFilter,
-} from '#utils/domain';
-
-import {
+    boundsSelector,
+    districtsSelector,
+    languageSelector,
     // provincesSelector,
     municipalitiesSelector,
-    districtsSelector,
-    wardsSelector,
-
     regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
-    languageSelector,
+    selectedProvinceIdSelector,
+    wardsSelector,
 } from '#selectors';
+import {
+    getDistrictFilter,
+    getMunicipalityFilter,
+    getProvinceFilter,
+    getWardFilter,
+} from '#utils/domain';
 
 const propTypes = {
     regionLevelFromAppState: PropTypes.number,

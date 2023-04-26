@@ -3,8 +3,8 @@ import { Icon } from 'react-icons-kit';
 import { ic_check_circle as Check } from 'react-icons-kit/md/ic_check_circle';
 import { ic_cancel as Cancel } from 'react-icons-kit/md/ic_cancel';
 import Spinner from '#rsu/../v2/View/Spinner';
-import styles from './styles.scss';
 import { createRequestClient, ClientAttributes, methods } from '#request';
+import styles from './styles.scss';
 
 interface Props {
     openspaceId: number;

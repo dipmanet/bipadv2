@@ -14,13 +14,13 @@ import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { generatePaint,
     getLayerHierarchy } from '#utils/domain';
 
-import styles from './styles.scss';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { municipalitiesSelector } from '#selectors';
 
 
 import LayerSelectionItem from '#components/LayerSelectionItem';
 import { getResponse, getResults } from '#utils/request';
+import styles from './styles.scss';
 
 
 interface Props {

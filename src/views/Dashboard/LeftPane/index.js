@@ -1,39 +1,36 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
-import { _cs } from '@togglecorp/fujs';
-import { connect } from 'react-redux';
-
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
-import Message from '#rscv/Message';
-import VirtualizedListView from '#rscv/VirtualizedListView';
-import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
-import modalize from '#rscg/Modalize';
 
-import Icon from '#rscg/Icon';
-import AccentButton from '#rsca/Button/AccentButton';
-import Button from '#rsca/Button';
-import DangerButton from '#rsca/Button/DangerButton';
-
-import { getHazardColor } from '#utils/domain';
-import { groupList, convertDateAccToLanguage } from '#utils/common';
 import Cloak from '#components/Cloak';
 import DateRangeInfo from '#components/DateRangeInfo';
-
+import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
+import DangerButton from '#rsca/Button/DangerButton';
+import Icon from '#rscg/Icon';
+import modalize from '#rscg/Modalize';
+import Message from '#rscv/Message';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
+import ModalHeader from '#rscv/Modal/Header';
+import VirtualizedListView from '#rscv/VirtualizedListView';
+import { languageSelector } from '#selectors';
+import { convertDateAccToLanguage, groupList } from '#utils/common';
+import { getHazardColor } from '#utils/domain';
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
-import EventItem from './EventItem';
-import AlertItem from './AlertItem';
-import Visualizations from './Visualizations';
-import AddAlertForm from './AddAlertForm';
-import AddEventForm from './AddEventForm';
-import AlertTable from './AlertTable';
-import { languageSelector } from '#selectors';
 import styles from './styles.scss';
+import Visualizations from './Visualizations';
+import EventItem from './EventItem';
+import AlertTable from './AlertTable';
+import AlertItem from './AlertItem';
+import AddEventForm from './AddEventForm';
+import AddAlertForm from './AddAlertForm';
 
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types

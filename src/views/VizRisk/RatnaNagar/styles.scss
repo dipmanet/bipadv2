@@ -1,0 +1,33 @@
+.loaderInfo {
+    position: fixed;
+    top: 50%;
+    left: 46%;
+
+    // border: 1px solid red;
+    .loader {
+        background-color: white;
+    }
+
+    .loaderText {
+        color: white;
+        position: relative;
+        top: 40px !important;
+        left: 3px;
+    }
+}
+:global{
+    .mainTitleDiv {
+        h1{
+        position: fixed !important;
+        background-color: #0c2432;
+        width: calc(30% - 80px);
+        z-index: 9999;
+        top:60px;
+        left: 0;
+        padding: 2px 16px;
+        font-family:none;
+        color:white;
+        font-size:25px;
+    }
+    }
+}

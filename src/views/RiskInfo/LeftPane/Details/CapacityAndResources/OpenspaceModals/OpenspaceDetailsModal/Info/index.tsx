@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { createRequestClient, ClientAttributes, methods } from '#request';
 import styles from './styles.scss';
 import IconComponent from '../IconComponent';
-import { createRequestClient, ClientAttributes, methods } from '#request';
 
 interface Props {
     openspaceId: any;

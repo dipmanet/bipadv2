@@ -1,0 +1,165 @@
+
+    .vrSideBar{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color:#112330;
+        min-width: 300px;
+        color:#b6d6e4;
+        padding: 70px 0 0 0;
+        right: 60px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        overflow-y: scroll;
+        .source {
+            display: flex;
+            justify-content: flex-end;
+            color: #A7B3BB;
+            margin-right: 30px;
+        }
+        .iconRow{
+            display: flex;
+            padding-left: 30px;
+            .infoIconsContainerHidden{
+                visibility: hidden;
+            }
+            .infoIconsContainer{
+                display: flex;
+                margin: 15px 15px 15px 0;
+                flex: 1;
+                .infoIcon{
+                    margin: 0px 15px 0 5px;
+                    width: 32px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+                }
+                .descriptionCotainer{
+                    display: flex;
+                    flex-direction: column;
+                    .iconTitle{
+                    font-size: 20px;
+                    color: #A7B3BB;
+                    font-family: 'Source Sans Pro';
+    
+                    }
+                    .iconText{
+                        font-size: 12px;
+                    color: #A7B3BB;
+                    }
+                }
+            }
+        }
+      
+    
+        .customChartLegend{
+            position: relative;
+            padding: 0;
+        }
+        h1{
+        font-family: 'Playfair Display';
+        font-size: 46px;
+        color: white;
+        opacity: 0.87;
+        padding: 0 30px;
+        margin-top: 20px;
+        line-height: 1.2em;
+        }
+        h2{
+            font-family: 'Playfair Display';
+            font-size: 30px;
+            color: white;
+            opacity: 0.87;
+            padding: 0 30px;
+            margin-top: 20px;
+            line-height: 1.2em;
+            }
+        p{
+            color:white;
+            font-size: 16px;
+            font-family: 'Source Sans Pro';
+            opacity: 0.67;
+            line-height: 1.4em;
+            padding: 0 30px;
+        }
+        .climateLegendContainer{
+            display:flex;
+            justify-content: flex-start;
+            margin-left: 55px;
+            min-width: 200px;
+         
+            .climatelegend{
+            display:flex;
+            padding-right: 20px;
+                .legendMax{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #ffbf00;
+                    padding-right: 4px;
+                    margin-right: 3px;
+                }
+                .legendMin{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #347eff;
+                    // border: 1px solid #1f59be;
+                    margin-right: 3px;
+
+                }
+                .legendDaily{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #00d725;
+                    // border: 1px solid #047a18;
+                    margin-right: 3px;
+                
+                }
+                .legendText{
+                    color: #6490a4;
+                    // opacity: 0.45;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                }
+            }
+        }
+        .chartContainer{
+            margin-top: 30px;
+        }
+    }
+
+
+    .customTooltip{
+        background-color: rgb(190, 190, 190) !important;
+        color: #444;
+        padding-bottom: 5px;
+        border-radius: 4px;
+        h2{
+            color: rgb(41, 40, 40) !important;
+            font-size: 12px !important;
+            line-height: 1em;
+            padding: 10px 0 0 10px;
+            display: flex;
+            justify-content: center;
+
+        }
+        p{
+            color: rgb(41, 40, 40) !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            justify-content: center;
+        }
+    }
+    .recharts-tooltip-wrapper{
+        background-color: white !important;
+        border: 1px solid gray;
+        z-index: 100;
+        color: blue;
+        padding: 0px !important;
+
+    }
+
+
+
+

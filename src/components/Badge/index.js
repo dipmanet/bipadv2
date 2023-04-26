@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {
     _cs,
     isTruthyString,
 } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import Tooltip from '#rscv/Tooltip';
+
 import Icon from '#rscg/Icon';
+import Tooltip from '#rscv/Tooltip';
 import styles from './styles.scss';
 
 const propTypes = {

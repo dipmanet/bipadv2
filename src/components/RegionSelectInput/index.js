@@ -1,15 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
-import { FaramInputElement } from '@togglecorp/faram';
-import memoize from 'memoize-one';
 import { Translation } from 'react-i18next';
-import SelectInput from '#rsci/SelectInput';
-import SearchSelectInput from '#rsci/SearchSelectInput';
-import { createSingleList } from './util';
+import { connect } from 'react-redux';
+import { FaramInputElement } from '@togglecorp/faram';
+import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
+
 // import SegmentInput from '#rsci/SegmentInput';
 
+import SearchSelectInput from '#rsci/SearchSelectInput';
+import SelectInput from '#rsci/SelectInput';
 import {
     // adminLevelListSelector,
     districtsSelector,
@@ -17,8 +18,8 @@ import {
     municipalitiesSelector,
     provincesSelector,
 } from '#selectors';
-
 import styles from './styles.scss';
+import { createSingleList } from './util';
 
 // const adminLevelLabelSelector = d => d.title;
 

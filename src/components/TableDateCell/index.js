@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import FormattedDate from '#rscv/FormattedDate';
 
-import styles from './styles.scss';
+
+import FormattedDate from '#rscv/FormattedDate';
 import { languageSelector } from '#selectors';
+import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

@@ -78,8 +78,8 @@ const FeedbackSupport = ({ className, closeModal, handledisableOutsideDivClick }
                                         className={styles.tech_btn}
                                         onClick={() => {
                                             setformElementsPosition(0);
-                                            closeModal();
-                                            navigate('/support/');
+                                            // closeModal();
+                                            // navigate('/support/');
                                         }}
                                     >
                                         TECHNICAL SUPPORT REQUEST FORM
@@ -99,8 +99,8 @@ const FeedbackSupport = ({ className, closeModal, handledisableOutsideDivClick }
                                         className={styles.feed_btn}
                                         onClick={() => {
                                             setformElementsPosition(1);
-                                            closeModal();
-                                            navigate('/feedback/');
+                                            // closeModal();
+                                            // navigate('/feedback/');
                                         }
                                         }
                                     >

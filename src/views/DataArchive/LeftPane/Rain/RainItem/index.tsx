@@ -1,10 +1,10 @@
 import React from 'react';
 import * as PageType from '#store/atom/page/types';
 
-import AverageBlock from '../AverageBlock';
 import Icon from '#rscg/Icon';
 
 import { getDate, getIndividualAverages } from '#views/DataArchive/utils';
+import AverageBlock from '../AverageBlock';
 import styles from './styles.scss';
 
 interface Props {

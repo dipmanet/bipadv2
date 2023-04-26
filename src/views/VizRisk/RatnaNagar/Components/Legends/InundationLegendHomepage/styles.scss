@@ -1,0 +1,35 @@
+.mainLegendDivHomePage {
+    position: absolute;
+    width: 35%;
+    bottom: 45px;
+    // left: calc(30% - 52px);
+    z-index: 2;
+    margin: 0;
+
+    .scale {
+        display: flex;
+
+        .scale-element {
+            width: 25px;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            flex-grow: 1;
+            text-align: right;
+
+            .color-unit {
+                flex-shrink: 0;
+                margin: 0;
+                height: var(--font-size-small);
+            }
+
+            .value {
+                color: white;
+            }
+        }
+    }
+
+
+
+
+}

@@ -2,15 +2,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FormattedDate from '#rscv/FormattedDate';
-import DangerButton from '#rsca/Button/DangerButton';
-import Modal from '#rscv/Modal';
-import ListView from '#rscv/List/ListView';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
+
 import TextOutput from '#components/TextOutput';
 import { iconNames } from '#constants';
-
+import DangerButton from '#rsca/Button/DangerButton';
+import FormattedDate from '#rscv/FormattedDate';
+import ListView from '#rscv/List/ListView';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
+import ModalHeader from '#rscv/Modal/Header';
 import styles from './styles.scss';
 
 const Output = ({

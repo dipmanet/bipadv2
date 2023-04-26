@@ -1,18 +1,17 @@
 import React from 'react';
 import {
-    caseInsensitiveSubmatch,
     _cs,
+    caseInsensitiveSubmatch,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-import Button from '#rsca/Button';
+
 
 import { iconNames } from '#constants';
-
+import Button from '#rsca/Button';
 import SearchInput from '#rsci/SearchInput';
 import ListView from '#rscv/List/ListView';
-import Wizard from '#rscv/Wizard';
 import Modal from '#rscv/Modal';
-
+import Wizard from '#rscv/Wizard';
 import styles from './styles.scss';
 
 const keySelector = item => item.id;
@@ -90,7 +89,9 @@ class SelectionPage extends React.PureComponent {
                         transparent
                     />
                     <h3 className={styles.heading}>
-                        Select one of the {title}
+                        Select one of the
+                        {' '}
+                        {title}
                     </h3>
                     <SearchInput
                         className={styles.searchInput}

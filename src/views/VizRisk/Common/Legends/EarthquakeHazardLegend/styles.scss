@@ -1,0 +1,103 @@
+
+    
+    .populationContainer{
+        display: flex;
+        // flex-direction: column;
+        // border: 1px solid red;
+        .legendsRow{
+            // width: 30px;
+            text-align: center;
+            padding-left: 0;
+            .populationIndicator2{
+                font-size: 9px;
+                color: #000;
+                font-weight: 600;
+                padding: 2px;
+            }
+        }
+        p{
+            line-height: 0;
+            position: relative;
+            bottom: 20px;
+            font-size: 9px;
+        }
+  
+        .populationIndContainerShort{
+            display: flex;
+            .conainerStyle{ 
+                display: flex;
+                justify-content: center;
+                font-size: 9px;
+                padding: 3px;
+                border: 1px solid gray;
+                white-space: nowrap;
+            }
+            .populationIndicator1{
+                @extend .conainerStyle;
+                background-color: rgb(252,255,0);
+            }
+            .populationIndicator2{
+                @extend .conainerStyle;
+
+                background-color: rgb(255,212,0); 
+
+            }
+            .populationIndicator3{
+                @extend .conainerStyle;
+
+                
+                background-color:rgb(255,167,0);
+                background-color:rgb(255,187,0);
+                
+            }
+            .populationIndicator4{
+                @extend .conainerStyle;
+                
+                background-color:rgb(255,187,0);
+                background-color:rgb(255,167,0);
+
+            }
+            .populationIndicator5{
+                @extend .conainerStyle;
+
+                background-color:rgb(255,134,0);
+
+            }
+            
+            .populationIndicator6{
+                @extend .conainerStyle;
+
+                background-color:rgb(255,62,0);
+                display: none;
+            }
+        }
+        .populationTextContainer{
+            display:flex;
+            justify-content: space-between;
+            .populationText{
+                color: white;
+                opacity:0.67;
+                font-family: 'Source Sans Pro';
+                position: relative;
+                bottom: 0;
+                font-size: 11px;
+                // padding-right: 15px
+            }
+        }
+    }
+
+    .susLegend{
+        h2{
+            font-size: 11px;
+            color: white;
+            margin-right: 15px;
+        }
+        position: fixed;
+        // right: calc(% - 75px);
+        left: calc(30% - 60px);
+        bottom: 22px;
+        z-index: 201;
+      }
+
+
+

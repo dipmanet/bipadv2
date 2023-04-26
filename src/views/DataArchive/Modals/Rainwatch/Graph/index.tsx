@@ -20,13 +20,13 @@ import Button from '#rsca/Button';
 import {
     saveChart,
 } from '#utils/common';
+import { getMonthName } from '#views/DataArchive/utils';
 import { ArchiveRain, ChartData, FaramValues } from '../types';
 // import { renderLegendName } from '../utils';
 import NoData from '../NoData';
 import CustomTooltip from './Tooltip';
 import Note from './Note';
 import styles from './styles.scss';
-import { getMonthName } from '#views/DataArchive/utils';
 
 interface Props {
     stationData: ArchiveRain[];

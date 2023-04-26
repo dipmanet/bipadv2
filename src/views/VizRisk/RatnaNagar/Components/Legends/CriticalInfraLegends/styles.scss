@@ -1,0 +1,155 @@
+.mainDivPop{
+	position: fixed;
+	bottom: 100px;
+	right: 85px;
+	z-index: 999;
+	background-color: rgb(19, 32, 55);
+	padding: 10px;
+	border-radius: 10px;
+	width: 185px;
+	box-shadow: rgb(31, 38, 135 );
+    opacity: 0.8;
+}
+.mainDivPopExposure{
+	position: fixed;
+	bottom: 430px;
+	right: 85px;
+	z-index: 15;
+	background-color: rgb(19, 32, 55);
+	padding: 10px;
+	border-radius: 10px;
+	width: 185px;
+	box-shadow: rgb(31, 38, 135 );
+}
+
+
+
+
+.toggleCritical{
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    color: white;
+    // opacity: 0.87;
+    text-transform: uppercase;
+    .chevrontoggle{
+        font-size: 14px;
+    padding-left: 0px;
+    padding-bottom: 4px;
+	margin-left: 4px;
+	transform: rotate(90deg);
+        // display: none;
+    }
+    .resetIcon{
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+    }
+}
+
+.criticalIcons{
+    // border: 1px solid red;
+    .toggleContainer{
+        .infraIconContainer{
+            text-transform: capitalize;
+            margin: 3px 0;
+            .allIconSelected{
+                font-size: 15px;
+                color: #036ef0;
+                padding-right: 9px;
+                padding-left: 7px;
+
+            }
+            .allIcon{
+                font-size: 15px;
+                color: white;
+                // opacity: 0.87;
+                padding-right: 11px;
+                padding-left: 4px;
+
+            }
+            .canalIcon{
+                border-bottom:2px solid #0670bc;
+                width: 25px;
+                margin-right: 12px;
+                font-size: 15px;
+                position: relative;
+                // bottom: 7px;
+            }
+            .roadIcon{
+                border-bottom:2px solid #a7a5a5;
+                width: 25px;
+                margin-right: 12px;
+                font-size: 15px;
+                position: relative;
+                // bottom: 7px;
+            }
+            .criticalButtonSelected{
+                font-family: 'Source Sans Pro';
+                background: transparent;
+                // color: #1664c1;
+                color: #036ef0;
+                display: flex;
+                align-items: center;
+                border: none;
+                font-size: 11px;
+                // opacity: 0.87;
+                // width: 100%;
+                filter: saturate(100%);
+                // border: 1px solid red;
+                margin: 0;
+                padding: 0;
+                height: 22px;
+                // padding-top: 10px;
+           
+                .svgIcon{
+                    width: 25px;
+                    margin-right: 4px;
+
+                }
+                  path{
+                    fill: #1664c1;
+                    // fill: white;
+                }
+                polygon{
+                    fill: #1664c1;
+                    // fill: white;
+                }
+            }
+            .criticalButton{
+                font-family: 'Source Sans Pro';
+                background: transparent;
+                color: white;
+                display: flex;
+                align-items: center;
+                border: none;
+                font-size: 11px;
+                // opacity: 0.5;
+                // width: 100%;
+                filter: saturate(100%);
+                // border: 1px solid blue;
+                margin: 0;
+                padding: 0;
+                height: 22px;
+                // padding-top: 10px;
+                white-space: nowrap;
+                path{
+                    fill: white;
+                    // opacity: 0.87;
+                }
+                polygon{
+                    fill: white;
+                    // opacity: 0.87;
+
+                }
+                .svgIcon{
+                    width: 25px;
+                    margin-right: 4px;
+                }
+            }
+        }
+    }
+}
+
+

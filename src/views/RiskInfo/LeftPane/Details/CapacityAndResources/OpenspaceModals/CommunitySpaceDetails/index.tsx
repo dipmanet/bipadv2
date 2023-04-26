@@ -4,8 +4,6 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { _cs } from '@togglecorp/fujs';
 import { Tabs } from '@material-ui/core';
-import styles from './styles.scss';
-import Info from './Info';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -13,7 +11,6 @@ import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import SubHeader from './SubHeader';
 import {
     createRequestClient,
     ClientAttributes,
@@ -24,6 +21,9 @@ import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
 import defaultImage from '#resources/images/openspace-images/default_image.png';
+import SubHeader from './SubHeader';
+import Info from './Info';
+import styles from './styles.scss';
 
 interface State {
     currentView: string;

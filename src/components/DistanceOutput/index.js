@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { _cs, isFalsy } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
 import { iconNames } from '#constants';
 import styles from './styles.scss';
+
 
 const propTypes = {
     className: PropTypes.string,

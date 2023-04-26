@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
+
 
 import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';

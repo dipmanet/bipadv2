@@ -1,24 +1,20 @@
-import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { isNotDefined } from '@togglecorp/fujs';
-
-import MapBounds from '#re-map/MapBounds';
-import MapState from '#re-map/MapSource/MapState';
-import MapSource from '#re-map/MapSource';
-import MapLayer from '#re-map/MapSource/MapLayer';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
 import { mapSources, mapStyles } from '#constants';
-
-import { regionLabelToGeojson } from '#utils/domain';
-
+import MapBounds from '#re-map/MapBounds';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
 import {
-    provincesSelector,
-
-    regionLevelSelector,
     boundsSelector,
+    provincesSelector,
+    regionLevelSelector,
 } from '#selectors';
+import { regionLabelToGeojson } from '#utils/domain';
 
 const propTypes = {
     regionLevelFromAppState: PropTypes.number,

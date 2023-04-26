@@ -1,56 +1,52 @@
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { isDefined, unique } from '@togglecorp/fujs';
 import mapboxgl from 'mapbox-gl';
-import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
+
+import {
+    patchIncidentActionIP,
+    removeIncidentActionIP,
+    setIncidentActionIP,
+} from '#actionCreators';
+import { getParams } from '#components/Cloak';
+// import SVGMapIcon from '#components/SVGMapIcon';
+import CommonMap from '#components/CommonMap';
+import IncidentInfo from '#components/IncidentInfo';
+import ProvinceMap from '#components/ProvinceMap';
+import { mapStyles } from '#constants';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
-import { getParams } from '#components/Cloak';
-
-// import SVGMapIcon from '#components/SVGMapIcon';
-import CommonMap from '#components/CommonMap';
-import ProvinceMap from '#components/ProvinceMap';
-import {
-    hazardTypesSelector,
-    provincesMapSelector,
-    districtsMapSelector,
-    municipalitiesMapSelector,
-    wardsMapSelector,
-    userSelector,
-    mapStyleSelector,
-    languageSelector,
-} from '#selectors';
-
-import {
-    setIncidentActionIP,
-    patchIncidentActionIP,
-    removeIncidentActionIP,
-} from '#actionCreators';
-
-import { mapStyles } from '#constants';
-import IncidentInfo from '#components/IncidentInfo';
 import {
     createRequestClient,
     methods,
 } from '#request';
 import {
-    getYesterday,
+    districtsMapSelector,
+    hazardTypesSelector,
+    languageSelector,
+    mapStyleSelector,
+    municipalitiesMapSelector,
+    provincesMapSelector,
+    userSelector,
+    wardsMapSelector,
+} from '#selectors';
+import {
     framize,
     getImage,
+    getYesterday,
 } from '#utils/common';
-
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
 } from '#utils/domain';
-
-
+import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import styles from './styles.scss';
 
 const propTypes = {

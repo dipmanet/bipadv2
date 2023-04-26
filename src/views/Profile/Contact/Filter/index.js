@@ -1,25 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import Button from '#rsca/Button';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-import SelectInput from '#rsci/SelectInput';
-import Checkbox from '#rsci/Checkbox';
-
-import CollapsibleView from '#components/CollapsibleView';
-import RegionSelectInput from '#components/RegionSelectInput';
 
 import {
     setProfileContactFiltersAction,
 } from '#actionCreators';
+import CollapsibleView from '#components/CollapsibleView';
+import RegionSelectInput from '#components/RegionSelectInput';
+import { iconNames } from '#constants';
+import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+import Checkbox from '#rsci/Checkbox';
+import SelectInput from '#rsci/SelectInput';
 import {
     profileContactFiltersSelector,
 } from '#selectors';
-import { iconNames } from '#constants';
-
 import styles from './styles.scss';
 
 const propTypes = {

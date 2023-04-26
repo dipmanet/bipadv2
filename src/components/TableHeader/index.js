@@ -1,11 +1,10 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import Button from '#rsca/Button';
 
-import Icon from '#rscg/Icon';
 
 import { iconNames } from '#constants';
-
+import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
 const getSortIcon = (sortOrder) => {

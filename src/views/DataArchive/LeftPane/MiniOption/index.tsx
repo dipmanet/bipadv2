@@ -4,7 +4,6 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import RainIcon from '#resources/icons/Rain.svg';
@@ -18,6 +17,7 @@ import {
 } from '#selectors';
 import { AppState } from '#types';
 import { User } from '#store/atom/auth/types';
+import styles from './styles.scss';
 
 type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 

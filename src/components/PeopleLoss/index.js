@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
 import TextOutput from '#components/TextOutput';
-
 import styles from './styles.scss';
+
+
 
 const propTypes = {
     className: PropTypes.string,
@@ -19,6 +20,7 @@ const emptyList = [];
 
 export default class PeopleLoss extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getLossData = memoize((peopleList) => {

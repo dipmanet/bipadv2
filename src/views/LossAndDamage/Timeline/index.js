@@ -1,30 +1,28 @@
 import React from 'react';
-import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
-
-import { currentStyle } from '#rsu/styles';
-
-import { styleProperties } from '#constants';
-import Page from '#components/Page';
-
-import Button from '#rsca/Button';
-import FormattedDate from '#rscv/FormattedDate';
-import SelectInput from '#rsci/SelectInput';
+import memoize from 'memoize-one';
 
 import Map from '../Map';
+
 import LeftPane from './LeftPane';
 import Seekbar from './Seekbar';
 
+import styles from './styles.scss';
+
+import Page from '#components/Page';
+import { styleProperties } from '#constants';
+import Button from '#rsca/Button';
+import SelectInput from '#rsci/SelectInput';
+import FormattedDate from '#rscv/FormattedDate';
+import { currentStyle } from '#rsu/styles';
 import {
     getAggregatedStats,
-    getGroupMethod,
+    getFilledGroupedIncidents,
     getGroupedIncidents,
+    getGroupMethod,
     getMinMaxTime,
     metricMap,
-    getFilledGroupedIncidents,
 } from '../common';
-
-import styles from './styles.scss';
 
 const propTypes = {
 };

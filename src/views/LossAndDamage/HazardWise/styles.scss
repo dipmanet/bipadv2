@@ -1,53 +1,61 @@
+@font-face {
+  font-family: "Kalimati Regular";
+  src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+  unicode-range: U+30-39;
+  size-adjust: 85%;
+}
 
-.label{
-    padding: 7px;
-    background: rgba(255, 255, 255, 0.2);
-border-radius: 10px;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(7.3px);
--webkit-backdrop-filter: blur(7.3px);
-border: 1px solid rgba(255, 255, 255, 0.3);
-    color:black;
-    font-size: 12px;
+.languageNp {
+  font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+}
+
+.label {
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.3px);
+  -webkit-backdrop-filter: blur(7.3px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: black;
+  font-size: 12px;
 }
 
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  // width: 95%;
+
+  .hazardHead {
     display: flex;
-    flex-direction: column;
-    // width: 95%;
-      
-    .hazardHead {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 5px;
-        position: relative;
-        .hazardText {
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 600;
-                    }  
-
-
-        .downloadButton {
-            padding: 5px;
-        }
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    position: relative;
+    .hazardText {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 600;
     }
 
-    .treeMap{
-        width:100%;
-        &:fullscreen{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: white;
-        }
+    .downloadButton {
+      padding: 5px;
     }
+  }
 
-    // .svg {
-    //     // filter: invert(49%) sepia(98%) saturate(1378%) hue-rotate(188deg) brightness(92%) contrast(89%);
-    //     filter: brightness(0) invert(1);
+  .treeMap {
+    width: 100%;
+    &:fullscreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;
+    }
+  }
 
-    // }
+  // .svg {
+  //     // filter: invert(49%) sepia(98%) saturate(1378%) hue-rotate(188deg) brightness(92%) contrast(89%);
+  //     filter: brightness(0) invert(1);
 
+  // }
 }

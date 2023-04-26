@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../styles.scss';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
@@ -7,6 +6,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import styles from '../styles.scss';
 
 interface Props {
     handleTabClick: (tab: string) => void;

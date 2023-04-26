@@ -59,6 +59,22 @@ import FireIcon from '#resources/icons/Forest-fire.svg';
 import {
     isAnyRequestPending,
 } from '#utils/request';
+import StreamFlowLegend from '#components/StreamFlowLegend';
+import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
+import {
+    rain24LegendItems,
+    rain12LegendItems,
+    rain6LegendItems,
+    rain3LegendItems,
+    rain1LegendItems,
+    rainLegendItems,
+    newRiverLegendItems,
+    earthquakeLegendItems,
+    forestFireLegendItems,
+    pollutionLegendItems,
+    noLegend,
+} from './legendItems';
+
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
 import MiniRiverWatch from './MiniRiverWatch';
@@ -68,20 +84,6 @@ import MiniPollution from './MiniPollution';
 import MiniFire from './MiniFire';
 
 import styles from './styles.scss';
-import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
-import {
-    rain24LegendItems,
-    rain12LegendItems,
-    rain6LegendItems,
-    rain3LegendItems,
-    rain1LegendItems,
-    newRiverLegendItems,
-    earthquakeLegendItems,
-    forestFireLegendItems,
-    pollutionLegendItems,
-    noLegend,
-} from './legendItems';
-import StreamFlowLegend from '#components/StreamFlowLegend';
 
 interface State {
     activeView?: ActiveView;

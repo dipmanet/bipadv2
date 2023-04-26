@@ -1,7 +1,7 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
 
-import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 
 export default class About extends React.PureComponent {

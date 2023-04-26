@@ -9,9 +9,9 @@ import NumberInput from '#rsci/NumberInput';
 import TimeInput from '#rsci/TimeInput';
 import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
+import { languageSelector } from '#selectors';
 import styles from '../styles.scss';
 
-import { languageSelector } from '#selectors';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

@@ -9,13 +9,13 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import { Release } from '#types';
 
-import AddReleaseForm from '../AddReleaseForm';
 import {
     createRequestClient,
     NewProps,
     ClientAttributes,
     methods,
 } from '#request';
+import AddReleaseForm from '../AddReleaseForm';
 
 import styles from './styles.scss';
 

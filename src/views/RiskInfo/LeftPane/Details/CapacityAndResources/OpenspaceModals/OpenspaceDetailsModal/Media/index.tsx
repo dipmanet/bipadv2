@@ -6,10 +6,10 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { cross } from 'react-icons-kit/icomoon/cross';
 import { Icon } from 'react-icons-kit';
 import { createRequestClient, ClientAttributes, methods } from '#request';
-import styles from './styles.scss';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import Spinner from '#rsu/../v2/View/Spinner';
+import styles from './styles.scss';
 
 interface Props {
     openspaceId: any;

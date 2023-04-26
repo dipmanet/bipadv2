@@ -11,9 +11,9 @@ import { getAttributeOptions } from '#utils/domain';
 import TimeInput from '#rsci/TimeInput';
 import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
+import { languageSelector } from '#selectors';
 import styles from '../styles.scss';
 
-import { languageSelector } from '#selectors';
 
 interface Props {
     resourceEnums: EnumItem[];

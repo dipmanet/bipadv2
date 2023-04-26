@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { _cs } from '@togglecorp/fujs';
-
 import { Translation } from 'react-i18next';
-import VirtualizedListView from '#rscv/VirtualizedListView';
+import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
+import VirtualizedListView from '#rscv/VirtualizedListView';
 import IncidentItem from '../IncidentItem';
 
 import styles from './styles.scss';
+
 
 const propTypes = {
     className: PropTypes.string,

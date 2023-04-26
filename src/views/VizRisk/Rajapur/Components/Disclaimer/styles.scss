@@ -1,0 +1,52 @@
+.iconContainer{
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    // margin-top: 15px;
+    bottom: 20px;
+    left:0;
+    margin-right: 15%;
+    .bottomInfo{
+        font-size: 12px !important;
+        color: white;
+        opacity: 0.5;
+        padding-right: 10px;
+        max-height: 0;
+        transform: scaleY(1);   
+        transition: transform 0.26s ease-out;
+        margin-top: 2px;
+        width: 50%;
+        padding-bottom: 50px;
+
+    }
+    .bottomInfoHide{
+        transform: scaleY(0);
+        transition: transform 0.26s ease-in;
+        font-size: 10px;
+        color: white;
+        opacity: 0.5;
+        padding-right: 10px;
+        max-height: 0;
+        margin-top: 2px;
+    }
+    .infoContainerBtn{
+        background-color: transparent;
+        border: none;
+        
+        .closeIcon{
+            color: white;
+            opacity: 0.87;
+        }
+    }
+    .infoContainerClosed{
+        margin-left: 50%;
+        background-color: transparent;
+        border: none;
+        
+        .closeIcon{
+            color: white;
+            opacity: 0.87;
+        }
+    }
+}

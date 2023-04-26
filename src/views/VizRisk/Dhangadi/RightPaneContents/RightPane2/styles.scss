@@ -1,0 +1,108 @@
+
+    .vrSideBar{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color:#112330;
+        min-width: 300px;
+        color:#b6d6e4;
+        padding: 70px 0 0 0;
+        right: 60px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        overflow-y: scroll;
+        .customTooltip{
+            background-color: white;
+            // opacity: 0.87;
+            padding: 10px 0;
+            p{
+                color:#444;
+            }
+        }
+        .pieTotal{
+            color: white !important;
+            opacity: 0.87;
+        }
+        .respContainer{
+            margin-bottom:25px;
+        }
+        .iconContainer{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            margin-top: 15px;
+            // bottom: 20px;
+            .bottomInfo{
+                font-size: 9px;
+                color: white;
+                opacity: 0.5;
+                padding-right: 10px;
+                max-height: 0;
+                transform: scaleY(1);   
+                transition: transform 0.26s ease-out;
+                margin-top: 2px;
+            }
+            .bottomInfoHide{
+                transform: scaleY(0);
+                transition: transform 0.26s ease-in;
+                font-size: 9px;
+                color: white;
+                opacity: 0.5;
+                padding-right: 10px;
+                max-height: 0;
+                margin-top: 2px;
+
+
+            }
+            .infoContainerBtn{
+                background-color: transparent;
+                border: none;
+
+                .closeIcon{
+                    color: white;
+                    opacity: 0.87;
+                }
+            }
+        }
+        .customChartLegend{
+            position: relative;
+            padding: 0;
+        }
+       
+
+        h1{
+            font-family: 'Playfair Display';
+            font-size: 46px;
+            color: white;
+            opacity: 0.87;
+            padding: 0 30px;
+            margin-top: 20px;
+            line-height: 1.2em;
+            }
+            h2{
+                font-family: 'Playfair Display';
+                font-size: 30px;
+                color: white;
+                opacity: 0.87;
+                padding: 0 30px;
+                margin-top: 20px;
+                line-height: 1.2em;
+                }
+            p{
+                color:white;
+                font-size: 16px;
+                font-family: 'Source Sans Pro';
+                opacity: 0.67;
+                line-height: 1.4em;
+                padding: 0 30px;
+            }
+    }
+   
+
+
+
+
+
+
+

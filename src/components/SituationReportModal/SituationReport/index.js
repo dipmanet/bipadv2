@@ -1,61 +1,61 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
-import html2canvas from 'html2canvas';
-import JsPDF from 'jspdf';
 import {
     _cs,
-    listToMap,
     isDefined,
+    listToMap,
 } from '@togglecorp/fujs';
-
+import html2canvas from 'html2canvas';
+import JsPDF from 'jspdf';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 import {
+    Bar,
+    BarChart,
+    Cell,
+    LabelList,
+    Pie,
+    PieChart,
     ResponsiveContainer,
     XAxis,
     YAxis,
-    BarChart,
-    Pie,
-    Bar,
-    Cell,
-    PieChart,
-    LabelList,
 } from 'recharts';
-import { Translation } from 'react-i18next';
+
+
+import HazardsLegend from '#components/HazardsLegend';
+import LayerLegend from '#components/LayerLegend';
+import ProvinceChoroplethMap from '#components/ProvinceChroplethMap';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
-import LoadingAnimation from '#rscv/LoadingAnimation';
-import LegendItem from '#rscz/Legend/LegendItem';
-import {
-    hazardTypesList,
-    generatePaint,
-} from '#utils/domain';
-import IncidentMap from '#views/Incidents/Map';
-import Button from '#rsca/Button';
-import LayerLegend from '#components/LayerLegend';
-import HazardsLegend from '#components/HazardsLegend';
-import ProvinceChoroplethMap from '#components/ProvinceChroplethMap';
-import Message from '#rscv/Message';
-import {
-    getGroupMethod,
-    getGroupedIncidents,
-    getSumStats,
-    getSanitizedIncidents,
-} from '#views/LossAndDamage/common';
-import { groupList } from '#utils/common';
-import {
-    mapStyleSelector,
-    hazardTypesSelector,
-    regionsSelector,
-    languageSelector,
-} from '#selectors';
-
 import {
     createRequestClient,
     methods,
 } from '#request';
-import Table from './Table';
+import Button from '#rsca/Button';
+import LoadingAnimation from '#rscv/LoadingAnimation';
+import Message from '#rscv/Message';
+import LegendItem from '#rscz/Legend/LegendItem';
+import {
+    hazardTypesSelector,
+    languageSelector,
+    mapStyleSelector,
+    regionsSelector,
+} from '#selectors';
+import { groupList } from '#utils/common';
+import {
+    generatePaint,
+    hazardTypesList,
+} from '#utils/domain';
+import IncidentMap from '#views/Incidents/Map';
+import {
+    getGroupedIncidents,
+    getGroupMethod,
+    getSanitizedIncidents,
+    getSumStats,
+} from '#views/LossAndDamage/common';
 import styles from './styles.scss';
+import Table from './Table';
 
 const REQUEST_LIMIT = -1;
 

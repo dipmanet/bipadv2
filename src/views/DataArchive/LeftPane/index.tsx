@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { connect } from 'react-redux';
+import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
+import { userSelector } from '#selectors';
+import { AppState } from '#types';
+import { User } from '#store/atom/auth/types';
 import Rain from './Rain';
 import River from './River';
 import Pollution from './Pollution';
 import Earthquake from './Earthquake';
 import MiniOption from './MiniOption';
-import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 
 import styles from './styles.scss';
-import { userSelector } from '#selectors';
-import { AppState } from '#types';
-import { User } from '#store/atom/auth/types';
 
 type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 

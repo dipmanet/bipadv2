@@ -1,39 +1,36 @@
 import React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
-    mapToList,
+    _cs,
+    getHexFromString,
     isNotDefined,
     listToMap,
-    getHexFromString,
-    _cs,
+    mapToList,
 } from '@togglecorp/fujs';
-import { groupList } from '#utils/common';
+import { compose } from 'redux';
 
-import {
-    regionsSelector,
-    regionLevelSelector,
-    projectsProfileFiltersSelector,
-} from '#selectors';
 
 import Loading from '#components/Loading';
 import PageContext from '#components/PageContext';
 import { TitleContext } from '#components/TitleContext';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
 } from '#request';
 import {
-    isAnyRequestPending,
+    projectsProfileFiltersSelector,
+    regionLevelSelector,
+    regionsSelector,
+} from '#selectors';
+import { groupList } from '#utils/common';
+import {
     getResults,
+    isAnyRequestPending,
 } from '#utils/request';
-
-import ProjectsProfileFilter from './Filter';
-import LeftPane from './LeftPane';
-import Map from './Map';
-
 import styles from './styles.scss';
+import Map from './Map';
+import LeftPane from './LeftPane';
+import ProjectsProfileFilter from './Filter';
 
 const emptyList = [];
 

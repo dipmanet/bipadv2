@@ -1,16 +1,18 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
-import { connect } from 'react-redux';
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+
+import templateNep from './sourceNe.html';
+
+import styles from './styles.scss';
+
+import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
-import DangerButton from '#rsca/Button/DangerButton';
-
-import template from './source.html';
-import templateNep from './sourceNe.html';
-import styles from './styles.scss';
 import { languageSelector } from '#selectors';
+import template from './source.html';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

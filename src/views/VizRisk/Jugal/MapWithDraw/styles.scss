@@ -1,0 +1,85 @@
+.searchBox{
+  position: fixed;
+  top: 17px;
+  right: 60%;
+  background: white;
+  padding: 0 0 0 4px;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  z-index: 2;
+  .searchbutton{
+    border: none;
+    background: transparent;
+  }
+  .searchIcon{
+    font-size: 16px;
+    color: #444;
+    cursor: pointer;
+  }
+
+  input::-webkit-input-placeholder{
+    font-size: 10px;
+    vertical-align:middle !important;
+    line-height: 25px !important;
+}
+input{
+    border: none;
+    padding: 12px 2px;
+    margin-left: 0;
+    background: transparent;
+  width: 100px;
+}
+input:focus{
+    outline: none;
+}
+input::placeholder{
+    font-size: 12px;
+}
+}
+
+.sliderLabel{
+  position: fixed;
+  right: 70px;
+  bottom: 150px;
+  color: white;
+  z-index: 201;
+}
+.slider {
+  z-index: 201;
+  -webkit-appearance: none;
+  width: 190px;
+  height: 6px;
+  background: #d3d3d3;
+  outline: none;
+  border-radius: 4px;
+  opacity: 0.9;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  position: fixed;
+  right: 70px;
+  bottom: 135px;
+
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.thumb-style{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 10px;
+  background: rgb(0,139,191);
+  cursor: pointer;
+}
+.slider::-webkit-slider-thumb {
+ @extend .thumb-style;
+}
+
+.slider::-moz-range-thumb {
+  @extend .thumb-style;
+}
+

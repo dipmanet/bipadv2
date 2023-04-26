@@ -4,11 +4,11 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
-import styles from './styles.scss';
 import MultiViewContainer from '#rscv/MultiViewContainer';
+import ScrollTabs from '#rscv/ScrollTabs';
+import styles from './styles.scss';
 import MetaData from './MetaData';
 import Details from './Details';
-import ScrollTabs from '#rscv/ScrollTabs';
 import HowToUse from './HowToUse';
 import StandardMetadata from './MetadataComponents/StandardMetadata';
 

@@ -1,0 +1,22 @@
+.legends{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.loaderInfo{
+    position: fixed;
+    top: 50%;
+    left: 60%;
+    .loader{
+        background-color: white;
+    }
+    .loaderText{
+        color: white;
+        position: relative;
+        top: 40px !important;
+        left: 3px;
+    }
+}

@@ -1,14 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
+
 
 import Button from '#rsca/Button';
+import Delay from '#rscg/Delay';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
-
-import Delay from '#rscg/Delay';
-
 import styles from './styles.scss';
 
 const propTypes = {
@@ -33,6 +32,7 @@ const defaultProps = {
 @Delay
 export default class ListSelection extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getRendererParams = (index, option, options) => {

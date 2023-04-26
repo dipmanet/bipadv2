@@ -1,15 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+
+import Cloak from '#components/Cloak';
+import DateOutput from '#components/DateOutput';
+import alertIcon from '#resources/icons/Alert.svg';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
-import alertIcon from '#resources/icons/Alert.svg';
-
-import DateOutput from '#components/DateOutput';
-import Cloak from '#components/Cloak';
-
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import styles from './styles.scss';
 
 const propTypes = {

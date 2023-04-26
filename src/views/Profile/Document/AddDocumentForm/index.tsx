@@ -45,7 +45,6 @@ import {
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
-import styles from './styles.scss';
 
 import {
     createRequestClient,
@@ -54,6 +53,7 @@ import {
     methods,
 } from '#request';
 import TextArea from '#rsci/TextArea';
+import styles from './styles.scss';
 
 const StepwiseRegionSelectInput = FaramInputElement(NormalStepwiseRegionSelectInput);
 

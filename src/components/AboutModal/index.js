@@ -1,21 +1,23 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
-
 import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-import MultiViewContainer from '#rscv/MultiViewContainer';
-import ScrollTabs from '#rscv/ScrollTabs';
-import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
-import DangerButton from '#rsca/Button/DangerButton';
-import { languageSelector } from '#selectors';
-import About from './About';
+import { _cs } from '@togglecorp/fujs';
+
 // import PrivacyPolicy from './PrivacyPolicy';
 // import Metadata from './Metadata';
 // import Disclaimer from './Disclaimer';
-import Manual from './Manual';
+
+
+import DangerButton from '#rsca/Button/DangerButton';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
+import ModalHeader from '#rscv/Modal/Header';
+import MultiViewContainer from '#rscv/MultiViewContainer';
+import ScrollTabs from '#rscv/ScrollTabs';
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
+import Manual from './Manual';
+import About from './About';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

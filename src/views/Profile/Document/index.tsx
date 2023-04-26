@@ -28,12 +28,8 @@ import SelectInput from '#rsci/SelectInput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import { checkSameRegionPermission, convertDateAccToLanguage } from '#utils/common';
 import documentIcon from '#resources/icons/file-document.svg';
-import tableView from '../../../resources/icons/list-view.svg';
-import listView from '../../../resources/icons/category-view.svg';
-import dateCalender from '../../../resources/icons/date-calender.svg';
 import Loading from '#components/Loading';
 import Cloak from '#components/Cloak';
-import downloadCloud from '../../../resources/icons/download-cloud.svg';
 import bookIcon from '#resources/icons/Book-icon.svg';
 import {
     createRequestClient,
@@ -58,6 +54,10 @@ import { AppState } from '#store/types';
 import { Region, DocumentCategory, DocumentItem } from '#store/atom/page/types';
 
 import CommonMap from '#components/CommonMap';
+import downloadCloud from '../../../resources/icons/download-cloud.svg';
+import dateCalender from '../../../resources/icons/date-calender.svg';
+import listView from '../../../resources/icons/category-view.svg';
+import tableView from '../../../resources/icons/list-view.svg';
 
 import AddDocumentForm from './AddDocumentForm';
 import phoneContactLogo from '../../../resources/icons/phone-contact.svg';

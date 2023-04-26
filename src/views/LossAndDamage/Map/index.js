@@ -1,18 +1,18 @@
 /* eslint-disable max-len */
 /* eslint-disable arrow-parens */
 import React from 'react';
-import PropTypes from 'prop-types';
-import { _cs } from '@togglecorp/fujs';
-
 import { Translation } from 'react-i18next';
-import Numeral from '#rscv/Numeral';
+import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import SegmentInput from '#rsci/SegmentInput';
+
 import ChoroplethMap from '#components/ChoroplethMap';
+import SegmentInput from '#rsci/SegmentInput';
+import Numeral from '#rscv/Numeral';
 import { generatePaintByQuantile } from '#utils/domain';
 import styles from './styles.scss';
+import { generateMapState, generatePaintLegendByInterval, tooltipRenderer } from '../utils/utils';
 import Legend, { legendItems } from '../Legend';
-import { generateMapState, tooltipRenderer, generatePaintLegendByInterval } from '../utils/utils';
 
 const propTypes = {
     geoareas: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types

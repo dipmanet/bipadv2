@@ -1,7 +1,6 @@
 import React from 'react';
 import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
-import styles from '../../OpenspaceFields/AddOpenspaceTabs/styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import {
@@ -11,6 +10,7 @@ import {
 } from '#request';
 
 import { languageSelector } from '#selectors';
+import styles from '../../OpenspaceFields/AddOpenspaceTabs/styles.scss';
 
 interface Props {
     handleTabClick: (tab: string) => void;

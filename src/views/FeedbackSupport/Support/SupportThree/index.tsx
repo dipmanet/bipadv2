@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Button from 'src/vendor/react-store/v2/Action/Button';
 import { _cs } from '@togglecorp/fujs';
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -20,6 +19,7 @@ import {
     createRequestClient,
     methods,
 } from '#request';
+import styles from './styles.scss';
 
 const requestOptions: {
     [key: string]: ClientAttributes<PropsWithRedux, Params>;

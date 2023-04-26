@@ -1,18 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
-// import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
 import {
-    regionSelector,
     // adminLevelListSelector,
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
+    regionSelector,
 } from '#selectors';
-
 import styles from './styles.scss';
+
+
+
+// import { _cs } from '@togglecorp/fujs';
 
 // const adminLevelKeySelector = d => d.id;
 // const adminLevelLabelSelector = d => d.title;

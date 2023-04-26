@@ -5,8 +5,6 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
-import styles from './styles.scss';
-import TabularView from './TabularView';
 import {
     createRequestClient,
     ClientAttributes,
@@ -16,6 +14,8 @@ import {
 import { filtersSelector } from '#selectors';
 import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
+import TabularView from './TabularView';
+import styles from './styles.scss';
 
 interface State {
     currentView: string;

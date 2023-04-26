@@ -11,13 +11,13 @@ import {
 import * as PageType from '#store/atom/page/types';
 
 
-import styles from '../styles.scss';
 import MultiViewContainer from '#rscv/MultiViewContainer';
-import BasicInfo from './CommunitySpaceTabs/BasicInfo';
 import ScrollTabs from '#rscv/ScrollTabs';
+import { languageSelector } from '#selectors';
+import styles from '../styles.scss';
+import BasicInfo from './CommunitySpaceTabs/BasicInfo';
 import Details from './CommunitySpaceTabs/Details';
 
-import { languageSelector } from '#selectors';
 
 const mapStateToProps = state => ({
     language: languageSelector(state),

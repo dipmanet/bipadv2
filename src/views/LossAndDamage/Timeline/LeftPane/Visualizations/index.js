@@ -1,21 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-
 import { isDefined } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
 
+
+import HazardsLegend from '#components/HazardsLegend';
 import Numeral from '#rscv/Numeral';
 import DonutChart from '#rscz/DonutChart';
-
-import { hazardTypesList } from '#utils/domain';
-import { groupList, sum } from '#utils/common';
-import HazardsLegend from '#components/HazardsLegend';
-
 import {
     hazardTypesSelector,
 } from '#selectors';
-
+import { groupList, sum } from '#utils/common';
+import { hazardTypesList } from '#utils/domain';
 import styles from './styles.scss';
 
 const propTypes = {

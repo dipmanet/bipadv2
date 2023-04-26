@@ -1,7 +1,7 @@
 import { isNotDefined } from '@togglecorp/fujs';
 
-import TableHeader from '#components/TableHeader';
 import TableCell from '#components/TableCell';
+import TableHeader from '#components/TableHeader';
 
 export const readNestedValue = (obj, keystring) => {
     const keylist = keystring.split('.');

@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _cs, bound } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
 
 import SparkLine from '#rscz/SparkLine';
 import { groupFilledList } from '#utils/common';

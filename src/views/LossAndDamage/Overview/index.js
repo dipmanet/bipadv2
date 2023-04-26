@@ -1,25 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import { TitleContext } from '#components/TitleContext';
-
 import {
-    provincesSelector,
-    municipalitiesSelector,
     districtsSelector,
-    wardsSelector,
-    regionLevelSelector,
     hazardTypesSelector,
-    regionsSelector,
     languageSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    regionLevelSelector,
+    regionsSelector,
+    wardsSelector,
 } from '#selectors';
-
+import { getSanitizedIncidents, metricMap } from '../common';
 import Map from '../Map';
-// import LeftPane from './LeftPane';
-
-import { metricMap, getSanitizedIncidents } from '../common';
 import { generateOverallDataset } from '../utils/utils';
 
 import styles from './styles.scss';
+
+// import LeftPane from './LeftPane';
 
 const propTypes = {};
 

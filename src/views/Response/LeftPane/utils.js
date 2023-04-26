@@ -1,4 +1,4 @@
-import { mapToMap, mapToList, listToMap } from '@togglecorp/fujs';
+import { listToMap, mapToList, mapToMap } from '@togglecorp/fujs';
 
 export const getFilterItems = (resourceAttributes) => {
     const values = mapToMap(

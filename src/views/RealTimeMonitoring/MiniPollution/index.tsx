@@ -20,11 +20,11 @@ import {
     RealTimePollution,
 } from '#store/atom/page/types';
 
+import { languageSelector } from '#selectors';
+import { convertDateAccToLanguage } from '#utils/common';
 import Pollution from '../Pollution';
 
 import styles from './styles.scss';
-import { languageSelector } from '#selectors';
-import { convertDateAccToLanguage } from '#utils/common';
 
 const mapStateToProps = (state: AppState) => ({
     language: languageSelector(state),

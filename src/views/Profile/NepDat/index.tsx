@@ -17,7 +17,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 
 import { Translation } from 'react-i18next';
-import styles from './styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
     resourceTypeListSelector,
@@ -41,6 +40,7 @@ import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import nepDatDownload from '#resources/icons/Download2.svg';
+import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     provinces: provincesSelector(state),

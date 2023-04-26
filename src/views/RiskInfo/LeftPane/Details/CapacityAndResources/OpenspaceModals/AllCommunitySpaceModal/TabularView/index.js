@@ -1,22 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import {
     _cs,
-    compareDate,
-    compareString,
     compareBoolean,
+    compareDate,
     compareNumber,
+    compareString,
 } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
+
+import DownloadButton from '#components/DownloadButton';
 import Numeral from '#rscv/Numeral';
 import NormalTaebul from '#rscv/Taebul';
-import Sortable from '#rscv/Taebul/Sortable';
 import ColumnWidth from '#rscv/Taebul/ColumnWidth';
-import DownloadButton from '#components/DownloadButton';
+import Sortable from '#rscv/Taebul/Sortable';
 import {
     convertTableToCsv,
-    prepareColumns,
     defaultState,
+    prepareColumns,
     readNestedValue,
 } from '#utils/table';
 import styles from './styles.scss';

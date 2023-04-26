@@ -1,0 +1,48 @@
+$border-color: rgba(255,255,255,0.5);
+
+.select{
+    border-bottom: 1px solid $border-color !important;
+    path { 
+        fill: $border-color;
+    }
+}
+
+.inputContainer {
+    .label{
+        padding: 10px 0;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.67) ;
+
+    }
+    margin: 5px 0;
+}
+$button-color: rgb(0,170,223);
+
+.saveBtn{
+    z-index: 500;
+    background-color: transparent;
+    border: 1px solid $button-color;
+    filter: saturate(100%);
+    color: $button-color;
+    cursor:pointer;
+    padding: 5px 10px;
+    margin-left: 5px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+.loaderInfo{
+    position: fixed;
+    z-index: 9999;
+top: 50%;
+left: 55%;
+// border: 1px solid red;
+    .loader{
+        background-color: white;
+    }
+    .loaderText{
+        color: rgb(139, 135, 135);
+        position: relative;
+        top: 40px !important;
+        left: 3px;
+    }
+}

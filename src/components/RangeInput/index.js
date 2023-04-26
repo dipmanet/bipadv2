@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { isNotDefined } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
-import { NormalNumberInput } from '#rsci/NumberInput';
 import Delay from '#rscg/Delay';
+import { NormalNumberInput } from '#rsci/NumberInput';
 
 const propTypes = {
     className: PropTypes.string,
@@ -29,6 +29,7 @@ const defaultProps = {
 
 class RangeInput extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     handleMinChange = (val) => {
@@ -56,8 +57,8 @@ class RangeInput extends React.PureComponent {
         } = this.props;
 
         if (
-            isNotDefined(val) ||
-            ((isNotDefined(min) || val >= min) && val <= maxLimit)
+            isNotDefined(val)
+            || ((isNotDefined(min) || val >= min) && val <= maxLimit)
         ) {
             onChange({ min, max: val });
         }
@@ -76,7 +77,11 @@ class RangeInput extends React.PureComponent {
 
         return (
             <div className={classNameFromProps}>
-                <span> { label } </span>
+                <span>
+                    {' '}
+                    { label }
+                    {' '}
+                </span>
                 { !noMin && (
                     <NormalNumberInput
                         key="min"

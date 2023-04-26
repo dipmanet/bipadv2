@@ -12,10 +12,10 @@ import { EnumItem, KeyLabel } from '#types';
 import { getAttributeOptions } from '#utils/domain';
 import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
-import styles from '../styles.scss';
 import DateInput from '#rsci/DateInput';
 
 import { languageSelector } from '#selectors';
+import styles from '../styles.scss';
 
 
 interface Props {

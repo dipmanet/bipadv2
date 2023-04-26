@@ -1,11 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 
 import LossDetails from '#components/LossDetails';
-
 import Visualizations from './Visualizations';
+
 import styles from './styles.scss';
+
+
 
 const propTypes = {
     className: PropTypes.string,

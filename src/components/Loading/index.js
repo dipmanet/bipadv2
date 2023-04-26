@@ -1,9 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Translation } from 'react-i18next';
-import Spinner from '#rsu/../v2/View/Spinner';
+import PropTypes from 'prop-types';
 
+import Spinner from '#rsu/../v2/View/Spinner';
 import styles from './styles.scss';
+
 
 const Loading = ({ pending, text }) => {
     if (!pending) {

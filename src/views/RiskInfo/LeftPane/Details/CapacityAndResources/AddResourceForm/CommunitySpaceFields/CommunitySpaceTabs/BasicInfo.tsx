@@ -11,10 +11,10 @@ import { createConnectedRequestCoordinator } from '#request';
 import { AppState } from '#store/types';
 import { authStateSelector, languageSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
-import styles from './styles.scss';
-import RegionSelectInput from '../../OpenspaceFields/AddOpenspaceTabs/RegionSelectInput';
 import NumberInput from '#rsci/NumberInput';
 import LocationInput from '#components/LocationInput';
+import styles from './styles.scss';
+import RegionSelectInput from '../../OpenspaceFields/AddOpenspaceTabs/RegionSelectInput';
 
 
 interface PropsFromState {

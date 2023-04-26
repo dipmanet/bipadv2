@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { authStateSelector } from '#selectors';
-import styles from './styles.scss';
 
 import CapacityResourcesImg from '#resources/images/openspace-images/capacity-and-resources.png';
 import ToggleOpenspace from '#resources/images/openspace-images/image6.png';
@@ -16,6 +15,7 @@ import MetadataTab from '#resources/images/openspace-images/image10.png';
 import LegendOpenspace from '#resources/images/openspace-images/image11.png';
 import DroneImageOpenspace from '#resources/images/openspace-images/image12.png';
 import TooltipOpenspace from '#resources/images/openspace-images/image14.png';
+import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     authState: authStateSelector(state),

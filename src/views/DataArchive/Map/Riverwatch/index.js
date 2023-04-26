@@ -1,24 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import memoize from 'memoize-one';
+
+
 import CommonMap from '#components/CommonMap';
+import {
+    getMapPaddings,
+    mapStyles,
+} from '#constants';
+import { MapChildContext } from '#re-map/context';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import { MapChildContext } from '#re-map/context';
-import { httpGet } from '#utils/common';
-
-
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
 import { riverFiltersSelector, riverStationsSelector } from '#selectors';
+import { httpGet } from '#utils/common';
 import { getDate, getTime } from '#views/DataArchive/utils';
-import RiverModal from '../../Modals/Riverwatch';
-
 import styles from './styles.scss';
+import RiverModal from '../../Modals/Riverwatch';
 
 const mapStateToProps = state => ({
     riverFilters: riverFiltersSelector(state),

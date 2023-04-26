@@ -1,16 +1,16 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+import PropTypes from 'prop-types';
+
+
 import StatOutput from '#components/StatOutput';
-import { lossMetrics } from '#utils/domain';
-import { sum, nullCheck } from '#utils/common';
 import { languageSelector } from '#selectors';
-
-
+import { nullCheck, sum } from '#utils/common';
+import { lossMetrics } from '#utils/domain';
 import styles from './styles.scss';
 
 const propTypes = {

@@ -1,15 +1,15 @@
 /* eslint-disable no-nested-ternary */
-import PropTypes from 'prop-types';
+import React from 'react';
 import {
     _cs,
     isFalsy,
 } from '@togglecorp/fujs';
-import React from 'react';
+import PropTypes from 'prop-types';
 
-import Numeral from '#rscv/Numeral';
 
-import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import Numeral from '#rscv/Numeral';
+import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,

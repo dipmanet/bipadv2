@@ -57,7 +57,6 @@ import {
 
 import Loading from '#components/Loading';
 import Page from '#components/Page';
-
 import {
     getResults,
     getPending,
@@ -498,11 +497,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     {language === 'en'
-                                    && (
-                                        <div className={styles.label}>
-                                        Showing Data From
-                                        </div>
-                                    )
+                                        && (
+                                            <div className={styles.label}>
+                                                Showing Data From
+                                            </div>
+                                        )
                                     }
                                     <DateInput
                                         showLabel={false}
@@ -531,7 +530,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     {language === 'np'
                                         && (
                                             <span>
-                                                सम्‍म को डेटा
+                                                सम्‍मको डाटा
                                                 {' '}
                                                 {''}
                                             </span>
@@ -703,7 +702,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 <h3 className={styles.headerText}>
                                                     {language === 'en'
                                                         ? 'Please wait, the system is loading data'
-                                                        : 'कृपया पर्खनुहोस्, प्रणाली डेटा लोड गर्दैछ'}
+                                                        : 'कृपया पर्खनुहोस्, प्रणाली डाटा लोड गर्दैछ'}
                                                 </h3>
                                                 <Spinner
                                                     className={styles.spinner}

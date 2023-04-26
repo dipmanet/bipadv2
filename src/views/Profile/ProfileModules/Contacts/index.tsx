@@ -9,12 +9,12 @@ import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import Page from '#components/Page';
+import Button from '#rsca/Button';
 import DisasterProfile from '../../DisasterProfile';
 import ProjectsProfile from '../../ProjectsProfile';
 import Indicator from '../../Indicator';
 import Contact from '../../Contact';
 import Document from '../../Document';
-import Button from '#rsca/Button';
 import styles from '../../styles.scss';
 
 type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';

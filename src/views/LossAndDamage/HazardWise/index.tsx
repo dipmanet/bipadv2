@@ -1,3 +1,5 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable func-names */
 /* eslint-disable arrow-parens */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-closing-tag-location */
@@ -6,9 +8,10 @@
 import React, { useRef, useState } from 'react';
 import { ResponsiveContainer, Tooltip, Treemap } from 'recharts';
 import { Translation, useTranslation } from 'react-i18next';
+import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
-import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
+import { formatNumeralAccLang } from '../utils/utils';
 import { HazardDetail, Summary } from './types';
 import { ContainerSize, TooltipInterface } from '../Barchart/types';
 import FullScreenIcon from '../FullScreen';
@@ -81,10 +84,25 @@ const HazardWise = (props: HazardWiseProps) => {
         '#f6d8bf',
     ];
 
+
+    const SvgToBase64Encoder = (url: string): string => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, false);
+        xhr.send();
+        if (xhr.status !== 200) {
+            throw new Error('Failed to fetch SVG content');
+        }
+        const svgText = xhr.responseText;
+        const svgString = encodeURIComponent(svgText);
+        return `data:image/svg+xml,${svgString}`;
+    };
+
+
     const CustomizedContent = (prop: any) => {
         const { root, depth, x, y, width, height, index, colors, name, value, icon } = prop;
+        const base64Icon = SvgToBase64Encoder(icon);
         return (
-            <g>
+            <g style={{ position: 'relative' }}>
                 <rect
                     id={name}
                     x={x}
@@ -120,20 +138,15 @@ const HazardWise = (props: HazardWiseProps) => {
                         >
                             {height + width > 150 ? formatNumeralAccLang(value, language) : ''}
                         </text>
-                        <foreignObject
+                        <image
                             width={height + width <= 150 ? '15px' : (height + width) / 14}
                             height={height + width <= 150 ? '15px' : (height + width) / 14}
+                            href={base64Icon}
+                            style={{ filter: 'brightness(0) invert(1)' }}
                             x={x + width / 8}
                             y={height + width <= 150 ? y + height / 7 : y + height / 1.5}
-                        >
-                            <img
-                                width={height + width <= 150 ? '15px' : (height + width) / 14}
-                                height={height + width <= 150 ? '15px' : (height + width) / 14}
-                                src={icon}
-                                alt={name}
-                                style={{ filter: 'brightness(0) invert(1)' }}
-                            />
-                        </foreignObject>
+                            id={`base64${name}`}
+                        />
                     </>
                 ) : null}
             </g>
@@ -171,21 +184,21 @@ const HazardWise = (props: HazardWiseProps) => {
         selectOption: selectOption.name,
         headerText: language === 'en'
             ? `Hazard-wise distribution of ${selectOption.name}`
-            : `${t(selectOption.name)}को जोखिम अनुसार वितरण`,
+            : `प्रकोप अनुसार ${t(selectOption.name)}को  विवरण`,
         fileName: 'Tree Map',
         height: 50,
         width: 0,
     };
 
     return (
-        <div className={styles.wrapper}>
+        <div className={_cs(styles.wrapper, language === 'np' && styles.languageNp)}>
             <div className={styles.hazardHead}>
                 <Translation>
                     {(k) => (
                         <p className={styles.hazardText}>
                             {language === 'en'
                                 ? `Hazard-wise distribution of ${selectOption.name}`
-                                : `${k(selectOption.name)}को जोखिम अनुसार वितरण`}
+                                : `प्रकोप अनुसार ${k(selectOption.name)}को विवरण`}
                         </p>
                     )}
                 </Translation>
@@ -197,7 +210,7 @@ const HazardWise = (props: HazardWiseProps) => {
                         selectOption={selectOption.name}
                         headerText={language === 'en'
                             ? `Hazard-wise distribution of ${selectOption.name}`
-                            : `${t(selectOption.name)}को जोखिम अनुसार वितरण`}
+                            : `प्रकोप अनुसार ${t(selectOption.name)}को विवरण`}
                         language={language}
                     />
                 )}
@@ -213,6 +226,7 @@ const HazardWise = (props: HazardWiseProps) => {
                     />
                 )}
             </div>
+            <div id="test" />
             <div id="treemap" ref={treeMapRef} className={styles.treeMap}>
                 {hazardWiseData.length > 0 && (
                     <ResponsiveContainer height={fullScreen.height} width={fullScreen.width}>

@@ -42,8 +42,8 @@ import {
 } from '#request';
 
 import RawFileInput from '#rsci/RawFileInput';
-import styles from './styles.scss';
 import LocationInput from '#components/LocationInput';
+import styles from './styles.scss';
 
 interface Params {
     body: object;

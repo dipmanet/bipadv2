@@ -1,5 +1,5 @@
-import { ArchiveRiver, Errors } from './types';
 import { isValidDate, getDateDiff } from '#views/DataArchive/utils';
+import { ArchiveRiver, Errors } from './types';
 
 export const riverToGeojson = (riverList: ArchiveRiver[]) => {
     const geojson = {
