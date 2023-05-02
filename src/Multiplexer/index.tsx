@@ -1785,6 +1785,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
 
     private hideLanguageToggleButton = (routeName) => {
+        console.log('route name', routeName);
         if (routeName === 'admin') {
             return true;
         } if (routeName === 'healthinfrastructure-data-table') {
@@ -1806,6 +1807,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             return true;
         }
         if (routeName === 'DRRM Report') {
+            return true;
+        }
+        if (routeName === 'visrisk') {
             return true;
         }
         return false;
