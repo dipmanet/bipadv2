@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-useless-concat */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
@@ -69,6 +70,7 @@ import {
 } from '#utils/transformations';
 import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
 import Spinner from '#rscv/Spinner';
+import DateRangeInfo from '#components/DateRangeInfo';
 import TabularView from './TabularView';
 import { getSanitizedIncidents } from './common';
 import Overview from './Overview';
@@ -476,7 +478,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             setSelectOption(label, key);
         };
 
-
         return (
             <>
                 <Loading
@@ -491,20 +492,26 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                         <>
                             <div className={styles.dataDetails}>
                                 <div className={styles.dateDetails}>
-                                    <div className={styles.infoIconContainer}>
+                                    {/* <div className={styles.infoIconContainer}>
                                         <Icon
                                             className={styles.infoIcon}
                                             name="info"
                                         />
-                                    </div>
-                                    {language === 'en'
+                                    </div> */}
+                                    <DateRangeInfo
+                                        className={styles.dateRange}
+                                        startDate={convertDateAccToLanguage(startDate, language)}
+                                        endDate={convertDateAccToLanguage(endDate, language)}
+                                    />
+                                    {/* {language === 'en'
                                         && (
                                             <div className={styles.label}>
                                                 Showing Data From
                                             </div>
                                         )
-                                    }
-                                    <DateInput
+                                    } */}
+
+                                    {/* <DateInput
                                         showLabel={false}
                                         showHintAndError={false}
                                         className={'startDateInput'}
@@ -536,8 +543,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 {''}
                                             </span>
                                         )
-                                    }
-                                    <div
+                                    } */}
+                                    {/* <div
                                         className={styles.submitButton}
                                         onClick={this.handleSubmitClick}
                                         role="presentation"
@@ -547,7 +554,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 t => <span>{t('Submit')}</span>
                                             }
                                         </Translation>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 {startDate > endDate
                                     && (
@@ -663,7 +670,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     language={language}
                                 />
                                 {
-                                    filteredData.length > 0
+                                    !pending && filteredData.length > 0
                                         ? (
                                             <div style={{ width: '95%' }}>
                                                 <BarChartVisual
@@ -698,18 +705,26 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 />
                                             </div>
                                         )
-                                        : (
-                                            <div className={styles.dataUnavailable}>
-                                                <h3 className={styles.headerText}>
+                                        : !pending && filteredData.length === 0
+                                            ? (
+                                                <h3 style={{ marginTop: '50px' }} className={styles.headerText}>
                                                     {language === 'en'
-                                                        ? 'Please wait, the system is loading data'
-                                                        : 'कृपया पर्खनुहोस्, प्रणाली डाटा लोड गर्दैछ'}
+                                                        ? 'No Data Available'
+                                                        : 'डाटा उपलब्ध छैन'}
                                                 </h3>
-                                                <Spinner
-                                                    className={styles.spinner}
-                                                />
-                                            </div>
-                                        )
+                                            )
+                                            : (
+                                                <div className={styles.dataUnavailable}>
+                                                    <h3 className={styles.headerText}>
+                                                        {language === 'en'
+                                                            ? 'Please wait, the system is loading data'
+                                                            : 'कृपया पर्खनुहोस्, प्रणाली डाटा लोड गर्दैछ'}
+                                                    </h3>
+                                                    <Spinner
+                                                        className={styles.spinner}
+                                                    />
+                                                </div>
+                                            )
                                 }
                             </div>
                         </>
