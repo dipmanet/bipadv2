@@ -10,8 +10,9 @@ export default {
 
     mapCSS: {
         position: 'absolute',
-        width: 'calc(70%)',
-        left: 'calc(30% - 60px)',
+        width: 'calc(73%)',
+        // left: 'calc(30% - 60px)',
+        left: '27%',
         top: 0,
         height: '100vh',
     },

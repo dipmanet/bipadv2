@@ -218,6 +218,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
     componentDidMount() {
         const { filters, setFilters } = this.props;
+
         const sixMonths = {
             dataDateRange: {
                 rangeInDays: 183,
@@ -225,7 +226,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 endDate: undefined,
             },
             hazard: [],
-            region: {},
+            region: filters.region,
         };
 
         setFilters({ filters: sixMonths });
@@ -259,7 +260,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 endDate: undefined,
             },
             hazard: [],
-            region: {},
+            region: filters.region,
         };
 
         setFilters({ filters: sixMonths });
