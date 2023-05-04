@@ -1785,7 +1785,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
 
     private hideLanguageToggleButton = (routeName) => {
-        console.log('route name', routeName);
         if (routeName === 'admin') {
             return true;
         } if (routeName === 'healthinfrastructure-data-table') {
@@ -1801,12 +1800,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         } if (routeName === 'incident-data-table') {
             return true;
         }
-        if (routeName === 'incident') {
-            return true;
-        } if (routeName === 'incident-upload') {
+        if (routeName === 'incident-upload') {
             return true;
         }
         if (routeName === 'DRRM Report') {
+            return true;
+        }
+        if (routeName === 'incident') {
+            return false;
+        }
+        if (routeName === 'dataArchive') {
             return true;
         }
         if (routeName === 'visrisk') {
@@ -1819,7 +1822,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private hiddenNavRouteName = (routeName) => {
         if (routeName === 'homepage') {
             return true;
-        } if (routeName === 'gpdrr') {
+        }
+        if (routeName === 'gpdrr') {
             return true;
         }
         if (routeName === 'about') {
@@ -2020,8 +2024,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
-
-        console.log('active route name', activeRouteName);
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>

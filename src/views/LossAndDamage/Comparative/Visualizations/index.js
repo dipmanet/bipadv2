@@ -141,7 +141,7 @@ class Visualizations extends React.PureComponent {
         const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList, language);
         const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList, language);
         const lossSummary = this.getLossSummary(lossAndDamageList);
-        console.log('loss summary: ', lossSummary);
+
         // height: `${60 + lossSummary.length * 40}px`,
 
         return (
@@ -254,7 +254,7 @@ class Visualizations extends React.PureComponent {
                                     innerRadius="70%"
                                     outerRadius="90%"
                                 >
-                                    { hazardDeaths.map(hazard => (
+                                    {hazardDeaths.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}
@@ -287,7 +287,7 @@ class Visualizations extends React.PureComponent {
                                     innerRadius="70%"
                                     outerRadius="90%"
                                 >
-                                    { hazardLossEstimate.map(loss => (
+                                    {hazardLossEstimate.map(loss => (
                                         <Cell
                                             key={loss.label}
                                             fill={loss.color}

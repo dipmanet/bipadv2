@@ -250,9 +250,7 @@ class Incidents extends React.PureComponent<Props, State> {
             hazardTypes,
         );
 
-        console.log('incidentList', incidentList);
-        console.log('regions', regions);
-        console.log('hazardTypes', hazardTypes);
+
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
 
 

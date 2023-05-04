@@ -181,7 +181,6 @@ class VizriskMap extends React.PureComponent {
     // }
 
     getRasterTile = (layer) => {
-        console.log('infunction: layer ', layer);
         const url = [
             `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
             '&version=1.1.1',
@@ -196,7 +195,7 @@ class VizriskMap extends React.PureComponent {
             '&transparent=true',
             '&format=image/png',
         ].join('');
-        console.log(url);
+
         return encodeURI(url);
     }
     // getRasterTile = (layer.layername) => {
@@ -297,12 +296,16 @@ class VizriskMap extends React.PureComponent {
             offset: 8,
         };
         const rasterLayers = [
-            { layerName: 'fluvial_defended_1in5',
+            {
+                layerName: 'fluvial_defended_1in5',
                 id: 1,
-                opacity: 0.7 },
-            { layerName: 'fluvial_defended_1in10',
+                opacity: 0.7,
+            },
+            {
+                layerName: 'fluvial_defended_1in10',
                 id: 2,
-                opacity: 0.7 },
+                opacity: 0.7,
+            },
         ];
 
         // const tileUrl = [

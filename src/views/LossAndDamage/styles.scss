@@ -52,6 +52,10 @@
             align-items: center;
             padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
 
+            .dateRange {
+                padding-left: 1px;
+            }
+
             .info-icon-container {
                 flex-shrink: 0;
                 padding: 0 var(--spacing-small);
@@ -140,7 +144,7 @@
 
     }
 
-    .radioAndCompare{
+    .radioAndCompare {
         display: flex;
         margin-right: auto;
     }
@@ -162,23 +166,26 @@
         }
     }
 
-    .dataUnavailable{
+    .dataUnavailable {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         margin-top: 100px;
-        .headerText{
+
+        .headerText {
             color: rgb(113, 126, 125);
             font-size: 14px;
             font-weight: 600;
         }
-        .textOption{
+
+        .textOption {
             color: rgb(113, 126, 125);
             font-size: 16px;
             margin-top: 5px;
         }
-        .spinner{
+
+        .spinner {
             font-size: 40px;
             color: red;
         }

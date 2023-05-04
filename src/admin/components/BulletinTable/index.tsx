@@ -387,7 +387,7 @@ const BulletinTable = (props) => {
             link.parentNode.removeChild(link);
         }
     };
-    console.log('This is loader', loader);
+
     return (
         <>
             {
