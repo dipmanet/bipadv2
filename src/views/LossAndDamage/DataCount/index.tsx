@@ -15,10 +15,11 @@ interface DataCountProps {
 }
 
 const DataCount = (props: DataCountProps) => {
-    const { data, value, language } = props;
+    const { data, value, language, overallTotalIncident } = props;
     const { name, key } = value;
     const nullCondition = false;
     const dataValue = nullCheck(nullCondition, data, key);
+    console.log('Data value', dataValue);
     return (
         <div className={styles.wrapper}>
             <Translation>
@@ -27,7 +28,7 @@ const DataCount = (props: DataCountProps) => {
                         <p className={styles.alertText}>
                             {
                             }
-                            { language === 'en'
+                            {language === 'en'
                                 ? `Total number of ${name}`
                                 : `${t(name)}को कुल संख्या`
 
@@ -37,11 +38,20 @@ const DataCount = (props: DataCountProps) => {
                 }
             </Translation>
 
-            {
+            {/* {
                 data.length > 0
                 && (
                     <span className={styles.alertValue}>
                         {formatNumeralAccLang(dataValue, language)}
+                    </span>
+                )
+            } */}
+
+            {
+                data.length > 0
+                && (
+                    <span className={styles.alertValue}>
+                        {overallTotalIncident}
                     </span>
                 )
             }

@@ -50,11 +50,13 @@ const AreaChartVisual = (props: AreaChartProps) => {
         document.addEventListener('webkitfullscreenchange', exitHandler, false);
     }
 
-    const chartData = data.map((item) => {
+    const chartData = data && data.length && data.map((item) => {
         const date = new Date();
         date.setTime(parseInt(item.incidentMonthTimestamp, 10));
+        console.log('This is date', date);
         const year = date.getFullYear();
-        const month = date.getMonth() === 0 ? 1 : date.getMonth();
+        console.log('date month', date.getMonth());
+        const month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
         const finalDate = convertDateAccToLanguage(`${year}-${month}`, language);
         const obj = {
             date: finalDate,
@@ -62,7 +64,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
         };
         return obj;
     });
-
+    console.log('This chart data', chartData);
     const CustomizedTick = (value: number) => formatNumeralAccLang(value, language);
 
     function CustomTooltip({ payload, active }: TooltipInterface) {

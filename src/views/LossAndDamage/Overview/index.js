@@ -63,6 +63,7 @@ class Overview extends React.PureComponent {
             radioSelect,
             pending,
             language: { language },
+            incidentData,
         } = this.props;
         // const {
         //     selectedMetricKey = 'count',
@@ -71,6 +72,16 @@ class Overview extends React.PureComponent {
         const sanitizedList = getSanitizedIncidents(lossAndDamageList, regions, hazardTypes);
 
         const { mapping, aggregatedStat } = generateOverallDataset(sanitizedList, radioSelect.id);
+
+        const obj = {};
+        const objectCreation = incidentData && incidentData.data
+            && incidentData.data.map((item, i) => {
+                obj[`${i + 1}`] = { count: item.count, key: item.provinceId };
+                return null;
+            });
+
+        const maxDataValue = incidentData && incidentData.data
+            && Math.max(...incidentData.data.map(item => item.count));
 
         const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
@@ -94,11 +105,13 @@ class Overview extends React.PureComponent {
                 return prevState;
             });
         }
+
+
         return (
             <Map
                 geoareas={geoareas}
-                mapping={mapping}
-                maxValue={maxValue}
+                mapping={obj}
+                maxValue={maxDataValue}
                 sourceKey="loss-and-damage-overview"
                 metric={selectedMetric.metricFn}
                 metricName={selectedMetric.label}

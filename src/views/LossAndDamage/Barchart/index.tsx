@@ -48,6 +48,7 @@ const BarChartVisual = (props: BarchartProps) => {
         downloadButton,
         fullScreenMode,
         language,
+        barChartData,
     } = props;
 
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
@@ -60,8 +61,8 @@ const BarChartVisual = (props: BarchartProps) => {
     function exitHandler() {
         if (
             !document.webkitIsFullScreen
-      && !document.mozFullScreen
-      && !document.msFullscreenElement
+            && !document.mozFullScreen
+            && !document.msFullscreenElement
         ) {
             setFullScreen({ width: '100%', height: 300 });
             setAllBarData(false);
@@ -146,7 +147,7 @@ const BarChartVisual = (props: BarchartProps) => {
             }
             regiondata.push({
                 [language === 'en' ? typeKey[i].name : typeKey[i].nameNe]:
-          regionWiseData,
+                    regionWiseData,
             });
         }
 
@@ -154,7 +155,7 @@ const BarChartVisual = (props: BarchartProps) => {
             const obj = {
                 name: Object.keys(item)[0],
                 value:
-          item[Object.keys(item)[0]][valueOnclick.index][valueOnclick.value],
+                    item[Object.keys(item)[0]][valueOnclick.index][valueOnclick.value],
             };
             return obj;
         });
@@ -188,7 +189,7 @@ const BarChartVisual = (props: BarchartProps) => {
                     setChartData(isAllBarData ? AlldistrictData : TopTendistrictData);
                     break;
                 case regionRadio.adminLevel === 3
-          || regionRadio.name === 'municipality':
+                    || regionRadio.name === 'municipality':
                     // eslint-disable-next-line no-case-declarations
                     const muniData = distributionCalculate(
                         municipalityIndex,
@@ -224,8 +225,8 @@ const BarChartVisual = (props: BarchartProps) => {
     function nameReturn(region: RadioValue) {
         if (
             region.name === 'district'
-      || region.name === 'municipality'
-      || region.name === 'ward'
+            || region.name === 'municipality'
+            || region.name === 'ward'
         ) {
             if (region.name === 'district') {
                 return language === 'en'
@@ -288,7 +289,7 @@ const BarChartVisual = (props: BarchartProps) => {
     }
 
     const CustomizedLabel = (prop) => {
-    // eslint-disable-next-line react/prop-types
+        // eslint-disable-next-line react/prop-types
         const { x, y, payload, dy, dx } = prop;
         return typeof payload.value === 'string' ? (
             <Text
@@ -315,17 +316,17 @@ const BarChartVisual = (props: BarchartProps) => {
         domElement: 'barChart',
         selectOption: selectOption.name,
         headerText:
-      language === 'en'
-          ? `${nameReturn(regionRadio)} of ${selectOption.name} `
-          : `${nameReturn(regionRadio)} ${t(selectOption.name)}को विवरण`,
+            language === 'en'
+                ? `${nameReturn(regionRadio)} of ${selectOption.name} `
+                : `${nameReturn(regionRadio)} ${t(selectOption.name)}को विवरण`,
         fileName: 'Bar Chart',
         height: 20,
         width: 0,
     };
 
-
+    console.log('This is final chart data', barChartData);
     return (
-    // <div className={styles.container}>
+        // <div className={styles.container}>
         <div
             className={className ? _cs(className, styles.wrapper) : styles.wrapper}
         >
@@ -363,7 +364,7 @@ const BarChartVisual = (props: BarchartProps) => {
                         }
                         className={styles.downloadButton}
                         transparent
-            // disabled={pending}
+                        // disabled={pending}
                         onClick={() => handleDownload(downloadProps)}
                         iconName="download"
                     />
@@ -381,7 +382,7 @@ const BarChartVisual = (props: BarchartProps) => {
                         height={fullScreen.height}
                     >
                         <BarChart
-                            data={chartData}
+                            data={barChartData}
                             margin={{
                                 top: 10,
                                 bottom: 45,
@@ -414,7 +415,7 @@ const BarChartVisual = (props: BarchartProps) => {
                 )}
             </div>
         </div>
-    // </div>
+        // </div>
     );
 };
 
