@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-eval */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
@@ -180,16 +183,15 @@ class NewCompare extends React.PureComponent {
   messageForNoData = (noData, language) => {
     const noOptionSelected = language === 'en' ? 'No comparison is made' : 'तुलना भइरहेको छैन';
     return (
-        <div className={styles.preComparisionMessage}>
-            <h3 className={styles.headerText}>{noData ? '' : noOptionSelected}</h3>
-            <p className={styles.textOption}>
-                {language === 'en'
+      <div className={styles.preComparisionMessage}>
+        <h3 className={styles.headerText}>{noData ? '' : noOptionSelected}</h3>
+        <p className={styles.textOption}>
+          {language === 'en'
             ? `Select ${noData ? 'a region' : 'different sections'} to compare`
-            : `तुलना गर्न  ${
-                noData ? 'क्षेत्र' : 'विभिन्न खण्डहरू'
-              } छनोट गर्नुहोस्`}
-            </p>
-        </div>
+            : `तुलना गर्न  ${noData ? 'क्षेत्र' : 'विभिन्न खण्डहरू'
+            } छनोट गर्नुहोस्`}
+        </p>
+      </div>
     );
   };
 
@@ -240,7 +242,7 @@ class NewCompare extends React.PureComponent {
       geoarea: region.id,
       label: language === 'en' ? region.title : region.title_ne,
     }));
-
+    console.log('This is region options', RegionOptions);
     const dropDownClickHandler = (item, index, elementName) => {
       const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
       this.setState({ faramValues: { ...faramValues, [elementName]: data } });
@@ -287,306 +289,306 @@ class NewCompare extends React.PureComponent {
     const colorPaint = generatePaint(colorRange);
 
     const handleDownload = async () => {
-        if (this.imageDownloadRef.current) {
-            const width = this.imageDownloadRef.current.scrollWidth;
-            const height = this.imageDownloadRef.current.scrollHeight;
-            await HtmltoImage.toPng(this.imageDownloadRef.current,
-                { width, height }).then((img) => {
-                    const link = document.createElement('a');
-                    link.href = img;
-                    link.download = 'Compare.png';
-                    link.click();
-                });
-        }
+      if (this.imageDownloadRef.current) {
+        const width = this.imageDownloadRef.current.scrollWidth;
+        const height = this.imageDownloadRef.current.scrollHeight;
+        await HtmltoImage.toPng(this.imageDownloadRef.current,
+          { width, height }).then((img) => {
+            const link = document.createElement('a');
+            link.href = img;
+            link.download = 'Compare.png';
+            link.click();
+          });
+      }
     };
 
-
+    console.log('region1Incidents', region1Incidents);
     return (
-        <Modal className={_cs(className, styles.comparative)}>
-            <div className={styles.regionHead}>
-                <h1 className={styles.compareText}>
-                    {language === 'en' ? 'COMPARE' : 'तुलना गर्नुहोस्'}
-                </h1>
-                <Button
-                    title={
+      <Modal className={_cs(className, styles.comparative)}>
+        <div className={styles.regionHead}>
+          <h1 className={styles.compareText}>
+            {language === 'en' ? 'COMPARE' : 'तुलना गर्नुहोस्'}
+          </h1>
+          <Button
+            title={
               language === 'en' ? 'Download Chart' : 'चार्ट डाउनलोड गर्नुहोस्'
             }
-                    className={styles.chartDownload}
-                    transparent
-                    disabled={!region1 && !region2}
-                    onClick={handleDownload}
-                    iconName="download"
-                />
-                <Button
-                    onClick={closeModal}
-                    iconName="close"
-                    className={styles.closeButton}
-                />
-            </div>
-            <header className={styles.header}>
-                <div className={styles.regionSelectionForm}>
-                    <Dropdown
-                        elementName="region1"
-                        label={
+            className={styles.chartDownload}
+            transparent
+            disabled={!region1 && !region2}
+            onClick={handleDownload}
+            iconName="download"
+          />
+          <Button
+            onClick={closeModal}
+            iconName="close"
+            className={styles.closeButton}
+          />
+        </div>
+        <header className={styles.header}>
+          <div className={styles.regionSelectionForm}>
+            <Dropdown
+              elementName="region1"
+              label={
                 language === 'en'
                   ? 'Enter a Location to compare'
                   : 'स्थान छनोट गर्नुहोस्'
               }
-                        className={styles.regionInput}
-                        placeholder={
+              className={styles.regionInput}
+              placeholder={
                 language === 'en' ? 'Select an Option' : 'विकल्प छनोट गर्नुहोस्'
               }
-                        dropdownOption={RegionOptions}
-                        icon={false}
-                        dropDownClickHandler={dropDownClickHandler}
-                        deleteicon
-                        clearValues={clearValues}
-                        inputSearch
-                    />
-                    <Dropdown
-                        elementName="region2"
-                        label={
+              dropdownOption={RegionOptions}
+              icon={false}
+              dropDownClickHandler={dropDownClickHandler}
+              deleteicon
+              clearValues={clearValues}
+              inputSearch
+            />
+            <Dropdown
+              elementName="region2"
+              label={
                 language === 'en'
                   ? 'Enter a Location to compare'
                   : 'स्थान छनोट गर्नुहोस्'
               }
-                        className={styles.regionInput}
-                        placeholder={
+              className={styles.regionInput}
+              placeholder={
                 language === 'en' ? 'Select an Option' : 'विकल्प छनोट गर्नुहोस्'
               }
-                        dropdownOption={RegionOptions}
-                        icon={false}
-                        dropDownClickHandler={dropDownClickHandler}
-                        deleteicon
-                        clearValues={clearValues}
-                        inputSearch
-                    />
-                </div>
-            </header>
-            <div
-                className={_cs(
+              dropdownOption={RegionOptions}
+              icon={false}
+              dropDownClickHandler={dropDownClickHandler}
+              deleteicon
+              clearValues={clearValues}
+              inputSearch
+            />
+          </div>
+        </header>
+        <div
+          className={_cs(
             styles.content,
           )}
-            >
-                {!region1 && !region2 ? (
+        >
+          {!region1 && !region2 ? (
             this.messageForNoData(false, language)
           ) : (
+            <div
+              className={styles.comparisionContainer}
+              ref={this.imageDownloadRef}
+            >
               <div
-                  className={styles.comparisionContainer}
-                  ref={this.imageDownloadRef}
+                className={styles.mapContainer}
               >
-                  <div
-                      className={styles.mapContainer}
-                  >
-                      {isRegionValid(faramValues.region1)
-                && region1Incidents.length > 0 ? (
-                    <Map
-                        mapStyle={mapStyle}
-                        mapOptions={{
+                {isRegionValid(faramValues.region1)
+                  && region1Incidents.length > 0 ? (
+                  <Map
+                    mapStyle={mapStyle}
+                    mapOptions={{
                       logoPosition: 'top-left',
                       minZoom: 5,
                       preserveDrawingBuffer: true,
                     }}
                     // debug
 
-                        scaleControlShown
-                        scaleControlPosition="bottom-right"
-                        navControlShown
-                        navControlPosition="bottom-right"
-                    >
-                        <MapContainer className={styles.map1} />
-                        <ChoroplethMap
-                            sourceKey="comparative-first"
-                            paint={colorPaint}
-                            mapState={mapStateValue(
+                    scaleControlShown
+                    scaleControlPosition="bottom-right"
+                    navControlShown
+                    navControlPosition="bottom-right"
+                  >
+                    <MapContainer className={styles.map1} />
+                    <ChoroplethMap
+                      sourceKey="comparative-first"
+                      paint={colorPaint}
+                      mapState={mapStateValue(
                         faramValues.region1,
                         region1Incidents,
                       )}
-                            region={faramValues.region1}
-                            tooltipRenderer={prop => tooltipRenderer(
-                          prop,
-                          currentSelection.name,
-                          regionRadio.id,
-                          language,
-                        )
+                      region={faramValues.region1}
+                      tooltipRenderer={prop => tooltipRenderer(
+                        prop,
+                        currentSelection.name,
+                        regionRadio.id,
+                        language,
+                      )
                       }
-                            isDamageAndLoss
-                        />
-                    </Map>
+                      isDamageAndLoss
+                    />
+                  </Map>
                 ) : (
                   this.messageForNoData(true, language)
                 )}
-                      {isRegionValid(faramValues.region2)
-                && region2Incidents.length > 0 ? (
-                    <Map
-                        mapStyle={mapStyle}
-                        mapOptions={{
+                {isRegionValid(faramValues.region2)
+                  && region2Incidents.length > 0 ? (
+                  <Map
+                    mapStyle={mapStyle}
+                    mapOptions={{
                       logoPosition: 'top-left',
                       minZoom: 5,
                       preserveDrawingBuffer: true,
                     }}
                     // debug
 
-                        scaleControlShown
-                        scaleControlPosition="bottom-right"
-                        navControlShown
-                        navControlPosition="bottom-right"
-                    >
-                        <MapContainer className={styles.map2} />
-                        <ChoroplethMap
-                            sourceKey="comparative-second"
-                            paint={colorPaint}
-                            mapState={mapStateValue(
+                    scaleControlShown
+                    scaleControlPosition="bottom-right"
+                    navControlShown
+                    navControlPosition="bottom-right"
+                  >
+                    <MapContainer className={styles.map2} />
+                    <ChoroplethMap
+                      sourceKey="comparative-second"
+                      paint={colorPaint}
+                      mapState={mapStateValue(
                         faramValues.region2,
                         region2Incidents,
                       )}
-                            region={faramValues.region2}
-                            tooltipRenderer={prop => tooltipRenderer(
-                          prop,
-                          currentSelection.name,
-                          regionRadio.id,
-                          language,
-                        )
+                      region={faramValues.region2}
+                      tooltipRenderer={prop => tooltipRenderer(
+                        prop,
+                        currentSelection.name,
+                        regionRadio.id,
+                        language,
+                      )
                       }
-                            isDamageAndLoss
-                        />
-                    </Map>
+                      isDamageAndLoss
+                    />
+                  </Map>
                 ) : (
                   this.messageForNoData(true, language)
                 )}
-                  </div>
-                  <div
-                      className={styles.visualizations}
-                  >
-                      <div className={styles.otherVisualizations}>
-                          {isRegionValid(faramValues.region1)
-                  && region1Incidents.length > 0 ? (
-                      <BarChartVisual
-                          className={styles.region1Container}
-                          data={region1Incidents}
-                          regionRadio={region1}
-                          selectOption={selectOption}
-                          valueOnclick={valueOnclick}
-                          language={language}
-                      />
-                  ) : (
-                      <div />
-                  )}
-                          {isRegionValid(faramValues.region2)
-                  && region2Incidents.length > 0 ? (
-                      <BarChartVisual
-                          className={styles.region2Container}
-                          data={region2Incidents}
-                          regionRadio={region2}
-                          selectOption={selectOption}
-                          valueOnclick={valueOnclick}
-                          language={language}
-                      />
-                  ) : (
-                      <div />
-                  )}
-                      </div>
-                      <div className={styles.otherVisualizations}>
-                          {isRegionValid(faramValues.region1)
-                  && region1Incidents.length > 0 ? (
-                      <div
-                          className={styles.region1Container}
-
-                      >
-                          <AreaChartVisual
-                              data={getDataAggregatedByYear(region1Incidents)}
-                              selectOption={selectOption}
-                              language={language}
-                          />
-                      </div>
-                  ) : (
-                      <div />
-                  )}
-                          {isRegionValid(faramValues.region2)
-                  && region2Incidents.length > 0 ? (
-                      <div
-                          className={styles.region2Container}
-
-                      >
-                          <AreaChartVisual
-                              data={getDataAggregatedByYear(region2Incidents)}
-                              selectOption={selectOption}
-                              language={language}
-                          />
-                      </div>
-                  ) : (
-                      <div />
-                  )}
-                      </div>
-                      <div
-                          className={styles.otherVisualizations}
-
-                      >
-                          {isRegionValid(faramValues.region1)
-                  && region1Incidents.length > 0 ? (
-                      <div
-                          className={styles.region1Container}
-                      >
-                          <HazardWise
-                        // eslint-disable-next-line max-len
-                              data={getHazardsCount(region1Incidents, hazardTypes)}
-                              selectOption={selectOption}
-                              language={language}
-                          />
-                      </div>
-                  ) : (
-                      <div />
-                  )}
-                          {isRegionValid(faramValues.region2)
-                  && region2Incidents.length > 0 ? (
-                      <div
-                          className={styles.region2Container}
-                      >
-                          <HazardWise
-                        // eslint-disable-next-line max-len
-                              data={getHazardsCount(region2Incidents, hazardTypes)}
-                              selectOption={selectOption}
-                              language={language}
-                          />
-                      </div>
-                  ) : (
-                      <div />
-                  )}
-                      </div>
-                      {(region1Incidents.length > 0
-                  || region2Incidents.length > 0) && (
-                  <Translation>
-                      {t => (
-                          <div
-                              className={styles.value}
-                          >
-                              <span className={styles.label}>
-                                  {t('Data sources')}
-:
-                              </span>
-                              <span className={styles.source}>
-                                  {t('Nepal Police')}
-                              </span>
-                              <div className={styles.source}>
-                                  <span className={styles.text}>{t('DRR Portal')}</span>
-                                  <a
-                                      className={styles.link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      href="http://drrportal.gov.np"
-                                  >
-                                      <Icon name="externalLink" />
-                                  </a>
-                              </div>
-                          </div>
-                    )}
-                  </Translation>
-                )}
-                  </div>
               </div>
-          )}
+              <div
+                className={styles.visualizations}
+              >
+                <div className={styles.otherVisualizations}>
+                  {isRegionValid(faramValues.region1)
+                    && region1Incidents.length > 0 ? (
+                    <BarChartVisual
+                      className={styles.region1Container}
+                      data={region1Incidents}
+                      regionRadio={region1}
+                      selectOption={selectOption}
+                      valueOnclick={valueOnclick}
+                      language={language}
+                    />
+                  ) : (
+                    <div />
+                  )}
+                  {isRegionValid(faramValues.region2)
+                    && region2Incidents.length > 0 ? (
+                    <BarChartVisual
+                      className={styles.region2Container}
+                      data={region2Incidents}
+                      regionRadio={region2}
+                      selectOption={selectOption}
+                      valueOnclick={valueOnclick}
+                      language={language}
+                    />
+                  ) : (
+                    <div />
+                  )}
+                </div>
+                <div className={styles.otherVisualizations}>
+                  {isRegionValid(faramValues.region1)
+                    && region1Incidents.length > 0 ? (
+                    <div
+                      className={styles.region1Container}
+
+                    >
+                      <AreaChartVisual
+                        data={getDataAggregatedByYear(region1Incidents)}
+                        selectOption={selectOption}
+                        language={language}
+                      />
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                  {isRegionValid(faramValues.region2)
+                    && region2Incidents.length > 0 ? (
+                    <div
+                      className={styles.region2Container}
+
+                    >
+                      <AreaChartVisual
+                        data={getDataAggregatedByYear(region2Incidents)}
+                        selectOption={selectOption}
+                        language={language}
+                      />
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+                <div
+                  className={styles.otherVisualizations}
+
+                >
+                  {isRegionValid(faramValues.region1)
+                    && region1Incidents.length > 0 ? (
+                    <div
+                      className={styles.region1Container}
+                    >
+                      <HazardWise
+                        // eslint-disable-next-line max-len
+                        data={getHazardsCount(region1Incidents, hazardTypes)}
+                        selectOption={selectOption}
+                        language={language}
+                      />
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                  {isRegionValid(faramValues.region2)
+                    && region2Incidents.length > 0 ? (
+                    <div
+                      className={styles.region2Container}
+                    >
+                      <HazardWise
+                        // eslint-disable-next-line max-len
+                        data={getHazardsCount(region2Incidents, hazardTypes)}
+                        selectOption={selectOption}
+                        language={language}
+                      />
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+                {(region1Incidents.length > 0
+                  || region2Incidents.length > 0) && (
+                    <Translation>
+                      {t => (
+                        <div
+                          className={styles.value}
+                        >
+                          <span className={styles.label}>
+                            {t('Data sources')}
+                            :
+                          </span>
+                          <span className={styles.source}>
+                            {t('Nepal Police')}
+                          </span>
+                          <div className={styles.source}>
+                            <span className={styles.text}>{t('DRR Portal')}</span>
+                            <a
+                              className={styles.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              href="http://drrportal.gov.np"
+                            >
+                              <Icon name="externalLink" />
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                    </Translation>
+                  )}
+              </div>
             </div>
-        </Modal>
+          )}
+        </div>
+      </Modal>
     );
   }
 }
