@@ -13,6 +13,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import DownloadButton from '#components/DownloadButton';
 import { convertDateAccToLanguage } from '#utils/common';
+import Spinner from 'src/vendor/react-store/v2/View/Spinner';
 import { mainHeading, bodyheader } from './headers';
 import { returnDataByFormat } from './util';
 import { formatNumeralAccLang } from '../utils/utils';
@@ -103,7 +104,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                         const requiredKey1 = elemCur.key.replace('.', ' ').split(' ')[1];
                         let elementValue;
                         if (element[requiredKey]) {
-                        // eslint-disable-next-line no-prototype-builtins
+                            // eslint-disable-next-line no-prototype-builtins
                             if (element[requiredKey].hasOwnProperty(requiredKey1)) {
                                 elementValue = element[requiredKey][requiredKey1];
                             }
@@ -347,7 +348,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
 
     return (
         <>
-
+            {/* <Spinner /> */}
             <Modal className={_cs(styles.lossAndDamageTableModal, language === 'np' && styles.languageFont)}>
                 <ModalHeader
                     title={(

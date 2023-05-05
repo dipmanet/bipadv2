@@ -759,7 +759,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                                 <ModalButton
-                                    disabled={isLoading}
+                                    disabled={pending}
                                     className={styles.modalButton}
                                     modal={(
                                         <NewCompare
@@ -772,6 +772,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             currentSelection={selectOption}
                                             language={language}
                                             regionRadio={regionRadio}
+                                            pending={pending}
                                         />
                                     )}
                                 >
@@ -782,7 +783,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     </Translation>
                                 </ModalButton>
                                 <ModalButton
-                                    disabled={isLoading}
+                                    disabled={pending}
                                     title={language === 'en' ? 'View Tabular Data' : 'टेबुलर डाटा हेर्नुहोस्'}
                                     className={styles.showTableButton}
                                     iconName="table"
@@ -791,6 +792,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         <DataTable
                                             incidentList={filteredData}
                                             language={language}
+                                            pending={pending}
                                         />
                                     )}
                                 />

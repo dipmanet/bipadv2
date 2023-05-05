@@ -324,7 +324,7 @@ const BarChartVisual = (props: BarchartProps) => {
         width: 0,
     };
 
-
+    console.log('barChartData', chartData);
     return (
         // <div className={styles.container}>
         <div
@@ -382,7 +382,7 @@ const BarChartVisual = (props: BarchartProps) => {
                         height={fullScreen.height}
                     >
                         <BarChart
-                            data={barChartData}
+                            data={chartData}
                             margin={{
                                 top: 10,
                                 bottom: 45,
