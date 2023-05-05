@@ -104,6 +104,8 @@ export const generateOverallDataset = memoize((incidents, regionLevel) => {
 });
 
 export const generateMapState = memoize((geoareas, groupedIncidentMapping, metricFn) => {
+    console.log('This is group incident mapping', groupedIncidentMapping);
+    console.log('This is group incident mapping geoarea', geoareas);
     const value = geoareas.map(geoarea => ({
         id: geoarea.id,
         value: groupedIncidentMapping

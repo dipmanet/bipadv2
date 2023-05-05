@@ -1,3 +1,6 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable prefer-const */
+/* eslint-disable no-plusplus */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-useless-concat */
@@ -271,6 +274,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     : adminLevel === 3
                         ? `municipality=${geoarea}`
                         : 'province=';
+            console.log('This is admin level', adminLevel);
+            if (adminLevel === undefined) {
+                this.setState({ regionRadio: { name: 'province', id: 1 } });
+            }
+
             fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
@@ -463,6 +471,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regionFilter,
             regions,
             language: { language },
+            filters: { region: { adminLevel, geoarea } },
             filters,
 
         } = this.props;
@@ -507,6 +516,31 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         };
 
         const setRegionRadio = (val, id) => {
+            const { dataDateRange } = filters;
+            console.log('This is date range', dataDateRange);
+            const finalFilters = transformFilters(filters);
+            const summaryType = id === 1 ? 'province_wise'
+                : id === 2 ? 'district_wise' : id === 3 ? 'municipality_wise' : 'ward_wise';
+            console.log('This is what wise data', summaryType);
+            const federalFilter = adminLevel === 1
+                ? `province=${geoarea}`
+                : adminLevel === 2
+                    ? `district=${geoarea}`
+                    : adminLevel === 3
+                        ? `municipality=${geoarea}`
+                        : 'province=';
+            console.log('This is admin level', adminLevel);
+            if (adminLevel === undefined) {
+                this.setState({ regionRadio: { name: 'province', id: 1 } });
+            }
+
+            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+                .then(res => res.json())
+                .then((data) => {
+                    this.setState({ incidentData: data.results });
+                });
+
+
             this.setState({ regionRadio: { name: val, id } });
         };
         console.log('This is filtered data', filteredData);
@@ -533,8 +567,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             && incidentData.data.map(item => ({
                 name: language === 'en' ? item.federalTitleEn : item.federalTitleNe,
                 value: item.count,
-            })).sort((x, y) => y.value - x.value);
+            })).sort((x, y) => y.value - x.value).slice(0, 10);
 
+
+        console.log('This is barchart filter', barChartData);
         const overallTotalIncident = incidentData && incidentData.data
             && incidentData.data.length
             ? incidentData.data.reduce((previousValue, currentValue) => previousValue + currentValue.count, 0)
@@ -684,6 +720,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         valueOnclick={valueOnclick}
                                         regionFilter={regionFilter}
                                         language={language}
+                                        federalLevel={adminLevel}
                                     />
                                 </div>
                                 <ModalButton

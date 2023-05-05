@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
@@ -20,8 +22,8 @@ interface FilterRadioProps {
 }
 
 const FilterRadio = (props: FilterRadioProps) => {
-    const { regionRadio, setRegionRadio, regionFilter, language } = props;
-
+    const { regionRadio, setRegionRadio, regionFilter, language, federalLevel } = props;
+    console.log('This is federal level', federalLevel);
     useEffect(() => {
         if (Object.keys(regionFilter).length > 1) {
             switch (regionFilter.adminLevel) {
@@ -55,6 +57,9 @@ const FilterRadio = (props: FilterRadioProps) => {
                         value={item.name}
                         onChange={e => setRegionRadio(e.target.value, item.id)}
                         checked={regionRadio.name === item.name}
+                        disabled={federalLevel === 3 && (item.id === 1 || item.id === 2 || item.id === 3) ? true
+                            : federalLevel === 2 && (item.id === 1 || item.id === 2) ? true
+                                : !!(federalLevel === 1 && (item.id === 1))}
                     />
                     <label className={item.id === 4 ? styles.visibilty : styles.radioItems}>
                         {language === 'en' ? item.name : item.nameNe}
