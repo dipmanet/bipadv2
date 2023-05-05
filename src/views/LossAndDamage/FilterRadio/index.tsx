@@ -23,7 +23,7 @@ interface FilterRadioProps {
 
 const FilterRadio = (props: FilterRadioProps) => {
     const { regionRadio, setRegionRadio, regionFilter, language, federalLevel } = props;
-    console.log('This is federal level', federalLevel);
+
     useEffect(() => {
         if (Object.keys(regionFilter).length > 1) {
             switch (regionFilter.adminLevel) {

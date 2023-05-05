@@ -19,7 +19,7 @@ const DataCount = (props: DataCountProps) => {
     const { name, key } = value;
     const nullCondition = false;
     const dataValue = nullCheck(nullCondition, data, key);
-    console.log('Data value', dataValue);
+
     return (
         <div className={styles.wrapper}>
             <Translation>

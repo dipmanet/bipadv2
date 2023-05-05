@@ -74,7 +74,7 @@ class Overview extends React.PureComponent {
         const { mapping, aggregatedStat } = generateOverallDataset(sanitizedList, radioSelect.id);
 
         const obj = {};
-        console.log('This is incident data', incidentData);
+
         const objectCreation = incidentData && incidentData.data
             && incidentData.data.map((item, i) => {
                 obj[`${item.federalId}`] = { count: item.count, key: item.federalId };
@@ -87,7 +87,7 @@ class Overview extends React.PureComponent {
         const selectedMetric = metricMap[currentSelection.key];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
-        console.log('This is radio select', radioSelect);
+
         const geoareas = (radioSelect.id === 4 && wards)
             || (radioSelect.id === 3 && municipalities)
             || (radioSelect.id === 2 && districts)
@@ -108,8 +108,7 @@ class Overview extends React.PureComponent {
             });
         }
 
-        console.log('obj', obj);
-        console.log('This is selected metric', selectedMetric);
+
         return (
             <Map
                 geoareas={geoareas}

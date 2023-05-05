@@ -219,6 +219,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         valueOnclick: { value: 'count', index: 0 },
         regionRadio: { name: 'province', id: 1 },
         incidentData: {},
+        incidentType: 'incident_count',
+        isLoading: true,
     }
 
 
@@ -263,7 +265,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         }
         if (prevProps.filters !== filters) {
             const { dataDateRange, region: { adminLevel, geoarea } } = filters;
-            console.log('This is date range', dataDateRange);
+            const { incidentType } = this.state;
+
             const finalFilters = transformFilters(filters);
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
@@ -274,18 +277,17 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     : adminLevel === 3
                         ? `municipality=${geoarea}`
                         : 'province=';
-            console.log('This is admin level', adminLevel);
+
             if (adminLevel === undefined) {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
-                    this.setState({ incidentData: data.results });
+                    this.setState({ incidentData: data.results, isLoading: false });
                 });
         }
-        console.log('start date', filters);
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
@@ -486,6 +488,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             selectOption,
             regionRadio,
             incidentData,
+            isLoading,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -499,29 +502,31 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regions,
         );
         const chartData = this.getDataAggregatedByYear(filteredData);
-        console.log('This is chart data', chartData);
+
         const chartDataFinal = incidentData && incidentData.dateWise
             && incidentData.dateWise.map((item => ({
                 incidentMonthTimestamp: this.dateTimeStamp(item.date),
                 summary: { count: item.count },
             }))).sort((x, y) => x.incidentMonthTimestamp - y.incidentMonthTimestamp);
 
-        console.log('This is chart date final value', chartDataFinal);
+
         const setVAlueOnClick = (dat) => {
             this.setState({ valueOnclick: dat });
         };
 
         const setSelectOption = (name, key) => {
+            console.log('name key', name, key);
             this.setState({ selectOption: { name, key } });
         };
 
         const setRegionRadio = (val, id) => {
             const { dataDateRange } = filters;
-            console.log('This is date range', dataDateRange);
+
+            this.setState({ isLoading: true });
             const finalFilters = transformFilters(filters);
             const summaryType = id === 1 ? 'province_wise'
                 : id === 2 ? 'district_wise' : id === 3 ? 'municipality_wise' : 'ward_wise';
-            console.log('This is what wise data', summaryType);
+
             const federalFilter = adminLevel === 1
                 ? `province=${geoarea}`
                 : adminLevel === 2
@@ -529,7 +534,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     : adminLevel === 3
                         ? `municipality=${geoarea}`
                         : 'province=';
-            console.log('This is admin level', adminLevel);
+
             if (adminLevel === undefined) {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
@@ -537,17 +542,52 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
-                    this.setState({ incidentData: data.results });
+                    this.setState({ incidentData: data.results, isLoading: false });
                 });
 
 
             this.setState({ regionRadio: { name: val, id } });
         };
-        console.log('This is filtered data', filteredData);
-        console.log('This is hazard types', hazardTypes);
+
         const hazardSummary = this.getHazardsCount(filteredData, hazardTypes);
         const dropDownClickHandler = (item, index) => {
             const { label, key } = item;
+            this.setState({ isLoading: true });
+            const { dataDateRange } = filters;
+            console.log('Item', item);
+            const finalFilters = transformFilters(filters);
+
+            const summaryType = adminLevel === 1 ? 'district_wise'
+                : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
+
+            const federalFilter = adminLevel === 1
+                ? `province=${geoarea}`
+                : adminLevel === 2
+                    ? `district=${geoarea}`
+                    : adminLevel === 3
+                        ? `municipality=${geoarea}`
+                        : 'province=';
+
+            const incidentTypeData = index === 0 ? 'incident_count'
+                : index === 1
+                    ? 'people_death_count'
+                    : index === 2
+                        ? 'estimated_loss'
+                        : index === 3
+                            ? 'infrastructures_destroyed'
+                            : index === 4
+                                ? 'livestocks_destroyed'
+                                : index === 5
+                                    ? 'people_injured_count'
+                                    : 'people_missing_count';
+            this.setState({ incidentType: incidentTypeData });
+            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+                .then(res => res.json())
+                .then((data) => {
+                    this.setState({ incidentData: data.results, isLoading: false });
+                });
+
+
             setVAlueOnClick({ value: key, index });
             setSelectOption(label, key);
         };
@@ -570,21 +610,16 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             })).sort((x, y) => y.value - x.value).slice(0, 10);
 
 
-        console.log('This is barchart filter', barChartData);
         const overallTotalIncident = incidentData && incidentData.data
             && incidentData.data.length
             ? incidentData.data.reduce((previousValue, currentValue) => previousValue + currentValue.count, 0)
             : '-';
-        console.log('hazardSummaryData', hazardSummaryData);
-        console.log('hazardTypeData', hazardTypeData);
-        console.log('hazardSummary', hazardSummary);
-        console.log('incidentData', incidentData);
-        console.log('This is bar chart data', barChartData);
-        console.log('These filters', filters);
+        console.log('This is data', barChartData);
+        console.log('chartDataFinal', chartDataFinal);
         return (
             <>
                 <Loading
-                    pending={pending}
+                    pending={isLoading}
                     text={language === 'en'
                         ? 'Please wait, the system is loading data'
                         : 'कृपया पर्खनुहोस्, प्रणाली डेटा लोड गर्दैछ'}
@@ -724,7 +759,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                                 <ModalButton
-                                    disabled={pending}
+                                    disabled={isLoading}
                                     className={styles.modalButton}
                                     modal={(
                                         <NewCompare
@@ -747,7 +782,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     </Translation>
                                 </ModalButton>
                                 <ModalButton
-                                    disabled={pending}
+                                    disabled={isLoading}
                                     title={language === 'en' ? 'View Tabular Data' : 'टेबुलर डाटा हेर्नुहोस्'}
                                     className={styles.showTableButton}
                                     iconName="table"
@@ -775,7 +810,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     overallTotalIncident={overallTotalIncident}
                                 />
                                 {
-                                    !pending && filteredData.length > 0
+                                    !isLoading && barChartData.length > 0
                                         ? (
                                             <div style={{ width: '95%' }}>
                                                 <BarChartVisual
@@ -811,7 +846,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                 />
                                             </div>
                                         )
-                                        : !pending && filteredData.length === 0
+                                        : !isLoading && incidentData && incidentData.data.length === 0
                                             ? (
                                                 <h3 style={{ marginTop: '50px' }} className={styles.headerText}>
                                                     {language === 'en'
@@ -843,7 +878,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             endDate={submittedEndDate}
                             radioSelect={regionRadio}
                             currentSelection={selectOption}
-                            pending={pending}
+                            pending={isLoading}
                         />
                     )}
                 />

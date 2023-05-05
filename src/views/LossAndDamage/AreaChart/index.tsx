@@ -53,9 +53,9 @@ const AreaChartVisual = (props: AreaChartProps) => {
     const chartData = data && data.length && data.map((item) => {
         const date = new Date();
         date.setTime(parseInt(item.incidentMonthTimestamp, 10));
-        console.log('This is date', date);
+
         const year = date.getFullYear();
-        console.log('date month', date.getMonth());
+
         const month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
         const finalDate = convertDateAccToLanguage(`${year}-${month}`, language);
         const obj = {
@@ -64,7 +64,9 @@ const AreaChartVisual = (props: AreaChartProps) => {
         };
         return obj;
     });
-    console.log('This chart data', chartData);
+    console.log('This is data', data);
+    console.log('This is chart data', name, key);
+    console.log('chart data final', chartData);
     const CustomizedTick = (value: number) => formatNumeralAccLang(value, language);
 
     function CustomTooltip({ payload, active }: TooltipInterface) {

@@ -324,7 +324,7 @@ const BarChartVisual = (props: BarchartProps) => {
         width: 0,
     };
 
-    console.log('This is final chart data', barChartData);
+
     return (
         // <div className={styles.container}>
         <div
