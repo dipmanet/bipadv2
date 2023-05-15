@@ -324,7 +324,6 @@ const BarChartVisual = (props: BarchartProps) => {
         width: 0,
     };
 
-    console.log('barChartData', chartData);
     return (
         // <div className={styles.container}>
         <div
@@ -376,13 +375,13 @@ const BarChartVisual = (props: BarchartProps) => {
                 ref={imageDownloadRef}
                 style={{ display: 'flex', flexDirection: 'column' }}
             >
-                {chartData.length > 0 && (
+                {barChartData.length > 0 && (
                     <ResponsiveContainer
                         width={fullScreen.width}
                         height={fullScreen.height}
                     >
                         <BarChart
-                            data={chartData}
+                            data={barChartData}
                             margin={{
                                 top: 10,
                                 bottom: 45,

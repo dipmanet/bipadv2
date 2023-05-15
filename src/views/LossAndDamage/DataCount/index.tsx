@@ -48,7 +48,7 @@ const DataCount = (props: DataCountProps) => {
             } */}
 
             {
-                data.length > 0
+                overallTotalIncident
                 && (
                     <span className={styles.alertValue}>
                         {formatNumeralAccLang(overallTotalIncident, language)}

@@ -64,9 +64,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
         };
         return obj;
     });
-    console.log('This is data', data);
-    console.log('This is chart data', name, key);
-    console.log('chart data final', chartData);
+
     const CustomizedTick = (value: number) => formatNumeralAccLang(value, language);
 
     function CustomTooltip({ payload, active }: TooltipInterface) {

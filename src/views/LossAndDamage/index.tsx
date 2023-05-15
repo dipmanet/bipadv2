@@ -75,6 +75,7 @@ import {
 import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
 import Spinner from '#rscv/Spinner';
 import DateRangeInfo from '#components/DateRangeInfo';
+import Loader from 'react-loader-spinner';
 import TabularView from './TabularView';
 import { getSanitizedIncidents } from './common';
 import Overview from './Overview';
@@ -88,6 +89,7 @@ import NewCompare from './NewCompare';
 
 import styles from './styles.scss';
 import DataCount from './DataCount';
+import { Data } from './types';
 
 
 const ModalButton = modalize(Button);
@@ -282,7 +284,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
@@ -501,6 +503,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regionFilter,
             regions,
         );
+        // const filteredData: Data[] = [];
         const chartData = this.getDataAggregatedByYear(filteredData);
 
         const chartDataFinal = incidentData && incidentData.dateWise
@@ -515,7 +518,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         };
 
         const setSelectOption = (name, key) => {
-            console.log('name key', name, key);
             this.setState({ selectOption: { name, key } });
         };
 
@@ -539,7 +541,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
@@ -554,7 +556,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { label, key } = item;
             this.setState({ isLoading: true });
             const { dataDateRange } = filters;
-            console.log('Item', item);
+
             const finalFilters = transformFilters(filters);
 
             const summaryType = adminLevel === 1 ? 'district_wise'
@@ -581,7 +583,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     ? 'people_injured_count'
                                     : 'people_missing_count';
             this.setState({ incidentType: incidentTypeData });
-            fetch(`http://192.168.1.101:8004/api/v1/incident/analytics/?${federalFilter}&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
@@ -614,8 +616,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             && incidentData.data.length
             ? incidentData.data.reduce((previousValue, currentValue) => previousValue + currentValue.count, 0)
             : '-';
-        console.log('This is data', barChartData);
-        console.log('chartDataFinal', chartDataFinal);
+
         return (
             <>
                 <Loading
@@ -758,6 +759,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         federalLevel={adminLevel}
                                     />
                                 </div>
+
                                 <ModalButton
                                     disabled={pending}
                                     className={styles.modalButton}
@@ -776,11 +778,28 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     )}
                                 >
-                                    <Translation>
-                                        {
-                                            t => <span>{t('Compare Regions')}</span>
-                                        }
-                                    </Translation>
+                                    {
+                                        pending ? (
+                                            <>
+                                                {' '}
+                                                <span>
+                                                    Loading,please wait
+                                                    {' '}
+                                                    <Spinner />
+                                                </span>
+                                                {' '}
+
+                                            </>
+                                        )
+                                            : (
+                                                <Translation>
+                                                    {
+                                                        t => <span>{t('Compare Regions')}</span>
+                                                    }
+                                                </Translation>
+                                            )
+                                    }
+
                                 </ModalButton>
                                 <ModalButton
                                     disabled={pending}

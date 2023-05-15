@@ -68,6 +68,7 @@ class LossDetails extends React.PureComponent {
             language: { language },
             nullCondition,
             data,
+            pending,
         } = this.props;
 
         return (
@@ -76,6 +77,7 @@ class LossDetails extends React.PureComponent {
                     if (metric.key === 'count' && hideIncidentCount) {
                         return null;
                     }
+
                     return (
 
                         <StatOutput
@@ -84,7 +86,7 @@ class LossDetails extends React.PureComponent {
                             // value={summaryData[metric.key]}
                             // label={metric.label}
                             language={language}
-                            value={nullCheck(nullCondition, data, metric.key)}
+                            value={nullCheck(nullCondition, pending ? [] : data, metric.key)}
                         />
 
 

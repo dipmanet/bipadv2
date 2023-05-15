@@ -242,7 +242,7 @@ class NewCompare extends React.PureComponent {
       geoarea: region.id,
       label: language === 'en' ? region.title : region.title_ne,
     }));
-    console.log('This is region options', RegionOptions);
+
     const dropDownClickHandler = (item, index, elementName) => {
       const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
       this.setState({ faramValues: { ...faramValues, [elementName]: data } });
@@ -301,8 +301,6 @@ class NewCompare extends React.PureComponent {
           });
       }
     };
-
-    console.log('region1Incidents', region1Incidents);
     return (
       <Modal className={_cs(className, styles.comparative)}>
         <div className={styles.regionHead}>
