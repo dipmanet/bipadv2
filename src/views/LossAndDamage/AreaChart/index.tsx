@@ -88,7 +88,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
         height: 0,
         width: 30,
     };
-
+    console.log('This is chart data', chartData);
     return (
         <div className={_cs(styles.wrapper, language === 'np' && styles.languageNp)}>
             <div className={styles.firstDiv}>

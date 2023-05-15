@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-undef */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-indent */
@@ -104,6 +106,14 @@ class NewCompare extends React.PureComponent {
       faramValues: {},
       faramErrors: {},
       rightPaneExpanded: true,
+      mapStateValueOptimized1: [],
+      mapStateValueOptimized2: [],
+      barchartData1: [],
+      barchartData2: [],
+      chartData1: [],
+      chartData2: [],
+      hazardSummary1: [],
+      hazardSummary2: [],
       // comparisionStarted: false,
     };
 
@@ -216,9 +226,14 @@ class NewCompare extends React.PureComponent {
       currentSelection,
       language,
       regionRadio,
+      incidentTypeData,
+      finalFilters,
+      dateTimeStamp,
     } = this.props;
 
-    const { faramValues, faramErrors, rightPaneExpanded } = this.state;
+    const { faramValues, faramErrors, rightPaneExpanded,
+      mapStateValueOptimized1, mapStateValueOptimized2, barchartData1, barchartData2,
+      chartData1, chartData2, hazardSummary1, hazardSummary2 } = this.state;
 
     const { region1, region2 } = faramValues;
 
@@ -244,8 +259,63 @@ class NewCompare extends React.PureComponent {
     }));
 
     const dropDownClickHandler = (item, index, elementName) => {
+      console.log('This is element name', elementName);
       const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
       this.setState({ faramValues: { ...faramValues, [elementName]: data } });
+      const summaryType = item.adminLevel === 1 ? 'province_wise'
+        : item.adminLevel === 2 ? 'district_wise' : item.adminLevel === 3 ? 'municipality_wise' : 'ward_wise';
+      const federalFilter = item.adminLevel === 1
+        ? `province=${item.geoarea}`
+        : item.adminLevel === 2
+          ? `district=${item.geoarea}`
+          : item.adminLevel === 3
+            ? `municipality=${item.geoarea}`
+            : 'province=';
+
+
+      fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+        .then(res => res.json())
+        .then((response) => {
+          console.log('This is final data', response);
+          const { data: finalData, dateWise, hazardWise } = response.results;
+          const mapData = { id: finalData[0].federalId, value: finalData[0].count };
+          const barchartData = {
+            name: language === 'en'
+              ? finalData[0].federalTitleEn : finalData[0].federalTitleNe,
+            value: finalData[0].count,
+          };
+
+          const chartDataFinal = dateWise && dateWise.length
+            && dateWise.map((itm => ({
+              incidentMonthTimestamp: dateTimeStamp(itm.date),
+              summary: { count: itm.count },
+            }))).sort((x, y) => x.incidentMonthTimestamp - y.incidentMonthTimestamp);
+          console.log('This data', chartDataFinal);
+          const hazardTypeData = Object.values(hazardTypes);
+          const hazardSummaryData = {};
+          const hazardSummaryDataCalculation = hazardWise
+            && hazardWise.length && hazardWise.map((items, id) => {
+              const selectedHazardDetails = hazardTypeData.find(itm => itm.id === items.hazard);
+              const datas = {
+                hazardDetail: selectedHazardDetails,
+                summary: { count: items.count },
+              };
+              hazardSummaryData[`${selectedHazardDetails.id}`] = datas;
+              return null;
+            });
+          console.log('This is hazard summary data', hazardSummaryData);
+          if (elementName === 'region1') {
+            this.setState({ mapStateValueOptimized1: [mapData] });
+            this.setState({ barchartData1: [barchartData] });
+            this.setState({ chartData1: chartDataFinal });
+            this.setState({ hazardSummary1: hazardSummaryData });
+          } else {
+            this.setState({ mapStateValueOptimized2: [mapData] });
+            this.setState({ barchartData2: [barchartData] });
+            this.setState({ chartData2: chartDataFinal });
+            this.setState({ hazardSummary2: hazardSummaryData });
+          }
+        });
     };
 
     const clearValues = (element: string) => {
@@ -263,7 +333,6 @@ class NewCompare extends React.PureComponent {
       }
       return [];
     };
-
     const mapStateValue = (Region, Incidents) => {
       const geoareas = filterGeoArea(Region);
       const regionLevel = Region && Region.adminLevel;
@@ -277,7 +346,7 @@ class NewCompare extends React.PureComponent {
         id: geoareas[0].id,
         value: item[currentSelection.key],
       }));
-
+      console.log('This is mapstate', mapState);
       return mapState;
     };
 
@@ -301,6 +370,10 @@ class NewCompare extends React.PureComponent {
           });
       }
     };
+    console.log('RegionOptions', RegionOptions);
+    console.log('region 1 incident', region1Incidents);
+    console.log('mapStateValueOptimized', mapStateValueOptimized1);
+    console.log('area map', chartData1);
     return (
       <Modal className={_cs(className, styles.comparative)}>
         <div className={styles.regionHead}>
@@ -398,10 +471,11 @@ class NewCompare extends React.PureComponent {
                     <ChoroplethMap
                       sourceKey="comparative-first"
                       paint={colorPaint}
-                      mapState={mapStateValue(
-                        faramValues.region1,
-                        region1Incidents,
-                      )}
+                      // mapState={mapStateValue(
+                      //   faramValues.region1,
+                      //   region1Incidents,
+                      // )}
+                      mapState={mapStateValueOptimized1}
                       region={faramValues.region1}
                       tooltipRenderer={prop => tooltipRenderer(
                         prop,
@@ -436,10 +510,11 @@ class NewCompare extends React.PureComponent {
                     <ChoroplethMap
                       sourceKey="comparative-second"
                       paint={colorPaint}
-                      mapState={mapStateValue(
-                        faramValues.region2,
-                        region2Incidents,
-                      )}
+                      // mapState={mapStateValue(
+                      //   faramValues.region2,
+                      //   region2Incidents,
+                      // )}
+                      mapState={mapStateValueOptimized2}
                       region={faramValues.region2}
                       tooltipRenderer={prop => tooltipRenderer(
                         prop,
@@ -468,6 +543,7 @@ class NewCompare extends React.PureComponent {
                       selectOption={selectOption}
                       valueOnclick={valueOnclick}
                       language={language}
+                      barChartData={barchartData1}
                     />
                   ) : (
                     <div />
@@ -481,6 +557,7 @@ class NewCompare extends React.PureComponent {
                       selectOption={selectOption}
                       valueOnclick={valueOnclick}
                       language={language}
+                      barChartData={barchartData2}
                     />
                   ) : (
                     <div />
@@ -494,9 +571,10 @@ class NewCompare extends React.PureComponent {
 
                     >
                       <AreaChartVisual
-                        data={getDataAggregatedByYear(region1Incidents)}
+                        // data={getDataAggregatedByYear(region1Incidents)}
                         selectOption={selectOption}
                         language={language}
+                        data={chartData1}
                       />
                     </div>
                   ) : (
@@ -509,9 +587,10 @@ class NewCompare extends React.PureComponent {
 
                     >
                       <AreaChartVisual
-                        data={getDataAggregatedByYear(region2Incidents)}
+                        // data={getDataAggregatedByYear(region2Incidents)}
                         selectOption={selectOption}
                         language={language}
+                        data={chartData2}
                       />
                     </div>
                   ) : (
@@ -529,9 +608,10 @@ class NewCompare extends React.PureComponent {
                     >
                       <HazardWise
                         // eslint-disable-next-line max-len
-                        data={getHazardsCount(region1Incidents, hazardTypes)}
+                        // data={getHazardsCount(region1Incidents, hazardTypes)}
                         selectOption={selectOption}
                         language={language}
+                        data={hazardSummary1}
                       />
                     </div>
                   ) : (
@@ -544,9 +624,10 @@ class NewCompare extends React.PureComponent {
                     >
                       <HazardWise
                         // eslint-disable-next-line max-len
-                        data={getHazardsCount(region2Incidents, hazardTypes)}
+                        // data={getHazardsCount(region2Incidents, hazardTypes)}
                         selectOption={selectOption}
                         language={language}
+                        data={hazardSummary2}
                       />
                     </div>
                   ) : (

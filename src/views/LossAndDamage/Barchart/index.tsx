@@ -49,6 +49,7 @@ const BarChartVisual = (props: BarchartProps) => {
         fullScreenMode,
         language,
         barChartData,
+        barData,
     } = props;
 
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
@@ -323,7 +324,7 @@ const BarChartVisual = (props: BarchartProps) => {
         height: 20,
         width: 0,
     };
-
+    console.log('This is data', barChartData);
     return (
         // <div className={styles.container}>
         <div
@@ -375,7 +376,7 @@ const BarChartVisual = (props: BarchartProps) => {
                 ref={imageDownloadRef}
                 style={{ display: 'flex', flexDirection: 'column' }}
             >
-                {barChartData.length > 0 && (
+                {barChartData && barChartData.length > 0 && (
                     <ResponsiveContainer
                         width={fullScreen.width}
                         height={fullScreen.height}

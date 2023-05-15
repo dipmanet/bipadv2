@@ -223,6 +223,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         incidentData: {},
         incidentType: 'incident_count',
         isLoading: true,
+        filterData: null,
     }
 
 
@@ -270,6 +271,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { incidentType } = this.state;
 
             const finalFilters = transformFilters(filters);
+            this.setState({ filterData: finalFilters });
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
             const federalFilter = adminLevel === 1
@@ -491,6 +493,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regionRadio,
             incidentData,
             isLoading,
+            filterData,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -526,6 +529,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
             this.setState({ isLoading: true });
             const finalFilters = transformFilters(filters);
+            this.setState({ filterData: finalFilters });
             const summaryType = id === 1 ? 'province_wise'
                 : id === 2 ? 'district_wise' : id === 3 ? 'municipality_wise' : 'ward_wise';
 
@@ -558,6 +562,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { dataDateRange } = filters;
 
             const finalFilters = transformFilters(filters);
+            this.setState({ filterData: finalFilters });
 
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
@@ -605,6 +610,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 hazardSummaryData[`${selectedHazardDetails.id}`] = data;
                 return null;
             });
+
+        console.log('This is final summary', hazardSummaryData);
         const barChartData = incidentData && incidentData.data
             && incidentData.data.map(item => ({
                 name: language === 'en' ? item.federalTitleEn : item.federalTitleNe,
@@ -616,7 +623,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             && incidentData.data.length
             ? incidentData.data.reduce((previousValue, currentValue) => previousValue + currentValue.count, 0)
             : '-';
-
+        console.log('This is isloading', barChartData);
         return (
             <>
                 <Loading
@@ -775,6 +782,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             language={language}
                                             regionRadio={regionRadio}
                                             pending={pending}
+
+                                            dateTimeStamp={this.dateTimeStamp}
+                                            finalFilters={filterData}
+
+
                                         />
                                     )}
                                 >
@@ -831,7 +843,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     overallTotalIncident={overallTotalIncident}
                                 />
                                 {
-                                    !isLoading && barChartData.length > 0
+                                    !isLoading && incidentData && incidentData.data.length > 0
                                         ? (
                                             <div style={{ width: '95%' }}>
                                                 <BarChartVisual
