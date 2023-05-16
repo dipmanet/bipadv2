@@ -101,6 +101,7 @@ const HazardWise = (props: HazardWiseProps) => {
     const CustomizedContent = (prop: any) => {
         const { root, depth, x, y, width, height, index, colors, name, value, icon } = prop;
         const base64Icon = SvgToBase64Encoder(icon);
+
         return (
             <g style={{ position: 'relative' }}>
                 <rect
@@ -189,7 +190,6 @@ const HazardWise = (props: HazardWiseProps) => {
         height: 50,
         width: 0,
     };
-
     return (
         <div className={_cs(styles.wrapper, language === 'np' && styles.languageNp)}>
             <div className={styles.hazardHead}>

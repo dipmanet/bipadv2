@@ -259,7 +259,6 @@ class NewCompare extends React.PureComponent {
     }));
 
     const dropDownClickHandler = (item, index, elementName) => {
-      console.log('This is element name', elementName);
       const data = { adminLevel: item.adminLevel, geoarea: item.geoarea };
       this.setState({ faramValues: { ...faramValues, [elementName]: data } });
       const summaryType = item.adminLevel === 1 ? 'province_wise'
@@ -276,7 +275,6 @@ class NewCompare extends React.PureComponent {
       fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
         .then(res => res.json())
         .then((response) => {
-          console.log('This is final data', response);
           const { data: finalData, dateWise, hazardWise } = response.results;
           const mapData = { id: finalData[0].federalId, value: finalData[0].count };
           const barchartData = {
@@ -290,7 +288,7 @@ class NewCompare extends React.PureComponent {
               incidentMonthTimestamp: dateTimeStamp(itm.date),
               summary: { count: itm.count },
             }))).sort((x, y) => x.incidentMonthTimestamp - y.incidentMonthTimestamp);
-          console.log('This data', chartDataFinal);
+
           const hazardTypeData = Object.values(hazardTypes);
           const hazardSummaryData = {};
           const hazardSummaryDataCalculation = hazardWise
@@ -303,7 +301,7 @@ class NewCompare extends React.PureComponent {
               hazardSummaryData[`${selectedHazardDetails.id}`] = datas;
               return null;
             });
-          console.log('This is hazard summary data', hazardSummaryData);
+
           if (elementName === 'region1') {
             this.setState({ mapStateValueOptimized1: [mapData] });
             this.setState({ barchartData1: [barchartData] });
@@ -319,6 +317,17 @@ class NewCompare extends React.PureComponent {
     };
 
     const clearValues = (element: string) => {
+      if (element === 'region1') {
+        this.setState({ mapStateValueOptimized1: [] });
+        this.setState({ barchartData1: [] });
+        this.setState({ chartData1: [] });
+        this.setState({ hazardSummary1: [] });
+      } else {
+        this.setState({ mapStateValueOptimized2: [] });
+        this.setState({ barchartData2: [] });
+        this.setState({ chartData2: [] });
+        this.setState({ hazardSummary2: [] });
+      }
       this.setState({ faramValues: { ...faramValues, [element]: null } });
     };
 
@@ -346,7 +355,6 @@ class NewCompare extends React.PureComponent {
         id: geoareas[0].id,
         value: item[currentSelection.key],
       }));
-      console.log('This is mapstate', mapState);
       return mapState;
     };
 
@@ -370,10 +378,6 @@ class NewCompare extends React.PureComponent {
           });
       }
     };
-    console.log('RegionOptions', RegionOptions);
-    console.log('region 1 incident', region1Incidents);
-    console.log('mapStateValueOptimized', mapStateValueOptimized1);
-    console.log('area map', chartData1);
     return (
       <Modal className={_cs(className, styles.comparative)}>
         <div className={styles.regionHead}>
@@ -451,47 +455,46 @@ class NewCompare extends React.PureComponent {
               <div
                 className={styles.mapContainer}
               >
-                {isRegionValid(faramValues.region1)
-                  && region1Incidents.length > 0 ? (
-                  <Map
-                    mapStyle={mapStyle}
-                    mapOptions={{
-                      logoPosition: 'top-left',
-                      minZoom: 5,
-                      preserveDrawingBuffer: true,
-                    }}
-                    // debug
+                {
+                  mapStateValueOptimized1.length > 0 ? (
+                    <Map
+                      mapStyle={mapStyle}
+                      mapOptions={{
+                        logoPosition: 'top-left',
+                        minZoom: 5,
+                        preserveDrawingBuffer: true,
+                      }}
+                      // debug
 
-                    scaleControlShown
-                    scaleControlPosition="bottom-right"
-                    navControlShown
-                    navControlPosition="bottom-right"
-                  >
-                    <MapContainer className={styles.map1} />
-                    <ChoroplethMap
-                      sourceKey="comparative-first"
-                      paint={colorPaint}
-                      // mapState={mapStateValue(
-                      //   faramValues.region1,
-                      //   region1Incidents,
-                      // )}
-                      mapState={mapStateValueOptimized1}
-                      region={faramValues.region1}
-                      tooltipRenderer={prop => tooltipRenderer(
-                        prop,
-                        currentSelection.name,
-                        regionRadio.id,
-                        language,
-                      )
-                      }
-                      isDamageAndLoss
-                    />
-                  </Map>
-                ) : (
-                  this.messageForNoData(true, language)
-                )}
-                {isRegionValid(faramValues.region2)
-                  && region2Incidents.length > 0 ? (
+                      scaleControlShown
+                      scaleControlPosition="bottom-right"
+                      navControlShown
+                      navControlPosition="bottom-right"
+                    >
+                      <MapContainer className={styles.map1} />
+                      <ChoroplethMap
+                        sourceKey="comparative-first"
+                        paint={colorPaint}
+                        // mapState={mapStateValue(
+                        //   faramValues.region1,
+                        //   region1Incidents,
+                        // )}
+                        mapState={mapStateValueOptimized1}
+                        region={faramValues.region1}
+                        tooltipRenderer={prop => tooltipRenderer(
+                          prop,
+                          currentSelection.name,
+                          regionRadio.id,
+                          language,
+                        )
+                        }
+                        isDamageAndLoss
+                      />
+                    </Map>
+                  ) : (
+                    this.messageForNoData(true, language)
+                  )}
+                {mapStateValueOptimized2.length > 0 ? (
                   <Map
                     mapStyle={mapStyle}
                     mapOptions={{
@@ -534,11 +537,10 @@ class NewCompare extends React.PureComponent {
                 className={styles.visualizations}
               >
                 <div className={styles.otherVisualizations}>
-                  {isRegionValid(faramValues.region1)
-                    && region1Incidents.length > 0 ? (
+                  {barchartData1.length > 0 ? (
                     <BarChartVisual
                       className={styles.region1Container}
-                      data={region1Incidents}
+                      data={barchartData1}
                       regionRadio={region1}
                       selectOption={selectOption}
                       valueOnclick={valueOnclick}
@@ -548,11 +550,10 @@ class NewCompare extends React.PureComponent {
                   ) : (
                     <div />
                   )}
-                  {isRegionValid(faramValues.region2)
-                    && region2Incidents.length > 0 ? (
+                  {barchartData2.length > 0 ? (
                     <BarChartVisual
                       className={styles.region2Container}
-                      data={region2Incidents}
+                      data={barchartData2}
                       regionRadio={region2}
                       selectOption={selectOption}
                       valueOnclick={valueOnclick}
@@ -564,8 +565,7 @@ class NewCompare extends React.PureComponent {
                   )}
                 </div>
                 <div className={styles.otherVisualizations}>
-                  {isRegionValid(faramValues.region1)
-                    && region1Incidents.length > 0 ? (
+                  {chartData1 && chartData1.length > 0 ? (
                     <div
                       className={styles.region1Container}
 
@@ -580,8 +580,7 @@ class NewCompare extends React.PureComponent {
                   ) : (
                     <div />
                   )}
-                  {isRegionValid(faramValues.region2)
-                    && region2Incidents.length > 0 ? (
+                  {chartData2 && chartData2.length > 0 ? (
                     <div
                       className={styles.region2Container}
 
@@ -601,8 +600,7 @@ class NewCompare extends React.PureComponent {
                   className={styles.otherVisualizations}
 
                 >
-                  {isRegionValid(faramValues.region1)
-                    && region1Incidents.length > 0 ? (
+                  {hazardSummary1.length > 0 ? (
                     <div
                       className={styles.region1Container}
                     >
@@ -617,8 +615,7 @@ class NewCompare extends React.PureComponent {
                   ) : (
                     <div />
                   )}
-                  {isRegionValid(faramValues.region2)
-                    && region2Incidents.length > 0 ? (
+                  {hazardSummary2.length > 0 ? (
                     <div
                       className={styles.region2Container}
                     >
@@ -634,8 +631,8 @@ class NewCompare extends React.PureComponent {
                     <div />
                   )}
                 </div>
-                {(region1Incidents.length > 0
-                  || region2Incidents.length > 0) && (
+                {(barchartData1.length > 0
+                  || barchartData2.length > 0) && (
                     <Translation>
                       {t => (
                         <div

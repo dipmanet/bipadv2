@@ -51,6 +51,7 @@ import {
     regionsSelector,
     languageSelector,
     filtersSelector,
+    incidentListSelectorIP,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -179,17 +180,17 @@ const requestOptions: { [key: string] } = {
             const { results: incidentList = [] } = response as Response;
             setIncidentList({ incidentList });
         },
-        onMount: true,
-        onPropsChanged: {
-            filters: ({
-                props: { filters },
-                prevProps: { filters: prevFilters },
-            }) => {
-                const shouldRequest = filters !== prevFilters;
+        onMount: false,
+        // onPropsChanged: {
+        //     filters: ({
+        //         props: { filters },
+        //         prevProps: { filters: prevFilters },
+        //     }) => {
+        //         const shouldRequest = filters !== prevFilters;
 
-                return shouldRequest;
-            },
-        },
+        //         return shouldRequest;
+        //     },
+        // },
         // extras: { schemaName: 'incidentResponse' },
     },
 };
@@ -224,6 +225,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         incidentType: 'incident_count',
         isLoading: true,
         filterData: null,
+        tableIncidentList: [],
+        tablePending: true,
     }
 
 
@@ -479,7 +482,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             language: { language },
             filters: { region: { adminLevel, geoarea } },
             filters,
-
+            tableIncidentData,
         } = this.props;
 
         const {
@@ -494,19 +497,22 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             incidentData,
             isLoading,
             filterData,
+            tableIncidentList,
+            tablePending,
         } = this.state;
 
-        const incidentList = getResults(requests, 'incidentsGetRequest');
-        const pending = getPending(requests, 'incidentsGetRequest');
 
+        const pending = false;
+        // const incidentList: never[] = [];
         const filteredData = this.getFilteredData(
-            incidentList,
+            tableIncidentData,
             hazardTypes,
             hazardFilter,
             regionFilter,
             regions,
         );
-        // const filteredData: Data[] = [];
+
+
         const chartData = this.getDataAggregatedByYear(filteredData);
 
         const chartDataFinal = incidentData && incidentData.dateWise
@@ -611,7 +617,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 return null;
             });
 
-        console.log('This is final summary', hazardSummaryData);
+
         const barChartData = incidentData && incidentData.data
             && incidentData.data.map(item => ({
                 name: language === 'en' ? item.federalTitleEn : item.federalTitleNe,
@@ -623,7 +629,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             && incidentData.data.length
             ? incidentData.data.reduce((previousValue, currentValue) => previousValue + currentValue.count, 0)
             : '-';
-        console.log('This is isloading', barChartData);
+
+        const finalFiltersForTable = transformFilters(filters);
+
         return (
             <>
                 <Loading
@@ -772,7 +780,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.modalButton}
                                     modal={(
                                         <NewCompare
-                                            lossAndDamageList={incidentList}
+                                            lossAndDamageList={[]}
                                             getDataAggregatedByYear={this.getDataAggregatedByYear}
                                             getHazardsCount={this.getHazardsCount}
                                             hazardTypes={hazardTypes}
@@ -821,9 +829,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     transparent
                                     modal={(
                                         <DataTable
+
                                             incidentList={filteredData}
                                             language={language}
-                                            pending={pending}
+                                            pending={tablePending}
+                                            finalFiltersForTable={finalFiltersForTable}
+
                                         />
                                     )}
                                 />
@@ -927,6 +938,7 @@ const mapStateToProps = state => ({
     regions: regionsSelector(state),
     language: languageSelector(state),
     filters: filtersSelector(state),
+    tableIncidentData: incidentListSelectorIP(state),
 });
 
 const mapDispatchToProps = dispatch => ({

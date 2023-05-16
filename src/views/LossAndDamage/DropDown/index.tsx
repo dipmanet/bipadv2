@@ -104,6 +104,7 @@ const Dropdown = (props: DropDownProps) => {
         setdropDownPlaceHolder(placeholder);
         setSelectName('');
         setShowOption(false);
+        setDropdownValues(dropdownOption);
     };
 
 
@@ -114,7 +115,6 @@ const Dropdown = (props: DropDownProps) => {
         setShowOption(true);
         setDropdownValues(filteredDropdown);
     };
-
     return (
         <>
             <div
