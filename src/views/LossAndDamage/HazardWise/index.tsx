@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
 /* eslint-disable no-return-assign */
 /* eslint-disable func-names */
 /* eslint-disable arrow-parens */
@@ -34,6 +37,7 @@ interface HazardWiseProps {
 }
 
 const HazardWise = (props: HazardWiseProps) => {
+    const hazardIcons = useRef({});
     const { selectOption, data, handleSaveClick, downloadButton, fullScreenMode, language } = props;
     const { t } = useTranslation();
     const treeMapRef = useRef<HTMLDivElement>(null);
@@ -86,6 +90,9 @@ const HazardWise = (props: HazardWiseProps) => {
 
 
     const SvgToBase64Encoder = (url: string): string => {
+        if (url in hazardIcons.current) {
+            return hazardIcons.current[`${url}`];
+        }
         const xhr = new XMLHttpRequest();
         xhr.open('GET', url, false);
         xhr.send();
@@ -94,7 +101,9 @@ const HazardWise = (props: HazardWiseProps) => {
         }
         const svgText = xhr.responseText;
         const svgString = encodeURIComponent(svgText);
-        return `data:image/svg+xml,${svgString}`;
+        const base64Image = `data:image/svg+xml,${svgString}`;
+        hazardIcons.current[`${url}`] = base64Image;
+        return base64Image;
     };
 
 
