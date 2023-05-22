@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
@@ -72,7 +73,7 @@ const mapDispatchToProps = dispatch => ({
     setFilters: params => dispatch(setFiltersAction(params)),
 
 });
-const DataTable = ({ closeModal, incidentList, language, requests, finalFiltersForTable }: TableProps) => {
+const DataTable = ({ closeModal, incidentList, language, className, requests, finalFiltersForTable }: TableProps) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident-wise details' });
     const [data, setData] = useState<Sorted[] | []>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -446,9 +447,17 @@ const DataTable = ({ closeModal, incidentList, language, requests, finalFiltersF
                                 <TotalData />
                             </ModalBody>
                         )
-                        : (
-                            <span className={styles.loader} />
-                        )
+                        : !isLoading && data.length === 0
+                            ? (
+                                <h3 style={{ marginTop: '50px', textAlign: 'center' }} className={className}>
+                                    {language === 'en'
+                                        ? 'No Data Available'
+                                        : 'डाटा उपलब्ध छैन'}
+                                </h3>
+                            )
+                            : (
+                                <span className={styles.loader} />
+                            )
                 }
             </Modal>
 

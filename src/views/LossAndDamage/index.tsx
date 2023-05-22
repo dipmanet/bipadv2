@@ -829,7 +829,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     transparent
                                     modal={(
                                         <DataTable
-
+                                            className={styles.headerText}
                                             incidentList={filteredData}
                                             language={language}
                                             pending={tablePending}

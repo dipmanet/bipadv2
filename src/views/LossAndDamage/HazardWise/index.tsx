@@ -199,6 +199,7 @@ const HazardWise = (props: HazardWiseProps) => {
         height: 50,
         width: 0,
     };
+
     return (
         <div className={_cs(styles.wrapper, language === 'np' && styles.languageNp)}>
             <div className={styles.hazardHead}>
