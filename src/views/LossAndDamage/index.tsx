@@ -289,7 +289,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
@@ -551,7 +551,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
@@ -594,7 +594,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     ? 'people_injured_count'
                                     : 'people_missing_count';
             this.setState({ incidentType: incidentTypeData });
-            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
