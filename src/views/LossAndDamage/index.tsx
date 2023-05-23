@@ -289,6 +289,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
+
             fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
@@ -499,6 +500,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             filterData,
             tableIncidentList,
             tablePending,
+            incidentType,
         } = this.state;
 
 
@@ -532,7 +534,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
         const setRegionRadio = (val, id) => {
             const { dataDateRange } = filters;
-
             this.setState({ isLoading: true });
             const finalFilters = transformFilters(filters);
             this.setState({ filterData: finalFilters });
@@ -551,7 +552,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=incident_count&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
@@ -605,6 +606,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             setSelectOption(label, key);
         };
         const hazardTypeData = Object.values(hazardTypes);
+
         const hazardSummaryData = {};
         const hazardSummaryDataCalculation = incidentData && incidentData.hazardWise
             && incidentData.hazardWise.map((item, id) => {

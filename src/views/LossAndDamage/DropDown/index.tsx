@@ -143,6 +143,7 @@ const Dropdown = (props: DropDownProps) => {
                 <div
                     className={styles.mainDiv}
                     style={!icon ? { width: '98%' } : {}}
+                    onClick={onSelectClick}
                 >
                     <div
                         className={styles.selectDiv}
@@ -206,7 +207,7 @@ const Dropdown = (props: DropDownProps) => {
 
                             <div
                                 className={styles.selectIcon}
-                                onClick={onSelectClick}
+
                             />
                         </div>
                     </div>
