@@ -227,7 +227,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         filterData: null,
         tableIncidentList: [],
         tablePending: true,
-        summaryTypeData: '',
+        summaryTypeData: 'province_wise',
     }
 
 
@@ -278,6 +278,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             this.setState({ filterData: finalFilters });
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
+            this.setState({
+                summaryTypeData: summaryType,
+            });
             const federalFilter = adminLevel === 1
                 ? `province=${geoarea}`
                 : adminLevel === 2
@@ -574,9 +577,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
             const finalFilters = transformFilters(filters);
             this.setState({ filterData: finalFilters });
-
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
+
             const federalFilter = adminLevel === 1
                 ? `province=${geoarea}`
                 : adminLevel === 2
