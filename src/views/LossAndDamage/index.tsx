@@ -227,6 +227,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         filterData: null,
         tableIncidentList: [],
         tablePending: true,
+        summaryTypeData: '',
     }
 
 
@@ -501,6 +502,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             tableIncidentList,
             tablePending,
             incidentType,
+            summaryTypeData,
         } = this.state;
 
 
@@ -539,7 +541,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             this.setState({ filterData: finalFilters });
             const summaryType = id === 1 ? 'province_wise'
                 : id === 2 ? 'district_wise' : id === 3 ? 'municipality_wise' : 'ward_wise';
-
+            this.setState({
+                summaryTypeData: summaryType,
+            });
             const federalFilter = adminLevel === 1
                 ? `province=${geoarea}`
                 : adminLevel === 2
@@ -573,7 +577,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
-
             const federalFilter = adminLevel === 1
                 ? `province=${geoarea}`
                 : adminLevel === 2
@@ -595,7 +598,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     ? 'people_injured_count'
                                     : 'people_missing_count';
             this.setState({ incidentType: incidentTypeData });
-            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentTypeData}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryTypeData}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState({ incidentData: data.results, isLoading: false });
