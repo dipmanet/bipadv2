@@ -1,0 +1,39 @@
+.myTable {
+    border-collapse: collapse;
+    border-spacing: 10px 10px;
+    width: 95%;
+    font-family: 'Source Sans Pro';
+    font-size: 16px;
+    margin: 0px 10px 10px 10px;
+
+    .first {
+        width: 50%;
+        text-align: center !important;
+    }
+
+}
+
+.myTable,
+.head,
+.col {
+    padding: 5px;
+    text-align: center !important;
+    white-space: nowrap;
+}
+
+.head {
+    text-align: center;
+    background: linear-gradient(139.16deg, #3989BE 13.49%, #4BA8BF 80.5%);
+}
+
+.col {
+    text-align: center;
+}
+
+// .row:hover {
+//     background-color: #18425e !important;
+// }
+
+// .row:nth-child(even) {
+//     background-color: #295476;
+// }

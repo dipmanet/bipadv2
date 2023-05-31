@@ -1,0 +1,80 @@
+.main{
+    display: flex;
+    flex-direction: row;
+    .export {
+        padding: 0;
+        height: 20px;
+        margin-left: -32px;
+        width: 10px;
+    }
+        
+    
+    .table {
+        display: flex;
+        flex-direction: column;
+        padding-left: 50px;
+        width: 360px;
+        .header {
+            display: flex;
+            background-color: #003F5C;
+            color: white;
+            padding: 5px 0px;
+            width: 90%;
+            .col1 {
+                display: flex;
+                flex-direction: column;
+                width:35%;
+                padding-left:20px;
+                align-items: flex-start;
+            }
+            .col2 {
+                display: flex;
+                width:75%;
+                flex-direction: column;     
+            }
+
+        }
+        .body{
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            padding: 5px 0px;
+            
+            .row{
+                display: flex;
+                border: 1px solid #003F5C;
+                flex-direction: row;           
+                padding: 2px 2px; 
+                .col1 {
+                    display: flex;
+                    flex-direction: column;   
+                    border-right: 1px solid #003F5C;  
+                    padding-left:5px;   
+                    width:40%;
+                }
+                .col2 {    
+                    display: flex;
+                    flex-direction: column;
+                    width:60%;
+
+                    padding-left:5px;
+                    .innerRow {
+                        display: flex;
+                        flex-direction: row;           
+                        padding-bottom: 2px;
+                        .col1 {
+                            display: flex;
+                            flex-direction: column;     
+                            padding-left:5px;   
+                            border-right: none;  
+                            width:40%;
+                        } 
+                    }
+                }
+            }
+           
+            
+        }
+    }
+}
+

@@ -1,0 +1,39 @@
+.btn {
+    display: inline-block;
+    width: 65px;
+    height: 60px;
+    background: linear-gradient(135.86deg, rgba(177, 177, 177, 0.32) 5.24%, rgba(54, 53, 103, 0.2) 51.01%), rgba(49, 48, 54, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    border-radius: 12px;
+    filter: saturate(100%);
+    cursor: pointer;
+    color: white;
+
+    .btnContent {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        align-items: center;
+
+        .icon {
+            width: 35%;
+        }
+
+        .tag {
+            font-size: 10px;
+        }
+    }
+}
+
+.hidden {
+    opacity: 0;
+    display: none;
+    transition: all 0.1s linear;
+}
+
+.visible {
+    opacity: 1;
+    display: block;
+    transition: all 0.1s linear;
+}

@@ -1,0 +1,22 @@
+.exposedContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+
+  .title {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    height: 55px;
+
+    .baseTitle {
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  .content {
+    flex-grow: 1;
+  }
+}

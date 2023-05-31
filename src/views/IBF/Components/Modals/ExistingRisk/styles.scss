@@ -1,0 +1,64 @@
+.existingRiskContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+
+  .titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      height: 55px;
+  
+      .backBtn {
+        outline: none;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+      }
+  
+      .baseTitle {
+        font-weight: 600;
+        font-size: 18px;
+      }
+  
+      .activeTitle {
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+    }
+
+    .weight {
+      color: white;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+      display: flex;
+      gap: 0.2rem;
+      justify-content: center;
+      align-items: center;
+
+      .editBtn {
+        width: 12px;
+      }
+    }
+
+    .wtHidden {
+      display: none;
+    }
+
+  }
+
+  .content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}

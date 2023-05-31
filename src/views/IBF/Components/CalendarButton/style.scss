@@ -1,0 +1,57 @@
+.button {
+  position: relative;
+  display: flex;
+  filter: saturate(100%);
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  justify-content: center;
+  align-items: flex-end;
+  height: 72px;
+  width: 72px;
+
+  &:disabled {
+    color: #A9A9A9;
+    cursor: auto;
+  }
+
+
+.dateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .monthYear {
+      display: flex;
+      gap: 0.4rem;
+      color: white;
+  }
+
+  .dayWeak {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    padding-top: 5px;
+    justify-content: center;
+    align-items: center;
+}
+}
+.lineInButton {
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  width: 1px;
+  height: 85%;
+  background-color: rgba(255, 255, 255, 0.67);
+}
+
+.mode {
+  position: absolute;
+  bottom: -1.4rem;
+  white-space: nowrap;
+  color: white;
+  font-size: 12px;
+  line-height: 14px;
+}
+}

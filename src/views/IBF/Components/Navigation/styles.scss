@@ -1,0 +1,109 @@
+.container {
+    top: 0px;
+    padding: 20px;
+    position: absolute;
+    height: 20px;
+    width: calc(100vw - 60px);
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #003F5C;
+    font-family: 'Source Sans Pro';
+    z-index: 9998;
+
+    button {
+        display: flex;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: white;
+        opacity: 0.9;
+        align-items: center;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-left: 1rem;
+    }
+
+    .menu {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 16px;
+
+        .nav {
+            display: flex;
+        }
+
+        .icons {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            cursor: pointer;
+
+            .household {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+
+              span {
+                font-size: 2rem;
+              }
+            }
+
+            .chart {
+                display: flex;
+                align-items: center;
+                padding-right: 20px;
+                animation: scale 2s ;
+                @keyframes scale {
+                    0% {transform: scale(1);
+                  
+                  }
+                    50% {transform: scale(2.5);
+                   
+                  }
+                   100% {transform: scale(1);
+                  
+                 }
+                }
+
+            }
+
+            .download {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .previousIcon {
+        height: 15px;
+        color: white;
+
+        path {
+            fill: white
+        }
+
+        ;
+        padding-right: 5px;
+    }
+
+    .chartIcon {
+        height: 25px;
+    }
+
+    .reportIcon {
+        height: 25px;
+
+        path {
+            fill: white
+        }
+
+        ;
+    }
+}

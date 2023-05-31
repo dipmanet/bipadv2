@@ -1,0 +1,55 @@
+.riskSuperCon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .riskContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        position: absolute;
+        right: -105px;
+        top: 5px;
+        width: 100px;
+
+        .title {
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 18px;
+            color: #FFA700;
+        }
+
+        .rangeContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+
+            .range {
+                display: flex;
+                gap: 0.7rem;
+                justify-content: center;
+                align-items: center;
+                border-radius: 10px;
+                height: 50px;
+                width: 125px;
+                cursor: pointer;
+
+                .rangeValue {
+                    font-weight: 700;
+                    font-size: 22px;
+                    line-height: 22px;
+                    margin-left: 0.5rem;
+                    color: #FFFFFF;
+                }
+
+                .indicator {
+                    color: rgba(255, 255, 255, 0.67);
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 10px;
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+    }
+}
