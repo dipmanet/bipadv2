@@ -91,9 +91,6 @@ const Summary = (props: Props) => {
         const munArrData = getMunicipalityId(filter.municipality);
         setMunForTable(munArrData);
     }, [filter.municipality]);
-    console.log('row-district', districtRow);
-    console.log('row-Municipality', municipalityRow);
-    console.log('row-', row);
 
 
     return (

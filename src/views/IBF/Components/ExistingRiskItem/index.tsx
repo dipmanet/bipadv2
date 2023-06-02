@@ -25,7 +25,6 @@ const ExistingRiskItem = (
         ibfPage },
 ) => {
     const { title, score, content } = data;
-    console.log('content', content);
 
     const rangeStyle = {
         backgroundColor: '#1AD167',

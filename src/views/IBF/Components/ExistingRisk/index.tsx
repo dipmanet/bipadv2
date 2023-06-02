@@ -59,7 +59,6 @@ const ExistingRisk = ({ ibfPage, setCountActive, setIbfPage, user }: Props) => {
     const [isWtActive, setWtActive] = useState(false);
 
     const isActiveHandler = (selectedData) => {
-        console.log('selectedData-existingRisk', selectedData);
         if (selectedData.length === 1) {
             setExistingRiskData(selectedData);
             setIbfPage({ showHouseHold: 1 });
