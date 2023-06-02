@@ -91,6 +91,10 @@ const Summary = (props: Props) => {
         const munArrData = getMunicipalityId(filter.municipality);
         setMunForTable(munArrData);
     }, [filter.municipality]);
+    console.log('row-district', districtRow);
+    console.log('row-Municipality', municipalityRow);
+    console.log('row-', row);
+
 
     return (
         <>
@@ -109,22 +113,24 @@ const Summary = (props: Props) => {
                             : 'Overall Summary'}
                 </div>
                 <div className={style.line} />
-                {filter.municipality && filter.municipality.length > 0 && municipalityRow
-                    ? (
-                        <Table
-                            theadData={theadMunicipalityData}
-                            tbodyData={municipalityRow}
-                        />
-                    )
-                    : filter.district
+                <div>
+                    {filter.municipality && filter.municipality.length > 0 && municipalityRow
                         ? (
                             <Table
-                                theadData={theadDistrictData}
-                                tbodyData={districtRow}
+                                theadData={theadMunicipalityData}
+                                tbodyData={municipalityRow}
                             />
                         )
-                        : <Table theadData={theadData} tbodyData={row} />
-                }
+                        : filter.district
+                            ? (
+                                <Table
+                                    theadData={theadDistrictData}
+                                    tbodyData={districtRow}
+                                />
+                            )
+                            : <Table theadData={theadData} tbodyData={row} />
+                    }
+                </div>
                 <button
                     type="button"
                     style={{ opacity: toggleSummary ? 0 : 1 }}

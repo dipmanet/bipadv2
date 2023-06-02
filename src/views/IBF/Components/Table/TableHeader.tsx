@@ -1,7 +1,10 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
+import style from './styles.scss';
 
-const TableHeader = ({ item, className }) => (
-    <th title={item} className={className} key={item}>
+
+const TableHeader = ({ item }: any) => (
+    <th title={item} className={_cs(style.fedTh)} key={item}>
         {item}
     </th>
 );

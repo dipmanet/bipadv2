@@ -4,8 +4,8 @@ import { _cs } from '@togglecorp/fujs';
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
-import IbfLeftArrow from '#resources/icons/IbfLeftArrow.svg';
 import { PropsFromDispatch } from '#views/IBF';
+import IbfLeftArrow from '#resources/icons/IbfLeftArrow.svg';
 import styles from './styles.scss';
 
 export interface ImpactedValueType {

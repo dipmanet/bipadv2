@@ -1815,6 +1815,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (routeName === 'visrisk') {
             return true;
         }
+        if (routeName === 'ibf') {
+            return true;
+        }
         return false;
     }
 
