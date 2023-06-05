@@ -6,6 +6,7 @@ import { DataDateRangeValueElement } from '#types';
 import { pastDaysToDateRange } from '#utils/transformations';
 
 import { convertDateAccToLanguage } from '#utils/common';
+
 import {
     HAZARD_LIST,
     damageAndLossList,
@@ -24,7 +25,6 @@ import { RealTimeFilters, ActiveLayer } from './types';
 let calculatedSourceTitle = '';
 // Util Functions
 
-const getHazard = (id: number) => HAZARD_LIST.filter(h => h.id === id);
 
 const setSimpleTitle = (title: string, regionName: string) => `${title}, ${regionName}`;
 
@@ -77,13 +77,17 @@ const damageAndLossTitleParser = (
     startDate: string,
     endDate: string,
     language: string,
+    hazardListOverall: any[],
 ): string => {
+    console.log('hazard list redux', hazardListOverall);
+    console.log('hazard list now', HAZARD_LIST);
+    console.log('region name', regionName);
     const initialStringCheck = (events: string, lang: string) => {
         if (events === 'estimated Loss (NPR)') {
             if (lang === 'en') {
                 return 'Total';
             }
-            return 'को जम्‍मा संख्या';
+            return '';
         }
         if (lang === 'en') {
             return 'Total number of';
@@ -95,16 +99,19 @@ const damageAndLossTitleParser = (
     //     : 'Total number of';
     const initialString = initialStringCheck(event, language);
     let hazardName = '';
-
+    const getHazard = (id: number) => hazardListOverall.filter(h => h.id === id);
+    console.log('This came hazard list', hazardList);
     if (!multipleHazards) {
-        hazardName = `${getHazard(hazardList[0])[0].title}`;
+        hazardName = language === 'en'
+            ? `${getHazard(hazardList[0])[0].titleEn}`
+            : `${getHazard(hazardList[0])[0].titleNe}`;
     }
     const getHazardCheck = (hazard, lang: string) => {
         if (hazard) {
             if (lang === 'en') {
                 return `${initialString} ${event} due to ${hazard} from ${startDate} to ${endDate}, ${regionName}`;
             }
-            return `${convertDateAccToLanguage(startDate, lang)} देखि ${convertDateAccToLanguage(endDate, lang)} सम्‍मको ${hazard}कारण घटेको ${eventNe} ${initialString}, ${regionName} `;
+            return `${convertDateAccToLanguage(startDate, lang)} देखि ${convertDateAccToLanguage(endDate, lang)} सम्‍मको ${hazard}को कारण घटेको ${eventNe} ${initialString}, ${regionName} `;
         }
 
         if (lang === 'en') {
@@ -180,7 +187,9 @@ const setDamageAndLossTitle = (
     regionName: string,
     language: string,
     dataDateRange: DataDateRangeValueElement,
+    hazardListOverall: any[],
 ) => {
+    console.log('This is hazard list', hazardList);
     const { damageAndLoss } = titleContext;
     const multipleHazards = hazardList.length > 1 || hazardList.length === 0;
     let damageAndLossTitle = '';
@@ -189,6 +198,7 @@ const setDamageAndLossTitle = (
         const [startDate, endDate] = getStartAndEndDate(dataDateRange, language);
         const { mainModule } = damageAndLoss;
         const capitalizedTitle = mainModule.toUpperCase().trim();
+        console.log('This is damage and loss list', damageAndLossList);
         damageAndLossList.forEach((dll) => {
             const { key, titlePart, titlePartNe } = dll;
             if (capitalizedTitle === key) {
@@ -201,6 +211,7 @@ const setDamageAndLossTitle = (
                     startDate,
                     endDate,
                     language,
+                    hazardListOverall,
                 );
             }
         });
@@ -568,6 +579,7 @@ export const getRouteWiseTitleAndSource = (
     riskInfoActiveLayers: any[],
     dataDateRange: DataDateRangeValueElement,
     language: string,
+    hazardListOverall: any[],
 ): [string, string] => {
     if (pageContext && pageContext.activeRouteDetails) {
         const { name: routeName } = pageContext.activeRouteDetails;
@@ -588,7 +600,7 @@ export const getRouteWiseTitleAndSource = (
         // Damage and Loss
         if (routeName === 'lossAndDamage') {
             defineSource('Nepal Police, DRR Portal', setSource);
-            title = setDamageAndLossTitle(titleContext, hazardList, regionName, language, dataDateRange);
+            title = setDamageAndLossTitle(titleContext, hazardList, regionName, language, dataDateRange, hazardListOverall);
         }
 
         // RealTime
@@ -621,7 +633,7 @@ export const getRouteWiseTitleAndSource = (
                 && riskInfoSubModule !== 'capacity-and-resources'
             ) {
                 defineSource('', setSource);
-                title = `RiskInfo, ${regionName}`;
+                title = language === 'en' ? `RiskInfo, ${regionName}` : `जोखिम जानकारी, ${regionName}`;
                 return [title, ''];
             }
 
@@ -651,6 +663,7 @@ export const getRouteWiseTitleAndSource = (
         }
         const tempSource = calculatedSourceTitle;
         calculatedSourceTitle = '';
+        console.log('Title', title);
         return [title, tempSource];
     }
     return [`${pageTitle} for ${regionName}`, ''];

@@ -245,7 +245,6 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    // hazardList: hazardTypeListSelector(state),
     closeWalkThroughHomepage: closeWalkThroughSelector(state),
     run: runSelector(state),
     language: languageSelector(state),

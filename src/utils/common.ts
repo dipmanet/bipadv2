@@ -11,6 +11,10 @@ import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 import { lossMetrics } from '#utils/domain';
+import {
+    englishToNepaliNumber,
+
+} from 'nepali-number';
 
 interface Row {
     [key: string]: string | number | boolean | undefined | null;
@@ -316,15 +320,17 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
         return '';
     }
     let dateToReturn = date;
+    console.log('this is data', dateToReturn);
     if (forceAD && (language === 'np')) {
         dateToReturn = BSToAD(date);
     } else if (language === 'np') {
         try {
-            dateToReturn = ADToBS(date);
+            dateToReturn = englishToNepaliNumber(ADToBS(date));
         } catch (e) {
             dateToReturn = date;
         }
     }
+    console.log('This is date', dateToReturn);
     return dateToReturn;
 };
 
