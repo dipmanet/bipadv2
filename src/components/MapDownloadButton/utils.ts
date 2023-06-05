@@ -118,6 +118,7 @@ const damageAndLossTitleParser = (
     // return hazardName
     //  ? `${initialString} ${event} due to ${hazardName} from ${startDate} to ${endDate}, ${regionName}`
     //     : `${initialString} ${event} from ${startDate} to ${endDate}, ${regionName}`;
+    console.log('This is hazard value', hazardValue);
     return hazardValue;
 };
 
@@ -178,13 +179,15 @@ const setDamageAndLossTitle = (
     hazardList: number[],
     regionName: string,
     language: string,
+    dataDateRange: DataDateRangeValueElement,
 ) => {
     const { damageAndLoss } = titleContext;
     const multipleHazards = hazardList.length > 1 || hazardList.length === 0;
     let damageAndLossTitle = '';
 
     if (damageAndLoss) {
-        const { mainModule, startDate, endDate } = damageAndLoss;
+        const [startDate, endDate] = getStartAndEndDate(dataDateRange, language);
+        const { mainModule } = damageAndLoss;
         const capitalizedTitle = mainModule.toUpperCase().trim();
         damageAndLossList.forEach((dll) => {
             const { key, titlePart, titlePartNe } = dll;
@@ -585,7 +588,7 @@ export const getRouteWiseTitleAndSource = (
         // Damage and Loss
         if (routeName === 'lossAndDamage') {
             defineSource('Nepal Police, DRR Portal', setSource);
-            title = setDamageAndLossTitle(titleContext, hazardList, regionName, language);
+            title = setDamageAndLossTitle(titleContext, hazardList, regionName, language, dataDateRange);
         }
 
         // RealTime
