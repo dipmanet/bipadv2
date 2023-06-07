@@ -229,7 +229,6 @@ const MapDownloadButton = (props: Props) => {
             const pageTitle = pageContext.activeRouteDetails.title;
 
             let regionName = language === 'en' ? 'Nepal' : 'नेपाल ';
-            console.log('Provinces', provinces);
             if (region.adminLevel === 1) {
                 const province = provinces.find(d => d.id === region.geoarea);
                 if (province) {
@@ -382,7 +381,6 @@ const MapDownloadButton = (props: Props) => {
                     hazardList,
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
-                console.log('This is specific title', specificTitle, pageTitle, regionName);
                 source = specificSource || '';
                 const calculation = value => (
                     (value / 200) * constant
@@ -535,9 +533,7 @@ const MapDownloadButton = (props: Props) => {
                     } else {
                         canvas.toBlob((blob) => {
                             const link = document.createElement('a');
-                            console.log('title finally', title);
                             const pageDownloadTitle = title;
-                            console.log('This is title', pageDownloadTitle);
                             link.download = defaultMap ? `${pageDownloadTitle}.png`
                                 : `${pageDownloadTitle}.${selectedFileFormat}`;
                             link.href = URL.createObjectURL(blob);

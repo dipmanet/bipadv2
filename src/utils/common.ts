@@ -320,7 +320,6 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
         return '';
     }
     let dateToReturn = date;
-    console.log('this is data', dateToReturn);
     if (forceAD && (language === 'np')) {
         dateToReturn = BSToAD(date);
     } else if (language === 'np') {
@@ -330,7 +329,6 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
             dateToReturn = date;
         }
     }
-    console.log('This is date', dateToReturn);
     return dateToReturn;
 };
 

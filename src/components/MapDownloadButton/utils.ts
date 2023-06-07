@@ -79,9 +79,6 @@ const damageAndLossTitleParser = (
     language: string,
     hazardListOverall: any[],
 ): string => {
-    console.log('hazard list redux', hazardListOverall);
-    console.log('hazard list now', HAZARD_LIST);
-    console.log('region name', regionName);
     const initialStringCheck = (events: string, lang: string) => {
         if (events === 'estimated Loss (NPR)') {
             if (lang === 'en') {
@@ -100,7 +97,6 @@ const damageAndLossTitleParser = (
     const initialString = initialStringCheck(event, language);
     let hazardName = '';
     const getHazard = (id: number) => hazardListOverall.filter(h => h.id === id);
-    console.log('This came hazard list', hazardList);
     if (!multipleHazards) {
         hazardName = language === 'en'
             ? `${getHazard(hazardList[0])[0].titleEn}`
@@ -125,7 +121,7 @@ const damageAndLossTitleParser = (
     // return hazardName
     //  ? `${initialString} ${event} due to ${hazardName} from ${startDate} to ${endDate}, ${regionName}`
     //     : `${initialString} ${event} from ${startDate} to ${endDate}, ${regionName}`;
-    console.log('This is hazard value', hazardValue);
+
     return hazardValue;
 };
 
@@ -189,7 +185,6 @@ const setDamageAndLossTitle = (
     dataDateRange: DataDateRangeValueElement,
     hazardListOverall: any[],
 ) => {
-    console.log('This is hazard list', hazardList);
     const { damageAndLoss } = titleContext;
     const multipleHazards = hazardList.length > 1 || hazardList.length === 0;
     let damageAndLossTitle = '';
@@ -198,7 +193,7 @@ const setDamageAndLossTitle = (
         const [startDate, endDate] = getStartAndEndDate(dataDateRange, language);
         const { mainModule } = damageAndLoss;
         const capitalizedTitle = mainModule.toUpperCase().trim();
-        console.log('This is damage and loss list', damageAndLossList);
+
         damageAndLossList.forEach((dll) => {
             const { key, titlePart, titlePartNe } = dll;
             if (capitalizedTitle === key) {
@@ -663,7 +658,6 @@ export const getRouteWiseTitleAndSource = (
         }
         const tempSource = calculatedSourceTitle;
         calculatedSourceTitle = '';
-        console.log('Title', title);
         return [title, tempSource];
     }
     return [`${pageTitle} for ${regionName}`, ''];
