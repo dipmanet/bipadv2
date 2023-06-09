@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/indent */
 import produce from 'immer';
 import { listToMap } from '@togglecorp/fujs';

@@ -19,12 +19,13 @@ import {
     ibfPageSelector,
     districtsSelector,
     municipalitiesSelector,
+    wardsSelector,
     userSelector,
 } from '#selectors';
 
 import { AppState } from '#types';
 import { mapSources } from '#constants';
-import { District, Municipality } from '#store/atom/page/types';
+import { District, Municipality, Ward } from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
 import style from './styles.scss';
 import LegendFilters from '../Constants/LegendFilters';
@@ -48,6 +49,7 @@ interface OwnProps {
 interface PropsFromMapState extends PropsFromState {
     district: District[];
     municipality: Municipality[];
+    ward: Ward[];
     user: User;
 }
 interface Params {
@@ -63,6 +65,7 @@ const mapStateToProps = (state: AppState): PropsFromMapState => ({
     ibfPage: ibfPageSelector(state),
     district: districtsSelector(state),
     municipality: municipalitiesSelector(state),
+    ward: wardsSelector(state),
     user: userSelector(state),
 });
 
@@ -127,6 +130,7 @@ const Map = (props: Props) => {
             selectedIndicator,
             selectedLegend },
         user,
+        ward,
         district,
         municipality,
         isSelectionActive,
@@ -208,6 +212,29 @@ const Map = (props: Props) => {
             map.addSource('centroid', {
                 type: 'vector',
                 url: mapSources.nepalCentroid.url,
+            });
+
+            rasterLayersYears.map((layer) => {
+                if (mapRef.current) {
+                    mapRef.current.addSource(`ibfRaster${layer}`, {
+                        type: 'raster',
+                        tiles: [getRasterLayer(layer)],
+                        tileSize: 256,
+                    });
+
+                    mapRef.current.addLayer(
+                        {
+                            id: `raster-ibf-${layer}`,
+                            type: 'raster',
+                            source: `ibfRaster${layer}`,
+                            layout: { visibility: 'none' },
+                            paint: {
+                                'raster-opacity': 0.7,
+                            },
+                        },
+                    );
+                }
+                return null;
             });
 
             // Ward layer
@@ -390,28 +417,28 @@ const Map = (props: Props) => {
                 popup.remove();
             });
 
-            rasterLayersYears.map((layer) => {
-                if (mapRef.current) {
-                    mapRef.current.addSource(`ibfRaster${layer}`, {
-                        type: 'raster',
-                        tiles: [getRasterLayer(layer)],
-                        tileSize: 256,
-                    });
+            // rasterLayersYears.map((layer) => {
+            //     if (mapRef.current) {
+            //         mapRef.current.addSource(`ibfRaster${layer}`, {
+            //             type: 'raster',
+            //             tiles: [getRasterLayer(layer)],
+            //             tileSize: 256,
+            //         });
 
-                    mapRef.current.addLayer(
-                        {
-                            id: `raster-ibf-${layer}`,
-                            type: 'raster',
-                            source: `ibfRaster${layer}`,
-                            layout: { visibility: 'none' },
-                            paint: {
-                                'raster-opacity': 0.7,
-                            },
-                        },
-                    );
-                }
-                return null;
-            });
+            //         mapRef.current.addLayer(
+            //             {
+            //                 id: `raster-ibf-${layer}`,
+            //                 type: 'raster',
+            //                 source: `ibfRaster${layer}`,
+            //                 layout: { visibility: 'none' },
+            //                 paint: {
+            //                     'raster-opacity': 0.7,
+            //                 },
+            //             },
+            //         );
+            //     }
+            //     return null;
+            // });
         });
 
         return () => {
@@ -491,7 +518,7 @@ const Map = (props: Props) => {
                     source: 'household-main-data-source',
                     type: 'circle',
                     paint: { 'circle-color': getPaint(selectedIndicator) },
-                });
+                }, 'ward-local');
 
                 mapRef.current.on('click', 'household-main-data-layer', (e) => {
                     if (popupHouseRef.current) {
@@ -525,6 +552,18 @@ const Map = (props: Props) => {
         }
     }, [householdJson, showHouseHold]);
 
+    const getWardsOfMunicipalities = (municipalities: any, wards: any) => {
+        const listOfWards: number[] = [];
+        municipalities.forEach((municipalityItem: any) => {
+            wards.forEach((wardItem: any) => {
+                if (Number(wardItem.municipality) === Number(municipalityItem.id)) {
+                    listOfWards.push(wardItem.id);
+                }
+            });
+        });
+        return listOfWards;
+    };
+
     // 4th
     const getMunArrayId = () => filter.municipality.map(item => item.id);
     useEffect(() => {
@@ -536,10 +575,16 @@ const Map = (props: Props) => {
 
             if (filter.municipality.length > 1) {
                 mapRef.current.setFilter('district-local', ['all', ['==', ['get', 'id'], Number(filter.district)]]);
-                // Experiment ['id'] to be replaced with ['get','id']
+                mapRef
+                    .current
+                    .setFilter(
+                        'ward-local',
+                        ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
+                    );
                 mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
                 mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
                 mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
+                mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
             } else if (filter.municipality.length === 0) {
                 const disArray = getDistrictArray(stationDetail, selectedStation);
                 const disBbox = getBboxFromDistrictArray(disArray, district);
@@ -562,17 +607,26 @@ const Map = (props: Props) => {
                     });
                     mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
+                    mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('municipality-centroid', 'visibility', 'none');
                 } else {
                     mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
                     mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
+                    mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
                 }
             } else {
                 // Experiment same as above
                 mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
+                mapRef
+                    .current
+                    .setFilter(
+                        'ward-local',
+                        ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
+                    );
                 mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
                 mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
+                mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
