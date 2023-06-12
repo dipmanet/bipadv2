@@ -238,6 +238,7 @@ const Map = (props: Props) => {
             });
 
             // Ward layer
+
             map.addLayer({
                 id: 'ward-local',
                 source: 'boundary-layer',
@@ -416,29 +417,6 @@ const Map = (props: Props) => {
                 map.getCanvas().style.cursor = '';
                 popup.remove();
             });
-
-            // rasterLayersYears.map((layer) => {
-            //     if (mapRef.current) {
-            //         mapRef.current.addSource(`ibfRaster${layer}`, {
-            //             type: 'raster',
-            //             tiles: [getRasterLayer(layer)],
-            //             tileSize: 256,
-            //         });
-
-            //         mapRef.current.addLayer(
-            //             {
-            //                 id: `raster-ibf-${layer}`,
-            //                 type: 'raster',
-            //                 source: `ibfRaster${layer}`,
-            //                 layout: { visibility: 'none' },
-            //                 paint: {
-            //                     'raster-opacity': 0.7,
-            //                 },
-            //             },
-            //         );
-            //     }
-            //     return null;
-            // });
         });
 
         return () => {
@@ -581,9 +559,17 @@ const Map = (props: Props) => {
                         'ward-local',
                         ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
                     );
+                mapRef.current.setFilter('district-local', ['all', ['==', ['get', 'id'], Number(filter.district)]]);
+                mapRef
+                    .current
+                    .setFilter(
+                        'ward-centroid',
+                        ['all', ['in', ['get', 'municipality'], ['literal', getMunArrayId()]]],
+                    );
                 mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
                 mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
                 mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
+                mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
                 mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
             } else if (filter.municipality.length === 0) {
                 const disArray = getDistrictArray(stationDetail, selectedStation);
@@ -608,11 +594,13 @@ const Map = (props: Props) => {
                     mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
+                    mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('municipality-centroid', 'visibility', 'none');
                 } else {
                     mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
                     mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
+                    mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
                     mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
                 }
             } else {
@@ -624,6 +612,13 @@ const Map = (props: Props) => {
                         'ward-local',
                         ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
                     );
+                mapRef
+                    .current
+                    .setFilter(
+                        'ward-centroid',
+                        ['all', ['in', ['get', 'municipality'], ['literal', getMunArrayId()]]],
+                    );
+                mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
                 mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
                 mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
                 mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
