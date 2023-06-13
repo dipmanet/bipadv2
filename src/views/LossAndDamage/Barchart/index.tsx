@@ -17,7 +17,7 @@ import { _cs } from '@togglecorp/fujs';
 import { Translation, useTranslation } from 'react-i18next';
 import Button from '#rsca/Button';
 import { nullCheck } from '#utils/common';
-import { lossMetrics } from '#utils/domain';
+import { lossMetricsDamageLoss } from '#utils/domain';
 import styles from './styles.scss';
 import { returnValueByDropdown, formatNumeralAccLang } from '../utils/utils';
 import {
@@ -126,7 +126,7 @@ const BarChartVisual = (props: BarchartProps) => {
         typeKey: { name: string; id: number }[],
         type: string,
     ) => {
-        const key = lossMetrics.map(item => item.key);
+        const key = lossMetricsDamageLoss.map(item => item.key);
         const filteredData = [];
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < typeKey.length; i++) {

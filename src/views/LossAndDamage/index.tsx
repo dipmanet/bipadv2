@@ -37,7 +37,7 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 
-import { lossMetrics } from '#utils/domain';
+import { lossMetricsDamageLoss } from '#utils/domain';
 import {
     sum,
     saveChart,
@@ -323,7 +323,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     }
 
     private calculateSummary = (data) => {
-        const stat = lossMetrics.reduce((acc, { key }) => ({
+        const stat = lossMetricsDamageLoss.reduce((acc, { key }) => ({
             ...acc,
             [key]: sum(
                 data
@@ -852,7 +852,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     dropDownClickHandler={dropDownClickHandler}
                                     selectOption={selectOption}
                                     setSelectOption={setSelectOption}
-                                    dropdownOption={lossMetrics}
+                                    dropdownOption={lossMetricsDamageLoss}
                                     icon
                                 />
                                 <DataCount
