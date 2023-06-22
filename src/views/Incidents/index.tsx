@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-indent-props */
@@ -131,6 +132,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
             const { results: incidentList = [] } = response as Response;
+
             setIncidentList({ incidentList });
         },
         onMount: true,
@@ -198,6 +200,11 @@ class Incidents extends React.PureComponent<Props, State> {
             hoveredIncidentId: undefined,
         };
     }
+
+    // public componentDidMount(): void {
+    //     const { setIncidentList } = this.props;
+    //     setIncidentList({});
+    // }
 
     private getSanitizedIncidents = memoize(getSanitizedIncidents)
 
@@ -268,6 +275,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     onIncidentHover={this.handleIncidentHover}
                     mapHoverAttributes={mapHoverAttributes}
                     isHovered={!!hoveredIncidentId}
+                    pending={pending}
                 />
                 <Page
                     leftContentContainerClassName={styles.leftPaneContainer}
@@ -279,6 +287,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             onIncidentHover={this.handleIncidentHover}
                             hoveredIncidentId={hoveredIncidentId}
                             dateRange={filters.dataDateRange}
+                            pending={pending}
                         />
                     )}
                     mainContentContainerClassName={_cs(styles.legendContainer, 'map-legend-container')}
@@ -337,3 +346,6 @@ export default compose(
     createConnectedRequestCoordinator<ReduxProps>(),
     createRequestClient(requests),
 )(Incidents);
+function setIncidentList(arg0: { [x: number]: any }) {
+    throw new Error('Function not implemented.');
+}

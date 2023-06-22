@@ -43,6 +43,7 @@ export default class LossAndDamageMap extends React.PureComponent {
         } = this.props;
 
         const mapState = generateMapState(geoareas, mapping, metric);
+
         const colors = legendItems.map((item) => item.color);
         // eslint-disable-next-line max-len
         const { colorLegend, paintColor } = generatePaintLegendByInterval(mapState, colors.length, colors, language);

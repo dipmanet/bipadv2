@@ -170,11 +170,13 @@ export const generatePaintLegendByInterval = (data, parts, color, language) => {
             colorInterval.push(color[index - 1]);
             colorInterval.push(dat + interval + 1);
             dat += 1;
-            colorLegend.push({ name: `${formatNumeralAccLang(dat, language)} - ${dat + interval > max
-                ? formatNumeralAccLang(max, language)
-                : formatNumeralAccLang(dat + interval, language)}`,
-            color: color[index - 1],
-            range: [dat, dat + interval > max ? max : dat + interval] });
+            colorLegend.push({
+                name: `${formatNumeralAccLang(dat, language)} - ${dat + interval > max
+                    ? formatNumeralAccLang(max, language)
+                    : formatNumeralAccLang(dat + interval, language)}`,
+                color: color[index - 1],
+                range: [dat, dat + interval > max ? max : dat + interval],
+            });
             dat += interval;
         }
     }

@@ -170,6 +170,7 @@ class LeftPane extends React.PureComponent {
             onIncidentHover,
             hoveredIncidentId,
             dateRange,
+            pending,
             language: { language },
         } = this.props;
 
@@ -246,6 +247,7 @@ class LeftPane extends React.PureComponent {
                     className={styles.lossDetails}
                     data={incidentList}
                     hideIncidentCount
+                    pending={pending}
                 />
                 <header className={styles.header}>
                     <div className={styles.tabs}>
@@ -255,7 +257,7 @@ class LeftPane extends React.PureComponent {
                             role="presentation"
                         >
                             <div className={styles.value}>
-                                {incidentList.length}
+                                {pending ? 0 : incidentList.length}
                             </div>
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.incidentIcon)} />
@@ -324,7 +326,8 @@ class LeftPane extends React.PureComponent {
                         />
                     </div>
                 </header>
-                {activeView === 'incidents' && (
+
+                {activeView === 'incidents' && !pending && (
                     <IncidentListView
                         onIncidentHover={onIncidentHover}
                         hoveredIncidentId={hoveredIncidentId}
@@ -334,7 +337,7 @@ class LeftPane extends React.PureComponent {
                         recentDay={recentDay}
                     />
                 )}
-                {activeView === 'visualizations' && (
+                {activeView === 'visualizations' && !pending && (
                     <Visualizations
                         className={styles.content}
                         incidentList={incidentList}
