@@ -198,6 +198,10 @@ class PastDateRangeInput extends React.Component<Props> {
             customState,
         } = this.state;
         const { activeRouteDetails: { name: activePage } } = this.context;
+        const test = convertDateAccToLanguage(
+            value.endDate,
+            language,
+        );
 
         return (
             <div className={_cs(styles.pastDateRangeInput, className)}>
