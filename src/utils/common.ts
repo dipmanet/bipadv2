@@ -322,7 +322,7 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
     }
     let dateToReturn = date;
     if (forceAD && (language === 'np')) {
-        dateToReturn = BSToAD(date);
+        dateToReturn = (date);
     } else if (language === 'np') {
         try {
             // dateToReturn = englishToNepaliNumber(ADToBS(date));

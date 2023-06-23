@@ -71,6 +71,7 @@ import {
 import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
 import Spinner from '#rscv/Spinner';
 import DateRangeInfo from '#components/DateRangeInfo';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import TabularView from './TabularView';
 import { getSanitizedIncidents } from './common';
 import Overview from './Overview';
@@ -219,7 +220,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
     // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
     componentDidMount() {
-        const { filters, setFilters } = this.props;
+        const { filters, setFilters, language } = this.props;
+        const { startDate, endDate } = this.state;
 
         const sixMonths = {
             dataDateRange: {
@@ -246,8 +248,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.handleEndDateChange(encodeDate(endDateFromFilter));
             } else {
                 const { startDate: startDateFromFilter, endDate: endDateFromFilter } = filters.dataDateRange;
-                this.handleStartDateChange(startDateFromFilter);
-                this.handleEndDateChange(endDateFromFilter);
+
+                this.handleStartDateChange(BSToAD(startDateFromFilter));
+                this.handleEndDateChange(BSToAD(endDateFromFilter));
             }
         }
     }
@@ -391,6 +394,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         //     ...getDatesInIsoString(startDate, endDate),
         // });
         const { language: { language } } = this.props;
+
         const newConvertedStartDate = convertDateAccToLanguage(startDate, language, true);
         this.setState({ startDate: newConvertedStartDate });
     }
