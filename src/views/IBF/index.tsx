@@ -256,6 +256,7 @@ const Ibf = (props: Props) => {
         getCall();
     }, [wtChange]);
 
+
     const dashboardViewHandler = () => {
         setDashboard(true);
     };

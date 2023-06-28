@@ -26,6 +26,7 @@ export default class MapDownloadButton extends React.PureComponent {
             name,
         } = this.props;
         const csv = convertJsonToCsv(value);
+        console.log('csv', csv);
         const blob = new Blob([csv], { type: 'text/csv' });
 
         const currentTimestamp = (new Date()).getTime();
