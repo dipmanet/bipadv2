@@ -430,7 +430,7 @@ const state: PageState = {
         returnPeriod: 0,
         leadTime: 0,
         overallFloodHazard: [],
-        filter: { district: '', municipality: [], ward: '' },
+        filter: { district: '', municipality: '', ward: '' },
         householdJson: [],
         showHouseHold: 0,
         selectedIndicator: '',

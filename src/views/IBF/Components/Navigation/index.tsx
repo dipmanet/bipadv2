@@ -255,7 +255,7 @@ Add Household Level Data
                                         ? (
                                             <div
                                                 className={style.download}
-                                                onClick={() => showReport()}
+                                                onClick={() => showReport()}b
                                                 role="presentation"
                                                 title="Preview and download Report"
                                             >

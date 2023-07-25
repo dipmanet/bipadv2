@@ -139,12 +139,14 @@ const Map = (props: Props) => {
         getEditHouseValue,
     } = props;
 
-
+    console.log('stations', stations);
+    console.log('selectedStation', selectedStation);
+    console.log('householdJson', householdJson);
     // const [pending, setPending] = useState(false);
     // const [mun, setMun] = useState();
 
 
-    const rasterLayersYears = [2, 5, 20];
+    // const rasterLayersYears = [2, 5, 20];
 
     const setSelectedStation = (station) => {
         props.setIbfPage({ selectedStation: station });
@@ -177,7 +179,7 @@ const Map = (props: Props) => {
         return bboxArr;
     };
 
-    let interval;
+    // let interval;
     // 1st
     useEffect(() => {
         const map = new mapboxgl.Map({
@@ -214,28 +216,48 @@ const Map = (props: Props) => {
                 url: mapSources.nepalCentroid.url,
             });
 
-            rasterLayersYears.map((layer) => {
-                if (mapRef.current) {
-                    mapRef.current.addSource(`ibfRaster${layer}`, {
-                        type: 'raster',
-                        tiles: [getRasterLayer(layer)],
-                        tileSize: 256,
-                    });
+            if (mapRef.current) {
+                mapRef.current.addSource('ibfRaster20', {
+                    type: 'raster',
+                    tiles: [getRasterLayer(20)],
+                    tileSize: 256,
+                });
 
-                    mapRef.current.addLayer(
-                        {
-                            id: `raster-ibf-${layer}`,
-                            type: 'raster',
-                            source: `ibfRaster${layer}`,
-                            layout: { visibility: 'none' },
-                            paint: {
-                                'raster-opacity': 0.7,
-                            },
+                mapRef.current.addLayer(
+                    {
+                        id: 'raster-ibf-20',
+                        type: 'raster',
+                        source: 'ibfRaster20',
+                        layout: { visibility: 'none' },
+                        paint: {
+                            'raster-opacity': 0.7,
                         },
-                    );
-                }
-                return null;
-            });
+                    },
+                );
+            }
+
+            // rasterLayersYears.map((layer) => {
+            //     if (mapRef.current) {
+            //         mapRef.current.addSource(`ibfRaster${layer}`, {
+            //             type: 'raster',
+            //             tiles: [getRasterLayer(layer)],
+            //             tileSize: 256,
+            //         });
+
+            //         mapRef.current.addLayer(
+            //             {
+            //                 id: `raster-ibf-${layer}`,
+            //                 type: 'raster',
+            //                 source: `ibfRaster${layer}`,
+            //                 layout: { visibility: 'none' },
+            //                 paint: {
+            //                     'raster-opacity': 0.7,
+            //                 },
+            //             },
+            //         );
+            //     }
+            //     return null;
+            // });
 
             // Ward layer
 
@@ -325,41 +347,39 @@ const Map = (props: Props) => {
                 data: stations,
             });
 
+            // map.addSource('newstations', {
+            //     type: 'geojson',
+            //     data: stations,
+            // });
 
-            map.addSource('newstations', {
-                type: 'geojson',
-                data: stations,
-            });
+            // let radius = 0.6;
+            // map.addLayer({
+            //     id: 'newlayer-main',
+            //     source: 'newstations',
+            //     paint: {
+            //         'circle-opacity': 0,
+            //         'circle-color': [
+            //             'case',
+            //             ['==', ['get', 'exceed_twenty', ['at', leadTime, ['get', 'calculation']]], true],
+            //             'red',
+            //             ['==', ['get', 'exceed_five', ['at', leadTime, ['get', 'calculation']]], true],
+            //             'yellow',
+            //             ['==', ['get', 'exceed_two', ['at', leadTime, ['get', 'calculation']]], true],
+            //             'green',
+            //             'white',
+            //         ],
+            //         'circle-stroke-width': 1,
+            //         'circle-stroke-color': '#fff',
+            //     },
+            //     layout: {
+            //         visibility: 'none',
+            //     },
+            // });
 
-            let radius = 0.6;
-            map.addLayer({
-                id: 'newlayer-main',
-                type: 'circle',
-                source: 'newstations',
-                paint: {
-                    'circle-opacity': 0,
-                    'circle-color': [
-                        'case',
-                        ['==', ['get', 'exceed_twenty', ['at', leadTime, ['get', 'calculation']]], true],
-                        'red',
-                        ['==', ['get', 'exceed_five', ['at', leadTime, ['get', 'calculation']]], true],
-                        'yellow',
-                        ['==', ['get', 'exceed_two', ['at', leadTime, ['get', 'calculation']]], true],
-                        'green',
-                        'white',
-                    ],
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#fff',
-                },
-                layout: {
-                    visibility: 'none',
-                },
-            });
-
-            interval = setInterval(() => {
-                map.setPaintProperty('newlayer-main', 'circle-radius', radius);
-                radius = (radius + 0.8) % 16;
-            }, 60);
+            // interval = setInterval(() => {
+            //     map.setPaintProperty('newlayer-main', 'circle-radius', radius);
+            //     radius = (radius + 0.8) % 16;
+            // }, 60);
 
             map.addLayer({
                 id: 'placesInitial',
@@ -374,9 +394,19 @@ const Map = (props: Props) => {
                     ],
                     'icon-size': 0.06,
                     'icon-anchor': 'bottom',
+                    'text-field': [
+                        'case',
+                        ['==', ['get', 'has_household_data'], true],
+                        ['get', 'station_name'],
+                        '',
+                    ],
+                    'text-size': 10,
+                    'text-anchor': 'top',
+                },
+                paint: {
+                    'text-color': '#ffffff',
                 },
             });
-
 
             map.on('mouseenter', 'placesInitial', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
@@ -420,7 +450,7 @@ const Map = (props: Props) => {
         });
 
         return () => {
-            clearInterval(interval);
+            // clearInterval(interval);
             map.remove();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -656,59 +686,59 @@ const Map = (props: Props) => {
             mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
 
             mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
-            mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
-            mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
+        } else if (mapRef.current && mapRef.current.isStyleLoaded()) {
+            mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'visible');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedStation]);
 
     // 7th
-    useEffect(() => {
-        if (mapRef.current && returnPeriod) {
-            if (returnPeriod === 20) {
-                mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'visible');
-                mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
-                // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
-            } else if (returnPeriod === 5) {
-                mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'visible');
-                mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
-                // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
-            } else if (returnPeriod === 2) {
-                // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'visible');
-                mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
-                mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
-            } else {
-                // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
-                mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
-                mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [returnPeriod]);
+    // useEffect(() => {
+    //     if (mapRef.current && returnPeriod) {
+    //         if (returnPeriod === 20) {
+    //             mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'visible');
+    //             mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
+    //             // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
+    //         } else if (returnPeriod === 5) {
+    //             mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'visible');
+    //             mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
+    //             // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
+    //         } else if (returnPeriod === 2) {
+    //             // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'visible');
+    //             mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
+    //             mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
+    //         } else {
+    //             // mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
+    //             mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
+    //             mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
+    //         }
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [returnPeriod]);
 
     // 8th
-    useEffect(() => {
-        if (mapRef.current) {
-            mapRef.current.on('load', () => {
-                mapRef.current.setPaintProperty('newlayer-main', 'circle-color', getCircleProp('color', leadTime));
-                mapRef.current.setPaintProperty('newlayer-main', 'circle-opacity', getCircleProp('opacity', leadTime));
-                mapRef.current.setPaintProperty('newlayer-main', 'circle-stroke-width', getCircleProp('strokewidth', leadTime));
-                mapRef.current.setLayoutProperty('newlayer-main', 'visibility', 'visible');
-            });
-        }
-        const timeout = setTimeout(() => {
-            if (mapRef.current) {
-                if (mapRef.current.isStyleLoaded()) {
-                    mapRef.current.setPaintProperty('newlayer-main', 'circle-color', getCircleProp('color', leadTime));
-                    mapRef.current.setPaintProperty('newlayer-main', 'circle-opacity', getCircleProp('opacity', leadTime));
-                    mapRef.current.setPaintProperty('newlayer-main', 'circle-stroke-width', getCircleProp('strokewidth', leadTime));
-                    mapRef.current.setLayoutProperty('newlayer-main', 'visibility', 'visible');
-                }
-            }
-        }, 100);
+    // useEffect(() => {
+    //     if (mapRef.current) {
+    //         mapRef.current.on('load', () => {
+    //             mapRef.current.setPaintProperty('newlayer-main', 'circle-color', getCircleProp('color', leadTime));
+    //             mapRef.current.setPaintProperty('newlayer-main', 'circle-opacity', getCircleProp('opacity', leadTime));
+    //             mapRef.current.setPaintProperty('newlayer-main', 'circle-stroke-width', getCircleProp('strokewidth', leadTime));
+    //             mapRef.current.setLayoutProperty('newlayer-main', 'visibility', 'visible');
+    //         });
+    //     }
+    //     const timeout = setTimeout(() => {
+    //         if (mapRef.current) {
+    //             if (mapRef.current.isStyleLoaded()) {
+    //                 mapRef.current.setPaintProperty('newlayer-main', 'circle-color', getCircleProp('color', leadTime));
+    //                 mapRef.current.setPaintProperty('newlayer-main', 'circle-opacity', getCircleProp('opacity', leadTime));
+    //                 mapRef.current.setPaintProperty('newlayer-main', 'circle-stroke-width', getCircleProp('strokewidth', leadTime));
+    //                 mapRef.current.setLayoutProperty('newlayer-main', 'visibility', 'visible');
+    //             }
+    //         }
+    //     }, 100);
 
-        return () => clearTimeout(timeout);
-    }, [leadTime]);
+    //     return () => clearTimeout(timeout);
+    // }, [leadTime]);
 
     // 9th
     useEffect(() => {
@@ -739,42 +769,6 @@ const Map = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter.district]);
 
-    // 10th
-    // useEffect(() => {
-    //     if (mapRef.current && filter.municipality.length > 0 && mapRef.current.isStyleLoaded()) {
-    //         if (!mapRef.current.getLayer('household-main-data-layer')) return;
-    //         if (householdJson.length > 0) {
-    //             if (mapRef.current.getLayer('household-main-data-layer') && selectedIndicator === 'risk') {
-    //                 mapRef.current.setPaintProperty('household-main-data-layer', 'circle-color', getPaint(selectedIndicator));
-    //             }
-    //             mapRef.current.on('mousemove', 'household-main-data-layer', (e) => {
-    //                 if (e) {
-    //                     mapRef.current.getCanvas().style.cursor = 'pointer';
-    //                     const { lngLat } = e;
-    //                     const coordinates = [lngLat.lng, lngLat.lat];
-
-    //                     const prop = e.features && e.features[0] && e.features[0].properties;
-    //                     if (selectedIndicator === 'risk'
-    //                         || selectedIndicator === 'hazard'
-    //                         || selectedIndicator === 'vulnerability'
-    //                         || selectedIndicator === 'lackOfCopingCapacity') {
-    //                         popup.setLngLat(coordinates)
-    //                             .setHTML(getScore(prop, selectedIndicator))
-    //                             .addTo(mapRef.current);
-    //                     } else {
-    //                         popup.remove();
-    //                     }
-    //                 }
-    //             });
-    //             mapRef.current.on('mouseleave', 'household-main-data-layer', () => {
-    //                 mapRef.current.getCanvas().style.cursor = '';
-    //                 popup.remove();
-    //             });
-    //         }
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [selectedIndicator]);
-
     // 11th
     useEffect(() => {
         if (!mapRef.current) return;
@@ -784,7 +778,7 @@ const Map = (props: Props) => {
             mapRef.current.setPaintProperty('household-main-data-layer', 'circle-color', getPaint(selectedIndicator));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [returnPeriod, selectedIndicator, showHouseHold]);
+    }, [selectedIndicator, showHouseHold]);
 
     // 12th
     const getLegendFilter = (legend) => {
@@ -836,15 +830,7 @@ const Map = (props: Props) => {
         };
     }, [isSelectionActive]);
 
-    const mapContainer = { // 10th
-        // useEffect(() => {
-        //     if (mapRef.current && filter.municipality.length > 0 && mapRef.current.isStyleLoaded()) {
-        //         if (!mapRef.current.getLayer('household-main-data-layer')) return;
-        //         if (householdJson.length > 0) {
-        //             if (mapRef.current.getLayer('household-main-data-layer') && selectedIndicator === 'risk') {
-        //                 mapRef.current.setPaintProperty('household-main-data-layer', 'circle-color', getPaint(selectedIndicator));
-        //             }
-        //
+    const mapContainer = {
         position: 'absolute',
         top: '40px',
         right: '0',

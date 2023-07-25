@@ -109,10 +109,10 @@ export interface BudgetActivityData {
     projcompletionDate: string;
     projstartDate: string;
 }
-export interface IbfMunicipality {
-    id: number;
-    title: string;
-}
+// export interface IbfMunicipality {
+//     id: number;
+//     title: string;
+// }
 export interface IbfPage {
     demo: number;
     stations: object;
@@ -124,7 +124,7 @@ export interface IbfPage {
     overallFloodHazard: [];
     filter: {
         district: string;
-        municipality: IbfMunicipality[];
+        municipality: string;
         ward: string;
     };
     householdJson: [];

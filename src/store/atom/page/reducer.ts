@@ -1753,11 +1753,9 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
                         deferedState.ibfPage.indicators = indicators;
                 }
                 if (wtChange) {
-                        console.log('reducer-wtChange', wtChange);
                         deferedState.ibfPage.wtChange = wtChange;
                 }
                 if (wtChange === 0) {
-                        console.log('reducer-wtChange-0', wtChange);
                         deferedState.ibfPage.wtChange = wtChange;
                 }
                 if (weights) {

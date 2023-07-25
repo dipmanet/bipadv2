@@ -19,7 +19,7 @@ import style from './styles.scss';
 import { PropsFromDispatch, PropsFromState } from '..';
 
 interface OwnProps {
-
+    isFormOpen: boolean;
 }
 
 interface PropsFromFilterState extends PropsFromState {
@@ -42,15 +42,20 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const Filter = (props: Props) => {
-    const [selectedMun, setSelectedMun] = useState([]);
-    const [list, setList] = useState(false);
+    // const [selectedMun, setSelectedMun] = useState([]);
     const [disState, setDisState] = useState('selectDistrict');
+    const [munState, setMunState] = useState('selectMunicipality');
     const [disBool, setDisBool] = useState(false);
+    const [munBool, setMunBool] = useState(false);
+    const [wardBool, setWardBool] = useState(false);
+
+    // console.log('selectedMun,list,disState,disBool', selectedMun, list, disState, disBool);
 
     const {
         ibfPage,
         district,
         municipality,
+        ward,
         isFormOpen,
     } = props;
 
@@ -65,12 +70,15 @@ const Filter = (props: Props) => {
         && selectedStation.properties
         && selectedStation.properties.has_household_data;
 
+    console.log('selectedStation,stationDetail,filter,ward', selectedStation, stationDetail, filter, ward);
+
     const mystationdata = stationDetail.results
         .filter(item => item.station === selectedStation.id);
 
     const uniqueDistrict = [...new Set(mystationdata.map(item => item.district))];
 
     const disName = uniqueDistrict.map((i) => {
+        console.log('i', i);
         const result = {};
         result.id = i;
         result.title = district.filter(item => item.id === i)[0].title;
@@ -79,50 +87,59 @@ const Filter = (props: Props) => {
 
 
     const uniqueMunicipality = [...new Set(mystationdata.map(item => item.municipality))];
+
     const munName = uniqueMunicipality.map((i) => {
+        console.log('i', i);
         const result = {};
         result.id = i;
         result.title = municipality.filter(item => item.id === i)[0].title;
-        result.districtId = municipality.filter(item => item.id === i)[0].district;
+        return result;
+    });
+
+    const uniqueWard = [...new Set(mystationdata.map(item => item.ward))];
+
+    const wardName = uniqueWard.map((i) => {
+        const result = {};
+        result.id = i;
+        result.title = ward.filter(item => item.id === i)[0].title;
+        result.municipalityId = ward.filter(item => item.id === i)[0].municipality;
         result.isChecked = false;
         return result;
     });
 
-    const [munState, setMunState] = useState([]);
+    // const refreshHandler = () => {
+    //     props.setIbfPage({ filter: { district: '', municipality: [] } });
+    //     setSelectedMun([]);
+    //     setWardBool(false);
+    //     const resetState = munState.length > 0 && munState.map((munItem) => {
+    //         const munci = {
+    //             ...munItem,
+    //             isChecked: false,
+    //         };
+    //         return munci;
+    //     });
+    //     setMunState(resetState);
+    //     setDisState('selectDistrict');
+    //     setDisBool(false);
+    // };
 
-    const refreshHandler = () => {
-        props.setIbfPage({ filter: { district: '', municipality: [] } });
-        setSelectedMun([]);
-        setList(false);
-        const resetState = munState.length > 0 && munState.map((munItem) => {
-            const munci = {
-                ...munItem,
-                isChecked: false,
-            };
-            return munci;
-        });
-        setMunState(resetState);
-        setDisState('selectDistrict');
-        setDisBool(false);
-    };
+    // const handleCheckbox = (e, mun) => {
+    //     const munic = {
+    //         ...mun,
+    //         isChecked: e.target.checked,
+    //     };
+    //     setMunState(prevState => [...prevState.filter(item => item.id !== mun.id), munic]);
 
-    const handleCheckbox = (e, mun) => {
-        const munic = {
-            ...mun,
-            isChecked: e.target.checked,
-        };
-        setMunState(prevState => [...prevState.filter(item => item.id !== mun.id), munic]);
-
-        if (munic.isChecked) {
-            setSelectedMun(prevState => [munic, ...prevState]);
-        } else {
-            setSelectedMun((prevState) => {
-                const filteredMun = prevState.filter(data => data.id !== munic.id);
-                return filteredMun;
-            });
-        }
-        setList(false);
-    };
+    //     if (munic.isChecked) {
+    //         setSelectedMun(prevState => [munic, ...prevState]);
+    //     } else {
+    //         setSelectedMun((prevState) => {
+    //             const filteredMun = prevState.filter(data => data.id !== munic.id);
+    //             return filteredMun;
+    //         });
+    //     }
+    //     setWardBool(false);
+    // };
 
     const handleDisState = (disObj) => {
         setDisState(disObj.title);
@@ -130,18 +147,25 @@ const Filter = (props: Props) => {
         props.setIbfPage({ filter: { district: disObj.id } });
     };
 
-    useEffect(() => {
-        props.setIbfPage({ filter: { municipality: selectedMun } });
-    }, [props, selectedMun]);
+    const handleMunState = (munObj) => {
+        setMunState(munObj.title);
+        setMunBool(false);
+        props.setIbfPage({ filter: { municipality: munObj.id } });
+    };
 
-    useEffect(() => {
-        refreshHandler();
-        setMunState(munName);
-    }, [selectedStation]);
+    // useEffect(() => {
+    //     props.setIbfPage({ filter: { municipality: selectedMun } });
+    // }, [props, selectedMun]);
+
+    // useEffect(() => {
+    //     refreshHandler();
+    //     // setMunState(munName);
+    // }, [selectedStation]);
 
 
     return (
         <>
+            {/* District Dropdown */}
             <div
                 className={_cs(style.disContainer, isFormOpen && style.hideContainer)}
             >
@@ -173,11 +197,13 @@ const Filter = (props: Props) => {
                     </div>
                 )}
             </div>
-
-            <div className={_cs(style.munContainer, isFormOpen && style.hideContainer)}>
+            {/* Municipality Dropdown */}
+            <div
+                className={_cs(style.munContainer, isFormOpen && style.hideContainer)}
+            >
                 <div
                     className={style.selectBar}
-                    onClick={() => filter.district && setList(!list)}
+                    onClick={() => filter.district && setMunBool(!munBool)}
                     data-html
                     data-tip={
                         ReactDOMServer.renderToString(
@@ -189,8 +215,58 @@ const Filter = (props: Props) => {
                     data-offset="{ 'top': 60, 'left': 140 }"
                     data-background-color="transparent"
                 >
+                    <button
+                        style={{ cursor: !filterDisable && 'not-allowed' }}
+                        className={style.munBtnDefault}
+                        onClick={() => filter.district && setMunBool(!munBool)}
+                    >
+                        {munState === 'selectMunicipality'
+                            ? (<span className={style.munTitle}>Select Municipality</span>)
+                            : (<span className={style.munTitle}>{munState}</span>)}
+                        <span className={style.arrowDown}>
+                            <img src={IbfDownArrow} alt="downArrow" />
+                        </span>
+                    </button>
+                </div>
+                {
+                    filter.district === '' && (
+                        <ReactTooltip />
+                    )
+                }
+                {munName.length > 0 && munBool && (
+                    <div className={style.scrollCon}>
+                        {
+                            munName.length > 0 && munName.map(mun => (
+                                <button
+                                    key={mun.id}
+                                    className={style.munBtnScroll}
+                                    onClick={() => handleMunState(mun)}
+                                >
+                                    {mun.title}
+                                </button>
+                            ))
+                        }
+                    </div>
+                )}
+            </div>
+            {/* Ward Dropdown */}
+            <div className={_cs(style.wardContainer, isFormOpen && style.hideContainer)}>
+                <div
+                    className={style.selectBar}
+                    onClick={() => filter.municipality && setWardBool(!wardBool)}
+                    data-html
+                    data-tip={
+                        ReactDOMServer.renderToString(
+                            <div className={style.popup}>
+                                Please select municipality first to view ward level data
+                            </div>,
+                        )}
+                    data-place="bottom"
+                    data-offset="{ 'top': 60, 'left': 140 }"
+                    data-background-color="transparent"
+                >
                     <div className={style.selectContent}>
-                        <span>Select Municipality</span>
+                        <span>Select Ward</span>
                     </div>
                     <button type="button" className={style.arrowDown}>
                         <img src={IbfDownArrow} alt="downArrow" />
@@ -202,20 +278,10 @@ const Filter = (props: Props) => {
                     )
                 }
                 {
-                    list && (
-                        <ul className={style.munListContainer}>
+                    wardBool && (
+                        <ul className={style.wardListContainer}>
                             {
-                                munState.length > 0 && munState.sort((a, b) => {
-                                    const fI = a.title.toLowerCase();
-                                    const lI = b.title.toLowerCase();
-                                    if (fI < lI) {
-                                        return -1;
-                                    }
-                                    if (fI > lI) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                }).map(mun => (
+                                munState.length > 0 && munState.map(mun => (
                                     <li key={mun.id} className={style.munList}>
                                         <input
                                             type="checkbox"
@@ -230,6 +296,13 @@ const Filter = (props: Props) => {
                                         >
                                             {mun.title}
                                         </label>
+                                        <button
+
+                                            className={style.disBtnScroll}
+                                            // onClick={() => handleDisState(dis)}
+                                        >
+                                            {mun.title}
+                                        </button>
                                     </li>
                                 ))
                             }
@@ -237,11 +310,13 @@ const Filter = (props: Props) => {
                     )
                 }
             </div>
-            <button className={_cs(style.reset, isFormOpen && style.hideContainer)} type="button" onClick={refreshHandler}>
+            {/* <button
+            className={_cs(style.reset, isFormOpen && style.hideContainer)}
+            type="button" onClick={refreshHandler}>
                 <Icon
                     name="refresh"
                 />
-            </button>
+            </button> */}
         </>
     );
 };

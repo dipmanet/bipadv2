@@ -18,7 +18,7 @@ import ForDrag from './Components/ForDrag';
 
 import Navigation from './Components/Navigation';
 import Map from './Map';
-import Calendar from './Calender';
+// import Calendar from './Calender';
 import style from './styles.scss';
 
 
@@ -28,7 +28,7 @@ import testStationDetail from './Api/stationDetail';
 
 
 import Legend from './Legend';
-import SourceCon from './SourceCon';
+// import SourceCon from './SourceCon';
 import RiskAndImpactCon from './RiskAndImpactCon';
 import SummaryCon from './SummaryCon';
 import Filter from './Filter';
@@ -374,14 +374,14 @@ const Ibf = (props: Props) => {
                                                     </>
                                                 )
                                             }
-                                            <ForDrag
+                                            {/* <ForDrag
                                                 widthToggle={widthToggle}
                                                 defaultPosition={defaultValues.sourceDefaultPosition}
                                             >
                                                 <SourceCon
                                                     handleWidthToggle={handleWidthToggle}
                                                 />
-                                            </ForDrag>
+                                            </ForDrag> */}
                                         </>
                                     )}
                                     <LegendDrag
@@ -389,7 +389,7 @@ const Ibf = (props: Props) => {
                                     >
                                         <Legend />
                                     </LegendDrag>
-                                    <Calendar />
+                                    {/* <Calendar /> */}
                                     {
                                         isFormOpen && (
                                             <ForDrag
