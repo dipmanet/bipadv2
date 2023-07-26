@@ -113,6 +113,10 @@ export interface BudgetActivityData {
 //     id: number;
 //     title: string;
 // }
+export interface IbfWard {
+    id: number;
+    title: string;
+}
 export interface IbfPage {
     demo: number;
     stations: object;
@@ -125,7 +129,7 @@ export interface IbfPage {
     filter: {
         district: string;
         municipality: string;
-        ward: string;
+        ward: IbfWard[];
     };
     householdJson: [];
     showHouseHold: number;

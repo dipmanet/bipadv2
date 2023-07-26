@@ -164,19 +164,21 @@ const Map = (props: Props) => {
     };
 
     const getMunicipalityBbox = () => {
-        let bboxArr = [];
-        if (filter.municipality.length > 1 || filter.municipality.length === 0) {
-            if (filter.district) {
-                const { bbox } = district.filter(item => item.id === Number(filter.district))[0];
-                bboxArr = bbox;
-                return bboxArr;
-            }
-        }
-        if (filter.municipality.length > 0) {
-            const { bbox } = municipality.filter(item => item.id === Number(filter.municipality[0].id))[0];
-            bboxArr = bbox;
-        }
-        return bboxArr;
+        // let bboxArr = [];
+        // if (filter.municipality.length > 1 || filter.municipality.length === 0) {
+        //     if (filter.district) {
+        //         const { bbox } = district.filter(item => item.id === Number(filter.district))[0];
+        //         bboxArr = bbox;
+        //         return bboxArr;
+        //     }
+        // }
+        // if (filter.municipality.length > 0) {
+        //     const { bbox } = municipality.filter(item => item.id === Number(filter.municipality[0].id))[0];
+        //     bboxArr = bbox;
+        // }
+        // return bboxArr;
+        const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
+        return bbox;
     };
 
     // let interval;
@@ -573,89 +575,104 @@ const Map = (props: Props) => {
     };
 
     // 4th
-    const getMunArrayId = () => filter.municipality.map(item => item.id);
+    // const getMunArrayId = () => filter.municipality.map(item => item.id);
     useEffect(() => {
+        // if (mapRef.current && mapRef.current.isStyleLoaded()) {
+        //     const munBbox = getMunicipalityBbox();
+        //     if (munBbox.length > 0) {
+        //         mapRef.current.fitBounds([[munBbox[0], munBbox[1]], [munBbox[2], munBbox[3]]], { padding: 150 });
+        //     }
+
+        //     if (filter.municipality.length > 1) {
+        //         mapRef.current.setFilter('district-local', ['all', ['==', ['get', 'id'], Number(filter.district)]]);
+        //         mapRef
+        //             .current
+        //             .setFilter(
+        //                 'ward-local',
+        //                 ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
+        //             );
+        //         mapRef.current.setFilter('district-local', ['all', ['==', ['get', 'id'], Number(filter.district)]]);
+        //         mapRef
+        //             .current
+        //             .setFilter(
+        //                 'ward-centroid',
+        //                 ['all', ['in', ['get', 'municipality'], ['literal', getMunArrayId()]]],
+        //             );
+        //         mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
+        //         mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
+        //         mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
+        //         mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
+        //         mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
+        //     } else if (filter.municipality.length === 0) {
+        //         const disArray = getDistrictArray(stationDetail, selectedStation);
+        //         const disBbox = getBboxFromDistrictArray(disArray, district);
+
+        //         if (mapRef.current.getLayer('household-main-data-layer')) {
+        //             mapRef.current.removeLayer('household-main-data-layer');
+        //         }
+
+        //         if (mapRef.current.getSource('household-main-data-source')) {
+        //             mapRef.current.removeSource('household-main-data-source');
+        //         }
+
+        //         if (disBbox && disBbox.length > 0) {
+        //             mapRef.current.fitBounds([[disBbox[0], disBbox[1]], [disBbox[2], disBbox[3]]], { padding: 150 });
+        //         }
+        //         if (Object.keys(selectedStation).length === 0) {
+        //             mapRef.current.flyTo({
+        //                 center: [84.394226, 28.1],
+        //                 zoom: 6.8,
+        //             });
+        //             mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('municipality-centroid', 'visibility', 'none');
+        //         } else {
+        //             mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
+        //             mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
+        //             mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
+        //         }
+        //     } else {
+        //         // Experiment same as above
+        //         mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
+        //         mapRef
+        //             .current
+        //             .setFilter(
+        //                 'ward-local',
+        //                 ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
+        //             );
+        //         mapRef
+        //             .current
+        //             .setFilter(
+        //                 'ward-centroid',
+        //                 ['all', ['in', ['get', 'municipality'], ['literal', getMunArrayId()]]],
+        //             );
+        //         mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
+        //         mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
+        //         mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
+        //         mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
+        //     }
+        // }
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
-            const munBbox = getMunicipalityBbox();
-            if (munBbox.length > 0) {
-                mapRef.current.fitBounds([[munBbox[0], munBbox[1]], [munBbox[2], munBbox[3]]], { padding: 150 });
-            }
+            if (filter.municipality) {
+                const bbox = getMunicipalityBbox();
+                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
 
-            if (filter.municipality.length > 1) {
-                mapRef.current.setFilter('district-local', ['all', ['==', ['get', 'id'], Number(filter.district)]]);
-                mapRef
-                    .current
-                    .setFilter(
-                        'ward-local',
-                        ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
-                    );
-                mapRef.current.setFilter('district-local', ['all', ['==', ['get', 'id'], Number(filter.district)]]);
-                mapRef
-                    .current
-                    .setFilter(
-                        'ward-centroid',
-                        ['all', ['in', ['get', 'municipality'], ['literal', getMunArrayId()]]],
-                    );
-                mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
-                mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
-                mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
-                mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
-                mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
-            } else if (filter.municipality.length === 0) {
-                const disArray = getDistrictArray(stationDetail, selectedStation);
-                const disBbox = getBboxFromDistrictArray(disArray, district);
-
-                if (mapRef.current.getLayer('household-main-data-layer')) {
-                    mapRef.current.removeLayer('household-main-data-layer');
-                }
-
-                if (mapRef.current.getSource('household-main-data-source')) {
-                    mapRef.current.removeSource('household-main-data-source');
-                }
-
-                if (disBbox && disBbox.length > 0) {
-                    mapRef.current.fitBounds([[disBbox[0], disBbox[1]], [disBbox[2], disBbox[3]]], { padding: 150 });
-                }
-                if (Object.keys(selectedStation).length === 0) {
-                    mapRef.current.flyTo({
-                        center: [84.394226, 28.1],
-                        zoom: 6.8,
-                    });
-                    mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('municipality-centroid', 'visibility', 'none');
-                } else {
-                    mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
-                    mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
-                    mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
-                }
-            } else {
-                // Experiment same as above
-                mapRef.current.setFilter('municipality-local', ['match', ['id'], getMunArrayId(), true, false]);
-                mapRef
-                    .current
-                    .setFilter(
-                        'ward-local',
-                        ['match', ['id'], getWardsOfMunicipalities(filter.municipality, ward), true, false],
-                    );
-                mapRef
-                    .current
-                    .setFilter(
-                        'ward-centroid',
-                        ['all', ['in', ['get', 'municipality'], ['literal', getMunArrayId()]]],
-                    );
-                mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
+                mapRef.current.setFilter('municipality-local', ['all', ['==', ['get', 'title'], getTitle('municipality', filter.municipality)]]);
+                mapRef.current.setFilter('ward-local', ['all', ['==', ['get', 'municipality'], Number(filter.municipality)]]);
+                mapRef.current.setFilter('ward-centroid', ['all', ['==', ['get', 'municipality'], Number(filter.municipality)]]);
                 mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
+                mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'none');
                 mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'visible');
                 mapRef.current.setLayoutProperty('ward-local', 'visibility', 'visible');
+                mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'visible');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter.municipality.length]);
+    }, [filter.municipality]);
 
     // 5th
     useEffect(() => {
@@ -761,9 +778,7 @@ const Map = (props: Props) => {
                 mapRef.current.setLayoutProperty('municipality-centroid', 'visibility', 'none');
                 mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
                 mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
-                mapRef.current.setLayoutProperty('raster-ibf-2', 'visibility', 'none');
                 mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
-                mapRef.current.setLayoutProperty('raster-ibf-5', 'visibility', 'none');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

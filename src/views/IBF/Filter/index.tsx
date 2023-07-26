@@ -3,7 +3,7 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
@@ -42,14 +42,12 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const Filter = (props: Props) => {
-    // const [selectedMun, setSelectedMun] = useState([]);
     const [disState, setDisState] = useState('selectDistrict');
     const [munState, setMunState] = useState('selectMunicipality');
     const [disBool, setDisBool] = useState(false);
     const [munBool, setMunBool] = useState(false);
     const [wardBool, setWardBool] = useState(false);
-
-    // console.log('selectedMun,list,disState,disBool', selectedMun, list, disState, disBool);
+    const [selectedWard, setSelectedWard] = useState([]);
 
     const {
         ibfPage,
@@ -74,6 +72,7 @@ const Filter = (props: Props) => {
 
     const mystationdata = stationDetail.results
         .filter(item => item.station === selectedStation.id);
+    console.log('mystationdata', mystationdata);
 
     const uniqueDistrict = [...new Set(mystationdata.map(item => item.district))];
 
@@ -96,10 +95,12 @@ const Filter = (props: Props) => {
         return result;
     });
 
-    const uniqueWard = [...new Set(mystationdata.map(item => item.ward))];
+    const uniqueWard = mystationdata.filter((item: any) => item.municipality === munState.id)
+        .map((mapItem: any) => mapItem.ward);
+
     console.log('uniqureWard', uniqueWard);
 
-    const wardName = uniqueWard.map((i) => {
+    const wardName = uniqueWard && uniqueWard.map((i) => {
         const result = {};
         result.id = i;
         result.title = ward.filter(item => item.id === i)[0].title;
@@ -107,61 +108,68 @@ const Filter = (props: Props) => {
         result.isChecked = false;
         return result;
     });
+    console.log('wardName', wardName);
 
-    // const refreshHandler = () => {
-    //     props.setIbfPage({ filter: { district: '', municipality: [] } });
-    //     setSelectedMun([]);
-    //     setWardBool(false);
-    //     const resetState = munState.length > 0 && munState.map((munItem) => {
-    //         const munci = {
-    //             ...munItem,
-    //             isChecked: false,
-    //         };
-    //         return munci;
-    //     });
-    //     setMunState(resetState);
-    //     setDisState('selectDistrict');
-    //     setDisBool(false);
-    // };
+    const [wardState, setWardState] = useState([]);
 
-    // const handleCheckbox = (e, mun) => {
-    //     const munic = {
-    //         ...mun,
-    //         isChecked: e.target.checked,
-    //     };
-    //     setMunState(prevState => [...prevState.filter(item => item.id !== mun.id), munic]);
 
-    //     if (munic.isChecked) {
-    //         setSelectedMun(prevState => [munic, ...prevState]);
-    //     } else {
-    //         setSelectedMun((prevState) => {
-    //             const filteredMun = prevState.filter(data => data.id !== munic.id);
-    //             return filteredMun;
-    //         });
-    //     }
-    //     setWardBool(false);
-    // };
+    const refreshHandler = () => {
+        props.setIbfPage({ filter: { district: '', municipality: '', ward: [] } });
+        setSelectedWard([]);
+        setWardBool(false);
+        const resetState = wardState.length > 0 && wardState.map((wardItem: any) => {
+            const wardData = {
+                ...wardItem,
+                isChecked: false,
+            };
+            return wardData;
+        });
+        setWardState(resetState);
+        setDisState('selectDistrict');
+        setDisBool(false);
+    };
 
-    const handleDisState = (disObj) => {
+    const handleWardCheckbox = (e: any, wardItem: any) => {
+        const wardData = {
+            ...wardItem,
+            isChecked: e.target.checked,
+        };
+        setWardState(prevState => [...prevState.filter(item => item.id !== wardItem.id), wardData]);
+
+        if (wardData.isChecked) {
+            setSelectedWard(prevState => [wardData, ...prevState]);
+        } else {
+            setSelectedWard((prevState) => {
+                const filteredMun = prevState.filter(data => data.id !== wardData.id);
+                return filteredMun;
+            });
+        }
+        setWardBool(false);
+    };
+
+    const handleDisState = (disObj: any) => {
         setDisState(disObj.title);
         setDisBool(false);
         props.setIbfPage({ filter: { district: disObj.id } });
     };
 
-    const handleMunState = (munObj) => {
-        setMunState(munObj.title);
+    const handleMunState = (munObj: any) => {
+        setMunState(munObj);
         setMunBool(false);
+        setWardState(wardName);
         props.setIbfPage({ filter: { municipality: munObj.id } });
     };
 
-    // useEffect(() => {
-    //     props.setIbfPage({ filter: { municipality: selectedMun } });
-    // }, [props, selectedMun]);
+    useEffect(() => {
+        props.setIbfPage({ filter: { ward: selectedWard } });
+    }, [props, selectedWard]);
 
+    console.log('inside-wardState', wardState);
     // useEffect(() => {
-    //     refreshHandler();
-    //     // setMunState(munName);
-    // }, [selectedStation]);
+    //     console.log('inside-wardName', wardName);
+    //     // refreshHandler();
+    //     setWardState(wardName);
+    // }, []);
 
 
     return (
@@ -223,7 +231,7 @@ const Filter = (props: Props) => {
                     >
                         {munState === 'selectMunicipality'
                             ? (<span className={style.munTitle}>Select Municipality</span>)
-                            : (<span className={style.munTitle}>{munState}</span>)}
+                            : (<span className={style.munTitle}>{munState.title}</span>)}
                         <span className={style.arrowDown}>
                             <img src={IbfDownArrow} alt="downArrow" />
                         </span>
@@ -282,13 +290,15 @@ const Filter = (props: Props) => {
                     wardBool && (
                         <ul className={style.wardListContainer}>
                             {
-                                wardName.length > 0 && wardName.map((wardItem: any) => (
-                                    <li key={wardItem.id} className={style.munList}>
+                                wardState
+                                && wardState.length > 0
+                                && wardState.map((wardItem: any) => (
+                                    <li key={wardItem.id} className={style.wardList}>
                                         <input
                                             type="checkbox"
                                             className={style.checkbox}
                                             id={wardItem.id}
-                                            // onClick={e => handleCheckbox(e, mun)}
+                                            onClick={e => handleWardCheckbox(e, wardItem)}
                                             checked={wardItem.isChecked}
                                         />
                                         <label
@@ -297,13 +307,6 @@ const Filter = (props: Props) => {
                                         >
                                             {wardItem.title}
                                         </label>
-                                        <button
-
-                                            className={style.disBtnScroll}
-                                            // onClick={() => handleDisState(dis)}
-                                        >
-                                            {wardItem.title}
-                                        </button>
                                     </li>
                                 ))
                             }
