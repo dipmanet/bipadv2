@@ -97,6 +97,7 @@ const Filter = (props: Props) => {
     });
 
     const uniqueWard = [...new Set(mystationdata.map(item => item.ward))];
+    console.log('uniqureWard', uniqueWard);
 
     const wardName = uniqueWard.map((i) => {
         const result = {};
@@ -281,27 +282,27 @@ const Filter = (props: Props) => {
                     wardBool && (
                         <ul className={style.wardListContainer}>
                             {
-                                munState.length > 0 && munState.map(mun => (
-                                    <li key={mun.id} className={style.munList}>
+                                wardName.length > 0 && wardName.map((wardItem: any) => (
+                                    <li key={wardItem.id} className={style.munList}>
                                         <input
                                             type="checkbox"
                                             className={style.checkbox}
-                                            id={mun.id}
-                                            onClick={e => handleCheckbox(e, mun)}
-                                            checked={mun.isChecked}
+                                            id={wardItem.id}
+                                            // onClick={e => handleCheckbox(e, mun)}
+                                            checked={wardItem.isChecked}
                                         />
                                         <label
-                                            htmlFor={mun.id}
+                                            htmlFor={wardItem.id}
                                             className={style.label}
                                         >
-                                            {mun.title}
+                                            {wardItem.title}
                                         </label>
                                         <button
 
                                             className={style.disBtnScroll}
                                             // onClick={() => handleDisState(dis)}
                                         >
-                                            {mun.title}
+                                            {wardItem.title}
                                         </button>
                                     </li>
                                 ))
