@@ -113,6 +113,8 @@ const Ibf = (props: Props) => {
         setIbfPage,
     } = props;
 
+    console.log('householdJson', householdJson);
+
     const [pending, setPending] = useState(false);
     const [viewDashboard, setDashboard] = useState(false);
     const [widthToggle, setWidthToggle] = useState(false);
@@ -132,7 +134,7 @@ const Ibf = (props: Props) => {
             returnPeriod: 0,
             leadTime: 0,
             overallFloodHazard: [],
-            filter: { district: '', municipality: [], ward: '' },
+            filter: { district: '', municipality: '', ward: [] },
             householdJson: [],
             showHouseHold: 0,
             selectedIndicator: '',
@@ -144,11 +146,11 @@ const Ibf = (props: Props) => {
         });
     };
 
-    const getMunicipalityId = (munArray) => {
-        const munExposed = munArray.map(munItem => munItem.id);
-        const munString = munExposed.join(',');
-        return munString;
-    };
+    // const getMunicipalityId = (munArray) => {
+    //     const munExposed = munArray.map(munItem => munItem.id);
+    //     const munString = munExposed.join(',');
+    //     return munString;
+    // };
 
     useEffect(() => {
         if (viewDashboard) {
@@ -185,20 +187,23 @@ const Ibf = (props: Props) => {
 
     useEffect(() => {
         const getCall = async () => {
-            if (filter.municipality.length > 0) {
+            console.log('index-getCall');
+            if (filter.municipality) {
+                console.log('index-household', filter.municipality);
                 props.setIbfPage({ householdJson: [] });
                 setPending(true);
                 const indicatorData = await getRequest(
                     'ibf-vulnerability-indicator',
                     {
-                        municipality: getMunicipalityId(filter.municipality),
+                        // municipality: getMunicipalityId(filter.municipality),
+                        municipality: String(filter.municipality),
                     },
                 );
                 const houseData = await getRequest(
                     'ibf-households',
                     {
                         limit: -1,
-                        municipality: getMunicipalityId(filter.municipality),
+                        municipality: String(filter.municipality),
                     },
                 );
                 setPending(false);
@@ -221,7 +226,7 @@ const Ibf = (props: Props) => {
             }
         };
         getCall();
-    }, [filter.municipality.length]);
+    }, [filter.municipality]);
 
     useEffect(() => {
         const getCall = async () => {
@@ -230,7 +235,7 @@ const Ibf = (props: Props) => {
                 const indicatorData = await getRequest(
                     'ibf-vulnerability-indicator',
                     {
-                        municipality: getMunicipalityId(filter.municipality),
+                        municipality: String(filter.municipality),
                     },
                 );
                 setPending(false);
@@ -356,7 +361,7 @@ const Ibf = (props: Props) => {
                                                             )
                                                         }
                                                         {
-                                                            filter.municipality.length > 0 && (
+                                                            filter.municipality && (
                                                                 <ForDrag
                                                                     widthToggle={widthToggle}
                                                                     defaultPosition={

@@ -197,7 +197,7 @@ const RiskAndImpact = (props: Props) => {
         if (returnPeriod !== 0) {
             props.requests.floodHazard.setDefaultParams({
                 returnPeriod,
-                municipality: getMunicipalityIdString(filter.municipality) || '',
+                municipality: String(filter.municipality) || '',
             });
             props.requests.floodHazard.do();
         }
@@ -233,7 +233,7 @@ const RiskAndImpact = (props: Props) => {
                     {
                         contentShowingParam === 'risk'
                         && (
-                            (householdJson.length > 0 && filter.municipality.length > 0)
+                            (householdJson.length > 0 && filter.municipality)
                             && (
                                 <ExistingRisk
                                     // contentShowingParam={contentShowingParam}
