@@ -44,10 +44,10 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 const Filter = (props: Props) => {
     const [disState, setDisState] = useState('selectDistrict');
     const [munState, setMunState] = useState('selectMunicipality');
+    const [wardState, setWardState] = useState([]);
     const [disBool, setDisBool] = useState(false);
     const [munBool, setMunBool] = useState(false);
     const [wardBool, setWardBool] = useState(false);
-    const [selectedWard, setSelectedWard] = useState([]);
 
     const {
         ibfPage,
@@ -68,16 +68,14 @@ const Filter = (props: Props) => {
         && selectedStation.properties
         && selectedStation.properties.has_household_data;
 
-    console.log('selectedStation,stationDetail,filter,ward', selectedStation, stationDetail, filter, ward);
+    console.log('1-ibf-filter', filter);
 
     const mystationdata = stationDetail.results
         .filter(item => item.station === selectedStation.id);
-    console.log('mystationdata', mystationdata);
 
     const uniqueDistrict = [...new Set(mystationdata.map(item => item.district))];
 
     const disName = uniqueDistrict.map((i) => {
-        console.log('i', i);
         const result = {};
         result.id = i;
         result.title = district.filter(item => item.id === i)[0].title;
@@ -88,46 +86,11 @@ const Filter = (props: Props) => {
     const uniqueMunicipality = [...new Set(mystationdata.map(item => item.municipality))];
 
     const munName = uniqueMunicipality.map((i) => {
-        console.log('i', i);
         const result = {};
         result.id = i;
         result.title = municipality.filter(item => item.id === i)[0].title;
         return result;
     });
-
-    const uniqueWard = mystationdata.filter((item: any) => item.municipality === munState.id)
-        .map((mapItem: any) => mapItem.ward);
-
-    console.log('uniqureWard', uniqueWard);
-
-    const wardName = uniqueWard && uniqueWard.map((i) => {
-        const result = {};
-        result.id = i;
-        result.title = ward.filter(item => item.id === i)[0].title;
-        result.municipalityId = ward.filter(item => item.id === i)[0].municipality;
-        result.isChecked = false;
-        return result;
-    });
-    console.log('wardName', wardName);
-
-    const [wardState, setWardState] = useState([]);
-
-
-    const refreshHandler = () => {
-        props.setIbfPage({ filter: { district: '', municipality: '', ward: [] } });
-        setSelectedWard([]);
-        setWardBool(false);
-        const resetState = wardState.length > 0 && wardState.map((wardItem: any) => {
-            const wardData = {
-                ...wardItem,
-                isChecked: false,
-            };
-            return wardData;
-        });
-        setWardState(resetState);
-        setDisState('selectDistrict');
-        setDisBool(false);
-    };
 
     const handleWardCheckbox = (e: any, wardItem: any) => {
         const wardData = {
@@ -135,15 +98,6 @@ const Filter = (props: Props) => {
             isChecked: e.target.checked,
         };
         setWardState(prevState => [...prevState.filter(item => item.id !== wardItem.id), wardData]);
-
-        if (wardData.isChecked) {
-            setSelectedWard(prevState => [wardData, ...prevState]);
-        } else {
-            setSelectedWard((prevState) => {
-                const filteredMun = prevState.filter(data => data.id !== wardData.id);
-                return filteredMun;
-            });
-        }
         setWardBool(false);
     };
 
@@ -156,21 +110,44 @@ const Filter = (props: Props) => {
     const handleMunState = (munObj: any) => {
         setMunState(munObj);
         setMunBool(false);
-        setWardState(wardName);
         props.setIbfPage({ filter: { municipality: munObj.id } });
     };
 
+    const refreshHandler = () => {
+        setDisState('selectDistrict');
+        setDisBool(false);
+        setMunState('selectMunicipality');
+        setMunBool(false);
+        setWardState([]);
+        setWardBool(false);
+        props.setIbfPage({ filter: { district: '', municipality: '', ward: [] } });
+    };
+
     useEffect(() => {
-        props.setIbfPage({ filter: { ward: selectedWard } });
-    }, [props, selectedWard]);
+        if (munState !== 'selectMunicipality') {
+            const uniqueWard = mystationdata
+                .filter((item: any) => item.municipality === munState.id)
+                .map((mapItem: any) => mapItem.ward);
 
-    console.log('inside-wardState', wardState);
-    // useEffect(() => {
-    //     console.log('inside-wardName', wardName);
-    //     // refreshHandler();
-    //     setWardState(wardName);
-    // }, []);
+            const wardName = uniqueWard && uniqueWard.map((i) => {
+                const result = {};
+                result.id = i;
+                result.title = ward.filter(item => item.id === i)[0].title;
+                result.municipalityId = ward.filter(item => item.id === i)[0].municipality;
+                result.isChecked = false;
+                return result;
+            });
+            setWardState([...wardName]);
+        }
+    }, [munState]);
 
+    useEffect(() => {
+        if (wardState) {
+            const toPushArray = wardState
+                .filter(wardItem => wardItem && wardItem.isChecked === true);
+            props.setIbfPage({ filter: { ward: toPushArray } });
+        }
+    }, [wardState]);
 
     return (
         <>
@@ -282,7 +259,7 @@ const Filter = (props: Props) => {
                     </button>
                 </div>
                 {
-                    filter.district === '' && (
+                    filter.district === '' && filter.municipality === '' && (
                         <ReactTooltip />
                     )
                 }
@@ -314,13 +291,15 @@ const Filter = (props: Props) => {
                     )
                 }
             </div>
-            {/* <button
-            className={_cs(style.reset, isFormOpen && style.hideContainer)}
-            type="button" onClick={refreshHandler}>
+            <button
+                className={_cs(style.reset, isFormOpen && style.hideContainer)}
+                type="button"
+                onClick={refreshHandler}
+            >
                 <Icon
                     name="refresh"
                 />
-            </button> */}
+            </button>
         </>
     );
 };
