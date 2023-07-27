@@ -45,7 +45,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const Summary = (props: Props) => {
-    const [munForTable, setMunForTable] = useState([]);
     const { ibfPage,
         summaryClassName,
         toggleSummary,
@@ -75,22 +74,21 @@ const Summary = (props: Props) => {
     const districtRow = totalMunicipality
         .map(item => utils.getTotalDistrictRow(item, municipality, ward));
 
-    const municipalityRow = munForTable.length > 0
-        && munForTable.map(munId => utils.getMunicipalityRow(mystationdata,
-            munId,
-            municipality,
-            ward));
+    const municipalityRow = utils.getMunicipalityRow(mystationdata,
+        filter.municipality,
+        municipality,
+        ward);
+    console.log('municipalityRow', municipalityRow);
 
+    // const getMunicipalityId = (munArr) => {
+    //     const munData = munArr.length > 0 && munArr.map(munItem => munItem.id);
+    //     return munData;
+    // };
 
-    const getMunicipalityId = (munArr) => {
-        const munData = munArr.length > 0 && munArr.map(munItem => munItem.id);
-        return munData;
-    };
-
-    useEffect(() => {
-        const munArrData = getMunicipalityId(filter.municipality);
-        setMunForTable(munArrData);
-    }, [filter.municipality]);
+    // useEffect(() => {
+    //     const munArrData = getMunicipalityId(filter.municipality);
+    //     setMunForTable(munArrData);
+    // }, [filter.municipality]);
 
 
     return (
@@ -103,7 +101,7 @@ const Summary = (props: Props) => {
             }
             >
                 <div className={style.heading}>
-                    {filter.municipality.length > 0
+                    {filter.municipality
                         ? 'Municipality summary'
                         : filter.district
                             ? 'District Summary'
@@ -111,11 +109,11 @@ const Summary = (props: Props) => {
                 </div>
                 <div className={style.line} />
                 <div>
-                    {filter.municipality && filter.municipality.length > 0 && municipalityRow
+                    {filter.municipality
                         ? (
                             <Table
                                 theadData={theadMunicipalityData}
-                                tbodyData={municipalityRow}
+                                tbodyData={[municipalityRow]}
                             />
                         )
                         : filter.district
