@@ -7,7 +7,10 @@ export const getRequest = async (
     params: any,
 
 ) => {
-    const JSONResponse = await fetch(`${baseURL}/${pathName}/?${new URLSearchParams(params)}`);
+    const JSONResponse = await fetch(`${baseURL}/${pathName}/?${new URLSearchParams(params)}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
     const response = await JSONResponse.json();
     return response;
 };

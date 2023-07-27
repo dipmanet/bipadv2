@@ -207,6 +207,7 @@ const Ibf = (props: Props) => {
                     },
                 );
                 setPending(false);
+                console.log('houseData', houseData);
                 const calculatedData = calculation(houseData.results, indicatorData.results);
                 const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
 
@@ -227,6 +228,24 @@ const Ibf = (props: Props) => {
         };
         getCall();
     }, [filter.municipality]);
+
+    // useEffect(() => {
+    //     if (filter.ward.length > 0) {
+    //         const wardLevelHouseData = householdJson.filter(houseData => filter.ward.map(wardItem => wardItem.id).includes(houseData.ward));
+    //         const calculatedData = calculation(wardLevelHouseData, indicators);
+    //         const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
+
+    //         setIbfPage({
+    //             weights: weight_Data,
+    //         });
+    //         setIbfPage({
+    //             householdDistrictAverage: averageDatas,
+    //         });
+    //         setIbfPage({
+    //             householdJson: houseHoldDatas,
+    //         });
+    //     }
+    // }, [filter.ward.length]);
 
     useEffect(() => {
         const getCall = async () => {

@@ -78,39 +78,6 @@ const popup = new mapboxgl.Popup({
     closeOnClick: false,
 });
 
-// const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-//     householdJson: {
-//         url: '/ibf-household/',
-//         method: methods.GET,
-//         onMount: false,
-//         query: ({ params }) => ({
-//             municipality: params && params.municipality && params.municipality,
-//             limit: -1,
-//         }),
-//         onSuccess: ({ props, response, params }) => {
-//             props.setIbfPage({ householdJson: response.results });
-//             if (params) {
-//                 params.setPending(false);
-//             }
-//         },
-//     },
-
-//     householdDistrictAverage: {
-//         url: '/ibf-household/',
-//         method: methods.GET,
-//         onMount: false,
-//         query: ({ params }) => ({
-//             format: 'json',
-//             summary: 'true',
-//             municipality: params && params.municipality,
-//             limit: -1,
-//         }),
-//         onSuccess: ({ props, response }) => {
-//             props.setIbfPage({ householdDistrictAverage: response });
-//         },
-//     },
-// };
-
 const Map = (props: Props) => {
     const mapRef = useRef<mapboxgl.Map | undefined>(undefined);
     const mapContainerRef = useRef(null);
@@ -494,6 +461,7 @@ const Map = (props: Props) => {
             properties: { ...item },
         })),
     };
+
     useEffect(() => {
         if (popupHouseRef.current) {
             popupHouseRef.current.remove();
@@ -561,18 +529,6 @@ const Map = (props: Props) => {
             }
         }
     }, [householdJson, showHouseHold]);
-
-    const getWardsOfMunicipalities = (municipalities: any, wards: any) => {
-        const listOfWards: number[] = [];
-        municipalities.forEach((municipalityItem: any) => {
-            wards.forEach((wardItem: any) => {
-                if (Number(wardItem.municipality) === Number(municipalityItem.id)) {
-                    listOfWards.push(wardItem.id);
-                }
-            });
-        });
-        return listOfWards;
-    };
 
     useEffect(() => {
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
@@ -731,19 +687,35 @@ const Map = (props: Props) => {
                 center: [84.394226, 28.1],
                 zoom: 6.8,
             });
-            mapRef.current.setLayoutProperty('placesInitial', 'visibility', 'visible');
+            mapRef
+                .current
+                .setLayoutProperty('placesInitial', 'visibility', 'visible');
 
-            mapRef.current.setLayoutProperty('district-local', 'visibility', 'none');
-            mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'none');
-            mapRef.current.setLayoutProperty('municipality-local', 'visibility', 'none');
-            mapRef.current.setLayoutProperty('municipality-centroid', 'visibility', 'none');
+            mapRef
+                .current
+                .setLayoutProperty('district-local', 'visibility', 'none');
+            mapRef
+                .current
+                .setLayoutProperty('district-centroid', 'visibility', 'none');
+            mapRef
+                .current
+                .setLayoutProperty('municipality-local', 'visibility', 'none');
+            mapRef
+                .current
+                .setLayoutProperty('municipality-centroid', 'visibility', 'none');
 
-            mapRef.current.setLayoutProperty('ward-local', 'visibility', 'none');
-            mapRef.current.setLayoutProperty('ward-centroid', 'visibility', 'none');
+            mapRef
+                .current
+                .setLayoutProperty('ward-local', 'visibility', 'none');
+            mapRef
+                .current
+                .setLayoutProperty('ward-centroid', 'visibility', 'none');
 
             mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'none');
         } else if (mapRef.current && mapRef.current.isStyleLoaded()) {
-            mapRef.current.setLayoutProperty('raster-ibf-20', 'visibility', 'visible');
+            mapRef
+                .current
+                .setLayoutProperty('raster-ibf-20', 'visibility', 'visible');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedStation]);
@@ -816,6 +788,7 @@ const Map = (props: Props) => {
         }
         return '';
     };
+
     useEffect(() => {
         if (!mapRef.current) return;
         if (!mapRef.current.getLayer('household-main-data-layer')) return;
