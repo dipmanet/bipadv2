@@ -106,9 +106,6 @@ const Map = (props: Props) => {
         getEditHouseValue,
     } = props;
 
-    console.log('stations', stations);
-    console.log('selectedStation', selectedStation);
-    console.log('householdJson', householdJson);
     // const [pending, setPending] = useState(false);
     // const [mun, setMun] = useState();
 
@@ -555,12 +552,11 @@ const Map = (props: Props) => {
                     .current
                     .setLayoutProperty('municipality-centroid', 'visibility', 'visible');
             } else {
-                const array = getDistrictArray(stationDetail, selectedStation);
-
-                const bbox = getBboxFromDistrictArray(array, district);
-
-                mapRef.current
-                    .fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
+                // const array = getDistrictArray(stationDetail, selectedStation);
+                // const bbox = getBboxFromDistrictArray(array, district);
+                // mapRef
+                //     .current
+                //     .fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
                 mapRef
                     .current
                     .setLayoutProperty('district-local', 'visibility', 'visible');

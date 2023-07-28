@@ -432,6 +432,7 @@ const state: PageState = {
         overallFloodHazard: [],
         filter: { district: '', municipality: '', ward: [] },
         householdJson: [],
+        householdTemp: [],
         showHouseHold: 0,
         selectedIndicator: '',
         householdDistrictAverage: {},

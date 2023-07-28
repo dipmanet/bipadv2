@@ -10,9 +10,10 @@ import Page from '#components/Page';
 import { calendarData as cd, defaultValues } from '#views/IBF/utils';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods, NewProps } from '#request';
 import { setIbfPageAction } from '#actionCreators';
-import { ibfPageSelector } from '#selectors';
+import { ibfPageSelector, userSelector } from '#selectors';
 import { AppState } from '#types';
 import { IbfPage } from '#store/atom/page/types';
+import { User } from '#store/atom/auth/types';
 import Dashboard from './Dashboard';
 import ForDrag from './Components/ForDrag';
 
@@ -43,6 +44,7 @@ interface OwnProps {
 }
 export interface PropsFromState {
     ibfPage: IbfPage;
+    user: User;
 }
 
 export interface PropsFromDispatch {
@@ -59,6 +61,7 @@ type Props = NewProps<ReduxProps, Params>
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     ibfPage: ibfPageSelector(state),
+    user: userSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -108,12 +111,12 @@ const Ibf = (props: Props) => {
             indicators,
             wtChange,
             householdJson,
+            householdTemp,
             weights,
         },
         setIbfPage,
+        user,
     } = props;
-
-    console.log('householdJson', householdJson);
 
     const [pending, setPending] = useState(false);
     const [viewDashboard, setDashboard] = useState(false);
@@ -136,6 +139,7 @@ const Ibf = (props: Props) => {
             overallFloodHazard: [],
             filter: { district: '', municipality: '', ward: [] },
             householdJson: [],
+            householdTemp: [],
             showHouseHold: 0,
             selectedIndicator: '',
             householdDistrictAverage: {},
@@ -187,9 +191,7 @@ const Ibf = (props: Props) => {
 
     useEffect(() => {
         const getCall = async () => {
-            console.log('index-getCall');
             if (filter.municipality) {
-                console.log('index-household', filter.municipality);
                 props.setIbfPage({ householdJson: [] });
                 setPending(true);
                 const indicatorData = await getRequest(
@@ -205,9 +207,9 @@ const Ibf = (props: Props) => {
                         limit: -1,
                         municipality: String(filter.municipality),
                     },
+                    user,
                 );
                 setPending(false);
-                console.log('houseData', houseData);
                 const calculatedData = calculation(houseData.results, indicatorData.results);
                 const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
 
@@ -224,28 +226,36 @@ const Ibf = (props: Props) => {
                 setIbfPage({
                     householdJson: houseHoldDatas,
                 });
+                setIbfPage({
+                    householdTemp: houseHoldDatas,
+                });
             }
         };
         getCall();
     }, [filter.municipality]);
 
-    // useEffect(() => {
-    //     if (filter.ward.length > 0) {
-    //         const wardLevelHouseData = householdJson.filter(houseData => filter.ward.map(wardItem => wardItem.id).includes(houseData.ward));
-    //         const calculatedData = calculation(wardLevelHouseData, indicators);
-    //         const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
-
-    //         setIbfPage({
-    //             weights: weight_Data,
-    //         });
-    //         setIbfPage({
-    //             householdDistrictAverage: averageDatas,
-    //         });
-    //         setIbfPage({
-    //             householdJson: houseHoldDatas,
-    //         });
-    //     }
-    // }, [filter.ward.length]);
+    useEffect(() => {
+        if (filter.ward.length > 0) {
+            const tempWard = filter.ward.map(wardItem => wardItem.id);
+            const wardHouseData = [...householdTemp];
+            const wardLevelHouseData = wardHouseData.filter(houseData => tempWard.includes(houseData.ward));
+            const calculatedData = calculation(wardLevelHouseData, indicators);
+            const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
+            setIbfPage({
+                weights: weight_Data,
+            });
+            setIbfPage({
+                householdDistrictAverage: averageDatas,
+            });
+            setIbfPage({
+                householdJson: houseHoldDatas,
+            });
+        } else {
+            setIbfPage({
+                householdJson: householdTemp,
+            });
+        }
+    }, [filter.ward.length]);
 
     useEffect(() => {
         const getCall = async () => {

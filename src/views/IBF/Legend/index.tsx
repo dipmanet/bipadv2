@@ -70,7 +70,7 @@ const Legend = (props: Props) => {
         <div className={style.legendContainer}>
             {
                 Object.keys(selectedStation).length === 0
-                    && filter.municipality.length === 0
+                    && filter.municipality === ''
                     && leadTime === 0
                     ? (
 
@@ -90,7 +90,7 @@ const Legend = (props: Props) => {
                     : (
                         <>
                             {/* Kuch To Gadbadh Hey??? */}
-                            {Object.keys(selectedStation).length === 0 && leadTime !== 0 && filter.municipality.length === 0 ? (
+                            {Object.keys(selectedStation).length === 0 && leadTime !== 0 && filter.municipality === '' ? (
 
                                 <>
                                     <div className={style.legendStationsContainer}>
@@ -119,7 +119,7 @@ const Legend = (props: Props) => {
                                     )
                                     }
                                 </>
-                            ) : Object.keys(selectedStation).length !== 0 && leadTime === 0 && filter.municipality.length === 0 ? (
+                            ) : Object.keys(selectedStation).length !== 0 && leadTime === 0 && filter.municipality === '' ? (
                                 <div className={style.legendStationsContainer}>
                                     <div className={style.titleNoHover}>HOUSEHOLD LEVEL DATA</div>
                                     <div>
@@ -131,7 +131,7 @@ const Legend = (props: Props) => {
                                         <div className={style.notAvailable} />
                                     </div>
                                 </div>
-                            ) : Object.keys(selectedStation).length !== 0 && leadTime !== 0 && filter.municipality.length === 0 && returnPeriod !== 0 ? (
+                            ) : Object.keys(selectedStation).length !== 0 && leadTime !== 0 && filter.municipality === '' && returnPeriod !== 0 ? (
                                 <>
                                     <div className={style.legendStationsContainer}>
                                         <div className={style.titleNoHover}>HOUSEHOLD LEVEL DATA</div>
@@ -156,7 +156,7 @@ const Legend = (props: Props) => {
                                         }
                                     </div>
                                 </>
-                            ) : filter.municipality.length > 0 && (selectedIndicator === 'risk')
+                            ) : filter.municipality && (selectedIndicator === 'risk')
                                 ? (
                                     <div className={style.legendIndicatorContainer}>
                                         <div onClick={() => setSelectedLegend('')} className={style.title}>
@@ -620,7 +620,7 @@ const Legend = (props: Props) => {
 
             }
 
-            {
+            {/* {
                 Object.keys(selectedStation).length > 0 && leadTime !== 0 && returnPeriod !== 0
                     ? (
                         <div className={style.fdContainer}>
@@ -652,7 +652,7 @@ const Legend = (props: Props) => {
                     ) : (
                         ''
                     )
-            }
+            } */}
         </div>
     );
 };

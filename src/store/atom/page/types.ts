@@ -132,6 +132,7 @@ export interface IbfPage {
         ward: IbfWard[];
     };
     householdJson: [];
+    householdTemp: [];
     showHouseHold: number;
     selectedIndicator: string;
     householdDistrictAverage: object;

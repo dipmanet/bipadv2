@@ -5,11 +5,10 @@ const baseURL = process.env.REACT_APP_API_SERVER_URL;
 export const getRequest = async (
     pathName: string,
     params: any,
-
+    user?: any,
 ) => {
     const JSONResponse = await fetch(`${baseURL}/${pathName}/?${new URLSearchParams(params)}`, {
-        method: 'GET',
-        credentials: 'include',
+        credentials: user ? 'include' : 'omit',
     });
     const response = await JSONResponse.json();
     return response;

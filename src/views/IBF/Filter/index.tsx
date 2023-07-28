@@ -68,7 +68,6 @@ const Filter = (props: Props) => {
         && selectedStation.properties
         && selectedStation.properties.has_household_data;
 
-    console.log('1-ibf-filter', filter);
 
     const mystationdata = stationDetail.results
         .filter(item => item.station === selectedStation.id);
@@ -125,9 +124,12 @@ const Filter = (props: Props) => {
 
     useEffect(() => {
         if (munState !== 'selectMunicipality') {
-            const uniqueWard = mystationdata
-                .filter((item: any) => item.municipality === munState.id)
-                .map((mapItem: any) => mapItem.ward);
+            // const uniqueWard = mystationdata
+            //     .filter((item: any) => item.municipality === munState.id)
+            //     .map((mapItem: any) => mapItem.ward);
+            const uniqueWard = ward
+                .filter(wardItem => wardItem.municipality === munState.id)
+                .map(item => item.id);
 
             const wardName = uniqueWard && uniqueWard.map((i) => {
                 const result = {};
@@ -269,23 +271,25 @@ const Filter = (props: Props) => {
                             {
                                 wardState
                                 && wardState.length > 0
-                                && wardState.map((wardItem: any) => (
-                                    <li key={wardItem.id} className={style.wardList}>
-                                        <input
-                                            type="checkbox"
-                                            className={style.checkbox}
-                                            id={wardItem.id}
-                                            onClick={e => handleWardCheckbox(e, wardItem)}
-                                            checked={wardItem.isChecked}
-                                        />
-                                        <label
-                                            htmlFor={wardItem.id}
-                                            className={style.label}
-                                        >
-                                            {wardItem.title}
-                                        </label>
-                                    </li>
-                                ))
+                                && wardState
+                                    .sort((a, b) => a.title - b.title)
+                                    .map((wardItem: any) => (
+                                        <li key={wardItem.id} className={style.wardList}>
+                                            <input
+                                                type="checkbox"
+                                                className={style.checkbox}
+                                                id={wardItem.id}
+                                                onClick={e => handleWardCheckbox(e, wardItem)}
+                                                checked={wardItem.isChecked}
+                                            />
+                                            <label
+                                                htmlFor={wardItem.id}
+                                                className={style.label}
+                                            >
+                                                {wardItem.title}
+                                            </label>
+                                        </li>
+                                    ))
                             }
                         </ul>
                     )

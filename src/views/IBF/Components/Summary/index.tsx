@@ -78,7 +78,6 @@ const Summary = (props: Props) => {
         filter.municipality,
         municipality,
         ward);
-    console.log('municipalityRow', municipalityRow);
 
     // const getMunicipalityId = (munArr) => {
     //     const munData = munArr.length > 0 && munArr.map(munItem => munItem.id);
