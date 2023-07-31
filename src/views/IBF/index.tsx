@@ -209,6 +209,7 @@ const Ibf = (props: Props) => {
                     },
                     user,
                 );
+                console.log('houseData', houseData);
                 setPending(false);
                 const calculatedData = calculation(houseData.results, indicatorData.results);
                 const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
@@ -224,10 +225,10 @@ const Ibf = (props: Props) => {
                     householdDistrictAverage: averageDatas,
                 });
                 setIbfPage({
-                    householdJson: houseHoldDatas,
+                    householdJson: [...houseHoldDatas],
                 });
                 setIbfPage({
-                    householdTemp: houseHoldDatas,
+                    householdTemp: [...houseHoldDatas],
                 });
             }
         };
@@ -248,11 +249,11 @@ const Ibf = (props: Props) => {
                 householdDistrictAverage: averageDatas,
             });
             setIbfPage({
-                householdJson: houseHoldDatas,
+                householdJson: [...houseHoldDatas],
             });
         } else {
             setIbfPage({
-                householdJson: householdTemp,
+                householdJson: [...householdTemp],
             });
         }
     }, [filter.ward.length]);

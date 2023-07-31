@@ -620,11 +620,17 @@ const Legend = (props: Props) => {
 
             }
 
-            {/* {
-                Object.keys(selectedStation).length > 0 && leadTime !== 0 && returnPeriod !== 0
+            {
+                Object.keys(selectedStation).length > 0
                     ? (
                         <div className={style.fdContainer}>
-                            <div className={style.titleNoHover}>Flood depth (in meters)</div>
+                            <div className={style.titleNoHover}>
+Flood depth (in meters)
+                                <div style={{ fontSize: '0.6rem', textAlign: 'right' }}>20 year return period</div>
+                                <div style={{ fontSize: '0.6rem', textAlign: 'right' }}>
+provided by GLOFAS
+                                </div>
+                            </div>
                             <div className={style.floodDepthContainer}>
                                 <div className={style.floodDepth}>
                                     <div className={style.floodIndicator1}>
@@ -652,7 +658,7 @@ const Legend = (props: Props) => {
                     ) : (
                         ''
                     )
-            } */}
+            }
         </div>
     );
 };

@@ -43,6 +43,10 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const Filter = (props: Props) => {
     const [disState, setDisState] = useState('selectDistrict');
+    // const [filterHover, setFilterHover] = useState({
+    //     municipality: true,
+    //     ward: true,
+    // });
     const [munState, setMunState] = useState('selectMunicipality');
     const [wardState, setWardState] = useState([]);
     const [disBool, setDisBool] = useState(false);
@@ -119,6 +123,9 @@ const Filter = (props: Props) => {
         setMunBool(false);
         setWardState([]);
         setWardBool(false);
+        // setFilterHover({
+        //     municipality: true, ward: true,
+        // });
         props.setIbfPage({ filter: { district: '', municipality: '', ward: [] } });
     };
 
@@ -150,6 +157,15 @@ const Filter = (props: Props) => {
             props.setIbfPage({ filter: { ward: toPushArray } });
         }
     }, [wardState]);
+
+    // useEffect(() => {
+    //     if (filter.district) {
+    //         setFilterHover({ ...filterHover, municipality: true });
+    //     }
+    //     if (filter.municipality) {
+    //         setFilterHover({ ...filterHover, ward: true });
+    //     }
+    // }, [filter.district, filter.municipality]);
 
     return (
         <>
@@ -195,16 +211,19 @@ const Filter = (props: Props) => {
                     data-html
                     data-tip={
                         ReactDOMServer.renderToString(
-                            <div className={style.popup}>
+                            filter.district === ''
+                                ? (
+                                    <div className={style.popup}>
                                 Please select district first to view municipal level data
-                            </div>,
+                                    </div>
+                                ) : (<span />),
                         )}
                     data-place="bottom"
                     data-offset="{ 'top': 60, 'left': 140 }"
                     data-background-color="transparent"
                 >
                     <button
-                        style={{ cursor: !filterDisable && 'not-allowed' }}
+                        style={{ cursor: !filter.district && 'not-allowed' }}
                         className={style.munBtnDefault}
                         onClick={() => filter.district && setMunBool(!munBool)}
                     >
@@ -253,7 +272,10 @@ const Filter = (props: Props) => {
                     data-offset="{ 'top': 60, 'left': 140 }"
                     data-background-color="transparent"
                 >
-                    <div className={style.selectContent}>
+                    <div
+                        style={{ cursor: !filter.municipality && 'not-allowed' }}
+                        className={style.selectContent}
+                    >
                         <span>Select Ward</span>
                     </div>
                     <button type="button" className={style.arrowDown}>
@@ -261,7 +283,7 @@ const Filter = (props: Props) => {
                     </button>
                 </div>
                 {
-                    filter.district === '' && filter.municipality === '' && (
+                    filter.district && filter.municipality === '' && (
                         <ReactTooltip />
                     )
                 }

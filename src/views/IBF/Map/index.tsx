@@ -525,7 +525,7 @@ const Map = (props: Props) => {
                 });
             }
         }
-    }, [householdJson, showHouseHold]);
+    }, [householdJson, showHouseHold, householdJson.length]);
 
     useEffect(() => {
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
@@ -551,7 +551,8 @@ const Map = (props: Props) => {
                 mapRef
                     .current
                     .setLayoutProperty('municipality-centroid', 'visibility', 'visible');
-            } else {
+            }
+            if (!filter.district && Object.keys(selectedStation).length > 0) {
                 // const array = getDistrictArray(stationDetail, selectedStation);
                 // const bbox = getBboxFromDistrictArray(array, district);
                 // mapRef
@@ -644,7 +645,7 @@ const Map = (props: Props) => {
                     );
             }
 
-            if (filter.ward.length === 0) {
+            if (filter.ward.length === 0 && filter.municipality) {
                 const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
                 mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
 
@@ -679,6 +680,7 @@ const Map = (props: Props) => {
     // 6th
     useEffect(() => {
         if (Object.keys(selectedStation).length === 0 && mapRef.current && mapRef.current.isStyleLoaded()) {
+            console.log('Inside selected station');
             mapRef.current.flyTo({
                 center: [84.394226, 28.1],
                 zoom: 6.8,
@@ -793,6 +795,24 @@ const Map = (props: Props) => {
             if (selectedLegend === '') {
                 mapRef.current.setFilter('household-main-data-layer');
             } else {
+                if (mapRef.current.getLayer('household-main-data-layer')) {
+                    mapRef.current.removeLayer('household-main-data-layer');
+                }
+
+                if (mapRef.current.getSource('household-main-data-source')) {
+                    mapRef.current.removeSource('household-main-data-source');
+                }
+
+                mapRef.current.addSource('household-main-data-source', {
+                    type: 'geojson',
+                    data: householdGeoJSON,
+                });
+                mapRef.current.addLayer({
+                    id: 'household-main-data-layer',
+                    source: 'household-main-data-source',
+                    type: 'circle',
+                    paint: { 'circle-color': getPaint(selectedIndicator) },
+                }, 'ward-local');
                 mapRef.current.setFilter('household-main-data-layer', getLegendFilter(selectedLegend));
             }
         }
