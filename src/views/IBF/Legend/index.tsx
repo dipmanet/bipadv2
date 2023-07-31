@@ -626,9 +626,9 @@ const Legend = (props: Props) => {
                         <div className={style.fdContainer}>
                             <div className={style.titleNoHover}>
 Flood depth (in meters)
-                                <div style={{ fontSize: '0.6rem', textAlign: 'right' }}>20 year return period</div>
+                                <div style={{ fontSize: '0.6rem', textAlign: 'right' }}>20 year flood return period</div>
                                 <div style={{ fontSize: '0.6rem', textAlign: 'right' }}>
-provided by GLOFAS
+Source: METEOR project
                                 </div>
                             </div>
                             <div className={style.floodDepthContainer}>
@@ -643,7 +643,7 @@ provided by GLOFAS
                                     <div className={style.floodIndicator2}>
                                         {'1m - 2m'}
                                     </div>
-                                    <div className={style.floodText}>Med</div>
+                                    <div className={style.floodText}>Medium</div>
                                 </div>
                                 <div className={style.floodDepth}>
                                     <div className={style.floodIndicator3}>

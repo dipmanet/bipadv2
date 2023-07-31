@@ -52,6 +52,10 @@ const Filter = (props: Props) => {
     const [disBool, setDisBool] = useState(false);
     const [munBool, setMunBool] = useState(false);
     const [wardBool, setWardBool] = useState(false);
+    const disDropdownRef = useRef(null);
+    const munDropdownRef = useRef(null);
+    const wardDropdownRef = useRef(null);
+
 
     const {
         ibfPage,
@@ -101,7 +105,7 @@ const Filter = (props: Props) => {
             isChecked: e.target.checked,
         };
         setWardState(prevState => [...prevState.filter(item => item.id !== wardItem.id), wardData]);
-        setWardBool(false);
+        // setWardBool(false);
     };
 
     const handleDisState = (disObj: any) => {
@@ -167,11 +171,33 @@ const Filter = (props: Props) => {
     //     }
     // }, [filter.district, filter.municipality]);
 
+
+    const handleDocumentClick = (event: any) => {
+        if (disDropdownRef.current && !disDropdownRef.current.contains(event.target)) {
+            setDisBool(false);
+        }
+        if (munDropdownRef.current && !munDropdownRef.current.contains(event.target)) {
+            setMunBool(false);
+        }
+        if (wardDropdownRef.current && !wardDropdownRef.current.contains(event.target)) {
+            setWardBool(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleDocumentClick);
+
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, []);
+
     return (
         <>
             {/* District Dropdown */}
             <div
                 className={_cs(style.disContainer, isFormOpen && style.hideContainer)}
+                ref={disDropdownRef}
             >
                 <button
                     style={{ cursor: !filterDisable && 'not-allowed' }}
@@ -204,6 +230,8 @@ const Filter = (props: Props) => {
             {/* Municipality Dropdown */}
             <div
                 className={_cs(style.munContainer, isFormOpen && style.hideContainer)}
+                ref={munDropdownRef}
+
             >
                 <div
                     className={style.selectBar}
@@ -257,7 +285,10 @@ const Filter = (props: Props) => {
                 )}
             </div>
             {/* Ward Dropdown */}
-            <div className={_cs(style.wardContainer, isFormOpen && style.hideContainer)}>
+            <div
+                className={_cs(style.wardContainer, isFormOpen && style.hideContainer)}
+                ref={wardDropdownRef}
+            >
                 <div
                     className={style.selectBar}
                     onClick={() => filter.municipality && setWardBool(!wardBool)}

@@ -553,17 +553,23 @@ const Map = (props: Props) => {
                     .setLayoutProperty('municipality-centroid', 'visibility', 'visible');
             }
             if (!filter.district && Object.keys(selectedStation).length > 0) {
-                // const array = getDistrictArray(stationDetail, selectedStation);
-                // const bbox = getBboxFromDistrictArray(array, district);
-                // mapRef
-                //     .current
-                //     .fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
+                const array = getDistrictArray(stationDetail, selectedStation);
+                const bbox = getBboxFromDistrictArray(array, district);
+                mapRef
+                    .current
+                    .fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
+                if (mapRef.current.getLayer('household-main-data-layer')) {
+                    mapRef.current.removeLayer('household-main-data-layer');
+                }
                 mapRef
                     .current
                     .setLayoutProperty('district-local', 'visibility', 'visible');
                 mapRef
                     .current
                     .setLayoutProperty('district-centroid', 'visibility', 'visible');
+                mapRef
+                    .current
+                    .setLayoutProperty('municipality-local', 'visibility', 'none');
                 mapRef
                     .current
                     .setLayoutProperty('municipality-centroid', 'visibility', 'none');
@@ -573,9 +579,9 @@ const Map = (props: Props) => {
                 mapRef
                     .current
                     .setLayoutProperty('ward-centroid', 'visibility', 'none');
-                mapRef
-                    .current
-                    .setLayoutProperty('raster-ibf-20', 'visibility', 'none');
+                // mapRef
+                //     .current
+                //     .setLayoutProperty('raster-ibf-20', 'visibility', 'none');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -680,7 +686,6 @@ const Map = (props: Props) => {
     // 6th
     useEffect(() => {
         if (Object.keys(selectedStation).length === 0 && mapRef.current && mapRef.current.isStyleLoaded()) {
-            console.log('Inside selected station');
             mapRef.current.flyTo({
                 center: [84.394226, 28.1],
                 zoom: 6.8,
