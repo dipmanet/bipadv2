@@ -22,10 +22,12 @@ const ExistingRiskItem = (
         isActive,
         setIbfPage,
         countActiveHandler,
+        setMaintainTitle,
         ibfPage },
 ) => {
     const { title, score, content } = data;
 
+    console.log('existing-data', data);
     const rangeStyle = {
         backgroundColor: '#1AD167',
         height: '12px',
@@ -46,6 +48,7 @@ const ExistingRiskItem = (
             const defaultIndicatorValue = content[0].value;
             setSelectedIndicator(defaultIndicatorValue);
         }
+        setMaintainTitle(title);
     };
 
 

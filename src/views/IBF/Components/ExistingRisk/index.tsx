@@ -53,6 +53,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const ExistingRisk = ({ ibfPage, setCountActive, setIbfPage, user }: Props) => {
     const { householdDistrictAverage, weights } = ibfPage;
+    const [maintainTitle, setMaintainTitle] = useState('');
     const [isActive, setActive] = useState(false);
     const [existingRiskData, setExistingRiskData] = useState<ExistingRiskDataType[]>([]);
     const [wt, setWeight] = useState({});
@@ -80,7 +81,6 @@ const ExistingRisk = ({ ibfPage, setCountActive, setIbfPage, user }: Props) => {
     // if (contentShowingParam === 'risk' && Object.keys(householdDistrictAverage).length > 0) {
     //     setExistingRiskData(getExistingRiskData(householdDistrictAverage));
     // }
-
     const weightHandler = (title) => {
         const tit = title.replaceAll(' ', '').toLowerCase();
         const wtObj = weights[tit];
@@ -90,8 +90,16 @@ const ExistingRisk = ({ ibfPage, setCountActive, setIbfPage, user }: Props) => {
     };
 
     useEffect(() => {
+        if (maintainTitle) {
+            const existingRiskDataList = getExistingRiskData(householdDistrictAverage);
+            const filteredDataList = existingRiskDataList.filter(dataItem => dataItem.title === maintainTitle);
+            setExistingRiskData(filteredDataList);
+            return;
+        }
         const existingRiskDataList = getExistingRiskData(householdDistrictAverage);
         setExistingRiskData(existingRiskDataList);
+        // setActive(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [householdDistrictAverage]);
 
     return (
@@ -131,6 +139,7 @@ const ExistingRisk = ({ ibfPage, setCountActive, setIbfPage, user }: Props) => {
                     !isWtActive && (
                         existingRiskData && existingRiskData.length > 0 && existingRiskData.map(dataItem => (
                             <ExistingRiskItem
+                                setMaintainTitle={setMaintainTitle}
                                 key={dataItem.score}
                                 data={dataItem}
                                 isActiveHandler={isActiveHandler}

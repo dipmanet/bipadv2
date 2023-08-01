@@ -118,11 +118,11 @@ const Navigation = (props: Props) => {
                 District: getDistrict(houseObj.district),
                 Municipality: houseObj.municipality,
                 Ward: houseObj.ward,
-                // ...(user && {
-                //     'House id': houseObj.houseId,
-                //     'Household name': houseObj.householdName,
-                //     'Household contact number': houseObj.householdContactNumber,
-                // }),
+                ...(user && {
+                    'House id': houseObj.houseId,
+                    'Household name': houseObj.householdName,
+                    'Household contact number': houseObj.householdContactNumber,
+                }),
                 'Normalized risk score': houseObj.normalized_risk_score,
                 'Normalized hazard and exposure': houseObj.normalized_hazard_and_exposure,
                 'Normalized vulnerability': houseObj.normalized_vulnerability,
@@ -172,17 +172,17 @@ const Navigation = (props: Props) => {
                 'Flood impact in thirty years': houseObj.floodImpactInThirtyYears,
                 'Flood return period': houseObj.floodReturnPeriod,
             };
-            if (user && houseObj.houseId) {
-                transformedArr['House id'] = houseObj.houseId;
-            }
+            // if (user && houseObj.houseId) {
+            //     transformedArr['House id'] = houseObj.houseId;
+            // }
 
-            if (user && houseObj.householdName) {
-                transformedArr['Household name'] = houseObj.householdName;
-            }
+            // if (user && houseObj.householdName) {
+            //     transformedArr['Household name'] = houseObj.householdName;
+            // }
 
-            if (user && houseObj.householdContactNumber) {
-                transformedArr['Household contact number'] = houseObj.householdContactNumber;
-            }
+            // if (user && houseObj.householdContactNumber) {
+            //     transformedArr['Household contact number'] = houseObj.householdContactNumber;
+            // }
             return transformedArr;
         });
         return householdArray;

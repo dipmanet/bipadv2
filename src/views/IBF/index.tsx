@@ -209,7 +209,6 @@ const Ibf = (props: Props) => {
                     },
                     user,
                 );
-                // console.log('houseData', houseData);
                 setPending(false);
                 const calculatedData = calculation(houseData.results, indicatorData.results);
                 const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];

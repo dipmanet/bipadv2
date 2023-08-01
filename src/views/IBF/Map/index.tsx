@@ -406,6 +406,9 @@ const Map = (props: Props) => {
                     setSelectedStation(e.features[0]);
                     mapRef.current.setLayoutProperty('district-local', 'visibility', 'visible');
                     mapRef.current.setLayoutProperty('district-centroid', 'visibility', 'visible');
+                    // mapRef
+                    //     .current
+                    //     .setLayoutProperty('raster-ibf-20', 'visibility', 'visible');
                 }
             });
 
@@ -627,7 +630,7 @@ const Map = (props: Props) => {
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
             if (filter.ward.length === 1) {
                 const { bbox } = ward.filter(item => item.id === Number(filter.ward[0].id))[0];
-                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
+                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
                 mapRef.current.setFilter('ward-local', ['all', ['==', ['get', 'id'], filter.ward.map(wardItem => wardItem.id)[0]]]);
                 mapRef.current.setFilter('household-main-data-layer', ['all', ['==', ['get', 'ward'], filter.ward[0].id]]);
@@ -635,7 +638,7 @@ const Map = (props: Props) => {
 
             if (filter.ward.length > 1) {
                 const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
-                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
+                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
                 mapRef
                     .current
@@ -653,7 +656,7 @@ const Map = (props: Props) => {
 
             if (filter.ward.length === 0 && filter.municipality) {
                 const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
-                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
+                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
                 mapRef
                     .current

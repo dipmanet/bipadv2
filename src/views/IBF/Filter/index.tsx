@@ -54,7 +54,7 @@ const Filter = (props: Props) => {
     const [wardBool, setWardBool] = useState(false);
     const disDropdownRef = useRef(null);
     const munDropdownRef = useRef(null);
-    const wardDropdownRef = useRef(null);
+    // const wardDropdownRef = useRef(null);
 
 
     const {
@@ -179,9 +179,9 @@ const Filter = (props: Props) => {
         if (munDropdownRef.current && !munDropdownRef.current.contains(event.target)) {
             setMunBool(false);
         }
-        if (wardDropdownRef.current && !wardDropdownRef.current.contains(event.target)) {
-            setWardBool(false);
-        }
+        // if (wardDropdownRef.current && !wardDropdownRef.current.contains(event.target)) {
+        //     setWardBool(false);
+        // }
     };
 
     useEffect(() => {
@@ -287,7 +287,7 @@ const Filter = (props: Props) => {
             {/* Ward Dropdown */}
             <div
                 className={_cs(style.wardContainer, isFormOpen && style.hideContainer)}
-                ref={wardDropdownRef}
+                // ref={wardDropdownRef}
             >
                 <div
                     className={style.selectBar}
