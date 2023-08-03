@@ -1693,6 +1693,7 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
                     indicators,
                     wtChange,
                     weights,
+                    idleDisable,
             } } = action;
         const newState = produce(state, (deferedState) => {
                 /* eslint-disable no-param-reassign */
@@ -1765,6 +1766,12 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
                 if (weights) {
                         deferedState.ibfPage.weights = weights;
                 }
+                // if (idleDisable) {
+                //         deferedState.ibfPage.idleDisable = idleDisable;
+                // }
+                // if (idleDisable === false) {
+                //         deferedState.ibfPage.idleDisable = idleDisable;
+                // }
                 if (filter) {
                         if (filter.district) {
                                 deferedState.ibfPage.filter.district = filter.district;

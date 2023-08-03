@@ -200,9 +200,9 @@ const Filter = (props: Props) => {
                 ref={disDropdownRef}
             >
                 <button
-                    style={{ cursor: !filterDisable && 'not-allowed' }}
+                    style={{ cursor: ibfPage.idleDisable && !filterDisable && 'not-allowed' }}
                     className={style.disBtnDefault}
-                    onClick={() => filterDisable && setDisBool(!disBool)}
+                    onClick={() => !ibfPage.idleDisable && filterDisable && setDisBool(!disBool)}
                 >
                     {disState === 'selectDistrict'
                         ? (<span className={style.disTitle}>Select District</span>)

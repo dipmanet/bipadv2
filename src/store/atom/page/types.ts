@@ -140,6 +140,7 @@ export interface IbfPage {
     indicators: [];
     wtChange: number;
     weights: [];
+//     idleDisable: boolean;
 }
 
 export interface Bulletin {

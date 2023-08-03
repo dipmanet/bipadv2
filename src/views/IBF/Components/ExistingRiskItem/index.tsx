@@ -27,7 +27,6 @@ const ExistingRiskItem = (
 ) => {
     const { title, score, content } = data;
 
-    console.log('existing-data', data);
     const rangeStyle = {
         backgroundColor: '#1AD167',
         height: '12px',

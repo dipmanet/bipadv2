@@ -440,6 +440,7 @@ const state: PageState = {
         indicators: [],
         wtChange: 0,
         weights: [],
+        // idleDisable: false,
     },
 
     bulletinEditData: {},

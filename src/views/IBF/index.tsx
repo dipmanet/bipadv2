@@ -126,7 +126,6 @@ const Ibf = (props: Props) => {
     const [coordinates, setCoordinates] = useState({});
     const [isFormOpen, setFormOpen] = useState(false);
     const [editValue, setEditState] = useState({});
-    // console.log('stations-selectedStations', stations, selectedStation);
 
 
     let calendar;
@@ -187,75 +186,74 @@ const Ibf = (props: Props) => {
         }
     }, [stations, selectedStation]);
 
-    // console.log('household-json__check', householdJson, householdJson.map((jsonData: any) => jsonData.incomeSource));
 
-    useEffect(() => {
-        const getCall = async () => {
-            if (filter.municipality) {
-                props.setIbfPage({ householdJson: [] });
-                setPending(true);
-                const indicatorData = await getRequest(
-                    'ibf-vulnerability-indicator',
-                    {
-                        // municipality: getMunicipalityId(filter.municipality),
-                        municipality: String(filter.municipality),
-                    },
-                );
-                const houseData = await getRequest(
-                    'ibf-households',
-                    {
-                        limit: -1,
-                        municipality: String(filter.municipality),
-                    },
-                    user,
-                );
-                setPending(false);
-                const calculatedData = calculation(houseData.results, indicatorData.results);
-                const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
+    //  useEffect(() => {
+    //       const getCall = async () => {
+    //           if (filter.municipality) {
+    //               props.setIbfPage({ householdJson: [] });
+    //               setPending(true);
+    //               const indicatorData = await getRequest(
+    //                   'ibf-vulnerability-indicator',
+    //                   {
+    //                       // municipality: getMunicipalityId(filter.municipality),
+    //                       municipality: String(filter.municipality),
+    //                   },
+    //               );
+    //               const houseData = await getRequest(
+    //                   'ibf-households',
+    //                   {
+    //                       limit: -1,
+    //                       municipality: String(filter.municipality),
+    //                   },
+    //                   user,
+    //               );
+    //               setPending(false);
+    //               const calculatedData = calculation(houseData.results, indicatorData.results);
+    //               const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
 
-                // const modifiedHouseData = houseDataKeyModifier(houseHoldDatas);
-                setIbfPage({
-                    weights: weight_Data,
-                });
-                setIbfPage({
-                    indicators: indicatorData.results,
-                });
-                setIbfPage({
-                    householdDistrictAverage: averageDatas,
-                });
-                setIbfPage({
-                    householdJson: [...houseHoldDatas],
-                });
-                setIbfPage({
-                    householdTemp: [...houseHoldDatas],
-                });
-            }
-        };
-        getCall();
-    }, [filter.municipality]);
+    //               // const modifiedHouseData = houseDataKeyModifier(houseHoldDatas);
+    //               setIbfPage({
+    //                   weights: weight_Data,
+    //               });
+    //               setIbfPage({
+    //                   indicators: indicatorData.results,
+    //               });
+    //               setIbfPage({
+    //                   householdDistrictAverage: averageDatas,
+    //               });
+    //               setIbfPage({
+    //                   householdJson: [...houseHoldDatas],
+    //               });
+    //               setIbfPage({
+    //                   householdTemp: [...houseHoldDatas],
+    //               });
+    //           }
+    //       };
+    //       getCall();
+    //   }, [filter.municipality]);
 
-    useEffect(() => {
-        if (filter.ward.length > 0) {
-            const tempWard = filter.ward.map(wardItem => wardItem.id);
-            const wardHouseData = [...householdTemp];
-            const wardLevelHouseData = wardHouseData.filter(houseData => tempWard.includes(houseData.ward));
-            const calculatedData = calculation(wardLevelHouseData, indicators);
-            const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
-            setIbfPage({
-                weights: weight_Data,
-            });
-            setIbfPage({
-                householdDistrictAverage: averageDatas,
-            });
-            setIbfPage({
-                householdJson: [...houseHoldDatas],
-            });
-        } else {
-            setIbfPage({
-                householdJson: [...householdTemp],
-            });
-        }
-    }, [filter.ward.length]);
+    // useEffect(() => {
+    //     if (filter.ward.length > 0) {
+    //         const tempWard = filter.ward.map(wardItem => wardItem.id);
+    //         const wardHouseData = [...householdTemp];
+    //         const wardLevelHouseData = wardHouseData.filter(houseData => tempWard.includes(houseData.ward));
+    //         const calculatedData = calculation(wardLevelHouseData, indicators);
+    //         const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
+    //         setIbfPage({
+    //             weights: weight_Data,
+    //         });
+    //         setIbfPage({
+    //             householdDistrictAverage: averageDatas,
+    //         });
+    //         setIbfPage({
+    //             householdJson: [...houseHoldDatas],
+    //         });
+    //     } else {
+    //         setIbfPage({
+    //             householdJson: [...householdTemp],
+    //         });
+    //     }
+    // }, [filter.ward.length]);
 
     useEffect(() => {
         const getCall = async () => {

@@ -27,13 +27,15 @@ import { AppState } from '#types';
 import { mapSources } from '#constants';
 import { District, Municipality, Ward } from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import style from './styles.scss';
 import LegendFilters from '../Constants/LegendFilters';
 import { markerLocations, getCircleProp, getPaint, getScore, getRasterLayer } from '../Constants/MapExpressions';
 import { getBboxFromDistrictArray, getDistrictArray } from '../utils';
 import { PropsFromDispatch, PropsFromState } from '..';
-import { getRequest } from '../Requests/apiCalls';
+// import { getRequest } from '../Requests/apiCalls';
 import HouseholdPopup from '../Components/HouseholdPopup';
+import { calculation } from '../Components/RiskAndImpact/expression';
 
 interface Coordinates {
     lat: number;
@@ -78,7 +80,39 @@ const popup = new mapboxgl.Popup({
     closeOnClick: false,
 });
 
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    vulnerabilityIndicators: {
+        url: '/ibf-vulnerability-indicator/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            municipality: params.municipality,
+        }),
+        onSuccess: ({ props, response, params }) => {
+            props.setIbfPage({ indicators: response.results });
+            // params.setPending(false);
+        },
+    },
+    householdJson: {
+        url: '/ibf-households/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            municipality: params.municipality,
+            limit: -1,
+        }),
+        onSuccess: ({ props, response, params }) => {
+            params.setHouseTemprary(response.results);
+            params.setPending(false);
+        },
+    },
+
+};
+
 const Map = (props: Props) => {
+    const [pending, setPending] = useState(false);
+    const [houseTemprary, setHouseTemprary] = useState([]);
     const mapRef = useRef<mapboxgl.Map | undefined>(undefined);
     const mapContainerRef = useRef(null);
     const markerRef = useRef<mapboxgl.Marker | undefined>(undefined);
@@ -92,10 +126,13 @@ const Map = (props: Props) => {
             stationDetail,
             filter,
             householdJson,
+            householdTemp,
+            indicators,
             householdDistrictAverage,
             showHouseHold,
             selectedIndicator,
-            selectedLegend },
+            selectedLegend,
+            idleDisable },
         user,
         ward,
         district,
@@ -108,7 +145,6 @@ const Map = (props: Props) => {
 
     // const [pending, setPending] = useState(false);
     // const [mun, setMun] = useState();
-
 
     // const rasterLayersYears = [2, 5, 20];
 
@@ -396,6 +432,7 @@ const Map = (props: Props) => {
             });
 
             map.on('click', 'placesInitial', (e) => {
+                props.setIbfPage({ idleDisable: true });
                 const uniqueDistrictArray = getDistrictArray(stationDetail, e.features[0]);
                 const bbox = getBboxFromDistrictArray(uniqueDistrictArray, district);
 
@@ -418,6 +455,10 @@ const Map = (props: Props) => {
             });
         });
 
+        // map.on('idle', () => {
+        //     props.setIbfPage({ idleDisable: false });
+        // });
+
         return () => {
             // clearInterval(interval);
             map.remove();
@@ -425,42 +466,25 @@ const Map = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // 3rd
-    const keys = ['numberOfChildren', 'numberOfElderly', 'numberOfPregnantLactating', 'numberOfDisabled'];
-    // const nulldata = JSON.stringify(householdJson, (k, v) => {
-    //     if (keys.includes(k) && v === null) return 0;
-    //     if (k === 'incomeSource') {
-    //         if (v) {
-    //             const count = v.split(',').length;
-    //             return count !== 0 ? 'Yes' : 'No';
-    //         }
-    //         return 'No';
-    //     }
-    //     return v;
-    // });
-    const nulldata = JSON.stringify(householdJson, (k, v) => {
-        if (keys.includes(k) && v === null) return 0;
-        if (k === 'incomeSource') {
-            if (v) {
-                const count = v.split(',').length;
-                return count === 1 ? 10 : 0;
-            }
-            return v;
+    useEffect(() => {
+        if (houseTemprary.length > 0) {
+            const calculatedData = calculation(houseTemprary, indicators);
+            const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
+
+            props.setIbfPage({
+                weights: weight_Data,
+            });
+            props.setIbfPage({
+                householdDistrictAverage: averageDatas,
+            });
+            props.setIbfPage({
+                householdJson: [...houseHoldDatas],
+            });
+            props.setIbfPage({
+                householdTemp: [...houseHoldDatas],
+            });
         }
-        return v;
-    });
-
-    const nullToZerodata = JSON.parse(nulldata);
-
-    const householdGeoJSON = {
-        type: 'FeatureCollection',
-        features: nullToZerodata.length > 0 && nullToZerodata.map(item => ({
-            id: item.id,
-            type: 'Feature',
-            geometry: item.point,
-            properties: { ...item },
-        })),
-    };
+    }, [houseTemprary]);
 
     useEffect(() => {
         if (popupHouseRef.current) {
@@ -477,7 +501,42 @@ const Map = (props: Props) => {
                 }
             }
 
-            if (showHouseHold === 1) {
+            if (householdJson.length > 0) {
+                const keys = ['numberOfChildren', 'numberOfElderly', 'numberOfPregnantLactating', 'numberOfDisabled'];
+                // const nulldata = JSON.stringify(householdJson, (k, v) => {
+                //     if (keys.includes(k) && v === null) return 0;
+                //     if (k === 'incomeSource') {
+                //         if (v) {
+                //             const count = v.split(',').length;
+                //             return count !== 0 ? 'Yes' : 'No';
+                //         }
+                //         return 'No';
+                //     }
+                //     return v;
+                // });
+                const nulldata = JSON.stringify(householdJson, (k, v) => {
+                    if (keys.includes(k) && v === null) return 0;
+                    if (k === 'incomeSource') {
+                        if (v) {
+                            const count = v.split(',').length;
+                            return count === 1 ? 10 : 0;
+                        }
+                        return v;
+                    }
+                    return v;
+                });
+
+                const nullToZerodata = JSON.parse(nulldata);
+
+                const householdGeoJSON = {
+                    type: 'FeatureCollection',
+                    features: nullToZerodata.length > 0 && nullToZerodata.map(item => ({
+                        id: item.id,
+                        type: 'Feature',
+                        geometry: item.point,
+                        properties: { ...item },
+                    })),
+                };
                 if (mapRef.current.getLayer('household-main-data-layer')) {
                     mapRef.current.removeLayer('household-main-data-layer');
                 }
@@ -594,6 +653,16 @@ const Map = (props: Props) => {
     useEffect(() => {
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
             if (filter.municipality) {
+                setPending(true);
+                props.requests.vulnerabilityIndicators.do({
+                    municipality: String(filter.municipality),
+                    setPending,
+                });
+                props.requests.householdJson.do({
+                    municipality: String(filter.municipality),
+                    setHouseTemprary,
+                    setPending,
+                });
                 const bbox = getMunicipalityBbox();
                 mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { padding: 150 });
 
@@ -628,33 +697,52 @@ const Map = (props: Props) => {
 
     useEffect(() => {
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
-            if (filter.ward.length === 1) {
-                const { bbox } = ward.filter(item => item.id === Number(filter.ward[0].id))[0];
-                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
+            if (filter.ward.length > 0) {
+                const tempWard = filter.ward.map(wardItem => wardItem.id);
+                const wardHouseData = [...householdTemp];
+                const wardLevelHouseData = wardHouseData.filter(houseData => tempWard.includes(houseData.ward));
+                const calculatedData = calculation(wardLevelHouseData, indicators);
+                const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
+                props.setIbfPage({
+                    weights: weight_Data,
+                });
+                props.setIbfPage({
+                    householdDistrictAverage: averageDatas,
+                });
+                props.setIbfPage({
+                    householdJson: [...houseHoldDatas],
+                });
+                if (filter.ward.length === 1) {
+                    const { bbox } = ward.filter(item => item.id === Number(filter.ward[0].id))[0];
+                    mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
-                mapRef.current.setFilter('ward-local', ['all', ['==', ['get', 'id'], filter.ward.map(wardItem => wardItem.id)[0]]]);
-                mapRef.current.setFilter('household-main-data-layer', ['all', ['==', ['get', 'ward'], filter.ward[0].id]]);
-            }
+                    mapRef.current.setFilter('ward-local', ['all', ['==', ['get', 'id'], filter.ward.map(wardItem => wardItem.id)[0]]]);
+                    mapRef.current.setFilter('household-main-data-layer', ['all', ['==', ['get', 'ward'], filter.ward[0].id]]);
+                }
 
-            if (filter.ward.length > 1) {
-                const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
-                mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
+                if (filter.ward.length > 1) {
+                    const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
+                    mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
-                mapRef
-                    .current
-                    .setFilter(
-                        'ward-local',
-                        ['all', ['in', ['get', 'id'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
-                    );
-                mapRef
-                    .current
-                    .setFilter(
-                        'household-main-data-layer',
-                        ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
-                    );
+                    mapRef
+                        .current
+                        .setFilter(
+                            'ward-local',
+                            ['all', ['in', ['get', 'id'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
+                        );
+                    mapRef
+                        .current
+                        .setFilter(
+                            'household-main-data-layer',
+                            ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
+                        );
+                }
             }
 
             if (filter.ward.length === 0 && filter.municipality) {
+                props.setIbfPage({
+                    householdJson: [...householdTemp],
+                });
                 const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
                 mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
@@ -810,6 +898,41 @@ const Map = (props: Props) => {
                 if (mapRef.current.getSource('household-main-data-source')) {
                     mapRef.current.removeSource('household-main-data-source');
                 }
+                const keys = ['numberOfChildren', 'numberOfElderly', 'numberOfPregnantLactating', 'numberOfDisabled'];
+                // const nulldata = JSON.stringify(householdJson, (k, v) => {
+                //     if (keys.includes(k) && v === null) return 0;
+                //     if (k === 'incomeSource') {
+                //         if (v) {
+                //             const count = v.split(',').length;
+                //             return count !== 0 ? 'Yes' : 'No';
+                //         }
+                //         return 'No';
+                //     }
+                //     return v;
+                // });
+                const nulldata = JSON.stringify(householdJson, (k, v) => {
+                    if (keys.includes(k) && v === null) return 0;
+                    if (k === 'incomeSource') {
+                        if (v) {
+                            const count = v.split(',').length;
+                            return count === 1 ? 10 : 0;
+                        }
+                        return v;
+                    }
+                    return v;
+                });
+
+                const nullToZerodata = JSON.parse(nulldata);
+
+                const householdGeoJSON = {
+                    type: 'FeatureCollection',
+                    features: nullToZerodata.length > 0 && nullToZerodata.map(item => ({
+                        id: item.id,
+                        type: 'Feature',
+                        geometry: item.point,
+                        properties: { ...item },
+                    })),
+                };
 
                 mapRef.current.addSource('household-main-data-source', {
                     type: 'geojson',
@@ -866,21 +989,21 @@ const Map = (props: Props) => {
 
     return (
         <>
-            {/* {pending
+            {pending
                 && (
                     <div className={style.loader}>
                         <Loader color="white" />
                     </div>
                 )
-            } */}
+            }
             <div style={props.myStyle ? props.myStyle : mapContainer} ref={mapContainerRef} />
         </>
     );
 };
 
-// export default compose(
-//     connect(mapStateToProps, mapDispatchToProps),
-//     createConnectedRequestCoordinator<ReduxProps>(),
-//     createRequestClient(requests),
-// )(Map);
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
+)(Map);
+// export default connect(mapStateToProps, mapDispatchToProps)(Map);
