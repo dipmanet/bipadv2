@@ -428,6 +428,7 @@ export const stateShcema = {
         label: 'House Id',
         placeholder: 'Enter your house id',
         inputType: 'input',
+        view: 'private',
     },
     householdName: {
         value: null,
@@ -454,15 +455,6 @@ export const stateShcema = {
         type: 'number',
         placeholder: 'Enter altitude',
         inputType: 'input',
-    },
-    precision: {
-        value: null,
-        error: '',
-        label: 'Precision',
-        type: 'number',
-        placeholder: 'Enter precision',
-        inputType: 'input',
-        view: 'private',
     },
     localUnit: {
         value: null,
@@ -590,7 +582,7 @@ export const stateShcema = {
         type: 'text',
         placeholder: 'Enter your source of income',
         inputType: 'input',
-        view: 'private',
+        // view: 'private',
     },
     hasAgricultureLivestock: {
         value: null,

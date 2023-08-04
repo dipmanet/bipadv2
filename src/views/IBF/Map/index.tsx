@@ -7,9 +7,6 @@ import { connect } from 'react-redux';
 import Redux, { compose } from 'redux';
 import Loader from 'react-loader';
 import mapboxgl from 'mapbox-gl';
-
-// import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
-
 import ReactDOM from 'react-dom';
 import {
     setIbfPageAction,
@@ -33,7 +30,6 @@ import LegendFilters from '../Constants/LegendFilters';
 import { markerLocations, getCircleProp, getPaint, getScore, getRasterLayer } from '../Constants/MapExpressions';
 import { getBboxFromDistrictArray, getDistrictArray } from '../utils';
 import { PropsFromDispatch, PropsFromState } from '..';
-// import { getRequest } from '../Requests/apiCalls';
 import HouseholdPopup from '../Components/HouseholdPopup';
 import { calculation } from '../Components/RiskAndImpact/expression';
 
@@ -121,18 +117,14 @@ const Map = (props: Props) => {
     const {
         ibfPage: { stations,
             selectedStation,
-            leadTime,
-            returnPeriod,
             stationDetail,
             filter,
             householdJson,
             householdTemp,
             indicators,
-            householdDistrictAverage,
             showHouseHold,
             selectedIndicator,
-            selectedLegend,
-            idleDisable },
+            selectedLegend },
         user,
         ward,
         district,
@@ -426,11 +418,6 @@ const Map = (props: Props) => {
                 ).addTo(map);
             });
 
-            map.on('mouseleave', 'placesInitial', () => {
-                map.getCanvas().style.cursor = '';
-                popup.remove();
-            });
-
             map.on('click', 'placesInitial', (e) => {
                 props.setIbfPage({ idleDisable: true });
                 const uniqueDistrictArray = getDistrictArray(stationDetail, e.features[0]);
@@ -563,7 +550,7 @@ const Map = (props: Props) => {
                     }
                     if (e) {
                         const { lngLat } = e;
-                        const coordinates = [lngLat.lng, lngLat.lat];
+                        // const coordinates = [lngLat.lng, lngLat.lat];
 
                         const { properties } = e.features[0];
 
@@ -721,20 +708,21 @@ const Map = (props: Props) => {
                 }
 
                 if (filter.ward.length > 1) {
+                    props.setIbfPage({ selectedLegend: '' });
                     const { bbox } = municipality.filter(item => item.id === Number(filter.municipality))[0];
                     mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
 
                     mapRef
                         .current
                         .setFilter(
-                            'ward-local',
-                            ['all', ['in', ['get', 'id'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
+                            'household-main-data-layer',
+                            ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
                         );
                     mapRef
                         .current
                         .setFilter(
-                            'household-main-data-layer',
-                            ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
+                            'ward-local',
+                            ['all', ['in', ['get', 'id'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
                         );
                 }
             }
@@ -887,64 +875,89 @@ const Map = (props: Props) => {
         if (!mapRef.current) return;
         if (!mapRef.current.getLayer('household-main-data-layer')) return;
 
-        if (householdJson.length > 0) {
-            if (selectedLegend === '') {
-                mapRef.current.setFilter('household-main-data-layer');
+        // if (householdJson.length > 0) {
+        //     if (selectedLegend === '') {
+        //         mapRef.current.setFilter('household-main-data-layer');
+        //     } else {
+        //         if (mapRef.current.getLayer('household-main-data-layer')) {
+        //             mapRef.current.removeLayer('household-main-data-layer');
+        //         }
+
+        //         if (mapRef.current.getSource('household-main-data-source')) {
+        //             mapRef.current.removeSource('household-main-data-source');
+        //         }
+        //         const keys = ['numberOfChildren', 'numberOfElderly', 'numberOfPregnantLactating', 'numberOfDisabled'];
+        //         // const nulldata = JSON.stringify(householdJson, (k, v) => {
+        //         //     if (keys.includes(k) && v === null) return 0;
+        //         //     if (k === 'incomeSource') {
+        //         //         if (v) {
+        //         //             const count = v.split(',').length;
+        //         //             return count !== 0 ? 'Yes' : 'No';
+        //         //         }
+        //         //         return 'No';
+        //         //     }
+        //         //     return v;
+        //         // });
+        //         const nulldata = JSON.stringify(householdJson, (k, v) => {
+        //             if (keys.includes(k) && v === null) return 0;
+        //             if (k === 'incomeSource') {
+        //                 if (v) {
+        //                     const count = v.split(',').length;
+        //                     return count === 1 ? 10 : 0;
+        //                 }
+        //                 return v;
+        //             }
+        //             return v;
+        //         });
+
+        //         const nullToZerodata = JSON.parse(nulldata);
+
+        //         const householdGeoJSON = {
+        //             type: 'FeatureCollection',
+        //             features: nullToZerodata.length > 0 && nullToZerodata.map(item => ({
+        //                 id: item.id,
+        //                 type: 'Feature',
+        //                 geometry: item.point,
+        //                 properties: { ...item },
+        //             })),
+        //         };
+
+        //         mapRef.current.addSource('household-main-data-source', {
+        //             type: 'geojson',
+        //             data: householdGeoJSON,
+        //         });
+        //         mapRef.current.addLayer({
+        //             id: 'household-main-data-layer',
+        //             source: 'household-main-data-source',
+        //             type: 'circle',
+        //             paint: { 'circle-color': getPaint(selectedIndicator) },
+        //         }, 'ward-local');
+        //         mapRef.current.setFilter('household-main-data-layer', getLegendFilter(selectedLegend));
+        //     }
+        // }
+        if (selectedLegend) {
+            // if (filter.ward.length > 0) {
+            //     mapRef
+            //         .current
+            //         .setFilter(
+            //             'household-main-data-layer',
+            //             ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
+            //         );
+            // }
+            // mapRef.current.setFilter('household-main-data-layer', getLegendFilter(selectedLegend));
+            if (filter.ward.length > 0) {
+                mapRef.current.setFilter(
+                    'household-main-data-layer',
+                    ['all',
+                        ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]],
+                        getLegendFilter(selectedLegend),
+                    ],
+                );
             } else {
-                if (mapRef.current.getLayer('household-main-data-layer')) {
-                    mapRef.current.removeLayer('household-main-data-layer');
-                }
-
-                if (mapRef.current.getSource('household-main-data-source')) {
-                    mapRef.current.removeSource('household-main-data-source');
-                }
-                const keys = ['numberOfChildren', 'numberOfElderly', 'numberOfPregnantLactating', 'numberOfDisabled'];
-                // const nulldata = JSON.stringify(householdJson, (k, v) => {
-                //     if (keys.includes(k) && v === null) return 0;
-                //     if (k === 'incomeSource') {
-                //         if (v) {
-                //             const count = v.split(',').length;
-                //             return count !== 0 ? 'Yes' : 'No';
-                //         }
-                //         return 'No';
-                //     }
-                //     return v;
-                // });
-                const nulldata = JSON.stringify(householdJson, (k, v) => {
-                    if (keys.includes(k) && v === null) return 0;
-                    if (k === 'incomeSource') {
-                        if (v) {
-                            const count = v.split(',').length;
-                            return count === 1 ? 10 : 0;
-                        }
-                        return v;
-                    }
-                    return v;
-                });
-
-                const nullToZerodata = JSON.parse(nulldata);
-
-                const householdGeoJSON = {
-                    type: 'FeatureCollection',
-                    features: nullToZerodata.length > 0 && nullToZerodata.map(item => ({
-                        id: item.id,
-                        type: 'Feature',
-                        geometry: item.point,
-                        properties: { ...item },
-                    })),
-                };
-
-                mapRef.current.addSource('household-main-data-source', {
-                    type: 'geojson',
-                    data: householdGeoJSON,
-                });
-                mapRef.current.addLayer({
-                    id: 'household-main-data-layer',
-                    source: 'household-main-data-source',
-                    type: 'circle',
-                    paint: { 'circle-color': getPaint(selectedIndicator) },
-                }, 'ward-local');
-                mapRef.current.setFilter('household-main-data-layer', getLegendFilter(selectedLegend));
+                mapRef.current.setFilter(
+                    'household-main-data-layer',
+                    getLegendFilter(selectedLegend),
+                );
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
