@@ -357,7 +357,17 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         id: 'navbar-realtime',
     },
-
+    {
+        name: 'ibf',
+        title: 'IBF',
+        titleNep: 'आइ.बि.यफ',
+        path: '/ibf/',
+        load: () => import('../views/IBF'),
+        navbar: false,
+        disabled: false,
+        iconName: 'cloud',
+        id: 'ibf',
+    },
 
     {
         name: 'profile',

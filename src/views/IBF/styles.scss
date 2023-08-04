@@ -1,0 +1,64 @@
+// $font-family-sans-serif: 'Fira Sans', sans-serif;
+// @font-face {
+//   font-family: 'Fira Sans';
+//   src: url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap');
+// }
+
+*{
+  font-family: 'Fira Sans', sans-serif !important;
+}
+
+.ibfContainer {
+    position: absolute;
+    width: calc(100vw - 60px);
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #1D2636;
+    font-size: 16px;
+    overflow: hidden;
+
+    .invisibleBtn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 60px;
+      height: 40px;
+      outline: none;
+      border: none;
+      background: transparent;
+    }
+}
+
+.loader {
+    position: fixed;
+    top: 0;
+    right: 60px;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.mapSelection {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(139.16deg, #3989BE 13.49%, #4BA8BF 80.5%);
+  border-radius: 0.4rem;
+  z-index: 99;
+  color: white;
+}
+.fadeIn {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 5000 linear, opacity 5000;
+}
+.fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 300s linear, opacity 300ms;
+}

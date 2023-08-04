@@ -1,0 +1,98 @@
+.houseFormContainer {
+  position: absolute;
+  top: 3.6rem;
+  left: 1rem;
+  width: 450px;
+  padding: 1rem 1rem;
+  background: linear-gradient(135.86deg, rgba(177, 177, 177, 0.32) 5.24%, rgba(54, 53, 103, 0.2) 51.01%), rgba(49, 48, 54, 0.67);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 0.6rem;
+  color: rgba(255, 255, 255, 0.97);
+  z-index: 999;
+
+  .formContainer {
+    height: 600px;
+    overflow: auto;
+    padding-right: 0.5rem;
+
+    .subContainer {
+      padding-top: 1.2rem;
+
+      .mapSelect {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-top: 0.2rem;
+
+        img {
+          height: 0.8rem;
+        }
+
+        .mapButton {
+          position: relative;
+          border: none;
+          outline: none;
+          font-size: 12px;
+          color: white;
+          cursor: pointer;
+          background: transparent;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: 0.3rem;
+            border-bottom: 1px solid white;
+            width: 74px;
+            background-color: white;
+          }
+        }
+      }
+    }
+
+    .formSubmit {
+      display: block;
+      text-align: center;
+      width: 100%;
+      background: linear-gradient(139.16deg, #3989BE 13.49%, #4BA8BF 80.5%);
+      filter: saturate(1);
+      padding: 0.5rem 0rem;
+      color: #ffff;
+      outline: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06rem;
+    }
+  }
+
+  h1 {
+    padding: 0.5rem 0;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.27);
+  }
+
+  .closeHouseForm{
+    position: absolute;
+    display: block;
+    width: 20px;
+    height: 20px;
+    top: -0.5rem;
+    right: -0.5rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.allowed {
+  cursor: pointer;
+}

@@ -1,0 +1,77 @@
+.btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+
+  &:hover {
+    color: #edc68c;
+  }
+}
+
+.existingRiskItemContainer {
+  display: flex;
+  flex-direction: column;
+
+  .contentContainer {
+    display: flex;
+    flex-direction: column;
+
+    .titleBtn {
+      display: flex;
+      @extend .btn;
+    }
+
+    .barScore {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+
+      .bar {
+        width: 250px;
+        height: 12px;
+        border-radius: 50px;
+        background: #989595;
+      }
+
+      .scoreValue {
+        font-size: 14px;
+      }
+    }
+  }
+  .listContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 0px;
+
+    .list {
+      list-style-type: none;
+
+      .listBtn {
+        @extend .btn;
+      }
+
+      .listBtnActive {
+        @extend .btn;
+        color: #edc68c;
+      }
+    }
+    .listActive {
+      list-style-type: none;
+      background: linear-gradient(139.16deg, #3989be 13.49%, #4ba8bf 80.5%);
+      border-radius: 0.08rem;
+
+      .listBtn {
+        @extend .btn;
+      }
+
+      // .listBtnActive {
+      //   @extend .btn;
+      //   color: #edc68c;
+      // }
+    }
+  }
+}
