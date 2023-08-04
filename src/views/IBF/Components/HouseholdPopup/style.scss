@@ -1,0 +1,60 @@
+.housePopUpContainer {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  height: 280px;
+  padding: 0px 5px 15px 5px;
+  background: linear-gradient(135.86deg, rgba(177, 177, 177, 0.32) 5.24%, rgba(54, 53, 103, 0.2) 51.01%), rgba(49, 48, 54, 0.3);
+
+  .popUpTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+
+    .houseId{
+      font-weight: 500;
+      color: white;
+      font-size: 14px;
+      line-height: 14px;
+    }
+  
+    .editBtn {
+      background-color: transparent;
+      outline: none;
+      position: absolute;
+      right: 0rem;
+      border: none;
+      border-bottom: 1px solid white;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 0.2rem;
+      margin-right: 1rem;
+    }
+  }
+
+  .fieldContainer {
+    background: linear-gradient(135.86deg, rgba(177, 177, 177, 0.32) 5.24%, rgba(54, 53, 103, 0.2) 51.01%), rgba(49, 48, 54, 0.3);
+    overflow-y: auto;
+    font-size: 11px;
+    line-height: 11px;
+
+    .popUpData {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      padding: 0.6rem 0.4rem;
+    }
+
+    .popUpData:nth-child(even){
+      background: linear-gradient(135.86deg, rgba(177, 177, 177, 0.32) 5.24%, rgba(54, 53, 103, 0.2) 51.01%), rgba(242, 242, 242, 0.3);
+      padding: 0.6rem 0.4rem;
+    }
+}
+
+.loginMessage {
+  color: white;
+  padding: 0rem 0.4rem;
+}
+}

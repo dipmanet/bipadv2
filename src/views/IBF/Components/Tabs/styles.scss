@@ -1,0 +1,93 @@
+.tabs {
+    margin: 0;
+
+    .tabHeader {
+        margin: 0;
+        padding: 0px;
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135.86deg, rgba(177, 177, 177, 0.32) 5.24%, rgba(54, 53, 103, 0.2) 51.01%), rgba(49, 48, 54, 0.3);
+        box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        list-style: none;
+
+        .tabHeaderContent {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+
+            .tht {
+                display: flex;
+                flex-direction: row;
+
+                .tabHeaderTotal {
+                    display: flex;
+                    font-size: 14px;
+                    padding-right: 3px;
+                }
+
+                .tabHeaderUnit {
+                    display: flex;
+                    font-size: 14px;
+                    align-items: flex-end;
+                    padding-bottom: 2px;
+                }
+            }
+        }
+
+        .tabHeaderName {
+            display: flex;
+            flex-direction: row;
+            margin-left: -10px;
+
+            .thnName {
+                align-items: flex-start;
+                font-size: 14px;
+                padding: 0px 10px;
+            }
+
+            .thnIcon {
+                align-items: flex-end;
+            }
+        }
+    }
+
+    .tabHeader li {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .tabHeader li.active {
+        width: 100%;
+        border-radius: 5px;
+        background: linear-gradient(139.16deg, #3989BE 13.49%, #4BA8BF 80.5%);
+    }
+
+    .tabContent {
+        height: 300px;
+        position: relative;
+    }
+
+    .tabChild {
+        font-size: 14px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+}
+
+.resDiv {
+    margin-top: 5px;
+    height: 25vh !important;
+    width: 250px;
+}

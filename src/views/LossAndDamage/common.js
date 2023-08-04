@@ -7,7 +7,7 @@ import {
     groupList,
     sum,
 } from '#utils/common';
-import { lossMetrics } from '#utils/domain';
+import { lossMetricsDamageLoss } from '#utils/domain';
 
 export const createMetric = type => (val) => {
     if (!val) {
@@ -17,7 +17,7 @@ export const createMetric = type => (val) => {
 };
 
 export const metricMap = listToMap(
-    lossMetrics,
+    lossMetricsDamageLoss,
     item => item.key,
     (item, key) => ({
         ...item,

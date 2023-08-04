@@ -11,6 +11,10 @@ import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 import { lossMetrics } from '#utils/domain';
+import {
+    englishToNepaliNumber,
+
+} from 'nepali-number';
 
 interface Row {
     [key: string]: string | number | boolean | undefined | null;
@@ -200,6 +204,7 @@ export const encodeTime = (date: Date) => (
 export { encodeDate } from '@togglecorp/fujs';
 
 export const imageUrlToDataUrl = (url, callback) => {
+    console.log('image load');
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {
         const reader = new FileReader();
@@ -312,14 +317,16 @@ export const checkSameRegionPermission = (user, region) => {
 
 // convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
+    console.log('This is date', date);
     if (!date) {
         return '';
     }
     let dateToReturn = date;
     if (forceAD && (language === 'np')) {
-        dateToReturn = BSToAD(date);
+        dateToReturn = (date);
     } else if (language === 'np') {
         try {
+            // dateToReturn = englishToNepaliNumber(ADToBS(date));
             dateToReturn = ADToBS(date);
         } catch (e) {
             dateToReturn = date;

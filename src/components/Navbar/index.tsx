@@ -333,7 +333,7 @@ class Navbar extends React.PureComponent<Props, State> {
         const { authenticated, user } = authState;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
         const GroupMenuListRoutes = ['droughtWatch',
-            'DRRM Report',
+            'DRRM Report', 'ibf',
         ];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
 
@@ -386,6 +386,21 @@ class Navbar extends React.PureComponent<Props, State> {
                         handleActiveGroupButton={this.handleActiveGroupButton}
                         disableOutsideDivClick={disableOutsideDivClick}
                     >
+                        <Translation>
+                            {
+                                t => (
+                                    <MenuItemLikeButton
+                                        className={activeRouteName === 'ibf' ? styles.selectedButtonActive : styles.reportIncidentButton}
+                                        title={t('IBF')}
+                                        iconName="cloud"
+                                        id="logout"
+                                        onClick={() => {
+                                            navigate('/ibf/');
+                                        }}
+
+                                    />
+                                )}
+                        </Translation>
                         {/* <Translation>
                             {
                                 t => (
@@ -525,7 +540,14 @@ class Navbar extends React.PureComponent<Props, State> {
                                         title={t('About Us')}
                                         id="about-us"
                                         iconName="aboutUs"
-                                        modal={<AboutModal />}
+                                        modal={(
+                                            <AboutModal
+                                                handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                            />
+                                        )}
+                                        onDisableClick={() => {
+                                            this.setState({ disableOutsideDivClick: true });
+                                        }}
                                     />
                                 )}
                         </Translation>
@@ -538,7 +560,14 @@ class Navbar extends React.PureComponent<Props, State> {
                                         title={t('Situation Report')}
                                         id="situation-report"
                                         iconName="textDocument"
-                                        modal={<SituationReport />}
+                                        modal={(
+                                            <SituationReport
+                                                handledisableOutsideDivClick={this.handledisableOutsideDivClick}
+                                            />
+                                        )}
+                                        onDisableClick={() => {
+                                            this.setState({ disableOutsideDivClick: true });
+                                        }}
                                     />
                                 )}
                         </Translation>

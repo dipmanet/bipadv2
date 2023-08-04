@@ -30,6 +30,7 @@ import {
     layersSelector,
     layerGroupSelector,
     languageSelector,
+    hazardTypeListSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
@@ -80,6 +81,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     layers: layersSelector(state),
     layerGroups: layerGroupSelector(state),
     language: languageSelector(state),
+    hazardList: hazardTypeListSelector(state),
 
 });
 
@@ -164,6 +166,7 @@ const MapDownloadButton = (props: Props) => {
         mapOrientation,
         handleDisableDownloadButton,
         language: { language },
+        hazardList,
         ...otherProps
     } = props;
 
@@ -225,21 +228,21 @@ const MapDownloadButton = (props: Props) => {
             }
             const pageTitle = pageContext.activeRouteDetails.title;
 
-            let regionName = 'Nepal';
+            let regionName = language === 'en' ? 'Nepal' : 'नेपाल ';
             if (region.adminLevel === 1) {
                 const province = provinces.find(d => d.id === region.geoarea);
                 if (province) {
-                    regionName = province.title;
+                    regionName = language === 'en' ? province.title_en : province.title_ne;
                 }
             } else if (region.adminLevel === 2) {
                 const district = districts.find(d => d.id === region.geoarea);
                 if (district) {
-                    regionName = district.title;
+                    regionName = language === 'en' ? district.title_en : district.title_ne;
                 }
             } else if (region.adminLevel === 3) {
                 const municipality = municipalities.find(d => d.id === region.geoarea);
                 if (municipality) {
-                    regionName = municipality.title;
+                    regionName = language === 'en' ? municipality.title_en : municipality.title_ne;
                 }
             }
             // let myElements = document.getElementById('realMap123');
@@ -375,6 +378,7 @@ const MapDownloadButton = (props: Props) => {
                     riskInfoActiveLayers,
                     dataDateRange,
                     language,
+                    hazardList,
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
                 source = specificSource || '';
@@ -514,7 +518,9 @@ const MapDownloadButton = (props: Props) => {
                         const pdf = new JsPDF(orientation, 'mm', pageType);
                         const pageData = canvas.toDataURL('image/png', 1.0);
                         pdf.addImage(pageData, 'PNG', 0, 0, width, height);
-                        const pageDownloadTitle = slugify(title, '_');
+
+                        // const pageDownloadTitle = slugify(title, '_');
+                        const pageDownloadTitle = title;
                         pdf.save(`${pageDownloadTitle}.pdf`);
                         setDownloadPending(false);
                         handleCancelButton();
@@ -527,7 +533,7 @@ const MapDownloadButton = (props: Props) => {
                     } else {
                         canvas.toBlob((blob) => {
                             const link = document.createElement('a');
-                            const pageDownloadTitle = slugify(title, '_');
+                            const pageDownloadTitle = title;
                             link.download = defaultMap ? `${pageDownloadTitle}.png`
                                 : `${pageDownloadTitle}.${selectedFileFormat}`;
                             link.href = URL.createObjectURL(blob);

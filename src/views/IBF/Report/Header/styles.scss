@@ -1,0 +1,33 @@
+.header {
+    background-color: #D9E2E7;
+    width: 210mm;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    
+    .title {
+        display: flex;
+        align-items: center;
+        padding-left: 50px;
+    }
+    .note{
+        display: flex;
+        justify-content: space-between;
+        
+        .pageNo{
+            display: flex;
+            width: 87px;
+            background-color: #003F5C;
+            color: white;
+            align-items: center;
+            justify-content: center;
+        }
+        .headNote{
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            padding-right: 10px;
+        }
+    }
+}

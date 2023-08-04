@@ -238,6 +238,7 @@ class IncidentMap extends React.PureComponent {
             districtsMap,
             municipalitiesMap,
             user,
+            pending,
             isHovered,
             requests: {
                 incidentDeleteRequest: {
@@ -304,36 +305,39 @@ class IncidentMap extends React.PureComponent {
                         }}
                     />
                 </MapSource>
-                <MapSource
-                    sourceKey="incident-points"
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={pointFeatureCollection}
-                >
-                    <MapLayer
-                        layerKey="incident-points-animate"
-                        layerOptions={{
-                            type: 'circle',
-                            filter,
-                            paint: mapStyles.incidentPoint.animatedFill,
-                            layout: isHovered
-                                ? noneLayout
-                                : visibleLayout,
-                        }}
-                        onAnimationFrame={this.handleAnimationKeyframe}
-                    />
-                    <MapLayer
-                        layerKey="incident-points-fill"
-                        layerOptions={{
-                            type: 'circle',
-                            paint: isHovered
-                                ? mapStyles.incidentPoint.dimFill
-                                : mapStyles.incidentPoint.fill,
-                        }}
-                        onClick={this.handleIncidentClick}
-                        onMouseEnter={this.handleIncidentMouseEnter}
-                        onMouseLeave={this.handleIncidentMouseLeave}
-                    />
-                    {/*
+                {
+                    !pending
+                    && (
+                        <MapSource
+                            sourceKey="incident-points"
+                            sourceOptions={{ type: 'geojson' }}
+                            geoJson={pointFeatureCollection}
+                        >
+                            <MapLayer
+                                layerKey="incident-points-animate"
+                                layerOptions={{
+                                    type: 'circle',
+                                    filter,
+                                    paint: mapStyles.incidentPoint.animatedFill,
+                                    layout: isHovered
+                                        ? noneLayout
+                                        : visibleLayout,
+                                }}
+                                onAnimationFrame={this.handleAnimationKeyframe}
+                            />
+                            <MapLayer
+                                layerKey="incident-points-fill"
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: isHovered
+                                        ? mapStyles.incidentPoint.dimFill
+                                        : mapStyles.incidentPoint.fill,
+                                }}
+                                onClick={this.handleIncidentClick}
+                                onMouseEnter={this.handleIncidentMouseEnter}
+                                onMouseLeave={this.handleIncidentMouseLeave}
+                            />
+                            {/*
                     <MapLayer
                         layerKey="incident-point-icon"
                         layerOptions={{
@@ -348,33 +352,36 @@ class IncidentMap extends React.PureComponent {
                         }}
                     />
                     */}
-                    {incidentLngLat && (
-                        <MapTooltip
-                            coordinates={incidentLngLat}
-                            tooltipOptions={tooltipOptions}
-                            onHide={this.handleIncidentClose}
-                        >
-                            <IncidentInfo
-                                incident={incident}
-                                wardsMap={wardsMap}
-                                provincesMap={provincesMap}
-                                districtsMap={districtsMap}
-                                municipalitiesMap={municipalitiesMap}
-                                className={styles.incidentInfo}
-                                showEditIncident={showEditIncident}
-                                showDeleteIncident={showDeleteIncident}
-                                onEditIncident={this.handleEditIncidentClick}
-                                onDeleteIncident={this.handleIncidentDelete}
-                                incidentDeletePending={incidentDeletePending}
-                                language={language}
+                            {incidentLngLat && (
+                                <MapTooltip
+                                    coordinates={incidentLngLat}
+                                    tooltipOptions={tooltipOptions}
+                                    onHide={this.handleIncidentClose}
+                                >
+                                    <IncidentInfo
+                                        incident={incident}
+                                        wardsMap={wardsMap}
+                                        provincesMap={provincesMap}
+                                        districtsMap={districtsMap}
+                                        municipalitiesMap={municipalitiesMap}
+                                        className={styles.incidentInfo}
+                                        showEditIncident={showEditIncident}
+                                        showDeleteIncident={showDeleteIncident}
+                                        onEditIncident={this.handleEditIncidentClick}
+                                        onDeleteIncident={this.handleIncidentDelete}
+                                        incidentDeletePending={incidentDeletePending}
+                                        language={language}
+                                    />
+                                </MapTooltip>
+                            )}
+                            <MapState
+                                attributes={mapHoverAttributes}
+                                attributeKey="hover"
                             />
-                        </MapTooltip>
-                    )}
-                    <MapState
-                        attributes={mapHoverAttributes}
-                        attributeKey="hover"
-                    />
-                </MapSource>
+                        </MapSource>
+                    )
+                }
+
                 {showEditIncidentModal && (
                     <AddIncidentForm
                         lossServerId={lossServerId}

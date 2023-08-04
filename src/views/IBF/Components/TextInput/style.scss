@@ -1,0 +1,45 @@
+$placeholder: white;
+
+.container {
+
+  .inputContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 0rem;
+  
+    label {
+      width: 105px;
+      font-size: 14px;
+    }
+  
+    input {
+      width: 280px;
+      background: transparent;
+      padding: 0.4rem;
+      color: #FFFFFF;
+      border-radius: 0.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+  
+      &::placeholder {
+        color: $placeholder
+      }
+  
+      &:-ms-input-placeholder {
+        color: $placeholder
+      }
+  
+      &::-ms-input-placeholder {
+        color: $placeholder;
+      }
+    }
+  }
+
+  .inputError{
+  font-size: 0.8rem;
+  text-align: right;
+  padding: 0rem;
+  margin: 0rem;
+  }
+}

@@ -77,6 +77,7 @@ class AboutUs extends React.PureComponent {
         const {
             className,
             closeModal,
+            handledisableOutsideDivClick,
         } = this.props;
         const {
             currentView,
@@ -85,7 +86,7 @@ class AboutUs extends React.PureComponent {
         return (
             <Modal
                 className={_cs(styles.loginModal, className)}
-                // onClose={closeModal}
+            // onClose={closeModal}
             >
                 <Translation>
                     {
@@ -97,7 +98,10 @@ class AboutUs extends React.PureComponent {
                                     <DangerButton
                                         transparent
                                         iconName="close"
-                                        onClick={closeModal}
+                                        onClick={() => {
+                                            handledisableOutsideDivClick(false);
+                                            closeModal();
+                                        }}
                                         title="Close Modal"
                                     />
                                 )}
@@ -118,7 +122,7 @@ class AboutUs extends React.PureComponent {
                     <MultiViewContainer
                         views={this.views}
                         active={currentView}
-                        // useHash
+                    // useHash
                     />
                 </ModalBody>
             </Modal>

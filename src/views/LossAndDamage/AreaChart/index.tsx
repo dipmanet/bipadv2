@@ -29,6 +29,7 @@ const AreaChartVisual = (props: AreaChartProps) => {
     } = props;
     const { t } = useTranslation();
 
+
     const setFullScreenHeightWidth = (width: string, height: string | number) => {
         setFullScreen({ width, height });
     };
@@ -50,12 +51,15 @@ const AreaChartVisual = (props: AreaChartProps) => {
         document.addEventListener('webkitfullscreenchange', exitHandler, false);
     }
 
-    const chartData = data.map((item) => {
+    const chartData = data && data.length && data.map((item) => {
         const date = new Date();
         date.setTime(parseInt(item.incidentMonthTimestamp, 10));
+
         const year = date.getFullYear();
-        const month = date.getMonth() === 0 ? 1 : date.getMonth();
+
+        const month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
         const finalDate = convertDateAccToLanguage(`${year}-${month}`, language);
+
         const obj = {
             date: finalDate,
             [name]: item.summary[key],

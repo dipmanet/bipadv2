@@ -1,0 +1,47 @@
+.section{
+    display: flex;
+    flex-direction: row;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    padding-bottom: 5px;
+    line-height: 20px;
+
+
+    .sectionNo{
+        display: flex;
+        padding-right: 20px;
+        font-size: 18px;
+    }
+    .content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .title{
+            display: flex;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 20px;
+        }
+        .blurpContainer{
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            .blurp{
+                display: flex;
+                width: 33%;
+                flex-direction: column;
+                padding:20px;
+                .icon{
+                    width: 40px;
+                }
+                .text{
+
+                }
+            }
+        }
+    }
+}

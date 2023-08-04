@@ -109,7 +109,11 @@ export interface BudgetActivityData {
     projcompletionDate: string;
     projstartDate: string;
 }
-export interface IbfMunicipality {
+// export interface IbfMunicipality {
+//     id: number;
+//     title: string;
+// }
+export interface IbfWard {
     id: number;
     title: string;
 }
@@ -124,10 +128,11 @@ export interface IbfPage {
     overallFloodHazard: [];
     filter: {
         district: string;
-        municipality: IbfMunicipality[];
-        ward: string;
+        municipality: string;
+        ward: IbfWard[];
     };
     householdJson: [];
+    householdTemp: [];
     showHouseHold: number;
     selectedIndicator: string;
     householdDistrictAverage: object;
@@ -135,6 +140,7 @@ export interface IbfPage {
     indicators: [];
     wtChange: number;
     weights: [];
+//     idleDisable: boolean;
 }
 
 export interface Bulletin {

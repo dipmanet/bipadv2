@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+
+.toggleswitchcontainer {
+  align-content: center;
+  position: relative;
+//   padding: 30px;
+}
+
+.toggleswitch {
+  margin: 0;
+}
+
+.toggleswitch {
+  width: 5px;
+  position: relative;
+}
+
+.toggleswitch input {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.toggleswitch input:checked {
+  z-index: 1;
+}
+
+.toggleswitch input:checked + label {
+  opacity: 1;
+  cursor: default;
+}
+
+.toggleswitch input:not(:checked) + label:hover {
+  opacity: 0.5;
+}
+
+.toggleswitch label {
+  color: #fff;
+  opacity: 0.33;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.toggleswitch .toggleoutside {
+  height: 100%;
+  border-radius: 17px;
+  padding: 5px;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.toggleswitch .toggleinside {
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+}
+
+.switchvertical {
+  background-color: #00F;
+  width: 0px;
+  height: 30px;
+  margin-left: 27px;
+}
+
+.switchvertical input {
+  height: 100%;
+  width: 30px;
+  right: 0;
+  margin: 0;
+}
+
+.switchvertical label {
+  font-size: 12px;
+  line-height: 15px;
+  display: block;
+  width: 150px;
+  height: 50%;
+  margin: 0;
+  text-align: left;
+  padding-left: 3px;
+}
+
+.switchvertical .toggleoutside {
+  background: #295a80;
+  position: absolute;
+  width: 12px;
+  height: 100%;
+  right: 0;
+  top: 0;
+}
+
+.switchvertical .toggleinside {
+  height: 6px;
+  left: 3px;
+  top: 3px;
+  width: 6px;
+}
+
+.switchvertical input:checked ~ .toggleoutside .toggleinside {
+  top: 3px;
+}
+
+.switchvertical input ~ input:checked ~ .toggleoutside .toggleinside {
+  top: 20px;
+}

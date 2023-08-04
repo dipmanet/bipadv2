@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -13,6 +15,12 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import DownloadButton from '#components/DownloadButton';
 import { convertDateAccToLanguage } from '#utils/common';
+import Spinner from 'src/vendor/react-store/v2/View/Spinner';
+import { createRequestClient, methods } from '@togglecorp/react-rest-request';
+import { createConnectedRequestCoordinator } from '#request';
+import { compose } from 'redux';
+import { setFiltersAction, setIncidentListActionIP } from '#actionCreators';
+import { connect } from 'react-redux';
 import { mainHeading, bodyheader } from './headers';
 import { returnDataByFormat } from './util';
 import { formatNumeralAccLang } from '../utils/utils';
@@ -24,17 +32,65 @@ interface TableProps {
     closeModal: () => void;
     incidentList: Data[];
     language?: string;
+    requests: Record<string, any>;
+    finalFiltersForTable: any;
 }
 
-const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
+const requestOptions: { [key: string] } = {
+    incidentsGetRequest: {
+        url: '/incident/',
+        method: methods.GET,
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: ({ props: { filters, finalFiltersForTable } }) => ({
+            ...finalFiltersForTable,
+            expand: ['loss', 'event', 'wards'],
+            ordering: '-incident_on',
+            limit: -1,
+        }),
+        onSuccess: ({ response, props: { setIncidentList, setIsLoading }, params }) => {
+            interface Response { results: any }
+            const { results: incidentList = [] } = response as Response;
+            setIncidentList({ incidentList });
+            params.setIsLoading(false);
+        },
+        onMount: false,
+        // onPropsChanged: {
+        //     filters: ({
+        //         props: { filters },
+        //         prevProps: { filters: prevFilters },
+        //     }) => {
+        //         const shouldRequest = filters !== prevFilters;
+
+        //         return shouldRequest;
+        //     },
+        // },
+        // extras: { schemaName: 'incidentResponse' },
+    },
+};
+
+const mapDispatchToProps = dispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
+
+});
+const DataTable = ({ closeModal, incidentList, language, className, requests, finalFiltersForTable }: TableProps) => {
     const [focus, setFocus] = useState({ id: 1, name: 'Incident-wise details' });
     const [data, setData] = useState<Sorted[] | []>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isSortClicked, setIsSortClicked] = useState(false);
     const [sortDirection, setSortDirection] = useState(false);
     const tableRef = React.createRef<FixedSizeList<any>>();
     const headerRef = React.createRef<HTMLInputElement>();
     const totalRef = React.createRef<HTMLInputElement>();
     const [calculation, setCalculation] = useState([]);
+
+
+    useEffect(() => {
+        requests.incidentsGetRequest.do({
+            finalFiltersForTable,
+            setIsLoading,
+        });
+    }, []);
 
     useEffect(() => {
         if (headerRef.current) {
@@ -56,9 +112,9 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
     }, [isSortClicked]);
 
 
-    const summaryCalculate = (dat) => {
+    const summaryCalculate = (dat: any[]) => {
         if (focus.id !== 1) {
-            const keys = [...new Set(dat.map(item => Object.values(item)[0]))];
+            const keys = [...new Set(dat.map((item: { [s: string]: unknown } | ArrayLike<unknown>) => Object.values(item)[0]))];
             const reducedData = [];
             const groupedData = [];
             for (const keyItem of keys) {
@@ -103,7 +159,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                         const requiredKey1 = elemCur.key.replace('.', ' ').split(' ')[1];
                         let elementValue;
                         if (element[requiredKey]) {
-                        // eslint-disable-next-line no-prototype-builtins
+                            // eslint-disable-next-line no-prototype-builtins
                             if (element[requiredKey].hasOwnProperty(requiredKey1)) {
                                 elementValue = element[requiredKey][requiredKey1];
                             }
@@ -138,7 +194,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
         const incidentData = requiredDataEval();
         setCalculation(incidentData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focus]);
+    }, [focus, incidentList]);
 
     useEffect(() => {
         if (calculation) setData(calculation);
@@ -238,7 +294,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
             {
                 bodyheader[Object.keys(bodyheader)
                     .filter(item => item === focus.name)[0]]
-                    .map(dat => (
+                    .map((dat: { type: string; name: {} | null | undefined; id: React.Key | null | undefined; nameNe: {} | null | undefined }) => (
                         <div
                             className={styles.headerContent}
                             onClick={() => sortDatahandler(dat.type, dat.name)}
@@ -347,7 +403,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
 
     return (
         <>
-
+            {/* <Spinner /> */}
             <Modal className={_cs(styles.lossAndDamageTableModal, language === 'np' && styles.languageFont)}>
                 <ModalHeader
                     title={(
@@ -372,7 +428,7 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                     className={styles.modalHeader}
                 />
                 {
-                    (data.length > 0)
+                    (!isLoading && data.length > 0)
                         ? (
                             <ModalBody className={styles.body}>
                                 <BodyHeader />
@@ -391,9 +447,17 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
                                 <TotalData />
                             </ModalBody>
                         )
-                        : (
-                            <span className={styles.loader} />
-                        )
+                        : !isLoading && data.length === 0
+                            ? (
+                                <h3 style={{ marginTop: '50px', textAlign: 'center' }} className={className}>
+                                    {language === 'en'
+                                        ? 'No Data Available'
+                                        : 'डाटा उपलब्ध छैन'}
+                                </h3>
+                            )
+                            : (
+                                <span className={styles.loader} />
+                            )
                 }
             </Modal>
 
@@ -401,4 +465,9 @@ const DataTable = ({ closeModal, incidentList, language }: TableProps) => {
 
     );
 };
-export default DataTable;
+
+export default compose(
+    connect(null, mapDispatchToProps),
+    createConnectedRequestCoordinator<ComponentProps>(),
+    createRequestClient(requestOptions),
+)(DataTable);

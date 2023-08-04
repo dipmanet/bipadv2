@@ -1,0 +1,73 @@
+.selectContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem 0rem;
+
+  h3 {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  button {
+    display: block;
+    cursor: pointer;
+    background: transparent;
+    color: #FFFFFF;
+    outline: none;
+    border: none;
+    padding: 0.2rem;
+
+    span {
+      display: block;
+    }
+  
+    img {
+      display: block;
+    }
+  }
+  
+  .selectSubContainer {
+    position: relative;
+
+    ul {
+      position: absolute;
+      top: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.2rem;
+      width: 280px;
+      z-index: 99;
+      // backdrop-filter: blur(10px);
+      background: rgba(96, 98, 123, 1);
+
+      .optionButton {
+        width: 278px;
+        margin-left: -2.5rem ;
+
+        &:hover {
+          background: linear-gradient(139.16deg, #3989BE 13.49%, #4BA8BF 80.5%);
+        }
+      }
+    }
+
+    .select {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      width: 280px;
+      color: #FFFFFF;
+      border-radius: 0.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      padding: 0.4rem;
+    }
+  
+    .option {
+      font-size: 14px;
+      list-style-type: none;
+      text-align: left;
+      padding-left: 0.2rem;
+    }
+  }
+}

@@ -1,0 +1,59 @@
+.shared-fedRow {
+  background: transparent !important;
+  text-align: center !important;
+  border: none !important;
+}
+
+.shared-fedTh {
+  width: 50%;
+  text-align: center !important;
+  color: white !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.federalTable {
+  border-collapse: collapse;
+  border-spacing: 10px 10px;
+  width: 95%;
+  font-family: "Source Sans Pro";
+  font-size: 16px;
+  margin: 0px 10px 10px 10px;
+  padding: 5px;
+  white-space: nowrap;
+  text-align: center !important;
+  background: transparent !important;
+  border: none !important;
+
+  .fedHead {
+    background: linear-gradient(
+      139.16deg,
+      #3989be 13.49%,
+      #4ba8bf 80.5%
+    ) !important;
+    padding: 5px;
+    white-space: nowrap;
+    border: none !important;
+
+    .fedRow {
+      @extend .shared-fedRow;
+      .fedTh {
+        @extend .shared-fedTh;
+      }
+    }
+  }
+
+  .fedBody {
+    text-align: center !important;
+    color: white !important;
+    background: transparent !important;
+    border: none !important;
+
+    .fedRow {
+      @extend .shared-fedRow;
+      .fedTh {
+        @extend .shared-fedTh;
+      }
+    }
+  }
+}

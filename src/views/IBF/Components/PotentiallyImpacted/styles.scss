@@ -1,0 +1,62 @@
+.impactContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+
+  .title {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    height: 55px;
+
+    .backBtn {
+      outline: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .baseTitle {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .activeTitle {
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+  }
+
+  .content {
+    flex-grow: 1;
+
+    
+    .yesContent {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .line {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.27);
+      }
+
+      .impactList {
+        padding-left: 0px;
+
+        .listItem {
+          list-style-type: none;
+        }
+      }
+    }
+
+    .noContent {
+      display: flex;
+      align-items: center;
+      height: 74%;
+    }
+  }
+}

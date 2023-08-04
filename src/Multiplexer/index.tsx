@@ -245,7 +245,6 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    // hazardList: hazardTypeListSelector(state),
     closeWalkThroughHomepage: closeWalkThroughSelector(state),
     run: runSelector(state),
     language: languageSelector(state),
@@ -1813,6 +1812,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             return true;
         }
         if (routeName === 'visrisk') {
+            return true;
+        }
+        if (routeName === 'ibf') {
             return true;
         }
         return false;
