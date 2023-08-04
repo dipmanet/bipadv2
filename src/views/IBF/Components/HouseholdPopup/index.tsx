@@ -117,6 +117,9 @@ const HouseholdPopup = ({ houseProperties, setOpen, getEditHouseValue, user }) =
                           && stateShcema[houseKey].view === 'private' && !user) {
                             return null;
                         }
+                        if (stateShcema[houseKey].label && stateShcema[houseKey].label === 'Income Source') {
+                            return null;
+                        }
                         return (
                             <div className={style.popUpData} key={houseKey}>
                                 <div>

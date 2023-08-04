@@ -80,6 +80,9 @@ const HouseForm = ({ mapSelectHandler,
     const { householdJson, indicators } = ibfPage;
 
     function getTextInput(inputDataObject, stateItem, stateForArray) {
+        if (stateItem === 'incomeSource') {
+            return null;
+        }
         if (stateItem === 'otherJob') {
             if (stateForArray.isOtherJob.value === 'Yes') {
                 return (

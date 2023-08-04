@@ -33,8 +33,8 @@ export const useFormValidation = (
     const validateState = useCallback(() => {
         const hasError = Object.keys(validationSchemaObject).some((key) => {
             const isInputRequired = validationSchemaObject[key].required;
-            const stateValue = state[key].value;
-            const stateError = state[key].error;
+            const stateValue = state[key] && state[key].value;
+            const stateError = state[key] && state[key].error;
             return isInputRequired && (!stateValue || stateError);
         });
         return hasError;
