@@ -386,7 +386,7 @@ class Navbar extends React.PureComponent<Props, State> {
                         handleActiveGroupButton={this.handleActiveGroupButton}
                         disableOutsideDivClick={disableOutsideDivClick}
                     >
-                        <Translation>
+                        {/* <Translation>
                             {
                                 t => (
                                     <MenuItemLikeButton
@@ -400,7 +400,7 @@ class Navbar extends React.PureComponent<Props, State> {
 
                                     />
                                 )}
-                        </Translation>
+                        </Translation> */}
                         {/* <Translation>
                             {
                                 t => (
