@@ -490,6 +490,16 @@ const routeSettings: SomeRoute[] = [
         iconName: 'eye',
     },
     {
+        name: 'ibf',
+        title: 'IBF',
+        titleNep: 'आई.बि.एफ',
+        path: '/ibf/',
+        load: () => import('../views/IBF'),
+        navbar: true,
+        disabled: false,
+        iconName: 'cloud',
+    },
+    {
         name: 'fourHundredThree',
         title: '403',
         path: '/403/',
