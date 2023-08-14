@@ -433,6 +433,7 @@ const state: PageState = {
         filter: { district: '', municipality: '', ward: [] },
         householdJson: [],
         householdTemp: [],
+        houseCsv: [],
         showHouseHold: 0,
         selectedIndicator: '',
         householdDistrictAverage: {},

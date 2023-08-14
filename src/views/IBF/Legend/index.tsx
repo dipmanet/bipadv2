@@ -620,7 +620,7 @@ const Legend = (props: Props) => {
 
             }
 
-            {
+            {/* {
                 Object.keys(selectedStation).length > 0
                     ? (
                         <div className={style.fdContainer}>
@@ -658,7 +658,7 @@ Source: METEOR project
                     ) : (
                         ''
                     )
-            }
+            } */}
         </div>
     );
 };
