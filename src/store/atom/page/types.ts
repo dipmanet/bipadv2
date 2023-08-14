@@ -133,6 +133,7 @@ export interface IbfPage {
     };
     householdJson: [];
     householdTemp: [];
+    houseCsv: [];
     showHouseHold: number;
     selectedIndicator: string;
     householdDistrictAverage: object;

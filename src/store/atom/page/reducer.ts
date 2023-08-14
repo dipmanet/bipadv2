@@ -1686,6 +1686,7 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
                     filter,
                     householdJson,
                     householdTemp,
+                    houseCsv,
                     showHouseHold,
                     selectedIndicator,
                     householdDistrictAverage,
@@ -1735,6 +1736,9 @@ const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
                 }
                 if (householdTemp) {
                         deferedState.ibfPage.householdTemp = householdTemp;
+                }
+                if (houseCsv) {
+                        deferedState.ibfPage.houseCsv = houseCsv;
                 }
                 if (showHouseHold) {
                         deferedState.ibfPage.showHouseHold = showHouseHold;

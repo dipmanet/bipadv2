@@ -10,23 +10,16 @@ import Page from '#components/Page';
 import { calendarData as cd, defaultValues } from '#views/IBF/utils';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods, NewProps } from '#request';
 import { setIbfPageAction } from '#actionCreators';
-import { ibfPageSelector, userSelector } from '#selectors';
+import { ibfPageSelector } from '#selectors';
 import { AppState } from '#types';
 import { IbfPage } from '#store/atom/page/types';
-import { User } from '#store/atom/auth/types';
 import Dashboard from './Dashboard';
 import ForDrag from './Components/ForDrag';
 
 import Navigation from './Components/Navigation';
 import Map from './Map';
-// import Calendar from './Calender';
+import Calendar from './Calender';
 import style from './styles.scss';
-
-
-// for testing
-import testStations from './Api/stationsList';
-import testStationDetail from './Api/stationDetail';
-
 
 import Legend from './Legend';
 // import SourceCon from './SourceCon';
@@ -37,14 +30,12 @@ import LegendDrag from './Components/LegendDrag';
 import HouseForm from './Components/HouseForm';
 import { getRequest } from './Requests/apiCalls';
 import { calculation } from './Components/RiskAndImpact/expression';
-// import HouseForm from './Components/HouseForm';
 
 interface OwnProps {
 
 }
 export interface PropsFromState {
     ibfPage: IbfPage;
-    user: User;
 }
 
 export interface PropsFromDispatch {
@@ -61,7 +52,6 @@ type Props = NewProps<ReduxProps, Params>
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     ibfPage: ibfPageSelector(state),
-    user: userSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -108,20 +98,15 @@ const Ibf = (props: Props) => {
             stationDetail,
             selectedStation,
             filter,
-            indicators,
             wtChange,
             householdJson,
-            householdTemp,
-            weights,
         },
         setIbfPage,
-        user,
     } = props;
 
     const [pending, setPending] = useState(false);
     const [viewDashboard, setDashboard] = useState(false);
     const [widthToggle, setWidthToggle] = useState(false);
-    const [isDemo, setIsDemo] = useState(true);
     const [isSelectionActive, setMapSelectionActive] = useState(false);
     const [coordinates, setCoordinates] = useState({});
     const [isFormOpen, setFormOpen] = useState(false);
@@ -139,6 +124,7 @@ const Ibf = (props: Props) => {
             filter: { district: '', municipality: '', ward: [] },
             householdJson: [],
             householdTemp: [],
+            houseCsv: [],
             showHouseHold: 0,
             selectedIndicator: '',
             householdDistrictAverage: {},
@@ -149,34 +135,16 @@ const Ibf = (props: Props) => {
         });
     };
 
-    // const getMunicipalityId = (munArray) => {
-    //     const munExposed = munArray.map(munItem => munItem.id);
-    //     const munString = munExposed.join(',');
-    //     return munString;
-    // };
-
     useEffect(() => {
         if (viewDashboard) {
-            if (isDemo) {
-                props.setIbfPage({ stations: testStations });
-                props.setIbfPage({ stationDetail: testStationDetail });
-                if (stations.features) {
-                    calendar = cd(stations, selectedStation);
-                    props.setIbfPage({ calendarData: calendar });
-                }
-            }
-
-            if (!isDemo) {
-                setPending(true);
-                props.requests.stationDetail.do();
-                props.requests.floodStations.do({ setPending });
-            }
+            setPending(true);
+            props.requests.stationDetail.do();
+            props.requests.floodStations.do({ setPending });
         }
-
         return function cleanup() {
             reset();
         };
-    }, [isDemo, viewDashboard]);
+    }, [viewDashboard]);
 
 
     useEffect(() => {
@@ -186,74 +154,6 @@ const Ibf = (props: Props) => {
         }
     }, [stations, selectedStation]);
 
-
-    //  useEffect(() => {
-    //       const getCall = async () => {
-    //           if (filter.municipality) {
-    //               props.setIbfPage({ householdJson: [] });
-    //               setPending(true);
-    //               const indicatorData = await getRequest(
-    //                   'ibf-vulnerability-indicator',
-    //                   {
-    //                       // municipality: getMunicipalityId(filter.municipality),
-    //                       municipality: String(filter.municipality),
-    //                   },
-    //               );
-    //               const houseData = await getRequest(
-    //                   'ibf-households',
-    //                   {
-    //                       limit: -1,
-    //                       municipality: String(filter.municipality),
-    //                   },
-    //                   user,
-    //               );
-    //               setPending(false);
-    //               const calculatedData = calculation(houseData.results, indicatorData.results);
-    //               const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
-
-    //               // const modifiedHouseData = houseDataKeyModifier(houseHoldDatas);
-    //               setIbfPage({
-    //                   weights: weight_Data,
-    //               });
-    //               setIbfPage({
-    //                   indicators: indicatorData.results,
-    //               });
-    //               setIbfPage({
-    //                   householdDistrictAverage: averageDatas,
-    //               });
-    //               setIbfPage({
-    //                   householdJson: [...houseHoldDatas],
-    //               });
-    //               setIbfPage({
-    //                   householdTemp: [...houseHoldDatas],
-    //               });
-    //           }
-    //       };
-    //       getCall();
-    //   }, [filter.municipality]);
-
-    // useEffect(() => {
-    //     if (filter.ward.length > 0) {
-    //         const tempWard = filter.ward.map(wardItem => wardItem.id);
-    //         const wardHouseData = [...householdTemp];
-    //         const wardLevelHouseData = wardHouseData.filter(houseData => tempWard.includes(houseData.ward));
-    //         const calculatedData = calculation(wardLevelHouseData, indicators);
-    //         const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
-    //         setIbfPage({
-    //             weights: weight_Data,
-    //         });
-    //         setIbfPage({
-    //             householdDistrictAverage: averageDatas,
-    //         });
-    //         setIbfPage({
-    //             householdJson: [...houseHoldDatas],
-    //         });
-    //     } else {
-    //         setIbfPage({
-    //             householdJson: [...householdTemp],
-    //         });
-    //     }
-    // }, [filter.ward.length]);
 
     useEffect(() => {
         const getCall = async () => {
@@ -270,7 +170,6 @@ const Ibf = (props: Props) => {
                 const calculatedData = calculation(householdJson, indicatorData.results);
                 const { averageDatas, houseHoldDatas, weight_Data } = calculatedData[0];
 
-                // const modifiedHouseData = houseDataKeyModifier(houseHoldDatas);
                 setIbfPage({
                     weights: weight_Data,
                 });
@@ -280,9 +179,6 @@ const Ibf = (props: Props) => {
                 setIbfPage({
                     householdJson: houseHoldDatas,
                 });
-                // setIbfPage({
-                //     wtChange: 0,
-                // });
             }
         };
         getCall();
@@ -293,11 +189,11 @@ const Ibf = (props: Props) => {
         setDashboard(true);
     };
 
-    const handleWidthToggle = (bool) => {
+    const handleWidthToggle = (bool: boolean) => {
         setWidthToggle(bool);
     };
 
-    const mapSelectHandler = (bool) => {
+    const mapSelectHandler = (bool: boolean) => {
         setMapSelectionActive(bool);
     };
 
@@ -323,7 +219,7 @@ const Ibf = (props: Props) => {
                         </div>
                     )
                 }
-                {(stations.features && Object.keys(stationDetail).length > 0)
+                {(stations && stations.features && Object.keys(stationDetail).length > 0)
                     && (
                         <>
                             <Navigation
@@ -342,9 +238,6 @@ const Ibf = (props: Props) => {
                                 )}
                             {viewDashboard && (
                                 <>
-                                    {/* {
-                                        !isFormOpen && (
-                                            <> */}
                                     {
                                         (
                                             Object.keys(selectedStation).length > 0
@@ -356,9 +249,6 @@ const Ibf = (props: Props) => {
                                             ? <Filter isFormOpen={isFormOpen} />
                                             : ''
                                     }
-                                    {/* </>
-                                        )
-                                    } */}
 
                                     <Map
                                         isSelectionActive={isSelectionActive}
@@ -421,7 +311,7 @@ const Ibf = (props: Props) => {
                                     >
                                         <Legend />
                                     </LegendDrag>
-                                    {/* <Calendar /> */}
+                                    <Calendar />
                                     {
                                         isFormOpen && (
                                             <ForDrag
@@ -447,7 +337,6 @@ const Ibf = (props: Props) => {
                         </>
                     )
                 }
-                <button type="button" onClick={() => setIsDemo(prev => !prev)} className={style.invisibleBtn} />
             </div>
         </>
     );
