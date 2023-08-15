@@ -302,8 +302,8 @@ export const legendFilterForCsv = {
     femaleHeadedHousehold: house => house.isFemaleHeadedHousehold === true,
     noFemaleHeadedData: house => house.isFemaleHeadedHousehold === null,
 
-    incomeSourceSingle: house => house.incomeSource === 10,
-    incomeSourceMultiple: house => house.incomeSource === 0,
+    incomeSourceSingle: house => house.incomeSource && house.incomeSource.split(',').length === 1,
+    incomeSourceMultiple: house => house.incomeSource && house.incomeSource.split(',').length >= 2,
     noIncomeSourceTypeData: house => house.incomeSource === null,
 
     annualIncomeMorethan100000: house => house.annualIncome === 'More than 1 lakh',

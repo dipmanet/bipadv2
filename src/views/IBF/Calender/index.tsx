@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
@@ -14,6 +15,7 @@ import {
 } from '#selectors';
 
 import { AppState } from '#types';
+import infoIcon from '#resources/icons/info-icon.svg';
 import style from './styles.scss';
 import CalendarButton from '../Components/CalendarButton';
 import { containerStyleData } from './expression';
@@ -133,7 +135,10 @@ const Calendar = (props: any) => {
     return (
         <>
             <div style={containerStyle.bg} className={style.calendarContainer}>
-                <p className={style.disclaimer}>The current feature for the forecast is not available.</p>
+                <p className={style.disclaimer}>
+                    <img src={infoIcon} />
+The current feature for the forecast is not available.
+                </p>
                 {Object.keys(containerStyle).length > 0
                     && containerStyle.text
                     && (
