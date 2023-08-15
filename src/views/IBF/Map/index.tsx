@@ -138,6 +138,7 @@ const Map = (props: Props) => {
         getEditHouseValue,
     } = props;
 
+
     const setSelectedStation = (station) => {
         props.setIbfPage({ selectedStation: station });
     };
@@ -455,6 +456,33 @@ const Map = (props: Props) => {
         }
     }, [houseTemprary]);
 
+    const getHouseSource = (filteredData: any) => {
+        const keys = ['numberOfChildren', 'numberOfElderly', 'numberOfPregnantLactating', 'numberOfDisabled'];
+        const nulldata = JSON.stringify(filteredData, (k, v) => {
+            if (keys.includes(k) && v === null) return 0;
+            if (k === 'incomeSource') {
+                if (v) {
+                    const count = v.split(',').length;
+                    return count === 1 ? 10 : 0;
+                }
+                return v;
+            }
+            return v;
+        });
+        const nullToZerodata = JSON.parse(nulldata);
+
+        const householdGeoJSON = {
+            type: 'FeatureCollection',
+            features: nullToZerodata.length > 0 && nullToZerodata.map((item: any) => ({
+                id: item.id,
+                type: 'Feature',
+                geometry: item.point,
+                properties: { ...item },
+            })),
+        };
+        return householdGeoJSON;
+    };
+
     useEffect(() => {
         if (!mapRef.current) return;
 
@@ -656,6 +684,27 @@ const Map = (props: Props) => {
     useEffect(() => {
         if (mapRef.current && mapRef.current.isStyleLoaded()) {
             if (filter.ward.length > 0) {
+                if (mapRef.current.getLayer('household-layer')) {
+                    mapRef.current.removeLayer('household-layer');
+                }
+
+                if (mapRef.current.getSource('household-source')) {
+                    mapRef.current.removeSource('household-source');
+                }
+
+                const householdGeoJSON = getHouseSource(householdTemp);
+
+                mapRef.current.addSource('household-source', {
+                    type: 'geojson',
+                    data: householdGeoJSON,
+                });
+
+                mapRef.current.addLayer({
+                    id: 'household-layer',
+                    source: 'household-source',
+                    type: 'circle',
+                    paint: { 'circle-color': getPaint(selectedIndicator) },
+                }, 'ward-local');
                 if (filter.ward.length === 1) {
                     const { bbox } = ward.filter(item => item.id === Number(filter.ward[0].id))[0];
                     mapRef.current.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], { duration: 2000, padding: 150 });
@@ -826,50 +875,80 @@ const Map = (props: Props) => {
     useEffect(() => {
         if (!mapRef.current) return;
         if (!mapRef.current.getLayer('household-layer')) return;
-        if (filter.ward.length > 0) {
-            mapRef
-                .current
-                .setFilter(
-                    'household-layer',
-                    ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
-                );
-            mapRef.current.setPaintProperty('household-layer', 'circle-color', getPaint(selectedIndicator));
-        } else {
-            mapRef
-                .current
-                .setFilter('household-layer', null);
-            mapRef.current.setPaintProperty('household-layer', 'circle-color', getPaint(selectedIndicator));
+        // if (filter.ward.length > 0) {
+        //     mapRef
+        //         .current
+        //         .setFilter(
+        //             'household-layer',
+        //             ['all', ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]]],
+        //         );
+        //     mapRef.current.setPaintProperty('household-layer', 'circle-color', getPaint(selectedIndicator));
+        // } else {
+        //     mapRef
+        //         .current
+        //         .setFilter('household-layer', null);
+        //     mapRef.current.setPaintProperty('household-layer', 'circle-color', getPaint(selectedIndicator));
+        // }
+        if (mapRef.current.getLayer('household-layer')) {
+            mapRef.current.removeLayer('household-layer');
         }
+
+        if (mapRef.current.getSource('household-source')) {
+            mapRef.current.removeSource('household-source');
+        }
+
+        const householdGeoJSON = getHouseSource(householdJson);
+
+        mapRef.current.addSource('household-source', {
+            type: 'geojson',
+            data: householdGeoJSON,
+        });
+
+        mapRef.current.addLayer({
+            id: 'household-layer',
+            source: 'household-source',
+            type: 'circle',
+            paint: { 'circle-color': getPaint(selectedIndicator) },
+        }, 'ward-local');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedIndicator]);
 
-    const getLegendFilter = (legend: any) => {
-        if (legend) {
-            return LegendFilters[legend];
-        }
-        return '';
-    };
+    // const getLegendFilter = (legend: any) => {
+    //     if (legend) {
+    //         return LegendFilters[legend];
+    //     }
+    //     return '';
+    // };
 
     useEffect(() => {
         if (!mapRef.current) return;
         if (!mapRef.current.getLayer('household-layer')) return;
 
         if (selectedLegend) {
-            if (filter.ward.length > 0) {
-                mapRef.current.setFilter(
-                    'household-layer',
-                    ['all',
-                        ['in', ['get', 'ward'], ['literal', filter.ward.map(wardItem => wardItem.id)]],
-                        getLegendFilter(selectedLegend),
-                    ],
-                );
-            } else {
-                mapRef.current.setFilter(
-                    'household-layer',
-                    getLegendFilter(selectedLegend),
-                );
+            if (mapRef.current.getLayer('household-layer')) {
+                mapRef.current.removeLayer('household-layer');
             }
+
+            if (mapRef.current.getSource('household-source')) {
+                mapRef.current.removeSource('household-source');
+            }
+
             const filteredData = householdJson.filter(legendFilterForCsv[selectedLegend]);
+
+            const householdGeoJSON = getHouseSource(filteredData);
+
+            mapRef.current.addSource('household-source', {
+                type: 'geojson',
+                data: householdGeoJSON,
+            });
+
+            mapRef.current.addLayer({
+                id: 'household-layer',
+                source: 'household-source',
+                type: 'circle',
+                paint: { 'circle-color': getPaint(selectedIndicator) },
+            }, 'ward-local');
+
             props.setIbfPage({
                 houseCsv: [...filteredData],
             });
