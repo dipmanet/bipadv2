@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
@@ -14,6 +15,7 @@ import {
 } from '#selectors';
 
 import { AppState } from '#types';
+import infoIcon from '#resources/icons/info-icon.svg';
 import style from './styles.scss';
 import CalendarButton from '../Components/CalendarButton';
 import { containerStyleData } from './expression';
@@ -52,7 +54,6 @@ const Calendar = (props: any) => {
         },
     } = props;
 
-
     const [selected, setSelected] = useState(-1);
     const [containerStyle, setContainerStyle] = useState<ContainerStyleType>(containerStyleInitialValue);
 
@@ -65,7 +66,7 @@ const Calendar = (props: any) => {
         recordedDateData.date = stations.features[0].properties.calculation[0].recorded_date;
     }
 
-    const getContainerStyle = (calIndex) => {
+    const getContainerStyle = (calIndex: number) => {
         switch (true) {
             case calIndex > -1 && calIndex < 3:
                 return containerStyleData.three;
@@ -76,7 +77,7 @@ const Calendar = (props: any) => {
         }
     };
 
-    const clickHandler = (index) => {
+    const clickHandler = (index: number) => {
         const container = getContainerStyle(index);
 
         setContainerStyle(container);
@@ -112,7 +113,7 @@ const Calendar = (props: any) => {
 
     // Effect here so that button is automatically selected on initial render and on back from selectedStation if selected field has value
     useEffect(() => {
-        calendarData.map((item, index) => {
+        calendarData.map((item: any, index: any) => {
             if (item.status > 0) {
                 leadTimeToSetOrIndex.push(index + 1);
             }
@@ -129,9 +130,15 @@ const Calendar = (props: any) => {
         }
     }, [calendarData]);
 
+    // Calendar dates are produced from recorded date that is obtained from stations properties recorded_date and thus obtained the dates for 10 days
+
     return (
         <>
             <div style={containerStyle.bg} className={style.calendarContainer}>
+                <p className={style.disclaimer}>
+                    <img src={infoIcon} />
+The current feature for the forecast is not available.
+                </p>
                 {Object.keys(containerStyle).length > 0
                     && containerStyle.text
                     && (
@@ -148,7 +155,7 @@ const Calendar = (props: any) => {
                         selected={def.defaultSelected}
                         clickHandler={def.defaultClickHandler}
                     />
-                    {calendarData && calendarData.map((calendarItem, calendarDataIndex, calendarArray) => (
+                    {calendarData && calendarData.map((calendarItem: any, calendarDataIndex: any, calendarArray: any) => (
                         <CalendarButton
                             key={calendarItem.date}
                             calendarData={calendarItem}

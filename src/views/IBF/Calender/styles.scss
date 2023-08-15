@@ -12,6 +12,17 @@
     justify-content: center;
     flex-direction: column;
 
+    .disclaimer {
+      display: flex;
+      justify-content: center;
+      gap: 0.2rem;
+      position: absolute;
+      left: 0rem;
+      top: -2.4rem;
+      font-size: 15px;
+      color: white;
+    }
+
      .line {
           position: absolute;
           left: 9.2%;

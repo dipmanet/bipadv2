@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import previousIcon from '#resources/icons/Previous-item.svg';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import { districtsSelector, ibfPageSelector, municipalitiesSelector, userSelector } from '#selectors';
+import { districtsSelector, ibfPageSelector, municipalitiesSelector, provincesSelector, userSelector, wardsSelector } from '#selectors';
 import { setIbfPageAction } from '#actionCreators';
 
 // import Icon from '#rscg/Icon';
@@ -13,7 +13,7 @@ import IbfChart from '#resources/icons/ibf-chart.svg';
 import { AppState } from '#types';
 import { PropsFromDispatch } from '#views/IBF';
 import { User } from '#store/atom/auth/types';
-import { District, IbfPage, Municipality } from '#store/atom/page/types';
+import { District, IbfPage, Municipality, Province, Ward } from '#store/atom/page/types';
 import { convertJsonToCsv } from '#utils/common';
 import { saveAs } from 'file-saver';
 import BoxModal from '../Modals';
@@ -26,9 +26,11 @@ interface OwnProps {
 
 interface PropsFromState {
     ibfPage: IbfPage;
+    province: Province[];
     district: District[];
-    user: User;
     municipality: Municipality[];
+    ward: Ward[];
+    user: User | undefined;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -37,8 +39,10 @@ type Props = ReduxProps
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     ibfPage: ibfPageSelector(state),
+    province: provincesSelector(state),
     district: districtsSelector(state),
     municipality: municipalitiesSelector(state),
+    ward: wardsSelector(state),
     user: userSelector(state),
 
 });
@@ -50,7 +54,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 const Navigation = (props: Props) => {
     const [modal, setModal] = useState(false);
     const [reports, setReport] = useState(false);
-    const { ibfPage: { selectedStation, stationDetail, filter, householdJson }, setFormOpen, user, municipality, district } = props;
+    const { ibfPage: { selectedStation, stationDetail, filter, houseCsv }, setFormOpen, user, district, province, municipality, ward } = props;
     const handleBtnClick = () => {
         props.setIbfPage({
             selectedStation: {},
@@ -64,6 +68,7 @@ const Navigation = (props: Props) => {
             selectedLegend: '',
             householdJson: [],
             householdTemp: [],
+            houseCsv: [],
             indicators: [],
             wtChange: 0,
             weights: [],
@@ -87,10 +92,19 @@ const Navigation = (props: Props) => {
         setReport(false);
     };
 
-    const getDistrict = (houseDistrict: any) => {
-        const districtLabel = district.find((data: any) => data.id === houseDistrict).title;
-        return districtLabel;
+    // eslint-disable-next-line consistent-return, react-hooks/exhaustive-deps
+    const getFederal = (houseFederal: any, federal: string) => {
+        // eslint-disable-next-line default-case
+        switch (true) {
+            case (federal === 'district'):
+                return district.find((data: any) => data.id === houseFederal).title;
+            case (federal === 'province'):
+                return province.find((data: any) => data.id === houseFederal).title;
+            case (federal === 'ward'):
+                return ward.find((data: any) => data.id === houseFederal).title;
+        }
     };
+
 
     // eslint-disable-next-line consistent-return
     const getPrecedence = (precedenceValue: number) => {
@@ -110,19 +124,28 @@ const Navigation = (props: Props) => {
     };
 
     const handleHouseDataTransformation = React.useMemo(() => {
-        const householdArray = householdJson.map((houseObj: any) => {
+        const householdArray = houseCsv.map((houseObj: any) => {
             const transformedArr = {
                 Id: houseObj.id,
-                'Local unit': houseObj.localUnit,
-                Province: houseObj.province,
-                District: getDistrict(houseObj.district),
-                Municipality: houseObj.municipality,
-                Ward: houseObj.ward,
-                ...(user && {
-                    'House id': houseObj.houseId,
-                    'Household name': houseObj.householdName,
-                    'Household contact number': houseObj.householdContactNumber,
-                }),
+                // 'Local unit': houseObj.localUnit,
+                // Province: houseObj.province,
+                // District: getDistrict(houseObj.district),
+                // Municipality: houseObj.municipality,
+                // Ward: houseObj.ward,
+                Province: getFederal(houseObj.province, 'province'),
+                District: getFederal(houseObj.district, 'district'),
+                Municipality: houseObj.localUnit,
+                // Municipality: houseObj.municipality,
+                Ward: getFederal(houseObj.ward, 'ward'),
+
+                // ...(user && {
+                //     'House id': houseObj.houseId,
+                //     'Household name': houseObj.householdName,
+                //     'Household contact number': houseObj.householdContactNumber,
+                // }),
+                'House id': houseObj.houseId,
+                'Household name': houseObj.householdName,
+                'Household contact number': houseObj.householdContactNumber,
                 'Normalized risk score': houseObj.normalized_risk_score,
                 'Normalized hazard and exposure': houseObj.normalized_hazard_and_exposure,
                 'Normalized vulnerability': houseObj.normalized_vulnerability,
@@ -186,7 +209,7 @@ const Navigation = (props: Props) => {
             return transformedArr;
         });
         return householdArray;
-    }, [getDistrict, householdJson, user]);
+    }, [getFederal, houseCsv]);
 
     const handleDownloadCsv = (title: string) => {
         const transformedData = handleHouseDataTransformation;
@@ -275,7 +298,7 @@ Add Household Level Data
                             </div>
                         </>
                     )}
-                {filter.municipality && (
+                {user && filter.municipality && (
                     <button
                         type="button"
                         onClick={() => handleDownloadCsv('Households')}

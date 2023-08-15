@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export default {
     riskVeryHigh: ['all',
         ['>=', ['get', 'normalized_risk_score'], 6.5],
@@ -252,4 +253,109 @@ export default {
         ['==', ['get', 'impactScore'], 0],
     ],
 
+};
+
+export const legendFilterForCsv = {
+    riskVeryHigh: house => house.normalized_risk_score > 6.5,
+    riskHigh: house => house.normalized_risk_score >= 5.0 && house.normalized_risk_score < 6.5,
+    riskMedium: house => house.normalized_risk_score >= 3.5 && house.normalized_risk_score < 5.0,
+    riskLow: house => house.normalized_risk_score >= 2.0 && house.normalized_risk_score < 3.5,
+    riskVeryLow: house => house.normalized_risk_score < 2.0,
+
+    hazardVeryHigh: house => house.normalized_hazard_and_exposure > 6.5,
+    hazardHigh: house => house.normalized_hazard_and_exposure >= 5.0 && house.normalized_hazard_and_exposure < 6.5,
+    hazardMedium: house => house.normalized_hazard_and_exposure >= 3.5 && house.normalized_hazard_and_exposure < 5.0,
+    hazardLow: house => house.normalized_hazard_and_exposure >= 2.0 && house.normalized_hazard_and_exposure < 3.5,
+    hazardVeryLow: house => house.normalized_hazard_and_exposure < 2.0,
+
+    vulnerabilityVeryHigh: house => house.normalized_vulnerability > 6.5,
+    vulnerabilityHigh: house => house.normalized_vulnerability >= 5.0 && house.normalized_vulnerability < 6.5,
+    vulnerabilityMedium: house => house.normalized_vulnerability >= 3.5 && house.normalized_vulnerability < 5.0,
+    vulnerabilityLow: house => house.normalized_vulnerability >= 2.0 && house.normalized_vulnerability < 3.5,
+    vulnerabilityVeryLow: house => house.normalized_vulnerability < 2.0,
+
+    lackofcopingVeryHigh: house => house.normalized_lack_of_coping_capacity > 6.5,
+    lackofcopingHigh: house => house.normalized_lack_of_coping_capacity >= 5.0 && house.normalized_lack_of_coping_capacity < 6.5,
+    lackofcopingMedium: house => house.normalized_lack_of_coping_capacity >= 3.5 && house.normalized_lack_of_coping_capacity < 5.0,
+    lackofcopingLow: house => house.normalized_lack_of_coping_capacity >= 2.0 && house.normalized_lack_of_coping_capacity < 3.5,
+    lackofcopingVeryLow: house => house.normalized_lack_of_coping_capacity < 2.0,
+    historicalAndLoss: house => house.hasHouseDamage === true && house.hasLossOfFamilyMembers === true && house.hasLivelihoodAffect === true,
+    historicalOrLoss: house => house.hasHouseDamage === true || house.hasLossOfFamilyMembers === true || house.hasLivelihoodAffect === true,
+    historicalNoLoss: house => house.hasHouseDamage === false && house.hasLossOfFamilyMembers === false && house.hasLivelihoodAffect === false,
+    noHistoricalLossData: house => house.hasHouseDamage === null || house.hasLossOfFamilyMembers === null || house.hasLivelihoodAffect === null,
+
+    vicinityLessthan100: house => house.vicinityToRivers === 'Less than 100 m',
+    vicinityBetween100and500: house => house.vicinityToRivers === '100-500 m',
+    vicinityMorethan500: house => ['500 m– 1 km', 'More than 1 km'].includes(house.vicinityToRivers),
+
+    noVicinityData: house => house.vicinityToRivers === null,
+
+    numberOfDependentNone: house => house.numberOfChildren + house.numberOfElderly + house.numberOfPregnantLactating + house.numberOfDisabled === 0,
+    numberOfDependentBetween1and2: house => [1, 2].includes(
+        house.numberOfChildren + house.numberOfElderly + house.numberOfPregnantLactating + house.numberOfDisabled,
+    ),
+    numberOfDependentMorethan2: house => [3, 4, 5].includes(
+        house.numberOfChildren + house.numberOfElderly + house.numberOfPregnantLactating + house.numberOfDisabled,
+    ),
+    noNumberOfDependentData: house => house.numberOfChildren + house.numberOfElderly + house.numberOfPregnantLactating + house.numberOfDisabled === null,
+
+    femaleHeadedHousehold: house => house.isFemaleHeadedHousehold === true,
+    noFemaleHeadedData: house => house.isFemaleHeadedHousehold === null,
+
+    incomeSourceSingle: house => house.incomeSource && house.incomeSource.split(',').length === 1,
+    incomeSourceMultiple: house => house.incomeSource && house.incomeSource.split(',').length >= 2,
+    noIncomeSourceTypeData: house => house.incomeSource === null,
+
+    annualIncomeMorethan100000: house => house.annualIncome === 'More than 1 lakh',
+    annualIncomeBetween40000and100000: house => ['40-60 thousand', '60 thousand to 1 lakh'].includes(house.annualIncome),
+    annualIncomeLessthan40000: house => house.annualIncome === 'Less than 40 thousand',
+    noAnnualIncomeData: house => house.annualIncome === null,
+    houseTypeLocal: house => house.houseTypeWall === 'Local house made of stone, Rural structures – mud, bamboo, bricks, etc.'
+      || house.houseTypeWall === 'Local stone-made, Rural structures – mud, bamboo, bricks, etc.',
+    houseTypePrefab: house => house.houseTypeWall === 'Made of ordinary bricks, Blocks, Prefave, Metc.al, Zinc sheets etc.'
+      || house.houseTypeWall === 'Made of ordinary bricks, Blocks, Prefave, Metal, Zinc sheets, etc.',
+    houseTypeRcc: house => house.houseTypeWall === 'Reinforced, Well-built structure',
+
+    noHouseTypeData: house => house.houseTypeWall === null,
+
+    floodImpactInHouseMorethan5: house => ['5-6 times', '7-8 times', 'More than 8 times'].includes(house.floodImpactInThirtyYears),
+    floodImpactInHouseBetween3and5: house => house.floodImpactInThirtyYears === '3-4 times',
+    floodImpactInHouseLessthan2: house => house.floodImpactInThirtyYears === '1-2 times',
+    noFloodImpactData: house => house.floodImpactInThirtyYears === null,
+
+    accessToDrinkingWater: house => house.hasAccessToDrinkingWater === true,
+    noAccessToDrinkingWater: house => house.hasAccessToDrinkingWater === false,
+    noAccessToDrinkingWaterData: house => house.hasAccessToDrinkingWater === null,
+
+    earlyWarningInformationAccess: house => house.hasAccessToEarlyWarningInformation === true,
+    earlyWarningInformationNoAccess: house => house.hasAccessToEarlyWarningInformation === false,
+    noEarlyWarningData: house => house.hasAccessToEarlyWarningInformation === null,
+
+    involvementOfFamily: house => house.hasInvolvmentToCommunityGroup === true,
+    noInvolvementOfFamily: house => house.hasInvolvmentToCommunityGroup === false,
+    noFamilyInvolvementData: house => house.hasInvolvmentToCommunityGroup === null,
+
+    accessToFinancial: house => house.hasAccessToFinancialServices === true,
+    noAccessToFinancial: house => house.hasAccessToFinancialServices === false,
+    noFinancialData: house => house.hasAccessToFinancialServices === null,
+
+    educationLevelIlliterate: house => house.educationLevel === 'Illiterate',
+    educationLevelFormal: house => ['Class 5', 'Graduate', 'Secondary Level'].includes(house.educationLevel),
+    educationLevelLiterate: house => house.educationLevel === 'Literate',
+    noEducationData: house => house.educationLevel === null,
+    accessToSocial: house => house.hasAvailabilityOfSocialSecurity === true,
+    noAccessToSocial: house => house.hasAvailabilityOfSocialSecurity === false,
+    noSocialData: house => house.hasAvailabilityOfSocialSecurity === null,
+
+    noSafeShelterData: house => house.distanceOfSafeShelter === null,
+    // noAccessToSafeShelter: house => house.distanceOfSafeShelter === null, // Uncomment this line if needed
+
+    thirtyminsToSafeShelter: house => ['Within 10 minutes', '10 minutes to half an hour'].includes(house.distanceOfSafeShelter),
+    morethan30minsToSafeShelter: house => ['Half an hour to 1 hour', 'More than 1 hour'].includes(house.distanceOfSafeShelter),
+
+    lowImpact: house => house.impactScore >= 1.0 && house.impactScore <= 2.0,
+    mediumImpact: house => house.impactScore >= 3.0 && house.impactScore <= 4.0,
+    highImpact: house => house.impactScore >= 5.0 && house.impactScore <= 9.0,
+    veryHighImpact: house => house.impactScore >= 10.0 && house.impactScore <= 15.0,
+    noImpact: house => house.impactScore === 0,
 };
