@@ -269,8 +269,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             } else {
                 const { startDate: startDateFromFilter, endDate: endDateFromFilter } = filters.dataDateRange;
 
-                this.handleStartDateChange(BSToAD(startDateFromFilter));
-                this.handleEndDateChange(BSToAD(endDateFromFilter));
+                this.handleStartDateChange(startDateFromFilter);
+                this.handleEndDateChange(endDateFromFilter);
             }
         }
         if (prevProps.filters !== filters) {
