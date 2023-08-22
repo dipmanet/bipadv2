@@ -204,7 +204,6 @@ export const encodeTime = (date: Date) => (
 export { encodeDate } from '@togglecorp/fujs';
 
 export const imageUrlToDataUrl = (url, callback) => {
-    console.log('image load');
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {
         const reader = new FileReader();
