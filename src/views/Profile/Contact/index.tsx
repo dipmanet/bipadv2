@@ -231,6 +231,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                     municipality,
                 } },
                     region } = this.props;
+
                 municipalityContactRequest.setDefaultParams({
                     setProfileContactList: this.setProfileContactList,
                     province: region.adminLevel === 1 ? region.geoarea : '',
@@ -608,6 +609,7 @@ class ContactPage extends React.PureComponent<Props, State> {
         // if (prevState.sortData !== this.state.sortData) {
         //     window.scrollTo(0, 0);
         // }
+
         if (prevProps.region !== region) {
             municipalityContactRequest.do(
                 {
@@ -763,6 +765,8 @@ class ContactPage extends React.PureComponent<Props, State> {
         const confirmationMessage = language === 'en'
             ? `Are you sure you want to remove the contact ${name}?`
             : `के तपाइँ निश्चित हुनुहुन्छ कि तपाइँ ${name} लाई हटाउन चाहनुहुन्छ ?`;
+
+
         return (
             filterPermissionGranted
                 ? (
@@ -1126,15 +1130,27 @@ class ContactPage extends React.PureComponent<Props, State> {
                 municipalityContactRequest: {
                     pending = false,
                 } = {},
-
+                municipalityContactRequest,
             },
             palikaRedirect,
+
         } = this.props;
 
         const { setProfile } = this.context;
         const { isSortByOrdering, contactList,
             sortData, sortButtonAscending,
             searchActivated, selectedSortList, enableListView, searchKeyword } = this.state;
+
+
+        municipalityContactRequest.setDefaultParams(
+            {
+                setProfileContactList: this.setProfileContactList,
+                province: region.adminLevel === 1 ? region.geoarea : '',
+                district: region.adminLevel === 2 ? region.geoarea : '',
+                municipality: region.adminLevel === 3 ? region.geoarea : '',
+            },
+        );
+
 
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
@@ -1164,6 +1180,7 @@ class ContactPage extends React.PureComponent<Props, State> {
         const nonClusteredPointFilter = ['!', clusteredPointFilter];
 
         const positionOptions = this.getPositionOptions(contactList);
+
         return (
             <>
                 <Loading pending={pending} />
