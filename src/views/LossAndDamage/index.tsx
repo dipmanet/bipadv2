@@ -279,8 +279,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             //     }
         }
 
-        if ((prevProps.filters.dataDateRange.startDate !== langStartDate) || (prevProps.filters.dataDateRange.endDate !== langEndDate)) {
+        if ((prevProps.filters.dataDateRange.startDate !== langStartDate) && (prevProps.filters.dataDateRange.endDate !== langEndDate)) {
             if (rangeInDays === 'custom') {
+                console.log('date-data', prevProps.filters.dataDateRange.startDate, langStartDate, prevProps.filters.dataDateRange.endDate, langEndDate);
                 this.setState({ startDate: convertDateAccToLanguage(langStartDate, language), endDate: convertDateAccToLanguage(langEndDate, language) });
             }
         }

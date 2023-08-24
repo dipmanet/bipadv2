@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/indent */
 import {
-    isDefined,
-    isNotDefined,
-    isObject,
-    isList,
-    isTruthy,
-    addSeparator,
+        isDefined,
+        isNotDefined,
+        isObject,
+        isList,
+        isTruthy,
+        addSeparator,
 } from '@togglecorp/fujs';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
 
@@ -12,7 +13,7 @@ import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 import { lossMetrics } from '#utils/domain';
 import {
-    englishToNepaliNumber,
+        englishToNepaliNumber,
 
 } from 'nepali-number';
 
@@ -21,74 +22,74 @@ interface Row {
 }
 
 export const convertJsonToCsv = (data: Row[] | undefined | null, columnDelimiter = ',', lineDelimiter = '\n', emptyValue = '') => {
-    if (!data || data.length <= 0) {
-        return undefined;
-    }
+        if (!data || data.length <= 0) {
+                return undefined;
+        }
 
-    // TODO: get exhaustive keys
-    const keys = Object.keys(data[0]);
+        // TODO: get exhaustive keys
+        const keys = Object.keys(data[0]);
 
-    let result = keys.join(columnDelimiter);
-    result += lineDelimiter;
-
-    data.forEach((item) => {
-        result += keys
-            .map(key => item[key])
-            .map((str) => {
-                if (isNotDefined(str)) {
-                    return emptyValue;
-                }
-                const val = String(str);
-                if (val.includes(columnDelimiter)) {
-                    return `"${val}"`;
-                }
-                return val;
-            })
-            .join(columnDelimiter);
+        let result = keys.join(columnDelimiter);
         result += lineDelimiter;
-    });
 
-    return result;
+        data.forEach((item) => {
+                result += keys
+                        .map(key => item[key])
+                        .map((str) => {
+                                if (isNotDefined(str)) {
+                                        return emptyValue;
+                                }
+                                const val = String(str);
+                                if (val.includes(columnDelimiter)) {
+                                        return `"${val}"`;
+                                }
+                                return val;
+                        })
+                        .join(columnDelimiter);
+                result += lineDelimiter;
+        });
+
+        return result;
 };
 
 export const toTitleCase = (str: string | undefined | null) => {
-    if (isNotDefined(str)) {
-        return undefined;
-    }
-    return String(str).replace(
-        /(^|\s)\S/g,
-        t => t.toUpperCase(),
-    );
+        if (isNotDefined(str)) {
+                return undefined;
+        }
+        return String(str).replace(
+                /(^|\s)\S/g,
+                t => t.toUpperCase(),
+        );
 };
 
 export const forEach = (obj: object, func: (key: string, val: any) => void) => {
-    Object.keys(obj).forEach((key) => {
-        const val = (obj as any)[key];
-        func(key, val);
-    });
+        Object.keys(obj).forEach((key) => {
+                const val = (obj as any)[key];
+                func(key, val);
+        });
 };
 
 export const sanitizeResponse = (data: unknown): any => {
-    if (data === null || data === undefined) {
-        return undefined;
-    }
-    if (isList(data)) {
-        return data.map(sanitizeResponse).filter(isDefined);
-    }
-    if (isObject(data)) {
-        let newData = {};
-        forEach(data, (k, val) => {
-            const newEntry = sanitizeResponse(val);
-            if (newEntry !== null && newEntry !== undefined) {
-                newData = {
-                    ...newData,
-                    [k]: newEntry,
-                };
-            }
-        });
-        return newData;
-    }
-    return data;
+        if (data === null || data === undefined) {
+                return undefined;
+        }
+        if (isList(data)) {
+                return data.map(sanitizeResponse).filter(isDefined);
+        }
+        if (isObject(data)) {
+                let newData = {};
+                forEach(data, (k, val) => {
+                        const newEntry = sanitizeResponse(val);
+                        if (newEntry !== null && newEntry !== undefined) {
+                                newData = {
+                                        ...newData,
+                                        [k]: newEntry,
+                                };
+                        }
+                });
+                return newData;
+        }
+        return data;
 };
 
 interface KeyFunc<T, Q> {
@@ -96,66 +97,66 @@ interface KeyFunc<T, Q> {
 }
 
 function groupListRaw<T>(lst: T[] = [], getKey: KeyFunc<T, string | number>) {
-    const mem: {
+        const mem: {
         [key: string]: {
             key: string | number;
             value: T[];
         };
     } = {};
-    lst.forEach((item) => {
-        const key = getKey(item);
-        if (!mem[key]) {
-            mem[key] = {
-                key,
-                value: [],
-            }; // eslint-disable-line no-param-reassign
-        }
-        mem[key].value.push(item);
-    });
-    return mem;
+        lst.forEach((item) => {
+                const key = getKey(item);
+                if (!mem[key]) {
+                        mem[key] = {
+                                key,
+                                value: [],
+                        }; // eslint-disable-line no-param-reassign
+                }
+                mem[key].value.push(item);
+        });
+        return mem;
 }
 
 export function groupList<T>(lst: T[] = [], getKey: KeyFunc<T, string | number>) {
-    const mem = groupListRaw(lst, getKey);
-    return Object.values(mem);
+        const mem = groupListRaw(lst, getKey);
+        return Object.values(mem);
 }
 
 export function groupFilledList<T>(lst: T[] = [], getKey: KeyFunc<T, number>) {
-    const mem = groupListRaw(lst, getKey);
+        const mem = groupListRaw(lst, getKey);
 
-    const identifierList = lst.map(getKey);
-    const start = Math.min(...identifierList);
+        const identifierList = lst.map(getKey);
+        const start = Math.min(...identifierList);
 
-    const end = Math.max(...identifierList);
-    const output = [];
-    for (let i = start; i <= end; i += 1) {
-        output.push(mem[i] || { key: i, value: [] });
-    }
-    return output;
+        const end = Math.max(...identifierList);
+        const output = [];
+        for (let i = start; i <= end; i += 1) {
+                output.push(mem[i] || { key: i, value: [] });
+        }
+        return output;
 }
 
 export function sum(list: number[]) {
-    return list.reduce(
-        (acc, val) => acc + (isDefined(val) ? val : 0),
-        0,
-    );
+        return list.reduce(
+                (acc, val) => acc + (isDefined(val) ? val : 0),
+                0,
+        );
 }
 
 export function getYmd(dateString: string | number | undefined) {
-    if (!dateString) {
-        return undefined;
-    }
-    const date = new Date(dateString);
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        if (!dateString) {
+                return undefined;
+        }
+        const date = new Date(dateString);
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
 export function getYesterday(days = 0) {
-    const date = new Date();
-    date.setDate(date.getDate() - days);
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    return date.getTime();
+        const date = new Date();
+        date.setDate(date.getDate() - days);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        return date.getTime();
 }
 
 interface FrameFunction<T> {
@@ -163,245 +164,315 @@ interface FrameFunction<T> {
 }
 
 export function framize<T>(fn: FrameFunction<T>, duration = 2000) {
-    let prevTimestamp: number;
-    return (timestamp: number) => {
-        if (!prevTimestamp) {
-            prevTimestamp = timestamp;
-        }
-        const diff = timestamp - prevTimestamp;
-        if (diff > duration) {
-            prevTimestamp = timestamp;
-        }
-        const percent = (timestamp - prevTimestamp) / duration;
-        return fn(percent, timestamp);
-    };
+        let prevTimestamp: number;
+        return (timestamp: number) => {
+                if (!prevTimestamp) {
+                        prevTimestamp = timestamp;
+                }
+                const diff = timestamp - prevTimestamp;
+                if (diff > duration) {
+                        prevTimestamp = timestamp;
+                }
+                const percent = (timestamp - prevTimestamp) / duration;
+                return fn(percent, timestamp);
+        };
 }
 
 export const getImageAsync = (src: string, width = 56, height = 56) => {
-    const image = new Image(width, height);
-    image.setAttribute('crossOrigin', '');
+        const image = new Image(width, height);
+        image.setAttribute('crossOrigin', '');
 
-    image.src = src;
+        image.src = src;
 
-    return new Promise((resolve) => {
-        image.onload = () => {
-            resolve(image);
-        };
-    });
+        return new Promise((resolve) => {
+                image.onload = () => {
+                        resolve(image);
+                };
+        });
 };
 
 export function getImage(src: string, width = 56, height = 56) {
-    const image = new Image(width, height);
-    image.src = src;
+        const image = new Image(width, height);
+        image.src = src;
 
-    return image;
+        return image;
 }
 
 export const encodeTime = (date: Date) => (
-    `${date.getHours()}:${date.getMinutes()}:00`
+        `${date.getHours()}:${date.getMinutes()}:00`
 );
 
 export { encodeDate } from '@togglecorp/fujs';
 
 export const imageUrlToDataUrl = (url, callback) => {
-    console.log('image load');
-    const xhr = new XMLHttpRequest();
-    xhr.onload = () => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            callback(reader.result);
+        console.log('image load');
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                        callback(reader.result);
+                };
+
+                reader.readAsDataURL(xhr.response);
         };
 
-        reader.readAsDataURL(xhr.response);
-    };
-
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
 };
 
 export function saveChart(elementId: string, name: string, functionData) {
-    const scale = 2;
-    const domNode = document.getElementById(elementId);
-    domtoimage.toBlob(domNode,
-        {
-            width: domNode.clientWidth * scale,
-            height: domNode.clientHeight * scale,
-            style: {
-                transform: `scale(${scale})`,
-                transformOrigin: 'top left',
-            },
-        })
-        .then(blob => (
-            saveAs(blob, `${name}.png`)
+        const scale = 2;
+        const domNode = document.getElementById(elementId);
+        domtoimage.toBlob(domNode,
+                {
+                        width: domNode.clientWidth * scale,
+                        height: domNode.clientHeight * scale,
+                        style: {
+                                transform: `scale(${scale})`,
+                                transformOrigin: 'top left',
+                        },
+                })
+                .then(blob => (
+                        saveAs(blob, `${name}.png`)
 
-        ));
-    functionData();
+                ));
+        functionData();
 }
 
 export const arrayGroupBy = (array: any[], key: any) => array.reduce((result, currentValue) => {
-    // eslint-disable-next-line no-param-reassign
-    (result[currentValue[key]] = result[currentValue[key]] || []).push(
-        currentValue,
-    );
-    return result;
+        // eslint-disable-next-line no-param-reassign
+        (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                currentValue,
+        );
+        return result;
 }, {});
 
 export const httpGet = (url: string) => {
-    const xmlHttp = new XMLHttpRequest();
-    xmlHttp.open('GET', url, false); // false for synchronous request
-    xmlHttp.send(null);
-    return xmlHttp.response;
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('GET', url, false); // false for synchronous request
+        xmlHttp.send(null);
+        return xmlHttp.response;
 };
 
 // user object from redux, example codeName="edit_resource", app="resource"
 export const checkPermission = (user, codeName, app) => {
-    let permission = false;
-    if (!user) {
-        permission = false;
-    } else if (user.isSuperuser) {
-        permission = true;
-    }
-    if (user && user.groups) {
-        user.groups.forEach((group) => {
-            if (group.permissions) {
-                group.permissions.forEach((p) => {
-                    if (p.codename === codeName && p.app === app) {
-                        permission = true;
-                    }
-                });
-            } else {
+        let permission = false;
+        if (!user) {
                 permission = false;
-            }
-        });
-    }
-    if (user && user.userPermissions) {
-        user.userPermissions.forEach((a) => {
-            if (a.codename === codeName && a.app === app) {
+        } else if (user.isSuperuser) {
                 permission = true;
-            }
-        });
-    } else {
-        permission = false;
-    }
-    return permission;
-    // temporary set true to all user for testing
-    // return true;
+        }
+        if (user && user.groups) {
+                user.groups.forEach((group) => {
+                        if (group.permissions) {
+                                group.permissions.forEach((p) => {
+                                        if (p.codename === codeName && p.app === app) {
+                                                permission = true;
+                                        }
+                                });
+                        } else {
+                                permission = false;
+                        }
+                });
+        }
+        if (user && user.userPermissions) {
+                user.userPermissions.forEach((a) => {
+                        if (a.codename === codeName && a.app === app) {
+                                permission = true;
+                        }
+                });
+        } else {
+                permission = false;
+        }
+        return permission;
+        // temporary set true to all user for testing
+        // return true;
 };
 
 // This function can be used to compare login in user's
 // federal region and filtered federal region to check the accessibility of the data.
 export const checkSameRegionPermission = (user, region) => {
-    let permission = false;
-    if (user && user.isSuperuser) {
-        permission = true;
-    } else if (region.adminLevel === 1) {
-        if (user && user.profile.province === region.geoarea
+        let permission = false;
+        if (user && user.isSuperuser) {
+                permission = true;
+        } else if (region.adminLevel === 1) {
+                if (user && user.profile.province === region.geoarea
             && user.profile.district === null && user.profile.municipality === null) {
-            permission = true;
+                        permission = true;
+                }
+        } else if (region.adminLevel === 2) {
+                if (user && user.profile.district === region.geoarea) {
+                        permission = true;
+                }
+        } else if (region.adminLevel === 3) {
+                if (user && user.profile.municipality === region.geoarea) {
+                        permission = true;
+                }
+        } else {
+                permission = false;
         }
-    } else if (region.adminLevel === 2) {
-        if (user && user.profile.district === region.geoarea) {
-            permission = true;
-        }
-    } else if (region.adminLevel === 3) {
-        if (user && user.profile.municipality === region.geoarea) {
-            permission = true;
-        }
-    } else {
-        permission = false;
-    }
-    return permission;
+        return permission;
 };
 
 
 // convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
-    if (!date) {
-        return '';
-    }
-    let dateToReturn = date;
-    if (forceAD && (language === 'np')) {
-        dateToReturn = (date);
-    } else if (language === 'np') {
-        try {
-            // dateToReturn = englishToNepaliNumber(ADToBS(date));
-            dateToReturn = ADToBS(date);
-        } catch (e) {
-            dateToReturn = date;
+        if (!date) {
+                return '';
         }
-    }
-    return dateToReturn;
+        let dateToReturn = date;
+        if (forceAD && (language === 'np')) {
+                dateToReturn = (date);
+        } else if (language === 'np') {
+                try {
+                        // dateToReturn = englishToNepaliNumber(ADToBS(date));
+                        dateToReturn = ADToBS(date);
+                } catch (e) {
+                        dateToReturn = date;
+                }
+        }
+        return dateToReturn;
 };
+// const createLanguageConverter = () => {
+//         let previousLanguageState = 'en'; // Default language
+
+//         const hofLangToValue = (date, language) => {
+//                 console.log('language', language);
+//                 if (!date) {
+//                         return '';
+//                 }
+//                 let correctedDate = date;
+
+//                 if (language === 'np') {
+//                         correctedDate = ADToBS(correctedDate);
+//                 } else if (language === 'en') {
+//                         if (previousLanguageState === 'np') {
+//                                 correctedDate = BSToAD(correctedDate);
+//                         }
+//                 }
+
+//                 previousLanguageState = language;
+
+//                 return correctedDate;
+//         };
+
+//         return hofLangToValue;
+// };
+
+// // Create a language converter instance
+// export const hofLangToValue = createLanguageConverter();
+
+// const createLanguageConverter = () => {
+//         let previousLanguageState = 'en'; // Default language
+
+//         return (date, language) => {
+//             console.log('language', language);
+//             if (!date) {
+//                 return '';
+//             }
+//             let correctedDate = date;
+
+//             if (language === 'np') {
+//                 correctedDate = ADToBS(correctedDate);
+//             } else if (language === 'en') {
+//                 if (previousLanguageState === 'np') {
+//                     correctedDate = BSToAD(correctedDate);
+//                 }
+//             }
+
+//             previousLanguageState = language;
+
+//             return correctedDate;
+//         };
+//     };
+
+// Create a language converter instance
+// export const hofLangToValue = createLanguageConverter();
+
+// export const hofLangToValue = (date: string | undefined, language: string) => {
+//     console.log('language', language);
+//     if (!date) {
+//         return '';
+//     }
+//     let correctedDate: string = date;
+//     if (language === 'np') {
+//         correctedDate = ADToBS(correctedDate);
+//     }
+//     if (language === 'en') {
+//         correctedDate = BSToAD(correctedDate);
+//     }
+//     return correctedDate;
+// };
 
 export const DataFormater = (value, lang) => {
-    const decimalRemoveToComma = (num) => {
-        const separator = ',';
-        const decimalSeparator = '.';
-        const [before, after] = String(num).split(decimalSeparator);
+        const decimalRemoveToComma = (num) => {
+                const separator = ',';
+                const decimalSeparator = '.';
+                const [before, after] = String(num).split(decimalSeparator);
 
-        let x1 = before;
-        const rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, `$1${separator}$2`);
+                let x1 = before;
+                const rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, `$1${separator}$2`);
+                }
+
+                const x2 = after !== undefined ? `${separator}${after}` : '';
+
+                const result = x1 + x2;
+
+                return result;
+        };
+
+        if (lang === 'np' && value) {
+                if (value > 10000000) {
+                        return { number: (decimalRemoveToComma((value / 10000000).toFixed(0))), normalizeSuffix: 'करोड' };
+                } if (value > 100000) {
+                        return { number: (decimalRemoveToComma((value / 100000).toFixed(0))), normalizeSuffix: 'लाख' };
+                } if (value > 10000) {
+                        return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'हजार' };
+                }
+                if (value > 1000) {
+                        return { number: value.toLocaleString(), normalizeSuffix: '' };
+                }
+                return { number: value, normalizeSuffix: '' };
         }
 
-        const x2 = after !== undefined ? `${separator}${after}` : '';
-
-        const result = x1 + x2;
-
-        return result;
-    };
-
-    if (lang === 'np' && value) {
-        if (value > 10000000) {
-            return { number: (decimalRemoveToComma((value / 10000000).toFixed(0))), normalizeSuffix: 'करोड' };
-        } if (value > 100000) {
-            return { number: (decimalRemoveToComma((value / 100000).toFixed(0))), normalizeSuffix: 'लाख' };
-        } if (value > 10000) {
-            return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'हजार' };
+        if (value && value > 1000000000) {
+                return { number: (decimalRemoveToComma((value / 1000000000).toFixed(0))), normalizeSuffix: 'B' };
+        } if (value && value > 1000000) {
+                return { number: (decimalRemoveToComma((value / 1000000).toFixed(0))), normalizeSuffix: 'M' };
+        } if (value && value > 10000) {
+                return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'K' };
         }
-        if (value > 1000) {
-            return { number: value.toLocaleString(), normalizeSuffix: '' };
+        if (value && value > 1000) {
+                return { number: value.toLocaleString(), normalizeSuffix: '' };
         }
         return { number: value, normalizeSuffix: '' };
-    }
-
-    if (value && value > 1000000000) {
-        return { number: (decimalRemoveToComma((value / 1000000000).toFixed(0))), normalizeSuffix: 'B' };
-    } if (value && value > 1000000) {
-        return { number: (decimalRemoveToComma((value / 1000000).toFixed(0))), normalizeSuffix: 'M' };
-    } if (value && value > 10000) {
-        return { number: (decimalRemoveToComma((value / 1000).toFixed(0))), normalizeSuffix: 'K' };
-    }
-    if (value && value > 1000) {
-        return { number: value.toLocaleString(), normalizeSuffix: '' };
-    }
-    return { number: value, normalizeSuffix: '' };
 };
 
 export const calculateSummary = (lossAndDamageList) => {
-    const stat = lossMetrics.reduce((acc, { key }) => ({
-        ...acc,
-        [key]: sum(
-            lossAndDamageList
-                .filter(incident => incident.loss)
-                .map(incident => incident.loss[key])
-                .filter(isDefined),
-        ),
-    }), {});
-    stat.count = lossAndDamageList.length;
-    return stat;
+        const stat = lossMetrics.reduce((acc, { key }) => ({
+                ...acc,
+                [key]: sum(
+                        lossAndDamageList
+                                .filter(incident => incident.loss)
+                                .map(incident => incident.loss[key])
+                                .filter(isDefined),
+                ),
+        }), {});
+        stat.count = lossAndDamageList.length;
+        return stat;
 };
 
 export const nullCheck = (nullCondition, data, m) => {
-    if (nullCondition) {
+        if (nullCondition) {
+                const summaryData = calculateSummary(data);
+                summaryData.estimatedLoss = '-';
+
+                return summaryData[m];
+        }
         const summaryData = calculateSummary(data);
-        summaryData.estimatedLoss = '-';
 
         return summaryData[m];
-    }
-    const summaryData = calculateSummary(data);
-
-    return summaryData[m];
 };

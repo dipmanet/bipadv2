@@ -19,7 +19,7 @@ import {
     languageSelector,
 } from '#selectors';
 
-import { convertDateAccToLanguage } from '#utils/common';
+import { convertDateAccToLanguage, hofLangToValue } from '#utils/common';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 
@@ -132,6 +132,12 @@ class PastDateRangeInput extends React.Component<Props> {
     // 	this.setState({ customState: false });
     // }
 
+    public componentDidUpdate() {
+         const { value } = this.props;
+         console.log('value-start', value.startDate);
+         console.log('value-end', value.endDate);
+    }
+
     private handleRadioInputChange = (rangeInDays: number | 'custom') => {
         const { onChange } = this.props;
         this.setState({ customActive: true });
@@ -170,7 +176,8 @@ class PastDateRangeInput extends React.Component<Props> {
         onChange({
             rangeInDays: 'custom',
             startDate: convertDateAccToLanguage(newStartDate, language, true),
-            endDate: value ? value.endDate : undefined,
+            // endDate: value ? value.endDate : undefined,
+            endDate: value && value.endDate ? value.endDate : undefined,
         });
     }
 
@@ -227,10 +234,11 @@ class PastDateRangeInput extends React.Component<Props> {
                                             className={'startDateInput'}
                                             label={t('Start Date')}
                                             faramElementName="start"
-                                            value={convertDateAccToLanguage(
-                                                value.startDate,
-                                                language,
-                                            )}
+                                            // value={convertDateAccToLanguage(
+                                            //     value.startDate,
+                                            //     language,
+                                            // )}
+                                            value={value.startDate}
                                             language={language}
                                         />
                                     )
@@ -244,10 +252,11 @@ class PastDateRangeInput extends React.Component<Props> {
                                             className={'endDateInput'}
                                             label={t('End Date')}
                                             faramElementName="end"
-                                            value={convertDateAccToLanguage(
-                                                value.endDate,
-                                                language,
-                                            )}
+                                            // value={convertDateAccToLanguage(
+                                            //     value.endDate,
+                                            //     language,
+                                            // )}
+                                            value={value.endDate}
                                             language={language}
                                         />
                                     )
