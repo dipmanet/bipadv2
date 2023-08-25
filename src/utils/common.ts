@@ -18,7 +18,7 @@ import {
 } from 'nepali-number';
 
 interface Row {
-    [key: string]: string | number | boolean | undefined | null;
+        [key: string]: string | number | boolean | undefined | null;
 }
 
 export const convertJsonToCsv = (data: Row[] | undefined | null, columnDelimiter = ',', lineDelimiter = '\n', emptyValue = '') => {
@@ -93,16 +93,16 @@ export const sanitizeResponse = (data: unknown): any => {
 };
 
 interface KeyFunc<T, Q> {
-    (val: T): Q;
+        (val: T): Q;
 }
 
 function groupListRaw<T>(lst: T[] = [], getKey: KeyFunc<T, string | number>) {
         const mem: {
-        [key: string]: {
-            key: string | number;
-            value: T[];
-        };
-    } = {};
+                [key: string]: {
+                        key: string | number;
+                        value: T[];
+                };
+        } = {};
         lst.forEach((item) => {
                 const key = getKey(item);
                 if (!mem[key]) {
@@ -160,7 +160,7 @@ export function getYesterday(days = 0) {
 }
 
 interface FrameFunction<T> {
-    (percent: number, timestamp: number): T;
+        (percent: number, timestamp: number): T;
 }
 
 export function framize<T>(fn: FrameFunction<T>, duration = 2000) {
@@ -298,7 +298,7 @@ export const checkSameRegionPermission = (user, region) => {
                 permission = true;
         } else if (region.adminLevel === 1) {
                 if (user && user.profile.province === region.geoarea
-            && user.profile.district === null && user.profile.municipality === null) {
+                        && user.profile.district === null && user.profile.municipality === null) {
                         permission = true;
                 }
         } else if (region.adminLevel === 2) {

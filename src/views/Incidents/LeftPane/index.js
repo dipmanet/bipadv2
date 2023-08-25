@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
@@ -31,6 +33,7 @@ import { calculateCategorizedSeverity, calculateSeverity, severityScaleFactor } 
 import {
     pastDaysToDateRange,
 } from '#utils/transformations';
+import { BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import Visualizations from './Visualizations';
 import IncidentTable from './TabularView';
@@ -189,13 +192,15 @@ class LeftPane extends React.PureComponent {
         } else {
             ({ startDate, endDate } = dateRange);
         }
-
+        console.log('start date', startDate);
         return (
             <div className={_cs(className, styles.leftPane)}>
                 <DateRangeInfo
                     className={styles.dateRange}
-                    startDate={convertDateAccToLanguage(startDate, language)}
-                    endDate={convertDateAccToLanguage(endDate, language)}
+                    // startDate={language === 'en' ? startDate && BSToAD(startDate) ? BSToAD(startDate) : startDate : convertDateAccToLanguage(startDate, language)}
+                    // endDate={language === 'en' ? endDate && BSToAD(endDate) ? (BSToAD(endDate)) : endDate : convertDateAccToLanguage(endDate, language)}
+                    startDate={language === 'en' ? startDate : convertDateAccToLanguage(startDate, language)}
+                    endDate={language === 'en' ? endDate : convertDateAccToLanguage(endDate, language)}
                 />
                 <div className={styles.sourceDetails}>
                     <div className={styles.infoIconContainer}>

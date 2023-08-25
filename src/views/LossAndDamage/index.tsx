@@ -78,6 +78,7 @@ import Spinner from '#rscv/Spinner';
 import DateRangeInfo from '#components/DateRangeInfo';
 import Loader from 'react-loader-spinner';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import TabularView from './TabularView';
 import { getSanitizedIncidents } from './common';
 import Overview from './Overview';
@@ -260,7 +261,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     componentDidUpdate(prevProps, prevState) {
         const { filters, language: { language } } = this.props;
         const { rangeInDays, startDate: langStartDate, endDate: langEndDate } = filters.dataDateRange;
-        console.log('prevProps-rangeInDays-start-end', rangeInDays, langStartDate, langEndDate);
         if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
             if (rangeInDays !== 'custom') {
                 const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
@@ -279,22 +279,19 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             //     }
         }
 
-        if ((prevProps.filters.dataDateRange.startDate !== langStartDate) && (prevProps.filters.dataDateRange.endDate !== langEndDate)) {
+        if ((prevProps.filters.dataDateRange.startDate !== langStartDate) || (prevProps.filters.dataDateRange.endDate !== langEndDate)) {
             if (rangeInDays === 'custom') {
-                console.log('date-data', prevProps.filters.dataDateRange.startDate, langStartDate, prevProps.filters.dataDateRange.endDate, langEndDate);
-                this.setState({ startDate: convertDateAccToLanguage(langStartDate, language), endDate: convertDateAccToLanguage(langEndDate, language) });
+                this.setState({ startDate: language === 'np' ? convertDateAccToLanguage(langStartDate, language) : langStartDate, endDate: language === 'np' ? convertDateAccToLanguage(langEndDate, language) : langEndDate });
             }
         }
 
         if (prevProps.language.language !== language) {
             if (rangeInDays === 'custom') {
                 if (language === 'np') {
-                    console.log('prevProps-np', language, prevProps.language.language);
                     this.setState({ startDate: convertDateAccToLanguage(langStartDate, language), endDate: convertDateAccToLanguage(langEndDate, language) });
                 }
                 if (language === 'en') {
-                    console.log('prevProps-np', language, prevProps.language.language);
-                    this.setState({ startDate: convertDateAccToLanguage(langStartDate, language), endDate: convertDateAccToLanguage(langEndDate, language) });
+                    this.setState({ startDate: (langStartDate), endDate: (langEndDate) });
                 }
             }
         }
@@ -307,12 +304,16 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             //     .then((data) => {
             //         this.setState({ incidentData: data.results, isLoading: false });
             //     });to english date for api call as data only get fetch for english date
+
             const modifiedFilter = {
                 ...filters,
                 dataDateRange: {
                     ...dataDateRange,
-                    startDate: language === 'np' ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate,
-                    endDate: language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
+                    // startDate: language === 'np' ? BSToAD(dataDateRange.dataDateRange) : dataDateRange.startDate,
+                    // endDate: language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
+                    startDate: prevProps.filters.dataDateRange.startDate !== dataDateRange.startDate ? language === 'np' ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate : dataDateRange.startDate,
+                    endDate: prevProps.filters.dataDateRange.endDate !== dataDateRange.endDate ? language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate : dataDateRange.endDate,
+                    // endDate: convertDateAccToLanguage(dataDateRange.endDate, language),
                 },
             };
 
@@ -322,7 +323,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             // if (language === 'np') {
             //     incidentOnGt = BSToAD();
             // }
-            console.log('props-finalFilters-componentDidUpdate', finalFilters, language);
+
             this.setState({ filterData: finalFilters });
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
@@ -539,7 +540,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             filters,
             tableIncidentData,
         } = this.props;
-        console.log('props-lossAndDamage', language, filters);
+
 
         const {
             startDate,
@@ -558,7 +559,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             incidentType,
             summaryTypeData,
         } = this.state;
-        console.log('startDate,submittedStartedDate', startDate, submittedStartDate, endDate, submittedEndDate);
 
 
         const pending = false;
@@ -593,7 +593,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { dataDateRange } = filters;
             this.setState({ isLoading: true });
             const finalFilters = transformFilters(filters);
-            console.log('props-finalFilters-setRegionRadio', finalFilters);
+
             this.setState({ filterData: finalFilters });
             const summaryType = id === 1 ? 'province_wise'
                 : id === 2 ? 'district_wise' : id === 3 ? 'municipality_wise' : 'ward_wise';
@@ -629,7 +629,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { dataDateRange } = filters;
 
             const finalFilters = transformFilters(filters);
-            console.log('props-finalFilters-dropDownClickHandler', finalFilters);
+
             this.setState({ filterData: finalFilters });
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';

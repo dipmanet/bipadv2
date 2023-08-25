@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-state */
+/* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
@@ -121,6 +123,8 @@ class PastDateRangeInput extends React.Component<Props> {
     public state = {
         customActive: false,
         customState: false,
+        switchDateValue: false,
+
     };
 
     // private testFunction() {
@@ -132,13 +136,34 @@ class PastDateRangeInput extends React.Component<Props> {
     // 	this.setState({ customState: false });
     // }
 
-    public componentDidUpdate() {
-         const { value } = this.props;
-         console.log('value-start', value.startDate);
-         console.log('value-end', value.endDate);
+    public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<{}>, snapshot?: any): void {
+        const {
+            className,
+            value,
+            error,
+            language: { language },
+            onChange,
+        } = this.props;
+        const { switchDateValue } = this.state;
+
+        // if ((prevProps.switchDateValue !== switchDateValue) && (prevProps.language.language !== language)) {
+        //     onChange({
+        //         rangeInDays: 'custom',
+        //         startDate: language === 'en' && value && value.startDate ? value.startDate : convertDateAccToLanguage(value.startDate, language),
+        //         // endDate: value ? value.endDate : undefined,
+        //         endDate: language === 'en' && value && value.endDate ? value.endDate : convertDateAccToLanguage(value.endDate, language),
+        //     });
+        // }
+
+        console.log('prev value', prevProps.language.language);
     }
 
     private handleRadioInputChange = (rangeInDays: number | 'custom') => {
+        const {
+
+            language: { language },
+
+        } = this.props;
         const { onChange } = this.props;
         this.setState({ customActive: true });
 
@@ -168,29 +193,35 @@ class PastDateRangeInput extends React.Component<Props> {
 
 
     private handleStartDateInputChange = (newStartDate: string) => {
+        const { switchDateValue } = this.state;
+        this.setState({ switchDateValue: !switchDateValue });
         const {
             value,
             onChange,
             language: { language },
         } = this.props;
+        this.setState({ previousLanguage: language === 'en' ? 'np' : 'en' });
         onChange({
             rangeInDays: 'custom',
-            startDate: convertDateAccToLanguage(newStartDate, language, true),
+            startDate: language === 'en' ? newStartDate : convertDateAccToLanguage(newStartDate, language),
             // endDate: value ? value.endDate : undefined,
             endDate: value && value.endDate ? value.endDate : undefined,
         });
     }
 
     private handleEndDateInputChange = (newEndDate: string) => {
+        const { switchDateValue } = this.state;
+        this.setState({ switchDateValue: !switchDateValue });
         const {
             value,
             onChange,
             language: { language },
         } = this.props;
+        this.setState({ previousLanguage: language === 'en' ? 'np' : 'en' });
         onChange({
             rangeInDays: 'custom',
             startDate: value ? value.startDate : undefined,
-            endDate: convertDateAccToLanguage(newEndDate, language, true),
+            endDate: language === 'en' ? newEndDate : convertDateAccToLanguage(newEndDate, language),
         });
     }
 
@@ -205,13 +236,14 @@ class PastDateRangeInput extends React.Component<Props> {
         const {
             customActive,
             customState,
+            previousLanguage,
         } = this.state;
         const { activeRouteDetails: { name: activePage } } = this.context;
         const test = convertDateAccToLanguage(
             value.endDate,
             language,
         );
-
+        console.log('This is final data', value);
         return (
             <div className={_cs(styles.pastDateRangeInput, className)}>
                 <RadioInput
@@ -234,11 +266,11 @@ class PastDateRangeInput extends React.Component<Props> {
                                             className={'startDateInput'}
                                             label={t('Start Date')}
                                             faramElementName="start"
-                                            // value={convertDateAccToLanguage(
-                                            //     value.startDate,
-                                            //     language,
-                                            // )}
-                                            value={value.startDate}
+                                            value={language === 'en' ? value && value.startDate ? (value.startDate) : '' : convertDateAccToLanguage(
+                                                value.startDate,
+                                                language,
+                                            )}
+                                            // value={value.startDate}
                                             language={language}
                                         />
                                     )
@@ -252,11 +284,12 @@ class PastDateRangeInput extends React.Component<Props> {
                                             className={'endDateInput'}
                                             label={t('End Date')}
                                             faramElementName="end"
-                                            // value={convertDateAccToLanguage(
-                                            //     value.endDate,
-                                            //     language,
-                                            // )}
-                                            value={value.endDate}
+                                            value={language === 'en' ? value && value.endDate ? (value.endDate) : '' : convertDateAccToLanguage(
+                                                value.endDate,
+                                                language,
+                                            )}
+
+                                            // value={value.endDate}
                                             language={language}
                                         />
                                     )

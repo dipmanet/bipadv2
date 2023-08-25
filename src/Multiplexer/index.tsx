@@ -376,6 +376,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             isTilesLoaded: false,
             toggleAnimationMapDownloadButton: false,
             elementStatus: false,
+            isBSToADClicked: false,
             steps: [
                 {
                     content: 'Welcome to BIPAD Portal Walkthrough. This walkthorough navigates you to each module and feature of BIPAD portal and provided easiness to your userexpereince.',
@@ -1322,6 +1323,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ isFilterClicked: boolean });
     }
 
+    private isBSToADClickedStatus = (boolean) => {
+        this.setState({ isBSToADClicked: boolean });
+    }
+
     private addLayer = (layer: Layer) => {
         this.setState(({ activeLayers }) => {
             const layerIndex = activeLayers.findIndex(d => d.id === layer.id);
@@ -1896,7 +1901,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             checkFullScreenStatus,
             isTilesLoaded,
             toggleAnimationMapDownloadButton,
-
+            isBSToADClicked,
             steps,
         } = this.state;
 
@@ -1948,6 +1953,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             addResource,
             setAddResource: this.setAddResource,
             activeRouteDetails,
+            isBSToADClicked,
+            isBSToADClickedStatus: this.isBSToADClickedStatus,
+
 
         };
 
