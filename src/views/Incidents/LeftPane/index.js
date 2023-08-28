@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
@@ -110,7 +111,31 @@ class LeftPane extends React.PureComponent {
             lossServerId: undefined,
             incidentServerId: undefined,
             activeView: 'incidents',
+            changedStartDate: false,
+            changedEndDate: false,
         };
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { filters, language: { language }, dateRange } = this.props;
+        const { rangeInDays } = dateRange;
+        const { startDate, endDate } = dateRange;
+
+
+        if (prevProps.dateRange.startDate !== startDate) {
+            if (language === 'np') {
+                this.setState({ changedStartDate: true });
+            } else {
+                this.setState({ changedStartDate: false });
+            }
+        }
+        if (prevProps.dateRange.endDate !== endDate) {
+            if (language === 'np') {
+                this.setState({ changedEndDate: true });
+            } else {
+                this.setState({ changedEndDate: false });
+            }
+        }
     }
 
     getMappedIncidentList = memoize((incidentList) => {
@@ -181,6 +206,8 @@ class LeftPane extends React.PureComponent {
             lossServerId,
             incidentServerId,
             activeView,
+            changedStartDate,
+            changedEndDate,
         } = this.state;
 
         const incidentList = this.getMappedIncidentList(incidentListFromProps);
@@ -192,15 +219,15 @@ class LeftPane extends React.PureComponent {
         } else {
             ({ startDate, endDate } = dateRange);
         }
-        console.log('start date', startDate);
+
         return (
             <div className={_cs(className, styles.leftPane)}>
                 <DateRangeInfo
                     className={styles.dateRange}
                     // startDate={language === 'en' ? startDate && BSToAD(startDate) ? BSToAD(startDate) : startDate : convertDateAccToLanguage(startDate, language)}
                     // endDate={language === 'en' ? endDate && BSToAD(endDate) ? (BSToAD(endDate)) : endDate : convertDateAccToLanguage(endDate, language)}
-                    startDate={language === 'en' ? startDate : convertDateAccToLanguage(startDate, language)}
-                    endDate={language === 'en' ? endDate : convertDateAccToLanguage(endDate, language)}
+                    startDate={language === 'en' ? changedStartDate ? BSToAD(startDate) : startDate : convertDateAccToLanguage(startDate, language)}
+                    endDate={language === 'en' ? changedEndDate ? BSToAD(endDate) : endDate : convertDateAccToLanguage(endDate, language)}
                 />
                 <div className={styles.sourceDetails}>
                     <div className={styles.infoIconContainer}>

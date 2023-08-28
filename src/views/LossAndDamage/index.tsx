@@ -327,8 +327,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     ...dataDateRange,
                     // startDate: language === 'np' ? BSToAD(dataDateRange.dataDateRange) : dataDateRange.startDate,
                     // endDate: language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
-                    startDate: prevProps.filters.dataDateRange.startDate !== dataDateRange.startDate ? language === 'np' ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate : dataDateRange.startDate,
-                    endDate: prevProps.filters.dataDateRange.endDate !== dataDateRange.endDate ? language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate : dataDateRange.endDate,
+                    startDate: prevProps.filters.dataDateRange.startDate !== dataDateRange.startDate
+                        ? language === 'np' ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate
+                        : changedStartDate ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate,
+                    endDate: prevProps.filters.dataDateRange.endDate !== dataDateRange.endDate
+                        ? language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate
+                        : changedEndDate ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
                     // endDate: convertDateAccToLanguage(dataDateRange.endDate, language),
                 },
             };
@@ -574,6 +578,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             tablePending,
             incidentType,
             summaryTypeData,
+            changedEndDate,
+            changedStartDate,
         } = this.state;
 
 
