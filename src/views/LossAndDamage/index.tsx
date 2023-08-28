@@ -230,6 +230,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         tableIncidentList: [],
         tablePending: true,
         summaryTypeData: 'province_wise',
+        changedStartDate: false,
+        changedEndDate: false,
     }
 
 
@@ -261,6 +263,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     componentDidUpdate(prevProps, prevState) {
         const { filters, language: { language } } = this.props;
         const { rangeInDays, startDate: langStartDate, endDate: langEndDate } = filters.dataDateRange;
+        const { changedStartDate, changedEndDate } = this.state;
         if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
             if (rangeInDays !== 'custom') {
                 const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
@@ -278,7 +281,20 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             //         this.handleEndDateChange(endDateFromFilter);
             //     }
         }
-
+        if (prevProps.filters.dataDateRange.startDate !== langStartDate) {
+            if (language === 'np') {
+                this.setState({ changedStartDate: true });
+            } else {
+                this.setState({ changedStartDate: false });
+            }
+        }
+        if (prevProps.filters.dataDateRange.endDate !== langEndDate) {
+            if (language === 'np') {
+                this.setState({ changedEndDate: true });
+            } else {
+                this.setState({ changedEndDate: false });
+            }
+        }
         if ((prevProps.filters.dataDateRange.startDate !== langStartDate) || (prevProps.filters.dataDateRange.endDate !== langEndDate)) {
             if (rangeInDays === 'custom') {
                 this.setState({ startDate: language === 'np' ? convertDateAccToLanguage(langStartDate, language) : langStartDate, endDate: language === 'np' ? convertDateAccToLanguage(langEndDate, language) : langEndDate });
@@ -291,7 +307,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     this.setState({ startDate: convertDateAccToLanguage(langStartDate, language), endDate: convertDateAccToLanguage(langEndDate, language) });
                 }
                 if (language === 'en') {
-                    this.setState({ startDate: (langStartDate), endDate: (langEndDate) });
+                    this.setState({ startDate: changedStartDate ? BSToAD(langStartDate) : langStartDate, endDate: changedEndDate ? BSToAD(langEndDate) : langEndDate });
                 }
             }
         }
