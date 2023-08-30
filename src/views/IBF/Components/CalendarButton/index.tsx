@@ -78,9 +78,9 @@ const CalendarButton = (
                 </div>
             </div>
         </div>
-        {index === 1 && <p className={style.mode}>Activate Mode</p>}
-        {index === 6 && <p className={style.mode}>Readiness Mode</p>}
-        {index === 3 && <div className={style.lineInButton} />}
+        {index === 8 && <p className={style.mode}>Activation Mode</p>}
+        {index === 3 && <p className={style.mode}>Readiness Mode</p>}
+        {index === 7 && <div className={style.lineInButton} />}
     </button>
 );
 

@@ -1,3 +1,11 @@
+/* eslint-disable react/no-unused-state */
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react/jsx-indent */
@@ -51,6 +59,7 @@ import Page from '#components/Page';
 import Loading from '#components/Loading';
 import HazardsLegend from '#components/HazardsLegend';
 
+import { BSToAD } from 'bikram-sambat-js';
 import Map from './Map';
 import LeftPane from './LeftPane';
 
@@ -122,7 +131,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/incident/',
         method: methods.GET,
         // We have to transform dateRange to incident_on__lt and incident_on__gt
-        query: ({ props: { filters } }) => ({
+        query: ({ props, params: { filters } }) => ({
+
             ...transformFilters(filters),
             expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
@@ -136,16 +146,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             setIncidentList({ incidentList });
         },
         onMount: true,
-        onPropsChanged: {
-            filters: ({
-                props: { filters },
-                prevProps: { filters: prevFilters },
-            }) => {
-                const shouldRequest = filters !== prevFilters;
-
-                return shouldRequest;
-            },
-        },
+        // onPropsChanged: {
+        //     filters: ({
+        //         props: { filters },
+        //         prevProps: { filters: prevFilters },
+        //     }) => {
+        //         const shouldRequest = filters !== prevFilters;
+        //         return shouldRequest;
+        //     },
+        // },
         // extras: { schemaName: 'incidentResponse' },
     },
     eventsRequest: {
@@ -198,6 +207,9 @@ class Incidents extends React.PureComponent<Props, State> {
 
         this.state = {
             hoveredIncidentId: undefined,
+            changedStartDate: false,
+            changedEndDate: false,
+
         };
     }
 
@@ -205,6 +217,72 @@ class Incidents extends React.PureComponent<Props, State> {
     //     const { setIncidentList } = this.props;
     //     setIncidentList({});
     // }
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
+        // const {
+        //     requests: {
+        //         incidentsGetRequest,
+
+        //     },
+        //     filters,
+        // } = this.props;
+        // if (prevProps.filters !== filters) {
+        //     console.log('This is final filter', filters);
+        //     // incidentsGetRequest.do({
+        //     //     startDate,
+        //     // });
+        // }
+
+        const { filters, language: { language }, requests: {
+            incidentsGetRequest,
+
+        } } = this.props;
+        const { dataDateRange, dataDateRange: { rangeInDays } } = filters;
+        const { startDate: langStartDate, endDate: langEndDate } = filters.dataDateRange;
+        const { changedEndDate, changedStartDate } = this.state;
+
+        console.log('langStartDate', langStartDate);
+        console.log('langEndDate', langEndDate);
+        if (prevProps.filters.dataDateRange.startDate !== langStartDate) {
+            if (language === 'np') {
+                this.setState({ changedStartDate: true });
+            } else {
+                this.setState({ changedStartDate: false });
+            }
+        }
+        if (prevProps.filters.dataDateRange.endDate !== langEndDate) {
+            if (language === 'np') {
+                this.setState({ changedEndDate: true });
+            } else {
+                this.setState({ changedEndDate: false });
+            }
+        }
+        if (prevProps.filters !== filters) {
+            const modifiedFilter = {
+                ...filters,
+                dataDateRange: {
+                    ...dataDateRange,
+                    // startDate: language === 'np' ? BSToAD(dataDateRange.dataDateRange) : dataDateRange.startDate,
+                    // endDate: language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
+                    startDate: prevProps.filters.dataDateRange.startDate !== dataDateRange.startDate
+                        ? language === 'np' ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate
+                        : changedStartDate ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate,
+                    endDate: prevProps.filters.dataDateRange.endDate !== dataDateRange.endDate
+                        ? language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate
+                        : changedEndDate ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
+                },
+            };
+            if (rangeInDays === 'custom') {
+                incidentsGetRequest.do({
+                    filters: modifiedFilter,
+                });
+            } else {
+                incidentsGetRequest.do({
+                    filters,
+                });
+            }
+        }
+    }
 
     private getSanitizedIncidents = memoize(getSanitizedIncidents)
 
@@ -239,10 +317,9 @@ class Incidents extends React.PureComponent<Props, State> {
     public render() {
         const {
             incidentList,
-            requests: {
+            requests: { incidentsGetRequest,
                 incidentsGetRequest: { pending: pendingIncidents },
-                eventsRequest: { pending: pendingEvents },
-            },
+                eventsRequest: { pending: pendingEvents } },
             regions,
             hazardTypes,
             filters,
@@ -256,7 +333,9 @@ class Incidents extends React.PureComponent<Props, State> {
             regions,
             hazardTypes,
         );
-
+        incidentsGetRequest.setDefaultParams({
+            filters,
+        });
 
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
 

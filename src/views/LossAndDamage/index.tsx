@@ -78,6 +78,7 @@ import Spinner from '#rscv/Spinner';
 import DateRangeInfo from '#components/DateRangeInfo';
 import Loader from 'react-loader-spinner';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import TabularView from './TabularView';
 import { getSanitizedIncidents } from './common';
 import Overview from './Overview';
@@ -229,6 +230,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         tableIncidentList: [],
         tablePending: true,
         summaryTypeData: 'province_wise',
+        changedStartDate: false,
+        changedEndDate: false,
     }
 
 
@@ -258,26 +261,89 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
     // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
     componentDidUpdate(prevProps, prevState) {
-        const { filters } = this.props;
-        const { rangeInDays } = filters.dataDateRange;
-
+        const { filters, language: { language } } = this.props;
+        const { rangeInDays, startDate: langStartDate, endDate: langEndDate } = filters.dataDateRange;
+        const { changedStartDate, changedEndDate } = this.state;
         if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
             if (rangeInDays !== 'custom') {
                 const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
                 this.handleStartDateChange(encodeDate(startDateFromFilter));
                 this.handleEndDateChange(encodeDate(endDateFromFilter));
+            }
+            // if (prevProps.filters.dataDateRange.rangeInDays !== rangeInDays) {
+            //     if (rangeInDays !== 'custom') {
+            //         const { startDate: startDateFromFilter, endDate: endDateFromFilter } = pastDaysToDateRange(rangeInDays);
+            //         this.handleStartDateChange(encodeDate(startDateFromFilter));
+            //         this.handleEndDateChange(encodeDate(endDateFromFilter));
+            //     } else {
+            //         const { startDate: startDateFromFilter, endDate: endDateFromFilter } = filters.dataDateRange;
+            //         this.handleStartDateChange(startDateFromFilter);
+            //         this.handleEndDateChange(endDateFromFilter);
+            //     }
+        }
+        if (prevProps.filters.dataDateRange.startDate !== langStartDate) {
+            if (language === 'np') {
+                this.setState({ changedStartDate: true });
             } else {
-                const { startDate: startDateFromFilter, endDate: endDateFromFilter } = filters.dataDateRange;
-
-                this.handleStartDateChange(startDateFromFilter);
-                this.handleEndDateChange(endDateFromFilter);
+                this.setState({ changedStartDate: false });
             }
         }
+        if (prevProps.filters.dataDateRange.endDate !== langEndDate) {
+            if (language === 'np') {
+                this.setState({ changedEndDate: true });
+            } else {
+                this.setState({ changedEndDate: false });
+            }
+        }
+        if ((prevProps.filters.dataDateRange.startDate !== langStartDate) || (prevProps.filters.dataDateRange.endDate !== langEndDate)) {
+            if (rangeInDays === 'custom') {
+                this.setState({ startDate: language === 'np' ? convertDateAccToLanguage(langStartDate, language) : langStartDate, endDate: language === 'np' ? convertDateAccToLanguage(langEndDate, language) : langEndDate });
+            }
+        }
+
+        if (prevProps.language.language !== language) {
+            if (rangeInDays === 'custom') {
+                if (language === 'np') {
+                    this.setState({ startDate: convertDateAccToLanguage(langStartDate, language), endDate: convertDateAccToLanguage(langEndDate, language) });
+                }
+                if (language === 'en') {
+                    this.setState({ startDate: changedStartDate ? BSToAD(langStartDate) : langStartDate, endDate: changedEndDate ? BSToAD(langEndDate) : langEndDate });
+                }
+            }
+        }
+
         if (prevProps.filters !== filters) {
             const { dataDateRange, region: { adminLevel, geoarea } } = filters;
             const { incidentType } = this.state;
+            // Convertion of the nepali date   // fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
+            //     .then(res => res.json())
+            //     .then((data) => {
+            //         this.setState({ incidentData: data.results, isLoading: false });
+            //     });to english date for api call as data only get fetch for english date
 
-            const finalFilters = transformFilters(filters);
+            const modifiedFilter = {
+                ...filters,
+                dataDateRange: {
+                    ...dataDateRange,
+                    // startDate: language === 'np' ? BSToAD(dataDateRange.dataDateRange) : dataDateRange.startDate,
+                    // endDate: language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
+                    startDate: prevProps.filters.dataDateRange.startDate !== dataDateRange.startDate
+                        ? language === 'np' ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate
+                        : changedStartDate ? BSToAD(dataDateRange.startDate) : dataDateRange.startDate,
+                    endDate: prevProps.filters.dataDateRange.endDate !== dataDateRange.endDate
+                        ? language === 'np' ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate
+                        : changedEndDate ? BSToAD(dataDateRange.endDate) : dataDateRange.endDate,
+                    // endDate: convertDateAccToLanguage(dataDateRange.endDate, language),
+                },
+            };
+
+            const finalFilters = transformFilters(modifiedFilter);
+            // let incidentOnGt = finalFilters.incident_on__gt;
+            // let incidentOnLt = finalFilters.incident_on__lt;
+            // if (language === 'np') {
+            //     incidentOnGt = BSToAD();
+            // }
+
             this.setState({ filterData: finalFilters });
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';
@@ -296,7 +362,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 this.setState({ regionRadio: { name: 'province', id: 1 } });
             }
 
-
             fetch(`${process.env.REACT_APP_API_SERVER_URL}/incident/analytics/?${federalFilter}&data_source=drr_api&incident_type=${incidentType}&hazard=${finalFilters.hazard.join(',')}&summary_type=${summaryType}&incident_on__gt=${finalFilters.incident_on__gt.split('+')[0]}&incident_on__lt=${finalFilters.incident_on__lt.split('+')[0]}`)
                 .then(res => res.json())
                 .then((data) => {
@@ -304,6 +369,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                 });
         }
     }
+
 
     // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
     componentWillUnmount(): void {
@@ -320,6 +386,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
         setFilters({ filters: sixMonths });
     }
+
 
     private handleSaveClick = (domId, saveName) => {
         saveChart(domId, saveName);
@@ -494,6 +561,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             tableIncidentData,
         } = this.props;
 
+
         const {
             startDate,
             endDate,
@@ -510,6 +578,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             tablePending,
             incidentType,
             summaryTypeData,
+            changedEndDate,
+            changedStartDate,
         } = this.state;
 
 
@@ -545,6 +615,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { dataDateRange } = filters;
             this.setState({ isLoading: true });
             const finalFilters = transformFilters(filters);
+
             this.setState({ filterData: finalFilters });
             const summaryType = id === 1 ? 'province_wise'
                 : id === 2 ? 'district_wise' : id === 3 ? 'municipality_wise' : 'ward_wise';
@@ -580,6 +651,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             const { dataDateRange } = filters;
 
             const finalFilters = transformFilters(filters);
+
             this.setState({ filterData: finalFilters });
             const summaryType = adminLevel === 1 ? 'district_wise'
                 : adminLevel === 2 ? 'municipality_wise' : adminLevel === 3 ? 'ward_wise' : 'province_wise';

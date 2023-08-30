@@ -30,6 +30,7 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
             endDate,
             language: { language },
         } = this.props;
+        console.log('props-dateRangeInfo', language, startDate, endDate);
 
         return (
             <div className={_cs(className, styles.dateDetails, 'date-range-tour')}>
