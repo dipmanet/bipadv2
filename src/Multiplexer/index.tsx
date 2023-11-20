@@ -69,6 +69,7 @@ import {
     closeWalkThroughSelector,
     runSelector,
     languageSelector,
+    authStateSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
@@ -248,6 +249,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     closeWalkThroughHomepage: closeWalkThroughSelector(state),
     run: runSelector(state),
     language: languageSelector(state),
+    authState: authStateSelector(state),
 
 
 });
@@ -1810,6 +1812,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (routeName === 'DRRM Report') {
             return true;
         }
+        if (routeName === 'earthquake-form') {
+            return true;
+        }
         if (routeName === 'incident') {
             return false;
         }
@@ -1859,6 +1864,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             run,
             closeWalkThroughHomepage,
             language: { language },
+
         } = this.props;
 
         const {
@@ -2034,6 +2040,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
+
+
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>

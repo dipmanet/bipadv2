@@ -7,6 +7,7 @@ export interface Route {
     path: string;
     name: string;
     title: string;
+    titleNep: string;
     load: any;
     navbar: boolean;
     id: string;
@@ -25,6 +26,7 @@ export interface FallbackRoute {
     default: true;
     navbar: false;
     title: string;
+    titleNep: string;
     name: string;
     load: any;
     path: undefined;
@@ -173,19 +175,23 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'incident',
         title: 'Incident Form',
+        titleNep: 'Incident Form',
         path: '/admin/incident/add-new-incident',
         load: () => import('../admin/views/Incidents'),
         navbar: false,
         disableIfNoAuth: true,
+        id: '',
     },
 
     {
         name: 'incident-upload',
         title: 'Incident Bulk Upload',
+        titleNep: 'Incident Bulk Upload',
         path: '/admin/incident/incident-bulk-upload',
         load: () => import('../admin/views/IncidentBulkUpload'),
         navbar: false,
         disableIfNoAuth: true,
+        id: '',
     },
 
     {
@@ -198,7 +204,26 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
         id: 'epidemics-table',
     },
-
+    {
+        name: 'temporary-shelter-enrollment-form-data-table',
+        title: 'Temporary shelter enrollment form Data Table',
+        titleNep: 'Temporary shelter enrollment form Data Table',
+        path: '/admin/temporary-shelter-enrollment-form/temporary-shelter-enrollment-form-data-table',
+        load: () => import('../admin/views/TemporaryShelterTable'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: 'TemporaryShelter-table',
+    },
+    {
+        name: 'add-new-temporary-shelter-enrollment-data',
+        title: 'Add New Temporary shelter enrollment data',
+        titleNep: 'Add New Temporary shelter enrollment data',
+        path: '/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data',
+        load: () => import('../admin/views/TemporaryShelter'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: '',
+    },
     {
         name: 'epidemics-upload',
         title: 'Epidemics Bulk Upload',
@@ -320,10 +345,12 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'incident-data-table',
         title: 'Incident Data Table',
+        titleNep: 'Incident Data Table',
         path: '/admin/incident/incident-data-table',
         load: () => import('../admin/views/IncidentDatatable'),
         navbar: false,
         disableIfNoAuth: true,
+        id: '',
     },
 
     {
@@ -400,6 +427,7 @@ const routeSettings: SomeRoute[] = [
         iconName: 'clipboard',
         load: () => import('../views/DataArchive'),
         navbar: true,
+        id: '',
     },
 
     {
