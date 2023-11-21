@@ -108,6 +108,72 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
             }
 
             .mainDataEntrySection {
+                .firstPartDetails {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+
+                    .firstPartContainer {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                        font-size: 20px;
+
+                        .formElements {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+
+                            .locationDetails {
+                                display: flex;
+                                flex-wrap: wrap;
+                                gap: 20px;
+
+                                .inputClassName {
+                                    border: none;
+                                    border-bottom: 2px dotted;
+                                    outline: none;
+                                    background: none;
+
+
+
+                                }
+                            }
+                        }
+
+                        .locationDetails {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 20px;
+
+                            .inputClassName {
+                                border: none;
+                                border-bottom: 2px dotted;
+                                outline: none;
+                                background: none;
+
+
+
+                            }
+                        }
+
+                        .freeText {
+                            display: flex;
+
+
+                            .inputClassName {
+                                border: none;
+                                border-bottom: 2px dotted;
+                                outline: none;
+                                background: none;
+                                width: 80%;
+
+
+                            }
+                        }
+                    }
+                }
+
                 .mainTempAddress {
                     display: flex;
                     flex-direction: column;
@@ -122,6 +188,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
                             display: flex;
                             align-items: center;
                             gap: 10px;
+                            font-size: 20px;
 
                             .inputClassName {
                                 border: none;

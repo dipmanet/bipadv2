@@ -1181,7 +1181,7 @@ const TemporaryShelter = (props) => {
                             : handleErrorClose}
                 />
 
-                <h1 className={styles.header}>Epidemics Data Structure</h1>
+                <h1 className={styles.header}>Temporary shelter enrollment Data Structure</h1>
                 <p className={styles.dataReporting}>Data Reporting</p>
                 <div className={styles.twoSections}>
                     <div className={styles.reportingStatus}>
@@ -1199,9 +1199,7 @@ const TemporaryShelter = (props) => {
                         <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.ideaPara}>
-                                The epidemics form consists of the details of the epidemics,
-                                geographical information of the affected area, and the
-                                casualty details disaggregated by gender and disability.
+                                The Temporary shelter enrollment form consists of the details of the earthquake affected area and house detail.
 
                             </p>
                         </div>
@@ -1221,11 +1219,11 @@ const TemporaryShelter = (props) => {
                             </div>
                             <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
-                                    <span>लााभग्रााही क्रम संंख्याः</span>
+                                    <span>लाभग्राही क्रम संंख्याः</span>
                                     <input type="text" className={styles.inputClassName} />
                                 </div>
                                 <div className={styles.countDataIndividual}>
-                                    <span>सम्झौौताा क्रमााङ्क संंख्याः</span>
+                                    <span>सम्झौता क्रमााङ्क संंख्याः</span>
                                     <input type="text" className={styles.inputClassName} />
                                 </div>
                             </div>
@@ -1234,7 +1232,7 @@ const TemporaryShelter = (props) => {
                                     भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि
                                     {' '}
                                     <select name="cars" id="cars">
-                                        <option value="volvo">Volvo</option>
+                                        <option value="volvo">जिल्ला</option>
                                         <option value="saab">Saab</option>
                                         <option value="opel">Opel</option>
                                         <option value="audi">Audi</option>
@@ -1243,15 +1241,18 @@ const TemporaryShelter = (props) => {
                                     जिल्ला
                                     {' '}
                                     <select name="cars" id="cars">
-                                        <option value="volvo">Volvo</option>
+                                        <option value="volvo"> गा.पा/न.पा. वडा नंं.</option>
                                         <option value="saab">Saab</option>
                                         <option value="opel">Opel</option>
                                         <option value="audi">Audi</option>
                                     </select>
                                     {' '}
-                                    गाा.पाा/न.पा. वडा नंं.
+                                    गा.पा/न.पा.
+                                    {' '}
+                                    {' '}
+                                    वडा नंं.
                                     <select name="cars" id="cars">
-                                        <option value="volvo">Volvo</option>
+                                        <option value="volvo">वडा नंं.</option>
                                         <option value="saab">Saab</option>
                                         <option value="opel">Opel</option>
                                         <option value="audi">Audi</option>
@@ -1264,7 +1265,7 @@ const TemporaryShelter = (props) => {
                                     को
                                     {' '}
                                     <select name="cars" id="cars">
-                                        <option value="volvo">Volvo</option>
+                                        <option value="volvo">नाती</option>
                                         <option value="saab">Saab</option>
                                         <option value="opel">Opel</option>
                                         <option value="audi">Audi</option>
@@ -1277,7 +1278,7 @@ const TemporaryShelter = (props) => {
                                     को
                                     {' '}
                                     <select name="cars" id="cars">
-                                        <option value="volvo">Volvo</option>
+                                        <option value="volvo">छोरा</option>
                                         <option value="saab">Saab</option>
                                         <option value="opel">Opel</option>
                                         <option value="audi">Audi</option>
@@ -1302,23 +1303,23 @@ const TemporaryShelter = (props) => {
                                 </p>
                             </div>
                             <div className={styles.mainTempAddress}>
-                                <h2 style={{ textDecoration: 'underline' }}>अस्थाायीी आवाास नि�र्माा�ण हुुनेे जग्गााकोो वि�वरण</h2>
+                                <h2 style={{ textDecoration: 'underline' }}>अस्थाायी आवाास निर्मााण हुुनेे जग्गाको विवरण</h2>
                                 <div className={styles.tempAddress}>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         जिल्ला
                                         {' '}
                                         <select name="cars" id="cars">
-                                            <option value="volvo">Volvo</option>
+                                            <option value="volvo">जिल्ला</option>
                                             <option value="saab">Saab</option>
                                             <option value="opel">Opel</option>
                                             <option value="audi">Audi</option>
                                         </select>
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        गाा.पाा/न.पा.
+                                        गाा.पा/न.पा.
                                         {' '}
                                         <select name="cars" id="cars">
-                                            <option value="volvo">Volvo</option>
+                                            <option value="volvo">गाा.पा/न.पा.</option>
                                             <option value="saab">Saab</option>
                                             <option value="opel">Opel</option>
                                             <option value="audi">Audi</option>
@@ -1328,14 +1329,14 @@ const TemporaryShelter = (props) => {
                                         वडा नंं.
                                         {' '}
                                         <select name="cars" id="cars">
-                                            <option value="volvo">Volvo</option>
+                                            <option value="volvo"> वडा नंं.</option>
                                             <option value="saab">Saab</option>
                                             <option value="opel">Opel</option>
                                             <option value="audi">Audi</option>
                                         </select>
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        कि�त्ताा नंं.
+                                        कित्ता नंं.
                                         {' '}
                                         <input type="text" className={styles.inputClassName} />
                                     </div>
@@ -1345,353 +1346,203 @@ const TemporaryShelter = (props) => {
                                         <input type="text" className={styles.inputClassName} />
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        नक्साा सि�ट नंं.
+                                        नक्सा सिट नंं.
                                         {' '}
                                         <input type="text" className={styles.inputClassName} />
                                     </div>
-
                                 </div>
+                            </div>
+                            <div className={styles.firstPartDetails}>
+                                <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्रााही)</h2>
+                                <div className={styles.firstPartContainer}>
+                                    <span>१. व्यक्तिगत विवरण</span>
+                                    <div className={styles.formElements}>
+                                        <div className={styles.freeText}>
+                                            <span>नाम, थर नेेपालीमाः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>नाम, थर अंंग्रेजीमाः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.locationDetails}>
+                                            <div>
+                                                <span>जिल्लाः</span>
+                                                {' '}
+                                                <select name="cars" id="cars">
+                                                    <option value="volvo"> वडा नंं.</option>
+                                                    <option value="saab">Saab</option>
+                                                    <option value="opel">Opel</option>
+                                                    <option value="audi">Audi</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span>गा.पा./न.पाः</span>
+                                                {' '}
+                                                <select name="cars" id="cars">
+                                                    <option value="volvo"> गा.पा./न.पाः</option>
+                                                    <option value="saab">Saab</option>
+                                                    <option value="opel">Opel</option>
+                                                    <option value="audi">Audi</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span>वडा नंं.</span>
+                                                {' '}
+                                                <select name="cars" id="cars">
+                                                    <option value="volvo"> वडा नंं.</option>
+                                                    <option value="saab">Saab</option>
+                                                    <option value="opel">Opel</option>
+                                                    <option value="audi">Audi</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span>ना.प्र.न.</span>
+                                                {' '}
+                                                <input type="text" className={styles.inputClassName} />
+                                            </div>
+                                            <div>
+                                                <span>सम्पर्क नंं.</span>
+                                                {' '}
+                                                <input type="text" className={styles.inputClassName} />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>
+                                                सम्झौताा-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
+                                                विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
+                                                संं रक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
+
+                                            </p>
+                                            <div className={styles.locationDetails}>
+                                                <div>
+                                                    <span>जिल्लाः</span>
+                                                    {' '}
+                                                    <select name="cars" id="cars">
+                                                        <option value="volvo"> वडा नंं.</option>
+                                                        <option value="saab">Saab</option>
+                                                        <option value="opel">Opel</option>
+                                                        <option value="audi">Audi</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <span>गा.पा./न.पाः</span>
+                                                    {' '}
+                                                    <select name="cars" id="cars">
+                                                        <option value="volvo"> गा.पा./न.पाः</option>
+                                                        <option value="saab">Saab</option>
+                                                        <option value="opel">Opel</option>
+                                                        <option value="audi">Audi</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <span>गा.पा./न.पाः</span>
+                                                    {' '}
+                                                    <select name="cars" id="cars">
+                                                        <option value="volvo"> गा.पा./न.पाः</option>
+                                                        <option value="saab">Saab</option>
+                                                        <option value="opel">Opel</option>
+                                                        <option value="audi">Audi</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <span>ना.प्र.न.</span>
+                                                    {' '}
+                                                    <input type="text" className={styles.inputClassName} />
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>बाजेेको नाम, थर:</span>
+                                            {' '}
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>बाबुु/आमाको नाम, थर:</span>
+                                            {' '}
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles.firstPartContainer}>
+                                    <span>२. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण</span>
+                                    <div className={styles.formElements}>
+                                        <div className={styles.freeText}>
+                                            <span>खातावालाको नाम, थरः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>खाता नम्बरः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>बैंंक/वित्तीय संंस्थाको नामः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>शाखाः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles.firstPartContainer}>
+                                    <span>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)</span>
+                                    <div className={styles.formElements}>
+                                        <div className={styles.freeText}>
+                                            <span>बसाइँँसराइ प्रमाण-पत्र नंः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>बसाइँँसराइको मितिः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className={styles.firstPartContainer}>
+                                    <span>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
+                                    <div className={styles.formElements}>
+                                        <div className={styles.freeText}>
+                                            <span>मितिः</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>साक्षीको नाम, थर</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>हस्ताक्षर</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>लाभग्राहीसँँगको नाता</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>सम्पर्क नंं.</span>
+                                            <input type="text" className={styles.inputClassName} />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औठांंछाप</span>
+                                            <table>
+                                                <tr>
+                                                    <th>Left Header</th>
+                                                    <td>Content for Left Header</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Right Header</th>
+                                                    <td>Content for Right Header</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>4</div>
+                                <div>5</div>
                             </div>
                             <span className={styles.ValidationErrors}>{validationError}</span>
-                            <div className={styles.twoInputSections}>
-                                <TextField
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={uniqueId}
-                                    onChange={e => setuniqueId(e.target.value)}
-                                    id="outlined-basic"
-                                    label="Unique Id"
-                                    disabled
-                                />
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DatePicker
-                                        label="Reported Date"
-                                        value={reportedDate}
-                                        onChange={(newValue) => {
-                                            setReportedDate(newValue);
-                                        }}
-                                        renderInput={params => (
-                                            <TextField
-                                                variant="outlined"
-                                                error={dateError}
-                                                helperText={dateError ? 'This field is required' : null}
-                                                className={styles.materialUiInput}
-                                                {...params}
-                                                required
-                                            />
-                                        )}
-                                    />
-                                </LocalizationProvider>
-
-                            </div>
-                            <TextField
-                                required
-                                id="outlined-basic"
-                                label="Hazard Inducer"
-                                variant="outlined"
-                                className={styles.hazardInducer}
-                                value={cause}
-                                onChange={e => setCause(e.target.value)}
-                            />
-
-                            <div className={styles.infoBar}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    {' '}
-                                    {' '}
-                                    Geographical Information on the area
-                                </p>
-                            </div>
-                            <div className={styles.fourInputSections}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="province-label">Province</InputLabel>
-                                    <Select
-                                        labelId="province"
-                                        id="province-select"
-                                        value={provinceName}
-                                        label="Provinvce"
-                                        onChange={e => setprovinceName(e.target.value)}
-                                    >
-                                        {provinces && provinces.map(item => (
-                                            <MenuItem
-                                                key={item.title}
-                                                value={item.title}
-                                            >
-                                                {item.title}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl fullWidth>
-                                    <InputLabel id="district-label">District</InputLabel>
-                                    <Select
-                                        labelId="district"
-                                        id="district-select"
-                                        value={districtName}
-                                        label="District"
-                                        onChange={e => setdistrictName(e.target.value)}
-                                    >
-                                        {districts && districts.filter(
-                                            item => item.province === provinceId,
-                                        ).map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.title}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-                                </FormControl>
-                                <FormControl fullWidth>
-                                    <InputLabel id="municipality-label">Municipality</InputLabel>
-                                    <Select
-                                        labelId="municipality"
-                                        id="munnicipality-select"
-                                        value={municipalityName}
-                                        label="Municipality"
-                                        onChange={e => setmunicipalityName(e.target.value)}
-                                    >
-                                        {municipalities && municipalities.filter(
-                                            item => item.district === districtId,
-                                        ).map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.title}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
-                                                </MenuItem>
-                                            ),
-                                        )}
-                                    </Select>
-                                </FormControl>
-                                <FormControl fullWidth>
-                                    <InputLabel id="ward-label">Ward</InputLabel>
-                                    <Select
-                                        labelId="ward"
-                                        id="ward-select"
-                                        value={wardName}
-                                        label="Ward"
-                                        onChange={e => setwardName(e.target.value)}
-                                    >
-                                        {wards && wards.filter(item => item.municipality === municipalityId)
-                                            .map(item => Number(item.title)).sort((a, b) => a - b)
-                                            .map(item => (
-                                                <MenuItem key={item} value={item}>
-                                                    {item}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </div>
-                            <TextField
-
-                                className={styles.hazardInducer}
-                                id="outlined-basic"
-                                label="Local Address(Kindly Specify)"
-                                variant="outlined"
-                                value={streetAddress}
-                                onChange={e => setStreetAddress(e.target.value)}
-                            />
-                            <div className={styles.twoInputSections}>
-                                <TextField
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={lattitude}
-                                    onChange={e => setLattitude(e.target.value)}
-                                    error={latError}
-                                    helperText={latError ? 'This field is required' : null}
-                                    id="outlined-basic"
-                                    label="Lattitude"
-                                />
-
-                                <TextField
-                                    variant="outlined"
-                                    className={styles.materialUiInput}
-                                    value={longitude}
-                                    onChange={e => setLongitude(e.target.value)}
-                                    error={longError}
-                                    helperText={longError ? 'This field is required' : null}
-                                    id="outlined-basic"
-                                    label="Longitude"
-                                />
-
-                            </div>
-                            <Map
-                                centriodsForMap={centriodsForMap}
-                                initialProvinceCenter={initialProvinceCenter}
-                                initialDistrictCenter={initialDistrictCenter}
-                                initialMunCenter={initialMunCenter}
-                            />
-                            <div className={styles.infoBarCasuality}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    Casualty Statistics of the area
-                                </p>
-                            </div>
-
-
-                            <div className={styles.mycontainer}>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Dead</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={dmError}
-                                        helperText={dmError ? 'This field is required' : null}
-                                        variant="outlined"
-                                        value={deadFormMale}
-
-                                        onChange={e => setDeadMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        error={dfError}
-                                        helperText={dfError ? 'This field is required' : null}
-                                        value={deadFormFemale}
-                                        onChange={e => setDeadFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={deadFormOther}
-                                        error={doError}
-                                        helperText={doError ? 'This field is required' : null}
-                                        onChange={e => setDeadOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={deadFormDisabled}
-                                        error={ddError}
-                                        helperText={ddError ? 'This field is required' : null}
-                                        onChange={e => setDeadDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                                <div className={styles.innerContainer}>
-                                    <div className={styles.label}>Affected</div>
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormMale}
-                                        error={amError}
-                                        helperText={amError ? 'This field is required' : null}
-                                        onChange={e => setInjuredMale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of male"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormFemale}
-                                        error={afError}
-                                        helperText={afError ? 'This field is required' : null}
-                                        onChange={e => setInjuredFemale(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of female"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormOther}
-                                        error={aoError}
-                                        helperText={aoError ? 'This field is required' : null}
-                                        onChange={e => setInjuredOther(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of others"
-                                        variant="outlined"
-                                    />
-                                    <TextField
-                                        className={styles.deadandaffected}
-                                        value={injuredFormDisabled}
-                                        error={adError}
-                                        helperText={adError ? 'This field is required' : null}
-                                        onChange={e => setInjuredDisabled(e.target.value)}
-                                        id="outlined-basic"
-                                        label="Total no. of disabled"
-                                        variant="outlined"
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.infoBarCasuality}>
-                                <p className={styles.instInfo}>
-                                    <span style={{ color: '#003572' }} />
-                                    Verification of the data
-                                </p>
-                            </div>
-                            <div className={styles.checkBoxArea}>
-                                <p className={styles.verifiedOrApproved}>01.Verified</p>
-                                <div className={styles.verified}>
-
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="verified"
-                                        checked={verified}
-                                        onChange={e => handleVerifiedChange()}
-                                    />
-
-                                    <InputLabel htmlFor="verified">Yes</InputLabel>
-
-
-                                </div>
-                                <div className={styles.notVerified}>
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="notVerified"
-                                        checked={notVerified}
-                                        onChange={e => handleNotVerifiedChange()}
-                                    />
-                                    <InputLabel htmlFor="notVerified">No</InputLabel>
-                                </div>
-                            </div>
-                            <div className={styles.checkBoxArea}>
-
-                                <TextField
-                                    className={styles.hazardInducer}
-                                    id="outlined-basic"
-                                    label="Verification Message"
-                                    value={verificationMessage}
-                                    onChange={e => setVerificationMessage(e.target.value)}
-
-                                    variant="outlined"
-                                />
-                                <p className={styles.verifiedOrApproved}>02.Approved</p>
-
-                                <div className={styles.verified}>
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="verified"
-                                        checked={approved}
-                                        onChange={handleApprovedChange}
-                                    />
-
-                                    <InputLabel htmlFor="verified">Yes</InputLabel>
-                                </div>
-                                <div className={styles.notVerified}>
-                                    <input
-                                        type="checkbox"
-                                        name="verifiedCheck"
-                                        id="notVerified"
-                                        checked={notApproved}
-                                        onChange={handleNotApprovedChange}
-                                    />
-                                    <InputLabel htmlFor="notVerified">No</InputLabel>
-                                </div>
-                            </div>
                             <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
                             </div>
