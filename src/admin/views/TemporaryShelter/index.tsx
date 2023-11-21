@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/prop-types */
@@ -668,6 +669,62 @@ const TemporaryShelter = (props) => {
     const [initialProvinceCenter, setinitialProvinceCenter] = useState([]);
     const [initialDistrictCenter, setinitialDistrictCenter] = useState([]);
     const [initialMunCenter, setinitialMunCenter] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [data, setData] = useState(
+        {
+            entry_date_bs: '',
+            pa_number: '',
+            tole_name: '',
+            grand_parent_title: null,
+            grand_parent_name: '',
+            grand_child_relation: null,
+            parent_title: 'श्री',
+            parent_name: '',
+            child_relation: null,
+            beneficiary_age: null,
+            beneficiary_name_nepali: '',
+            temporary_shelter_land_kitta_number: '',
+            temporary_shelter_land_area: '',
+            temporary_shelter_land_map_sheet_number: '',
+            beneficiary_name_english: '',
+            beneficiary_citizenship_number: '',
+            beneficiary_contact_number: '',
+            beneficiary_photo: null,
+            is_beneficiary_available_to_sign: false,
+            beneficiary_representative_name_nepali: '',
+            beneficiary_representative_citizenship_number: '',
+            beneficiary_representative_grandfather_name: '',
+            beneficiary_representative_parent_name: '',
+            bank_account_holder_name: '',
+            bank_account_number: '',
+            bank_name: '',
+            bank_branch_name: '',
+            migration_certificate_number: '',
+            migration_date_bs: '',
+            signed_date: '',
+            withness_name_nepali: '',
+            withness_relation: '',
+            withness_contact_number: '',
+            operating_municipality_officer_name: '',
+            operating_municipality_signed_date: '',
+            identity_document: null,
+            infrastructure_photo: null,
+            application_document: null,
+            police_report: null,
+            beneficiary_district: null,
+            beneficiary_municipality: null,
+            beneficiary_ward: null,
+            responsible_municipality: null,
+            temporary_shelter_land_district: null,
+            temporary_shelter_land_municipality: null,
+            temporary_shelter_land_ward: null,
+            beneficiary_representative_district: null,
+            beneficiary_representative_municipality: null,
+            beneficiary_representative_ward: null,
+            operating_municipality: null,
+        },
+    );
+
 
     const { epidemmicsPage:
         {
@@ -684,7 +741,18 @@ const TemporaryShelter = (props) => {
         municipalities,
         wards,
         uri } = props;
-
+    const handleFileInputChange = (e) => {
+        const file = e.target.files[0];
+        setData({ ...data, [e.target.name]: file });
+        // setSelectedFile(file);
+        // setSelectedFile(file);
+    };
+    const handleShowImage = (file) => {
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            return imageUrl;
+        }
+    };
     useEffect(() => {
         if (user && user.profile && user.profile.province && provinces && provinces.length > 0) {
             const nameOfProvince = provinces.filter(item => item.id === user.profile.province).map(item => item.title)[0];
@@ -710,7 +778,7 @@ const TemporaryShelter = (props) => {
         }
     }, [districts, municipalities, provinces, user, wards]);
 
-
+    console.log('This is final file', selectedFile);
     const clearData = () => {
         setuniqueId('');
         setReportedDate(null);
@@ -1159,6 +1227,66 @@ const TemporaryShelter = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossID]);
+
+
+    const handleFormData = (e) => {
+        if (e.target.value === 'beneficiary_district') {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+                beneficiary_municipality: null,
+                beneficiary_ward: null,
+            });
+        } else if (e.target.value === 'beneficiary_municipality') {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+                beneficiary_ward: null,
+            });
+        } else if (e.target.value === 'temporary_shelter_land_district') {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+                temporary_shelter_land_municipality: null,
+                temporary_shelter_land_ward: null,
+            });
+        } else if (e.target.value === 'temporary_shelter_land_municipality') {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+                temporary_shelter_land_ward: null,
+            });
+        } else if (e.target.value === 'beneficiary_representative_district') {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+                beneficiary_representative_municipality: null,
+                beneficiary_representative_ward: null,
+            });
+        } else if (e.target.value === 'beneficiary_representative_municipality') {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+                beneficiary_representative_ward: null,
+            });
+        } else {
+            setData({
+                ...data, [e.target.name]: e.target.value,
+            });
+        }
+    };
+    const selectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_district));
+    const selectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_municipality));
+    const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district));
+    const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
+    const beneficiarySelectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_representative_district));
+    const beneficiarySelectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality));
+
+
+    const municipalityDefinedName = user.profile.municipality
+        ? municipalities.find(i => i.id === user.profile.municipality).title_ne : '';
+
+    console.log('This is final data', data);
     return (
         <>
             <Page hideFilter hideMap />
@@ -1220,81 +1348,156 @@ const TemporaryShelter = (props) => {
                             <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
                                     <span>लाभग्राही क्रम संंख्याः</span>
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input type="text" name="" className={styles.inputClassName} />
                                 </div>
                                 <div className={styles.countDataIndividual}>
                                     <span>सम्झौता क्रमााङ्क संंख्याः</span>
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input
+                                        type="text"
+                                        name="pa_number"
+                                        onChange={handleFormData}
+                                        value={data.pa_number}
+                                        className={styles.inputClassName}
+                                    />
                                 </div>
                             </div>
                             <div className={styles.formDetails}>
                                 <p>
                                     भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि
                                     {' '}
-                                    <select name="cars" id="cars">
-                                        <option value="volvo">जिल्ला</option>
-                                        <option value="saab">Saab</option>
-                                        <option value="opel">Opel</option>
-                                        <option value="audi">Audi</option>
+                                    <select
+                                        name="beneficiary_district"
+                                        value={data.beneficiary_district}
+                                        id="districts-benificery"
+                                        onChange={handleFormData}
+                                    >
+                                        <option>जिल्ला</option>
+                                        {
+                                            districts.map(item => (
+                                                <option value={item.id}>{item.title_ne}</option>
+                                            ))
+                                        }
+
+
                                     </select>
                                     {' '}
                                     जिल्ला
                                     {' '}
-                                    <select name="cars" id="cars">
-                                        <option value="volvo"> गा.पा/न.पा. वडा नंं.</option>
-                                        <option value="saab">Saab</option>
-                                        <option value="opel">Opel</option>
-                                        <option value="audi">Audi</option>
+                                    <select
+                                        id="beneficiary_municipality"
+                                        name="beneficiary_municipality"
+                                        value={data.beneficiary_municipality}
+                                        onChange={handleFormData}
+                                    >
+                                        <option> गा.पा/न.पा. वडा नंं.</option>
+                                        {
+                                            selectedMunicipality.map(item => (
+                                                <option value={item.id}>{item.title_ne}</option>
+                                            ))
+                                        }
                                     </select>
                                     {' '}
                                     गा.पा/न.पा.
                                     {' '}
                                     {' '}
                                     वडा नंं.
-                                    <select name="cars" id="cars">
-                                        <option value="volvo">वडा नंं.</option>
-                                        <option value="saab">Saab</option>
-                                        <option value="opel">Opel</option>
-                                        <option value="audi">Audi</option>
+                                    <select
+                                        id="beneficiary_ward"
+                                        name="beneficiary_ward"
+                                        value={data.beneficiary_ward}
+                                        onChange={handleFormData}
+                                    >
+                                        <option>वडा नंं.</option>
+                                        {
+                                            selectedWard.map(item => (
+                                                <option value={item.id}>{item.title}</option>
+                                            ))
+                                        }
                                     </select>
+                                    {' '}
+                                    गाउँँ/टोल
+                                    <input
+                                        type="text"
+                                        className={styles.inputClassName}
+                                        name="tole_name"
+                                        value={data.tole_name}
+                                        onChange={handleFormData}
+                                    />
                                     {' '}
                                     बस्नेे श्री
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input
+                                        type="text"
+                                        name="grand_parent_name"
+                                        value={data.grand_parent_name}
+                                        className={styles.inputClassName}
+                                        onChange={handleFormData}
+                                    />
                                     {' '}
                                     को
                                     {' '}
-                                    <select name="cars" id="cars">
-                                        <option value="volvo">नाती</option>
-                                        <option value="saab">Saab</option>
-                                        <option value="opel">Opel</option>
-                                        <option value="audi">Audi</option>
+                                    <select
+                                        id="grand_child_relation"
+                                        name="grand_child_relation"
+                                        value={data.grand_child_relation}
+                                        onChange={handleFormData}
+                                    >
+                                        <option>सम्बन्ध</option>
+                                        <option value="नााती">नाती</option>
+                                        <option value="नाातीनी">नाातीनी</option>
+                                        <option value="बुुहाारी">बुुहाारी</option>
                                     </select>
                                     {' '}
                                     श्री
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input
+                                        type="text"
+                                        className={styles.inputClassName}
+                                        onChange={handleFormData}
+                                        name="parent_name"
+                                        value={data.parent_name}
+                                    />
                                     {' '}
                                     को
                                     {' '}
-                                    <select name="cars" id="cars">
-                                        <option value="volvo">छोरा</option>
-                                        <option value="saab">Saab</option>
-                                        <option value="opel">Opel</option>
-                                        <option value="audi">Audi</option>
+                                    <select
+                                        id="child_relation"
+                                        name="child_relation"
+                                        value={data.child_relation}
+                                        onChange={handleFormData}
+
+
+                                    >
+                                        <option>सम्बन्ध</option>
+                                        <option value="छोरा">छोरा</option>
+                                        <option value="छोरी">छोरी</option>
+                                        <option value="श्रीमती">श्रीमती</option>
+
                                     </select>
                                     {' '}
                                     बर्ष
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input
+                                        type="text"
+                                        name="beneficiary_age"
+                                        onChange={handleFormData}
+                                        value={data.beneficiary_age}
+                                        className={styles.inputClassName}
+                                    />
                                     {' '}
                                     को लााभग्रााही श्री
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input
+                                        type="text"
+                                        name="beneficiary_name_nepali"
+                                        value={data.beneficiary_name_nepali}
+                                        onChange={handleFormData}
+                                        className={styles.inputClassName}
+                                    />
                                     {' '}
                                     (यसपछि प्रथम पक्ष भनिनेे) र
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} />
+                                    <input type="text" className={styles.inputClassName} value={municipalityDefinedName} disabled />
                                     {' '}
                                     गााउँँपाालिका,
                                     नगरपाालिका काार्याालय (यसपछि दोोश्रोो पक्ष भनिनेे) बीच देेहााय बमोजिमका शर्तहरुको अधिनमाा रही भूूकम्पबाट प्रभाावित
@@ -1308,47 +1511,86 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.tempAddressIndividualDiv}>
                                         जिल्ला
                                         {' '}
-                                        <select name="cars" id="cars">
-                                            <option value="volvo">जिल्ला</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="opel">Opel</option>
-                                            <option value="audi">Audi</option>
+                                        <select
+                                            id="temporary_shelter_land_district"
+                                            name="temporary_shelter_land_district"
+                                            value={data.temporary_shelter_land_district}
+                                            onChange={handleFormData}
+                                        >
+                                            <option> गा.पा/न.पा. वडा नंं.</option>
+                                            {
+                                                districts.map(item => (
+                                                    <option value={item.id}>{item.title_ne}</option>
+                                                ))
+                                            }
                                         </select>
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         गाा.पा/न.पा.
                                         {' '}
-                                        <select name="cars" id="cars">
-                                            <option value="volvo">गाा.पा/न.पा.</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="opel">Opel</option>
-                                            <option value="audi">Audi</option>
+                                        <select
+                                            id="temporary_shelter_land_municipality"
+                                            name="temporary_shelter_land_municipality"
+                                            value={data.temporary_shelter_land_municipality}
+                                            onChange={handleFormData}
+                                        >
+                                            <option> गा.पा/न.पा. वडा नंं.</option>
+                                            {
+                                                tempSelectedMunicipality.map(item => (
+                                                    <option value={item.id}>{item.title_ne}</option>
+                                                ))
+                                            }
                                         </select>
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         वडा नंं.
                                         {' '}
-                                        <select name="cars" id="cars">
-                                            <option value="volvo"> वडा नंं.</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="opel">Opel</option>
-                                            <option value="audi">Audi</option>
+                                        <select
+                                            id="temporary_shelter_land_ward"
+                                            name="temporary_shelter_land_ward"
+                                            value={data.temporary_shelter_land_ward}
+                                            onChange={handleFormData}
+                                        >
+                                            <option> गा.पा/न.पा. वडा नंं.</option>
+                                            {
+                                                tempSelectedWard.map(item => (
+                                                    <option value={item.id}>{item.title}</option>
+                                                ))
+                                            }
                                         </select>
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         कित्ता नंं.
                                         {' '}
-                                        <input type="text" className={styles.inputClassName} />
+                                        <input
+                                            type="text"
+                                            name="temporary_shelter_land_kitta_number"
+                                            value={data.temporary_shelter_land_kitta_number}
+                                            onChange={handleFormData}
+                                            className={styles.inputClassName}
+                                        />
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         क्षेेत्रफल
                                         {' '}
-                                        <input type="text" className={styles.inputClassName} />
+                                        <input
+                                            type="text"
+                                            name="temporary_shelter_land_area"
+                                            value={data.temporary_shelter_land_area}
+                                            onChange={handleFormData}
+                                            className={styles.inputClassName}
+                                        />
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         नक्सा सिट नंं.
                                         {' '}
-                                        <input type="text" className={styles.inputClassName} />
+                                        <input
+                                            type="text"
+                                            name="temporary_shelter_land_map_sheet_number"
+                                            value={data.temporary_shelter_land_map_sheet_number}
+                                            onChange={handleFormData}
+                                            className={styles.inputClassName}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -1359,111 +1601,209 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.formElements}>
                                         <div className={styles.freeText}>
                                             <span>नाम, थर नेेपालीमाः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                onChange={handleFormData}
+                                                name="beneficiary_name_nepali"
+                                                value={data.beneficiary_name_nepali}
+
+                                                className={styles.inputClassName}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>नाम, थर अंंग्रेजीमाः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="beneficiary_name_english"
+                                                value={data.beneficiary_name_english}
+                                            />
                                         </div>
                                         <div className={styles.locationDetails}>
                                             <div>
                                                 <span>जिल्लाः</span>
                                                 {' '}
-                                                <select name="cars" id="cars">
+                                                <select name="beneficiary_district" value={data.beneficiary_district} disabled id="beneficiary_district1">
                                                     <option value="volvo"> वडा नंं.</option>
-                                                    <option value="saab">Saab</option>
-                                                    <option value="opel">Opel</option>
-                                                    <option value="audi">Audi</option>
+                                                    {
+                                                        districts.map(item => (
+                                                            <option value={item.id}>{item.title_ne}</option>
+                                                        ))
+                                                    }
                                                 </select>
                                             </div>
                                             <div>
                                                 <span>गा.पा./न.पाः</span>
                                                 {' '}
-                                                <select name="cars" id="cars">
+                                                <select name="beneficiary_municipality" value={data.beneficiary_municipality} disabled id="cars">
                                                     <option value="volvo"> गा.पा./न.पाः</option>
-                                                    <option value="saab">Saab</option>
-                                                    <option value="opel">Opel</option>
-                                                    <option value="audi">Audi</option>
+                                                    {
+                                                        selectedMunicipality.map(item => (
+                                                            <option value={item.id}>{item.title_ne}</option>
+                                                        ))
+                                                    }
                                                 </select>
                                             </div>
                                             <div>
                                                 <span>वडा नंं.</span>
                                                 {' '}
-                                                <select name="cars" id="cars">
+                                                <select name="beneficiary_ward" value={data.beneficiary_ward} disabled id="cars">
                                                     <option value="volvo"> वडा नंं.</option>
-                                                    <option value="saab">Saab</option>
-                                                    <option value="opel">Opel</option>
-                                                    <option value="audi">Audi</option>
+                                                    {
+                                                        selectedWard.map(item => (
+                                                            <option value={item.id}>{item.title_ne}</option>
+                                                        ))
+                                                    }
                                                 </select>
                                             </div>
                                             <div>
                                                 <span>ना.प्र.न.</span>
                                                 {' '}
-                                                <input type="text" className={styles.inputClassName} />
+                                                <input
+                                                    type="text"
+                                                    name="beneficiary_citizenship_number"
+                                                    value={data.beneficiary_citizenship_number}
+                                                    onChange={handleFormData}
+                                                    className={styles.inputClassName}
+                                                />
                                             </div>
                                             <div>
                                                 <span>सम्पर्क नंं.</span>
                                                 {' '}
-                                                <input type="text" className={styles.inputClassName} />
+                                                <input
+                                                    type="text"
+                                                    name="beneficiary_contact_number"
+                                                    value={data.beneficiary_contact_number}
+                                                    onChange={handleFormData}
+
+                                                    className={styles.inputClassName}
+                                                />
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                <span>फोटो:</span>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        id="file-input"
+                                                        // style={{ display: 'none' }}
+                                                        onChange={handleFileInputChange}
+                                                        name="beneficiary_photo"
+                                                    />
+                                                    {
+                                                        data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
+                                                    }
+                                                </div>
+
+
                                             </div>
                                         </div>
-                                        <div>
-                                            <p>
-                                                सम्झौताा-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
-                                                विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
-                                                संं रक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
+                                        {
+                                            data.is_beneficiary_available_to_sign
+                                                ? (
+                                                    <div>
+                                                        <p>
+                                                            सम्झौताा-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
+                                                            विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
+                                                            संं रक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
 
-                                            </p>
-                                            <div className={styles.locationDetails}>
-                                                <div>
-                                                    <span>जिल्लाः</span>
-                                                    {' '}
-                                                    <select name="cars" id="cars">
-                                                        <option value="volvo"> वडा नंं.</option>
-                                                        <option value="saab">Saab</option>
-                                                        <option value="opel">Opel</option>
-                                                        <option value="audi">Audi</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <span>गा.पा./न.पाः</span>
-                                                    {' '}
-                                                    <select name="cars" id="cars">
-                                                        <option value="volvo"> गा.पा./न.पाः</option>
-                                                        <option value="saab">Saab</option>
-                                                        <option value="opel">Opel</option>
-                                                        <option value="audi">Audi</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <span>गा.पा./न.पाः</span>
-                                                    {' '}
-                                                    <select name="cars" id="cars">
-                                                        <option value="volvo"> गा.पा./न.पाः</option>
-                                                        <option value="saab">Saab</option>
-                                                        <option value="opel">Opel</option>
-                                                        <option value="audi">Audi</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <span>ना.प्र.न.</span>
-                                                    {' '}
-                                                    <input type="text" className={styles.inputClassName} />
-                                                </div>
+                                                        </p>
+                                                        <div className={styles.locationDetails}>
+                                                            <div>
+                                                                <span>जिल्लाः</span>
+                                                                {' '}
+                                                                <select
+                                                                    name="beneficiary_representative_district"
+                                                                    value={data.beneficiary_representative_district}
+                                                                    onChange={handleFormData}
+                                                                    id="beneficiary_representative_district1"
+                                                                >
+                                                                    <option>जिल्लाः</option>
+                                                                    {
+                                                                        districts.map(item => (
+                                                                            <option value={item.id}>{item.title_ne}</option>
+                                                                        ))
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <span>गा.पा./न.पाः</span>
+                                                                {' '}
+                                                                <select
+                                                                    name="beneficiary_representative_municipality"
+                                                                    value={data.beneficiary_representative_municipality}
+                                                                    onChange={handleFormData}
+                                                                    id="beneficiary_representative_municipality1"
 
-                                            </div>
+                                                                >
+                                                                    <option> गा.पा./न.पाः</option>
+                                                                    {
+                                                                        beneficiarySelectedMunicipality.map(item => (
+                                                                            <option value={item.id}>{item.title_ne}</option>
+                                                                        ))
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <span>गा.पा./न.पाः</span>
+                                                                {' '}
+                                                                <select
+                                                                    name="beneficiary_representative_ward"
+                                                                    value={data.beneficiary_representative_ward}
+                                                                    onChange={handleFormData}
+                                                                    id="beneficiary_representative_ward1"
+                                                                >
+                                                                    <option> गा.पा./न.पाः</option>
+                                                                    {
+                                                                        beneficiarySelectedWard.map(item => (
+                                                                            <option value={item.id}>{item.title_ne}</option>
+                                                                        ))
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <span>ना.प्र.न.</span>
+                                                                {' '}
+                                                                <input
+                                                                    type="text"
+                                                                    name="beneficiary_representative_citizenship_number"
+                                                                    value={data.beneficiary_representative_citizenship_number}
+                                                                    onChange={handleFormData}
+                                                                    className={styles.inputClassName}
+                                                                />
+                                                            </div>
 
-                                        </div>
+                                                        </div>
+
+                                                    </div>
+                                                ) : ''
+                                        }
+
                                         <div className={styles.freeText}>
                                             <span>बाजेेको नाम, थर:</span>
                                             {' '}
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                name="beneficiary_representative_grandfather_name"
+                                                value={data.beneficiary_representative_grandfather_name}
+                                                onChange={handleFormData}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>बाबुु/आमाको नाम, थर:</span>
                                             {' '}
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                name="beneficiary_representative_parent_name"
+                                                value={data.beneficiary_representative_parent_name}
+                                                onChange={handleFormData}
+                                            />
                                         </div>
+
+
                                     </div>
                                 </div>
                                 <div className={styles.firstPartContainer}>
@@ -1471,19 +1811,43 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.formElements}>
                                         <div className={styles.freeText}>
                                             <span>खातावालाको नाम, थरः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                name="bank_account_holder_name"
+                                                value={data.bank_account_holder_name}
+                                                onChange={handleFormData}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>खाता नम्बरः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="bank_account_number"
+                                                value={data.bank_account_number}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>बैंंक/वित्तीय संंस्थाको नामः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="bank_name"
+                                                value={data.bank_name}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>शाखाः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="bank_branch_name"
+                                                value={data.bank_branch_name}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -1492,11 +1856,23 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.formElements}>
                                         <div className={styles.freeText}>
                                             <span>बसाइँँसराइ प्रमाण-पत्र नंः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="migration_certificate_number"
+                                                value={data.migration_certificate_number}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>बसाइँँसराइको मितिः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="migration_date_bs"
+                                                value={data.migration_date_bs}
+                                            />
                                         </div>
 
                                     </div>
@@ -1506,41 +1882,250 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.formElements}>
                                         <div className={styles.freeText}>
                                             <span>मितिः</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="signed_date"
+                                                value={data.signed_date}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>साक्षीको नाम, थर</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="withness_name_nepali"
+                                                value={data.withness_name_nepali}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>हस्ताक्षर</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                disabled
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>लाभग्राहीसँँगको नाता</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="withness_relation"
+                                                value={data.withness_relation}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>सम्पर्क नंं.</span>
-                                            <input type="text" className={styles.inputClassName} />
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="withness_contact_number"
+                                                value={data.withness_contact_number}
+                                            />
                                         </div>
-                                        <div className={styles.freeText}>
+                                        <div className={styles.freeTextTable}>
                                             <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औठांंछाप</span>
                                             <table>
                                                 <tr>
-                                                    <th>Left Header</th>
-                                                    <td>Content for Left Header</td>
+                                                    <th>दायाँँ</th>
+                                                    <th>बायाँँ</th>
+
                                                 </tr>
                                                 <tr>
-                                                    <th>Right Header</th>
-                                                    <td>Content for Right Header</td>
+                                                    <td />
+                                                    <td />
+
                                                 </tr>
+
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                                <div>4</div>
-                                <div>5</div>
+
+                            </div>
+                            <div className={styles.firstPartDetails}>
+                                <h2 style={{ textDecoration: 'underline' }}>ख. दोश्रो पक्ष</h2>
+                                <div className={styles.firstPartContainer} style={{ gap: '20px' }}>
+                                    <div className={styles.formElements}>
+                                        <div className={styles.freeTextPart2}>
+                                            (<input type="text" disabled className={styles.inputClassName} />
+                                            <span>कार्यपालिका कार्यालयको छाप</span>)
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            (
+                                            <input type="text" className={styles.inputClassName} value={municipalityDefinedName} disabled />
+                                            <span>गा.पा/न.पा.</span>
+                                            )
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>हस्ताक्षरः</span>
+                                            <input type="text" className={styles.inputClassName} disabled />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>नामः</span>
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="operating_municipality_officer_name"
+                                                value={data.operating_municipality_officer_name}
+                                            />
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>पदः प्रमुुख प्रशासकीय अधिकृृत</span>
+
+                                        </div>
+                                        <div className={styles.freeText}>
+                                            <span>मितिः</span>
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                onChange={handleFormData}
+                                                name="operating_municipality_signed_date"
+                                                value={data.operating_municipality_signed_date}
+                                            />
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div>
+                                <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
+                                <div>
+                                    <h2> 1. म/मेेरो परिवारका लाागि अस्थायी आवास निर्मााण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्यााप्त घडेेरी छ ।</h2>
+                                </div>
+                                <div>
+                                    <h2> 2. मैैलेे भूूकम्पबाट प्राभावित घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्रमा
+                                        उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनााउनेे छुु ।
+                                    </h2>
+                                </div>
+                                <div>
+                                    <h2>  3. निर्मााण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्मााण कार्य गर्न तथा श्रमिक
+                                        जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।
+                                    </h2>
+                                </div>
+                                <div>
+                                    <h2> 4. मैैलेे प्राप्त गर्नेे अस्थाायी आवास निर्मााण अनुुदाान रकम अस्थायी आवास निर्मााणका लागि मात्र गर्नेेछुु ।</h2>
+                                </div>
+                                <div>
+                                    <h2>
+                                        5. उपलब्ध अनुुदाान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्मााण सम्पन्न गर्नेेछुु।
+                                    </h2>
+                                </div>
+                                <div>
+                                    <h2>
+                                        6. परिवारको व्यक्तिगत सरसफााई ध्यानमा राखी संंरचना निर्मााण गर्नेेछुु।
+                                    </h2>
+                                </div>
+
+                            </div>
+                            <div>
+                                <h2>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h2>
+                                <div>
+                                    <h2>
+                                        1. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवाास निर्मााण अनुुदाान सरकारको
+                                        तर्फ बाट बैंंक माार्फत उपलब्ध गरााइनेे छ ।
+                                    </h2>
+                                </div>
+                            </div>
+                            <div>
+                                <h2>आवश्यक काागजातहरुः</h2>
+                                <div>
+                                    <h2> 1. नाागरिकता प्रमाण-पत्रकोो प्रतिलिपि वाा रााष्ट्रिय परिचयपत्रको प्रतिलिपि वाा मतदाता परिचयपत्रको प्रतिलिपि</h2>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="file-input"
+                                                // style={{ display: 'none' }}
+                                                onChange={handleFileInputChange}
+                                                name="identity_document"
+                                            />
+                                            {
+                                                data.identity_document ? <img height={100} width={100} src={handleShowImage(data.identity_document)} alt="img" /> : ''
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2> 2. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनााको फोटो
+                                    </h2>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="file-input"
+                                                // style={{ display: 'none' }}
+                                                onChange={handleFileInputChange}
+                                                name="infrastructure_photo"
+                                            />
+                                            {
+                                                data.infrastructure_photo ? <img height={100} width={100} src={handleShowImage(data.infrastructure_photo)} alt="img" /> : ''
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2> 3. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन
+                                    </h2>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="file-input"
+                                                // style={{ display: 'none' }}
+                                                onChange={handleFileInputChange}
+                                                name="application_document"
+                                            />
+                                            {
+                                                data.application_document ? <img height={100} width={100} src={handleShowImage(data.application_document)} alt="img" /> : ''
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2>4. प्रहरीको मुुचुल्का</h2>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="file-input"
+                                                // style={{ display: 'none' }}
+                                                onChange={handleFileInputChange}
+                                                name="police_report"
+                                            />
+                                            {
+                                                data.police_report ? <img height={100} width={100} src={handleShowImage(data.police_report)} alt="img" /> : ''
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
                             </div>
                             <span className={styles.ValidationErrors}>{validationError}</span>
                             <div className={styles.saveOrAddButtons}>
