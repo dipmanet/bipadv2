@@ -63,6 +63,58 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+
+    addEarthquakePostRequest: {
+        url: '/temporary-shelter-enrollment-form/',
+        method: methods.POST,
+        query: { meta: true },
+        onMount: false,
+        body: ({ params: { body } = { body: {} } }) => body,
+        onSuccess: ({
+            params: { onSuccess } = { onSuccess: undefined },
+            response,
+        }) => {
+            if (onSuccess) {
+                onSuccess(response as PageType.Resource);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    const data = error.response;
+                    const resultError = {};
+                    const keying = Object.keys(data);
+                    const valuing = Object.values(data).map(item => item[0]);
+                    const outputError = () => {
+                        const outputFinalError = keying.map((item, i) => (
+                            resultError[`${item}`] = valuing[i]
+                        ));
+                        return outputFinalError;
+                    };
+                    outputError();
+
+
+                    params.setFaramErrors(resultError);
+                }
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        extras: { hasFile: true },
+    },
     loss: {
         url: '/loss/',
         method: methods.POST,
@@ -675,7 +727,7 @@ const TemporaryShelter = (props) => {
             entry_date_bs: '',
             pa_number: '',
             tole_name: '',
-            grand_parent_title: null,
+            grand_parent_title: 'श्री',
             grand_parent_name: '',
             grand_child_relation: null,
             parent_title: 'श्री',
@@ -740,7 +792,13 @@ const TemporaryShelter = (props) => {
         districts,
         municipalities,
         wards,
-        uri } = props;
+        uri,
+        requests: {
+            addEarthquakePostRequest,
+
+        } } = props;
+
+
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         setData({ ...data, [e.target.name]: file });
@@ -1287,6 +1345,20 @@ const TemporaryShelter = (props) => {
         ? municipalities.find(i => i.id === user.profile.municipality).title_ne : '';
 
     console.log('This is final data', data);
+
+    const handleClick = () => {
+        const finalUpdateData = data;
+        finalUpdateData.operating_municipality = user.profile.municipality;
+        finalUpdateData.responsible_municipality = user.profile.municipality;
+        console.log('final data', finalUpdateData);
+        addEarthquakePostRequest.do({
+            body: finalUpdateData,
+            onSuccess: datas => console.log('Successful', datas),
+            setFaramErrors: err => console.log('err', err),
+
+        });
+    };
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -1343,7 +1415,14 @@ const TemporaryShelter = (props) => {
                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि अनुुदाान सम्झौौताा-पत्र</h1>
                             </div>
                             <div className={styles.datePickerForm}>
-                                <span>मितिः.....</span>
+                                <span>मितिः</span>
+                                <input
+                                    type="text"
+                                    name="entry_date_bs"
+                                    value={data.entry_date_bs}
+                                    onChange={handleFormData}
+                                    className={styles.inputClassName}
+                                />
                             </div>
                             <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
@@ -1478,7 +1557,7 @@ const TemporaryShelter = (props) => {
                                     बर्ष
                                     {' '}
                                     <input
-                                        type="text"
+                                        type="number"
                                         name="beneficiary_age"
                                         onChange={handleFormData}
                                         value={data.beneficiary_age}
@@ -1700,7 +1779,7 @@ const TemporaryShelter = (props) => {
                                             </div>
                                         </div>
                                         {
-                                            data.is_beneficiary_available_to_sign
+                                            !data.is_beneficiary_available_to_sign
                                                 ? (
                                                     <div>
                                                         <p>
@@ -1710,6 +1789,17 @@ const TemporaryShelter = (props) => {
 
                                                         </p>
                                                         <div className={styles.locationDetails}>
+                                                            <div className={styles.freeText}>
+                                                                <span>नाम, थर नेेपालीमाः</span>
+                                                                <input
+                                                                    type="text"
+                                                                    onChange={handleFormData}
+                                                                    name="beneficiary_representative_name_nepali"
+                                                                    value={data.beneficiary_representative_name_nepali}
+
+                                                                    className={styles.inputClassName}
+                                                                />
+                                                            </div>
                                                             <div>
                                                                 <span>जिल्लाः</span>
                                                                 {' '}
@@ -2129,7 +2219,7 @@ const TemporaryShelter = (props) => {
                             </div>
                             <span className={styles.ValidationErrors}>{validationError}</span>
                             <div className={styles.saveOrAddButtons}>
-                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New'}</button>
+                                <button className={styles.submitButtons} onClick={handleClick} type="submit">{'Save and New'}</button>
                             </div>
                         </div>
                     </div>

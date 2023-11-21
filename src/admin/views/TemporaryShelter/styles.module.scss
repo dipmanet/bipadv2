@@ -267,6 +267,15 @@ tr {
                     display: flex;
                     justify-content: flex-end;
                     font-size: 20px;
+
+                    .inputClassName {
+                        border: none;
+                        border-bottom: 2px dotted;
+                        outline: none;
+                        background: none;
+
+                    }
+
                 }
 
                 .countData {
