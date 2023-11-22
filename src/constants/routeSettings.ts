@@ -225,6 +225,16 @@ const routeSettings: SomeRoute[] = [
         id: '',
     },
     {
+        name: 'add-new-temporary-shelter-enrollment-data-preview',
+        title: 'Add New Temporary shelter enrollment data preview',
+        titleNep: 'Add New Temporary shelter enrollment data preview',
+        path: '/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/:id',
+        load: () => import('../admin/views/TemporaryShelterPreview'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: '',
+    },
+    {
         name: 'epidemics-upload',
         title: 'Epidemics Bulk Upload',
         titleNep: 'महामारी बल्क अपलोड',

@@ -1358,7 +1358,14 @@ const TemporaryShelter = (props) => {
 
         });
     };
-
+    // Function to handle checkbox change
+    const handleCheckboxChange = () => {
+        // Update the state with the opposite value of the current state
+        setData({
+            ...data,
+            is_beneficiary_available_to_sign: !data.is_beneficiary_available_to_sign,
+        });
+    };
     return (
         <>
             <Page hideFilter hideMap />
@@ -1523,8 +1530,8 @@ const TemporaryShelter = (props) => {
                                     >
                                         <option>सम्बन्ध</option>
                                         <option value="नााती">नाती</option>
-                                        <option value="नाातीनी">नाातीनी</option>
-                                        <option value="बुुहाारी">बुुहाारी</option>
+                                        <option value="नाातीनी">नातीनी</option>
+                                        <option value="बुुहाारी">बुुहारी</option>
                                     </select>
                                     {' '}
                                     श्री
@@ -1564,7 +1571,7 @@ const TemporaryShelter = (props) => {
                                         className={styles.inputClassName}
                                     />
                                     {' '}
-                                    को लााभग्रााही श्री
+                                    को लाभग्रााही श्री
                                     {' '}
                                     <input
                                         type="text"
@@ -1578,9 +1585,9 @@ const TemporaryShelter = (props) => {
                                     {' '}
                                     <input type="text" className={styles.inputClassName} value={municipalityDefinedName} disabled />
                                     {' '}
-                                    गााउँँपाालिका,
-                                    नगरपाालिका काार्याालय (यसपछि दोोश्रोो पक्ष भनिनेे) बीच देेहााय बमोजिमका शर्तहरुको अधिनमाा रही भूूकम्पबाट प्रभाावित
-                                    घरपरिवारलााई अस्थाायी आवाास निर्मााण अनुुदाान काार्ययविधि,२०८०, बमोजिम अस्थाायी आवाास निर्मााण गर्न यो अनुुदाान
+                                    गााउँँपालिका,
+                                    नगरपालिका कार्याालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
+                                    घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि,२०८०, बमोजिम अस्थायी आवास निर्मााण गर्न यो अनुुदान
                                     सम्झौता-पत्रमा सहीछााप गरेेका छौंं ।
                                 </p>
                             </div>
@@ -1596,7 +1603,7 @@ const TemporaryShelter = (props) => {
                                             value={data.temporary_shelter_land_district}
                                             onChange={handleFormData}
                                         >
-                                            <option> गा.पा/न.पा. वडा नंं.</option>
+                                            <option> जिल्ला</option>
                                             {
                                                 districts.map(item => (
                                                     <option value={item.id}>{item.title_ne}</option>
@@ -1605,7 +1612,7 @@ const TemporaryShelter = (props) => {
                                         </select>
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        गाा.पा/न.पा.
+                                        गा.पा/न.पा.
                                         {' '}
                                         <select
                                             id="temporary_shelter_land_municipality"
@@ -1630,7 +1637,7 @@ const TemporaryShelter = (props) => {
                                             value={data.temporary_shelter_land_ward}
                                             onChange={handleFormData}
                                         >
-                                            <option> गा.पा/न.पा. वडा नंं.</option>
+                                            <option>वडा नंं.</option>
                                             {
                                                 tempSelectedWard.map(item => (
                                                     <option value={item.id}>{item.title}</option>
@@ -1777,9 +1784,22 @@ const TemporaryShelter = (props) => {
 
 
                                             </div>
+                                            <div style={{ display: 'flex', gap: '5px' }}>
+                                                <span>
+                                                    लाभार्थी हस्ताक्षर गर्न उपलब्ध छ?
+                                                </span>
+                                                {' '}
+                                                <input
+                                                    style={{ cursor: 'pointer' }}
+                                                    type="checkbox"
+                                                    checked={data.is_beneficiary_available_to_sign}
+                                                    onChange={handleCheckboxChange}
+                                                />
+                                            </div>
+
                                         </div>
                                         {
-                                            !data.is_beneficiary_available_to_sign
+                                            data.is_beneficiary_available_to_sign
                                                 ? (
                                                     <div>
                                                         <p>

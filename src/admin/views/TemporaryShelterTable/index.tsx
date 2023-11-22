@@ -25,6 +25,7 @@ import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import TemporaryShelterTableData from 'src/admin/components/TemporaryShelterTableData';
 import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -62,7 +63,7 @@ const TemporaryShelterTable = (props) => {
                                 <div className={styles.mainContent}>
 
                                     <div className={styles.formDataContainer}>
-                                        <IncidentTable />
+                                        <TemporaryShelterTableData />
                                     </div>
 
                                 </div>
