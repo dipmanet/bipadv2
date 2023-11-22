@@ -170,7 +170,7 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const [fetchedData, setFetchedData] = useState([]);
+
     const createSortHandler = (property: string) => (
         event: React.MouseEvent<unknown>,
     ) => onRequestSort(event, property);
@@ -182,14 +182,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             disablePadding: false,
             label: tableTitleRef[invD],
         }));
-    const handleFetchedData = (finalData) => {
-        setFetchedData(finalData);
-    };
-    useEffect(() => {
-        props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData });
-    }, []);
 
-    console.log('This is fetched data', fetchedData);
+
     return (
         <TableHead>
             <TableRow>
@@ -301,12 +295,18 @@ const TemporaryShelterTableData = (props) => {
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
     const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile } } = props;
-
+    const [fetchedData, setFetchedData] = useState([]);
 
     const loadingCondition = (boolean) => {
         setLoader(boolean);
     };
+    const handleFetchedData = (finalData) => {
+        setFetchedData(finalData);
+    };
 
+    useEffect(() => {
+        props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData });
+    }, []);
     useEffect(() => {
         setLoader(true);
         props.requests.incidents.do({
@@ -541,7 +541,7 @@ const TemporaryShelterTableData = (props) => {
         }
         setSelected(newSelected);
     };
-
+    console.log('This is fetched data', fetchedData);
     return (
         <>
             {loader ? (
