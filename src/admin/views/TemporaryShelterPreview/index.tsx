@@ -35,7 +35,6 @@ import {
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 // import styles from './styles.module.scss';
-import './index.css';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
 import {
