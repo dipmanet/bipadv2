@@ -187,7 +187,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell
+                {/* <TableCell
                     align="center"
                     padding="checkbox"
                     sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
@@ -199,7 +199,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         onChange={onSelectAllClick}
                         style={{ visibility: 'hidden' }}
                     />
-                </TableCell>
+                </TableCell> */}
                 {headCells.map(headCell => (
                     <TableCell
                         align="left"
@@ -301,7 +301,7 @@ const TemporaryShelterTableData = (props) => {
         setLoader(boolean);
     };
     const handleFetchedData = (finalData) => {
-        setFetchedData(finalData);
+        setFetchedData(finalData.results);
     };
 
     useEffect(() => {
@@ -334,48 +334,23 @@ const TemporaryShelterTableData = (props) => {
     };
 
     useEffect(() => {
-        if (incidentData) {
-            const tableRows = incidentData.map((row) => {
+        if (fetchedData) {
+            const tableRows = fetchedData.map((row) => {
                 const epidemicObj = {
                     id: row.id,
-                    wards: row.wards,
-                    dataSource: row.dataSource,
-                    streetAddress: row.streetAddress, // use local address field
-                    longitube: row.point.coordinates[0],
-                    latitude: row.point.coordinates[1],
-                    // incident_on: row.incidentOn && (row.incidentOn).split('T')[0],
-                    reportedOn: row.reportedOn && (row.reportedOn).split('T')[0],
-                    hazard: hazardNameSelected(row.hazard),
-                    cause: row.cause, // hazard inducer
-                    estimatedLoss: row.loss && numberFormatter(row.loss.estimatedLoss),
-                    agricultureEconomicLoss: row && numberFormatter(row.agricultureEconomicLoss),
-                    infrastructureEconomicLoss: row && numberFormatter(row.infrastructureEconomicLoss),
-                    infrastructureDestroyedCount: row && row.infrastructureDestroyedCount,
-                    infrastructureDestroyedHouseCount: row && row.infrastructureDestroyedHouseCount,
-                    infrastructureAffectedHouseCount: row && row.infrastructureAffectedHouseCount,
-                    livestockDestroyedCount: row && row.livestockDestroyedCount,
-                    totalInjuredMale: row.loss && row.loss.peopleInjuredMaleCount,
-                    totalInjuredFemale: row.loss && row.loss.peopleInjuredFemaleCount,
-                    totalInjuredOther: row.loss && row.loss.peopleInjuredOtherCount,
-                    totalInjuredDisabled: row.loss && row.loss.peopleInjuredDisabledCount,
-                    peopleMissingMaleCount: row.loss && row.loss.peopleMissingMaleCount,
-                    peopleMissingFemaleCount: row.loss && row.loss.peopleMissingFemaleCount,
-                    peopleMissingOtherCount: row.loss && row.loss.peopleMissingOtherCount,
-                    peopleMissingDisabledCount: row.loss && row.loss.peopleMissingDisabledCount,
-                    totalDeadMale: row.loss && row.loss.peopleDeathMaleCount,
-                    totalDeadFemale: row.loss && row.loss.peopleDeathFemaleCount,
-                    totalDeadOther: row.loss && row.loss.peopleDeathOtherCount,
-                    totalDeadDisabled: row.loss && row.loss.peopleDeathDisabledCount,
-                    verified: row.verified,
-                    verificationMessage: row.verificationMessage,
-                    approved: row.approved,
+                    entryDateBs: row.entryDateBs,
+                    beneficiaryNameNepali: row.beneficiaryNameNepali,
+                    beneficiaryDistrict: row.beneficiaryDistrict, // use local address field
+                    beneficiaryMunicipality: row.beneficiaryMunicipality,
+                    beneficiaryWard: row.beneficiaryWard,
+
                 };
 
                 return epidemicObj;
             });
             setFilteredRowData(tableRows);
         }
-    }, [incidentData, hazardList]);
+    }, [incidentData, hazardList, fetchedData]);
 
     useEffect(() => {
         props.requests.incidents.do({
@@ -607,11 +582,11 @@ const TemporaryShelterTableData = (props) => {
                                 orderBy={orderBy}
                                 // onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={filteredRowData && filteredRowData.length}
+                                rowCount={fetchedData && fetchedData.length}
                             />
                             <TableBody>
-                                {filteredRowData
-                                    && stableSort(filteredRowData, getComparator(order, orderBy))
+                                {fetchedData
+                                    && stableSort(fetchedData, getComparator(order, orderBy))
                                         .map((row, index) => {
                                             // const isItemSelected = isSelected(row.id);
                                             const labelId = `enhanced-table-checkbox-${index}`;
@@ -625,7 +600,7 @@ const TemporaryShelterTableData = (props) => {
                                                     key={row.id}
                                                 // selected={isItemSelected}
                                                 >
-                                                    <TableCell
+                                                    {/* <TableCell
                                                         align="center"
                                                         padding="normal"
                                                     >
@@ -638,7 +613,7 @@ const TemporaryShelterTableData = (props) => {
                                                             }}
                                                             disabled={row.dataSource === 'drr_api'}
                                                         />
-                                                    </TableCell>
+                                                    </TableCell> */}
                                                     {
                                                         Object.keys(row)
                                                             .map((val) => {
@@ -765,7 +740,7 @@ const TemporaryShelterTableData = (props) => {
                                         })}
                             </TableBody>
                         </Table>
-                        {filteredRowData && !filteredRowData.length && loader
+                        {fetchedData && !fetchedData.length && loader
                             ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>Loading Data Please Wait...</h3></div>
                             : ''}
                     </TableContainer>

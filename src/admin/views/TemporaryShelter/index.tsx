@@ -1345,7 +1345,9 @@ const TemporaryShelter = (props) => {
         ? municipalities.find(i => i.id === user.profile.municipality).title_ne : '';
 
     console.log('This is final data', data);
-
+    const handleSuccessMessage = (d) => {
+        navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
+    };
     const handleClick = () => {
         const finalUpdateData = data;
         finalUpdateData.operating_municipality = user.profile.municipality;
@@ -1353,7 +1355,7 @@ const TemporaryShelter = (props) => {
         console.log('final data', finalUpdateData);
         addEarthquakePostRequest.do({
             body: finalUpdateData,
-            onSuccess: datas => console.log('Successful', datas),
+            onSuccess: datas => handleSuccessMessage(datas),
             setFaramErrors: err => console.log('err', err),
 
         });
@@ -1529,9 +1531,9 @@ const TemporaryShelter = (props) => {
                                         onChange={handleFormData}
                                     >
                                         <option>सम्बन्ध</option>
-                                        <option value="नााती">नाती</option>
-                                        <option value="नाातीनी">नातीनी</option>
-                                        <option value="बुुहाारी">बुुहारी</option>
+                                        <option value="नाती">नाती</option>
+                                        <option value="नातीनी">नातीनी</option>
+                                        <option value="बुुहारी">बुुहारी</option>
                                     </select>
                                     {' '}
                                     श्री
@@ -1738,7 +1740,7 @@ const TemporaryShelter = (props) => {
                                                     <option value="volvo"> वडा नंं.</option>
                                                     {
                                                         selectedWard.map(item => (
-                                                            <option value={item.id}>{item.title_ne}</option>
+                                                            <option value={item.id}>{item.title}</option>
                                                         ))
                                                     }
                                                 </select>

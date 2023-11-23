@@ -34,7 +34,8 @@ import {
 } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
-import styles from './styles.module.scss';
+// import styles from './styles.module.scss';
+import './index.css';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
 import {
@@ -714,7 +715,7 @@ const TemporaryShelterPreview = (props) => {
     const [editLossId, setEditLossId] = useState('');
     const [editLossPeople, setEditLossPeople] = useState('');
     const [editWardId, setEditWardId] = useState(0);
-
+    const [loadPrint, setLoadPrint] = useState(false);
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);
     const [error, setError] = useState(false);
@@ -1410,17 +1411,17 @@ const TemporaryShelterPreview = (props) => {
         return finalData;
     };
     const handlePrint = () => {
-        const reportContent = document.getElementById('downloadDiv');
-        const options = {
-            pagebreak: { avoid: 'tr', mode: ['css', 'legacy'] },
-            // margin: [10, 0, 10, 0],
-            html2canvas: { scale: 3 },
-        };
-        const reportPDF = html2pdf().set(options).from(reportContent).outputPdf('blob')
-            .then((bulletin: Blob) => {
-                reportPDF.save();
-            });
+        setLoadPrint(true);
     };
+
+    useEffect(() => {
+        if (loadPrint) {
+            const timer = setTimeout(() => {
+                setLoadPrint(false);
+            }, 10000);
+            return () => clearTimeout(timer);
+        }
+    }, [loadPrint]);
     useEffect(() => {
         function addScript(url) {
             const script = document.createElement('script');
@@ -1434,31 +1435,36 @@ const TemporaryShelterPreview = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <div className={styles.container}>
-                <h1 className={styles.header}>Temporary shelter enrollment Data Structure</h1>
-                <p className={styles.dataReporting}>Data Reporting</p>
-                <div className={styles.twoSections}>
-                    <div className={styles.reportingStatus}>
-                        <div className={styles.reporting}>
-                            <img className={styles.listSvg} src={ListSvg} alt="" />
-                            <p className={styles.reportingText}>General Information</p>
-                            <p className={styles.greenCircle} />
+            <div className="container123">
+                <h1 className="header123">Temporary shelter enrollment Data Structure</h1>
+                <p className="dataReporting123">Data Reporting</p>
+                <div className="twoSections123">
+                    <div className="reportingStatus123">
+                        <div className="reporting123">
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">General Information</p>
+                            <p className="greenCircle123" />
                         </div>
                     </div>
-                    <div className={styles.mainForm}>
-                        <div className={styles.generalInfoAndTableButton}>
-                            <h1 className={styles.generalInfo}>General Information</h1>
-                            <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>View Data Table</button>
+                    <div className="mainForm123">
+                        <div className="generalInfoAndTableButton123">
+                            <h1 className="generalInfo">General Information</h1>
+                            <button
+                                className="DataTableClick123"
+                                type="button"
+                                onClick={handleTableButton}
+                            >View Data Table
+                            </button>
                         </div>
-                        <div className={styles.shortGeneralInfo}>
-                            <img className={styles.ideaIcon} src={Ideaicon} alt="" />
-                            <p className={styles.ideaPara}>
+                        <div className="shortGeneralInfo123">
+                            <img className="ideaIcon123" src={Ideaicon} alt="" />
+                            <p className="ideaPara123">
                                 The Temporary shelter enrollment form consists of the details of the earthquake affected area and house detail.
 
                             </p>
                         </div>
-                        {/* <div className={styles.infoBar}>
-                            <p className={styles.instInfo}>
+                        {/* <div className='infoBar123'>
+                            <p className='instInfo123'>
                                 Reported Date and Location are required information
                             </p>
                         </div> */}
@@ -1466,28 +1472,36 @@ const TemporaryShelterPreview = (props) => {
                             !fetchedData ? <p>Loading...</p>
 
                                 : (
-                                    <div className={styles.mainDataEntrySection} ref={el => (componentRef = el)} id="downloadDiv">
-                                        <div className={styles.formGeneralInfo}>
-                                            <h1>अनुुसूूची ३</h1>
-                                            <h1>दफा ३(५) सँँग सम्बन्धित</h1>
-                                            <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि अनुुदाान सम्झौौताा-पत्र</h1>
-                                        </div>
-                                        <div className={styles.datePickerForm}>
-                                            <span>{`मितिः ${fetchedData.entryDateBs}`}</span>
-                                        </div>
-                                        <div className={styles.countData}>
-                                            <div className={styles.countDataIndividual}>
-                                                <span>{`लाभग्राही क्रम संंख्याः ${fetchedData.id}`}</span>
-
+                                    <div style={{ width: '8.3in' }}>
+                                        <div className="mainDataEntrySection123" ref={el => (componentRef = el)} id="downloadDiv">
+                                            <div className="formGeneralInfo123">
+                                                <h1>अनुुसूूची ३</h1>
+                                                <h1>दफा ३(५) सँँग सम्बन्धित</h1>
+                                                <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि अनुुदाान सम्झौौताा-पत्र</h1>
                                             </div>
-                                            <div className={styles.countDataIndividual}>
-                                                <span>{`सम्झौता क्रमााङ्क संंख्याः ${fetchedData.id}`}</span>
-
+                                            <div
+                                                className="datePickerForm123"
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'flex-end',
+                                                    fontSize: '20px',
+                                                }}
+                                            >
+                                                <span>{`मितिः ${fetchedData.entryDateBs}`}</span>
                                             </div>
-                                        </div>
-                                        <div className={styles.formDetails}>
-                                            <p style={{ margin: 0 }}>
-                                                {`भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि ${districtNameConverter(fetchedData.beneficiaryDistrict)}
+                                            <div className="countData123">
+                                                <div className="countDataIndividual123">
+                                                    <span>{`लाभग्राही क्रम संंख्याः ${fetchedData.id}`}</span>
+
+                                                </div>
+                                                <div className="countDataIndividual123">
+                                                    <span>{`सम्झौता क्रमााङ्क संंख्याः ${fetchedData.id}`}</span>
+
+                                                </div>
+                                            </div>
+                                            <div className="formDetails123">
+                                                <p style={{ margin: 0 }}>
+                                                    {`भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि ${districtNameConverter(fetchedData.beneficiaryDistrict)}
                                                   जिल्ला ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)} गा.पा/न.पा. 
                                                   वडा नंं. ${wardNameConverter(fetchedData.beneficiaryWard)} गाउँँ/टोल ${fetchedData.toleName}
                                                   बस्नेे श्री ${fetchedData.grandParentName} को ${fetchedData.grandChildRelation} श्री ${fetchedData.parentName}
@@ -1497,345 +1511,381 @@ const TemporaryShelterPreview = (props) => {
                                                   घरपरिवारलााई अस्थाायी आवाास निर्मााण अनुुदाान काार्ययविधि,२०८०, बमोजिम अस्थाायी आवाास निर्मााण गर्न यो अनुुदाान
                                                   सम्झौता-पत्रमा सहीछााप गरेेका छौंं । 
                                                 `}
-                                            </p>
-                                        </div>
-                                        <div className={styles.mainTempAddress}>
-                                            <h2 style={{ textDecoration: 'underline' }}>अस्थाायी आवाास निर्मााण हुुनेे जग्गाको विवरण</h2>
-                                            <div className={styles.tempAddress}>
-                                                <div className={styles.tempAddressIndividualDiv}>
-                                                    {`जिल्ला ${districtNameConverter(fetchedData.temporaryShelterLandDistrict)}`}
-                                                </div>
-                                                <div className={styles.tempAddressIndividualDiv}>
-                                                    {`गा.पा/न.पा. ${fetchedData.temporaryShelterLandMunicipality}`}
-                                                </div>
-                                                <div className={styles.tempAddressIndividualDiv}>
-                                                    {`वडा नंं. ${wardNameConverter(fetchedData.temporaryShelterLandWard)}`}
-                                                </div>
-                                                <div className={styles.tempAddressIndividualDiv}>
-                                                    {`कित्ता नंं. ${fetchedData.temporaryShelterLandKittaNumber}`}
-                                                </div>
-                                                <div className={styles.tempAddressIndividualDiv}>
-                                                    {`क्षेेत्रफल ${fetchedData.temporaryShelterLandArea}`}
-                                                </div>
-                                                <div className={styles.tempAddressIndividualDiv}>
-                                                    {`नक्सा सिट नंं ${fetchedData.temporaryShelterLandMapSheetNumber}`}.
+                                                </p>
+                                            </div>
+                                            <div className="mainTempAddress123">
+                                                <h2 style={{ textDecoration: 'underline' }}>अस्थाायी आवाास निर्मााण हुुनेे जग्गाको विवरण</h2>
+                                                <div className="tempAddress123">
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`जिल्ला ${districtNameConverter(fetchedData.temporaryShelterLandDistrict)}`}
+                                                    </div>
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`गा.पा/न.पा. ${fetchedData.temporaryShelterLandMunicipality}`}
+                                                    </div>
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`वडा नंं. ${wardNameConverter(fetchedData.temporaryShelterLandWard)}`}
+                                                    </div>
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`कित्ता नंं. ${fetchedData.temporaryShelterLandKittaNumber}`}
+                                                    </div>
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`क्षेेत्रफल ${fetchedData.temporaryShelterLandArea}`}
+                                                    </div>
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`नक्सा सिट नंं ${fetchedData.temporaryShelterLandMapSheetNumber}`}.
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className={styles.firstPartDetails}>
-                                            <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्रााही)</h2>
-                                            <div className={styles.firstPartContainer}>
-                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <span style={{ fontWeight: 'bold' }}>१. व्यक्तिगत विवरण</span>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '-100px' }}>
+                                            <div className="firstPartDetails123">
+                                                <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्रााही)</h2>
+                                                <div className="firstPartContainer123">
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <span style={{ fontWeight: 'bold' }}>१. व्यक्तिगत विवरण</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '-100px' }}>
 
+                                                            {
+                                                                fetchedData.beneficiaryPhoto ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.beneficiaryPhoto} alt="img" /> : ''
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div className="formElements123">
+                                                        <div className="freeText123">
+                                                            <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryNameNepali}`}</span>
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`नाम, थर अंंग्रेजीमाः ${fetchedData.beneficiaryNameEnglish}`}</span>
+                                                        </div>
+                                                        <div className="locationDetails123">
+                                                            <div>
+                                                                <span>{`जिल्लाः ${districtNameConverter(fetchedData.beneficiaryDistrict)}`}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>{`गा.पा./न.पाः ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)}`}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>{`वडा नंं. ${wardNameConverter(fetchedData.beneficiaryWard)}`}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>{`ना.प्र.न. ${fetchedData.beneficiaryCitizenshipNumber}`}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>{`सम्पर्क नंं. ${fetchedData.beneficiaryContactNumber}`}</span>
+
+                                                            </div>
+                                                        </div>
                                                         {
-                                                            fetchedData.beneficiaryPhoto ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.beneficiaryPhoto} alt="img" /> : ''
-                                                        }
-                                                    </div>
-                                                </div>
-                                                <div className={styles.formElements}>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryNameNepali}`}</span>
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`नाम, थर अंंग्रेजीमाः ${fetchedData.beneficiaryNameEnglish}`}</span>
-                                                    </div>
-                                                    <div className={styles.locationDetails}>
-                                                        <div>
-                                                            <span>{`जिल्लाः ${districtNameConverter(fetchedData.beneficiaryDistrict)}`}</span>
-                                                        </div>
-                                                        <div>
-                                                            <span>{`गा.पा./न.पाः ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)}`}</span>
-                                                        </div>
-                                                        <div>
-                                                            <span>{`वडा नंं. ${wardNameConverter(fetchedData.beneficiaryWard)}`}</span>
-                                                        </div>
-                                                        <div>
-                                                            <span>{`ना.प्र.न. ${fetchedData.beneficiaryCitizenshipNumber}`}</span>
-                                                        </div>
-                                                        <div>
-                                                            <span>{`सम्पर्क नंं. ${fetchedData.beneficiaryContactNumber}`}</span>
+                                                            fetchedData.is_beneficiary_available_to_sign
+                                                                ? (
+                                                                    <div>
+                                                                        <p>
+                                                                            सम्झौताा-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
+                                                                            विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
+                                                                            संं रक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
 
-                                                        </div>
-                                                    </div>
-                                                    {
-                                                        !data.is_beneficiary_available_to_sign
-                                                            ? (
-                                                                <div>
-                                                                    <p>
-                                                                        सम्झौताा-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
-                                                                        विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
-                                                                        संं रक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
+                                                                        </p>
+                                                                        <div style={{ marginBottom: '10px' }} className="freeText123">
+                                                                            <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryRepresentativeNameNepali}`}</span>
 
-                                                                    </p>
-                                                                    <div style={{ marginBottom: '10px' }} className={styles.freeText}>
-                                                                        <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryRepresentativeNameNepali}`}</span>
+                                                                        </div>
+                                                                        <div className="locationDetails123">
+
+                                                                            <div>
+                                                                                <span>{`जिल्लाः ${districtNameConverter(fetchedData.beneficiaryRepresentativeDistrict)}`}</span>
+
+
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>{`गा.पा./न.पाः ${municipalityNameConverter(fetchedData.beneficiaryRepresentativeMunicipality)}`}</span>
+
+
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>{`गा.पा./न.पाः ${wardNameConverter(fetchedData.beneficiaryRepresentativeWard)}`}</span>
+
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>{`ना.प्र.न. ${fetchedData.beneficiaryRepresentativeCitizenshipNumber}`}</span>
+
+                                                                            </div>
+
+                                                                        </div>
 
                                                                     </div>
-                                                                    <div className={styles.locationDetails}>
-
-                                                                        <div>
-                                                                            <span>{`जिल्लाः ${districtNameConverter(fetchedData.beneficiaryRepresentativeDistrict)}`}</span>
-
-
-                                                                        </div>
-                                                                        <div>
-                                                                            <span>{`गा.पा./न.पाः ${municipalityNameConverter(fetchedData.beneficiaryRepresentativeMunicipality)}`}</span>
-
-
-                                                                        </div>
-                                                                        <div>
-                                                                            <span>{`गा.पा./न.पाः ${wardNameConverter(fetchedData.beneficiaryRepresentativeWard)}`}</span>
-
-                                                                        </div>
-                                                                        <div>
-                                                                            <span>{`ना.प्र.न. ${fetchedData.beneficiaryRepresentativeCitizenshipNumber}`}</span>
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </div>
-                                                            ) : ''
-                                                    }
-
-                                                    <div className={styles.freeText}>
-                                                        <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
-
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
-
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                            <div className={styles.firstPartContainer}>
-                                                <span style={{ fontWeight: 'bold' }}>२. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण</span>
-                                                <div className={styles.formElements}>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`खातावालाको नाम, थरः ${fetchedData.bankAccountHolderName}`}</span>
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`खाता नम्बरः ${fetchedData.bankAccountNumber}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`बैंंक/वित्तीय संंस्थाको नामः ${fetchedData.bankName}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`शाखाः ${fetchedData.bankBranchName}`}</span>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className={styles.firstPartContainer}>
-                                                <span style={{ fontWeight: 'bold' }}>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)</span>
-                                                <div className={styles.formElements}>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`बसाइँँसराइ प्रमाण-पत्र नंः ${fetchedData.migrationCertificateNumber}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`बसाइँँसराइको मितिः ${fetchedData.migrationDateBs}`}</span>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div className={styles.firstPartContainer}>
-                                                <span style={{ fontWeight: 'bold' }}>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
-                                                <div className={styles.formElements}>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`मितिः ${fetchedData.signedDate}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`साक्षीको नाम, थर: ${fetchedData.withnessNameNepali}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{'हस्ताक्षर: .................... '}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`लाभग्राहीसँँगको नाता: ${fetchedData.withnessRelation}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`सम्पर्क नंं. ${fetchedData.withnessContactNumber}`}</span>
-
-                                                    </div>
-                                                    <div className={styles.freeTextTable}>
-                                                        <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औठांंछाप</span>
-                                                        <table>
-                                                            <tr>
-                                                                <th>दायाँँ</th>
-                                                                <th>बायाँँ</th>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td />
-                                                                <td />
-
-                                                            </tr>
-
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div className={styles.firstPartDetails}>
-                                            <h2 style={{ textDecoration: 'underline' }}>ख. दोश्रो पक्ष</h2>
-                                            <div className={styles.firstPartContainer} style={{ gap: '20px' }}>
-                                                <div className={styles.formElements}>
-                                                    <div className={styles.freeTextPart2}>
-                                                        (<input type="text" disabled className={styles.inputClassName} />
-                                                        <span>कार्यपालिका कार्यालयको छाप</span>)
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        (
-
-                                                        <span>{`${municipalityDefinedName} गा.पा/न.पा.`}</span>
-                                                        )
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>हस्ताक्षरः ........................</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`नामः ${fetchedData.operatingMunicipalityOfficerName}`}</span>
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>पदः प्रमुुख प्रशासकीय अधिकृृत</span>
-
-                                                    </div>
-                                                    <div className={styles.freeText}>
-                                                        <span>{`मितिः ${fetchedData.operatingMunicipalitySignedDate}`}</span>
-
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                        <div>
-                                            <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
-                                            <div>
-                                                <h2> 1. म/मेेरो परिवारका लाागि अस्थायी आवास निर्मााण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्यााप्त घडेेरी छ ।</h2>
-                                            </div>
-                                            <div>
-                                                <h2> 2. मैैलेे भूूकम्पबाट प्राभावित घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्रमा
-                                                    उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनााउनेे छुु ।
-                                                </h2>
-                                            </div>
-                                            <div>
-                                                <h2>  3. निर्मााण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्मााण कार्य गर्न तथा श्रमिक
-                                                    जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।
-                                                </h2>
-                                            </div>
-                                            <div>
-                                                <h2> 4. मैैलेे प्राप्त गर्नेे अस्थाायी आवास निर्मााण अनुुदाान रकम अस्थायी आवास निर्मााणका लागि मात्र गर्नेेछुु ।</h2>
-                                            </div>
-                                            <div>
-                                                <h2>
-                                                    5. उपलब्ध अनुुदाान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्मााण सम्पन्न गर्नेेछुु।
-                                                </h2>
-                                            </div>
-                                            <div>
-                                                <h2>
-                                                    6. परिवारको व्यक्तिगत सरसफााई ध्यानमा राखी संंरचना निर्मााण गर्नेेछुु।
-                                                </h2>
-                                            </div>
-
-                                        </div>
-                                        <div>
-                                            <h2>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h2>
-                                            <div>
-                                                <h2>
-                                                    1. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवाास निर्मााण अनुुदाान सरकारको
-                                                    तर्फ बाट बैंंक माार्फत उपलब्ध गरााइनेे छ ।
-                                                </h2>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h2>आवश्यक काागजातहरुः</h2>
-                                            <div>
-                                                <h2> 1. नाागरिकता प्रमाण-पत्रकोो प्रतिलिपि वाा रााष्ट्रिय परिचयपत्रको प्रतिलिपि वाा मतदाता परिचयपत्रको प्रतिलिपि</h2>
-                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-
-                                                        {
-                                                            fetchedData.identityDocument ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.identityDocument} alt="img" /> : ''
+                                                                ) : ''
                                                         }
+
+                                                        <div className="freeText123">
+                                                            <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
+
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
+
+                                                        </div>
+
+
                                                     </div>
-
-
                                                 </div>
+                                                <div className="firstPartContainer123">
+                                                    <span style={{ fontWeight: 'bold' }}>२. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण</span>
+                                                    <div className="formElements123">
+                                                        <div className="freeText123">
+                                                            <span>{`खातावालाको नाम, थरः ${fetchedData.bankAccountHolderName}`}</span>
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`खाता नम्बरः ${fetchedData.bankAccountNumber}`}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`बैंंक/वित्तीय संंस्थाको नामः ${fetchedData.bankName}`}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`शाखाः ${fetchedData.bankBranchName}`}</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="firstPartContainer123">
+                                                    <span style={{ fontWeight: 'bold' }}>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)</span>
+                                                    <div className="formElements123">
+                                                        <div className="freeText123">
+                                                            <span>{`बसाइँँसराइ प्रमाण-पत्र नंः ${fetchedData.migrationCertificateNumber}`}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`बसाइँँसराइको मितिः ${fetchedData.migrationDateBs}`}</span>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div className="firstPartContainer123">
+                                                    <span style={{ fontWeight: 'bold' }}>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
+                                                    <div className="formElements123">
+                                                        <div className="freeText123">
+                                                            <span>{`मितिः ${fetchedData.signedDate}`}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`साक्षीको नाम, थर: ${fetchedData.withnessNameNepali}`}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{'हस्ताक्षर: .................... '}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`लाभग्राहीसँँगको नाता: ${fetchedData.withnessRelation}`}</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`सम्पर्क नंं. ${fetchedData.withnessContactNumber}`}</span>
+
+                                                        </div>
+                                                        <div className="freeTextTable123">
+                                                            <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औठांंछाप</span>
+                                                            <table
+                                                                className="lyapcheTable"
+                                                                style={{
+                                                                    width: '60%',
+                                                                    border: '1px solid black',
+                                                                    borderCollapse: 'collapse',
+                                                                    textAlign: 'center',
+                                                                }}
+                                                            >
+                                                                <tr style={{ background: 'none' }}>
+                                                                    <th style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                    }}
+                                                                    >दायाँँ
+                                                                    </th>
+                                                                    <th style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                    }}
+                                                                    >बायाँँ
+                                                                    </th>
+
+                                                                </tr>
+                                                                <tr style={{ background: 'none' }}>
+                                                                    <td style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                        height: '150px',
+                                                                        width: '200px',
+                                                                    }}
+                                                                    />
+                                                                    <td style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                        height: '150px',
+                                                                        width: '200px',
+                                                                    }}
+                                                                    />
+
+                                                                </tr>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div className="firstPartDetails123">
+                                                <h2 style={{ textDecoration: 'underline', marginTop: '30px' }}>ख. दोश्रो पक्ष</h2>
+                                                <div className="firstPartContainer123" style={{ gap: '20px' }}>
+                                                    <div className="formElements123">
+                                                        <div className="freeTextPart2">
+                                                            (<input type="text" disabled className="inputClassName123" />
+                                                            <span>कार्यपालिका कार्यालयको छाप</span>)
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            (
+
+                                                            <span>{`${municipalityDefinedName} गा.पा/न.पा.`}</span>
+                                                            )
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>हस्ताक्षरः ...........................................</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`नामः ${fetchedData.operatingMunicipalityOfficerName}`}</span>
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>पदः प्रमुुख प्रशासकीय अधिकृृत</span>
+
+                                                        </div>
+                                                        <div className="freeText123">
+                                                            <span>{`मितिः ${fetchedData.operatingMunicipalitySignedDate}`}</span>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
+
                                             </div>
                                             <div>
-                                                <h2> 2. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनााको फोटो
-                                                </h2>
-                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-
-                                                        {
-                                                            fetchedData.infrastructurePhoto ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.infrastructurePhoto} alt="img" /> : ''
-                                                        }
-                                                    </div>
-
-
+                                                <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2> 1. म/मेेरो परिवारका लाागि अस्थायी आवास निर्मााण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्यााप्त घडेेरी छ ।</h2>
                                                 </div>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2> 2. मैैलेे भूूकम्पबाट प्राभावित घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्रमा
+                                                        उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनााउनेे छुु ।
+                                                    </h2>
+                                                </div>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2>  3. निर्मााण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्मााण कार्य गर्न तथा श्रमिक
+                                                        जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।
+                                                    </h2>
+                                                </div>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2> 4. मैैलेे प्राप्त गर्नेे अस्थाायी आवास निर्मााण अनुुदाान रकम अस्थायी आवास निर्मााणका लागि मात्र गर्नेेछुु ।</h2>
+                                                </div>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2>
+                                                        5. उपलब्ध अनुुदाान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्मााण सम्पन्न गर्नेेछुु।
+                                                    </h2>
+                                                </div>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2>
+                                                        6. परिवारको व्यक्तिगत सरसफााई ध्यानमा राखी संंरचना निर्मााण गर्नेेछुु।
+                                                    </h2>
+                                                </div>
+
                                             </div>
                                             <div>
-                                                <h2> 3. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन
-                                                </h2>
-                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-
-                                                        {
-                                                            fetchedData.applicationDocument ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.applicationDocument} alt="img" /> : ''
-                                                        }
-                                                    </div>
-
-
+                                                <h2>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h2>
+                                                <div style={{ lineHeight: '40px' }}>
+                                                    <h2>
+                                                        1. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवाास निर्मााण अनुुदाान सरकारको
+                                                        तर्फ बाट बैंंक माार्फत उपलब्ध गरााइनेे छ ।
+                                                    </h2>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <h2>4. प्रहरीको मुुचुल्का</h2>
-                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <div style={{ marginTop: '160px' }}>
+                                                <h2>आवश्यक काागजातहरुः</h2>
+                                                <div>
+                                                    <h2> 1. नाागरिकता प्रमाण-पत्रकोो प्रतिलिपि वाा रााष्ट्रिय परिचयपत्रको प्रतिलिपि वाा मतदाता परिचयपत्रको प्रतिलिपि</h2>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
 
-                                                        {
-                                                            fetchedData.policeReport ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.policeReport} alt="img" /> : ''
-                                                        }
+                                                            {
+                                                                fetchedData.identityDocument ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.identityDocument} alt="img" /> : ''
+                                                            }
+                                                        </div>
+
+
                                                     </div>
-
-
                                                 </div>
-                                            </div>
+                                                <div>
+                                                    <h2> 2. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनााको फोटो
+                                                    </h2>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
 
+                                                            {
+                                                                fetchedData.infrastructurePhoto ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.infrastructurePhoto} alt="img" /> : ''
+                                                            }
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h2> 3. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन
+                                                    </h2>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+
+                                                            {
+                                                                fetchedData.applicationDocument ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.applicationDocument} alt="img" /> : ''
+                                                            }
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h2>4. प्रहरीको मुुचुल्का</h2>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+
+                                                            {
+                                                                fetchedData.policeReport ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.policeReport} alt="img" /> : ''
+                                                            }
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
 
                                         </div>
-                                        <span className={styles.ValidationErrors}>{validationError}</span>
-                                        <div className={styles.saveOrAddButtons}>
+                                        <span className="ValidationErrors123">{validationError}</span>
+                                        <div className="saveOrAddButtons123">
                                             <ReactToPrint
-                                                trigger={() => <button type="button">Print this out!</button>}
+                                                trigger={() => <button className="submitButtons123" onClick={handlePrint} type="submit">{loadPrint ? 'Printing...' : 'Print'}</button>}
                                                 content={() => componentRef}
 
                                             />
-                                            <button className={styles.submitButtons} onClick={handlePrint} type="submit">{'Print'}</button>
+
                                         </div>
                                     </div>
                                 )
