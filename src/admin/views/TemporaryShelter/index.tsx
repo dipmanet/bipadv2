@@ -725,7 +725,7 @@ const TemporaryShelter = (props) => {
     const [data, setData] = useState(
         {
             entry_date_bs: '',
-            pa_number: '',
+            pa_number: null,
             tole_name: '',
             grand_parent_title: 'श्री',
             grand_parent_name: '',
@@ -1436,9 +1436,9 @@ const TemporaryShelter = (props) => {
                             <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
                                     <span>लाभग्राही क्रम संंख्याः</span>
-                                    <input type="text" name="" className={styles.inputClassName} />
+                                    <input type="text" name="" className={styles.inputClassName} disabled />
                                 </div>
-                                <div className={styles.countDataIndividual}>
+                                {/* <div className={styles.countDataIndividual}>
                                     <span>सम्झौता क्रमााङ्क संंख्याः</span>
                                     <input
                                         type="text"
@@ -1446,8 +1446,9 @@ const TemporaryShelter = (props) => {
                                         onChange={handleFormData}
                                         value={data.pa_number}
                                         className={styles.inputClassName}
+                                        disabled
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             <div className={styles.formDetails}>
                                 <p>

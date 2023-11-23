@@ -1494,10 +1494,10 @@ const TemporaryShelterPreview = (props) => {
                                                     <span>{`लाभग्राही क्रम संंख्याः ${fetchedData.id}`}</span>
 
                                                 </div>
-                                                <div className="countDataIndividual123">
+                                                {/* <div className="countDataIndividual123">
                                                     <span>{`सम्झौता क्रमााङ्क संंख्याः ${fetchedData.id}`}</span>
 
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="formDetails123">
                                                 <p style={{ margin: 0 }}>
