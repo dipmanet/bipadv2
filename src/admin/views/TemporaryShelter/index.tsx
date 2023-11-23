@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-return-assign */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
@@ -1100,7 +1102,7 @@ const TemporaryShelter = (props) => {
             }
         } else if (uniqueId) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-            const data = {
+            const datai = {
                 ...incidentFormDataInitial,
                 title,
                 incidentOn: reportedDate,
@@ -1128,7 +1130,7 @@ const TemporaryShelter = (props) => {
                 };
                 props.requests.incidentPatch.do({ id: uniqueId, body: verify });
             } else {
-                props.requests.incidentUpdate.do({ id: uniqueId, body: data });
+                props.requests.incidentUpdate.do({ id: uniqueId, body: datai });
             }
 
 
@@ -1212,7 +1214,7 @@ const TemporaryShelter = (props) => {
     useEffect(() => {
         if (lossID) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-            const data = {
+            const datasa = {
                 ...incidentFormDataInitial,
                 loss: lossID,
                 title,
@@ -1229,7 +1231,7 @@ const TemporaryShelter = (props) => {
                 },
                 wards: [wardId],
             };
-            props.requests.incident.do({ body: data });
+            props.requests.incident.do({ body: datasa });
             const deadMale = {
                 ...deadMaleInitial,
                 loss: lossID,
@@ -1859,7 +1861,7 @@ const TemporaryShelter = (props) => {
                                                                 </select>
                                                             </div>
                                                             <div>
-                                                                <span>गा.पा./न.पाः</span>
+                                                                <span>वडा नंं.</span>
                                                                 {' '}
                                                                 <select
                                                                     name="beneficiary_representative_ward"
@@ -1867,10 +1869,10 @@ const TemporaryShelter = (props) => {
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_ward1"
                                                                 >
-                                                                    <option> गा.पा./न.पाः</option>
+                                                                    <option> वडा नंं.</option>
                                                                     {
                                                                         beneficiarySelectedWard.map(item => (
-                                                                            <option value={item.id}>{item.title_ne}</option>
+                                                                            <option value={item.id}>{item.title}</option>
                                                                         ))
                                                                     }
                                                                 </select>

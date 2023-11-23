@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-const-assign */
 /* eslint-disable no-return-assign */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -1121,7 +1122,7 @@ const TemporaryShelterPreview = (props) => {
             }
         } else if (uniqueId) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-            const data = {
+            const datas = {
                 ...incidentFormDataInitial,
                 title,
                 incidentOn: reportedDate,
@@ -1149,7 +1150,7 @@ const TemporaryShelterPreview = (props) => {
                 };
                 props.requests.incidentPatch.do({ id: uniqueId, body: verify });
             } else {
-                props.requests.incidentUpdate.do({ id: uniqueId, body: data });
+                props.requests.incidentUpdate.do({ id: uniqueId, body: datas });
             }
 
 
@@ -1233,7 +1234,7 @@ const TemporaryShelterPreview = (props) => {
     useEffect(() => {
         if (lossID) {
             const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-            const data = {
+            const datai = {
                 ...incidentFormDataInitial,
                 loss: lossID,
                 title,
@@ -1250,7 +1251,7 @@ const TemporaryShelterPreview = (props) => {
                 },
                 wards: [wardId],
             };
-            props.requests.incident.do({ body: data });
+            props.requests.incident.do({ body: datai });
             const deadMale = {
                 ...deadMaleInitial,
                 loss: lossID,
