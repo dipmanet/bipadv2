@@ -33,6 +33,8 @@ import {
 } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
+import 'nepali-datepicker-reactjs/dist/index.css';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
@@ -724,6 +726,7 @@ const TemporaryShelter = (props) => {
     const [initialDistrictCenter, setinitialDistrictCenter] = useState([]);
     const [initialMunCenter, setinitialMunCenter] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [date, setDate] = useState(null);
     const [data, setData] = useState(
         {
             entry_date_bs: '',
@@ -1370,6 +1373,8 @@ const TemporaryShelter = (props) => {
             is_beneficiary_available_to_sign: !data.is_beneficiary_available_to_sign,
         });
     };
+
+    console.log('This is final date', date);
     return (
         <>
             <Page hideFilter hideMap />
@@ -1434,6 +1439,23 @@ const TemporaryShelter = (props) => {
                                     onChange={handleFormData}
                                     className={styles.inputClassName}
                                 />
+
+                                {/* <NepaliDatePicker
+                                    inputClassName="form-control"
+                                    className={styles.datePick}
+                                    // value={ADToBS(dateAlt)}
+                                    value={date}
+                                    onChange={
+                                        (value: string) => {
+                                            setDate(value);
+                                        }
+                                    }
+                                    options={{
+                                        calenderLocale: 'ne',
+                                        valueLocale: 'en',
+                                    }}
+
+                                /> */}
                             </div>
                             <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
@@ -1791,7 +1813,7 @@ const TemporaryShelter = (props) => {
                                             </div>
                                             <div style={{ display: 'flex', gap: '5px' }}>
                                                 <span>
-                                                    लाभार्थी हस्ताक्षर गर्न उपलब्ध छ?
+                                                    लाभार्थी हस्ताक्षर गर्न उपलब्ध छैन?
                                                 </span>
                                                 {' '}
                                                 <input

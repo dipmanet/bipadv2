@@ -268,6 +268,17 @@ tr {
                     justify-content: flex-end;
                     font-size: 20px;
 
+                    .datePick {
+                        input {
+                            width: 100%;
+                            // border: none;
+                            // background: transparent;
+                            // outline: none;
+
+                        }
+
+                    }
+
                     .inputClassName {
                         border: none;
                         border-bottom: 2px dotted;
