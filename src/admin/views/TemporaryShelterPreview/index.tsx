@@ -124,7 +124,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
-            console.log('This is props', params);
             params.fetchedData(response);
         },
         onFailure: ({ error, params }) => {
@@ -859,7 +858,7 @@ const TemporaryShelterPreview = (props) => {
         }
     }, [districts, municipalities, provinces, user, wards]);
 
-    console.log('This is final file', selectedFile);
+
     const clearData = () => {
         setuniqueId('');
         setReportedDate(null);
@@ -991,7 +990,6 @@ const TemporaryShelterPreview = (props) => {
         setError(false);
     };
     const handleTableButton = () => {
-        console.log('Entered here');
         navigate('/admin/temporary-shelter-enrollment-form/temporary-shelter-enrollment-form-data-table');
     };
 
@@ -1367,13 +1365,12 @@ const TemporaryShelterPreview = (props) => {
     const municipalityDefinedName = fetchedData && fetchedData.operatingMunicipality
         && municipalities.find(i => i.id === fetchedData.operatingMunicipality).title_ne;
 
-    console.log('This is final data', municipalityDefinedName);
 
     const handleClick = () => {
         const finalUpdateData = data;
         finalUpdateData.operating_municipality = user.profile.municipality;
         finalUpdateData.responsible_municipality = user.profile.municipality;
-        console.log('final data', finalUpdateData);
+
         addEarthquakePostRequest.do({
             body: finalUpdateData,
             onSuccess: datas => console.log('Successful', datas),
@@ -1386,7 +1383,7 @@ const TemporaryShelterPreview = (props) => {
         setFetchedData(finalData);
     };
 
-    console.log('This is final data', fetchedData);
+
     useEffect(() => {
         const splittedRoute = pathname.split('/');
         const id = splittedRoute[splittedRoute.length - 1];
@@ -1394,12 +1391,10 @@ const TemporaryShelterPreview = (props) => {
             props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData });
         }
     }, [pathname]);
-    console.log('pathname', pathname);
+
     const districtNameConverter = (id) => {
         const finalData = fetchedData && districts.find(i => i.id === id).title_ne;
-        console.log('This is id', id);
-        console.log('This is districts', districts);
-        console.log('This is data', finalData);
+
         return finalData;
     };
 
@@ -1445,7 +1440,6 @@ const TemporaryShelterPreview = (props) => {
         addScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
     }, []);
 
-    console.log('This is fetched data', fetchedData);
 
     const dateFormatter = (date) => {
         const slicedDate = date.split('-');
@@ -1456,7 +1450,7 @@ const TemporaryShelterPreview = (props) => {
         return finalDate;
     };
 
-    console.log('This is municipality', municipalities);
+
     return (
         <>
             <Page hideFilter hideMap />

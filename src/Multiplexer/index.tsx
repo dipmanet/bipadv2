@@ -2050,7 +2050,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-        console.log('activeRouteName', activeRouteName);
+
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>

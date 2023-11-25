@@ -37,44 +37,41 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
 });
 
-const TemporaryShelterTable = (props) => {
-    console.log('This is final filter', props);
-    return (
-        <>
-            <Page hideFilter hideMap />
-            <Navbar />
-            <MenuCommon layout="common" currentPage={'Incident'} uri={props.uri} />
-            <div className={styles.dataContainer}>
-                {
-                    (
-                        <>
-                            <h2 className={styles.mainHeading}>अस्थायी आश्रय नामांकन फारम डाटा तालिका</h2>
-                            <div className={styles.rowTitle2}>
-                                <FontAwesomeIcon
-                                    icon={faInfoCircle}
-                                    className={styles.infoIcon}
-                                />
-                                <p>
-                                    तलको तालिकाले अस्थायी आश्रय नामांकन डाटाको सूची दिन्छ।
-                                </p>
-                            </div>
-                            <div className={styles.tableMenuContainer}>
-                                <div className={styles.mainContent}>
+const TemporaryShelterTable = props => (
+    <>
+        <Page hideFilter hideMap />
+        <Navbar />
+        <MenuCommon layout="common" currentPage={'Incident'} uri={props.uri} />
+        <div className={styles.dataContainer}>
+            {
+                (
+                    <>
+                        <h2 className={styles.mainHeading}>अस्थायी आश्रय नामांकन फारम डाटा तालिका</h2>
+                        <div className={styles.rowTitle2}>
+                            <FontAwesomeIcon
+                                icon={faInfoCircle}
+                                className={styles.infoIcon}
+                            />
+                            <p>
+                                तलको तालिकाले अस्थायी आश्रय नामांकन डाटाको सूची दिन्छ।
+                            </p>
+                        </div>
+                        <div className={styles.tableMenuContainer}>
+                            <div className={styles.mainContent}>
 
-                                    <div className={styles.formDataContainer}>
-                                        <TemporaryShelterTableData />
-                                    </div>
-
+                                <div className={styles.formDataContainer}>
+                                    <TemporaryShelterTableData />
                                 </div>
+
                             </div>
-                        </>
-                    )}
+                        </div>
+                    </>
+                )}
 
-            </div>
-        </>
+        </div>
+    </>
 
-    );
-};
+);
 
 
 // export default TemporaryShelterTable;

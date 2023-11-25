@@ -48,7 +48,7 @@ import GroupMenuContainer from './GroupMenuContainer';
 
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
-console.log('This is final pages', pages);
+
 interface Menu {
     title: string;
     name: string;
@@ -337,7 +337,7 @@ class Navbar extends React.PureComponent<Props, State> {
         ];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
         const data = authenticated ? pages : pages.filter(i => !i.disableIfNoAuth);
-        console.log('This is data', data);
+
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView

@@ -66,7 +66,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
-            console.log('This is props', params);
             params.fetchedData(response);
             params.countData(response.count);
         },
@@ -530,13 +529,11 @@ const TemporaryShelterTableData = (props) => {
         }
         setSelected(newSelected);
     };
-    console.log('This is fetched data', filteredRowData);
+
 
     const districtNameConverter = (id) => {
         const finalData = fetchedData && districts.find(i => i.id === id).title_ne;
-        console.log('This is id', id);
-        console.log('This is districts', districts);
-        console.log('This is data', finalData);
+
         return finalData;
     };
 

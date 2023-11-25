@@ -37,10 +37,10 @@ import { ADToBS } from 'bikram-sambat-js';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { englishToNepaliNumber } from 'nepali-number';
+import 'nepali-datepicker-reactjs/dist/index.css';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
-import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
     lossFormDataInitial,
@@ -844,7 +844,7 @@ const TemporaryShelter = (props) => {
         }
     }, [districts, municipalities, provinces, user, wards]);
 
-    console.log('This is final file', selectedFile);
+
     const clearData = () => {
         setuniqueId('');
         setReportedDate(null);
@@ -976,7 +976,6 @@ const TemporaryShelter = (props) => {
         setError(false);
     };
     const handleTableButton = () => {
-        console.log('Entered here');
         navigate('/admin/temporary-shelter-enrollment-form/temporary-shelter-enrollment-form-data-table');
     };
 
@@ -1352,7 +1351,7 @@ const TemporaryShelter = (props) => {
     const municipalityDefinedName = user.profile.municipality
         ? municipalities.find(i => i.id === user.profile.municipality).title_ne : '';
 
-    console.log('This is final data', data);
+
     const handleSuccessMessage = (d) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
@@ -1361,7 +1360,7 @@ const TemporaryShelter = (props) => {
         const finalUpdateData = data;
         finalUpdateData.operating_municipality = user.profile.municipality;
         finalUpdateData.responsible_municipality = user.profile.municipality;
-        console.log('final data', finalUpdateData);
+
         addEarthquakePostRequest.do({
             body: finalUpdateData,
             onSuccess: datas => handleSuccessMessage(datas),
@@ -1392,10 +1391,11 @@ const TemporaryShelter = (props) => {
             entry_date_bs: currentDate,
             signed_date: currentDate,
             operating_municipality_signed_date: currentDate,
+            migration_date_bs: currentDate,
         });
     }, []);
 
-    console.log('This is final date', date);
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -1453,15 +1453,15 @@ const TemporaryShelter = (props) => {
                             </div>
                             <div className={styles.datePickerForm}>
                                 <span>मितिः</span>
-                                <input
+                                {/* <input
                                     type="text"
                                     name="entry_date_bs"
                                     value={data.entry_date_bs}
                                     onChange={handleFormData}
                                     className={styles.inputClassName}
-                                />
+                                /> */}
 
-                                {/* <NepaliDatePicker
+                                <NepaliDatePicker
                                     inputClassName="form-control"
                                     // className={styles.datePick}
                                     // value={ADToBS(dateAlt)}
@@ -1480,7 +1480,7 @@ const TemporaryShelter = (props) => {
                                         valueLocale: 'en',
                                     }}
 
-                                /> */}
+                                />
                             </div>
                             {/* <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
@@ -2028,12 +2028,31 @@ const TemporaryShelter = (props) => {
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>बसाइँँसराइको मितिः</span>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 className={styles.inputClassName}
                                                 onChange={handleFormData}
                                                 name="migration_date_bs"
                                                 value={data.migration_date_bs}
+                                            /> */}
+                                            <NepaliDatePicker
+                                                inputClassName="form-control"
+                                                // className={styles.datePick}
+                                                // value={ADToBS(dateAlt)}
+                                                value={data.migration_date_bs}
+                                                onChange={
+                                                    (value: string) => {
+                                                        setData({
+                                                            ...data,
+                                                            migration_date_bs: value,
+
+                                                        });
+                                                    }
+                                                }
+                                                options={{
+                                                    calenderLocale: 'ne',
+                                                    valueLocale: 'en',
+                                                }}
                                             />
                                         </div>
 
@@ -2044,15 +2063,15 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.formElements}>
                                         <div className={styles.freeText}>
                                             <span>मितिः</span>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 className={styles.inputClassName}
                                                 onChange={handleFormData}
                                                 name="signed_date"
                                                 value={data.signed_date}
-                                            />
+                                            /> */}
 
-                                            {/* <NepaliDatePicker
+                                            <NepaliDatePicker
                                                 inputClassName="form-control"
                                                 // className={styles.datePick}
                                                 // value={ADToBS(dateAlt)}
@@ -2070,7 +2089,7 @@ const TemporaryShelter = (props) => {
                                                     calenderLocale: 'ne',
                                                     valueLocale: 'en',
                                                 }}
-                                            /> */}
+                                            />
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>साक्षीको नाम, थर</span>
@@ -2164,14 +2183,14 @@ const TemporaryShelter = (props) => {
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>मितिः</span>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 className={styles.inputClassName}
                                                 onChange={handleFormData}
                                                 name="operating_municipality_signed_date"
                                                 value={data.operating_municipality_signed_date}
-                                            />
-                                            {/* <NepaliDatePicker
+                                            /> */}
+                                            <NepaliDatePicker
                                                 inputClassName="form-control"
                                                 // className={styles.datePick}
                                                 // value={ADToBS(dateAlt)}
@@ -2189,7 +2208,7 @@ const TemporaryShelter = (props) => {
                                                     calenderLocale: 'ne',
                                                     valueLocale: 'en',
                                                 }}
-                                            /> */}
+                                            />
                                         </div>
 
 

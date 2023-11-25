@@ -241,8 +241,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const { startDate: langStartDate, endDate: langEndDate } = filters.dataDateRange;
         const { changedEndDate, changedStartDate } = this.state;
 
-        console.log('langStartDate', langStartDate);
-        console.log('langEndDate', langEndDate);
+
         if (prevProps.filters.dataDateRange.startDate !== langStartDate) {
             if (language === 'np') {
                 this.setState({ changedStartDate: true });
