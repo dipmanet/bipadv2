@@ -1448,7 +1448,7 @@ const TemporaryShelterPreview = (props) => {
     console.log('This is fetched data', fetchedData);
 
     const dateFormatter = (date) => {
-        const slicedDate = date.split('-');
+        const slicedDate = date.split('-' || '/');
         const year = englishToNepaliNumber(slicedDate[0]);
         const month = englishToNepaliNumber(slicedDate[1]);
         const day = englishToNepaliNumber(slicedDate[2]);
@@ -1462,30 +1462,30 @@ const TemporaryShelterPreview = (props) => {
             <Page hideFilter hideMap />
             <Navbar />
             <div className="container123">
-                <h1 className="header123">Temporary shelter enrollment Data Structure</h1>
-                <p className="dataReporting123">Data Reporting</p>
+                <h1 className="header123">अस्थायी आश्रय नामांकन डाटा संरचना</h1>
+                <p className="dataReporting123">डाटा रिपोर्टिङ</p>
                 <div className="twoSections123">
                     <div className="reportingStatus123">
                         <div className="reporting123">
                             <img className="listSvg123" src={ListSvg} alt="" />
-                            <p className="reportingText123">General Information</p>
+                            <p className="reportingText123">जानकारी</p>
                             <p className="greenCircle123" />
                         </div>
                     </div>
                     <div className="mainForm123">
                         <div className="generalInfoAndTableButton123">
-                            <h1 className="generalInfo">General Information</h1>
+                            <h1 className="generalInfo">जानकारी</h1>
                             <button
                                 className="DataTableClick123"
                                 type="button"
                                 onClick={handleTableButton}
-                            >View Data Table
+                            >डाटा तालिका हेर्नुहोस्
                             </button>
                         </div>
                         <div className="shortGeneralInfo123">
                             <img className="ideaIcon123" src={Ideaicon} alt="" />
                             <p className="ideaPara123">
-                                The Temporary shelter enrollment form consists of the details of the earthquake affected area and house detail.
+                                अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
 
                             </p>
                         </div>
@@ -2001,7 +2001,7 @@ const TemporaryShelterPreview = (props) => {
                                         <span className="ValidationErrors123">{validationError}</span>
                                         <div className="saveOrAddButtons123">
                                             <ReactToPrint
-                                                trigger={() => <button className="submitButtons123" onClick={handlePrint} type="submit">{loadPrint ? 'Printing...' : 'Print'}</button>}
+                                                trigger={() => <button className="submitButtons123" onClick={handlePrint} type="submit">{loadPrint ? 'Printing...' : 'प्रिन्ट'}</button>}
                                                 content={() => componentRef}
 
                                             />

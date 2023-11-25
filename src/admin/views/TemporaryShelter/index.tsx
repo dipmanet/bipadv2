@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 /* eslint-disable no-return-assign */
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -32,12 +33,14 @@ import {
     userSelector,
 } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
+import { ADToBS } from 'bikram-sambat-js';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
-import 'nepali-datepicker-reactjs/dist/index.css';
+import { englishToNepaliNumber } from 'nepali-number';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
+import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
     lossFormDataInitial,
@@ -781,7 +784,7 @@ const TemporaryShelter = (props) => {
             operating_municipality: null,
         },
     );
-
+    const [loading, setLoading] = useState(false);
 
     const { epidemmicsPage:
         {
@@ -1354,6 +1357,7 @@ const TemporaryShelter = (props) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
     const handleClick = () => {
+        setLoading(true);
         const finalUpdateData = data;
         finalUpdateData.operating_municipality = user.profile.municipality;
         finalUpdateData.responsible_municipality = user.profile.municipality;
@@ -1373,6 +1377,23 @@ const TemporaryShelter = (props) => {
             is_beneficiary_available_to_sign: !data.is_beneficiary_available_to_sign,
         });
     };
+
+    useEffect(() => {
+        const curDate = new Date();
+
+        const day = curDate.getDate();
+        const month = curDate.getMonth() + 1;
+        const year = curDate.getFullYear();
+
+        // This arrangement can be altered based on how we want the date's format to appear.
+        const currentDate = ADToBS(`${year}-${month}-${day}`);
+        setData({
+            ...data,
+            entry_date_bs: currentDate,
+            signed_date: currentDate,
+            operating_municipality_signed_date: currentDate,
+        });
+    }, []);
 
     console.log('This is final date', date);
     return (
@@ -1397,25 +1418,25 @@ const TemporaryShelter = (props) => {
                             : handleErrorClose}
                 />
 
-                <h1 className={styles.header}>Temporary shelter enrollment Data Structure</h1>
-                <p className={styles.dataReporting}>Data Reporting</p>
+                <h1 className={styles.header}>अस्थायी आश्रय नामांकन डाटा संरचना</h1>
+                <p className={styles.dataReporting}>डाटा रिपोर्टिङ</p>
                 <div className={styles.twoSections}>
                     <div className={styles.reportingStatus}>
                         <div className={styles.reporting}>
                             <img className={styles.listSvg} src={ListSvg} alt="" />
-                            <p className={styles.reportingText}>General Information</p>
+                            <p className={styles.reportingText}>जानकारी</p>
                             <p className={styles.greenCircle} />
                         </div>
                     </div>
                     <div className={styles.mainForm}>
                         <div className={styles.generalInfoAndTableButton}>
-                            <h1 className={styles.generalInfo}>General Information</h1>
-                            <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>View Data Table</button>
+                            <h1 className={styles.generalInfo}>जानकारी</h1>
+                            <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>डाटा तालिका हेर्नुहोस्</button>
                         </div>
                         <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.ideaPara}>
-                                The Temporary shelter enrollment form consists of the details of the earthquake affected area and house detail.
+                                अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
 
                             </p>
                         </div>
@@ -1428,7 +1449,7 @@ const TemporaryShelter = (props) => {
                             <div className={styles.formGeneralInfo}>
                                 <h1>अनुुसूूची ३</h1>
                                 <h1>दफा ३(५) सँँग सम्बन्धित</h1>
-                                <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि अनुुदाान सम्झौौताा-पत्र</h1>
+                                <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
                             </div>
                             <div className={styles.datePickerForm}>
                                 <span>मितिः</span>
@@ -1442,12 +1463,16 @@ const TemporaryShelter = (props) => {
 
                                 {/* <NepaliDatePicker
                                     inputClassName="form-control"
-                                    className={styles.datePick}
+                                    // className={styles.datePick}
                                     // value={ADToBS(dateAlt)}
-                                    value={date}
+                                    value={data.entry_date_bs}
                                     onChange={
                                         (value: string) => {
-                                            setDate(value);
+                                            setData({
+                                                ...data,
+                                                entry_date_bs: value,
+
+                                            });
                                         }
                                     }
                                     options={{
@@ -1476,7 +1501,7 @@ const TemporaryShelter = (props) => {
                             </div>
                             <div className={styles.formDetails}>
                                 <p>
-                                    भूूकम्प प्रभाावितको अस्थाायी आवाास निर्मााणका लाागि
+                                    भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि
                                     {' '}
                                     <select
                                         name="beneficiary_district"
@@ -1613,13 +1638,13 @@ const TemporaryShelter = (props) => {
                                     <input type="text" className={styles.inputClassName} value={municipalityDefinedName} disabled />
                                     {' '}
                                     गााउँँपालिका,
-                                    नगरपालिका कार्याालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
+                                    नगरपालिका कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
                                     घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि,२०८०, बमोजिम अस्थायी आवास निर्मााण गर्न यो अनुुदान
                                     सम्झौता-पत्रमा सहीछााप गरेेका छौंं ।
                                 </p>
                             </div>
                             <div className={styles.mainTempAddress}>
-                                <h2 style={{ textDecoration: 'underline' }}>अस्थाायी आवाास निर्मााण हुुनेे जग्गाको विवरण</h2>
+                                <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
                                 <div className={styles.tempAddress}>
                                     <div className={styles.tempAddressIndividualDiv}>
                                         जिल्ला
@@ -1708,7 +1733,7 @@ const TemporaryShelter = (props) => {
                                 </div>
                             </div>
                             <div className={styles.firstPartDetails}>
-                                <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्रााही)</h2>
+                                <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्राही)</h2>
                                 <div className={styles.firstPartContainer}>
                                     <span>१. व्यक्तिगत विवरण</span>
                                     <div className={styles.formElements}>
@@ -1830,9 +1855,9 @@ const TemporaryShelter = (props) => {
                                                 ? (
                                                     <div>
                                                         <p>
-                                                            सम्झौताा-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
+                                                            सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
                                                             विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
-                                                            संं रक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
+                                                            संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
 
                                                         </p>
                                                         <div className={styles.locationDetails}>
@@ -2026,6 +2051,26 @@ const TemporaryShelter = (props) => {
                                                 name="signed_date"
                                                 value={data.signed_date}
                                             />
+
+                                            {/* <NepaliDatePicker
+                                                inputClassName="form-control"
+                                                // className={styles.datePick}
+                                                // value={ADToBS(dateAlt)}
+                                                value={data.signed_date}
+                                                onChange={
+                                                    (value: string) => {
+                                                        setData({
+                                                            ...data,
+                                                            signed_date: value,
+
+                                                        });
+                                                    }
+                                                }
+                                                options={{
+                                                    calenderLocale: 'ne',
+                                                    valueLocale: 'en',
+                                                }}
+                                            /> */}
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>साक्षीको नाम, थर</span>
@@ -2126,6 +2171,25 @@ const TemporaryShelter = (props) => {
                                                 name="operating_municipality_signed_date"
                                                 value={data.operating_municipality_signed_date}
                                             />
+                                            {/* <NepaliDatePicker
+                                                inputClassName="form-control"
+                                                // className={styles.datePick}
+                                                // value={ADToBS(dateAlt)}
+                                                value={data.operating_municipality_signed_date}
+                                                onChange={
+                                                    (value: string) => {
+                                                        setData({
+                                                            ...data,
+                                                            operating_municipality_signed_date: value,
+
+                                                        });
+                                                    }
+                                                }
+                                                options={{
+                                                    calenderLocale: 'ne',
+                                                    valueLocale: 'en',
+                                                }}
+                                            /> */}
                                         </div>
 
 
@@ -2137,29 +2201,29 @@ const TemporaryShelter = (props) => {
                             <div>
                                 <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
                                 <div>
-                                    <h2> 1. म/मेेरो परिवारका लाागि अस्थायी आवास निर्मााण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्यााप्त घडेेरी छ ।</h2>
+                                    <h2> {`${englishToNepaliNumber(1)}. म/मेेरो परिवारका लागि अस्थायी आवास निर्माण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्याप्त घडेेरी छ ।`}</h2>
                                 </div>
                                 <div>
-                                    <h2> 2. मैैलेे भूूकम्पबाट प्राभावित घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्रमा
-                                        उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनााउनेे छुु ।
+                                    <h2> {`${englishToNepaliNumber(2)}. मैैलेे भूूकम्पबाट प्रभावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्यविधि, २०८० एबंं यस सम्झौता-पत्रमा
+                                        उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनाउनेे छुु ।`}
                                     </h2>
                                 </div>
                                 <div>
-                                    <h2>  3. निर्मााण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्मााण कार्य गर्न तथा श्रमिक
-                                        जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।
+                                    <h2> {`${englishToNepaliNumber(3)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
+                                        जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
                                     </h2>
                                 </div>
                                 <div>
-                                    <h2> 4. मैैलेे प्राप्त गर्नेे अस्थाायी आवास निर्मााण अनुुदाान रकम अस्थायी आवास निर्मााणका लागि मात्र गर्नेेछुु ।</h2>
+                                    <h2>{`${englishToNepaliNumber(4)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}</h2>
                                 </div>
                                 <div>
                                     <h2>
-                                        5. उपलब्ध अनुुदाान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्मााण सम्पन्न गर्नेेछुु।
+                                        {`${englishToNepaliNumber(5)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}
                                     </h2>
                                 </div>
                                 <div>
                                     <h2>
-                                        6. परिवारको व्यक्तिगत सरसफााई ध्यानमा राखी संंरचना निर्मााण गर्नेेछुु।
+                                        {`${englishToNepaliNumber(6)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
                                     </h2>
                                 </div>
 
@@ -2168,15 +2232,15 @@ const TemporaryShelter = (props) => {
                                 <h2>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h2>
                                 <div>
                                     <h2>
-                                        1. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवाास निर्मााण अनुुदाान सरकारको
-                                        तर्फ बाट बैंंक माार्फत उपलब्ध गरााइनेे छ ।
+                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवाास निर्माण अनुुदान सरकारको
+                                        तर्फ बाट बैंंक मार्फत उपलब्ध गराइनेे छ ।`}
                                     </h2>
                                 </div>
                             </div>
                             <div>
-                                <h2>आवश्यक काागजातहरुः</h2>
+                                <h2>आवश्यक कागजातहरुः</h2>
                                 <div>
-                                    <h2> 1. नाागरिकता प्रमाण-पत्रकोो प्रतिलिपि वाा रााष्ट्रिय परिचयपत्रको प्रतिलिपि वाा मतदाता परिचयपत्रको प्रतिलिपि</h2>
+                                    <h2> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि`}</h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -2197,7 +2261,7 @@ const TemporaryShelter = (props) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h2> 2. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनााको फोटो
+                                    <h2> {`${englishToNepaliNumber(2)}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
                                     </h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
@@ -2219,7 +2283,7 @@ const TemporaryShelter = (props) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h2> 3. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन
+                                    <h2> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
                                     </h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
@@ -2241,7 +2305,7 @@ const TemporaryShelter = (props) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h2>4. प्रहरीको मुुचुल्का</h2>
+                                    <h2>{`${englishToNepaliNumber(4)}. प्रहरीको मुुचुल्का`}</h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -2266,7 +2330,7 @@ const TemporaryShelter = (props) => {
                             </div>
                             <span className={styles.ValidationErrors}>{validationError}</span>
                             <div className={styles.saveOrAddButtons}>
-                                <button className={styles.submitButtons} onClick={handleClick} type="submit">{'Save and New'}</button>
+                                <button className={styles.submitButtons} onClick={handleClick} type="submit" disabled={!!loading}>{loading ? 'पेश गरिँदै छ...' : 'पेश गर्नुहोस्'}</button>
                             </div>
                         </div>
                     </div>

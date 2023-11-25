@@ -1791,6 +1791,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
 
     private hideLanguageToggleButton = (routeName) => {
+        if (routeName === 'temporary-shelter-enrollment-form-data-table') {
+            return true;
+        }
+        if (routeName === 'add-new-temporary-shelter-enrollment-data') {
+            return true;
+        }
+        if (routeName === 'add-new-temporary-shelter-enrollment-data-preview') {
+            return true;
+        }
         if (routeName === 'admin') {
             return true;
         } if (routeName === 'healthinfrastructure-data-table') {
@@ -2041,7 +2050,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-
+        console.log('activeRouteName', activeRouteName);
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>

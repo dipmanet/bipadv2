@@ -38,11 +38,12 @@ export const epidemicDetails = {
     totalDeadDisabled: null,
 };
 export const tableTitleRef = {
-    id: 'ID',
-    entryDateBs: 'Date',
-    beneficiaryNameNepali: 'Name',
-    beneficiaryDistrict: 'District',
-    beneficiaryMunicipality: 'Municipality',
-    beneficiaryWard: 'ward',
+    id: 'आईडी',
+    entryDateBs: 'मिति',
+    beneficiaryNameNepali: 'नाम',
+    beneficiaryDistrict: 'जिल्ला',
+    beneficiaryMunicipality: 'नगरपालिका',
+    beneficiaryWard: 'वार्ड',
+    action: 'कार्य',
 
 };

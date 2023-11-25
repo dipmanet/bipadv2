@@ -48,15 +48,14 @@ const TemporaryShelterTable = (props) => {
                 {
                     (
                         <>
-                            <h2 className={styles.mainHeading}>Incident Data Table</h2>
+                            <h2 className={styles.mainHeading}>अस्थायी आश्रय नामांकन फारम डाटा तालिका</h2>
                             <div className={styles.rowTitle2}>
                                 <FontAwesomeIcon
                                     icon={faInfoCircle}
                                     className={styles.infoIcon}
                                 />
                                 <p>
-                                    The table below gives the list of incidents. The table is downloadable
-                                    and the data can be edited as well.
+                                    तलको तालिकाले अस्थायी आश्रय नामांकन डाटाको सूची दिन्छ।
                                 </p>
                             </div>
                             <div className={styles.tableMenuContainer}>

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
@@ -34,9 +36,11 @@ import { Paper } from '@mui/material';
 import Loader from 'react-loader';
 import { object } from 'prop-types';
 import { SetEpidemicsPageAction, SetIncidentPageAction } from '#actionCreators';
-import { epidemicsPageSelector, hazardFilterSelector, hazardTypesSelector, incidentPageSelector, userSelector } from '#selectors';
+import { districtsSelector, epidemicsPageSelector, hazardFilterSelector, hazardTypesSelector, incidentPageSelector, municipalitiesSelector, userSelector, wardsSelector } from '#selectors';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';
+import { englishToNepaliNumber } from 'nepali-number';
+import eyeSolid from '#resources/icons/eye-solid.svg';
 import { tableTitleRef } from './utils';
 import styles from './styles.module.scss';
 
@@ -45,6 +49,9 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     incidentPage: incidentPageSelector(state),
     hazardList: hazardTypesSelector(state),
     user: userSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -55,12 +62,13 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     getEarthquakeRequest: {
-        url: ({ params }) => '/temporary-shelter-enrollment-form/',
+        url: ({ params }) => '/temporary-shelter-enrollment-form/?count=true',
         method: methods.GET,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
             console.log('This is props', params);
             params.fetchedData(response);
+            params.countData(response.count);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setEpidemicsPage) {
@@ -203,7 +211,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </TableCell> */}
                 {headCells.map(headCell => (
                     <TableCell
-                        align="left"
+                        align="center"
                         key={headCell.id}
                         sortDirection={orderBy === headCell.id ? order : false}
                         sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
@@ -295,8 +303,10 @@ const TemporaryShelterTableData = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile } } = props;
+    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile },
+        districts, municipalities, wards } = props;
     const [fetchedData, setFetchedData] = useState([]);
+    const [count, setCount] = useState(null);
 
     const loadingCondition = (boolean) => {
         setLoader(boolean);
@@ -304,9 +314,11 @@ const TemporaryShelterTableData = (props) => {
     const handleFetchedData = (finalData) => {
         setFetchedData(finalData.results);
     };
-
+    const handleCount = (countData) => {
+        setCount(countData);
+    };
     useEffect(() => {
-        props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData });
+        props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData, countData: handleCount });
     }, []);
     useEffect(() => {
         setLoader(true);
@@ -344,6 +356,7 @@ const TemporaryShelterTableData = (props) => {
                     beneficiaryDistrict: row.beneficiaryDistrict, // use local address field
                     beneficiaryMunicipality: row.beneficiaryMunicipality,
                     beneficiaryWard: row.beneficiaryWard,
+                    action: null,
 
                 };
 
@@ -367,8 +380,8 @@ const TemporaryShelterTableData = (props) => {
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
         setLoader(true);
-        const remainder = incidentCount % 100;
-        const maxPages = ((incidentCount - remainder) / 100 + 1);
+        const remainder = count % 100;
+        const maxPages = ((count - remainder) / 100 + 1);
         if (newPage <= maxPages) {
             setOffset(newPage * 100);
         }
@@ -517,7 +530,45 @@ const TemporaryShelterTableData = (props) => {
         }
         setSelected(newSelected);
     };
-    console.log('This is fetched data', fetchedData);
+    console.log('This is fetched data', filteredRowData);
+
+    const districtNameConverter = (id) => {
+        const finalData = fetchedData && districts.find(i => i.id === id).title_ne;
+        console.log('This is id', id);
+        console.log('This is districts', districts);
+        console.log('This is data', finalData);
+        return finalData;
+    };
+
+    const municipalityNameConverter = (id) => {
+        // const finalData = fetchedData && municipalities.find(i => i.id === id).title_ne;
+        const finalData = fetchedData && municipalities.find(i => i.id === id);
+        if (finalData.type === 'Rural Municipality') {
+            const municipality = `${finalData.title_ne} गाउँपालिका`;
+            return municipality;
+        } if (finalData.type === 'Submetropolitan City') {
+            const municipality = `${finalData.title_ne} उप-महानगरपालिका`;
+            return municipality;
+        } if (finalData.type === 'Metropolitan City') {
+            const municipality = `${finalData.title_ne} महानगरपालिका`;
+            return municipality;
+        }
+        return `${finalData.title_ne} नगरपालिका`;
+    };
+
+    const wardNameConverter = (id) => {
+        const finalData = fetchedData && wards.find(i => i.id === id).title;
+        return finalData;
+    };
+
+    const dateFormatter = (date) => {
+        const slicedDate = date.split('-');
+        const year = englishToNepaliNumber(slicedDate[0]);
+        const month = englishToNepaliNumber(slicedDate[1]);
+        const day = englishToNepaliNumber(slicedDate[2]);
+        const finalDate = `${year}/${month}/${day}`;
+        return finalDate;
+    };
     return (
         <>
             {loader ? (
@@ -536,18 +587,18 @@ const TemporaryShelterTableData = (props) => {
             <Box sx={{ width: '80vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
                 <div className={styles.credentialSearch}>
                     <div className={styles.rightOptions}>
-                        <IconButton
+                        {/* <IconButton
                             onClick={handleDownload}
                             style={{ cursor: 'pointer' }}
                         >
 
                             <DownloadIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <TablePagination
                             className={styles.tablePagination}
                             rowsPerPageOptions={[100]}
                             component="div"
-                            count={incidentCount}
+                            count={count}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
@@ -586,8 +637,8 @@ const TemporaryShelterTableData = (props) => {
                                 rowCount={fetchedData && fetchedData.length}
                             />
                             <TableBody>
-                                {fetchedData
-                                    && stableSort(fetchedData, getComparator(order, orderBy))
+                                {filteredRowData
+                                    && stableSort(filteredRowData, getComparator(order, orderBy))
                                         .map((row, index) => {
                                             // const isItemSelected = isSelected(row.id);
                                             const labelId = `enhanced-table-checkbox-${index}`;
@@ -661,52 +712,7 @@ const TemporaryShelterTableData = (props) => {
                                                                         </>
                                                                     );
                                                                 }
-                                                                if (val === 'dataSource') {
-                                                                    return (
-                                                                        <TableCell
-                                                                            align={typeof val === 'string' ? 'left' : 'center'}
-                                                                            className={styles.setStyleForTableCell}
-                                                                            component="th"
-                                                                            id={labelId}
-                                                                            scope="row"
-                                                                            padding="none"
-                                                                            key={val}
-                                                                        >
-                                                                            {row[val] === 'drr_api' ? 'Nepal Police' : 'Admin'}
-                                                                        </TableCell>
-                                                                    );
-                                                                }
-                                                                if (val === 'approved') {
-                                                                    return (
-                                                                        <TableCell
-                                                                            align={typeof val === 'string' ? 'left' : 'center'}
-                                                                            className={styles.setStyleForTableCell}
-                                                                            component="th"
-                                                                            id={labelId}
-                                                                            scope="row"
-                                                                            padding="none"
-                                                                            key={val}
-                                                                        >
-                                                                            {row[val] === true ? 'YES' : 'No'}
-                                                                        </TableCell>
-                                                                    );
-                                                                }
-                                                                if (val === 'point') {
-                                                                    return (
-                                                                        <TableCell
-                                                                            align={typeof val === 'string' ? 'left' : 'center'}
-                                                                            className={styles.setStyleForTableCell}
-                                                                            component="th"
-                                                                            id={labelId}
-                                                                            scope="row"
-                                                                            padding="none"
-                                                                            key={val}
-                                                                        >
-                                                                            {`${row[val].coordinates[0].toFixed(4)}, ${row[val].coordinates[1].toFixed(4)}`}
-                                                                        </TableCell>
-                                                                    );
-                                                                }
-                                                                if (val === 'lastModifiedDate') {
+                                                                if (val === 'id') {
                                                                     return (
                                                                         <TableCell
                                                                             align="center"
@@ -717,22 +723,111 @@ const TemporaryShelterTableData = (props) => {
                                                                             padding="none"
                                                                             key={val}
                                                                         >
-                                                                            {`${row[val].split('T')[0]}`}
+                                                                            {`${englishToNepaliNumber(row[val])}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'entryDateBs') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${dateFormatter(row[val])}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'beneficiaryDistrict') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${districtNameConverter(row[val])}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'beneficiaryMunicipality') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${municipalityNameConverter(row[val])}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                if (val === 'beneficiaryWard') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${englishToNepaliNumber(wardNameConverter(row[val]))}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+
+                                                                if (val === 'action') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            <img
+
+                                                                                title="डाटा विवरण हेर्न क्लिक गर्नुहोस्"
+                                                                                height={20}
+                                                                                width={20}
+                                                                                src={eyeSolid}
+                                                                                alt="eyeSolid"
+                                                                                role="button"
+                                                                                onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${row.id}`)}
+                                                                            />
+
                                                                         </TableCell>
                                                                     );
                                                                 }
                                                                 return (
-                                                                    <TableCell
-                                                                        align={typeof row[val] === 'string' ? 'left' : 'center'}
-                                                                        className={styles.setStyleForTableCell}
-                                                                        component="th"
-                                                                        id={labelId}
-                                                                        scope="row"
-                                                                        padding="none"
-                                                                        key={val}
-                                                                    >
-                                                                        {row[val] || '-'}
-                                                                    </TableCell>
+                                                                    <>
+                                                                        <TableCell
+                                                                            align={typeof row[val] === 'string' ? 'left' : 'center'}
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {row[val] || '-'}
+                                                                        </TableCell>
+
+                                                                    </>
                                                                 );
                                                             })
                                                     }
