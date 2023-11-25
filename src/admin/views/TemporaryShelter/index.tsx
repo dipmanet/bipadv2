@@ -1482,12 +1482,12 @@ const TemporaryShelter = (props) => {
 
                                 /> */}
                             </div>
-                            <div className={styles.countData}>
+                            {/* <div className={styles.countData}>
                                 <div className={styles.countDataIndividual}>
                                     <span>लाभग्राही क्रम संंख्याः</span>
                                     <input type="text" name="" className={styles.inputClassName} disabled />
                                 </div>
-                                {/* <div className={styles.countDataIndividual}>
+                                <div className={styles.countDataIndividual}>
                                     <span>सम्झौता क्रमााङ्क संंख्याः</span>
                                     <input
                                         type="text"
@@ -1497,8 +1497,8 @@ const TemporaryShelter = (props) => {
                                         className={styles.inputClassName}
                                         disabled
                                     />
-                                </div> */}
-                            </div>
+                                </div>
+                            </div> */}
                             <div className={styles.formDetails}>
                                 <p>
                                     भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि

@@ -1448,7 +1448,7 @@ const TemporaryShelterPreview = (props) => {
     console.log('This is fetched data', fetchedData);
 
     const dateFormatter = (date) => {
-        const slicedDate = date.split('-' || '/');
+        const slicedDate = date.split('-');
         const year = englishToNepaliNumber(slicedDate[0]);
         const month = englishToNepaliNumber(slicedDate[1]);
         const day = englishToNepaliNumber(slicedDate[2]);
