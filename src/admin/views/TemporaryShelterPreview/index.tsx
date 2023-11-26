@@ -1537,12 +1537,12 @@ const TemporaryShelterPreview = (props) => {
                                                         {`जिल्ला ${districtNameConverter(fetchedData.temporaryShelterLandDistrict)}`}
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
-                                                        {`गा.पा/न.पा. ${municipalityNameConverter(fetchedData.temporaryShelterLandMunicipality)}`}
+                                                        {`${municipalityNameConverter(fetchedData.temporaryShelterLandMunicipality)}`}
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
                                                         {`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.temporaryShelterLandWard))}`}
                                                     </div>
-                                                    <div className="tempAddressIndividualDiv123">
+                                                    {/* <div className="tempAddressIndividualDiv123">
                                                         {`कित्ता नंं. ${englishToNepaliNumber(fetchedData.temporaryShelterLandKittaNumber)}`}
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
@@ -1550,7 +1550,7 @@ const TemporaryShelterPreview = (props) => {
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
                                                         {`नक्सा सिट नंं ${fetchedData.temporaryShelterLandMapSheetNumber}`}.
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                             <div style={{ display: 'flex' }}>
