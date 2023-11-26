@@ -24,6 +24,12 @@ tr {
     background: none;
 }
 
+tr:nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+
+
 .container {
     padding: 5% 5%;
     width: calc(100vw - 63px);

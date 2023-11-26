@@ -1648,7 +1648,7 @@ const TemporaryShelterPreview = (props) => {
                                                         </div>
 
                                                     </div>
-                                                    <div className="freeTextTable123" style={{ paddingTop: '65px' }}>
+                                                    <div className="freeTextTable123" style={{ pageBreakBefore: 'always' }}>
                                                         <span style={{ fontSize: '16px', fontWeight: 'bold' }}>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औठांंछाप</span>
                                                         <table
                                                             className="lyapcheTable"
@@ -1734,7 +1734,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                         </div>
                                                     </div>
-                                                    <div className="firstPartContainer123">
+                                                    <div className="firstPartContainer123" style={{ marginBottom: '58px' }}>
                                                         <span style={{ fontWeight: 'bold', lineHeight: '30px' }}>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
                                                         <div className="formElements123">
                                                             <div className="freeText123">
@@ -1760,7 +1760,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                         </div>
                                                     </div>
-                                                    <div className="firstPartDetails123" style={{ paddingTop: '60px' }}>
+                                                    <div className="firstPartDetails123" style={{ pageBreakBefore: 'always' }}>
                                                         <h2 style={{ textDecoration: 'underline' }}>ख. दोश्रो पक्ष</h2>
                                                         <div className="firstPartContainer123" style={{ gap: '20px' }}>
                                                             <div className="formElements123">
@@ -1920,7 +1920,7 @@ const TemporaryShelterPreview = (props) => {
 
 
                                             </div>
-                                            <div style={{ display: 'flex', gap: '10px', paddingTop: '150px', flexDirection: 'column' }}>
+                                            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', pageBreakBefore: 'always' }}>
                                                 <h3>प्राप्त कागजातका फोटोहरुः</h3>
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>

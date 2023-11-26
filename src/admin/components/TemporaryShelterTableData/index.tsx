@@ -739,6 +739,21 @@ const TemporaryShelterTableData = (props) => {
                                                                         </TableCell>
                                                                     );
                                                                 }
+                                                                if (val === 'beneficiaryNameNepali') {
+                                                                    return (
+                                                                        <TableCell
+                                                                            align="center"
+                                                                            className={styles.setStyleForTableCell}
+                                                                            component="th"
+                                                                            id={labelId}
+                                                                            scope="row"
+                                                                            padding="none"
+                                                                            key={val}
+                                                                        >
+                                                                            {`${(row[val])}`}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
                                                                 if (val === 'beneficiaryDistrict') {
                                                                     return (
                                                                         <TableCell
