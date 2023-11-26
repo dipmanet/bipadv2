@@ -69,6 +69,7 @@ import {
     closeWalkThroughSelector,
     runSelector,
     languageSelector,
+    authStateSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
@@ -248,6 +249,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     closeWalkThroughHomepage: closeWalkThroughSelector(state),
     run: runSelector(state),
     language: languageSelector(state),
+    authState: authStateSelector(state),
 
 
 });
@@ -1789,6 +1791,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
 
     private hideLanguageToggleButton = (routeName) => {
+        if (routeName === 'temporary-shelter-enrollment-form-data-table') {
+            return true;
+        }
+        if (routeName === 'add-new-temporary-shelter-enrollment-data') {
+            return true;
+        }
+        if (routeName === 'add-new-temporary-shelter-enrollment-data-preview') {
+            return true;
+        }
         if (routeName === 'admin') {
             return true;
         } if (routeName === 'healthinfrastructure-data-table') {
@@ -1808,6 +1819,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             return true;
         }
         if (routeName === 'DRRM Report') {
+            return true;
+        }
+        if (routeName === 'earthquake-form') {
             return true;
         }
         if (routeName === 'incident') {
@@ -1859,6 +1873,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             run,
             closeWalkThroughHomepage,
             language: { language },
+
         } = this.props;
 
         const {
@@ -2034,6 +2049,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
+
+
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>

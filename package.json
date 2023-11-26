@@ -259,6 +259,7 @@
     "react-spring": "8.0.27",
     "react-svg": "10.0.18",
     "react-test-renderer": "16.8.6",
+    "react-to-print": "^2.14.15",
     "react-tooltip": "4.2.10",
     "react-transition-group": "^4.4.1",
     "react-window": "^1.8.7",

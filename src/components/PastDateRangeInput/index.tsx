@@ -157,8 +157,6 @@ class PastDateRangeInput extends React.Component<Props> {
         //         endDate: language === 'en' && value && value.endDate ? value.endDate : convertDateAccToLanguage(value.endDate, language),
         //     });
         // }
-
-        console.log('prev value', prevProps.language.language);
     }
 
     private handleRadioInputChange = (rangeInDays: number | 'custom') => {
@@ -260,7 +258,7 @@ class PastDateRangeInput extends React.Component<Props> {
             value.endDate,
             language,
         );
-        console.log('This is final data', value);
+
         return (
             <div className={_cs(styles.pastDateRangeInput, className)}>
                 <RadioInput

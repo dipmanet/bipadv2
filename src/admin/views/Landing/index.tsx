@@ -11,6 +11,7 @@ import Footer from '../../components/Footer';
 
 const Landing = (props) => {
     const { uri, title } = props;
+
     return (
         <>
             <Page hideMap hideFilter />

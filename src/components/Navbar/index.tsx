@@ -336,11 +336,12 @@ class Navbar extends React.PureComponent<Props, State> {
             'DRRM Report', 'ibf',
         ];
         const isRoutedListedHere = !!GroupMenuListRoutes.find(i => i === activeRouteName);
+        const data = authenticated ? pages : pages.filter(i => !i.disableIfNoAuth);
 
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView
-                    data={pages}
+                    data={data}
                     keySelector={menuKeySelector}
                     renderer={MenuItem}
                     rendererParams={this.menuRendererParams}

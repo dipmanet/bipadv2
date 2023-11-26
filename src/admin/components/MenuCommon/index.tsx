@@ -97,6 +97,8 @@ const MenuCommon = (props: Props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {
