@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 /* eslint-disable no-return-assign */
@@ -785,6 +786,59 @@ const TemporaryShelter = (props) => {
             operating_municipality: null,
         },
     );
+
+    const [errorFields, setErrorFields] = useState({
+        entry_date_bs: false,
+        pa_number: false,
+        tole_name: false,
+        grand_parent_title: false,
+        grand_parent_name: false,
+        grand_child_relation: false,
+        parent_title: false,
+        parent_name: false,
+        child_relation: false,
+        beneficiary_age: false,
+        beneficiary_name_nepali: false,
+        temporary_shelter_land_kitta_number: false,
+        temporary_shelter_land_area: false,
+        temporary_shelter_land_map_sheet_number: false,
+        beneficiary_name_english: false,
+        beneficiary_citizenship_number: false,
+        beneficiary_contact_number: false,
+        beneficiary_photo: false,
+        is_beneficiary_available_to_sign: false,
+        beneficiary_representative_name_nepali: false,
+        beneficiary_representative_citizenship_number: false,
+        beneficiary_representative_grandfather_name: false,
+        beneficiary_representative_parent_name: false,
+        bank_account_holder_name: false,
+        bank_account_number: false,
+        bank_name: false,
+        bank_branch_name: false,
+        migration_certificate_number: false,
+        migration_date_bs: false,
+        signed_date: false,
+        withness_name_nepali: false,
+        withness_relation: false,
+        withness_contact_number: false,
+        operating_municipality_officer_name: false,
+        operating_municipality_signed_date: false,
+        identity_document: false,
+        infrastructure_photo: false,
+        application_document: false,
+        police_report: false,
+        beneficiary_district: false,
+        beneficiary_municipality: false,
+        beneficiary_ward: false,
+        responsible_municipality: false,
+        temporary_shelter_land_district: false,
+        temporary_shelter_land_municipality: false,
+        temporary_shelter_land_ward: false,
+        beneficiary_representative_district: false,
+        beneficiary_representative_municipality: false,
+        beneficiary_representative_ward: false,
+        operating_municipality: false,
+    });
     const [loading, setLoading] = useState(false);
 
     const { epidemmicsPage:
@@ -809,6 +863,10 @@ const TemporaryShelter = (props) => {
 
 
     const handleFileInputChange = (e) => {
+        setErrorFields({
+            ...errorFields,
+            [e.target.name]: false,
+        });
         const file = e.target.files[0];
         setData({ ...data, [e.target.name]: file });
         // setSelectedFile(file);
@@ -1296,6 +1354,10 @@ const TemporaryShelter = (props) => {
 
 
     const handleFormData = (e) => {
+        setErrorFields({
+            ...errorFields,
+            [e.target.name]: false,
+        });
         if (e.target.name === 'beneficiary_district') {
             setData({
                 ...data,
@@ -1418,6 +1480,45 @@ const TemporaryShelter = (props) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
     const handleClick = () => {
+        const errorCheckingFields = Object.keys(data);
+        const latestErrorUpdate = errorFields;
+        errorCheckingFields.map((i) => {
+            if (!data[i]) {
+                if (data.is_beneficiary_available_to_sign === false) {
+                    latestErrorUpdate.beneficiary_representative_name_nepali = false;
+                    latestErrorUpdate.beneficiary_representative_citizenship_number = false;
+                    latestErrorUpdate.beneficiary_representative_grandfather_name = false;
+                    latestErrorUpdate.beneficiary_representative_parent_name = false;
+                    latestErrorUpdate.beneficiary_representative_district = false;
+                    latestErrorUpdate.beneficiary_representative_municipality = false;
+                    latestErrorUpdate.beneficiary_representative_ward = false;
+                }
+                if (i === 'migration_certificate_number') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'operating_municipality') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'responsible_municipality') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'pa_number') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'is_beneficiary_available_to_sign') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'application_document') {
+                    return latestErrorUpdate[i] = false;
+                }
+                return latestErrorUpdate[i] = true;
+            } return null;
+        });
+
+        setErrorFields({ ...latestErrorUpdate });
+        if (Object.values(latestErrorUpdate).filter(i => i === true).length) {
+            return;
+        }
         setLoading(true);
         const finalUpdateData = data;
         finalUpdateData.operating_municipality = user.profile.municipality;
@@ -1426,9 +1527,10 @@ const TemporaryShelter = (props) => {
         addEarthquakePostRequest.do({
             body: finalUpdateData,
             onSuccess: datas => handleSuccessMessage(datas),
-            setFaramErrors: err => console.log('err', err),
+            setFaramErrors: err => setLoading(false),
 
         });
+        // return errorCheck;
     };
     // Function to handle checkbox change
     const handleCheckboxChange = () => {
@@ -1438,7 +1540,7 @@ const TemporaryShelter = (props) => {
             is_beneficiary_available_to_sign: !data.is_beneficiary_available_to_sign,
         });
     };
-
+    console.log('This is final error list', errorFields);
     useEffect(() => {
         const curDate = new Date();
 
@@ -1654,6 +1756,7 @@ const TemporaryShelter = (props) => {
                                         value={data.beneficiary_district || ''}
                                         id="districts-benificery"
                                         onChange={handleFormData}
+                                        style={errorFields.beneficiary_district ? { border: '1px solid red' } : {}}
                                     >
                                         <option>जिल्ला</option>
                                         {
@@ -1683,6 +1786,7 @@ const TemporaryShelter = (props) => {
                                         name="beneficiary_municipality"
                                         value={data.beneficiary_municipality || ''}
                                         onChange={handleFormData}
+                                        style={errorFields.beneficiary_municipality ? { border: '1px solid red' } : {}}
                                     >
                                         <option> गा.पा/न.पा. वडा नंं.</option>
                                         {
@@ -1712,6 +1816,7 @@ const TemporaryShelter = (props) => {
                                         name="beneficiary_ward"
                                         value={data.beneficiary_ward || ''}
                                         onChange={handleFormData}
+                                        style={errorFields.beneficiary_ward ? { border: '1px solid red' } : {}}
                                     >
                                         <option>वडा नंं.</option>
                                         {
@@ -1739,6 +1844,7 @@ const TemporaryShelter = (props) => {
                                         name="tole_name"
                                         value={data.tole_name}
                                         onChange={handleFormData}
+                                        style={errorFields.tole_name ? { borderBottom: '2px dotted red' } : {}}
                                     />
                                     {' '}
                                     बस्नेे श्री
@@ -1749,6 +1855,7 @@ const TemporaryShelter = (props) => {
                                         value={data.grand_parent_name}
                                         className={styles.inputClassName}
                                         onChange={handleFormData}
+                                        style={errorFields.grand_parent_name ? { borderBottom: '2px dotted red' } : {}}
                                     />
                                     {' '}
                                     को
@@ -1758,6 +1865,7 @@ const TemporaryShelter = (props) => {
                                         name="grand_child_relation"
                                         value={data.grand_child_relation}
                                         onChange={handleFormData}
+                                        style={errorFields.grand_child_relation ? { border: '1px solid red' } : {}}
                                     >
                                         <option>सम्बन्ध</option>
                                         <option value="नाती">नाती</option>
@@ -1773,6 +1881,7 @@ const TemporaryShelter = (props) => {
                                         onChange={handleFormData}
                                         name="parent_name"
                                         value={data.parent_name}
+                                        style={errorFields.parent_name ? { borderBottom: '2px dotted red' } : {}}
                                     />
                                     {' '}
                                     को
@@ -1782,6 +1891,7 @@ const TemporaryShelter = (props) => {
                                         name="child_relation"
                                         value={data.child_relation}
                                         onChange={handleFormData}
+                                        style={errorFields.child_relation ? { border: '1px solid red' } : {}}
 
 
                                     >
@@ -1800,6 +1910,7 @@ const TemporaryShelter = (props) => {
                                         onChange={handleFormData}
                                         value={data.beneficiary_age}
                                         className={styles.inputClassName}
+                                        style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red' } : {}}
                                     />
                                     {' '}
                                     को लाभग्रााही श्री
@@ -1810,6 +1921,7 @@ const TemporaryShelter = (props) => {
                                         value={data.beneficiary_name_nepali}
                                         onChange={handleFormData}
                                         className={styles.inputClassName}
+                                        style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red' } : {}}
                                     />
                                     {' '}
                                     (यसपछि प्रथम पक्ष भनिनेे) र
@@ -1833,6 +1945,7 @@ const TemporaryShelter = (props) => {
                                             name="temporary_shelter_land_district"
                                             value={data.temporary_shelter_land_district}
                                             onChange={handleFormData}
+                                            style={errorFields.temporary_shelter_land_district ? { border: '1px solid red' } : {}}
                                         >
                                             <option> जिल्ला</option>
                                             {
@@ -1861,6 +1974,7 @@ const TemporaryShelter = (props) => {
                                             name="temporary_shelter_land_municipality"
                                             value={data.temporary_shelter_land_municipality}
                                             onChange={handleFormData}
+                                            style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red' } : {}}
                                         >
                                             <option> गा.पा/न.पा. वडा नंं.</option>
                                             {
@@ -1889,11 +2003,12 @@ const TemporaryShelter = (props) => {
                                             name="temporary_shelter_land_ward"
                                             value={data.temporary_shelter_land_ward}
                                             onChange={handleFormData}
+                                            style={errorFields.temporary_shelter_land_ward ? { border: '1px solid red' } : {}}
                                         >
                                             <option>वडा नंं.</option>
                                             {
                                                 tempSelectedWard.map(item => (
-                                                    <option value={item.id}>{item.title}</option>
+                                                    <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
                                                 ))
                                             }
                                         </select>
@@ -1956,7 +2071,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="beneficiary_name_nepali"
                                                 value={data.beneficiary_name_nepali}
-
+                                                style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red' } : {}}
                                                 className={styles.inputClassName}
                                             />
                                         </div>
@@ -1968,15 +2083,16 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="beneficiary_name_english"
                                                 value={data.beneficiary_name_english}
+                                                style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.locationDetails}>
                                             <div>
-                                                <span>{`जिल्लाः ${districtNameConverter(data.beneficiary_district)}`}</span>
+                                                <span>{`जिल्ला ${districtNameConverter(data.beneficiary_district)}`}</span>
 
                                             </div>
                                             <div>
-                                                <span>{`${municipalityNameConverter(data.beneficiary_municipality)}`}</span>
+                                                <span>{`${data.beneficiary_municipality ? municipalityNameConverter(data.beneficiary_municipality) : ''}`}</span>
 
                                             </div>
                                             <div>
@@ -1992,6 +2108,7 @@ const TemporaryShelter = (props) => {
                                                     value={data.beneficiary_citizenship_number}
                                                     onChange={handleFormData}
                                                     className={styles.inputClassName}
+                                                    style={errorFields.beneficiary_citizenship_number ? { borderBottom: '2px dotted red' } : {}}
                                                 />
                                             </div>
                                             <div>
@@ -2002,11 +2119,11 @@ const TemporaryShelter = (props) => {
                                                     name="beneficiary_contact_number"
                                                     value={data.beneficiary_contact_number}
                                                     onChange={handleFormData}
-
+                                                    style={errorFields.beneficiary_contact_number ? { borderBottom: '2px dotted red' } : {}}
                                                     className={styles.inputClassName}
                                                 />
                                             </div>
-                                            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                                            <div style={{ display: 'flex', gap: '5px', alignItems: errorFields.beneficiary_photo ? 'flex-start' : 'center' }}>
                                                 <span>फोटो:</span>
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                                     <input
@@ -2017,6 +2134,9 @@ const TemporaryShelter = (props) => {
                                                         onChange={handleFileInputChange}
                                                         name="beneficiary_photo"
                                                     />
+                                                    {errorFields.beneficiary_photo
+                                                        ? <p style={{ margin: '0', color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                                    }
                                                     {
                                                         data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
                                                     }
@@ -2034,6 +2154,7 @@ const TemporaryShelter = (props) => {
                                                     type="checkbox"
                                                     checked={data.is_beneficiary_available_to_sign}
                                                     onChange={handleCheckboxChange}
+
                                                 />
                                             </div>
 
@@ -2055,7 +2176,7 @@ const TemporaryShelter = (props) => {
                                                                 onChange={handleFormData}
                                                                 name="beneficiary_representative_name_nepali"
                                                                 value={data.beneficiary_representative_name_nepali}
-
+                                                                style={errorFields.beneficiary_representative_name_nepali ? { borderBottom: '2px dotted red' } : {}}
                                                                 className={styles.inputClassName}
                                                             />
                                                         </div>
@@ -2069,6 +2190,7 @@ const TemporaryShelter = (props) => {
                                                                     value={data.beneficiary_representative_district}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_district1"
+                                                                    style={errorFields.beneficiary_representative_district ? { border: '1px solid red' } : {}}
                                                                 >
                                                                     <option>जिल्लाः</option>
                                                                     {
@@ -2098,6 +2220,7 @@ const TemporaryShelter = (props) => {
                                                                     value={data.beneficiary_representative_municipality}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_municipality1"
+                                                                    style={errorFields.beneficiary_representative_municipality ? { border: '1px solid red' } : {}}
 
                                                                 >
                                                                     <option> गा.पा./न.पाः</option>
@@ -2128,11 +2251,12 @@ const TemporaryShelter = (props) => {
                                                                     value={data.beneficiary_representative_ward}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_ward1"
+                                                                    style={errorFields.beneficiary_representative_ward ? { border: '1px solid red' } : {}}
                                                                 >
                                                                     <option> वडा नंं.</option>
                                                                     {
                                                                         beneficiarySelectedWard.map(item => (
-                                                                            <option value={item.id}>{item.title}</option>
+                                                                            <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
                                                                         ))
                                                                     }
                                                                 </select>
@@ -2157,37 +2281,38 @@ const TemporaryShelter = (props) => {
                                                                     value={data.beneficiary_representative_citizenship_number}
                                                                     onChange={handleFormData}
                                                                     className={styles.inputClassName}
+                                                                    style={errorFields.beneficiary_representative_citizenship_number ? { borderBottom: '2px dotted red' } : {}}
                                                                 />
                                                             </div>
 
                                                         </div>
-
+                                                        <div className={styles.freeText}>
+                                                            <span>बाजेेको नाम, थर:</span>
+                                                            {' '}
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputClassName}
+                                                                name="beneficiary_representative_grandfather_name"
+                                                                value={data.beneficiary_representative_grandfather_name}
+                                                                onChange={handleFormData}
+                                                                style={errorFields.beneficiary_representative_grandfather_name ? { borderBottom: '2px dotted red' } : {}}
+                                                            />
+                                                        </div>
+                                                        <div className={styles.freeText}>
+                                                            <span>बाबुु/आमाको नाम, थर:</span>
+                                                            {' '}
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputClassName}
+                                                                name="beneficiary_representative_parent_name"
+                                                                value={data.beneficiary_representative_parent_name}
+                                                                onChange={handleFormData}
+                                                                style={errorFields.beneficiary_representative_parent_name ? { borderBottom: '2px dotted red' } : {}}
+                                                            />
+                                                        </div>
                                                     </div>
                                                 ) : ''
                                         }
-
-                                        <div className={styles.freeText}>
-                                            <span>बाजेेको नाम, थर:</span>
-                                            {' '}
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                name="beneficiary_representative_grandfather_name"
-                                                value={data.beneficiary_representative_grandfather_name}
-                                                onChange={handleFormData}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>बाबुु/आमाको नाम, थर:</span>
-                                            {' '}
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                name="beneficiary_representative_parent_name"
-                                                value={data.beneficiary_representative_parent_name}
-                                                onChange={handleFormData}
-                                            />
-                                        </div>
 
 
                                     </div>
@@ -2203,6 +2328,7 @@ const TemporaryShelter = (props) => {
                                                 name="bank_account_holder_name"
                                                 value={data.bank_account_holder_name}
                                                 onChange={handleFormData}
+                                                style={errorFields.bank_account_holder_name ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeText}>
@@ -2213,6 +2339,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="bank_account_number"
                                                 value={data.bank_account_number}
+                                                style={errorFields.bank_account_number ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeText}>
@@ -2223,6 +2350,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="bank_name"
                                                 value={data.bank_name}
+                                                style={errorFields.bank_name ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeText}>
@@ -2233,6 +2361,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="bank_branch_name"
                                                 value={data.bank_branch_name}
+                                                style={errorFields.bank_branch_name ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                     </div>
@@ -2323,6 +2452,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="withness_name_nepali"
                                                 value={data.withness_name_nepali}
+                                                style={errorFields.withness_name_nepali ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeText}>
@@ -2341,6 +2471,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="withness_relation"
                                                 value={data.withness_relation}
+                                                style={errorFields.withness_relation ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeText}>
@@ -2351,6 +2482,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="withness_contact_number"
                                                 value={data.withness_contact_number}
+                                                style={errorFields.withness_contact_number ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeTextTable}>
@@ -2399,6 +2531,7 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFormData}
                                                 name="operating_municipality_officer_name"
                                                 value={data.operating_municipality_officer_name}
+                                                style={errorFields.operating_municipality_officer_name ? { borderBottom: '2px dotted red' } : {}}
                                             />
                                         </div>
                                         <div className={styles.freeText}>
@@ -2496,6 +2629,11 @@ const TemporaryShelter = (props) => {
                                                 name="identity_document"
                                             />
                                             {
+                                                errorFields.identity_document
+                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                            }
+
+                                            {
                                                 data.identity_document ? <img height={100} width={100} src={handleShowImage(data.identity_document)} alt="img" /> : ''
                                             }
                                         </div>
@@ -2517,6 +2655,10 @@ const TemporaryShelter = (props) => {
                                                 onChange={handleFileInputChange}
                                                 name="infrastructure_photo"
                                             />
+                                            {
+                                                errorFields.infrastructure_photo
+                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                            }
                                             {
                                                 data.infrastructure_photo ? <img height={100} width={100} src={handleShowImage(data.infrastructure_photo)} alt="img" /> : ''
                                             }
@@ -2540,6 +2682,10 @@ const TemporaryShelter = (props) => {
                                                 name="application_document"
                                             />
                                             {
+                                                errorFields.application_document
+                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                            }
+                                            {
                                                 data.application_document ? <img height={100} width={100} src={handleShowImage(data.application_document)} alt="img" /> : ''
                                             }
                                         </div>
@@ -2561,6 +2707,10 @@ const TemporaryShelter = (props) => {
                                                 name="police_report"
                                             />
                                             {
+                                                errorFields.police_report
+                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                            }
+                                            {
                                                 data.police_report ? <img height={100} width={100} src={handleShowImage(data.police_report)} alt="img" /> : ''
                                             }
                                         </div>
@@ -2571,7 +2721,13 @@ const TemporaryShelter = (props) => {
 
 
                             </div>
-                            <span className={styles.ValidationErrors}>{validationError}</span>
+                            {
+                                Object.values(errorFields).filter(i => i === true).length
+                                    ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
+                                    : ''
+                            }
+
+                            {/* <span className={styles.ValidationErrors}>{validationError}</span> */}
                             <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleClick} type="submit" disabled={!!loading}>{loading ? 'पेश गरिँदै छ...' : 'पेश गर्नुहोस्'}</button>
                             </div>

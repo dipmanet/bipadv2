@@ -1629,20 +1629,18 @@ const TemporaryShelterPreview = (props) => {
                                                                                 </div>
 
                                                                             </div>
+                                                                            <div className="freeText123" style={{ marginTop: '10px' }}>
+                                                                                <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
 
+
+                                                                            </div>
+                                                                            <div className="freeText123" style={{ marginTop: '10px' }}>
+                                                                                <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
+
+                                                                            </div>
                                                                         </div>
                                                                     ) : ''
                                                             }
-
-                                                            <div className="freeText123">
-                                                                <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
-
-
-                                                            </div>
-                                                            <div className="freeText123">
-                                                                <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
-
-                                                            </div>
 
 
                                                         </div>
@@ -1901,7 +1899,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.policeReport ? (
                                                         <div>
-                                                            <h3>{`${englishToNepaliNumber(4)}. प्रहरीको मुुचुल्का`}</h3>
+                                                            <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का`}</h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
                                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -1954,28 +1952,33 @@ const TemporaryShelterPreview = (props) => {
 
                                                     </div>
                                                 </div>
+                                                {
+                                                    fetchedData.applicationDocument
+
+
+                                                        ? (
+                                                            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                                                                <h3> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
+                                                                </h3>
+                                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                                    {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
+                                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+
+                                                                        {
+                                                                            fetchedData.applicationDocument ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.applicationDocument} alt="img" /> : ''
+                                                                        }
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        )
+                                                        : ''}
 
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
-                                                    </h3>
-                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                        {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-
-                                                            {
-                                                                fetchedData.applicationDocument ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.applicationDocument} alt="img" /> : ''
-                                                            }
-                                                        </div>
-
-
-                                                    </div>
-
-                                                </div>
-
-
-                                                <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3>{`${englishToNepaliNumber(4)}. प्रहरीको मुुचुल्का`}</h3>
+                                                    <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का`}</h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
