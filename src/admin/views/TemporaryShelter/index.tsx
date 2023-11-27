@@ -1417,14 +1417,14 @@ const TemporaryShelter = (props) => {
             value: d.id,
             label: d.title_ne,
         }));
-    console.log('DistrictListSelect', DistrictListSelect);
+
     const MunicipalityListSelectedMunicipality = data.beneficiary_district && municipalities
         .filter(i => i.district === Number(data.beneficiary_district.value))
         .map(d => ({
             value: d.id,
             label: d.title_ne,
         }));
-    console.log('This is final data', data);
+
     const WardListSelectedWard = data.beneficiary_municipality && wards
         .filter(i => i.municipality === Number(data.beneficiary_municipality.value))
         .map(d => ({
@@ -1540,7 +1540,7 @@ const TemporaryShelter = (props) => {
             is_beneficiary_available_to_sign: !data.is_beneficiary_available_to_sign,
         });
     };
-    console.log('This is final error list', errorFields);
+
     useEffect(() => {
         const curDate = new Date();
 
@@ -1616,7 +1616,6 @@ const TemporaryShelter = (props) => {
         // setErrorPersonal({ ...errorPersonal, [name]: false });
     };
     const districtNameConverter = (id) => {
-        console.log('This is id', typeof id, id);
         const finalData = id && districts.find(i => i.id === Number(id)).title_ne;
 
         return finalData || '-';
