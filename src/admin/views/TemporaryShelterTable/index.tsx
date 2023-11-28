@@ -46,14 +46,14 @@ const TemporaryShelterTable = props => (
             {
                 (
                     <>
-                        <h2 className={styles.mainHeading}>अस्थायी आश्रय नामांकन फारम डाटा तालिका</h2>
+                        <h2 className={styles.mainHeading}>अस्थायी आवास सम्झौता फारम तथ्याङ्क तालिका</h2>
                         <div className={styles.rowTitle2}>
                             <FontAwesomeIcon
                                 icon={faInfoCircle}
                                 className={styles.infoIcon}
                             />
                             <p>
-                                तलको तालिकाले अस्थायी आश्रय नामांकन डाटाको सूची दिन्छ।
+                                तलको तालिकाले अस्थायी आवास सम्बन्धी तथ्याङ्कको विस्तृत विवरणहरू सुचीमा देखाउछ।
                             </p>
                         </div>
                         <div className={styles.tableMenuContainer}>
