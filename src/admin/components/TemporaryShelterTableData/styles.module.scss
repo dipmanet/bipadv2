@@ -30,6 +30,29 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 }
 
 .credentialSearch {
+    .saveOrAddButtons {
+        display: flex;
+        justify-content: flex-end;
+
+
+        .submitButtons {
+            color: white;
+            background-color: #0a58b1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 8px 25px;
+            border-radius: 3px;
+            font-family: $Fira;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #0a58b1;
+            }
+
+        }
+    }
+
     .leftOptions {
         display: flex;
         justify-content: flex-start;
@@ -48,7 +71,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgb(202, 202, 202);
     // border-left: 1px solid rgb(228, 228, 228);
