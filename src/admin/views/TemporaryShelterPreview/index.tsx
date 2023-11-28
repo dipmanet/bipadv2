@@ -1542,6 +1542,9 @@ const TemporaryShelterPreview = (props) => {
                                                     <div className="tempAddressIndividualDiv123">
                                                         {`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.temporaryShelterLandWard))}`}
                                                     </div>
+                                                    <div className="tempAddressIndividualDiv123">
+                                                        {`टोल: ${(fetchedData.temporaryShelterLandTole)}`}
+                                                    </div>
                                                     {/* <div className="tempAddressIndividualDiv123">
                                                         {`कित्ता नंं. ${englishToNepaliNumber(fetchedData.temporaryShelterLandKittaNumber)}`}
                                                     </div>
@@ -1726,7 +1729,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`बसाइँँसराइको मितिः ${dateFormatter(fetchedData.migrationDateBs)}`}</span>
+                                                                <span>{`बसाइँँसराइको मितिः ${fetchedData.migrationCertificateNumber ? dateFormatter(fetchedData.migrationDateBs) : ''}`}</span>
 
                                                             </div>
 
@@ -1736,6 +1739,10 @@ const TemporaryShelterPreview = (props) => {
                                                         <span style={{ fontWeight: 'bold', lineHeight: '30px' }}>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
                                                         <div className="formElements123">
                                                             <div className="freeText123">
+                                                                <span>{'लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर: .................................... '}</span>
+
+                                                            </div>
+                                                            <div className="freeText123">
                                                                 <span>{`मितिः ${dateFormatter(fetchedData.signedDate)}`}</span>
 
                                                             </div>
@@ -1744,7 +1751,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{'हस्ताक्षर: .................... '}</span>
+                                                                <span>{'हस्ताक्षर: ................................. '}</span>
 
                                                             </div>
                                                             <div className="freeText123">
@@ -1799,39 +1806,34 @@ const TemporaryShelterPreview = (props) => {
                                             <div>
                                                 <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
                                                 <div>
-                                                    <h3> {`${englishToNepaliNumber(1)}. म/मेेरो परिवारका लाागि अस्थायी आवास निर्माण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्याप्त घडेेरी छ ।`}</h3>
+                                                    <h3> {`${englishToNepaliNumber(1)}. मैैलेे भूूकम्पबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्र अनुुरुप बनाउनेे छुु ।`}</h3>
                                                 </div>
                                                 <div>
-                                                    <h3> {`${englishToNepaliNumber(2)}. मैैलेे भूूकम्पबाट प्राभावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्यविधि, २०८० एबंं यस सम्झौता-पत्रमा
-                                                        उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनाउनेे छुु ।`}
+                                                    <h3> {`${englishToNepaliNumber(2)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
+जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
                                                     </h3>
                                                 </div>
                                                 <div>
-                                                    <h3>  {`${englishToNepaliNumber(3)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
-                                                        जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
+                                                    <h3>  {`${englishToNepaliNumber(3)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}
                                                     </h3>
                                                 </div>
                                                 <div>
-                                                    <h3> {`${englishToNepaliNumber(4)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}</h3>
+                                                    <h3> {`${englishToNepaliNumber(4)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}</h3>
                                                 </div>
                                                 <div>
                                                     <h3>
-                                                        {`${englishToNepaliNumber(5)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}
+                                                        {`${englishToNepaliNumber(5)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
                                                     </h3>
                                                 </div>
-                                                <div>
-                                                    <h3>
-                                                        {`${englishToNepaliNumber(6)}. परिवारको व्यक्तिगत सरसफााई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
-                                                    </h3>
-                                                </div>
+
 
                                             </div>
                                             <div>
                                                 <h3>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h3>
                                                 <div>
                                                     <h3>
-                                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवास निर्माण अनुुदान सरकारको
-                                                        तर्फ बाट बैंंक मार्फत उपलब्ध गराइनेे छ ।`}
+                                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट यस कार्यविधि अनुुसार अस्थायी आवास निर्मााणको कार्य भएमा अनुुदान रकम सरकारको तर्फ बाट दफा
+५ बमोजिम उपलब्ध गराइनेे छ ।`}
                                                     </h3>
                                                 </div>
                                             </div>
@@ -1840,7 +1842,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.identityDocument ? (
                                                         <div>
-                                                            <h3> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि`}</h3>
+                                                            <h3> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
                                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -1899,7 +1901,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.policeReport ? (
                                                         <div>
-                                                            <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का`}</h3>
+                                                            <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
                                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -1922,7 +1924,7 @@ const TemporaryShelterPreview = (props) => {
                                                 <h3>प्राप्त कागजातका फोटोहरुः</h3>
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि`}</h3>
+                                                    <h3> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -1978,7 +1980,7 @@ const TemporaryShelterPreview = (props) => {
 
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का`}</h3>
+                                                    <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>

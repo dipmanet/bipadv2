@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable @typescript-eslint/indent */
@@ -26,7 +27,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
-
+import Select from 'react-select';
 import { visuallyHidden } from '@mui/utils';
 import {
     CsvBuilder,
@@ -62,9 +63,16 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     getEarthquakeRequest: {
-        url: ({ params }) => '/temporary-shelter-enrollment-form/?count=true',
+        url: ({ params }) => '/temporary-shelter-enrollment-form/',
         method: methods.GET,
         onMount: false,
+        query: ({ params }) => ({
+            count: true,
+            beneficiary_district: params.district,
+            beneficiary_municipality: params.municipality,
+            beneficiary_ward: params.ward,
+
+        }),
         onSuccess: ({ response, props, params }) => {
             params.fetchedData(response);
             params.countData(response.count);
@@ -302,15 +310,20 @@ const TemporaryShelterTableData = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile },
+    const { user, epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile },
         districts, municipalities, wards } = props;
     const [fetchedData, setFetchedData] = useState([]);
     const [count, setCount] = useState(null);
-
+    const [filterData, setFilterData] = useState({
+        district: null,
+        municipality: null,
+        ward: null,
+    });
     const loadingCondition = (boolean) => {
         setLoader(boolean);
     };
     const handleFetchedData = (finalData) => {
+        setLoader(false);
         setFetchedData(finalData.results);
     };
     const handleCount = (countData) => {
@@ -319,6 +332,16 @@ const TemporaryShelterTableData = (props) => {
     useEffect(() => {
         props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData, countData: handleCount });
     }, []);
+    const handleSearch = () => {
+        setLoader(true);
+        props.requests.getEarthquakeRequest.do({
+            fetchedData: handleFetchedData,
+            district: filterData.municipality ? '' : filterData.district && filterData.district.value,
+            municipality: filterData.ward ? '' : filterData.municipality && filterData.municipality.value,
+            ward: filterData.ward ? filterData.ward && filterData.ward.value : '',
+            countData: handleCount,
+        });
+    };
     useEffect(() => {
         setLoader(true);
         props.requests.incidents.do({
@@ -330,7 +353,26 @@ const TemporaryShelterTableData = (props) => {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const DistrictListSelect = districts
+        .map(d => ({
+            value: d.id,
+            label: d.title_ne,
+        }));
 
+    const MunicipalityList = filterData.district && municipalities
+        .filter(i => i.district === Number(filterData.district.value))
+        .map(d => ({
+            value: d.id,
+            label: d.title_ne,
+        }));
+
+    const WardList = filterData.municipality && wards
+        .filter(i => i.municipality === Number(filterData.municipality.value))
+        .map(d => ({
+            value: d.id,
+            label: englishToNepaliNumber(d.title),
+        }))
+        .sort((a, b) => a.label - b.label);
     const array = [];
     for (const obj in hazardList) {
         const objective = hazardList[obj];
@@ -566,6 +608,41 @@ const TemporaryShelterTableData = (props) => {
         const finalDate = `${year}/${month}/${day}`;
         return finalDate;
     };
+    const handleProvincialFormDataNepaliValue = (value, dataList, isWard = false) => {
+        const finalValueToStore = dataList
+            .filter(i => i.id === value)
+            .map(d => ({
+                value,
+                label: isWard ? englishToNepaliNumber(d.title_ne || d.title) : d.title_ne || d.title,
+            }));
+        return finalValueToStore[0];
+    };
+    const handleDropdown = (name, value) => {
+        if (name === 'district') {
+            setFilterData({
+                ...filterData,
+                [name]: value,
+                municipality: '',
+                ward: '',
+            });
+        } else if (name === 'municipality') {
+            setFilterData({
+                ...filterData,
+                [name]: value,
+                ward: '',
+            });
+        } else {
+            setFilterData({
+                ...filterData,
+                [name]: value,
+
+            });
+        }
+
+        // setErrorPersonal({ ...errorPersonal, [name]: false });
+    };
+
+
     return (
         <>
             {loader ? (
@@ -582,6 +659,7 @@ const TemporaryShelterTableData = (props) => {
             )
                 : ''}
             <Box sx={{ width: '80vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
+
                 <div className={styles.credentialSearch}>
                     <div className={styles.rightOptions}>
                         {/* <IconButton
@@ -600,8 +678,66 @@ const TemporaryShelterTableData = (props) => {
                             page={page}
                             onPageChange={handleChangePage}
                         />
+
+                    </div>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+
+                        <div style={{ width: '230px' }}>
+                            <Select
+                                isClearable
+                                value={filterData.district === '' ? '' : handleProvincialFormDataNepaliValue(filterData.district, districts)}
+                                name="district"
+                                placeholder={'जिल्ला छान्नुहोस्'}
+                                onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
+                                options={DistrictListSelect}
+                                className="dropdownZindex"
+                                menuPortalTarget={document.body}
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            />
+                        </div>
+
+
+                        <div style={{ width: '230px' }}>
+                            <Select
+                                isClearable
+                                value={filterData.municipality === '' ? '' : handleProvincialFormDataNepaliValue(filterData.municipality, districts)}
+                                name="municipality"
+                                placeholder={'पालिका छान्नुहोस्'}
+                                onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
+                                options={MunicipalityList}
+                                className="dropdownZindex"
+                                menuPortalTarget={document.body}
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999, width: '220px' }) }}
+                            />
+                        </div>
+
+                        <div style={{ width: '230px' }}>
+                            <Select
+                                isClearable
+                                value={filterData.ward === '' ? '' : handleProvincialFormDataNepaliValue(filterData.ward, districts)}
+                                name="ward"
+                                placeholder={'वडा छान्नुहोस्'}
+                                onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
+                                options={WardList}
+                                className="dropdownZindex"
+                                menuPortalTarget={document.body}
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999, width: '220px' }) }}
+                            />
+                        </div>
+                        <div className={styles.saveOrAddButtons}>
+                            <button
+                                className={styles.submitButtons}
+                                // disabled={!!(filterData.district && !filterData.district.value)}
+                                onClick={handleSearch}
+                                type="submit"
+                            >
+                                {'खोज्नुहोस्'}
+
+                            </button>
+                        </div>
                     </div>
                 </div>
+
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <EnhancedTableToolbar
                         selected={selected}

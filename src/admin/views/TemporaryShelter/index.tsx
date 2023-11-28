@@ -745,9 +745,7 @@ const TemporaryShelter = (props) => {
             child_relation: null,
             beneficiary_age: null,
             beneficiary_name_nepali: '',
-            temporary_shelter_land_kitta_number: '123',
-            temporary_shelter_land_area: '123',
-            temporary_shelter_land_map_sheet_number: '123',
+            temporary_shelter_land_tole: '',
             beneficiary_name_english: '',
             beneficiary_citizenship_number: '',
             beneficiary_contact_number: '',
@@ -799,9 +797,7 @@ const TemporaryShelter = (props) => {
         child_relation: false,
         beneficiary_age: false,
         beneficiary_name_nepali: false,
-        temporary_shelter_land_kitta_number: false,
-        temporary_shelter_land_area: false,
-        temporary_shelter_land_map_sheet_number: false,
+        temporary_shelter_land_tole: false,
         beneficiary_name_english: false,
         beneficiary_citizenship_number: false,
         beneficiary_contact_number: false,
@@ -840,6 +836,7 @@ const TemporaryShelter = (props) => {
         operating_municipality: false,
     });
     const [loading, setLoading] = useState(false);
+    const [backendError, setBackendError] = useState(false);
 
     const { epidemmicsPage:
         {
@@ -1480,6 +1477,7 @@ const TemporaryShelter = (props) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
     const handleClick = () => {
+        setBackendError(false);
         const errorCheckingFields = Object.keys(data);
         const latestErrorUpdate = errorFields;
         errorCheckingFields.map((i) => {
@@ -1521,13 +1519,19 @@ const TemporaryShelter = (props) => {
         }
         setLoading(true);
         const finalUpdateData = data;
+        if (!finalUpdateData.migration_certificate_number) {
+            finalUpdateData.migration_date_bs = '';
+        }
         finalUpdateData.operating_municipality = user.profile.municipality;
         finalUpdateData.responsible_municipality = user.profile.municipality;
 
         addEarthquakePostRequest.do({
             body: finalUpdateData,
             onSuccess: datas => handleSuccessMessage(datas),
-            setFaramErrors: err => setLoading(false),
+            setFaramErrors: (err) => {
+                setBackendError(true);
+                setLoading(false);
+            },
 
         });
         // return errorCheck;
@@ -1787,7 +1791,7 @@ const TemporaryShelter = (props) => {
                                         onChange={handleFormData}
                                         style={errorFields.beneficiary_municipality ? { border: '1px solid red' } : {}}
                                     >
-                                        <option> गा.पा/न.पा. वडा नंं.</option>
+                                        <option> गा.पा/न.पा.</option>
                                         {
                                             selectedMunicipality.map(item => (
                                                 <option value={item.id}>{item.title_ne}</option>
@@ -1912,7 +1916,7 @@ const TemporaryShelter = (props) => {
                                         style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red' } : {}}
                                     />
                                     {' '}
-                                    को लाभग्रााही श्री
+                                    को लाभग्राही श्री
                                     {' '}
                                     <input
                                         type="text"
@@ -1925,12 +1929,11 @@ const TemporaryShelter = (props) => {
                                     {' '}
                                     (यसपछि प्रथम पक्ष भनिनेे) र
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} value={municipalityDefinedName} disabled />
+                                    <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled />
                                     {' '}
-                                    गााउँँपालिका,
-                                    नगरपालिका कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
-                                    घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि,२०८०, बमोजिम अस्थायी आवास निर्मााण गर्न यो अनुुदान
-                                    सम्झौता-पत्रमा सहीछााप गरेेका छौंं ।
+                                    कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
+                                    घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि,२०८०, बमोजिम अस्थायी आवास निर्माण गर्न यो अनुुदान
+                                    सम्झौता-पत्रमा सहीछाप गरेेका छौंं ।
                                 </p>
                             </div>
                             <div className={styles.mainTempAddress}>
@@ -1942,7 +1945,7 @@ const TemporaryShelter = (props) => {
                                         <select
                                             id="temporary_shelter_land_district"
                                             name="temporary_shelter_land_district"
-                                            value={data.temporary_shelter_land_district}
+                                            value={data.temporary_shelter_land_district || ''}
                                             onChange={handleFormData}
                                             style={errorFields.temporary_shelter_land_district ? { border: '1px solid red' } : {}}
                                         >
@@ -1971,7 +1974,7 @@ const TemporaryShelter = (props) => {
                                         <select
                                             id="temporary_shelter_land_municipality"
                                             name="temporary_shelter_land_municipality"
-                                            value={data.temporary_shelter_land_municipality}
+                                            value={data.temporary_shelter_land_municipality || ''}
                                             onChange={handleFormData}
                                             style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red' } : {}}
                                         >
@@ -2000,7 +2003,7 @@ const TemporaryShelter = (props) => {
                                         <select
                                             id="temporary_shelter_land_ward"
                                             name="temporary_shelter_land_ward"
-                                            value={data.temporary_shelter_land_ward}
+                                            value={data.temporary_shelter_land_ward || ''}
                                             onChange={handleFormData}
                                             style={errorFields.temporary_shelter_land_ward ? { border: '1px solid red' } : {}}
                                         >
@@ -2023,17 +2026,18 @@ const TemporaryShelter = (props) => {
                                             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                         /> */}
                                     </div>
-                                    {/* <div className={styles.tempAddressIndividualDiv}>
-                                        कित्ता नंं.
+                                    <div className={styles.tempAddressIndividualDiv}>
+                                        टोल
                                         {' '}
                                         <input
                                             type="text"
-                                            name="temporary_shelter_land_kitta_number"
-                                            value={data.temporary_shelter_land_kitta_number}
+                                            name="temporary_shelter_land_tole"
+                                            value={data.temporary_shelter_land_tole}
                                             onChange={handleFormData}
                                             className={styles.inputClassName}
+                                            style={errorFields.temporary_shelter_land_tole ? { borderBottom: '2px dotted red' } : {}}
                                         />
-                                    </div> */}
+                                    </div>
                                     {/* <div className={styles.tempAddressIndividualDiv}>
                                         क्षेेत्रफल
                                         {' '}
@@ -2186,7 +2190,7 @@ const TemporaryShelter = (props) => {
                                                                 {' '}
                                                                 <select
                                                                     name="beneficiary_representative_district"
-                                                                    value={data.beneficiary_representative_district}
+                                                                    value={data.beneficiary_representative_district || ''}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_district1"
                                                                     style={errorFields.beneficiary_representative_district ? { border: '1px solid red' } : {}}
@@ -2216,7 +2220,7 @@ const TemporaryShelter = (props) => {
                                                                 {' '}
                                                                 <select
                                                                     name="beneficiary_representative_municipality"
-                                                                    value={data.beneficiary_representative_municipality}
+                                                                    value={data.beneficiary_representative_municipality || ''}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_municipality1"
                                                                     style={errorFields.beneficiary_representative_municipality ? { border: '1px solid red' } : {}}
@@ -2247,7 +2251,7 @@ const TemporaryShelter = (props) => {
                                                                 {' '}
                                                                 <select
                                                                     name="beneficiary_representative_ward"
-                                                                    value={data.beneficiary_representative_ward}
+                                                                    value={data.beneficiary_representative_ward || ''}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_ward1"
                                                                     style={errorFields.beneficiary_representative_ward ? { border: '1px solid red' } : {}}
@@ -2414,6 +2418,14 @@ const TemporaryShelter = (props) => {
                                     <span>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
                                     <div className={styles.formElements}>
                                         <div className={styles.freeText}>
+                                            <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
+                                            <input
+                                                type="text"
+                                                className={styles.inputClassName}
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className={styles.freeText}>
                                             <span>मितिः</span>
                                             {/* <input
                                                 type="text"
@@ -2514,8 +2526,8 @@ const TemporaryShelter = (props) => {
                                         </div>
                                         <div className={styles.freeText}>
                                             (
-                                            <input type="text" className={styles.inputClassName} value={municipalityDefinedName} disabled />
-                                            <span>गा.पा/न.पा.</span>
+                                            <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled />
+
                                             )
                                         </div>
                                         <div className={styles.freeText}>
@@ -2576,29 +2588,23 @@ const TemporaryShelter = (props) => {
                             <div>
                                 <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
                                 <div>
-                                    <h2> {`${englishToNepaliNumber(1)}. म/मेेरो परिवारका लागि अस्थायी आवास निर्माण गर्न मेेरो/मेेरो परिवारको नाममा उपयुुक्त र पर्याप्त घडेेरी छ ।`}</h2>
+                                    <h2> {`${englishToNepaliNumber(1)}. मैैलेे भूूकम्पबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्र अनुुरुप बनाउनेे छुु ।`}</h2>
                                 </div>
                                 <div>
-                                    <h2> {`${englishToNepaliNumber(2)}. मैैलेे भूूकम्पबाट प्रभावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्यविधि, २०८० एबंं यस सम्झौता-पत्रमा
-                                        उल्लेेखित शर्त, मापदण्ड, प्रविधि र गुुणस्तर अनुुरुप बनाउनेे छुु ।`}
+                                    <h2> {`${englishToNepaliNumber(2)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
+जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
                                     </h2>
                                 </div>
                                 <div>
-                                    <h2> {`${englishToNepaliNumber(3)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
-                                        जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
+                                    <h2> {`${englishToNepaliNumber(3)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}
                                     </h2>
                                 </div>
                                 <div>
-                                    <h2>{`${englishToNepaliNumber(4)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}</h2>
+                                    <h2>{`${englishToNepaliNumber(4)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}</h2>
                                 </div>
                                 <div>
                                     <h2>
-                                        {`${englishToNepaliNumber(5)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}
-                                    </h2>
-                                </div>
-                                <div>
-                                    <h2>
-                                        {`${englishToNepaliNumber(6)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
+                                        {`${englishToNepaliNumber(5)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
                                     </h2>
                                 </div>
 
@@ -2607,15 +2613,15 @@ const TemporaryShelter = (props) => {
                                 <h2>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h2>
                                 <div>
                                     <h2>
-                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट उल्लिखित शर्तहरु पूूरा भएको अवस्थामा तोकिए अनुुसारको अस्थायी आवाास निर्माण अनुुदान सरकारको
-                                        तर्फ बाट बैंंक मार्फत उपलब्ध गराइनेे छ ।`}
+                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट यस कार्यविधि अनुुसार अस्थायी आवास निर्मााणको कार्य भएमा अनुुदान रकम सरकारको तर्फ बाट दफा
+५ बमोजिम उपलब्ध गराइनेे छ ।`}
                                     </h2>
                                 </div>
                             </div>
                             <div>
                                 <h2>आवश्यक कागजातहरुः</h2>
-                                <div>
-                                    <h2> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि`}</h2>
+                                <div style={{ margin: '10px 0px' }}>
+                                    <h2> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -2640,7 +2646,7 @@ const TemporaryShelter = (props) => {
 
                                     </div>
                                 </div>
-                                <div>
+                                <div style={{ margin: '10px 0px' }}>
                                     <h2> {`${englishToNepaliNumber(2)}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
                                     </h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
@@ -2666,7 +2672,7 @@ const TemporaryShelter = (props) => {
 
                                     </div>
                                 </div>
-                                <div>
+                                <div style={{ margin: '10px 0px' }}>
                                     <h2> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
                                     </h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
@@ -2692,8 +2698,8 @@ const TemporaryShelter = (props) => {
 
                                     </div>
                                 </div>
-                                <div>
-                                    <h2>{`${englishToNepaliNumber(4)}. प्रहरीको मुुचुल्का`}</h2>
+                                <div style={{ margin: '10px 0px' }}>
+                                    <h2>{`${englishToNepaliNumber(4)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -2725,7 +2731,11 @@ const TemporaryShelter = (props) => {
                                     ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
                                     : ''
                             }
-
+                            {
+                                backendError
+                                    ? <span className={styles.ValidationErrors}>तपाईंको इन्टरनेट वा सर्भरमा समस्या छ कृपया पुन: प्रयास गर्नुहोस्</span>
+                                    : ''
+                            }
                             {/* <span className={styles.ValidationErrors}>{validationError}</span> */}
                             <div className={styles.saveOrAddButtons}>
                                 <button className={styles.submitButtons} onClick={handleClick} type="submit" disabled={!!loading}>{loading ? 'पेश गरिँदै छ...' : 'पेश गर्नुहोस्'}</button>
