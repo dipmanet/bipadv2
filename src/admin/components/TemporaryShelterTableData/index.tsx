@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
@@ -545,7 +546,6 @@ const TemporaryShelterTableData = (props) => {
 
         // setErrorPersonal({ ...errorPersonal, [name]: false });
     };
-    console.log('This is fetched data', fetchedData);
 
     return (
         <>
@@ -675,7 +675,7 @@ const TemporaryShelterTableData = (props) => {
                             />
                             <TableBody>
                                 {filteredRowData
-                                    && stableSort(filteredRowData, getComparator(order, orderBy))
+                                    ? stableSort(filteredRowData, getComparator(order, orderBy))
                                         .map((row, index) => {
                                             // const isItemSelected = isSelected(row.id);
                                             const labelId = `enhanced-table-checkbox-${index}`;
@@ -885,12 +885,16 @@ const TemporaryShelterTableData = (props) => {
                                                     }
                                                 </TableRow>
                                             );
-                                        })}
+                                        }) : <p />}
                             </TableBody>
                         </Table>
                         {fetchedData && !fetchedData.length && loader
-                            ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>Loading Data Please Wait...</h3></div>
-                            : ''}
+                            ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>डाटा लोड हुँदैछ कृपया प्रतीक्षा गर्नुहोस्...</h3></div>
+                            : fetchedData && !fetchedData.length
+                                ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>डाटा उपलब्ध छैन</h3></div>
+                                : ''
+
+                        }
                     </TableContainer>
                 </Paper>
             </Box>
