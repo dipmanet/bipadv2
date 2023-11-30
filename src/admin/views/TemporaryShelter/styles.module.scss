@@ -2,31 +2,11 @@ $Fira: 'Fira Sans', sans-serif;
 $inputBackground : #F7F7F7;
 $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 
-table,
-th,
-td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    text-align: center;
 
-}
 
-table {
-    width: 60%
-}
-
-td {
-    height: 300px;
-    width: 200px;
-}
-
-tr {
-    background: none;
-}
-
-tr:nth-child(even) {
-    background-color: #FFFFFF;
-}
+// tr:nth-child(even) {
+//     background-color: #FFFFFF;
+// }
 
 
 
