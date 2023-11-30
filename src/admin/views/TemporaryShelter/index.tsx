@@ -308,11 +308,14 @@ const TemporaryShelter = (props) => {
     };
 
     const selectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_district));
-    const selectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_municipality));
+    // const selectedWard =user&&user.profile&& wards.filter(i => i.municipality === Number(user.profile.municipality data.beneficiary_municipality));
+    const selectedWard = user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
     const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district));
-    const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
+    // const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
+    const tempSelectedWard = user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
     const beneficiarySelectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_representative_district));
-    const beneficiarySelectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality));
+    // const beneficiarySelectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality));
+    const beneficiarySelectedWard = user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
 
 
     const handleSuccessMessage = (d) => {
@@ -366,6 +369,7 @@ const TemporaryShelter = (props) => {
         }
         finalUpdateData.operating_municipality = user.profile.municipality;
         finalUpdateData.responsible_municipality = user.profile.municipality;
+
 
         addEarthquakePostRequest.do({
             body: finalUpdateData,
@@ -489,6 +493,8 @@ const TemporaryShelter = (props) => {
         const finalData = id && wards.find(i => i.id === Number(id)).title;
         return finalData || '-';
     };
+
+    console.log('This is user', user);
     return (
         <>
             <Page hideFilter hideMap />
@@ -581,7 +587,7 @@ const TemporaryShelter = (props) => {
                                 <p>
                                     भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि
                                     {' '}
-                                    <select
+                                    {/* <select
                                         name="beneficiary_district"
                                         value={data.beneficiary_district || ''}
                                         id="districts-benificery"
@@ -596,7 +602,8 @@ const TemporaryShelter = (props) => {
                                         }
 
 
-                                    </select>
+                                    </select> */}
+                                    {user && user.profile && districtNameConverter(user.profile.district)}
                                     {/* <Select
                                         isClearable
                                         value={data.beneficiary_district === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_district, districts)}
@@ -609,9 +616,9 @@ const TemporaryShelter = (props) => {
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                     /> */}
                                     {' '}
-                                    जिल्ला
+                                    जिल्ला <span>{user && user.profile && municipalityNameConverter(user.profile.municipality)}</span>
                                     {' '}
-                                    <select
+                                    {/* <select
                                         id="beneficiary_municipality"
                                         name="beneficiary_municipality"
                                         value={data.beneficiary_municipality || ''}
@@ -624,7 +631,7 @@ const TemporaryShelter = (props) => {
                                                 <option value={item.id}>{item.title_ne}</option>
                                             ))
                                         }
-                                    </select>
+                                    </select> */}
                                     {/* <Select
                                         isClearable
                                         value={data.beneficiary_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_municipality, municipalities)}
@@ -637,7 +644,7 @@ const TemporaryShelter = (props) => {
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                     /> */}
                                     {' '}
-                                    गा.पा/न.पा.
+                                    {/* गा.पा/न.पा. */}
                                     {' '}
                                     {' '}
                                     वडा नंं.
@@ -756,7 +763,8 @@ const TemporaryShelter = (props) => {
                                     {' '}
                                     (यसपछि प्रथम पक्ष भनिनेे) र
                                     {' '}
-                                    <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled />
+                                    {municipalityNameConverter(user.profile.municipality)}
+                                    {/* <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled /> */}
                                     {' '}
                                     कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
                                     घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि,२०८०, बमोजिम अस्थायी आवास निर्माण गर्न यो अनुुदान
@@ -767,9 +775,10 @@ const TemporaryShelter = (props) => {
                                 <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
                                 <div className={styles.tempAddress}>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        जिल्ला
+                                        {user && user.profile && districtNameConverter(user.profile.district)}
                                         {' '}
-                                        <select
+                                        जिल्ला
+                                        {/* <select
                                             id="temporary_shelter_land_district"
                                             name="temporary_shelter_land_district"
                                             value={data.temporary_shelter_land_district || ''}
@@ -782,7 +791,7 @@ const TemporaryShelter = (props) => {
                                                     <option value={item.id}>{item.title_ne}</option>
                                                 ))
                                             }
-                                        </select>
+                                        </select> */}
                                         {/* <Select
                                             isClearable
                                             value={data.temporary_shelter_land_district === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_district, districts)}
@@ -796,9 +805,9 @@ const TemporaryShelter = (props) => {
                                         /> */}
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        गा.पा/न.पा.
-                                        {' '}
-                                        <select
+                                        <span>{user && user.profile && municipalityNameConverter(user.profile.municipality)}</span>
+
+                                        {/* <select
                                             id="temporary_shelter_land_municipality"
                                             name="temporary_shelter_land_municipality"
                                             value={data.temporary_shelter_land_municipality || ''}
@@ -811,7 +820,7 @@ const TemporaryShelter = (props) => {
                                                     <option value={item.id}>{item.title_ne}</option>
                                                 ))
                                             }
-                                        </select>
+                                        </select> */}
                                         {/* <Select
                                             isClearable
                                             value={data.temporary_shelter_land_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_municipality, municipalities)}
@@ -918,11 +927,11 @@ const TemporaryShelter = (props) => {
                                         </div>
                                         <div className={styles.locationDetails}>
                                             <div>
-                                                <span>{`जिल्ला ${districtNameConverter(data.beneficiary_district)}`}</span>
+                                                <span>{`${user && user.profile && districtNameConverter(user.profile.district)} जिल्ला`}</span>
 
                                             </div>
                                             <div>
-                                                <span>{`${data.beneficiary_municipality ? municipalityNameConverter(data.beneficiary_municipality) : ''}`}</span>
+                                                <span>{`${user && user.profile ? municipalityNameConverter(user.profile.municipality) : ''}`}</span>
 
                                             </div>
                                             <div>
@@ -974,13 +983,13 @@ const TemporaryShelter = (props) => {
 
 
                                             </div>
-                                            <div style={{ display: 'flex', gap: '5px' }}>
+                                            <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                 <span>
                                                     लाभार्थी हस्ताक्षर गर्न उपलब्ध छैन?
                                                 </span>
-                                                {' '}
+
                                                 <input
-                                                    style={{ cursor: 'pointer' }}
+                                                    style={{ cursor: 'pointer', marginTop: '7px' }}
                                                     type="checkbox"
                                                     checked={data.is_beneficiary_available_to_sign}
                                                     onChange={handleCheckboxChange}
@@ -1013,9 +1022,11 @@ const TemporaryShelter = (props) => {
                                                         <div className={styles.locationDetails}>
 
                                                             <div>
-                                                                <span>जिल्लाः</span>
+
+                                                                {user && user.profile && districtNameConverter(user.profile.district)}
                                                                 {' '}
-                                                                <select
+                                                                <span>जिल्ला</span>
+                                                                {/* <select
                                                                     name="beneficiary_representative_district"
                                                                     value={data.beneficiary_representative_district || ''}
                                                                     onChange={handleFormData}
@@ -1028,7 +1039,7 @@ const TemporaryShelter = (props) => {
                                                                             <option value={item.id}>{item.title_ne}</option>
                                                                         ))
                                                                     }
-                                                                </select>
+                                                                </select> */}
 
                                                                 {/* <Select
                                                                     isClearable
@@ -1043,9 +1054,10 @@ const TemporaryShelter = (props) => {
                                                                 /> */}
                                                             </div>
                                                             <div>
-                                                                <span>गा.पा./न.पाः</span>
+                                                                {/* <span>गा.पा./न.पाः</span> */}
+                                                                {user && user.profile && municipalityNameConverter(user.profile.municipality)}
                                                                 {' '}
-                                                                <select
+                                                                {/* <select
                                                                     name="beneficiary_representative_municipality"
                                                                     value={data.beneficiary_representative_municipality || ''}
                                                                     onChange={handleFormData}
@@ -1059,7 +1071,7 @@ const TemporaryShelter = (props) => {
                                                                             <option value={item.id}>{item.title_ne}</option>
                                                                         ))
                                                                     }
-                                                                </select>
+                                                                </select> */}
 
                                                                 {/* <Select
                                                                     isClearable
@@ -1116,7 +1128,7 @@ const TemporaryShelter = (props) => {
                                                             </div>
 
                                                         </div>
-                                                        <div className={styles.freeText}>
+                                                        <div className={styles.freeText} style={{ marginBottom: '10px' }}>
                                                             <span>बाजेेको नाम, थर:</span>
                                                             {' '}
                                                             <input
@@ -1382,10 +1394,13 @@ const TemporaryShelter = (props) => {
                                             <span>कार्यपालिका कार्यालयको छाप</span>)
                                         </div>
                                         <div className={styles.freeText}>
-                                            (
+                                            {
+                                                municipalityNameConverter(user.profile.municipality)
+                                            }
+                                            {/* (
                                             <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled />
 
-                                            )
+                                            ) */}
                                         </div>
                                         <div className={styles.freeText}>
                                             <span>हस्ताक्षरः</span>
