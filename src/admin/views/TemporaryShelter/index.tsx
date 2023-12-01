@@ -393,7 +393,6 @@ const TemporaryShelter = (props) => {
 
     useEffect(() => {
         const curDate = new Date();
-
         const day = curDate.getDate();
         const month = curDate.getMonth() + 1;
         const year = curDate.getFullYear();
