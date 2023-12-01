@@ -354,6 +354,26 @@ const TemporaryShelter = (props) => {
                 if (i === 'application_document') {
                     return latestErrorUpdate[i] = false;
                 }
+                if (i === 'beneficiary_municipality') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'beneficiary_district') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'temporary_shelter_land_district') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'temporary_shelter_land_municipality') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'beneficiary_representative_district') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'beneficiary_representative_municipality') {
+                    return latestErrorUpdate[i] = false;
+                }
+
+
                 return latestErrorUpdate[i] = true;
             } return null;
         });
@@ -369,7 +389,13 @@ const TemporaryShelter = (props) => {
         }
         finalUpdateData.operating_municipality = user.profile.municipality;
         finalUpdateData.responsible_municipality = user.profile.municipality;
+        finalUpdateData.beneficiary_municipality = user.profile.municipality;
+        finalUpdateData.beneficiary_district = user.profile.district;
 
+        finalUpdateData.temporary_shelter_land_district = user.profile.district;
+        finalUpdateData.temporary_shelter_land_municipality = user.profile.municipality;
+        finalUpdateData.beneficiary_representative_district = user.profile.district;
+        finalUpdateData.beneficiary_representative_municipality = user.profile.municipality;
 
         addEarthquakePostRequest.do({
             body: finalUpdateData,
