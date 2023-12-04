@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
@@ -148,7 +149,6 @@ const TemporaryShelter = (props) => {
             beneficiary_district: null,
             beneficiary_municipality: null,
             beneficiary_ward: null,
-            responsible_municipality: null,
             temporary_shelter_land_district: null,
             temporary_shelter_land_municipality: null,
             temporary_shelter_land_ward: null,
@@ -181,6 +181,9 @@ const TemporaryShelter = (props) => {
         beneficiary_representative_citizenship_number: false,
         beneficiary_representative_grandfather_name: false,
         beneficiary_representative_parent_name: false,
+        beneficiary_representative_district: false,
+        beneficiary_representative_municipality: false,
+        beneficiary_representative_ward: false,
         bank_account_holder_name: false,
         bank_account_number: false,
         bank_name: false,
@@ -200,13 +203,9 @@ const TemporaryShelter = (props) => {
         beneficiary_district: false,
         beneficiary_municipality: false,
         beneficiary_ward: false,
-        responsible_municipality: false,
         temporary_shelter_land_district: false,
         temporary_shelter_land_municipality: false,
         temporary_shelter_land_ward: false,
-        beneficiary_representative_district: false,
-        beneficiary_representative_municipality: false,
-        beneficiary_representative_ward: false,
         operating_municipality: false,
     });
     const [loading, setLoading] = useState(false);
@@ -261,6 +260,7 @@ const TemporaryShelter = (props) => {
             ...errorFields,
             [e.target.name]: false,
         });
+
         if (e.target.name === 'beneficiary_district') {
             setData({
                 ...data,
@@ -309,13 +309,19 @@ const TemporaryShelter = (props) => {
 
     const selectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_district));
     // const selectedWard =user&&user.profile&& wards.filter(i => i.municipality === Number(user.profile.municipality data.beneficiary_municipality));
-    const selectedWard = user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
+    const selectedWard = user.isSuperuser
+        ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_municipality))
+        : user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
     const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district));
     // const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
-    const tempSelectedWard = user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
+    const tempSelectedWard = user.isSuperuser
+        ? user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality))
+        : user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
     const beneficiarySelectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_representative_district));
     // const beneficiarySelectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality));
-    const beneficiarySelectedWard = user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
+    const beneficiarySelectedWard = user.isSuperuser
+        ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality))
+        : user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
 
 
     const handleSuccessMessage = (d) => {
@@ -325,56 +331,72 @@ const TemporaryShelter = (props) => {
         setBackendError(false);
         const errorCheckingFields = Object.keys(data);
         const latestErrorUpdate = errorFields;
+
         errorCheckingFields.map((i) => {
             if (!data[i]) {
-                if (data.is_beneficiary_available_to_sign === false) {
+                if (!data.is_beneficiary_available_to_sign) {
+                    latestErrorUpdate.is_beneficiary_available_to_sign = false;
                     latestErrorUpdate.beneficiary_representative_name_nepali = false;
                     latestErrorUpdate.beneficiary_representative_citizenship_number = false;
                     latestErrorUpdate.beneficiary_representative_grandfather_name = false;
+                    latestErrorUpdate.beneficiary_representative_ward = false;
                     latestErrorUpdate.beneficiary_representative_parent_name = false;
                     latestErrorUpdate.beneficiary_representative_district = false;
                     latestErrorUpdate.beneficiary_representative_municipality = false;
-                    latestErrorUpdate.beneficiary_representative_ward = false;
                 }
                 if (i === 'migration_certificate_number') {
                     return latestErrorUpdate[i] = false;
                 }
-                if (i === 'operating_municipality') {
+
+                // if (i === 'responsible_municipality') {
+                //     return latestErrorUpdate[i] = false;
+                // }
+                if (i === 'bank_account_holder_name') {
                     return latestErrorUpdate[i] = false;
                 }
-                if (i === 'responsible_municipality') {
+                if (i === 'bank_account_number') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'bank_name') {
+                    return latestErrorUpdate[i] = false;
+                }
+                if (i === 'bank_branch_name') {
                     return latestErrorUpdate[i] = false;
                 }
                 if (i === 'pa_number') {
                     return latestErrorUpdate[i] = false;
                 }
-                if (i === 'is_beneficiary_available_to_sign') {
-                    return latestErrorUpdate[i] = false;
-                }
+
                 if (i === 'application_document') {
                     return latestErrorUpdate[i] = false;
                 }
-                if (i === 'beneficiary_municipality') {
-                    return latestErrorUpdate[i] = false;
-                }
-                if (i === 'beneficiary_district') {
-                    return latestErrorUpdate[i] = false;
-                }
-                if (i === 'temporary_shelter_land_district') {
-                    return latestErrorUpdate[i] = false;
-                }
-                if (i === 'temporary_shelter_land_municipality') {
-                    return latestErrorUpdate[i] = false;
-                }
-                if (i === 'beneficiary_representative_district') {
-                    return latestErrorUpdate[i] = false;
-                }
-                if (i === 'beneficiary_representative_municipality') {
-                    return latestErrorUpdate[i] = false;
-                }
 
 
-                return latestErrorUpdate[i] = true;
+                if (!user.isSuperuser) {
+                    if (i === 'beneficiary_municipality') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                    if (i === 'beneficiary_district') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                    if (i === 'temporary_shelter_land_district') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                    if (i === 'temporary_shelter_land_municipality') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                    if (i === 'beneficiary_representative_district') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                    if (i === 'beneficiary_representative_municipality') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                    if (i === 'operating_municipality') {
+                        return latestErrorUpdate[i] = false;
+                    }
+                }
+
+                return user.isSuperuser && !data.is_beneficiary_available_to_sign && i === 'beneficiary_representative_ward' ? latestErrorUpdate[i] = false : latestErrorUpdate[i] = true;
             } return null;
         });
 
@@ -387,15 +409,17 @@ const TemporaryShelter = (props) => {
         if (!finalUpdateData.migration_certificate_number) {
             finalUpdateData.migration_date_bs = '';
         }
-        finalUpdateData.operating_municipality = user.profile.municipality;
-        finalUpdateData.responsible_municipality = user.profile.municipality;
-        finalUpdateData.beneficiary_municipality = user.profile.municipality;
-        finalUpdateData.beneficiary_district = user.profile.district;
+        if (!user.isSuperuser) {
+            finalUpdateData.beneficiary_municipality = user.profile.municipality;
+            finalUpdateData.beneficiary_district = user.profile.district;
 
-        finalUpdateData.temporary_shelter_land_district = user.profile.district;
-        finalUpdateData.temporary_shelter_land_municipality = user.profile.municipality;
-        finalUpdateData.beneficiary_representative_district = user.profile.district;
-        finalUpdateData.beneficiary_representative_municipality = user.profile.municipality;
+            finalUpdateData.temporary_shelter_land_district = user.profile.district;
+            finalUpdateData.temporary_shelter_land_municipality = user.profile.municipality;
+            finalUpdateData.beneficiary_representative_district = user.profile.district;
+            finalUpdateData.beneficiary_representative_municipality = user.profile.municipality;
+            finalUpdateData.operating_municipality = user.profile.municipality;
+        }
+
 
         addEarthquakePostRequest.do({
             body: finalUpdateData,
@@ -519,7 +543,7 @@ const TemporaryShelter = (props) => {
         return finalData || '-';
     };
 
-    console.log('This is user', user);
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -612,23 +636,25 @@ const TemporaryShelter = (props) => {
                                 <p>
                                     भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि
                                     {' '}
-                                    {/* <select
-                                        name="beneficiary_district"
-                                        value={data.beneficiary_district || ''}
-                                        id="districts-benificery"
-                                        onChange={handleFormData}
-                                        style={errorFields.beneficiary_district ? { border: '1px solid red' } : {}}
-                                    >
-                                        <option>जिल्ला</option>
-                                        {
-                                            districts.map(item => (
-                                                <option value={item.id}>{item.title_ne}</option>
-                                            ))
-                                        }
+                                    {user.isSuperuser ? (
+                                        <select
+                                            name="beneficiary_district"
+                                            value={data.beneficiary_district || ''}
+                                            id="districts-benificery"
+                                            onChange={handleFormData}
+                                            style={errorFields.beneficiary_district ? { border: '1px solid red' } : {}}
+                                        >
+                                            <option>जिल्ला</option>
+                                            {
+                                                districts.map(item => (
+                                                    <option value={item.id}>{item.title_ne}</option>
+                                                ))
+                                            }
 
 
-                                    </select> */}
-                                    {user && user.profile && districtNameConverter(user.profile.district)}
+                                        </select>
+                                    )
+                                        : user && user.profile && districtNameConverter(user.profile.district)}
                                     {/* <Select
                                         isClearable
                                         value={data.beneficiary_district === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_district, districts)}
@@ -641,22 +667,30 @@ const TemporaryShelter = (props) => {
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                     /> */}
                                     {' '}
-                                    जिल्ला <span>{user && user.profile && municipalityNameConverter(user.profile.municipality)}</span>
+                                    जिल्ला
                                     {' '}
-                                    {/* <select
-                                        id="beneficiary_municipality"
-                                        name="beneficiary_municipality"
-                                        value={data.beneficiary_municipality || ''}
-                                        onChange={handleFormData}
-                                        style={errorFields.beneficiary_municipality ? { border: '1px solid red' } : {}}
-                                    >
-                                        <option> गा.पा/न.पा.</option>
-                                        {
-                                            selectedMunicipality.map(item => (
-                                                <option value={item.id}>{item.title_ne}</option>
-                                            ))
-                                        }
-                                    </select> */}
+
+                                    {user.isSuperuser ? (
+                                        <>
+                                            <select
+                                                id="beneficiary_municipality"
+                                                name="beneficiary_municipality"
+                                                value={data.beneficiary_municipality || ''}
+                                                onChange={handleFormData}
+                                                style={errorFields.beneficiary_municipality ? { border: '1px solid red' } : {}}
+                                            >
+                                                <option> गा.पा/न.पा.</option>
+                                                {
+                                                    selectedMunicipality.map(item => (
+                                                        <option value={item.id}>{item.title_ne}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                            {' '}
+                                            गा.पा/न.पा.
+                                            {' '}
+                                        </>
+                                    ) : user && user.profile && municipalityNameConverter(user.profile.municipality)}
                                     {/* <Select
                                         isClearable
                                         value={data.beneficiary_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_municipality, municipalities)}
@@ -800,23 +834,27 @@ const TemporaryShelter = (props) => {
                                 <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
                                 <div className={styles.tempAddress}>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        {user && user.profile && districtNameConverter(user.profile.district)}
-                                        {' '}
-                                        जिल्ला
-                                        {/* <select
-                                            id="temporary_shelter_land_district"
-                                            name="temporary_shelter_land_district"
-                                            value={data.temporary_shelter_land_district || ''}
-                                            onChange={handleFormData}
-                                            style={errorFields.temporary_shelter_land_district ? { border: '1px solid red' } : {}}
-                                        >
-                                            <option> जिल्ला</option>
-                                            {
-                                                districts.map(item => (
-                                                    <option value={item.id}>{item.title_ne}</option>
-                                                ))
-                                            }
-                                        </select> */}
+                                        {user.isSuperuser
+                                            ? (
+                                                <>
+                                                    जिल्ला :
+                                                    {' '}
+                                                    <select
+                                                        id="temporary_shelter_land_district"
+                                                        name="temporary_shelter_land_district"
+                                                        value={data.temporary_shelter_land_district || ''}
+                                                        onChange={handleFormData}
+                                                        style={errorFields.temporary_shelter_land_district ? { border: '1px solid red' } : {}}
+                                                    >
+                                                        <option> जिल्ला</option>
+                                                        {
+                                                            districts.map(item => (
+                                                                <option value={item.id}>{item.title_ne}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                </>
+                                            ) : user && user.profile && districtNameConverter(user.profile.district)}
                                         {/* <Select
                                             isClearable
                                             value={data.temporary_shelter_land_district === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_district, districts)}
@@ -830,22 +868,23 @@ const TemporaryShelter = (props) => {
                                         /> */}
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        <span>{user && user.profile && municipalityNameConverter(user.profile.municipality)}</span>
-
-                                        {/* <select
+                                        {/* <span>{user && user.profile && municipalityNameConverter(user.profile.municipality)}</span> */}
+                                        गा.पा/न.पा:
+                                        {' '}
+                                        <select
                                             id="temporary_shelter_land_municipality"
                                             name="temporary_shelter_land_municipality"
                                             value={data.temporary_shelter_land_municipality || ''}
                                             onChange={handleFormData}
                                             style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red' } : {}}
                                         >
-                                            <option> गा.पा/न.पा. वडा नंं.</option>
+                                            <option> गा.पा/न.पा.</option>
                                             {
                                                 tempSelectedMunicipality.map(item => (
                                                     <option value={item.id}>{item.title_ne}</option>
                                                 ))
                                             }
-                                        </select> */}
+                                        </select>
                                         {/* <Select
                                             isClearable
                                             value={data.temporary_shelter_land_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_municipality, municipalities)}
@@ -859,7 +898,7 @@ const TemporaryShelter = (props) => {
                                         /> */}
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv}>
-                                        वडा नंं.
+                                        वडा नंं:
                                         {' '}
                                         <select
                                             id="temporary_shelter_land_ward"
@@ -952,11 +991,11 @@ const TemporaryShelter = (props) => {
                                         </div>
                                         <div className={styles.locationDetails}>
                                             <div>
-                                                <span>{`${user && user.profile && districtNameConverter(user.profile.district)} जिल्ला`}</span>
+                                                <span>{`${user.isSuperuser ? user.profile && districtNameConverter(data.beneficiary_district) : user && user.profile && districtNameConverter(user.profile.district)} जिल्ला`}</span>
 
                                             </div>
                                             <div>
-                                                <span>{`${user && user.profile ? municipalityNameConverter(user.profile.municipality) : ''}`}</span>
+                                                <span>{`${user.isSuperuser ? user && user.profile && municipalityNameConverter(data.beneficiary_municipality) : user && user.profile && municipalityNameConverter(user.profile.municipality)}`}</span>
 
                                             </div>
                                             <div>
@@ -1047,24 +1086,26 @@ const TemporaryShelter = (props) => {
                                                         <div className={styles.locationDetails}>
 
                                                             <div>
-
-                                                                {user && user.profile && districtNameConverter(user.profile.district)}
-                                                                {' '}
-                                                                <span>जिल्ला</span>
-                                                                {/* <select
-                                                                    name="beneficiary_representative_district"
-                                                                    value={data.beneficiary_representative_district || ''}
-                                                                    onChange={handleFormData}
-                                                                    id="beneficiary_representative_district1"
-                                                                    style={errorFields.beneficiary_representative_district ? { border: '1px solid red' } : {}}
-                                                                >
-                                                                    <option>जिल्लाः</option>
-                                                                    {
-                                                                        districts.map(item => (
-                                                                            <option value={item.id}>{item.title_ne}</option>
-                                                                        ))
-                                                                    }
-                                                                </select> */}
+                                                                {user.isSuperuser ? (
+                                                                    <>  <span>जिल्ला:</span>
+                                                                        <select
+                                                                            name="beneficiary_representative_district"
+                                                                            value={data.beneficiary_representative_district || ''}
+                                                                            onChange={handleFormData}
+                                                                            id="beneficiary_representative_district1"
+                                                                            style={errorFields.beneficiary_representative_district ? { border: '1px solid red' } : {}}
+                                                                        >
+                                                                            <option>जिल्लाः</option>
+                                                                            {
+                                                                                districts.map(item => (
+                                                                                    <option value={item.id}>{item.title_ne}</option>
+                                                                                ))
+                                                                            }
+                                                                        </select>
+                                                                    </>
+                                                                )
+                                                                    : user && user.profile && districtNameConverter(user.profile.district)
+                                                                }
 
                                                                 {/* <Select
                                                                     isClearable
@@ -1079,24 +1120,28 @@ const TemporaryShelter = (props) => {
                                                                 /> */}
                                                             </div>
                                                             <div>
-                                                                {/* <span>गा.पा./न.पाः</span> */}
-                                                                {user && user.profile && municipalityNameConverter(user.profile.municipality)}
-                                                                {' '}
-                                                                {/* <select
-                                                                    name="beneficiary_representative_municipality"
-                                                                    value={data.beneficiary_representative_municipality || ''}
-                                                                    onChange={handleFormData}
-                                                                    id="beneficiary_representative_municipality1"
-                                                                    style={errorFields.beneficiary_representative_municipality ? { border: '1px solid red' } : {}}
-
-                                                                >
-                                                                    <option> गा.पा./न.पाः</option>
-                                                                    {
-                                                                        beneficiarySelectedMunicipality.map(item => (
-                                                                            <option value={item.id}>{item.title_ne}</option>
-                                                                        ))
-                                                                    }
-                                                                </select> */}
+                                                                {user.isSuperuser ? (
+                                                                    <>
+                                                                        <span>गा.पा./न.पाः</span>
+                                                                        {' '}
+                                                                        <select
+                                                                            name="beneficiary_representative_municipality"
+                                                                            value={data.beneficiary_representative_municipality || ''}
+                                                                            onChange={handleFormData}
+                                                                            id="beneficiary_representative_municipality1"
+                                                                            style={errorFields.beneficiary_representative_municipality ? { border: '1px solid red' } : {}}
+                                                                        >
+                                                                            <option> गा.पा./न.पाः</option>
+                                                                            {
+                                                                                beneficiarySelectedMunicipality.map(item => (
+                                                                                    <option value={item.id}>{item.title_ne}</option>
+                                                                                ))
+                                                                            }
+                                                                        </select>
+                                                                    </>
+                                                                )
+                                                                    : user && user.profile && municipalityNameConverter(user.profile.municipality)
+                                                                }
 
                                                                 {/* <Select
                                                                     isClearable
@@ -1418,10 +1463,35 @@ const TemporaryShelter = (props) => {
                                             (<input type="text" disabled className={styles.inputClassName} />
                                             <span>कार्यपालिका कार्यालयको छाप</span>)
                                         </div>
+                                        {
+                                            user.isSuperuser
+                                                ? (
+                                                    <>
+                                                        गा.पा/न.पा:
+                                                        {' '}
+                                                        <select
+                                                            id="operating_municipality123"
+                                                            name="operating_municipality"
+                                                            value={data.operating_municipality || ''}
+                                                            onChange={handleFormData}
+                                                            style={errorFields.operating_municipality ? { border: '1px solid red' } : {}}
+                                                        >
+                                                            <option>गा.पा/न.पा</option>
+                                                            {
+                                                                municipalities.map(item => (
+                                                                    <option value={item.id}>{(item.title_ne)}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </>
+                                                )
+                                                : municipalityNameConverter(user.profile.municipality)
+
+                                        }
+
+
                                         <div className={styles.freeText}>
-                                            {
-                                                municipalityNameConverter(user.profile.municipality)
-                                            }
+
                                             {/* (
                                             <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled />
 
