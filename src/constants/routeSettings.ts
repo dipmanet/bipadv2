@@ -235,6 +235,17 @@ const routeSettings: SomeRoute[] = [
         id: '',
     },
     {
+        name: 'add-view-tranche1',
+        title: 'Add View Tranche1',
+        titleNep: 'Add View Tranche1',
+        path: '/admin/temporary-shelter-enrollment-form/add-view-tranche1/:id',
+        load: () => import('../admin/views/Tranche1'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: '',
+    },
+
+    {
         name: 'epidemics-upload',
         title: 'Epidemics Bulk Upload',
         titleNep: 'महामारी बल्क अपलोड',

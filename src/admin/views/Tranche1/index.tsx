@@ -1,8 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-expressions */
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable no-undef */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -15,9 +12,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { navigate } from '@reach/router';
+import { navigate, useLocation } from '@reach/router';
 import Navbar from 'src/admin/components/Navbar';
 import Footer from 'src/admin/components/Footer';
 import MenuCommon from 'src/admin/components/MenuCommon';
@@ -36,13 +33,10 @@ import { ClientAttributes, createConnectedRequestCoordinator, createRequestClien
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { englishToNepaliNumber } from 'nepali-number';
 import 'nepali-datepicker-reactjs/dist/index.css';
-import close from '#resources/icons/close.svg';
-
-import axios from 'axios';
-import { getAuthState } from '#utils/session';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
+
 
 const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
@@ -110,31 +104,29 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 
 };
-const checkCSRFToken = getAuthState();
 
-
-const TemporaryShelter = (props) => {
+const Tranche1 = (props) => {
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);
 
     const [data, setData] = useState(
         {
             entry_date_bs: '',
-            pa_number: '',
+            pa_number: null,
             tole_name: '',
             grand_parent_title: 'श्री',
             grand_parent_name: '',
-            grand_child_relation: '',
+            grand_child_relation: null,
             parent_title: 'श्री',
             parent_name: '',
-            child_relation: '',
-            beneficiary_age: '',
+            child_relation: null,
+            beneficiary_age: null,
             beneficiary_name_nepali: '',
             temporary_shelter_land_tole: '',
             beneficiary_name_english: '',
             beneficiary_citizenship_number: '',
             beneficiary_contact_number: '',
-            beneficiary_photo: '',
+            beneficiary_photo: null,
             is_beneficiary_available_to_sign: false,
             beneficiary_representative_name_nepali: '',
             beneficiary_representative_citizenship_number: '',
@@ -152,20 +144,20 @@ const TemporaryShelter = (props) => {
             withness_contact_number: '',
             operating_municipality_officer_name: '',
             operating_municipality_signed_date: '',
-            identity_document: '',
-            infrastructure_photo: [],
-            application_document: '',
-            police_report: '',
-            beneficiary_district: '',
-            beneficiary_municipality: '',
-            beneficiary_ward: '',
-            temporary_shelter_land_district: '',
-            temporary_shelter_land_municipality: '',
-            temporary_shelter_land_ward: '',
-            beneficiary_representative_district: '',
-            beneficiary_representative_municipality: '',
-            beneficiary_representative_ward: '',
-            operating_municipality: '',
+            identity_document: null,
+            infrastructure_photo: null,
+            application_document: null,
+            police_report: null,
+            beneficiary_district: null,
+            beneficiary_municipality: null,
+            beneficiary_ward: null,
+            temporary_shelter_land_district: null,
+            temporary_shelter_land_municipality: null,
+            temporary_shelter_land_ward: null,
+            beneficiary_representative_district: null,
+            beneficiary_representative_municipality: null,
+            beneficiary_representative_ward: null,
+            operating_municipality: null,
         },
     );
 
@@ -220,7 +212,7 @@ const TemporaryShelter = (props) => {
     });
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
-    const fileInputRef = useRef(null);
+    const { pathname } = useLocation();
     const { user,
         districts,
         municipalities,
@@ -231,21 +223,6 @@ const TemporaryShelter = (props) => {
 
         } } = props;
 
-    const handleInfrastructurePhoto = (e) => {
-        setErrorFields({
-            ...errorFields,
-            [e.target.name]: false,
-        });
-        const file = e.target.files[0];
-        setData({ ...data, [e.target.name]: [...data.infrastructure_photo, file] });
-    };
-
-    const handleRemoveImage = (id) => {
-        const filteredArray = data.infrastructure_photo.filter((i, idx) => idx !== id);
-
-
-        setData({ ...data, infrastructure_photo: filteredArray });
-    };
 
     const handleFileInputChange = (e) => {
         setErrorFields({
@@ -337,7 +314,7 @@ const TemporaryShelter = (props) => {
     const selectedWard = user.isSuperuser
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_municipality))
         : user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
-    const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(user.profile.district));
+    const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district));
     // const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
     const tempSelectedWard = user.isSuperuser
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality))
@@ -372,7 +349,6 @@ const TemporaryShelter = (props) => {
                 if (i === 'migration_certificate_number') {
                     return latestErrorUpdate[i] = false;
                 }
-                console.log('This is i', i);
 
                 // if (i === 'responsible_municipality') {
                 //     return latestErrorUpdate[i] = false;
@@ -422,17 +398,8 @@ const TemporaryShelter = (props) => {
                     }
                 }
 
-                return user.isSuperuser && !data.is_beneficiary_available_to_sign && i === 'beneficiary_representative_ward'
-                    ? latestErrorUpdate[i] = false
-                    : latestErrorUpdate[i] = true;
-            }
-            if (i === 'infrastructure_photo') {
-                if (data.infrastructure_photo.length === 0) {
-                    return latestErrorUpdate[i] = true;
-                }
-            }
-            latestErrorUpdate[i] = false;
-            return null;
+                return user.isSuperuser && !data.is_beneficiary_available_to_sign && i === 'beneficiary_representative_ward' ? latestErrorUpdate[i] = false : latestErrorUpdate[i] = true;
+            } return null;
         });
 
         setErrorFields({ ...latestErrorUpdate });
@@ -456,83 +423,15 @@ const TemporaryShelter = (props) => {
         }
 
 
-        // addEarthquakePostRequest.do({
-        //     body: finalUpdateData,
-        //     onSuccess: datas => handleSuccessMessage(datas),
-        //     setFaramErrors: (err) => {
-        //         setBackendError(true);
-        //         setLoading(false);
-        //     },
-
-        // });
-
-        const finalFormData = new FormData();
-        finalFormData.append('entry_date_bs', finalUpdateData.entry_date_bs);
-        finalFormData.append('pa_number', finalUpdateData.pa_number);
-        finalFormData.append('tole_name', finalUpdateData.tole_name);
-        finalFormData.append('grand_parent_title', finalUpdateData.grand_parent_title);
-        finalFormData.append('grand_parent_name', finalUpdateData.grand_parent_name);
-        finalFormData.append('grand_child_relation', finalUpdateData.grand_child_relation);
-        finalFormData.append('parent_title', finalUpdateData.parent_title);
-        finalFormData.append('parent_name', finalUpdateData.parent_name);
-        finalFormData.append('child_relation', finalUpdateData.child_relation);
-        finalFormData.append('beneficiary_age', finalUpdateData.beneficiary_age);
-        finalFormData.append('beneficiary_name_nepali', finalUpdateData.beneficiary_name_nepali);
-        finalFormData.append('beneficiary_citizenship_number', finalUpdateData.beneficiary_citizenship_number);
-        finalFormData.append('beneficiary_name_english', finalUpdateData.beneficiary_name_english);
-        finalFormData.append('beneficiary_contact_number', finalUpdateData.beneficiary_contact_number);
-        finalFormData.append('beneficiary_citizenship_number', finalUpdateData.beneficiary_citizenship_number);
-        finalFormData.append('beneficiary_name_english', finalUpdateData.beneficiary_name_english);
-        finalFormData.append('beneficiary_contact_number', finalUpdateData.beneficiary_contact_number);
-        finalFormData.append('beneficiary_photo', finalUpdateData.beneficiary_photo);
-        finalFormData.append('beneficiary_representative_citizenship_number', finalUpdateData.beneficiary_representative_citizenship_number);
-        finalFormData.append('is_beneficiary_available_to_sign', finalUpdateData.is_beneficiary_available_to_sign);
-        finalFormData.append('beneficiary_representative_name_nepali', finalUpdateData.beneficiary_representative_name_nepali);
-        finalFormData.append('beneficiary_representative_grandfather_name', finalUpdateData.beneficiary_representative_grandfather_name);
-        finalFormData.append('beneficiary_representative_parent_name', finalUpdateData.beneficiary_representative_parent_name);
-        finalFormData.append('bank_account_holder_name', finalUpdateData.bank_account_holder_name);
-        finalFormData.append('bank_account_number', finalUpdateData.bank_account_number);
-        finalFormData.append('bank_name', finalUpdateData.bank_name);
-        finalFormData.append('bank_branch_name', finalUpdateData.bank_branch_name);
-        finalFormData.append('migration_certificate_number', finalUpdateData.migration_certificate_number);
-        finalFormData.append('migration_date_bs', finalUpdateData.migration_date_bs);
-        finalFormData.append('signed_date', finalUpdateData.signed_date);
-        finalFormData.append('withness_name_nepali', finalUpdateData.withness_name_nepali);
-        finalFormData.append('withness_relation', finalUpdateData.withness_relation);
-        finalFormData.append('withness_contact_number', finalUpdateData.withness_contact_number);
-        finalFormData.append('operating_municipality_officer_name', finalUpdateData.operating_municipality_officer_name);
-        finalFormData.append('operating_municipality_signed_date', finalUpdateData.operating_municipality_signed_date);
-        finalFormData.append('identity_document', finalUpdateData.identity_document);
-        finalFormData.append('application_document', finalUpdateData.application_document);
-        finalFormData.append('police_report', finalUpdateData.police_report);
-        finalFormData.append('beneficiary_district', finalUpdateData.beneficiary_district);
-        finalFormData.append('beneficiary_municipality', finalUpdateData.beneficiary_municipality);
-        finalFormData.append('beneficiary_ward', finalUpdateData.beneficiary_ward);
-        finalFormData.append('temporary_shelter_land_district', finalUpdateData.temporary_shelter_land_district);
-        finalFormData.append('temporary_shelter_land_municipality', finalUpdateData.temporary_shelter_land_municipality);
-        finalFormData.append('temporary_shelter_land_ward', finalUpdateData.temporary_shelter_land_ward);
-        finalFormData.append('temporary_shelter_land_tole', finalUpdateData.temporary_shelter_land_tole);
-        finalFormData.append('beneficiary_representative_district', finalUpdateData.beneficiary_representative_district);
-        finalFormData.append('beneficiary_representative_municipality', finalUpdateData.beneficiary_representative_municipality);
-        finalFormData.append('beneficiary_representative_ward', finalUpdateData.beneficiary_representative_ward);
-        finalFormData.append('operating_municipality', finalUpdateData.operating_municipality);
-        finalUpdateData.infrastructure_photo.length
-            ? finalUpdateData.infrastructure_photo.map(i => finalFormData.append('infrastructure_photo', i, i.name))
-            : null;
-        const baseUrl = process.env.REACT_APP_API_SERVER_URL;
-        axios.post(`${baseUrl}/temporary-shelter-enrollment-form/`, finalFormData, {
-            'Content-Type': 'multipart/form-data',
-            'X-CSRFToken': checkCSRFToken.csrftoken,
-        })
-            .then((res) => {
-                handleSuccessMessage(res.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.log('Error:', error);
+        addEarthquakePostRequest.do({
+            body: finalUpdateData,
+            onSuccess: datas => handleSuccessMessage(datas),
+            setFaramErrors: (err) => {
                 setBackendError(true);
                 setLoading(false);
-            });
+            },
+
+        });
         // return errorCheck;
     };
     // Function to handle checkbox change
@@ -645,25 +544,62 @@ const TemporaryShelter = (props) => {
         const finalData = id && wards.find(i => i.id === Number(id)).title;
         return finalData || '-';
     };
-
+    const splittedRouteId = pathname.split('/');
+    const routeId = splittedRouteId[splittedRouteId.length - 1];
 
     return (
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Epidemics'} uri={uri} />
+            {/* <MenuCommon layout="common" currentPage={'Epidemics'} uri={uri} /> */}
             <div className={styles.container}>
 
                 <h1 className={styles.header}>अस्थायी आश्रय नामांकन डाटा संरचना</h1>
                 <p className={styles.dataReporting}>डाटा रिपोर्टिङ</p>
                 <div className={styles.twoSections}>
-                    <div className={styles.reportingStatus}>
+                    <div
+                        className="reportingStatus123"
+                        style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px' }}
+
+
+                    >
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${routeId}`)}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">जानकारी</p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`)}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                किस्ता १
+                            </p>
+                            <p className="greenCircle123" />
+                        </div>
+                        <div className="reporting123" style={{ cursor: 'pointer' }}>
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                किस्ता २
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                    </div>
+                    {/* <div className={styles.reportingStatus}>
                         <div className={styles.reporting}>
                             <img className={styles.listSvg} src={ListSvg} alt="" />
                             <p className={styles.reportingText}>जानकारी</p>
                             <p className={styles.greenCircle} />
                         </div>
-                    </div>
+                    </div> */}
                     <div className={styles.mainForm}>
                         <div className={styles.generalInfoAndTableButton}>
                             <h1 className={styles.generalInfo}>जानकारी</h1>
@@ -1727,37 +1663,15 @@ const TemporaryShelter = (props) => {
                                                 accept="image/*"
                                                 id="file-input"
                                                 // style={{ display: 'none' }}
-                                                onChange={handleInfrastructurePhoto}
+                                                onChange={handleFileInputChange}
                                                 name="infrastructure_photo"
-                                                ref={fileInputRef}
                                             />
                                             {
                                                 errorFields.infrastructure_photo
                                                     ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
                                             }
                                             {
-                                                data.infrastructure_photo.length
-                                                    ? data.infrastructure_photo.map((item, index) => (
-                                                        <div style={{ display: 'flex' }}>
-                                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                                                                <img
-                                                                    height={100}
-                                                                    width={100}
-                                                                    src={handleShowImage(item)}
-                                                                    alt="img"
-                                                                />
-                                                                <img
-                                                                    src={close}
-                                                                    alt="close"
-                                                                    role="button"
-                                                                    onClick={() => handleRemoveImage(index)}
-                                                                    style={{ cursor: 'pointer' }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    ))
-
-                                                    : ''
+                                                data.infrastructure_photo ? <img height={100} width={100} src={handleShowImage(data.infrastructure_photo)} alt="img" /> : ''
                                             }
                                         </div>
 
@@ -1845,7 +1759,7 @@ const TemporaryShelter = (props) => {
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
-            TemporaryShelter,
+            Tranche1,
         ),
     ),
 );

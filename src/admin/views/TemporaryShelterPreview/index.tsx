@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable consistent-return */
 /* eslint-disable no-const-assign */
 /* eslint-disable no-return-assign */
@@ -148,7 +150,8 @@ const TemporaryShelterPreview = (props) => {
         const finalDate = `${year}/${month}/${day}`;
         return finalDate;
     };
-
+    const splittedRouteId = pathname.split('/');
+    const routeId = splittedRouteId[splittedRouteId.length - 1];
 
     return (
         <>
@@ -158,11 +161,44 @@ const TemporaryShelterPreview = (props) => {
                 <h1 className="header123">अस्थायी आश्रय नामांकन डाटा संरचना</h1>
                 <p className="dataReporting123">डाटा रिपोर्टिङ</p>
                 <div className="twoSections123">
-                    <div className="reportingStatus123">
-                        <div className="reporting123">
+
+                    <div
+                        className="reportingStatus123"
+                        style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px' }}
+
+                    >
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => {
+                                navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${routeId}`);
+                            }}
+                        >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">जानकारी</p>
                             <p className="greenCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => {
+                                navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`);
+                            }}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                किस्ता १
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div className="reporting123" style={{ cursor: 'pointer' }}>
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                किस्ता २
+                            </p>
+                            <p className="grayCircle123" />
                         </div>
                     </div>
                     <div className="mainForm123">
