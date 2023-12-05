@@ -576,8 +576,7 @@ const Tranche1 = (props) => {
                         <div
                             className="reporting123"
                             style={{ cursor: 'pointer' }}
-                            role="button"
-                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`)}
+
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
@@ -585,7 +584,12 @@ const Tranche1 = (props) => {
                             </p>
                             <p className="greenCircle123" />
                         </div>
-                        <div className="reporting123" style={{ cursor: 'pointer' }}>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`)}
+                        >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
                                 किस्ता २

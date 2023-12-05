@@ -244,6 +244,16 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
         id: '',
     },
+    {
+        name: 'add-view-tranche2',
+        title: 'Add View Tranche2',
+        titleNep: 'Add View Tranche2',
+        path: '/admin/temporary-shelter-enrollment-form/add-view-tranche2/:id',
+        load: () => import('../admin/views/Tranche2'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: '',
+    },
 
     {
         name: 'epidemics-upload',
