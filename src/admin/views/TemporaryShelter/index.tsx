@@ -372,8 +372,6 @@ const TemporaryShelter = (props) => {
                 if (i === 'migration_certificate_number') {
                     return latestErrorUpdate[i] = false;
                 }
-                console.log('This is i', i);
-
                 // if (i === 'responsible_municipality') {
                 //     return latestErrorUpdate[i] = false;
                 // }
