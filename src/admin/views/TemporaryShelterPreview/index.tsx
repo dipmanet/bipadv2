@@ -744,7 +744,10 @@ const TemporaryShelterPreview = (props) => {
                                             <ReactToPrint
                                                 trigger={() => <button className="submitButtons123" onClick={handlePrint} type="submit">{loadPrint ? 'Printing...' : 'प्रिन्ट'}</button>}
                                                 content={() => componentRef}
-
+                                                pageStyle={` @page {
+                                                    size: A4;
+                                                    margin: 1cm; /* You can adjust the margin values as needed */
+                                                  }`}
                                             />
 
                                         </div>
