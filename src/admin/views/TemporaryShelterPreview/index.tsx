@@ -686,10 +686,10 @@ const TemporaryShelterPreview = (props) => {
                                                     </h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
 
                                                             {
-                                                                fetchedData.infrastructurePhoto ? <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedData.infrastructurePhoto} alt="img" /> : ''
+                                                                fetchedData.infrastructurePhoto.length ? fetchedData.infrastructurePhoto.map(i => <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={i} alt="img" />) : ''
                                                             }
                                                         </div>
 
