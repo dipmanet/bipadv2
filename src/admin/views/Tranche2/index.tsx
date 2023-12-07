@@ -575,7 +575,6 @@ const Tranche2 = (props) => {
         }
     }, [pathname]);
 
-    console.log('Fetched data', fetchedData);
     return (
         <>
             <Page hideFilter hideMap />

@@ -337,7 +337,7 @@ const TemporaryShelter = (props) => {
     const selectedWard = user.isSuperuser
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_municipality))
         : user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
-    const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(user.profile.district));
+    const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district));
     // const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
     const tempSelectedWard = user.isSuperuser
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality))
@@ -432,7 +432,6 @@ const TemporaryShelter = (props) => {
             latestErrorUpdate[i] = false;
             return null;
         });
-
         setErrorFields({ ...latestErrorUpdate });
         if (Object.values(latestErrorUpdate).filter(i => i === true).length) {
             return;
@@ -685,9 +684,20 @@ const TemporaryShelter = (props) => {
                                 <h1>दफा ३(५) सँँग सम्बन्धित</h1>
                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
                             </div>
-                            <div className={styles.datePickerForm}>
-                                <span>मितिः</span>
-                                {/* <input
+                            <div style={{ fontSize: '20px', display: 'flex', gap: '20px' }}>
+                                <div
+                                    className={styles.datePickerForm}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'start',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        flex: 1,
+
+                                    }}
+                                >
+                                    <span>मितिः</span>
+                                    {/* <input
                                     type="text"
                                     name="entry_date_bs"
                                     value={data.entry_date_bs}
@@ -695,257 +705,231 @@ const TemporaryShelter = (props) => {
                                     className={styles.inputClassName}
                                 /> */}
 
-                                <NepaliDatePicker
-                                    inputClassName="form-control"
-                                    // className={styles.datePick}
-                                    // value={ADToBS(dateAlt)}
-                                    value={data.entry_date_bs}
-                                    onChange={
-                                        (value: string) => {
-                                            setData({
-                                                ...data,
-                                                entry_date_bs: value,
+                                    <NepaliDatePicker
 
-                                            });
+                                        inputClassName="form-control"
+                                        // className={styles.datePick}
+                                        // value={ADToBS(dateAlt)}
+                                        value={data.entry_date_bs}
+                                        onChange={
+                                            (value: string) => {
+                                                setData({
+                                                    ...data,
+                                                    entry_date_bs: value,
+
+                                                });
+                                            }
                                         }
-                                    }
-                                    options={{
-                                        calenderLocale: 'ne',
-                                        valueLocale: 'en',
-                                    }}
-
-                                />
-                            </div>
-                            {/* <div className={styles.countData}>
-                                <div className={styles.countDataIndividual}>
-                                    <span>लाभग्राही क्रम संंख्याः</span>
-                                    <input type="text" name="" className={styles.inputClassName} disabled />
-                                </div>
-                                <div className={styles.countDataIndividual}>
-                                    <span>सम्झौता क्रमााङ्क संंख्याः</span>
-                                    <input
-                                        type="text"
-                                        name="pa_number"
-                                        onChange={handleFormData}
-                                        value={data.pa_number}
-                                        className={styles.inputClassName}
-                                        disabled
+                                        options={{
+                                            calenderLocale: 'ne',
+                                            valueLocale: 'en',
+                                        }}
                                     />
                                 </div>
-                            </div> */}
-                            <div className={styles.formDetails}>
-                                <p>
-                                    भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि
-                                    {' '}
+                                <div style={{ flex: 1 }}>
                                     {user.isSuperuser ? (
-                                        <select
-                                            name="beneficiary_district"
-                                            value={data.beneficiary_district || ''}
-                                            id="districts-benificery"
-                                            onChange={handleFormData}
-                                            style={errorFields.beneficiary_district ? { border: '1px solid red' } : {}}
-                                        >
-                                            <option>जिल्ला</option>
-                                            {
-                                                districts.map(item => (
-                                                    <option value={item.id}>{item.title_ne}</option>
-                                                ))
-                                            }
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span>लाभग्राहीको जिल्ला</span>
+                                            <select
+                                                name="beneficiary_district"
+                                                value={data.beneficiary_district || ''}
+                                                id="districts-benificery"
+                                                onChange={handleFormData}
+                                                style={errorFields.beneficiary_district ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                            >
+                                                <option>लाभग्राहीको जिल्ला</option>
+                                                {
+                                                    districts.map(item => (
+                                                        <option value={item.id}>{item.title_ne}</option>
+                                                    ))
+                                                }
 
 
-                                        </select>
+                                            </select>
+                                        </div>
                                     )
                                         : user && user.profile && districtNameConverter(user.profile.district)}
-                                    {/* <Select
-                                        isClearable
-                                        value={data.beneficiary_district === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_district, districts)}
-                                        name="beneficiary_district"
-                                        placeholder={'जिल्ला छान्नुहोस्'}
-                                        onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                        options={DistrictListSelect}
-                                        className="dropdownZindex"
-                                        menuPortalTarget={document.body}
-                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                    /> */}
-                                    {' '}
-                                    जिल्ला
-                                    {' '}
-
+                                </div>
+                                <div style={{ flex: 1 }}>
                                     {user.isSuperuser ? (
-                                        <>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span>लाभग्राहीको गा.पा/न.पा.</span>
                                             <select
                                                 id="beneficiary_municipality"
                                                 name="beneficiary_municipality"
                                                 value={data.beneficiary_municipality || ''}
                                                 onChange={handleFormData}
-                                                style={errorFields.beneficiary_municipality ? { border: '1px solid red' } : {}}
+                                                style={errorFields.beneficiary_municipality ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                             >
-                                                <option> गा.पा/न.पा.</option>
+                                                <option>लाभग्राहीको गा.पा/न.पा.</option>
                                                 {
                                                     selectedMunicipality.map(item => (
                                                         <option value={item.id}>{item.title_ne}</option>
                                                     ))
                                                 }
                                             </select>
-                                            {' '}
-                                            गा.पा/न.पा.
-                                            {' '}
-                                        </>
+
+                                        </div>
                                     ) : user && user.profile && municipalityNameConverter(user.profile.municipality)}
-                                    {/* <Select
-                                        isClearable
-                                        value={data.beneficiary_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_municipality, municipalities)}
-                                        name="beneficiary_municipality"
-                                        placeholder={'पालिका छान्नुहोस्'}
-                                        onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                        options={MunicipalityListSelectedMunicipality}
-                                        className="dropdownZindex"
-                                        menuPortalTarget={document.body}
-                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                    /> */}
-                                    {' '}
-                                    {/* गा.पा/न.पा. */}
-                                    {' '}
-                                    {' '}
-                                    वडा नंं.
-                                    <select
-                                        id="beneficiary_ward"
-                                        name="beneficiary_ward"
-                                        value={data.beneficiary_ward || ''}
-                                        onChange={handleFormData}
-                                        style={errorFields.beneficiary_ward ? { border: '1px solid red' } : {}}
-                                    >
-                                        <option>वडा नंं.</option>
-                                        {
-                                            selectedWard.map(item => (
-                                                <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
-                                            ))
-                                        }
-                                    </select>
-                                    {/* <Select
-                                        isClearable
-                                        value={data.beneficiary_ward === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_ward, wards)}
-                                        name="beneficiary_ward"
-                                        placeholder={'वडा छान्नुहोस्'}
-                                        onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                        options={WardListSelectedWard}
-                                        className="dropdownZindex"
-                                        menuPortalTarget={document.body}
-                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                    /> */}
-                                    {' '}
-                                    गाउँँ/टोल
-                                    <input
-                                        type="text"
-                                        className={styles.inputClassName}
-                                        name="tole_name"
-                                        value={data.tole_name}
-                                        onChange={handleFormData}
-                                        style={errorFields.tole_name ? { borderBottom: '2px dotted red' } : {}}
-                                    />
-                                    {' '}
-                                    बस्नेे श्री
-                                    {' '}
-                                    <input
-                                        type="text"
-                                        name="grand_parent_name"
-                                        value={data.grand_parent_name}
-                                        className={styles.inputClassName}
-                                        onChange={handleFormData}
-                                        style={errorFields.grand_parent_name ? { borderBottom: '2px dotted red' } : {}}
-                                    />
-                                    {' '}
-                                    को
-                                    {' '}
-                                    <select
-                                        id="grand_child_relation"
-                                        name="grand_child_relation"
-                                        value={data.grand_child_relation}
-                                        onChange={handleFormData}
-                                        style={errorFields.grand_child_relation ? { border: '1px solid red' } : {}}
-                                    >
-                                        <option>सम्बन्ध</option>
-                                        <option value="नाती">नाती</option>
-                                        <option value="नातीनी">नातीनी</option>
-                                        <option value="बुुहारी">बुुहारी</option>
-                                    </select>
-                                    {' '}
-                                    श्री
-                                    {' '}
-                                    <input
-                                        type="text"
-                                        className={styles.inputClassName}
-                                        onChange={handleFormData}
-                                        name="parent_name"
-                                        value={data.parent_name}
-                                        style={errorFields.parent_name ? { borderBottom: '2px dotted red' } : {}}
-                                    />
-                                    {' '}
-                                    को
-                                    {' '}
-                                    <select
-                                        id="child_relation"
-                                        name="child_relation"
-                                        value={data.child_relation}
-                                        onChange={handleFormData}
-                                        style={errorFields.child_relation ? { border: '1px solid red' } : {}}
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>लाभग्राहीको वडा नंं.</span>
+                                        <select
+                                            id="beneficiary_ward"
+                                            name="beneficiary_ward"
+                                            value={data.beneficiary_ward || ''}
+                                            onChange={handleFormData}
+                                            style={errorFields.beneficiary_ward ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        >
+                                            <option>लाभग्राहीको वडा नंं.</option>
+                                            {
+                                                selectedWard.map(item => (
+                                                    <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{ fontSize: '20px', display: 'flex', gap: '20px', flex: 1 }}>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>
+                                            लाभग्राहीको गाउँँ/टोल
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className={styles.inputClassName}
+                                            name="tole_name"
+                                            value={data.tole_name}
+                                            onChange={handleFormData}
+                                            style={errorFields.tole_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div style={{ flex: 2 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>
+                                            हजुरबुबाको नाम
+                                        </span>
+                                        <input
+                                            type="text"
+                                            name="grand_parent_name"
+                                            value={data.grand_parent_name}
+                                            className={styles.inputClassName}
+                                            onChange={handleFormData}
+                                            style={errorFields.grand_parent_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>
+                                            नातिनातिना सम्बन्ध
+                                        </span>
+                                        <select
+                                            id="grand_child_relation"
+                                            name="grand_child_relation"
+                                            value={data.grand_child_relation}
+                                            onChange={handleFormData}
+                                            style={errorFields.grand_child_relation ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        >
+                                            <option>सम्बन्ध</option>
+                                            <option value="नाती">नाती</option>
+                                            <option value="नातीनी">नातीनी</option>
+                                            <option value="बुुहारी">बुुहारी</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{ fontSize: '20px', display: 'flex', gap: '20px', flex: 1 }}>
+                                <div style={{ flex: 2 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>
+                                            आमाबाबुको नाम
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className={styles.inputClassName}
+                                            onChange={handleFormData}
+                                            name="parent_name"
+                                            value={data.parent_name}
+                                            style={errorFields.parent_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>
+                                            बालबालिकाको सम्बन्ध
+                                        </span>
+                                        <select
+                                            id="child_relation"
+                                            name="child_relation"
+                                            value={data.child_relation}
+                                            onChange={handleFormData}
+                                            style={errorFields.child_relation ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        >
+                                            <option>सम्बन्ध</option>
+                                            <option value="छोरा">छोरा</option>
+                                            <option value="छोरी">छोरी</option>
+                                            <option value="श्रीमती">श्रीमती</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span>
+                                            उमेर
+                                        </span>
+                                        <input
+                                            type="number"
+                                            name="beneficiary_age"
+                                            onChange={handleFormData}
+                                            value={data.beneficiary_age}
+                                            className={styles.inputClassName}
+                                            style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
 
 
-                                    >
-                                        <option>सम्बन्ध</option>
-                                        <option value="छोरा">छोरा</option>
-                                        <option value="छोरी">छोरी</option>
-                                        <option value="श्रीमती">श्रीमती</option>
+                            <div>
+                                <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px' }}>
+                                    <span>
 
-                                    </select>
-                                    {' '}
-                                    बर्ष
-                                    {' '}
-                                    <input
-                                        type="number"
-                                        name="beneficiary_age"
-                                        onChange={handleFormData}
-                                        value={data.beneficiary_age}
-                                        className={styles.inputClassName}
-                                        style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red' } : {}}
-                                    />
-                                    {' '}
-                                    को लाभग्राही श्री
-                                    {' '}
+
+                                        लाभग्राहीको नाम
+                                    </span>
                                     <input
                                         type="text"
                                         name="beneficiary_name_nepali"
                                         value={data.beneficiary_name_nepali}
                                         onChange={handleFormData}
                                         className={styles.inputClassName}
-                                        style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red' } : {}}
+                                        style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                     />
-                                    {' '}
-                                    (यसपछि प्रथम पक्ष भनिनेे) र
-                                    {' '}
-                                    {municipalityNameConverter(user.profile.municipality)}
-                                    {/* <input type="text" className={styles.inputClassName} value={municipalityNameConverter(user.profile.municipality)} disabled /> */}
-                                    {' '}
-                                    कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
-                                    घरपरिवारलाई अस्थायी आवास निर्मााण अनुुदान कार्ययविधि,२०८०, बमोजिम अस्थायी आवास निर्माण गर्न यो अनुुदान
-                                    सम्झौता-पत्रमा सहीछाप गरेेका छौंं ।
-                                </p>
+                                </div>
                             </div>
-                            <div className={styles.mainTempAddress}>
+                            <div>
                                 <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
-                                <div className={styles.tempAddress}>
-                                    <div className={styles.tempAddressIndividualDiv}>
+                                <div style={{ display: 'flex', fontSize: '20px', gap: '20px' }}>
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
                                         {user.isSuperuser
                                             ? (
-                                                <>
-                                                    जिल्ला :
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span> जिल्ला </span>
                                                     {' '}
                                                     <select
                                                         id="temporary_shelter_land_district"
                                                         name="temporary_shelter_land_district"
                                                         value={data.temporary_shelter_land_district || ''}
                                                         onChange={handleFormData}
-                                                        style={errorFields.temporary_shelter_land_district ? { border: '1px solid red' } : {}}
+                                                        style={errorFields.temporary_shelter_land_district ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                                     >
                                                         <option> जिल्ला</option>
                                                         {
@@ -954,200 +938,155 @@ const TemporaryShelter = (props) => {
                                                             ))
                                                         }
                                                     </select>
-                                                </>
+                                                </div>
                                             ) : user && user.profile && districtNameConverter(user.profile.district)}
-                                        {/* <Select
-                                            isClearable
-                                            value={data.temporary_shelter_land_district === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_district, districts)}
-                                            name="temporary_shelter_land_district"
-                                            placeholder={'जिल्ला छान्नुहोस्'}
-                                            onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                            options={DistrictListSelect}
-                                            className="dropdownZindex"
-                                            menuPortalTarget={document.body}
-                                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                        /> */}
+
                                     </div>
-                                    <div className={styles.tempAddressIndividualDiv}>
-                                        {/* <span>{user && user.profile && municipalityNameConverter(user.profile.municipality)}</span> */}
-                                        गा.पा/न.पा:
-                                        {' '}
-                                        <select
-                                            id="temporary_shelter_land_municipality"
-                                            name="temporary_shelter_land_municipality"
-                                            value={data.temporary_shelter_land_municipality || ''}
-                                            onChange={handleFormData}
-                                            style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red' } : {}}
-                                        >
-                                            <option> गा.पा/न.पा.</option>
-                                            {
-                                                tempSelectedMunicipality.map(item => (
-                                                    <option value={item.id}>{item.title_ne}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        {/* <Select
-                                            isClearable
-                                            value={data.temporary_shelter_land_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_municipality, municipalities)}
-                                            name="temporary_shelter_land_municipality"
-                                            placeholder={'गा.पा/न.पा. छान्नुहोस्'}
-                                            onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                            options={MunicipalityListTempSelectedMunicipality}
-                                            className="dropdownZindex"
-                                            menuPortalTarget={document.body}
-                                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                        /> */}
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                            <span> गा.पा/न.पा </span>
+
+                                            <select
+                                                id="temporary_shelter_land_municipality"
+                                                name="temporary_shelter_land_municipality"
+                                                value={data.temporary_shelter_land_municipality || ''}
+                                                onChange={handleFormData}
+                                                style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                            >
+                                                <option> गा.पा/न.पा.</option>
+                                                {
+                                                    tempSelectedMunicipality.map(item => (
+                                                        <option value={item.id}>{item.title_ne}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div className={styles.tempAddressIndividualDiv}>
-                                        वडा नंं:
-                                        {' '}
-                                        <select
-                                            id="temporary_shelter_land_ward"
-                                            name="temporary_shelter_land_ward"
-                                            value={data.temporary_shelter_land_ward || ''}
-                                            onChange={handleFormData}
-                                            style={errorFields.temporary_shelter_land_ward ? { border: '1px solid red' } : {}}
-                                        >
-                                            <option>वडा नंं.</option>
-                                            {
-                                                tempSelectedWard.map(item => (
-                                                    <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        {/* <Select
-                                            isClearable
-                                            value={data.temporary_shelter_land_ward === '' ? '' : handleProvincialFormDataNepaliValue(data.temporary_shelter_land_ward, wards)}
-                                            name="temporary_shelter_land_ward"
-                                            placeholder={'वडा नंं. छान्नुहोस्'}
-                                            onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                            options={WardListTempSelectedWard}
-                                            className="dropdownZindex"
-                                            menuPortalTarget={document.body}
-                                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                        /> */}
+
+
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        <div className={styles.tempAddressIndividualDiv}>
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                                <span> वडा नंं:</span>
+                                                <select
+                                                    id="temporary_shelter_land_ward"
+                                                    name="temporary_shelter_land_ward"
+                                                    value={data.temporary_shelter_land_ward || ''}
+                                                    onChange={handleFormData}
+                                                    style={errorFields.temporary_shelter_land_ward ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                                >
+                                                    <option>वडा नंं.</option>
+                                                    {
+                                                        tempSelectedWard.map(item => (
+                                                            <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <div className={styles.tempAddressIndividualDiv}>
-                                        टोल
-                                        {' '}
-                                        <input
-                                            type="text"
-                                            name="temporary_shelter_land_tole"
-                                            value={data.temporary_shelter_land_tole}
-                                            onChange={handleFormData}
-                                            className={styles.inputClassName}
-                                            style={errorFields.temporary_shelter_land_tole ? { borderBottom: '2px dotted red' } : {}}
-                                        />
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span>टोल</span>
+                                            <input
+                                                type="text"
+                                                name="temporary_shelter_land_tole"
+                                                value={data.temporary_shelter_land_tole}
+                                                onChange={handleFormData}
+                                                className={styles.inputClassName}
+                                                style={errorFields.temporary_shelter_land_tole ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                            />
+                                        </div>
                                     </div>
-                                    {/* <div className={styles.tempAddressIndividualDiv}>
-                                        क्षेेत्रफल
-                                        {' '}
-                                        <input
-                                            type="text"
-                                            name="temporary_shelter_land_area"
-                                            value={data.temporary_shelter_land_area}
-                                            onChange={handleFormData}
-                                            className={styles.inputClassName}
-                                        />
-                                    </div> */}
-                                    {/* <div className={styles.tempAddressIndividualDiv}>
-                                        नक्सा सिट नंं.
-                                        {' '}
-                                        <input
-                                            type="text"
-                                            name="temporary_shelter_land_map_sheet_number"
-                                            value={data.temporary_shelter_land_map_sheet_number}
-                                            onChange={handleFormData}
-                                            className={styles.inputClassName}
-                                        />
-                                    </div> */}
                                 </div>
                             </div>
-                            <div className={styles.firstPartDetails}>
+                            <div>
                                 <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्राही)</h2>
+                                <span style={{ fontSize: '16px' }}>१. व्यक्तिगत विवरण</span>
+                                <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
+                                    <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
+                                        <span>नाम, थर नेेपालीमाः</span>
+                                        <input
+                                            type="text"
+                                            onChange={handleFormData}
+                                            name="beneficiary_name_nepali"
+                                            value={data.beneficiary_name_nepali}
+                                            style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                            className={styles.inputClassName}
+                                        />
+                                    </div>
+                                    <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
+                                        <span>नाम, थर अंंग्रेजीमाः</span>
+                                        <input
+                                            type="text"
+                                            className={styles.inputClassName}
+                                            onChange={handleFormData}
+                                            name="beneficiary_name_english"
+                                            value={data.beneficiary_name_english}
+                                            style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                        />
+                                    </div>
+                                </div>
+
+
+                                <div style={{ display: 'flex', gap: '20px', fontSize: '20px', margin: '20px 0px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                        <span>ना.प्र.न.</span>
+                                        {' '}
+                                        <input
+                                            type="text"
+                                            name="beneficiary_citizenship_number"
+                                            value={data.beneficiary_citizenship_number}
+                                            onChange={handleFormData}
+                                            className={styles.inputClassName}
+                                            style={errorFields.beneficiary_citizenship_number ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                        />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                        <span>सम्पर्क नंं.</span>
+                                        {' '}
+                                        <input
+                                            type="text"
+                                            name="beneficiary_contact_number"
+                                            value={data.beneficiary_contact_number}
+                                            onChange={handleFormData}
+                                            style={errorFields.beneficiary_contact_number ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                            className={styles.inputClassName}
+                                        />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 2, alignItems: 'flex-start' }}>
+                                        <span>फोटो:</span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="file-input"
+                                                // style={{ display: 'none' }}
+                                                onChange={handleFileInputChange}
+                                                name="beneficiary_photo"
+                                            />
+                                            {errorFields.beneficiary_photo
+                                                ? <p style={{ margin: '0', color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                            }
+                                            {
+                                                data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div className={styles.firstPartDetails}>
+
                                 <div className={styles.firstPartContainer}>
-                                    <span>१. व्यक्तिगत विवरण</span>
                                     <div className={styles.formElements}>
-                                        <div className={styles.freeText}>
-                                            <span>नाम, थर नेेपालीमाः</span>
-                                            <input
-                                                type="text"
-                                                onChange={handleFormData}
-                                                name="beneficiary_name_nepali"
-                                                value={data.beneficiary_name_nepali}
-                                                style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red' } : {}}
-                                                className={styles.inputClassName}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>नाम, थर अंंग्रेजीमाः</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="beneficiary_name_english"
-                                                value={data.beneficiary_name_english}
-                                                style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
                                         <div className={styles.locationDetails}>
-                                            <div>
-                                                <span>{`${user.isSuperuser ? user.profile && districtNameConverter(data.beneficiary_district) : user && user.profile && districtNameConverter(user.profile.district)} जिल्ला`}</span>
-
-                                            </div>
-                                            <div>
-                                                <span>{`${user.isSuperuser ? user && user.profile && municipalityNameConverter(data.beneficiary_municipality) : user && user.profile && municipalityNameConverter(user.profile.municipality)}`}</span>
-
-                                            </div>
-                                            <div>
-                                                <span>{`वडा नंं. ${englishToNepaliNumber(wardNameConverter(data.beneficiary_ward))}`}</span>
-
-                                            </div>
-                                            <div>
-                                                <span>ना.प्र.न.</span>
-                                                {' '}
-                                                <input
-                                                    type="text"
-                                                    name="beneficiary_citizenship_number"
-                                                    value={data.beneficiary_citizenship_number}
-                                                    onChange={handleFormData}
-                                                    className={styles.inputClassName}
-                                                    style={errorFields.beneficiary_citizenship_number ? { borderBottom: '2px dotted red' } : {}}
-                                                />
-                                            </div>
-                                            <div>
-                                                <span>सम्पर्क नंं.</span>
-                                                {' '}
-                                                <input
-                                                    type="text"
-                                                    name="beneficiary_contact_number"
-                                                    value={data.beneficiary_contact_number}
-                                                    onChange={handleFormData}
-                                                    style={errorFields.beneficiary_contact_number ? { borderBottom: '2px dotted red' } : {}}
-                                                    className={styles.inputClassName}
-                                                />
-                                            </div>
-                                            <div style={{ display: 'flex', gap: '5px', alignItems: errorFields.beneficiary_photo ? 'flex-start' : 'center' }}>
-                                                <span>फोटो:</span>
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                                    <input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        id="file-input"
-                                                        // style={{ display: 'none' }}
-                                                        onChange={handleFileInputChange}
-                                                        name="beneficiary_photo"
-                                                    />
-                                                    {errorFields.beneficiary_photo
-                                                        ? <p style={{ margin: '0', color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
-                                                    }
-                                                    {
-                                                        data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
-                                                    }
-                                                </div>
-
-
-                                            </div>
                                             <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                 <span>
                                                     लाभार्थी हस्ताक्षर गर्न उपलब्ध छैन?
@@ -1158,7 +1097,6 @@ const TemporaryShelter = (props) => {
                                                     type="checkbox"
                                                     checked={data.is_beneficiary_available_to_sign}
                                                     onChange={handleCheckboxChange}
-
                                                 />
                                             </div>
 
@@ -1167,34 +1105,43 @@ const TemporaryShelter = (props) => {
                                             data.is_beneficiary_available_to_sign
                                                 ? (
                                                     <div>
-                                                        <p>
-                                                            सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
-                                                            विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
-                                                            संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
-
-                                                        </p>
-                                                        <div className={styles.freeText} style={{ marginBottom: '10px' }}>
-                                                            <span>नाम, थर नेेपालीमाः</span>
-                                                            <input
-                                                                type="text"
-                                                                onChange={handleFormData}
-                                                                name="beneficiary_representative_name_nepali"
-                                                                value={data.beneficiary_representative_name_nepali}
-                                                                style={errorFields.beneficiary_representative_name_nepali ? { borderBottom: '2px dotted red' } : {}}
-                                                                className={styles.inputClassName}
-                                                            />
-                                                        </div>
-                                                        <div className={styles.locationDetails}>
-
-                                                            <div>
+                                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                                            <div
+                                                                // className={styles.freeText}
+                                                                style={{
+                                                                    marginBottom: '10px',
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    alignItems: 'flex-start',
+                                                                    flex: 2,
+                                                                }}
+                                                            >
+                                                                <span>नाम, थर नेेपालीमाः</span>
+                                                                <input
+                                                                    type="text"
+                                                                    onChange={handleFormData}
+                                                                    name="beneficiary_representative_name_nepali"
+                                                                    value={data.beneficiary_representative_name_nepali}
+                                                                    style={errorFields.beneficiary_representative_name_nepali ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                                    className={styles.inputClassName}
+                                                                />
+                                                            </div>
+                                                            <div style={{ flex: 1 }}>
                                                                 {user.isSuperuser ? (
-                                                                    <>  <span>जिल्ला:</span>
+                                                                    <div style={{
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column',
+                                                                        alignItems: 'flex-start',
+
+                                                                    }}
+                                                                    >
+                                                                        <span>जिल्ला:</span>
                                                                         <select
                                                                             name="beneficiary_representative_district"
                                                                             value={data.beneficiary_representative_district || ''}
                                                                             onChange={handleFormData}
                                                                             id="beneficiary_representative_district1"
-                                                                            style={errorFields.beneficiary_representative_district ? { border: '1px solid red' } : {}}
+                                                                            style={errorFields.beneficiary_representative_district ? { border: '1px solid red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                         >
                                                                             <option>जिल्लाः</option>
                                                                             {
@@ -1203,26 +1150,22 @@ const TemporaryShelter = (props) => {
                                                                                 ))
                                                                             }
                                                                         </select>
-                                                                    </>
+                                                                    </div>
                                                                 )
                                                                     : user && user.profile && districtNameConverter(user.profile.district)
                                                                 }
 
-                                                                {/* <Select
-                                                                    isClearable
-                                                                    value={data.beneficiary_representative_district === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_representative_district, wards)}
-                                                                    name="beneficiary_representative_district"
-                                                                    placeholder={'जिल्ला छान्नुहोस्'}
-                                                                    onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                                                    options={DistrictListSelect}
-                                                                    className="dropdownZindex"
-                                                                    menuPortalTarget={document.body}
-                                                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                                                /> */}
+
                                                             </div>
-                                                            <div>
+                                                            <div style={{ flex: 1 }}>
                                                                 {user.isSuperuser ? (
-                                                                    <>
+                                                                    <div style={{
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column',
+                                                                        alignItems: 'flex-start',
+                                                                        flex: 1,
+                                                                    }}
+                                                                    >
                                                                         <span>गा.पा./न.पाः</span>
                                                                         {' '}
                                                                         <select
@@ -1230,7 +1173,7 @@ const TemporaryShelter = (props) => {
                                                                             value={data.beneficiary_representative_municipality || ''}
                                                                             onChange={handleFormData}
                                                                             id="beneficiary_representative_municipality1"
-                                                                            style={errorFields.beneficiary_representative_municipality ? { border: '1px solid red' } : {}}
+                                                                            style={errorFields.beneficiary_representative_municipality ? { border: '1px solid red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                         >
                                                                             <option> गा.पा./न.पाः</option>
                                                                             {
@@ -1239,24 +1182,23 @@ const TemporaryShelter = (props) => {
                                                                                 ))
                                                                             }
                                                                         </select>
-                                                                    </>
+                                                                    </div>
                                                                 )
                                                                     : user && user.profile && municipalityNameConverter(user.profile.municipality)
                                                                 }
 
-                                                                {/* <Select
-                                                                    isClearable
-                                                                    value={data.beneficiary_representative_municipality === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_representative_municipality, wards)}
-                                                                    name="beneficiary_representative_municipality"
-                                                                    placeholder={'जिल्ला छान्नुहोस्'}
-                                                                    onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                                                    options={MunicipalityListTempBeneficiarySelectedMunicipality}
-                                                                    className="dropdownZindex"
-                                                                    menuPortalTarget={document.body}
-                                                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                                                /> */}
+
                                                             </div>
-                                                            <div>
+
+                                                        </div>
+                                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                flexDirection: 'column',
+                                                                alignItems: 'flex-start',
+                                                                flex: 1,
+                                                            }}
+                                                            >
                                                                 <span>वडा नंं.</span>
                                                                 {' '}
                                                                 <select
@@ -1264,7 +1206,7 @@ const TemporaryShelter = (props) => {
                                                                     value={data.beneficiary_representative_ward || ''}
                                                                     onChange={handleFormData}
                                                                     id="beneficiary_representative_ward1"
-                                                                    style={errorFields.beneficiary_representative_ward ? { border: '1px solid red' } : {}}
+                                                                    style={errorFields.beneficiary_representative_ward ? { border: '1px solid red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                 >
                                                                     <option> वडा नंं.</option>
                                                                     {
@@ -1273,55 +1215,73 @@ const TemporaryShelter = (props) => {
                                                                         ))
                                                                     }
                                                                 </select>
-                                                                {/* <Select
-                                                                    isClearable
-                                                                    value={data.beneficiary_representative_ward === '' ? '' : handleProvincialFormDataNepaliValue(data.beneficiary_representative_ward, wards)}
-                                                                    name="beneficiary_representative_ward"
-                                                                    placeholder={'वडा छान्नुहोस्'}
-                                                                    onChange={(value, actionMeta) => handleDropdown(actionMeta.name, value)}
-                                                                    options={WardListBeneficiarySelectedWard}
-                                                                    className="dropdownZindex"
-                                                                    menuPortalTarget={document.body}
-                                                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                                                /> */}
+
                                                             </div>
                                                             <div>
-                                                                <span>ना.प्र.न.</span>
+                                                                <div style={{
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    alignItems: 'flex-start',
+                                                                    flex: 1,
+                                                                }}
+                                                                >
+                                                                    <span>ना.प्र.न.</span>
+                                                                    {' '}
+                                                                    <input
+                                                                        type="text"
+                                                                        name="beneficiary_representative_citizenship_number"
+                                                                        value={data.beneficiary_representative_citizenship_number}
+                                                                        onChange={handleFormData}
+                                                                        className={styles.inputClassName}
+                                                                        style={errorFields.beneficiary_representative_citizenship_number ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                                    />
+                                                                </div>
+
+                                                            </div>
+                                                            <div
+                                                                className={styles.freeText}
+                                                                style={{
+                                                                    marginBottom: '10px',
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    alignItems: 'flex-start',
+                                                                    flex: 2,
+                                                                }}
+                                                            >
+                                                                <span>बाजेेको नाम, थर:</span>
                                                                 {' '}
                                                                 <input
                                                                     type="text"
-                                                                    name="beneficiary_representative_citizenship_number"
-                                                                    value={data.beneficiary_representative_citizenship_number}
+                                                                    // className={styles.inputClassName}
+                                                                    name="beneficiary_representative_grandfather_name"
+                                                                    value={data.beneficiary_representative_grandfather_name}
                                                                     onChange={handleFormData}
-                                                                    className={styles.inputClassName}
-                                                                    style={errorFields.beneficiary_representative_citizenship_number ? { borderBottom: '2px dotted red' } : {}}
+                                                                    style={errorFields.beneficiary_representative_grandfather_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                 />
                                                             </div>
 
                                                         </div>
-                                                        <div className={styles.freeText} style={{ marginBottom: '10px' }}>
-                                                            <span>बाजेेको नाम, थर:</span>
-                                                            {' '}
-                                                            <input
-                                                                type="text"
-                                                                className={styles.inputClassName}
-                                                                name="beneficiary_representative_grandfather_name"
-                                                                value={data.beneficiary_representative_grandfather_name}
-                                                                onChange={handleFormData}
-                                                                style={errorFields.beneficiary_representative_grandfather_name ? { borderBottom: '2px dotted red' } : {}}
-                                                            />
-                                                        </div>
-                                                        <div className={styles.freeText}>
-                                                            <span>बाबुु/आमाको नाम, थर:</span>
-                                                            {' '}
-                                                            <input
-                                                                type="text"
-                                                                className={styles.inputClassName}
-                                                                name="beneficiary_representative_parent_name"
-                                                                value={data.beneficiary_representative_parent_name}
-                                                                onChange={handleFormData}
-                                                                style={errorFields.beneficiary_representative_parent_name ? { borderBottom: '2px dotted red' } : {}}
-                                                            />
+                                                        <div>
+                                                            <div
+                                                                className={styles.freeText}
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    alignItems: 'flex-start',
+                                                                    flex: 1,
+                                                                }}
+                                                            >
+                                                                <span>बाबुु/आमाको नाम, थर:</span>
+                                                                {' '}
+                                                                <input
+                                                                    type="text"
+                                                                    // className={styles.inputClassName}
+                                                                    name="beneficiary_representative_parent_name"
+                                                                    value={data.beneficiary_representative_parent_name}
+                                                                    onChange={handleFormData}
+                                                                    style={errorFields.beneficiary_representative_parent_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ) : ''
@@ -1333,66 +1293,119 @@ const TemporaryShelter = (props) => {
                                 <div className={styles.firstPartContainer}>
                                     <span>२. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण</span>
                                     <div className={styles.formElements}>
-                                        <div className={styles.freeText}>
-                                            <span>खातावालाको नाम, थरः</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                name="bank_account_holder_name"
-                                                value={data.bank_account_holder_name}
-                                                onChange={handleFormData}
-                                                style={errorFields.bank_account_holder_name ? { borderBottom: '2px dotted red' } : {}}
-                                            />
+                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 2,
+                                                }}
+                                            >
+                                                <span>खातावालाको नाम, थरः</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    name="bank_account_holder_name"
+                                                    value={data.bank_account_holder_name}
+                                                    onChange={handleFormData}
+                                                    style={errorFields.bank_account_holder_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 2,
+                                                }}
+                                            >
+                                                <span>खाता नम्बरः</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="bank_account_number"
+                                                    value={data.bank_account_number}
+                                                    style={errorFields.bank_account_number ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
                                         </div>
-                                        <div className={styles.freeText}>
-                                            <span>खाता नम्बरः</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="bank_account_number"
-                                                value={data.bank_account_number}
-                                                style={errorFields.bank_account_number ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>बैंंक/वित्तीय संंस्थाको नामः</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="bank_name"
-                                                value={data.bank_name}
-                                                style={errorFields.bank_name ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>शाखाः</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="bank_branch_name"
-                                                value={data.bank_branch_name}
-                                                style={errorFields.bank_branch_name ? { borderBottom: '2px dotted red' } : {}}
-                                            />
+                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 2,
+                                                }}
+                                            >
+                                                <span>बैंंक/वित्तीय संंस्थाको नामः</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="bank_name"
+                                                    value={data.bank_name}
+                                                    style={errorFields.bank_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 2,
+                                                }}
+                                            >
+                                                <span>शाखाः</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="bank_branch_name"
+                                                    value={data.bank_branch_name}
+                                                    style={errorFields.bank_branch_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className={styles.firstPartContainer}>
                                     <span>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)</span>
-                                    <div className={styles.formElements}>
-                                        <div className={styles.freeText}>
+                                    <div className={styles.formElements} style={{ display: 'flex', gap: '20px', flexDirection: 'row' }}>
+                                        <div
+                                            className={styles.freeText}
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'flex-start',
+                                                flex: 2,
+                                            }}
+                                        >
                                             <span>बसाइँँसराइ प्रमाण-पत्र नंः</span>
                                             <input
                                                 type="text"
-                                                className={styles.inputClassName}
+                                                // className={styles.inputClassName}
                                                 onChange={handleFormData}
                                                 name="migration_certificate_number"
                                                 value={data.migration_certificate_number}
+                                                style={{ height: '34px', width: '100%' }}
                                             />
                                         </div>
-                                        <div className={styles.freeText}>
+                                        <div
+                                            className={styles.freeText}
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'flex-start',
+                                                flex: 2,
+                                            }}
+                                        >
                                             <span>बसाइँँसराइको मितिः</span>
                                             {/* <input
                                                 type="text"
@@ -1427,17 +1440,18 @@ const TemporaryShelter = (props) => {
                                 <div className={styles.firstPartContainer}>
                                     <span>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
                                     <div className={styles.formElements}>
-                                        <div className={styles.freeText}>
-                                            <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                disabled
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>मितिः</span>
-                                            {/* <input
+                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 1,
+                                                }}
+                                            >
+                                                <span>मितिः</span>
+                                                {/* <input
                                                 type="text"
                                                 className={styles.inputClassName}
                                                 onChange={handleFormData}
@@ -1445,112 +1459,86 @@ const TemporaryShelter = (props) => {
                                                 value={data.signed_date}
                                             /> */}
 
-                                            <NepaliDatePicker
-                                                inputClassName="form-control"
-                                                // className={styles.datePick}
-                                                // value={ADToBS(dateAlt)}
-                                                value={data.signed_date}
-                                                onChange={
-                                                    (value: string) => {
-                                                        setData({
-                                                            ...data,
-                                                            signed_date: value,
+                                                <NepaliDatePicker
+                                                    inputClassName="form-control"
+                                                    // className={styles.datePick}
+                                                    // value={ADToBS(dateAlt)}
+                                                    value={data.signed_date}
+                                                    onChange={
+                                                        (value: string) => {
+                                                            setData({
+                                                                ...data,
+                                                                signed_date: value,
 
-                                                        });
+                                                            });
+                                                        }
                                                     }
-                                                }
-                                                options={{
-                                                    calenderLocale: 'ne',
-                                                    valueLocale: 'en',
+                                                    options={{
+                                                        calenderLocale: 'ne',
+                                                        valueLocale: 'en',
+                                                    }}
+                                                />
+                                            </div>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 3,
                                                 }}
-                                            />
+                                            >
+                                                <span>साक्षीको नाम, थर</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="withness_name_nepali"
+                                                    value={data.withness_name_nepali}
+                                                    style={errorFields.withness_name_nepali ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
                                         </div>
-                                        <div className={styles.freeText}>
-                                            <span>साक्षीको नाम, थर</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="withness_name_nepali"
-                                                value={data.withness_name_nepali}
-                                                style={errorFields.withness_name_nepali ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>हस्ताक्षर</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                disabled
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>लाभग्राहीसँँगको नाता</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="withness_relation"
-                                                value={data.withness_relation}
-                                                style={errorFields.withness_relation ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>सम्पर्क नंं.</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="withness_contact_number"
-                                                value={data.withness_contact_number}
-                                                style={errorFields.withness_contact_number ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
-                                        <div className={styles.freeTextTable}>
-                                            <span>लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औठांंछाप</span>
-                                            <table style={{ width: '60%' }}>
-                                                <tr style={{ background: 'none' }}>
-                                                    <th
-                                                        style={{
-                                                            border: '1px solid black',
-                                                            borderCollapse: 'collapse',
-                                                            textAlign: 'center',
-                                                        }}
-                                                    >दायाँँ
-                                                    </th>
-                                                    <th
-                                                        style={{
-                                                            border: '1px solid black',
-                                                            borderCollapse: 'collapse',
-                                                            textAlign: 'center',
-                                                        }}
-                                                    >बायाँँ
-                                                    </th>
+                                        <div style={{ display: 'flex', gap: '20px' }}>
 
-                                                </tr>
-                                                <tr style={{ background: 'none' }}>
-                                                    <td
-                                                        style={{
-                                                            border: '1px solid black',
-                                                            borderCollapse: 'collapse',
-                                                            textAlign: 'center',
-                                                            width: '200px',
-                                                            height: '300px',
-                                                        }}
-                                                    />
-                                                    <td
-                                                        style={{
-                                                            border: '1px solid black',
-                                                            borderCollapse: 'collapse',
-                                                            textAlign: 'center',
-                                                            width: '200px',
-                                                            height: '300px',
-                                                        }}
-                                                    />
-
-                                                </tr>
-
-                                            </table>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 2,
+                                                }}
+                                            >
+                                                <span>लाभग्राहीसँँगको नाता</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="withness_relation"
+                                                    value={data.withness_relation}
+                                                    style={errorFields.withness_relation ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 2,
+                                                }}
+                                            >
+                                                <span>सम्पर्क नंं.</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="withness_contact_number"
+                                                    value={data.withness_contact_number}
+                                                    style={errorFields.withness_contact_number ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1560,10 +1548,7 @@ const TemporaryShelter = (props) => {
                                 <h2 style={{ textDecoration: 'underline' }}>ख. दोश्रो पक्ष</h2>
                                 <div className={styles.firstPartContainer} style={{ gap: '20px' }}>
                                     <div className={styles.formElements}>
-                                        <div className={styles.freeTextPart2}>
-                                            (<input type="text" disabled className={styles.inputClassName} />
-                                            <span>कार्यपालिका कार्यालयको छाप</span>)
-                                        </div>
+
                                         {
                                             user.isSuperuser
                                                 ? (
@@ -1575,7 +1560,7 @@ const TemporaryShelter = (props) => {
                                                             name="operating_municipality"
                                                             value={data.operating_municipality || ''}
                                                             onChange={handleFormData}
-                                                            style={errorFields.operating_municipality ? { border: '1px solid red' } : {}}
+                                                            style={errorFields.operating_municipality ? { border: '1px solid red', height: '34px' } : { height: '34px' }}
                                                         >
                                                             <option>गा.पा/न.पा</option>
                                                             {
@@ -1598,92 +1583,51 @@ const TemporaryShelter = (props) => {
 
                                             ) */}
                                         </div>
-                                        <div className={styles.freeText}>
-                                            <span>हस्ताक्षरः</span>
-                                            <input type="text" className={styles.inputClassName} disabled />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>नामः</span>
-                                            <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="operating_municipality_officer_name"
-                                                value={data.operating_municipality_officer_name}
-                                                style={errorFields.operating_municipality_officer_name ? { borderBottom: '2px dotted red' } : {}}
-                                            />
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>पदः प्रमुुख प्रशासकीय अधिकृृत</span>
-
-                                        </div>
-                                        <div className={styles.freeText}>
-                                            <span>मितिः</span>
-                                            {/* <input
-                                                type="text"
-                                                className={styles.inputClassName}
-                                                onChange={handleFormData}
-                                                name="operating_municipality_signed_date"
-                                                value={data.operating_municipality_signed_date}
-                                            /> */}
-                                            <NepaliDatePicker
-                                                inputClassName="form-control"
-                                                // className={styles.datePick}
-                                                // value={ADToBS(dateAlt)}
-                                                value={data.operating_municipality_signed_date}
-                                                onChange={
-                                                    (value: string) => {
-                                                        setData({
-                                                            ...data,
-                                                            operating_municipality_signed_date: value,
-
-                                                        });
-                                                    }
-                                                }
-                                                options={{
-                                                    calenderLocale: 'ne',
-                                                    valueLocale: 'en',
+                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                            <div
+                                                className={styles.freeText}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    flex: 3,
                                                 }}
-                                            />
+                                            >
+                                                <span>प्रमुुख प्रशासकीय अधिकृृतको नामः</span>
+                                                <input
+                                                    type="text"
+                                                    // className={styles.inputClassName}
+                                                    onChange={handleFormData}
+                                                    name="operating_municipality_officer_name"
+                                                    value={data.operating_municipality_officer_name}
+                                                    style={errorFields.operating_municipality_officer_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                />
+                                            </div>
+                                            <div className={styles.freeText} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                                <span>मितिः</span>
+
+                                                <NepaliDatePicker
+                                                    inputClassName="form-control"
+                                                    // className={styles.datePick}
+                                                    // value={ADToBS(dateAlt)}
+                                                    value={data.operating_municipality_signed_date}
+                                                    onChange={
+                                                        (value: string) => {
+                                                            setData({
+                                                                ...data,
+                                                                operating_municipality_signed_date: value,
+
+                                                            });
+                                                        }
+                                                    }
+                                                    options={{
+                                                        calenderLocale: 'ne',
+                                                        valueLocale: 'en',
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
-
-
                                     </div>
-                                </div>
-
-
-                            </div>
-                            <div>
-                                <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
-                                <div>
-                                    <h2> {`${englishToNepaliNumber(1)}. मैैलेे भूूकम्पबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्र अनुुरुप बनाउनेे छुु ।`}</h2>
-                                </div>
-                                <div>
-                                    <h2> {`${englishToNepaliNumber(2)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
-जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
-                                    </h2>
-                                </div>
-                                <div>
-                                    <h2> {`${englishToNepaliNumber(3)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}
-                                    </h2>
-                                </div>
-                                <div>
-                                    <h2>{`${englishToNepaliNumber(4)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}</h2>
-                                </div>
-                                <div>
-                                    <h2>
-                                        {`${englishToNepaliNumber(5)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
-                                    </h2>
-                                </div>
-
-                            </div>
-                            <div>
-                                <h2>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h2>
-                                <div>
-                                    <h2>
-                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट यस कार्यविधि अनुुसार अस्थायी आवास निर्मााणको कार्य भएमा अनुुदान रकम सरकारको तर्फ बाट दफा
-५ बमोजिम उपलब्ध गराइनेे छ ।`}
-                                    </h2>
                                 </div>
                             </div>
                             <div>
