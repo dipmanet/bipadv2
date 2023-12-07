@@ -337,7 +337,10 @@ const TemporaryShelter = (props) => {
     const selectedWard = user.isSuperuser
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_municipality))
         : user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
-    const tempSelectedMunicipality = municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district));
+    const tempSelectedMunicipality = user.isSuperuser ? user && user.profile
+        && municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district))
+        : user && user.profile
+        && municipalities.filter(i => i.district === Number(user.profile.district));
     // const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
     const tempSelectedWard = user.isSuperuser
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality))
