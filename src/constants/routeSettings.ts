@@ -254,7 +254,16 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
         id: '',
     },
-
+    {
+        name: 'add-tranche2-file-upload',
+        title: 'Add Tranche2 file upload',
+        titleNep: 'Add Tranche2 File Upload',
+        path: '/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/:id',
+        load: () => import('../admin/views/Tranche2FileUpload'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: '',
+    },
     {
         name: 'epidemics-upload',
         title: 'Epidemics Bulk Upload',

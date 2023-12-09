@@ -189,7 +189,7 @@ const TemporaryShelterPreview = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता १
+                                किस्ता १ फारम अपलोड
                             </p>
                             <p className="grayCircle123" />
                         </div>
@@ -203,7 +203,21 @@ const TemporaryShelterPreview = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता २
+                                किस्ता २ फारम
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => {
+                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                            }}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                किस्ता २ फारम अपलोड
                             </p>
                             <p className="grayCircle123" />
                         </div>

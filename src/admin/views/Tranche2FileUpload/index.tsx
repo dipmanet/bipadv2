@@ -52,7 +52,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
     addEarthquakePostTranche1Request: {
-        url: '/first-tranche-enrollment-upload/',
+        url: '/second-tranche-enrollment-upload/',
         method: methods.POST,
         query: { meta: true },
         onMount: false,
@@ -103,7 +103,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         extras: { hasFile: true },
     },
     getEarthquakeTranche1Request: {
-        url: ({ params }) => `/first-tranche-enrollment-upload/?temp_shelter_entrollment_form=${params.id}`,
+        url: ({ params }) => `/second-tranche-enrollment-upload/?temp_shelter_entrollment_form=${params.id}`,
         method: methods.GET,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
@@ -119,8 +119,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             console.warn('failure', error);
         },
     },
-    getEarthquakeRequest: {
-        url: ({ params }) => `/temporary-shelter-enrollment-form/${params.id}/`,
+    getEarthquakeTranche2Response: {
+        url: ({ params }) => `/second-tranche-enrollment-form/?temp_shelter_entrollment_form=${params.id}`,
         method: methods.GET,
         onMount: false,
         onSuccess: ({ response, props, params }) => {
@@ -139,7 +139,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 
-const Tranche1 = (props) => {
+const Tranche2FileUpload = (props) => {
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);
 
@@ -162,9 +162,9 @@ const Tranche1 = (props) => {
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
     const [fetchedData, setFetchedData] = useState(null);
-    const [fetchedDataWhole, setFetchedDataWhole] = useState(null);
     const { pathname } = useLocation();
-    const [nofetchedTranche1DataError, setNofetchedTranche1DataError] = useState(false);
+    const [fetchedTranche2Data, setFetchedTranche2Data] = useState(null);
+    const [nofetchedTranche2DataError, setNofetchedTranche2DataError] = useState(false);
     const { user,
         districts,
         municipalities,
@@ -282,7 +282,6 @@ const Tranche1 = (props) => {
         props.requests.getEarthquakeTranche1Request.do({ id: routeId, fetchedData: handleFetchedData });
     }, []);
     const handleClick = () => {
-        console.log('clicked');
         setBackendError(false);
         const errorCheckingFields = Object.keys(data);
         const latestErrorUpdate = errorFields;
@@ -300,7 +299,10 @@ const Tranche1 = (props) => {
         if (Object.values(latestErrorUpdate).filter(i => i === true).length) {
             return;
         }
-
+        if (!fetchedTranche2Data) {
+            setNofetchedTranche2DataError(true);
+            return;
+        }
         setLoading(true);
         const finalUpdateData = data;
         finalUpdateData.temp_shelter_entrollment_form = routeId;
@@ -427,16 +429,16 @@ const Tranche1 = (props) => {
         const finalData = id && wards.find(i => i.id === Number(id)).title;
         return finalData || '-';
     };
-    const handleFetchedDataWhole = (finalReceivedData) => {
-        setFetchedDataWhole(finalReceivedData.results);
+    const handleFetchedTranche2Data = (finalData) => {
+        setFetchedTranche2Data(finalData.results);
+        // setLoading(false);
     };
     useEffect(() => {
-        const splittedRoute = pathname.split('/');
-        const id = splittedRoute[splittedRoute.length - 1];
-        if (id) {
-            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedDataWhole });
-        }
-    }, [pathname]);
+        // setLoading(true);
+        props.requests.getEarthquakeTranche2Response.do({ id: routeId, fetchedData: handleFetchedTranche2Data });
+    }, []);
+
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -472,7 +474,7 @@ const Tranche1 = (props) => {
                             <p className="reportingText123">
                                 किस्ता १ फारम अपलोड
                             </p>
-                            <p className="greenCircle123" />
+                            <p className="grayCircle123" />
                         </div>
                         <div
                             className="reporting123"
@@ -491,14 +493,14 @@ const Tranche1 = (props) => {
                             style={{ cursor: 'pointer' }}
                             role="button"
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`);
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
                                 किस्ता २ फारम अपलोड
                             </p>
-                            <p className="grayCircle123" />
+                            <p className="greenCircle123" />
                         </div>
                     </div>
                     {/* <div className={styles.reportingStatus}>
@@ -526,9 +528,10 @@ const Tranche1 = (props) => {
                                 : (
                                     <div className={styles.mainDataEntrySection}>
                                         <div className={styles.formGeneralInfo}>
-                                            <h1>अनुुसूूची ३</h1>
-                                            <h1>दफा ३(५) सँँग सम्बन्धित</h1>
-                                            <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान किस्ता १</h1>
+
+                                            <h1>अनुुसूूची ४</h1>
+                                            <h1>दफा ४(२) सँँग सम्बन्धित</h1>
+                                            <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h1>
                                         </div>
 
 
@@ -630,8 +633,7 @@ const Tranche1 = (props) => {
                                                 : ''
                                         }
                                         {
-                                            nofetchedTranche1DataError
-                                                ? 'फाइल अपलोड गर्नको लागि कृपया किस्ता १ फारम भर्नुहोस्' : ''
+                                            nofetchedTranche2DataError ? 'फाइल अपलोड गर्नको लागि कृपया किस्ता २ फारम भर्नुहोस्' : ''
                                         }
                                         {
                                             fetchedData && fetchedData.length ? ''
@@ -654,7 +656,7 @@ const Tranche1 = (props) => {
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
-            Tranche1,
+            Tranche2FileUpload,
         ),
     ),
 );
