@@ -448,489 +448,490 @@ const Tranche2 = (props) => {
 
                 <h1 className={styles.header}>अस्थायी आश्रय नामांकन डाटा संरचना</h1>
                 <p className={styles.dataReporting}>डाटा रिपोर्टिङ</p>
-                {
-                    fetchedData
 
-                        ? (
-                            <div className={styles.twoSections}>
-                                <div
-                                    className="reportingStatus123"
-                                    style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px' }}
-                                >
-                                    <div
-                                        className="reporting123"
-                                        style={{ cursor: 'pointer' }}
-                                        role="button"
-                                        onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${routeId}`)}
-                                    >
-                                        <img className="listSvg123" src={ListSvg} alt="" />
-                                        <p className="reportingText123">जानकारी</p>
-                                        <p className="grayCircle123" />
-                                    </div>
-                                    <div
-                                        className="reporting123"
-                                        style={{ cursor: 'pointer' }}
-                                        role="button"
-                                        onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`)}
-                                    >
-                                        <img className="listSvg123" src={ListSvg} alt="" />
-                                        <p className="reportingText123">
-                                            पहिलो किस्ता फारम अपलोड
-                                        </p>
-                                        <p className="grayCircle123" />
-                                    </div>
-                                    <div className="reporting123" style={{ cursor: 'pointer' }}>
-                                        <img className="listSvg123" src={ListSvg} alt="" />
-                                        <p className="reportingText123">
-                                            दोस्रो किस्ता फारम
-                                        </p>
-                                        <p className="greenCircle123" />
-                                    </div>
-                                    <div
-                                        className="reporting123"
-                                        style={{ cursor: 'pointer' }}
-                                        role="button"
-                                        onClick={() => {
-                                            navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
-                                        }}
-                                    >
-                                        <img className="listSvg123" src={ListSvg} alt="" />
-                                        <p className="reportingText123">
-                                            दोस्रो किस्ता फारम अपलोड
-                                        </p>
-                                        <p className="grayCircle123" />
-                                    </div>
-                                </div>
+                <div className={styles.twoSections}>
+                    <div
+                        className="reportingStatus123"
+                        style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px' }}
+                    >
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${routeId}`)}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">पहिलो किस्ता फारम</p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`)}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                पहिलो किस्ता फारम अपलोड
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div className="reporting123" style={{ cursor: 'pointer' }}>
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                दोस्रो किस्ता फारम
+                            </p>
+                            <p className="greenCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+                            role="button"
+                            onClick={() => {
+                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                            }}
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                दोस्रो किस्ता फारम अपलोड
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                    </div>
 
-                                <div className={styles.mainForm}>
-                                    <div className={styles.generalInfoAndTableButton}>
-                                        <h1 className={styles.generalInfo}>जानकारी</h1>
-                                        <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>डाटा तालिका हेर्नुहोस्</button>
-                                    </div>
-                                    <div className={styles.shortGeneralInfo}>
-                                        <img className={styles.ideaIcon} src={Ideaicon} alt="" />
-                                        <p className={styles.ideaPara}>
-                                            अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
+                    <div className={styles.mainForm}>
+                        <div className={styles.generalInfoAndTableButton}>
+                            <h1 className={styles.generalInfo}>जानकारी</h1>
+                            <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>डाटा तालिका हेर्नुहोस्</button>
+                        </div>
+                        <div className={styles.shortGeneralInfo}>
+                            <img className={styles.ideaIcon} src={Ideaicon} alt="" />
+                            <p className={styles.ideaPara}>
+                                अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
 
-                                        </p>
-                                    </div>
-                                    {/* <AdditionForm /> */}
+                            </p>
+                        </div>
+                        {/* <AdditionForm /> */}
 
-                                    {
-                                        fetchedData && fetchedTranche2Data && fetchedTranche2Data.length && fetchedTranche2Data.length !== 0
-                                            ? (
-                                                <div style={{ width: '8.3in', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', padding: '15px 0px' }}>
-                                                    <div
-                                                        className="mainDataEntrySection123"
-                                                        ref={el => (componentRef = el)}
+                        {
 
-                                                    >
-                                                        <div className="formGeneralInfo123">
-                                                            <h2>अनुुसूूची ४</h2>
-                                                            <h2>दफा ४(२) सँँग सम्बन्धित</h2>
-                                                            <h2 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h2>
-                                                        </div>
-                                                        <div
-                                                            className="datePickerForm123"
-                                                            style={{
-                                                                display: 'flex',
-                                                                justifyContent: 'flex-end',
-                                                                fontSize: '16px',
-                                                            }}
-                                                        >
-                                                            <span>{`मितिः ${dateFormatter(fetchedTranche2Data[0].entryDateBs)}`}</span>
-                                                        </div>
+                            fetchedData
 
-                                                        <div style={{ display: 'flex', flexDirection: 'column', fontSize: '16px', lineHeight: '30px' }}>
-                                                            <span>श्रीमान प्रमुुख प्रशासकीय अधिकृृतज्यूू,</span>
-                                                            <span>{fetchedData && municipalityNameConverter(fetchedData.operatingMunicipality)}</span>
-                                                        </div>
+                                ? fetchedData && fetchedTranche2Data && fetchedTranche2Data.length && fetchedTranche2Data.length !== 0
+                                    ? (
+                                        <div style={{ width: '8.3in', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', padding: '15px 0px' }}>
+                                            <div
+                                                className="mainDataEntrySection123"
+                                                ref={el => (componentRef = el)}
 
-                                                        <div style={{ display: 'flex', justifyContent: 'center', fontSize: '16px', lineHeight: '30px' }}>
-                                                            <span>
-                                                                विषयः भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाऊँँ ।
-                                                            </span>
-                                                        </div>
-                                                        <div className="countData123">
-                                                            <div className="countDataIndividual123">
-                                                                <span>{`लाभग्राही क्रम संंख्याः ${englishToNepaliNumber(fetchedData.id)}`}</span>
+                                            >
+                                                <div className="formGeneralInfo123">
+                                                    <h2>अनुुसूूची ४</h2>
+                                                    <h2>दफा ४(२) सँँग सम्बन्धित</h2>
+                                                    <h2 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h2>
+                                                </div>
+                                                <div
+                                                    className="datePickerForm123"
+                                                    style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'flex-end',
+                                                        fontSize: '16px',
+                                                    }}
+                                                >
+                                                    <span>{`मितिः ${dateFormatter(fetchedTranche2Data[0].entryDateBs)}`}</span>
+                                                </div>
 
-                                                            </div>
-                                                            <div className="countDataIndividual123">
-                                                                <span>{`सम्झौता क्रमााङ्क संंख्याः ${englishToNepaliNumber(fetchedData.paNumber) || '-'}`}</span>
+                                                <div style={{ display: 'flex', flexDirection: 'column', fontSize: '16px', lineHeight: '30px' }}>
+                                                    <span>श्रीमान प्रमुुख प्रशासकीय अधिकृृतज्यूू,</span>
+                                                    <span>{fetchedData && municipalityNameConverter(fetchedData.operatingMunicipality)}</span>
+                                                </div>
 
-                                                            </div>
-                                                        </div>
-                                                        <div className="formDetails123">
-                                                            <p style={{ margin: 0 }}>
-                                                                {`भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि ${districtNameConverter(fetchedData.beneficiaryDistrict)} जिल्ला
+                                                <div style={{ display: 'flex', justifyContent: 'center', fontSize: '16px', lineHeight: '30px' }}>
+                                                    <span>
+                                                        विषयः भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाऊँँ ।
+                                                    </span>
+                                                </div>
+                                                <div className="countData123">
+                                                    <div className="countDataIndividual123">
+                                                        <span>{`लाभग्राही क्रम संंख्याः ${englishToNepaliNumber(fetchedData.id)}`}</span>
+
+                                                    </div>
+                                                    <div className="countDataIndividual123">
+                                                        <span>{`सम्झौता क्रमााङ्क संंख्याः ${englishToNepaliNumber(fetchedData.paNumber) || '-'}`}</span>
+
+                                                    </div>
+                                                </div>
+                                                <div className="formDetails123">
+                                                    <p style={{ margin: 0 }}>
+                                                        {`भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि ${districtNameConverter(fetchedData.beneficiaryDistrict)} जिल्ला
                                                              ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)}  वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))}
                                                               गाउँँ/टोल ${fetchedData.toleName} बस्नेे श्री ${fetchedData.grandParentName} को ${fetchedData.grandChildRelation} श्री ${fetchedData.parentName}
                                                               को ${fetchedData.childRelation} बर्ष ${englishToNepaliNumber(fetchedData.beneficiaryAge)}  को म र यस पालिका बीच
                                                                  `}
-                                                                मिति {dateFormatter(fetchedData.entryDateBs)}
-                                                                {' '}
-                                                                मा भएको अस्थायी आवास निर्मााण सम्झौता बमोजिम प्रथम किस्ता रकमबाट आवास निर्मााण
-                                                                भइरहेेको/सम्पन्न भएकोलेे सो को फोटो यसैै साथ संंलग्न गरी दोस्रो किस्ता भुक्तानी पाउनको लागि निवेेदन पेेश गरेेको छुु ।
+                                                        मिति {dateFormatter(fetchedData.entryDateBs)}
+                                                        {' '}
+                                                        मा भएको अस्थायी आवास निर्मााण सम्झौता बमोजिम प्रथम किस्ता रकमबाट आवास निर्मााण
+                                                        भइरहेेको/सम्पन्न भएकोलेे सो को फोटो यसैै साथ संंलग्न गरी दोस्रो किस्ता भुक्तानी पाउनको लागि निवेेदन पेेश गरेेको छुु ।
 
-                                                            </p>
+                                                    </p>
+                                                </div>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
+                                                    <div>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', textAlign: 'center', fontSize: '16px', lineHeight: '30px' }}>
+                                                            <span>निवेेदक</span>
+                                                            <span>......................................................................</span>
+                                                            <span>(नाम र सहीछाप)</span>
                                                         </div>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
-                                                            <div>
-                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', textAlign: 'center', fontSize: '16px', lineHeight: '30px' }}>
-                                                                    <span>निवेेदक</span>
-                                                                    <span>......................................................................</span>
-                                                                    <span>(नाम र सहीछाप)</span>
-                                                                </div>
-                                                                <div style={{ fontSize: '16px', lineHeight: '30px', marginTop: '20px', fontWeight: 'bold' }}>
-                                                                    <span>
-                                                                        नोटः अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो यसैै
-                                                                        निवेेदनका साथ संंलग्न गर्नेे ।
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div>
-
-                                                                <table>
-                                                                    <tr style={{ background: 'none' }}>
-                                                                        <th
-                                                                            style={{
-                                                                                border: '1px solid black',
-                                                                                borderCollapse: 'collapse',
-                                                                                textAlign: 'center',
-                                                                            }}
-                                                                        >दायाँँ
-                                                                        </th>
-                                                                        <th
-                                                                            style={{
-                                                                                border: '1px solid black',
-                                                                                borderCollapse: 'collapse',
-                                                                                textAlign: 'center',
-                                                                            }}
-                                                                        >बायाँँ
-                                                                        </th>
-
-                                                                    </tr>
-                                                                    <tr style={{ background: 'none' }}>
-                                                                        <td
-                                                                            style={{
-                                                                                border: '1px solid black',
-                                                                                borderCollapse: 'collapse',
-                                                                                textAlign: 'center',
-                                                                                width: '200px',
-                                                                                height: '140px',
-                                                                            }}
-                                                                        />
-                                                                        <td
-                                                                            style={{
-                                                                                border: '1px solid black',
-                                                                                borderCollapse: 'collapse',
-                                                                                textAlign: 'center',
-                                                                                width: '200px',
-                                                                                height: '140px',
-                                                                            }}
-                                                                        />
-
-                                                                    </tr>
-
-                                                                </table>
-                                                            </div>
+                                                        <div style={{ fontSize: '16px', lineHeight: '30px', marginTop: '20px', fontWeight: 'bold' }}>
+                                                            <span>
+                                                                नोटः अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो यसैै
+                                                                निवेेदनका साथ संंलग्न गर्नेे ।
+                                                            </span>
                                                         </div>
-                                                        <div className={styles.mainTempAddress}>
-                                                            <h2 style={{ textDecoration: 'underline', textAlign: 'center', fontWeight: 'bold' }}>दोस्रो किस्ता भुक्तानी सिफारिस</h2>
-                                                            <div className="formDetails123" style={{ fontSize: '16px', lineHeight: '30px' }}>
-                                                                <p style={{ margin: 0 }}>
-                                                                    {`भूूकम्प प्रभावितको अस्थायी आवास निर्मााणका लाागि लाभग्राही श्री ${fetchedData.beneficiaryNameNepali}लेे दोसरो किस्ता भुक्तानीको
+                                                    </div>
+                                                    <div>
+
+                                                        <table>
+                                                            <tr style={{ background: 'none' }}>
+                                                                <th
+                                                                    style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                    }}
+                                                                >दायाँँ
+                                                                </th>
+                                                                <th
+                                                                    style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                    }}
+                                                                >बायाँँ
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr style={{ background: 'none' }}>
+                                                                <td
+                                                                    style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                        width: '200px',
+                                                                        height: '140px',
+                                                                    }}
+                                                                />
+                                                                <td
+                                                                    style={{
+                                                                        border: '1px solid black',
+                                                                        borderCollapse: 'collapse',
+                                                                        textAlign: 'center',
+                                                                        width: '200px',
+                                                                        height: '140px',
+                                                                    }}
+                                                                />
+
+                                                            </tr>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div className={styles.mainTempAddress}>
+                                                    <h2 style={{ textDecoration: 'underline', textAlign: 'center', fontWeight: 'bold' }}>दोस्रो किस्ता भुक्तानी सिफारिस</h2>
+                                                    <div className="formDetails123" style={{ fontSize: '16px', lineHeight: '30px' }}>
+                                                        <p style={{ margin: 0 }}>
+                                                            {`भूूकम्प प्रभावितको अस्थायी आवास निर्मााणका लाागि लाभग्राही श्री ${fetchedData.beneficiaryNameNepali}लेे दोसरो किस्ता भुक्तानीको
                                                 लाागि निवेेदन पेेश गरेेकोलेे अस्थायी आवासको प्राविधिकको स्थलगत निरीक्षणबाट भूूकम्प प्रभावित घरपरिवारलाई अस्थायी
                                                 आवास निर्मााण अनुुदान कार्यविधि, २०८० तथा मिति ${dateFormatter(fetchedData.entryDateBs)} `}
-                                                                    मा भएको सम्झौता बमोजिम नैै अस्थायी आवास
-                                                                    निमाण भइरहेेको/समपन्न भएको देेखिएको हुँँदा निजलाई दोस्रो किस्ता भुक्तानी दिन उपयुुक्त छ भनी सिफाारिस गर्दछौंं।
-                                                                </p>
-                                                            </div>
+                                                            मा भएको सम्झौता बमोजिम नैै अस्थायी आवास
+                                                            निमाण भइरहेेको/समपन्न भएको देेखिएको हुँँदा निजलाई दोस्रो किस्ता भुक्तानी दिन उपयुुक्त छ भनी सिफाारिस गर्दछौंं।
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+                                                    <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px', lineHeight: '40px' }}>
+                                                        <h2 style={{ textDecoration: 'underline', textAlign: 'center', fontSize: '20px', lineHeight: '30px', fontWeight: 'bold' }}>प्राविधिक/इन्जिनियर</h2>
+                                                        <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <span>{`नाम: ${fetchedTranche2Data[0].engineerName}`}</span>
+
                                                         </div>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <span>हस्ताक्षरः....................</span>
+                                                        </div>
+                                                        <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <span>{`पदः ${fetchedTranche2Data[0].engineerPost}`}</span>
 
-                                                            <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px', lineHeight: '40px' }}>
-                                                                <h2 style={{ textDecoration: 'underline', textAlign: 'center', fontSize: '20px', lineHeight: '30px', fontWeight: 'bold' }}>प्राविधिक/इन्जिनियर</h2>
-                                                                <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span>{`नाम: ${fetchedTranche2Data[0].engineerName}`}</span>
+                                                        </div>
+                                                        <div style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                            <span>{`मितिः ${dateFormatter(fetchedTranche2Data[0].engineerSignedDate)}`}</span>
 
-                                                                </div>
-                                                                <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span>हस्ताक्षरः....................</span>
-                                                                </div>
-                                                                <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span>{`पदः ${fetchedTranche2Data[0].engineerPost}`}</span>
+                                                        </div>
+                                                    </div>
 
-                                                                </div>
-                                                                <div style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                                    <span>{`मितिः ${dateFormatter(fetchedTranche2Data[0].engineerSignedDate)}`}</span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px', lineHeight: '40px' }}>
+                                                        <h2 style={{ textDecoration: 'underline', textAlign: 'center', fontSize: '20px', lineHeight: '30px', fontWeight: 'bold' }}>वडा अध्यक्ष</h2>
+                                                        <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <span>{`नाम: ${fetchedTranche2Data[0].wardOfficerName}`}</span>
 
-                                                                </div>
-                                                            </div>
+                                                        </div>
+                                                        <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <span>हस्ताक्षरः...................</span>
 
-                                                            <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px', lineHeight: '40px' }}>
-                                                                <h2 style={{ textDecoration: 'underline', textAlign: 'center', fontSize: '20px', lineHeight: '30px', fontWeight: 'bold' }}>वडा अध्यक्ष</h2>
-                                                                <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span>{`नाम: ${fetchedTranche2Data[0].wardOfficerName}`}</span>
+                                                        </div>
 
-                                                                </div>
-                                                                <div className={styles.freeText} style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span>हस्ताक्षरः...................</span>
-
-                                                                </div>
-
-                                                                <div style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                                    <span>{`मितिः ${dateFormatter(fetchedTranche2Data[0].wardOfficerSignedDate)}`}</span>
-
-
-                                                                </div>
-                                                            </div>
+                                                        <div style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                            <span>{`मितिः ${dateFormatter(fetchedTranche2Data[0].wardOfficerSignedDate)}`}</span>
 
 
                                                         </div>
-                                                        <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', pageBreakBefore: 'always' }}>
-                                                            <h3>अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो</h3>
-                                                            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-
-                                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                                    {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
-                                                                    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-
-                                                                        {
-                                                                            fetchedTranche2Data && fetchedTranche2Data.length && fetchedTranche2Data[0].temporaryShelterPhoto.length ? fetchedTranche2Data[0].temporaryShelterPhoto.map(i => <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={i} alt="img" />) : ''
-                                                                        }
-                                                                    </div>
+                                                    </div>
 
 
-                                                                </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', pageBreakBefore: 'always' }}>
+                                                    <h3>अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो</h3>
+                                                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+
+                                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                            {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
+                                                            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+
+                                                                {
+                                                                    fetchedTranche2Data && fetchedTranche2Data.length && fetchedTranche2Data[0].temporaryShelterPhoto.length ? fetchedTranche2Data[0].temporaryShelterPhoto.map(i => <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={i} alt="img" />) : ''
+                                                                }
                                                             </div>
+
+
                                                         </div>
-                                                        {
-                                                            Object.values(errorFields).filter(i => i === true).length
-                                                                ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
-                                                                : ''
-                                                        }
-                                                        {
-                                                            backendError
-                                                                ? <span className={styles.ValidationErrors}>तपाईंको इन्टरनेट वा सर्भरमा समस्या छ कृपया पुन: प्रयास गर्नुहोस्</span>
-                                                                : ''
-                                                        }
-                                                        {/* <span className={styles.ValidationErrors}>{validationError}</span> */}
-                                                        {/* <div className={styles.saveOrAddButtons}>
+                                                    </div>
+                                                </div>
+                                                {
+                                                    Object.values(errorFields).filter(i => i === true).length
+                                                        ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
+                                                        : ''
+                                                }
+                                                {
+                                                    backendError
+                                                        ? <span className={styles.ValidationErrors}>तपाईंको इन्टरनेट वा सर्भरमा समस्या छ कृपया पुन: प्रयास गर्नुहोस्</span>
+                                                        : ''
+                                                }
+                                                {/* <span className={styles.ValidationErrors}>{validationError}</span> */}
+                                                {/* <div className={styles.saveOrAddButtons}>
                                                         <button className={styles.submitButtons} onClick={handleClick} type="submit" disabled={!!loading}>{loading ? 'पेश गरिँदै छ...' : 'पेश गर्नुहोस्'}</button>
                                                     </div> */}
 
-                                                    </div>
-                                                    <div className="saveOrAddButtons123">
-                                                        <ReactToPrint
-                                                            trigger={() => <button className="submitButtons123" type="submit">{'प्रिन्ट'}</button>}
-                                                            content={() => componentRef}
-                                                            pageStyle={` @page {
+                                            </div>
+                                            <div className="saveOrAddButtons123">
+                                                <ReactToPrint
+                                                    trigger={() => <button className="submitButtons123" type="submit">{'प्रिन्ट'}</button>}
+                                                    content={() => componentRef}
+                                                    pageStyle={` @page {
                                                          size: A4;
                                                          margin: 1cm; /* You can adjust the margin values as needed */
                                                        }`}
-                                                        />
+                                                />
 
-                                                    </div>
+                                            </div>
+                                        </div>
+                                    )
+
+                                    : (
+                                        <div className={styles.mainDataEntrySection}>
+                                            <div className={styles.formGeneralInfo}>
+                                                <h1>अनुुसूूची ४</h1>
+                                                <h1>दफा ४(२) सँँग सम्बन्धित</h1>
+                                                <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h1>
+                                            </div>
+
+                                            <div
+                                                className={styles.datePickerForm}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    width: '20%',
+                                                }}
+                                            >
+                                                <span>मितिः</span>
+                                                <NepaliDatePicker
+                                                    inputClassName="form-control"
+
+                                                    value={data.entry_date_bs}
+
+                                                    onChange={
+                                                        (value: string) => {
+                                                            setData({
+                                                                ...data,
+                                                                entry_date_bs: value,
+
+                                                            });
+                                                        }
+                                                    }
+                                                    options={{
+                                                        calenderLocale: 'ne',
+                                                        valueLocale: 'en',
+                                                    }}
+                                                />
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                    <span>प्राविधिक/इन्जिनियरको नाम</span>
+                                                    <input
+                                                        type="text"
+                                                        onChange={handleFormData}
+                                                        name="engineer_name"
+                                                        value={data.engineer_name}
+                                                        style={errorFields.engineer_name
+                                                            ? { borderBottom: '2px dotted red', height: '34px', background: 'white' }
+                                                            : { height: '34px', background: 'white', border: '1px solid black' }}
+                                                        className={styles.inputClassName}
+                                                    />
                                                 </div>
-                                            )
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                    <span>पदः</span>
+                                                    <input
+                                                        type="text"
+                                                        onChange={handleFormData}
+                                                        name="engineer_post"
+                                                        value={data.engineer_post}
+                                                        style={errorFields.engineer_post ? { borderBottom: '2px dotted red', height: '34px', background: 'white' } : { height: '34px', background: 'white', border: '1px solid black' }}
+                                                        className={styles.inputClassName}
+                                                    />
+                                                </div>
+                                                <div style={{
+                                                    width: 'fit-content',
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    gap: '4px',
+                                                }}
+                                                >
+                                                    <span>मितिः</span>
+                                                    <NepaliDatePicker
+                                                        inputClassName="form-control"
 
-                                            : (
-                                                <div className={styles.mainDataEntrySection}>
-                                                    <div className={styles.formGeneralInfo}>
-                                                        <h1>अनुुसूूची ४</h1>
-                                                        <h1>दफा ४(२) सँँग सम्बन्धित</h1>
-                                                        <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h1>
-                                                    </div>
+                                                        value={data.engineer_signed_date}
+                                                        onChange={
+                                                            (value: string) => {
+                                                                setData({
+                                                                    ...data,
+                                                                    engineer_signed_date: value,
 
-                                                    <div
-                                                        className={styles.datePickerForm}
-                                                        style={{
-                                                            display: 'flex',
-                                                            flexDirection: 'column',
-                                                            alignItems: 'flex-start',
-                                                            width: '20%',
-                                                        }}
-                                                    >
-                                                        <span>मितिः</span>
-                                                        <NepaliDatePicker
-                                                            inputClassName="form-control"
-
-                                                            value={data.entry_date_bs}
-
-                                                            onChange={
-                                                                (value: string) => {
-                                                                    setData({
-                                                                        ...data,
-                                                                        entry_date_bs: value,
-
-                                                                    });
-                                                                }
+                                                                });
                                                             }
-                                                            options={{
-                                                                calenderLocale: 'ne',
-                                                                valueLocale: 'en',
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                                            <span>प्राविधिक/इन्जिनियरको नाम</span>
-                                                            <input
-                                                                type="text"
-                                                                onChange={handleFormData}
-                                                                name="engineer_name"
-                                                                value={data.engineer_name}
-                                                                style={errorFields.engineer_name
-                                                                    ? { borderBottom: '2px dotted red', height: '34px', background: 'white' }
-                                                                    : { height: '34px', background: 'white', border: '1px solid black' }}
-                                                                className={styles.inputClassName}
-                                                            />
-                                                        </div>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                                            <span>पदः</span>
-                                                            <input
-                                                                type="text"
-                                                                onChange={handleFormData}
-                                                                name="engineer_post"
-                                                                value={data.engineer_post}
-                                                                style={errorFields.engineer_post ? { borderBottom: '2px dotted red', height: '34px', background: 'white' } : { height: '34px', background: 'white', border: '1px solid black' }}
-                                                                className={styles.inputClassName}
-                                                            />
-                                                        </div>
-                                                        <div style={{
-                                                            width: 'fit-content',
-                                                            display: 'flex',
-                                                            flexDirection: 'column',
-                                                            alignItems: 'flex-start',
-                                                            gap: '4px',
+                                                        }
+                                                        options={{
+                                                            calenderLocale: 'ne',
+                                                            valueLocale: 'en',
                                                         }}
-                                                        >
-                                                            <span>मितिः</span>
-                                                            <NepaliDatePicker
-                                                                inputClassName="form-control"
-
-                                                                value={data.engineer_signed_date}
-                                                                onChange={
-                                                                    (value: string) => {
-                                                                        setData({
-                                                                            ...data,
-                                                                            engineer_signed_date: value,
-
-                                                                        });
-                                                                    }
-                                                                }
-                                                                options={{
-                                                                    calenderLocale: 'ne',
-                                                                    valueLocale: 'en',
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                                            <span>वडा अध्यक्षको नाम</span>
-                                                            <input
-                                                                type="text"
-                                                                onChange={handleFormData}
-                                                                name="ward_officer_name"
-                                                                value={data.ward_officer_name}
-                                                                style={errorFields.ward_officer_name ? { borderBottom: '2px dotted red', height: '34px', background: 'white' } : { height: '34px', background: 'white', border: '1px solid black' }}
-                                                                className={styles.inputClassName}
-                                                            />
-                                                        </div>
-                                                        <div style={{ width: 'fit-content', display: 'flex', alignItems: 'flex-start', flexDirection: 'column', gap: '4px' }}>
-                                                            <span>मितिः</span>
-                                                            <NepaliDatePicker
-                                                                inputClassName="form-control"
-
-                                                                value={data.ward_officer_signed_date}
-                                                                onChange={
-                                                                    (value: string) => {
-                                                                        setData({
-                                                                            ...data,
-                                                                            ward_officer_signed_date: value,
-
-                                                                        });
-                                                                    }
-                                                                }
-                                                                options={{
-                                                                    calenderLocale: 'ne',
-                                                                    valueLocale: 'en',
-                                                                }}
-                                                            />
-
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ margin: '10px 0px' }}>
-                                                        <h2> {`${englishToNepaliNumber(2)}. अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो`}
-                                                        </h2>
-                                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                            <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                                                <input
-                                                                    type="file"
-                                                                    accept="image/*"
-                                                                    id="file-input"
-                                                                    // style={{ display: 'none' }}
-                                                                    onChange={handleInfrastructurePhoto}
-                                                                    name="temporary_shelter_photo"
-                                                                    ref={fileInputRef}
-                                                                />
-                                                                {
-                                                                    errorFields.temporary_shelter_photo
-                                                                        ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
-                                                                }
-                                                                {
-                                                                    data.temporary_shelter_photo.length
-                                                                        ? data.temporary_shelter_photo.map((item, index) => (
-                                                                            <div style={{ display: 'flex' }}>
-                                                                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                                                                                    <img
-                                                                                        height={100}
-                                                                                        width={100}
-                                                                                        src={handleShowImage(item)}
-                                                                                        alt="img"
-                                                                                    />
-                                                                                    <img
-                                                                                        src={close}
-                                                                                        alt="close"
-                                                                                        role="button"
-                                                                                        onClick={() => handleRemoveImage(index)}
-                                                                                        style={{ cursor: 'pointer' }}
-                                                                                    />
-                                                                                </div>
-                                                                            </div>
-                                                                        ))
-
-                                                                        : ''
-                                                                }
-                                                            </div>
-
-
-                                                        </div>
-                                                    </div>
-                                                    {
-                                                        Object.values(errorFields).filter(i => i === true).length
-                                                            ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
-                                                            : ''
-                                                    }
-                                                    {
-                                                        backendError
-                                                            ? <span className={styles.ValidationErrors}>तपाईंको इन्टरनेट वा सर्भरमा समस्या छ कृपया पुन: प्रयास गर्नुहोस्</span>
-                                                            : ''
-                                                    }
-                                                    {/* <span className={styles.ValidationErrors}>{validationError}</span> */}
-                                                    <div className={styles.saveOrAddButtons}>
-                                                        <button className={styles.submitButtons} onClick={handleClick} type="submit" disabled={!!loading}>{loading ? 'पेश गरिँदै छ...' : 'पेश गर्नुहोस्'}</button>
-                                                    </div>
+                                                    />
                                                 </div>
-                                            )}
-                                </div>
-                            </div>
-                        )
-                        : <p>Loading...</p>}
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                    <span>वडा अध्यक्षको नाम</span>
+                                                    <input
+                                                        type="text"
+                                                        onChange={handleFormData}
+                                                        name="ward_officer_name"
+                                                        value={data.ward_officer_name}
+                                                        style={errorFields.ward_officer_name ? { borderBottom: '2px dotted red', height: '34px', background: 'white' } : { height: '34px', background: 'white', border: '1px solid black' }}
+                                                        className={styles.inputClassName}
+                                                    />
+                                                </div>
+                                                <div style={{ width: 'fit-content', display: 'flex', alignItems: 'flex-start', flexDirection: 'column', gap: '4px' }}>
+                                                    <span>मितिः</span>
+                                                    <NepaliDatePicker
+                                                        inputClassName="form-control"
+
+                                                        value={data.ward_officer_signed_date}
+                                                        onChange={
+                                                            (value: string) => {
+                                                                setData({
+                                                                    ...data,
+                                                                    ward_officer_signed_date: value,
+
+                                                                });
+                                                            }
+                                                        }
+                                                        options={{
+                                                            calenderLocale: 'ne',
+                                                            valueLocale: 'en',
+                                                        }}
+                                                    />
+
+                                                </div>
+                                            </div>
+                                            <div style={{ margin: '10px 0px' }}>
+                                                <h2> {`${englishToNepaliNumber(2)}. अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो`}
+                                                </h2>
+                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            id="file-input"
+                                                            // style={{ display: 'none' }}
+                                                            onChange={handleInfrastructurePhoto}
+                                                            name="temporary_shelter_photo"
+                                                            ref={fileInputRef}
+                                                        />
+                                                        {
+                                                            errorFields.temporary_shelter_photo
+                                                                ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                                        }
+                                                        {
+                                                            data.temporary_shelter_photo.length
+                                                                ? data.temporary_shelter_photo.map((item, index) => (
+                                                                    <div style={{ display: 'flex' }}>
+                                                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                                                            <img
+                                                                                height={100}
+                                                                                width={100}
+                                                                                src={handleShowImage(item)}
+                                                                                alt="img"
+                                                                            />
+                                                                            <img
+                                                                                src={close}
+                                                                                alt="close"
+                                                                                role="button"
+                                                                                onClick={() => handleRemoveImage(index)}
+                                                                                style={{ cursor: 'pointer' }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+
+                                                                : ''
+                                                        }
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                            {
+                                                Object.values(errorFields).filter(i => i === true).length
+                                                    ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
+                                                    : ''
+                                            }
+                                            {
+                                                backendError
+                                                    ? <span className={styles.ValidationErrors}>तपाईंको इन्टरनेट वा सर्भरमा समस्या छ कृपया पुन: प्रयास गर्नुहोस्</span>
+                                                    : ''
+                                            }
+                                            {/* <span className={styles.ValidationErrors}>{validationError}</span> */}
+                                            <div className={styles.saveOrAddButtons}>
+                                                <button className={styles.submitButtons} onClick={handleClick} type="submit" disabled={!!loading}>{loading ? 'पेश गरिँदै छ...' : 'पेश गर्नुहोस्'}</button>
+                                            </div>
+                                        </div>
+                                    )
+                                : <p>Loading...</p>
+                        }
+                    </div>
+                </div>
+
             </div>
             <Footer />
 

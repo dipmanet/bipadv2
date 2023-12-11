@@ -176,7 +176,7 @@ const TemporaryShelterPreview = (props) => {
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
-                            <p className="reportingText123">जानकारी</p>
+                            <p className="reportingText123">पहिलो किस्ता फारम</p>
                             <p className="greenCircle123" />
                         </div>
                         <div
@@ -189,7 +189,7 @@ const TemporaryShelterPreview = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता १ फारम अपलोड
+                                पहिलो किस्ता फारम अपलोड
                             </p>
                             <p className="grayCircle123" />
                         </div>
@@ -203,7 +203,7 @@ const TemporaryShelterPreview = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता २ फारम
+                                दोस्रो किस्ता फारम
                             </p>
                             <p className="grayCircle123" />
                         </div>
@@ -217,7 +217,7 @@ const TemporaryShelterPreview = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता २ फारम अपलोड
+                                दोस्रो किस्ता फारम अपलोड
                             </p>
                             <p className="grayCircle123" />
                         </div>
@@ -345,7 +345,7 @@ const TemporaryShelterPreview = (props) => {
                                                                     <span>{`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))}`}</span>
                                                                 </div>
                                                                 <div>
-                                                                    <span>{`ना.प्र.न. ${fetchedData.beneficiaryCitizenshipNumber}`}</span>
+                                                                    <span>{`ना.प्र.न. ${englishToNepaliNumber(fetchedData.beneficiaryCitizenshipNumber)}`}</span>
                                                                 </div>
                                                                 <div>
                                                                     <span>{`सम्पर्क नंं. ${englishToNepaliNumber(fetchedData.beneficiaryContactNumber)}`}</span>
@@ -383,7 +383,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                                                 </div>
                                                                                 <div>
-                                                                                    <span>{`ना.प्र.न. ${fetchedData.beneficiaryRepresentativeCitizenshipNumber}`}</span>
+                                                                                    <span>{`ना.प्र.न. ${englishToNepaliNumber(fetchedData.beneficiaryRepresentativeCitizenshipNumber)}`}</span>
 
                                                                                 </div>
 
@@ -464,7 +464,7 @@ const TemporaryShelterPreview = (props) => {
                                                                 <span>{`खातावालाको नाम, थरः ${fetchedData.bankAccountHolderName}`}</span>
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`खाता नम्बरः ${fetchedData.bankAccountNumber}`}</span>
+                                                                <span>{`खाता नम्बरः ${englishToNepaliNumber(fetchedData.bankAccountNumber)}`}</span>
 
                                                             </div>
                                                             <div className="freeText123">
@@ -481,7 +481,7 @@ const TemporaryShelterPreview = (props) => {
                                                         <span style={{ fontWeight: 'bold', lineHeight: '30px' }}>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसाइँँसराइको विवरण उल्लेेख गर्नेे)</span>
                                                         <div className="formElements123">
                                                             <div className="freeText123">
-                                                                <span>{`बसाइँँसराइ प्रमाण-पत्र नंः ${fetchedData.migrationCertificateNumber}`}</span>
+                                                                <span>{`बसाइँँसराइ प्रमाण-पत्र नंः ${englishToNepaliNumber(fetchedData.migrationCertificateNumber)}`}</span>
 
                                                             </div>
                                                             <div className="freeText123">
@@ -515,7 +515,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`सम्पर्क नंं. ${fetchedData.withnessContactNumber}`}</span>
+                                                                <span>{`सम्पर्क नंं. ${englishToNepaliNumber(fetchedData.withnessContactNumber)}`}</span>
 
                                                             </div>
 

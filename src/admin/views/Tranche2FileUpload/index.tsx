@@ -462,13 +462,14 @@ const Tranche2FileUpload = (props) => {
                             onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${routeId}`)}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
-                            <p className="reportingText123">जानकारी</p>
+                            <p className="reportingText123">पहिलो किस्ता फारम</p>
                             <p className="grayCircle123" />
                         </div>
                         <div
                             className="reporting123"
                             style={{ cursor: 'pointer' }}
-
+                            role="button"
+                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`)}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
@@ -492,9 +493,7 @@ const Tranche2FileUpload = (props) => {
                             className="reporting123"
                             style={{ cursor: 'pointer' }}
                             role="button"
-                            onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`);
-                            }}
+
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">

@@ -459,7 +459,7 @@ const Tranche1 = (props) => {
                             onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${routeId}`)}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
-                            <p className="reportingText123">जानकारी</p>
+                            <p className="reportingText123"> पहिलो किस्ता फारम</p>
                             <p className="grayCircle123" />
                         </div>
                         <div

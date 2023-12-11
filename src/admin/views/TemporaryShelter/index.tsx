@@ -660,13 +660,13 @@ const TemporaryShelter = (props) => {
                     <div className={styles.reportingStatus}>
                         <div className={styles.reporting}>
                             <img className={styles.listSvg} src={ListSvg} alt="" />
-                            <p className={styles.reportingText}>जानकारी</p>
+                            <p className={styles.reportingText}> पहिलो किस्ता फारम</p>
                             <p className={styles.greenCircle} />
                         </div>
                     </div>
                     <div className={styles.mainForm}>
                         <div className={styles.generalInfoAndTableButton}>
-                            <h1 className={styles.generalInfo}>जानकारी</h1>
+                            <h1 className={styles.generalInfo}> पहिलो किस्ता फारम</h1>
                             <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>डाटा तालिका हेर्नुहोस्</button>
                         </div>
                         <div className={styles.shortGeneralInfo}>
@@ -1182,7 +1182,18 @@ const TemporaryShelter = (props) => {
                                                                         </select>
                                                                     </div>
                                                                 )
-                                                                    : user && user.profile && districtNameConverter(user.profile.district)
+                                                                    : (
+                                                                        <div style={{
+                                                                            display: 'flex',
+                                                                            flexDirection: 'column',
+                                                                            alignItems: 'flex-start',
+
+                                                                        }}
+                                                                        >
+                                                                            <span>जिल्ला:</span>
+                                                                            <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
+                                                                        </div>
+                                                                    )
                                                                 }
 
 
@@ -1214,10 +1225,21 @@ const TemporaryShelter = (props) => {
                                                                         </select>
                                                                     </div>
                                                                 )
-                                                                    : user && user.profile && municipalityNameConverter(user.profile.municipality)
+                                                                    : (
+                                                                        <div style={{
+                                                                            display: 'flex',
+                                                                            flexDirection: 'column',
+                                                                            alignItems: 'flex-start',
+                                                                            flex: 1,
+                                                                        }}
+                                                                        >
+                                                                            <span>गा.पा./न.पाः</span>
+                                                                            <span>
+                                                                                {user && user.profile && municipalityNameConverter(user.profile.municipality)}
+                                                                            </span>
+                                                                        </div>
+                                                                    )
                                                                 }
-
-
                                                             </div>
 
                                                         </div>
