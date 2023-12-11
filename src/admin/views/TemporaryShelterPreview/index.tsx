@@ -355,8 +355,14 @@ const TemporaryShelterPreview = (props) => {
                                                             {
                                                                 fetchedData.isBeneficiaryAvailableToSign
                                                                     ? (
-                                                                        <div style={{ lineHeight: '25px' }}>
-                                                                            <p style={{ lineHeight: '25px' }}>
+                                                                        <div style={{
+                                                                            lineHeight: '25px',
+                                                                            gap: '5px',
+                                                                            display: 'flex',
+                                                                            flexDirection: 'column',
+                                                                        }}
+                                                                        >
+                                                                            <p style={{ lineHeight: '25px', margin: 0, fontWeight: 'bold' }}>
                                                                                 सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
                                                                                 विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
                                                                                 संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
