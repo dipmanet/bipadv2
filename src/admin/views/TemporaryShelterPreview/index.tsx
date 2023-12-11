@@ -271,7 +271,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                 </div>
                                                 <div className="countDataIndividual123">
-                                                    <span>{`सम्झौता क्रमााङ्क संंख्याः ${fetchedData.paNumber || '-'}`}</span>
+                                                    <span>{`सम्झौता क्रमााङ्क संंख्याः ${englishToNepaliNumber(fetchedData.paNumber) || '-'}`}</span>
 
                                                 </div>
                                             </div>
