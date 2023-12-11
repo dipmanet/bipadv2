@@ -1794,6 +1794,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (routeName === 'temporary-shelter-enrollment-form-data-table') {
             return true;
         }
+        if (routeName === 'add-view-tranche1') {
+            return true;
+        }
+        if (routeName === 'add-view-tranche2') {
+            return true;
+        }
+        if (routeName === 'add-tranche2-file-upload') {
+            return true;
+        }
         if (routeName === 'add-new-temporary-shelter-enrollment-data') {
             return true;
         }

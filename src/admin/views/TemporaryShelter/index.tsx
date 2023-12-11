@@ -751,7 +751,14 @@ const TemporaryShelter = (props) => {
                                             </select>
                                         </div>
                                     )
-                                        : user && user.profile && districtNameConverter(user.profile.district)}
+                                        : (
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span>लाभग्राहीको जिल्ला</span>
+                                                <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
+
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     {user.isSuperuser ? (
@@ -773,7 +780,17 @@ const TemporaryShelter = (props) => {
                                             </select>
 
                                         </div>
-                                    ) : user && user.profile && municipalityNameConverter(user.profile.municipality)}
+                                    )
+                                        : (
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span>लाभग्राहीको गा.पा/न.पा.</span>
+                                                <span>
+                                                    {user && user.profile && municipalityNameConverter(user.profile.municipality)}
+                                                </span>
+
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -942,7 +959,17 @@ const TemporaryShelter = (props) => {
                                                         }
                                                     </select>
                                                 </div>
-                                            ) : user && user.profile && districtNameConverter(user.profile.district)}
+                                            )
+                                            : (
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span> जिल्ला </span>
+                                                    <span>
+                                                        {user && user.profile && districtNameConverter(user.profile.district)}
+                                                    </span>
+
+                                                </div>
+                                            )
+                                        }
 
                                     </div>
                                     <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>

@@ -472,7 +472,7 @@ const Tranche2FileUpload = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता १ फारम अपलोड
+                                पहिलो किस्ता फारम अपलोड
                             </p>
                             <p className="grayCircle123" />
                         </div>
@@ -484,7 +484,7 @@ const Tranche2FileUpload = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता २ फारम
+                                दोस्रो किस्ता फारम
                             </p>
                             <p className="grayCircle123" />
                         </div>
@@ -498,7 +498,7 @@ const Tranche2FileUpload = (props) => {
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
-                                किस्ता २ फारम अपलोड
+                                दोस्रो किस्ता फारम अपलोड
                             </p>
                             <p className="greenCircle123" />
                         </div>
@@ -559,14 +559,15 @@ const Tranche2FileUpload = (props) => {
                                                                         alignItems: 'flex-start',
                                                                     }}
                                                                     >
-                                                                        <span>
-                                                                            हस्ताक्षरित प्रतिलिपि कागजात किस्ता १
-                                                                        </span>
+
                                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
 
 
                                                                             {
-                                                                                fetchedData[0].signedCopyFile ? <img height={100} width={100} src={fetchedData[0].signedCopyFile} alt="img" /> : ''
+                                                                                fetchedData[0].signedCopyFile
+                                                                                    // ? <img height={100} width={100} src={fetchedData[0].signedCopyFile} alt="img" />
+                                                                                    ? <a href={fetchedData[0].signedCopyFile} style={{ textDecoration: 'underline' }} target="__blank">दोस्रो किस्ताको हस्ताक्षरित प्रतिलिपि कागजात हेर्न यहाँ क्लिक गर्नुहोस्</a>
+                                                                                    : ''
                                                                             }
                                                                         </div>
 
@@ -592,7 +593,7 @@ const Tranche2FileUpload = (props) => {
                                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                                                             <input
                                                                                 type="file"
-                                                                                accept="image/*"
+                                                                                accept="*"
                                                                                 id="file-input"
                                                                                 // style={{ display: 'none' }}
                                                                                 onChange={handleFileInputChange}
@@ -601,9 +602,9 @@ const Tranche2FileUpload = (props) => {
                                                                             {errorFields.signed_copy_file
                                                                                 ? <p style={{ margin: '0', color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
                                                                             }
-                                                                            {
+                                                                            {/* {
                                                                                 data.signed_copy_file ? <img height={100} width={100} src={handleShowImage(data.signed_copy_file)} alt="img" /> : ''
-                                                                            }
+                                                                            } */}
                                                                         </div>
 
 

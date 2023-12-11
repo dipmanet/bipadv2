@@ -475,14 +475,14 @@ const Tranche2 = (props) => {
                                     >
                                         <img className="listSvg123" src={ListSvg} alt="" />
                                         <p className="reportingText123">
-                                            किस्ता १ फारम अपलोड
+                                            पहिलो किस्ता फारम अपलोड
                                         </p>
                                         <p className="grayCircle123" />
                                     </div>
                                     <div className="reporting123" style={{ cursor: 'pointer' }}>
                                         <img className="listSvg123" src={ListSvg} alt="" />
                                         <p className="reportingText123">
-                                            किस्ता २ फारम
+                                            दोस्रो किस्ता फारम
                                         </p>
                                         <p className="greenCircle123" />
                                     </div>
@@ -496,7 +496,7 @@ const Tranche2 = (props) => {
                                     >
                                         <img className="listSvg123" src={ListSvg} alt="" />
                                         <p className="reportingText123">
-                                            किस्ता २ फारम अपलोड
+                                            दोस्रो किस्ता फारम अपलोड
                                         </p>
                                         <p className="grayCircle123" />
                                     </div>
