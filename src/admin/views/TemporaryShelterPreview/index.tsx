@@ -224,7 +224,7 @@ const TemporaryShelterPreview = (props) => {
                     </div>
                     <div className="mainForm123">
                         <div className="generalInfoAndTableButton123">
-                            <h1 className="generalInfo">जानकारी</h1>
+                            <h1 className="generalInfo">पहिलो किस्ता फारम</h1>
                             <button
                                 className="DataTableClick123"
                                 type="button"
@@ -232,13 +232,13 @@ const TemporaryShelterPreview = (props) => {
                             >डाटा तालिका हेर्नुहोस्
                             </button>
                         </div>
-                        <div className="shortGeneralInfo123">
+                        {/* <div className="shortGeneralInfo123">
                             <img className="ideaIcon123" src={Ideaicon} alt="" />
                             <p className="ideaPara123">
                                 अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
 
                             </p>
-                        </div>
+                        </div> */}
                         {/* <div className='infoBar123'>
                             <p className='instInfo123'>
                                 Reported Date and Location are required information
@@ -276,7 +276,7 @@ const TemporaryShelterPreview = (props) => {
                                                 </div>
                                             </div>
                                             <div className="formDetails123">
-                                                <p style={{ margin: 0 }}>
+                                                <p style={{ margin: 0, lineHeight: '25px' }}>
                                                     {`भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि ${districtNameConverter(fetchedData.beneficiaryDistrict)}
                                                   जिल्ला ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)} वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))} गाउँँ/टोल ${fetchedData.toleName} बस्नेे श्री ${fetchedData.grandParentName} को ${fetchedData.grandChildRelation} श्री ${fetchedData.parentName}
                                                   को ${fetchedData.childRelation} बर्ष ${englishToNepaliNumber(fetchedData.beneficiaryAge)} को लाभग्राही श्री ${fetchedData.beneficiaryNameNepali}
@@ -355,14 +355,14 @@ const TemporaryShelterPreview = (props) => {
                                                             {
                                                                 fetchedData.isBeneficiaryAvailableToSign
                                                                     ? (
-                                                                        <div>
-                                                                            <p style={{ lineHeight: '30px' }}>
+                                                                        <div style={{ lineHeight: '25px' }}>
+                                                                            <p style={{ lineHeight: '25px' }}>
                                                                                 सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
                                                                                 विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
                                                                                 संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
 
                                                                             </p>
-                                                                            <div style={{ marginBottom: '10px' }} className="freeText123">
+                                                                            <div className="freeText123">
                                                                                 <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryRepresentativeNameNepali}`}</span>
 
                                                                             </div>
@@ -379,7 +379,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                                                 </div>
                                                                                 <div>
-                                                                                    <span>{`गा.पा./न.पाः ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryRepresentativeWard))}`}</span>
+                                                                                    <span>{`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryRepresentativeWard))}`}</span>
 
                                                                                 </div>
                                                                                 <div>
@@ -388,12 +388,12 @@ const TemporaryShelterPreview = (props) => {
                                                                                 </div>
 
                                                                             </div>
-                                                                            <div className="freeText123" style={{ marginTop: '10px' }}>
+                                                                            <div className="freeText123">
                                                                                 <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
 
 
                                                                             </div>
-                                                                            <div className="freeText123" style={{ marginTop: '10px' }}>
+                                                                            <div className="freeText123">
                                                                                 <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
 
                                                                             </div>

@@ -501,16 +501,16 @@ const Tranche2 = (props) => {
 
                     <div className={styles.mainForm}>
                         <div className={styles.generalInfoAndTableButton}>
-                            <h1 className={styles.generalInfo}>जानकारी</h1>
+                            <h1 className={styles.generalInfo}>दोस्रो किस्ता फारम</h1>
                             <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>डाटा तालिका हेर्नुहोस्</button>
                         </div>
-                        <div className={styles.shortGeneralInfo}>
+                        {/* <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.ideaPara}>
                                 अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
 
                             </p>
-                        </div>
+                        </div> */}
                         {/* <AdditionForm /> */}
 
                         {
