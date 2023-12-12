@@ -15,6 +15,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     font-size: 14px;
     font-weight: 500 !important;
     line-height: 24px !important;
+    padding: 16px !important;
 
     // font-weight: bold !important;
     .curdOptions {
@@ -33,7 +34,18 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     .saveOrAddButtons {
         display: flex;
         justify-content: flex-end;
+        align-items: center;
 
+        .infoIcon {
+            margin: 0px 15px 0 5px;
+            width: 28px;
+            cursor: pointer;
+
+            path {
+                opacity: 1 !important;
+                fill: #0a58b1;
+            }
+        }
 
         .submitButtons {
             color: white;

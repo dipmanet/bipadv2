@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
@@ -29,36 +31,31 @@ import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
 import Select from 'react-select';
 import { visuallyHidden } from '@mui/utils';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import {
     CsvBuilder,
 } from 'filefy';
 
 import { Paper } from '@mui/material';
 import Loader from 'react-loader';
-import { object } from 'prop-types';
 import { SetEpidemicsPageAction, SetIncidentPageAction } from '#actionCreators';
-import { districtsSelector, epidemicsPageSelector, hazardFilterSelector, hazardTypesSelector, incidentPageSelector, municipalitiesSelector, userSelector, wardsSelector } from '#selectors';
+import { districtsSelector, municipalitiesSelector, userSelector, wardsSelector } from '#selectors';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { AppState } from '#types';
 import { englishToNepaliNumber } from 'nepali-number';
 import eyeSolid from '#resources/icons/eye-solid.svg';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Reset from '#resources/icons/reset.svg';
 import { tableTitleRef } from './utils';
 import styles from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-    epidemmicsPage: epidemicsPageSelector(state),
-    incidentPage: incidentPageSelector(state),
-    hazardList: hazardTypesSelector(state),
     user: userSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-});
-
-const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
-    setIncidentPage: params => dispatch(SetIncidentPageAction(params)),
-
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -87,46 +84,28 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             console.warn('failure', error);
         },
     },
-    incidents: {
-        url: '/incident/',
+    getEarthquakeRequestFilterById: {
+        url: ({ params }) => `/temporary-shelter-enrollment-form/${params.id}/`,
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => ({
-            format: 'json',
-            offset: params.offset,
-            limit: 100,
-            count: true,
-            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
-            ordering: '-id',
-            province: params.province,
-            district: params.district,
-            municipality: params.municipality,
+        onSuccess: ({ response, props, params }) => {
+            params.fetchedData(response);
+            if (response) {
+                params.countData(1);
+            } else {
+                params.countData(0);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failure', error);
+            params.fetchedData(null);
+            params.countData(0);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('failure', error);
+        },
+    },
 
-        }),
-        onSuccess: ({ response, props, params }) => {
-            props.setEpidemicsPage({
-                incidentData: response.results,
-                incidentCount: response.count,
-            });
-            params.loadingCondition(false);
-        },
-    },
-    incidentEditData: {
-        url: ({ params }) => `/incident/${params.id}`,
-        method: methods.GET,
-        onMount: false,
-        query: ({
-            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
-            format: 'json',
-        }),
-        onSuccess: ({ response, props, params }) => {
-            props.setEpidemicsPage({
-                incidentEditData: response,
-                lossID: response.loss.id,
-            });
-            params.loadingCondition(false);
-        },
-    },
 };
 
 
@@ -251,53 +230,53 @@ interface EnhancedTableToolbarProps {
     epidemicFormEdit: ActionCreator;
 }
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData, loadingCondition } = props;
+// const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+//     const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData, loadingCondition } = props;
 
-    // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
+//     // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
 
-    const handleDelete = () => {
-        console.log('...delete');
-    };
-    const handleEdit = () => {
-        loadingCondition(true);
-        epidemicFormEdit.do({ id: selected, loadingCondition });
-    };
-    useEffect(() => {
-        if (Object.keys(incidentEditData).length > 0) {
-            loadingCondition(false);
-            navigate('/admin/incident/add-new-incident');
-        }
-    }, [incidentEditData]);
+//     const handleDelete = () => {
+//         console.log('...delete');
+//     };
+//     const handleEdit = () => {
+//         loadingCondition(true);
+//         epidemicFormEdit.do({ id: selected, loadingCondition });
+//     };
+//     useEffect(() => {
+//         if (Object.keys(incidentEditData).length > 0) {
+//             loadingCondition(false);
+//             navigate('/admin/incident/add-new-incident');
+//         }
+//     }, [incidentEditData]);
 
 
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: theme => alpha(
-                        theme.palette.primary.main, theme.palette.action.activatedOpacity,
-                    ),
-                }),
-            }}
-        >
-            {numSelected > 0 && (
-                <>
-                    <Tooltip title="Edit">
+//     return (
+//         <Toolbar
+//             sx={{
+//                 pl: { sm: 2 },
+//                 pr: { xs: 1, sm: 1 },
+//                 ...(numSelected > 0 && {
+//                     bgcolor: theme => alpha(
+//                         theme.palette.primary.main, theme.palette.action.activatedOpacity,
+//                     ),
+//                 }),
+//             }}
+//         >
+//             {numSelected > 0 && (
+//                 <>
+//                     <Tooltip title="Edit">
 
-                        <IconButton
-                            onClick={handleEdit}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                    </Tooltip>
-                </>
-            )}
-        </Toolbar>
-    );
-};
+//                         <IconButton
+//                             onClick={handleEdit}
+//                         >
+//                             <EditIcon />
+//                         </IconButton>
+//                     </Tooltip>
+//                 </>
+//             )}
+//         </Toolbar>
+//     );
+// };
 
 
 const TemporaryShelterTableData = (props) => {
@@ -310,14 +289,15 @@ const TemporaryShelterTableData = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
     const [loader, setLoader] = useState(false);
-    const { user, epidemmicsPage: { incidentData, incidentCount, incidentEditData }, hazardList, user: { profile },
-        districts, municipalities, wards } = props;
+    const { districts, municipalities, wards } = props;
     const [fetchedData, setFetchedData] = useState([]);
     const [count, setCount] = useState(null);
+    const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
     const [filterData, setFilterData] = useState({
         district: null,
         municipality: null,
         ward: null,
+        id: null,
     });
     const loadingCondition = (boolean) => {
         setLoader(boolean);
@@ -330,29 +310,37 @@ const TemporaryShelterTableData = (props) => {
         setCount(countData);
     };
     useEffect(() => {
+        setLoader(true);
         props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData, countData: handleCount });
     }, []);
+    const handleFetchedDataById = (finalData) => {
+        setLoader(false);
+        if (finalData === null) {
+            setFetchedData([]);
+        } else {
+            setFetchedData([finalData]);
+        }
+    };
     const handleSearch = () => {
         setLoader(true);
-        props.requests.getEarthquakeRequest.do({
-            fetchedData: handleFetchedData,
-            district: filterData.municipality ? '' : filterData.district && filterData.district.value,
-            municipality: filterData.ward ? '' : filterData.municipality && filterData.municipality.value,
-            ward: filterData.ward ? filterData.ward && filterData.ward.value : '',
-            countData: handleCount,
-        });
+        setIsFilteredEnabled(true);
+        if (filterData.id) {
+            props.requests.getEarthquakeRequestFilterById.do({
+                id: filterData.id,
+                fetchedData: handleFetchedDataById,
+                countData: handleCount,
+            });
+        } else {
+            props.requests.getEarthquakeRequest.do({
+                fetchedData: handleFetchedData,
+                district: filterData.municipality ? '' : filterData.district && filterData.district.value,
+                municipality: filterData.ward ? '' : filterData.municipality && filterData.municipality.value,
+                ward: filterData.ward ? filterData.ward && filterData.ward.value : '',
+                countData: handleCount,
+            });
+        }
     };
-    useEffect(() => {
-        setLoader(true);
-        props.requests.incidents.do({
-            offset,
-            loadingCondition,
-            province: profile.province || '',
-            district: profile.district || '',
-            municipality: profile.municipality || '',
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+
     const DistrictListSelect = districts
         .map(d => ({
             value: d.id,
@@ -373,20 +361,6 @@ const TemporaryShelterTableData = (props) => {
             label: englishToNepaliNumber(d.title),
         }))
         .sort((a, b) => a.label - b.label);
-    const array = [];
-    for (const obj in hazardList) {
-        const objective = hazardList[obj];
-        array.push(objective);
-    }
-
-    const hazardNameSelected = id => (array.length && (array.find(i => i.id === id)).title);
-    const numberFormatter = (n) => {
-        const numberFormat = Intl.NumberFormat('en-US');
-        const formatted = n ? numberFormat.format(n) : '-';
-        // const formatted = n.toLocaleString('en-US');
-        return formatted;
-    };
-
     useEffect(() => {
         if (fetchedData) {
             const tableRows = fetchedData.map((row) => {
@@ -405,18 +379,8 @@ const TemporaryShelterTableData = (props) => {
             });
             setFilteredRowData(tableRows);
         }
-    }, [incidentData, hazardList, fetchedData]);
+    }, [fetchedData]);
 
-    useEffect(() => {
-        props.requests.incidents.do({
-            offset,
-            loadingCondition,
-            province: profile.province || '',
-            district: profile.district || '',
-            municipality: profile.municipality || '',
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -434,19 +398,6 @@ const TemporaryShelterTableData = (props) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-    };
-    const handleCheck = (e, id) => {
-        if (e.target.checked) {
-            setSelected([id]);
-        } else {
-            const temp = [...selected].filter(item => item !== id);
-            setSelected(temp);
-        }
-    };
-
-    const testCheckboxCondition = (id) => {
-        const checkboxCondition = !!selected.find(i => i === id);
-        return checkboxCondition;
     };
 
 
@@ -514,63 +465,63 @@ const TemporaryShelterTableData = (props) => {
         return csvData;
     };
 
-    const handleDownload = () => {
-        const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
-            .setColumns([
-                'id',
-                'Province',
-                'District',
-                'Municipality',
-                'Ward',
-                'Local Address',
-                'Reported Date (A.D.)(eg. 2021/07/31)',
-                'Hazard',
-                'Hazard Inducer',
-                'Total Estimated Loss(NPR)',
-                'Agriculture Economic Loss(NPR)',
-                'Infrastructure Economic Loss(NPR)',
-                'Total Infrastructure Destroyed',
-                'House Destroyed',
-                'House Affected',
-                'Total Livestock Destroyed',
-                'Total Injured Male',
-                'Total Injured Female',
-                'Total Injured Others',
-                'Total Injured Disabled',
-                'Total Missing Male',
-                'Total Missing Female',
-                'Total Missing Other',
-                'Total Missing Disabled',
-                'Total Male Death',
-                'Total Female Death',
-                'Total Other Death',
-                'Total Disabled Death',
-                'Verified (eg. Yes)',
-                'Verification message',
-                'Approved (eg. Yes)',
-            ])
-            .addRows(Dataforcsv())
-            .exportFile();
-    };
+    // const handleDownload = () => {
+    //     const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
+    //         .setColumns([
+    //             'id',
+    //             'Province',
+    //             'District',
+    //             'Municipality',
+    //             'Ward',
+    //             'Local Address',
+    //             'Reported Date (A.D.)(eg. 2021/07/31)',
+    //             'Hazard',
+    //             'Hazard Inducer',
+    //             'Total Estimated Loss(NPR)',
+    //             'Agriculture Economic Loss(NPR)',
+    //             'Infrastructure Economic Loss(NPR)',
+    //             'Total Infrastructure Destroyed',
+    //             'House Destroyed',
+    //             'House Affected',
+    //             'Total Livestock Destroyed',
+    //             'Total Injured Male',
+    //             'Total Injured Female',
+    //             'Total Injured Others',
+    //             'Total Injured Disabled',
+    //             'Total Missing Male',
+    //             'Total Missing Female',
+    //             'Total Missing Other',
+    //             'Total Missing Disabled',
+    //             'Total Male Death',
+    //             'Total Female Death',
+    //             'Total Other Death',
+    //             'Total Disabled Death',
+    //             'Verified (eg. Yes)',
+    //             'Verification message',
+    //             'Approved (eg. Yes)',
+    //         ])
+    //         .addRows(Dataforcsv())
+    //         .exportFile();
+    // };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected: readonly string[] = [];
+    // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    //     const selectedIndex = selected.indexOf(name);
+    //     let newSelected: readonly string[] = [];
 
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-        setSelected(newSelected);
-    };
+    //     if (selectedIndex === -1) {
+    //         newSelected = newSelected.concat(selected, name);
+    //     } else if (selectedIndex === 0) {
+    //         newSelected = newSelected.concat(selected.slice(1));
+    //     } else if (selectedIndex === selected.length - 1) {
+    //         newSelected = newSelected.concat(selected.slice(0, -1));
+    //     } else if (selectedIndex > 0) {
+    //         newSelected = newSelected.concat(
+    //             selected.slice(0, selectedIndex),
+    //             selected.slice(selectedIndex + 1),
+    //         );
+    //     }
+    //     setSelected(newSelected);
+    // };
 
 
     const districtNameConverter = (id) => {
@@ -617,6 +568,16 @@ const TemporaryShelterTableData = (props) => {
             }));
         return finalValueToStore[0];
     };
+    const handleChangeId = (e) => {
+        setFilterData({
+            ...filterData,
+            [e.target.name]: e.target.value,
+            district: '',
+            municipality: '',
+            ward: '',
+
+        });
+    };
     const handleDropdown = (name, value) => {
         if (name === 'district') {
             setFilterData({
@@ -624,6 +585,7 @@ const TemporaryShelterTableData = (props) => {
                 [name]: value,
                 municipality: '',
                 ward: '',
+                id: '',
             });
         } else if (name === 'municipality') {
             setFilterData({
@@ -642,6 +604,23 @@ const TemporaryShelterTableData = (props) => {
         // setErrorPersonal({ ...errorPersonal, [name]: false });
     };
 
+    const handleReset = () => {
+        setLoader(true);
+        setIsFilteredEnabled(false);
+        setFilterData({
+            district: '',
+            municipality: '',
+            ward: '',
+            id: '',
+        });
+        props.requests.getEarthquakeRequest.do({
+            fetchedData: handleFetchedData,
+            district: '',
+            municipality: '',
+            ward: '',
+            countData: handleCount,
+        });
+    };
 
     return (
         <>
@@ -724,22 +703,61 @@ const TemporaryShelterTableData = (props) => {
                                 styles={{ menuPortal: base => ({ ...base, zIndex: 9999, width: '220px' }) }}
                             />
                         </div>
+                        <FormControl>
+                            {/* <InputLabel>
+                                Test
+
+                            </InputLabel> */}
+                            <Input
+                                type="number"
+                                // value={covid24hrsStatData[field]}
+                                // onChange={e => handleCovid24hrStat(e, field)}
+                                // className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                name="id"
+                                value={filterData.id}
+                                onChange={handleChangeId}
+                                placeholder="आईडी द्वारा खोज्नुहोस्"
+                                style={{ border: '1px solid hsl(0, 0%, 80%)', width: 'fit-content', borderRadius: '3px', padding: '2px 10px' }}
+                            />
+                        </FormControl>
                         <div className={styles.saveOrAddButtons}>
                             <button
                                 className={styles.submitButtons}
                                 // disabled={!!(filterData.district && !filterData.district.value)}
                                 onClick={handleSearch}
                                 type="submit"
+                                disabled={!((filterData.district || filterData.id))}
                             >
                                 {'खोज्नुहोस्'}
 
                             </button>
+                            {
+                                isFilterEnabled ? (
+                                    <div
+                                        style={{ display: 'flex', alignItems: 'center' }}
+                                        role="button"
+                                        title="फिल्टर रिसेट गर्नुहोस्"
+                                        onClick={handleReset}
+                                    >
+                                        <ScalableVectorGraphics
+                                            className={styles.infoIcon}
+                                            src={Reset}
+                                        />
+                                    </div>
+                                ) : ''
+
+                            }
+
                         </div>
                     </div>
                 </div>
 
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar
+                    {/* <EnhancedTableToolbar
                         selected={selected}
                         numSelected={selected.length}
                         // dispatch={dispatch}
@@ -748,7 +766,7 @@ const TemporaryShelterTableData = (props) => {
                         incidentEditData={incidentEditData}
                         loadingCondition={loadingCondition}
 
-                    />
+                    /> */}
                     <TableContainer
                         sx={{ maxHeight: 800 }}
                         style={{ width: '100%', overflowX: 'scroll' }}
@@ -771,7 +789,7 @@ const TemporaryShelterTableData = (props) => {
                             />
                             <TableBody>
                                 {filteredRowData
-                                    && stableSort(filteredRowData, getComparator(order, orderBy))
+                                    ? stableSort(filteredRowData, getComparator(order, orderBy))
                                         .map((row, index) => {
                                             // const isItemSelected = isSelected(row.id);
                                             const labelId = `enhanced-table-checkbox-${index}`;
@@ -981,12 +999,16 @@ const TemporaryShelterTableData = (props) => {
                                                     }
                                                 </TableRow>
                                             );
-                                        })}
+                                        }) : <p />}
                             </TableBody>
                         </Table>
                         {fetchedData && !fetchedData.length && loader
-                            ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>Loading Data Please Wait...</h3></div>
-                            : ''}
+                            ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>डाटा लोड हुँदैछ कृपया प्रतीक्षा गर्नुहोस्...</h3></div>
+                            : fetchedData && !fetchedData.length
+                                ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}><h3>डाटा उपलब्ध छैन</h3></div>
+                                : ''
+
+                        }
                     </TableContainer>
                 </Paper>
             </Box>
@@ -996,7 +1018,7 @@ const TemporaryShelterTableData = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, null)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             TemporaryShelterTableData,
