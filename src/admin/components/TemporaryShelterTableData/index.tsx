@@ -30,6 +30,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
 import Select from 'react-select';
 import { visuallyHidden } from '@mui/utils';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import {
     CsvBuilder,
 } from 'filefy';
@@ -73,6 +76,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 // TODO: handle error
                 console.warn('failure', error);
             }
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('failure', error);
+        },
+    },
+    getEarthquakeRequestFilterById: {
+        url: ({ params }) => `/temporary-shelter-enrollment-form/${params.id}/`,
+        method: methods.GET,
+        onMount: false,
+        onSuccess: ({ response, props, params }) => {
+            params.fetchedData(response);
+            if (response) {
+                params.countData(1);
+            } else {
+                params.countData(0);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failure', error);
+            params.fetchedData(null);
+            params.countData(0);
         },
         onFatal: ({ error, params }) => {
             console.warn('failure', error);
@@ -269,6 +293,7 @@ const TemporaryShelterTableData = (props) => {
         district: null,
         municipality: null,
         ward: null,
+        id: null,
     });
     const loadingCondition = (boolean) => {
         setLoader(boolean);
@@ -284,15 +309,31 @@ const TemporaryShelterTableData = (props) => {
         setLoader(true);
         props.requests.getEarthquakeRequest.do({ fetchedData: handleFetchedData, countData: handleCount });
     }, []);
+    const handleFetchedDataById = (finalData) => {
+        setLoader(false);
+        if (finalData === null) {
+            setFetchedData([]);
+        } else {
+            setFetchedData([finalData]);
+        }
+    };
     const handleSearch = () => {
         setLoader(true);
-        props.requests.getEarthquakeRequest.do({
-            fetchedData: handleFetchedData,
-            district: filterData.municipality ? '' : filterData.district && filterData.district.value,
-            municipality: filterData.ward ? '' : filterData.municipality && filterData.municipality.value,
-            ward: filterData.ward ? filterData.ward && filterData.ward.value : '',
-            countData: handleCount,
-        });
+        if (filterData.id) {
+            props.requests.getEarthquakeRequestFilterById.do({
+                id: filterData.id,
+                fetchedData: handleFetchedDataById,
+                countData: handleCount,
+            });
+        } else {
+            props.requests.getEarthquakeRequest.do({
+                fetchedData: handleFetchedData,
+                district: filterData.municipality ? '' : filterData.district && filterData.district.value,
+                municipality: filterData.ward ? '' : filterData.municipality && filterData.municipality.value,
+                ward: filterData.ward ? filterData.ward && filterData.ward.value : '',
+                countData: handleCount,
+            });
+        }
     };
 
     const DistrictListSelect = districts
@@ -522,6 +563,16 @@ const TemporaryShelterTableData = (props) => {
             }));
         return finalValueToStore[0];
     };
+    const handleChangeId = (e) => {
+        setFilterData({
+            ...filterData,
+            [e.target.name]: e.target.value,
+            district: '',
+            municipality: '',
+            ward: '',
+
+        });
+    };
     const handleDropdown = (name, value) => {
         if (name === 'district') {
             setFilterData({
@@ -529,6 +580,7 @@ const TemporaryShelterTableData = (props) => {
                 [name]: value,
                 municipality: '',
                 ward: '',
+                id: '',
             });
         } else if (name === 'municipality') {
             setFilterData({
@@ -628,6 +680,27 @@ const TemporaryShelterTableData = (props) => {
                                 styles={{ menuPortal: base => ({ ...base, zIndex: 9999, width: '220px' }) }}
                             />
                         </div>
+                        <FormControl>
+                            {/* <InputLabel>
+                                Test
+
+                            </InputLabel> */}
+                            <Input
+                                type="number"
+                                // value={covid24hrsStatData[field]}
+                                // onChange={e => handleCovid24hrStat(e, field)}
+                                // className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                name="id"
+                                value={filterData.id}
+                                onChange={handleChangeId}
+                                placeholder="आईडी द्वारा खोज्नुहोस्"
+                                style={{ border: '1px solid hsl(0, 0%, 80%)', width: 'fit-content', borderRadius: '3px', padding: '2px 10px' }}
+                            />
+                        </FormControl>
                         <div className={styles.saveOrAddButtons}>
                             <button
                                 className={styles.submitButtons}
