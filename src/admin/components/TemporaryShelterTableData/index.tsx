@@ -46,8 +46,8 @@ import { createConnectedRequestCoordinator, createRequestClient, methods } from 
 import { AppState } from '#types';
 import { englishToNepaliNumber } from 'nepali-number';
 import eyeSolid from '#resources/icons/eye-solid.svg';
-import Reset from '#resources/icons/reset.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Reset from '#resources/icons/reset.svg';
 import { tableTitleRef } from './utils';
 import styles from './styles.module.scss';
 
