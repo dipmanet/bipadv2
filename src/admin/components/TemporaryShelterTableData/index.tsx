@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -45,6 +46,8 @@ import { createConnectedRequestCoordinator, createRequestClient, methods } from 
 import { AppState } from '#types';
 import { englishToNepaliNumber } from 'nepali-number';
 import eyeSolid from '#resources/icons/eye-solid.svg';
+import Reset from '#resources/icons/reset.svg';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import { tableTitleRef } from './utils';
 import styles from './styles.module.scss';
 
@@ -289,6 +292,7 @@ const TemporaryShelterTableData = (props) => {
     const { districts, municipalities, wards } = props;
     const [fetchedData, setFetchedData] = useState([]);
     const [count, setCount] = useState(null);
+    const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
     const [filterData, setFilterData] = useState({
         district: null,
         municipality: null,
@@ -319,6 +323,7 @@ const TemporaryShelterTableData = (props) => {
     };
     const handleSearch = () => {
         setLoader(true);
+        setIsFilteredEnabled(true);
         if (filterData.id) {
             props.requests.getEarthquakeRequestFilterById.do({
                 id: filterData.id,
@@ -599,6 +604,24 @@ const TemporaryShelterTableData = (props) => {
         // setErrorPersonal({ ...errorPersonal, [name]: false });
     };
 
+    const handleReset = () => {
+        setLoader(true);
+        setIsFilteredEnabled(false);
+        setFilterData({
+            district: '',
+            municipality: '',
+            ward: '',
+            id: '',
+        });
+        props.requests.getEarthquakeRequest.do({
+            fetchedData: handleFetchedData,
+            district: '',
+            municipality: '',
+            ward: '',
+            countData: handleCount,
+        });
+    };
+
     return (
         <>
             {loader ? (
@@ -707,10 +730,28 @@ const TemporaryShelterTableData = (props) => {
                                 // disabled={!!(filterData.district && !filterData.district.value)}
                                 onClick={handleSearch}
                                 type="submit"
+                                disabled={!((filterData.district || filterData.id))}
                             >
                                 {'खोज्नुहोस्'}
 
                             </button>
+                            {
+                                isFilterEnabled ? (
+                                    <div
+                                        style={{ display: 'flex', alignItems: 'center' }}
+                                        role="button"
+                                        title="फिल्टर रिसेट गर्नुहोस्"
+                                        onClick={handleReset}
+                                    >
+                                        <ScalableVectorGraphics
+                                            className={styles.infoIcon}
+                                            src={Reset}
+                                        />
+                                    </div>
+                                ) : ''
+
+                            }
+
                         </div>
                     </div>
                 </div>
