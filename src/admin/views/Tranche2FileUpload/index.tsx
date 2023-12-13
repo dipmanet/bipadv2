@@ -446,7 +446,7 @@ const Tranche2FileUpload = (props) => {
             {/* <MenuCommon layout="common" currentPage={'Epidemics'} uri={uri} /> */}
             <div className={styles.container}>
 
-                <h1 className={styles.header}>अस्थायी आश्रय नामांकन डाटा संरचना</h1>
+                <h1 className={styles.header}>अस्थायी आवास सम्झौता फारम</h1>
                 <p className={styles.dataReporting}>डाटा रिपोर्टिङ</p>
                 <div className={styles.twoSections}>
                     <div
