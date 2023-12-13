@@ -654,14 +654,57 @@ const TemporaryShelter = (props) => {
             <MenuCommon layout="common" currentPage={'Epidemics'} uri={uri} />
             <div className={styles.container}>
 
-                <h1 className={styles.header}>अस्थायी आश्रय नामांकन डाटा संरचना</h1>
+                <h1 className={styles.header}>अस्थायी आवास सम्झौता फारम</h1>
                 <p className={styles.dataReporting}>डाटा रिपोर्टिङ</p>
                 <div className={styles.twoSections}>
-                    <div className={styles.reportingStatus}>
-                        <div className={styles.reporting}>
-                            <img className={styles.listSvg} src={ListSvg} alt="" />
-                            <p className={styles.reportingText}> पहिलो किस्ता फारम</p>
-                            <p className={styles.greenCircle} />
+                    <div
+                        className="reportingStatus123"
+                        style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px' }}
+
+
+                    >
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+
+
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123"> पहिलो किस्ता फारम</p>
+                            <p className="greenCircle123 " />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                पहिलो किस्ता फारम अपलोड
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                दोस्रो किस्ता फारम
+                            </p>
+                            <p className="grayCircle123" />
+                        </div>
+                        <div
+                            className="reporting123"
+                            style={{ cursor: 'pointer' }}
+
+                        >
+                            <img className="listSvg123" src={ListSvg} alt="" />
+                            <p className="reportingText123">
+                                दोस्रो किस्ता फारम अपलोड
+                            </p>
+                            <p className="grayCircle123" />
                         </div>
                     </div>
                     <div className={styles.mainForm}>
@@ -672,7 +715,7 @@ const TemporaryShelter = (props) => {
                         <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.ideaPara}>
-                                अस्थायी आश्रय नामांकन फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
+                                अस्थायी आवास सम्झौता फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
 
                             </p>
                         </div>
@@ -847,7 +890,7 @@ const TemporaryShelter = (props) => {
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span>
-                                            नातिनातिना सम्बन्ध
+                                            नाती/नातीनी/बुुहारी
                                         </span>
                                         <select
                                             id="grand_child_relation"
@@ -868,7 +911,7 @@ const TemporaryShelter = (props) => {
                                 <div style={{ flex: 2 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span>
-                                            आमाबाबुको नाम
+                                            आमा/बाबुको नाम
                                         </span>
                                         <input
                                             type="text"
@@ -883,7 +926,7 @@ const TemporaryShelter = (props) => {
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span>
-                                            बालबालिकाको सम्बन्ध
+                                            छोरा/छोरी/श्रीमती
                                         </span>
                                         <select
                                             id="child_relation"
@@ -1119,7 +1162,7 @@ const TemporaryShelter = (props) => {
                                         <div className={styles.locationDetails}>
                                             <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                 <span>
-                                                    लाभार्थी हस्ताक्षर गर्न उपलब्ध छैन?
+                                                    लाभग्राही हस्ताक्षर गर्न उपलब्ध छैन?
                                                 </span>
 
                                                 <input
@@ -1135,6 +1178,7 @@ const TemporaryShelter = (props) => {
                                             data.is_beneficiary_available_to_sign
                                                 ? (
                                                     <div>
+                                                        <h2 style={{ textDecoration: 'underline', fontSize: '18px' }}>संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण</h2>
                                                         <div style={{ display: 'flex', gap: '20px' }}>
                                                             <div
                                                                 // className={styles.freeText}

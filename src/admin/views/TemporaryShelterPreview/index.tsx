@@ -126,6 +126,7 @@ const TemporaryShelterPreview = (props) => {
     };
 
     const wardNameConverter = (id) => {
+        console.log('This is id', id);
         const finalData = fetchedData && wards.find(i => i.id === id).title;
         return finalData;
     };
@@ -158,7 +159,7 @@ const TemporaryShelterPreview = (props) => {
             <Page hideFilter hideMap />
             <Navbar />
             <div className="container123">
-                <h1 className="header123">अस्थायी आश्रय नामांकन डाटा संरचना</h1>
+                <h1 className="header123">अस्थायी आवास सम्झौता फारम</h1>
                 <p className="dataReporting123">डाटा रिपोर्टिङ</p>
                 <div className="twoSections123">
 
@@ -352,60 +353,56 @@ const TemporaryShelterPreview = (props) => {
 
                                                                 </div>
                                                             </div>
-                                                            {
-                                                                fetchedData.isBeneficiaryAvailableToSign
-                                                                    ? (
-                                                                        <div style={{
-                                                                            lineHeight: '25px',
-                                                                            gap: '5px',
-                                                                            display: 'flex',
-                                                                            flexDirection: 'column',
-                                                                        }}
-                                                                        >
-                                                                            <p style={{ lineHeight: '25px', margin: 0, fontWeight: 'bold' }}>
-                                                                                सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
-                                                                                विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
-                                                                                संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
 
-                                                                            </p>
-                                                                            <div className="freeText123">
-                                                                                <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryRepresentativeNameNepali}`}</span>
+                                                            <div style={{
+                                                                lineHeight: '25px',
+                                                                gap: '5px',
+                                                                display: 'flex',
+                                                                flexDirection: 'column',
+                                                            }}
+                                                            >
+                                                                <p style={{ lineHeight: '25px', margin: 0, fontWeight: 'bold' }}>
+                                                                    सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
+                                                                    विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
+                                                                    संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
 
-                                                                            </div>
-                                                                            <div className="locationDetails123">
+                                                                </p>
+                                                                <div className="freeText123">
+                                                                    <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryRepresentativeNameNepali}`}</span>
 
-                                                                                <div>
-                                                                                    <span>{`जिल्लाः ${districtNameConverter(fetchedData.beneficiaryRepresentativeDistrict)}`}</span>
+                                                                </div>
+                                                                <div className="locationDetails123">
+
+                                                                    <div>
+                                                                        <span>{`जिल्लाः ${fetchedData.beneficiaryRepresentativeDistrict ? districtNameConverter(fetchedData.beneficiaryRepresentativeDistrict) : ''}`}</span>
 
 
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span>{`गा.पा./न.पाः ${municipalityNameConverter(fetchedData.beneficiaryRepresentativeMunicipality)}`}</span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span>{`गा.पा./न.पाः ${fetchedData.beneficiaryRepresentativeMunicipality ? municipalityNameConverter(fetchedData.beneficiaryRepresentativeMunicipality) : ''}`}</span>
 
 
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span>{`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryRepresentativeWard))}`}</span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span>{`वडा नंं: ${fetchedData.beneficiaryRepresentativeWard ? englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryRepresentativeWard)) : ''}`}</span>
 
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span>{`ना.प्र.न. ${englishToNepaliNumber(fetchedData.beneficiaryRepresentativeCitizenshipNumber)}`}</span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span>{`ना.प्र.न: ${fetchedData.beneficiaryRepresentativeCitizenshipNumber ? englishToNepaliNumber(fetchedData.beneficiaryRepresentativeCitizenshipNumber) : ''}`}</span>
 
-                                                                                </div>
+                                                                    </div>
 
-                                                                            </div>
-                                                                            <div className="freeText123">
-                                                                                <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
+                                                                </div>
+                                                                <div className="freeText123">
+                                                                    <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
 
 
-                                                                            </div>
-                                                                            <div className="freeText123">
-                                                                                <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
+                                                                </div>
+                                                                <div className="freeText123">
+                                                                    <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
 
-                                                                            </div>
-                                                                        </div>
-                                                                    ) : ''
-                                                            }
+                                                                </div>
+                                                            </div>
 
 
                                                         </div>
