@@ -218,6 +218,10 @@ const TemporaryShelter = (props) => {
         temporary_shelter_land_ward: false,
         operating_municipality: false,
     });
+    const [phoneNumberValidation, setPhoneNumberValidation] = useState({
+        benificiaryContactValidation: false,
+        witnessContactValidation: false,
+    });
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
     const fileInputRef = useRef(null);
@@ -285,7 +289,10 @@ const TemporaryShelter = (props) => {
             ...errorFields,
             [e.target.name]: false,
         });
-
+        setPhoneNumberValidation({
+            benificiaryContactValidation: false,
+            witnessContactValidation: false,
+        });
         if (e.target.name === 'beneficiary_district') {
             setData({
                 ...data,
@@ -325,11 +332,38 @@ const TemporaryShelter = (props) => {
                 [e.target.name]: e.target.value,
                 beneficiary_representative_ward: null,
             });
+        } else if (e.target.name === 'beneficiary_age') {
+            if (Number(e.target.value > 0)) {
+                setData({
+                    ...data, [e.target.name]: e.target.value,
+                });
+            } else {
+                setData({
+                    ...data, [e.target.name]: '',
+                });
+            }
         } else {
             setData({
                 ...data, [e.target.name]: e.target.value,
             });
         }
+
+
+        // if (!phoneNumberRegex.test(data.beneficiary_contact_number)) {
+        //     setPhoneNumberValidation({
+        //         ...phoneNumberValidation,
+        //         benificiaryContactValidation: true,
+        //     });
+        //     return;
+        // }
+
+        // if (!phoneNumberRegex.test(data.withness_contact_number)) {
+        //     setPhoneNumberValidation({
+        //         ...phoneNumberValidation,
+        //         witnessContactValidation: true,
+        //     });
+        //     return;
+        // }
     };
 
     const selectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_district));
@@ -355,6 +389,8 @@ const TemporaryShelter = (props) => {
     const handleSuccessMessage = (d) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
+
+    console.log('This is final data', data);
     const handleClick = () => {
         setBackendError(false);
         const errorCheckingFields = Object.keys(data);
@@ -409,9 +445,9 @@ const TemporaryShelter = (props) => {
                     if (i === 'temporary_shelter_land_district') {
                         return latestErrorUpdate[i] = false;
                     }
-                    if (i === 'temporary_shelter_land_municipality') {
-                        return latestErrorUpdate[i] = false;
-                    }
+                    // if (i === 'temporary_shelter_land_municipality') {
+                    //     return latestErrorUpdate[i] = false;
+                    // }
                     if (i === 'beneficiary_representative_district') {
                         return latestErrorUpdate[i] = false;
                     }
@@ -427,6 +463,7 @@ const TemporaryShelter = (props) => {
                     ? latestErrorUpdate[i] = false
                     : latestErrorUpdate[i] = true;
             }
+            console.log('This is i', i);
             if (i === 'infrastructure_photo') {
                 if (data.infrastructure_photo.length === 0) {
                     return latestErrorUpdate[i] = true;
@@ -435,10 +472,33 @@ const TemporaryShelter = (props) => {
             latestErrorUpdate[i] = false;
             return null;
         });
+        const phoneNumberRegex = /^\d{10}$/;
+
+
         setErrorFields({ ...latestErrorUpdate });
         if (Object.values(latestErrorUpdate).filter(i => i === true).length) {
             return;
         }
+        const phoneValidation = {
+            benificiaryContactValidation: false,
+            witnessContactValidation: false,
+        };
+        if (!phoneNumberRegex.test(data.beneficiary_contact_number)) {
+            phoneValidation.benificiaryContactValidation = true;
+            console.log('This is output', phoneValidation);
+            setPhoneNumberValidation(phoneValidation);
+            return;
+        }
+        phoneValidation.benificiaryContactValidation = false;
+        if (!phoneNumberRegex.test(data.withness_contact_number)) {
+            phoneValidation.witnessContactValidation = true;
+            setPhoneNumberValidation(phoneValidation);
+            return;
+        }
+        phoneValidation.witnessContactValidation = false;
+        setPhoneNumberValidation(phoneValidation);
+
+
         setLoading(true);
         const finalUpdateData = data;
         if (!finalUpdateData.migration_certificate_number) {
@@ -646,7 +706,7 @@ const TemporaryShelter = (props) => {
         return finalData || '-';
     };
 
-
+    console.log('This is phone number validation', phoneNumberValidation);
     return (
         <>
             <Page hideFilter hideMap />
@@ -727,7 +787,7 @@ const TemporaryShelter = (props) => {
                         <div className={styles.mainDataEntrySection}>
                             <div className={styles.formGeneralInfo}>
                                 <h1>अनुुसूूची ३</h1>
-                                <h1>दफा ३(५) सँँग सम्बन्धित</h1>
+                                <h1>दफा ३ को उपदफा(५) सँँग सम्बन्धित</h1>
                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
                             </div>
                             <div style={{ fontSize: '20px', display: 'flex', gap: '20px' }}>
@@ -899,7 +959,7 @@ const TemporaryShelter = (props) => {
                                             onChange={handleFormData}
                                             style={errorFields.grand_child_relation ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         >
-                                            <option>सम्बन्ध</option>
+                                            <option />
                                             <option value="नाती">नाती</option>
                                             <option value="नातीनी">नातीनी</option>
                                             <option value="बुुहारी">बुुहारी</option>
@@ -935,7 +995,7 @@ const TemporaryShelter = (props) => {
                                             onChange={handleFormData}
                                             style={errorFields.child_relation ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         >
-                                            <option>सम्बन्ध</option>
+                                            <option />
                                             <option value="छोरा">छोरा</option>
                                             <option value="छोरी">छोरी</option>
                                             <option value="श्रीमती">श्रीमती</option>
@@ -961,7 +1021,7 @@ const TemporaryShelter = (props) => {
                             </div>
 
 
-                            <div>
+                            {/* <div>
                                 <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px' }}>
                                     <span>
 
@@ -977,7 +1037,7 @@ const TemporaryShelter = (props) => {
                                         style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                             <div>
                                 <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
                                 <div style={{ display: 'flex', fontSize: '20px', gap: '20px' }}>
@@ -1122,16 +1182,16 @@ const TemporaryShelter = (props) => {
                                         <span>सम्पर्क नंं.</span>
                                         {' '}
                                         <input
-                                            type="text"
+                                            type="number"
                                             name="beneficiary_contact_number"
                                             value={data.beneficiary_contact_number}
                                             onChange={handleFormData}
-                                            style={errorFields.beneficiary_contact_number ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                            style={(errorFields.beneficiary_contact_number || phoneNumberValidation.benificiaryContactValidation) ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                             className={styles.inputClassName}
                                         />
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 2, alignItems: 'flex-start' }}>
-                                        <span>फोटो:</span>
+                                        <span>लाभग्राहीको फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <input
                                                 type="file"
@@ -1627,12 +1687,12 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span>सम्पर्क नंं.</span>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
                                                     name="withness_contact_number"
                                                     value={data.withness_contact_number}
-                                                    style={errorFields.withness_contact_number ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
+                                                    style={(errorFields.withness_contact_number || phoneNumberValidation.witnessContactValidation) ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
                                         </div>
@@ -1802,34 +1862,40 @@ const TemporaryShelter = (props) => {
 
                                     </div>
                                 </div>
-                                <div style={{ margin: '10px 0px' }}>
-                                    <h2> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
-                                    </h2>
-                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                id="file-input"
-                                                // style={{ display: 'none' }}
-                                                onChange={handleFileInputChange}
-                                                name="application_document"
-                                            />
-                                            {
-                                                errorFields.application_document
-                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
-                                            }
-                                            {
-                                                data.application_document ? <img height={100} width={100} src={handleShowImage(data.application_document)} alt="img" /> : ''
-                                            }
-                                        </div>
+                                {
+                                    data.is_beneficiary_available_to_sign
 
 
-                                    </div>
-                                </div>
+                                        ? (
+                                            <div style={{ margin: '10px 0px' }}>
+                                                <h2> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
+                                                </h2>
+                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            id="file-input"
+                                                            // style={{ display: 'none' }}
+                                                            onChange={handleFileInputChange}
+                                                            name="application_document"
+                                                        />
+                                                        {
+                                                            errorFields.application_document
+                                                                ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                                        }
+                                                        {
+                                                            data.application_document ? <img height={100} width={100} src={handleShowImage(data.application_document)} alt="img" /> : ''
+                                                        }
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        ) : ''}
                                 <div style={{ margin: '10px 0px' }}>
-                                    <h2>{`${englishToNepaliNumber(4)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h2>
+                                    <h2>{`${data.is_beneficiary_available_to_sign ? englishToNepaliNumber(4) : englishToNepaliNumber(3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h2>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -1859,6 +1925,16 @@ const TemporaryShelter = (props) => {
                             {
                                 Object.values(errorFields).filter(i => i === true).length
                                     ? <span className={styles.ValidationErrors}>रातो रङले संकेत गरेको माथिको फारममा केही फिल्ड भर्न बाँकी छ, कृपया फारम पूरा गर्नुहोस् र पुन: प्रयास गर्नुहोस्</span>
+                                    : ''
+                            }
+                            {
+                                phoneNumberValidation.benificiaryContactValidation
+                                    ? <span className={styles.ValidationErrors}>लाभग्राहीको सम्पर्क नम्बर १० अंकको हुनुपर्दछ</span>
+                                    : ''
+                            }
+                            {
+                                phoneNumberValidation.witnessContactValidation
+                                    ? <span className={styles.ValidationErrors}>साक्षीको सम्पर्क नम्बर १० अंकको हुनुपर्छ</span>
                                     : ''
                             }
                             {

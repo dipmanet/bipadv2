@@ -527,7 +527,7 @@ const Tranche2 = (props) => {
                                             >
                                                 <div className="formGeneralInfo123">
                                                     <h2>अनुुसूूची ४</h2>
-                                                    <h2>दफा ४(२) सँँग सम्बन्धित</h2>
+                                                    <h2>दफा ४ को उपदफा(२) सँँग सम्बन्धित</h2>
                                                     <h2 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h2>
                                                 </div>
                                                 <div
