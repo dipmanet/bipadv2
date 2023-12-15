@@ -369,23 +369,25 @@ const TemporaryShelter = (props) => {
     const selectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_district));
     // const selectedWard =user&&user.profile&& wards.filter(i => i.municipality === Number(user.profile.municipality data.beneficiary_municipality));
     const selectedWard = user.isSuperuser
-        ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_municipality))
-        : user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality));
+        ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_municipality)).sort((a, b) => Number(a.title) - Number(b.title))
+        : user && user.profile && wards.filter(i => i.municipality === (user.profile.municipality)).sort((a, b) => Number(a.title) - Number(b.title));
     const tempSelectedMunicipality = user.isSuperuser ? user && user.profile
         && municipalities.filter(i => i.district === Number(data.temporary_shelter_land_district))
         : user && user.profile
         && municipalities.filter(i => i.district === Number(user.profile.district));
     // const tempSelectedWard = wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality));
     const tempSelectedWard = user.isSuperuser
-        ? user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality))
-        : user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
+        ? user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality)).sort((a, b) => Number(a.title) - Number(b.title))
+        : user && user.profile && wards.filter(i => i.municipality === Number(data.temporary_shelter_land_municipality)).sort((a, b) => Number(a.title) - Number(b.title));
     const beneficiarySelectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_representative_district));
     // const beneficiarySelectedWard = wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality));
     const beneficiarySelectedWard = user.isSuperuser
-        ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality))
-        : user && user.profile && wards.filter(i => i.municipality === user.profile.municipality);
+        ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality)).sort((a, b) => Number(a.title) - Number(b.title))
+        : user && user.profile && wards.filter(i => i.municipality === user.profile.municipality).sort((a, b) => Number(a.title) - Number(b.title));
 
-
+    console.log('This is selected ward', selectedWard);
+    const test = selectedWard.sort((a, b) => Number(a.title) - Number(b.title));
+    console.log('This is final test', test);
     const handleSuccessMessage = (d) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
