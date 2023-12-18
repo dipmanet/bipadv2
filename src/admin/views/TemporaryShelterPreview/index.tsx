@@ -53,10 +53,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.fetchedData(response);
         },
         onFailure: ({ error, params }) => {
-            if (params && params.setEpidemicsPage) {
-                // TODO: handle error
-                console.warn('failure', error);
-            }
+            params.ErrorFetchData();
         },
         onFatal: ({ error, params }) => {
             console.warn('failure', error);
@@ -76,6 +73,7 @@ const TemporaryShelterPreview = (props) => {
 
 
     const [fetchedData, setFetchedData] = useState(null);
+    const [errorFetchData, setErrorFetchData] = useState(false);
     const { pathname } = useLocation();
     let componentRef = useRef();
     const {
@@ -99,7 +97,7 @@ const TemporaryShelterPreview = (props) => {
         const splittedRoute = pathname.split('/');
         const id = splittedRoute[splittedRoute.length - 1];
         if (id) {
-            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData });
+            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData, ErrorFetchData: () => setErrorFetchData(true) });
         }
     }, [pathname]);
 
@@ -153,7 +151,13 @@ const TemporaryShelterPreview = (props) => {
     };
     const splittedRouteId = pathname.split('/');
     const routeId = splittedRouteId[splittedRouteId.length - 1];
-
+    console.log('This is feteched data', fetchedData);
+    useEffect(() => {
+        if (errorFetchData) {
+            navigate('/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data');
+        }
+    }, [errorFetchData]);
+    console.log('error fetch data', errorFetchData);
     return (
         <>
             <Page hideFilter hideMap />
@@ -198,8 +202,11 @@ const TemporaryShelterPreview = (props) => {
                             className="reporting123"
                             style={{ cursor: 'pointer' }}
                             role="button"
+                            aria-disabled
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`);
+                                if (fetchedData.firstTrancheEnrollmentUpload) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`);
+                                }
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
@@ -213,7 +220,9 @@ const TemporaryShelterPreview = (props) => {
                             style={{ cursor: 'pointer' }}
                             role="button"
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                if (fetchedData.secondTrancheEnrollmentForm) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                }
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />

@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-expressions */
@@ -166,10 +167,14 @@ const TemporaryShelter = (props) => {
             beneficiary_representative_municipality: '',
             beneficiary_representative_ward: '',
             operating_municipality: '',
+            application_file: '',
+            application_date: '',
         },
     );
 
     const [errorFields, setErrorFields] = useState({
+        application_date: false,
+        application_file: false,
         entry_date_bs: false,
         pa_number: false,
         tole_name: false,
@@ -222,8 +227,18 @@ const TemporaryShelter = (props) => {
         benificiaryContactValidation: false,
         witnessContactValidation: false,
     });
+
+    const [imageOrFileValidation, setImageOrFileValidation] = useState({
+        identity_document_validation: false,
+        infrastructure_photo_validation: false,
+        application_document_validation: false,
+        police_report_validation: false,
+        profilePic_validation: false,
+        application_file: false,
+    });
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
+    const [isApplicationClicked, setIsApplicationClicked] = useState(false);
     const fileInputRef = useRef(null);
     const { user,
         districts,
@@ -240,7 +255,34 @@ const TemporaryShelter = (props) => {
             ...errorFields,
             [e.target.name]: false,
         });
+
         const file = e.target.files[0];
+        const imageValidation = {
+            identity_document_validation: false,
+            infrastructure_photo_validation: false,
+            application_document_validation: false,
+            police_report_validation: false,
+            profilePic_validation: false,
+        };
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+        if (!allowedExtensions.exec(file.name)) {
+            console.log('Entered here or not');
+            imageValidation.infrastructure_photo_validation = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.infrastructure_photo_validation = false;
+        setImageOrFileValidation(imageValidation);
+        // console.log('is this infrastructure photo', data.infrastructure_photo);
+        // data.infrastructure_photo.map((item) => {
+        //     console.log('This is item', item);
+        //     if (!allowedExtensions.exec(item.name)) {
+        //         console.log('Entered here or not');
+        //         imageValidation.infrastructure_photo_validation = true;
+        //         setImageOrFileValidation(imageValidation);
+        //     }
+        // });
+        // imageValidation.infrastructure_photo_validation = false;
         setData({ ...data, [e.target.name]: [...data.infrastructure_photo, file] });
     };
 
@@ -257,6 +299,63 @@ const TemporaryShelter = (props) => {
             [e.target.name]: false,
         });
         const file = e.target.files[0];
+
+        const imageValidation = {
+            identity_document_validation: false,
+            infrastructure_photo_validation: false,
+            application_document_validation: false,
+            police_report_validation: false,
+            profilePic_validation: false,
+            application_file: false,
+        };
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+        const profilePicValidation = /(\.jpg|\.jpeg|\.png)$/i;
+
+        if (e.target.name === 'beneficiary_photo' && !profilePicValidation.exec(file.name)) {
+            imageValidation.profilePic_validation = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.profilePic_validation = false;
+
+        if (e.target.name === 'application_file' && !allowedExtensions.exec(file.name)) {
+            imageValidation.application_file = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.application_file = false;
+
+        if (e.target.name === 'identity_document' && !allowedExtensions.exec(file.name)) {
+            imageValidation.identity_document_validation = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.identity_document_validation = false;
+        // console.log('is this infrastructure photo', data.infrastructure_photo);
+        // data.infrastructure_photo.map((item) => {
+        //     console.log('This is item', item);
+        //     if (!allowedExtensions.exec(item.name)) {
+        //         console.log('Entered here or not');
+        //         imageValidation.infrastructure_photo_validation = true;
+        //         setImageOrFileValidation(imageValidation);
+        //     }
+        // });
+        // imageValidation.infrastructure_photo_validation = false;
+        if (e.target.name === 'application_document' && !allowedExtensions.exec(file.name)) {
+            imageValidation.application_document_validation = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.application_document_validation = false;
+        if (e.target.name === 'police_report' && !allowedExtensions.exec(file.name)) {
+            imageValidation.police_report_validation = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.police_report_validation = false;
+        setImageOrFileValidation(imageValidation);
+
+
         setData({ ...data, [e.target.name]: file });
         // setSelectedFile(file);
         // setSelectedFile(file);
@@ -410,6 +509,10 @@ const TemporaryShelter = (props) => {
                     latestErrorUpdate.beneficiary_representative_district = false;
                     latestErrorUpdate.beneficiary_representative_municipality = false;
                 }
+                if (!isApplicationClicked) {
+                    latestErrorUpdate.application_date = false;
+                    latestErrorUpdate.application_file = false;
+                }
                 if (i === 'migration_certificate_number') {
                     return latestErrorUpdate[i] = false;
                 }
@@ -463,10 +566,13 @@ const TemporaryShelter = (props) => {
 
                 return user.isSuperuser && !data.is_beneficiary_available_to_sign && i === 'beneficiary_representative_ward'
                     ? latestErrorUpdate[i] = false
-                    : latestErrorUpdate[i] = true;
+                    : !data.is_beneficiary_available_to_sign && i === 'beneficiary_representative_ward'
+                        ? latestErrorUpdate[i] = false
+                        : latestErrorUpdate[i] = true;
             }
             console.log('This is i', i);
             if (i === 'infrastructure_photo') {
+                console.log('How is this possible', data.infrastructure_photo.length);
                 if (data.infrastructure_photo.length === 0) {
                     return latestErrorUpdate[i] = true;
                 }
@@ -476,7 +582,8 @@ const TemporaryShelter = (props) => {
         });
         const phoneNumberRegex = /^\d{10}$/;
 
-
+        console.log('This is data final', latestErrorUpdate);
+        console.log('This is data', latestErrorUpdate);
         setErrorFields({ ...latestErrorUpdate });
         if (Object.values(latestErrorUpdate).filter(i => i === true).length) {
             return;
@@ -501,10 +608,14 @@ const TemporaryShelter = (props) => {
         setPhoneNumberValidation(phoneValidation);
 
 
-        setLoading(true);
+        // setLoading(true);
         const finalUpdateData = data;
         if (!finalUpdateData.migration_certificate_number) {
             finalUpdateData.migration_date_bs = '';
+        }
+        if (!isApplicationClicked) {
+            finalUpdateData.application_date = '';
+            finalUpdateData.application_file = '';
         }
         if (!user.isSuperuser) {
             finalUpdateData.beneficiary_municipality = user.profile.municipality;
@@ -578,6 +689,9 @@ const TemporaryShelter = (props) => {
         finalFormData.append('beneficiary_representative_municipality', finalUpdateData.beneficiary_representative_municipality);
         finalFormData.append('beneficiary_representative_ward', finalUpdateData.beneficiary_representative_ward);
         finalFormData.append('operating_municipality', finalUpdateData.operating_municipality);
+        finalFormData.append('application_date', finalUpdateData.application_date);
+        finalFormData.append('application_file', finalUpdateData.application_file);
+
         finalUpdateData.infrastructure_photo.length
             ? finalUpdateData.infrastructure_photo.map(i => finalFormData.append('infrastructure_photo', i, i.name))
             : null;
@@ -595,7 +709,6 @@ const TemporaryShelter = (props) => {
                 setBackendError(true);
                 setLoading(false);
             });
-        // return errorCheck;
     };
     // Function to handle checkbox change
     const handleCheckboxChange = () => {
@@ -708,7 +821,7 @@ const TemporaryShelter = (props) => {
         return finalData || '-';
     };
 
-    console.log('This is phone number validation', phoneNumberValidation);
+    console.log('This is phone number validation', isApplicationClicked);
     return (
         <>
             <Page hideFilter hideMap />
@@ -792,7 +905,92 @@ const TemporaryShelter = (props) => {
                                 <h1>दफा ३ को उपदफा(५) सँँग सम्बन्धित</h1>
                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
                             </div>
+                            <div>
+                                <div className={styles.locationDetails}>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', fontSize: '20px' }}>
+                                        <span style={{ textDecoration: 'underline' }}>
+                                            आवेदन उपलब्ध छ ?
+                                        </span>
+
+                                        <input
+                                            style={{ cursor: 'pointer', marginTop: '7px' }}
+                                            type="checkbox"
+                                            checked={isApplicationClicked}
+                                            onChange={() => setIsApplicationClicked(!isApplicationClicked)}
+                                        />
+                                    </div>
+                                    {
+                                        isApplicationClicked
+                                            ? (
+                                                <div style={{ display: 'flex' }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 2, fontSize: '20px', alignItems: 'flex-start' }}>
+                                                        <span>आवेदनको फोटो वा pdf:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                            <input
+                                                                type="file"
+                                                                accept=".pdf, image/*"
+                                                                id="file-input"
+                                                                // style={{ display: 'none' }}
+                                                                onChange={handleFileInputChange}
+                                                                name="application_file"
+                                                            />
+                                                            {errorFields.application_file
+                                                                ? <p style={{ margin: '0', color: 'red' }}>कृपया कागजात अपलोड गर्नुहोस्</p> : ''
+                                                            }
+                                                            {
+                                                                data.application_file ? <img height={100} width={100} src={handleShowImage(data.application_file)} alt="img" /> : ''
+                                                            }
+                                                            {
+                                                                imageOrFileValidation.application_file ? <p style={{ margin: '0', color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
+                                                            }
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div
+                                                        className={styles.datePickerForm}
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'start',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'flex-start',
+                                                            flex: 1,
+
+                                                        }}
+                                                    >
+                                                        <span>आवेदनको मितिः</span>
+
+
+                                                        <NepaliDatePicker
+
+                                                            inputClassName="form-control"
+                                                            // className={styles.datePick}
+                                                            // value={ADToBS(dateAlt)}
+                                                            value={data.entry_date_bs}
+                                                            onChange={
+                                                                (value: string) => {
+                                                                    setData({
+                                                                        ...data,
+                                                                        entry_date_bs: value,
+
+                                                                    });
+                                                                }
+                                                            }
+                                                            options={{
+                                                                calenderLocale: 'ne',
+                                                                valueLocale: 'en',
+                                                            }}
+                                                        />
+                                                    </div>
+
+                                                </div>
+                                            ) : ''
+                                    }
+
+                                </div>
+                            </div>
                             <div style={{ fontSize: '20px', display: 'flex', gap: '20px' }}>
+
                                 <div
                                     className={styles.datePickerForm}
                                     style={{
@@ -1208,6 +1406,9 @@ const TemporaryShelter = (props) => {
                                             }
                                             {
                                                 data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
+                                            }
+                                            {
+                                                imageOrFileValidation.profilePic_validation ? <p style={{ margin: '0', color: 'red' }}>फोटो jpeg, jpg वा png हुनुपर्छ</p> : ''
                                             }
                                         </div>
 
@@ -1797,7 +1998,7 @@ const TemporaryShelter = (props) => {
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <input
                                                 type="file"
-                                                accept="image/*"
+                                                accept=".pdf, image/*"
                                                 id="file-input"
                                                 // style={{ display: 'none' }}
                                                 onChange={handleFileInputChange}
@@ -1808,8 +2009,12 @@ const TemporaryShelter = (props) => {
                                                     ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
                                             }
 
+
                                             {
                                                 data.identity_document ? <img height={100} width={100} src={handleShowImage(data.identity_document)} alt="img" /> : ''
+                                            }
+                                            {
+                                                imageOrFileValidation.identity_document_validation ? <p style={{ margin: 0, color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
                                             }
                                         </div>
 
@@ -1824,7 +2029,7 @@ const TemporaryShelter = (props) => {
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <input
                                                 type="file"
-                                                accept="image/*"
+                                                accept=".pdf, image/*"
                                                 id="file-input"
                                                 // style={{ display: 'none' }}
                                                 onChange={handleInfrastructurePhoto}
@@ -1859,6 +2064,9 @@ const TemporaryShelter = (props) => {
 
                                                     : ''
                                             }
+                                            {
+                                                imageOrFileValidation.infrastructure_photo_validation ? <p style={{ margin: 0, color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
+                                            }
                                         </div>
 
 
@@ -1877,7 +2085,7 @@ const TemporaryShelter = (props) => {
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                                         <input
                                                             type="file"
-                                                            accept="image/*"
+                                                            accept=".pdf, image/*"
                                                             id="file-input"
                                                             // style={{ display: 'none' }}
                                                             onChange={handleFileInputChange}
@@ -1889,6 +2097,9 @@ const TemporaryShelter = (props) => {
                                                         }
                                                         {
                                                             data.application_document ? <img height={100} width={100} src={handleShowImage(data.application_document)} alt="img" /> : ''
+                                                        }
+                                                        {
+                                                            imageOrFileValidation.application_document_validation ? <p style={{ margin: 0, color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
                                                         }
                                                     </div>
 
@@ -1903,7 +2114,7 @@ const TemporaryShelter = (props) => {
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <input
                                                 type="file"
-                                                accept="image/*"
+                                                accept=".pdf, image/*"
                                                 id="file-input"
                                                 // style={{ display: 'none' }}
                                                 onChange={handleFileInputChange}
@@ -1915,6 +2126,9 @@ const TemporaryShelter = (props) => {
                                             }
                                             {
                                                 data.police_report ? <img height={100} width={100} src={handleShowImage(data.police_report)} alt="img" /> : ''
+                                            }
+                                            {
+                                                imageOrFileValidation.police_report_validation ? <p style={{ margin: 0, color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
                                             }
                                         </div>
 
