@@ -733,6 +733,7 @@ const TemporaryShelter = (props) => {
             signed_date: currentDate,
             operating_municipality_signed_date: currentDate,
             migration_date_bs: currentDate,
+            application_date: currentDate,
         });
     }, []);
     const handleDropdown = (name, value) => {
@@ -966,12 +967,12 @@ const TemporaryShelter = (props) => {
                                                             inputClassName="form-control"
                                                             // className={styles.datePick}
                                                             // value={ADToBS(dateAlt)}
-                                                            value={data.entry_date_bs}
+                                                            value={data.application_date}
                                                             onChange={
                                                                 (value: string) => {
                                                                     setData({
                                                                         ...data,
-                                                                        entry_date_bs: value,
+                                                                        application_date: value,
 
                                                                     });
                                                                 }

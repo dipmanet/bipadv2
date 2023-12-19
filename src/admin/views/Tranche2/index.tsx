@@ -161,6 +161,8 @@ const Tranche2 = (props) => {
             // temporary_shelter_photo: [],
             temporary_shelter_photo_front: '',
             temporary_shelter_photo_back: '',
+            application_file: '',
+            application_date: '',
 
         },
     );
@@ -176,18 +178,22 @@ const Tranche2 = (props) => {
         // temporary_shelter_photo: false,
         temporary_shelter_photo_front: false,
         temporary_shelter_photo_back: false,
+        application_date: false,
+        application_file: false,
 
     });
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
     const [fetchedData, setFetchedData] = useState(null);
     const [fetchedTranche2Data, setFetchedTranche2Data] = useState(null);
+    const [isApplicationClicked, setIsApplicationClicked] = useState(false);
     const { pathname } = useLocation();
     const fileInputRef = useRef(null);
 
     const [imageOrFileValidation, setImageOrFileValidation] = useState({
         temporary_shelter_photo_front: false,
         temporary_shelter_photo_back: false,
+        application_file: false,
 
     });
     const { user,
@@ -211,7 +217,9 @@ const Tranche2 = (props) => {
         const imageValidation = {
             temporary_shelter_photo_front: false,
             temporary_shelter_photo_back: false,
+            application_file: false,
         };
+        const allowedExtensionsFile = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
         const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
         if (e.target.name === 'temporary_shelter_photo_front' && !allowedExtensions.exec(file.name)) {
             console.log('Entered here or not');
@@ -227,6 +235,12 @@ const Tranche2 = (props) => {
             setImageOrFileValidation(imageValidation);
             return;
         }
+        if (e.target.name === 'application_file' && !allowedExtensionsFile.exec(file.name)) {
+            imageValidation.application_file = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.application_file = false;
         imageValidation.temporary_shelter_photo_back = false;
         setImageOrFileValidation(imageValidation);
         setData({ ...data, [e.target.name]: file });
@@ -335,6 +349,10 @@ const Tranche2 = (props) => {
 
         errorCheckingFields.map((i) => {
             if (!data[i]) {
+                if (!isApplicationClicked) {
+                    latestErrorUpdate.application_date = false;
+                    latestErrorUpdate.application_file = false;
+                }
                 if (i === 'temp_shelter_entrollment_form') {
                     return latestErrorUpdate[i] = false;
                 }
@@ -366,6 +384,8 @@ const Tranche2 = (props) => {
         finalFormData.append('temp_shelter_entrollment_form', finalUpdateData.temp_shelter_entrollment_form);
         finalFormData.append('temporary_shelter_photo_front', finalUpdateData.temporary_shelter_photo_front);
         finalFormData.append('temporary_shelter_photo_back', finalUpdateData.temporary_shelter_photo_back);
+        finalFormData.append('application_date', finalUpdateData.application_date);
+        finalFormData.append('application_file', finalUpdateData.application_file);
 
 
         // finalUpdateData.temporary_shelter_photo.length
@@ -419,6 +439,7 @@ const Tranche2 = (props) => {
             entry_date_bs: currentDate,
             engineer_signed_date: currentDate,
             ward_officer_signed_date: currentDate,
+            application_date: currentDate,
 
         });
     }, []);
@@ -433,7 +454,7 @@ const Tranche2 = (props) => {
         if (id) {
             props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData });
         }
-    }, [pathname, fetchedData]);
+    }, [pathname, fetchedData, fetchedTranche2Data]);
 
     const districtNameConverter = (id) => {
         const finalData = id && districts.find(i => i.id === Number(id)).title_ne;
@@ -791,7 +812,90 @@ const Tranche2 = (props) => {
                                                 <h1>दफा ४(२) सँँग सम्बन्धित</h1>
                                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h1>
                                             </div>
+                                            <div>
+                                                <div>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', fontSize: '20px' }}>
+                                                        <span style={{ textDecoration: 'underline' }}>
+                                                            आवेदन उपलब्ध छ ?
+                                                        </span>
 
+                                                        <input
+                                                            style={{ cursor: 'pointer', marginTop: '7px' }}
+                                                            type="checkbox"
+                                                            checked={isApplicationClicked}
+                                                            onChange={() => setIsApplicationClicked(!isApplicationClicked)}
+                                                        />
+                                                    </div>
+                                                    {
+                                                        isApplicationClicked
+                                                            ? (
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 2, fontSize: '20px', alignItems: 'flex-start' }}>
+                                                                        <span>आवेदनको फोटो वा pdf:</span>
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                                            <input
+                                                                                type="file"
+                                                                                accept=".pdf, image/*"
+                                                                                id="file-input"
+                                                                                // style={{ display: 'none' }}
+                                                                                onChange={handleFileInputChange}
+                                                                                name="application_file"
+                                                                            />
+                                                                            {errorFields.application_file
+                                                                                ? <p style={{ margin: '0', color: 'red' }}>कृपया कागजात अपलोड गर्नुहोस्</p> : ''
+                                                                            }
+                                                                            {
+                                                                                data.application_file ? <img height={100} width={100} src={handleShowImage(data.application_file)} alt="img" /> : ''
+                                                                            }
+                                                                            {
+                                                                                imageOrFileValidation.application_file ? <p style={{ margin: '0', color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
+                                                                            }
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div
+                                                                        className={styles.datePickerForm}
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            justifyContent: 'start',
+                                                                            flexDirection: 'column',
+                                                                            alignItems: 'flex-start',
+                                                                            flex: 1,
+
+                                                                        }}
+                                                                    >
+                                                                        <span>आवेदनको मितिः</span>
+
+
+                                                                        <NepaliDatePicker
+
+                                                                            inputClassName="form-control"
+                                                                            // className={styles.datePick}
+                                                                            // value={ADToBS(dateAlt)}
+                                                                            value={data.application_date}
+                                                                            onChange={
+                                                                                (value: string) => {
+                                                                                    setData({
+                                                                                        ...data,
+                                                                                        application_date: value,
+
+                                                                                    });
+                                                                                }
+                                                                            }
+                                                                            options={{
+                                                                                calenderLocale: 'ne',
+                                                                                valueLocale: 'en',
+                                                                            }}
+                                                                        />
+                                                                    </div>
+
+                                                                </div>
+                                                            ) : ''
+                                                    }
+
+                                                </div>
+                                            </div>
                                             <div
                                                 className={styles.datePickerForm}
                                                 style={{
