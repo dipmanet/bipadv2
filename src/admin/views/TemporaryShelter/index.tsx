@@ -2028,11 +2028,12 @@ const TemporaryShelter = (props) => {
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                         <span style={{ fontSize: '20px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+
                                             <input
                                                 type="file"
                                                 accept=".pdf, image/*"
                                                 id="file-input"
-                                                // style={{ display: 'none' }}
+                                                style={data.infrastructure_photo.length ? { display: 'none' } : {}}
                                                 onChange={handleInfrastructurePhoto}
                                                 name="infrastructure_photo"
                                                 ref={fileInputRef}
@@ -2065,6 +2066,18 @@ const TemporaryShelter = (props) => {
 
                                                     : ''
                                             }
+                                            {
+                                                data.infrastructure_photo.length
+                                                    ? (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => fileInputRef.current.click()}
+                                                        >थप फोटो थप्नुहोस् +
+                                                        </button>
+                                                    )
+                                                    : ''
+                                            }
+
                                             {
                                                 imageOrFileValidation.infrastructure_photo_validation ? <p style={{ margin: 0, color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
                                             }
