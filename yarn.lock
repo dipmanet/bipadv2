@@ -15874,6 +15874,11 @@ nepali-number@^1.0.3:
   resolved "https://registry.yarnpkg.com/nepali-number/-/nepali-number-1.0.3.tgz#3d0079f77f0a85dfb86f54a0a716fd346a276ff3"
   integrity sha512-Vb6aMQM/xtE7KiiEhemgDcACxIMaDn18Ub/imWXB6JlhDwc2qVDnGW+sR0gDLPQmyiyk06bkKze1oK88FxWIjw==
 
+nepalify@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/nepalify/-/nepalify-0.5.0.tgz#3d00196eed6014f6e91397332325447e7119a584"
+  integrity sha512-oVXLAWC8zzWCbLIdxTSKTvPXgRQkfbPeCKt2IobgwaW7ff1556xrgUDlb9lq0JiqpzZRBfgpzq3pMyRZwMqfbA==
+
 next-tick@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.1.0.tgz#1836ee30ad56d67ef281b22bd199f709449b35eb"
@@ -18822,6 +18827,13 @@ react-svg@10.0.18:
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tanem/svg-injector" "^8.0.26"
+    prop-types "^15.7.2"
+
+react-switch@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-switch/-/react-switch-7.0.0.tgz#400990bb9822864938e343ed24f13276a617bdc0"
+  integrity sha512-KkDeW+cozZXI6knDPyUt3KBN1rmhoVYgAdCJqAh7st7tk8YE6N0iR89zjCWO8T8dUTeJGTR0KU+5CHCRMRffiA==
+  dependencies:
     prop-types "^15.7.2"
 
 react-test-renderer@16.8.6:

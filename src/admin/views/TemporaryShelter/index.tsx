@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-indent-props */
@@ -44,6 +46,8 @@ import close from '#resources/icons/close.svg';
 
 import axios from 'axios';
 import { getAuthState } from '#utils/session';
+import SwitchToggle from 'react-switch';
+import nepalify from 'nepalify';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
@@ -242,6 +246,10 @@ const TemporaryShelter = (props) => {
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
     const [isApplicationClicked, setIsApplicationClicked] = useState(false);
+    const [toggleSwitchChecked, setToggleSwitchChecked] = useState(false);
+    const [keyLayout, setKeyLayout] = useState('traditional');
+
+
     const fileInputRef = useRef(null);
     const { user,
         districts,
@@ -252,7 +260,18 @@ const TemporaryShelter = (props) => {
             addEarthquakePostRequest,
 
         } } = props;
+        const nepalilanguageOption1 = {
+          layout: 'traditional',
+          enable: true,
+        };
+        const nepalilanguageOption2 = {
+          layout: 'romanized',
+          enable: true,
+        };
 
+        const nepaliInput = (id) => {
+          nepalify.interceptElementById(id, { layout: keyLayout, enabled: true });
+        };
     const handleInfrastructurePhoto = (e) => {
         setErrorFields({
             ...errorFields,
@@ -269,7 +288,6 @@ const TemporaryShelter = (props) => {
         };
         const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
         if (!allowedExtensions.exec(file.name)) {
-            console.log('Entered here or not');
             imageValidation.infrastructure_photo_validation = true;
             setImageOrFileValidation(imageValidation);
             return;
@@ -821,7 +839,15 @@ const TemporaryShelter = (props) => {
         const finalData = id && wards.find(i => i.id === Number(id)).title;
         return finalData || '-';
     };
+    const handleChange = (checked) => {
+      if (checked) {
+        setKeyLayout('romanized');
+      } else {
+        setKeyLayout('traditional');
+      }
 
+      setToggleSwitchChecked(checked);
+    };
 
     return (
         <>
@@ -900,6 +926,30 @@ const TemporaryShelter = (props) => {
                                 Reported Date and Location are required information
                             </p>
                         </div> */}
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <span>
+परम्परागत
+                              </span>
+                              <SwitchToggle
+                                checked={toggleSwitchChecked}
+
+                              onChange={handleChange}
+                              onColor="#86d3ff"
+                              onHandleColor="#2693e6"
+                              handleDiameter={30}
+                              uncheckedIcon={false}
+                              checkedIcon={false}
+                              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                              activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                              height={20}
+                              width={48}
+                              className="react-switch"
+                              id="material-switch"
+                              />
+                               <span>
+रोमनीकृत
+                               </span>
+                              </label>
                         <div className={styles.mainDataEntrySection}>
                             {/* <div className={styles.formGeneralInfo}>
                                 <h1>अनुुसूूची ३</h1>
@@ -907,6 +957,8 @@ const TemporaryShelter = (props) => {
                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
                             </div> */}
                             <div>
+
+
                                 <div className={styles.locationDetails}>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', fontSize: '20px' }}>
                                         <span style={{ fontSize: '16px' }}>
@@ -1044,6 +1096,10 @@ const TemporaryShelter = (props) => {
                                             हजुरबुबाको नाम
                                         </span>
                                         <input
+
+
+                                            onFocus={() => nepaliInput('grand_parent_name')}
+                                            id="grand_parent_name"
                                             type="text"
                                             name="grand_parent_name"
                                             value={data.grand_parent_name}
@@ -1080,6 +1136,10 @@ const TemporaryShelter = (props) => {
                                             आमा/बाबुको नाम
                                         </span>
                                         <input
+
+
+onFocus={() => nepaliInput('parent_name')}
+id="parent_name"
                                             type="text"
                                             className={styles.inputClassName}
                                             onChange={handleFormData}
@@ -1116,6 +1176,10 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
                                         <span style={{ fontSize: '14px' }}>नाम, थर नेेपालीमाः</span>
                                         <input
+
+
+onFocus={() => nepaliInput('beneficiary_name_nepali')}
+id="beneficiary_name_nepali"
                                             type="text"
                                             onChange={handleFormData}
                                             name="beneficiary_name_nepali"
@@ -1127,6 +1191,7 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
                                         <span style={{ fontSize: '14px' }}>नाम, थर अंंग्रेजीमाः</span>
                                         <input
+        onFocus={null}
                                             type="text"
                                             className={styles.inputClassName}
                                             onChange={handleFormData}
@@ -1146,6 +1211,10 @@ const TemporaryShelter = (props) => {
                                             उमेर
                                         </span>
                                         <input
+
+
+onFocus={() => nepaliInput('beneficiary_age')}
+id="beneficiary_age"
                                             type="number"
                                             name="beneficiary_age"
                                             onChange={handleFormData}
@@ -1159,6 +1228,10 @@ const TemporaryShelter = (props) => {
                                        <span style={{ fontSize: '14px' }}>ना.प्र.न.</span>
                                        {' '}
                                        <input
+
+
+onFocus={() => nepaliInput('beneficiary_citizenship_number')}
+id="beneficiary_citizenship_number"
                                            type="text"
                                            name="beneficiary_citizenship_number"
                                            value={data.beneficiary_citizenship_number}
@@ -1171,6 +1244,10 @@ const TemporaryShelter = (props) => {
                                        <span style={{ fontSize: '14px' }}>सम्पर्क नंं.</span>
                                        {' '}
                                        <input
+
+
+onFocus={() => nepaliInput('beneficiary_contact_number')}
+id="beneficiary_contact_number"
                                            type="number"
                                            name="beneficiary_contact_number"
                                            value={data.beneficiary_contact_number}
@@ -1253,7 +1330,7 @@ const TemporaryShelter = (props) => {
                                         : (
                                             <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <span style={{ fontSize: '14px' }}>लाभग्राहीको जिल्ला</span>
-                                                <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
+                                                <span style={{ fontSize: '14px' }}>{user && user.profile && districtNameConverter(user.profile.district)}</span>
 
                                             </div>
                                         )
@@ -1283,7 +1360,7 @@ const TemporaryShelter = (props) => {
                                         : (
                                             <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <span style={{ fontSize: '14px' }}>लाभग्राहीको गा.पा/न.पा.</span>
-                                                <span>
+                                                <span style={{ fontSize: '14px' }}>
                                                     {user && user.profile && municipalityNameConverter(user.profile.municipality)}
                                                 </span>
 
@@ -1317,6 +1394,10 @@ const TemporaryShelter = (props) => {
                                             लाभग्राहीको गाउँँ/टोल
                                         </span>
                                         <input
+
+
+onFocus={() => nepaliInput('tole_name')}
+id="tole_name"
                                             type="text"
                                             className={styles.inputClassName}
                                             name="tole_name"
@@ -1365,6 +1446,10 @@ const TemporaryShelter = (props) => {
                                                             >
                                                                 <span style={{ fontSize: '14px' }}>नाम, थर नेेपालीमाः</span>
                                                                 <input
+
+
+onFocus={() => nepaliInput('beneficiary_representative_name_nepali')}
+id="beneficiary_representative_name_nepali"
                                                                     type="text"
                                                                     onChange={handleFormData}
                                                                     name="beneficiary_representative_name_nepali"
@@ -1408,7 +1493,7 @@ const TemporaryShelter = (props) => {
                                                                         }}
                                                                         >
                                                                             <span style={{ fontSize: '14px' }}>जिल्ला:</span>
-                                                                            <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
+                                                                            <span style={{ fontSize: '14px' }}>{user && user.profile && districtNameConverter(user.profile.district)}</span>
                                                                         </div>
                                                                     )
                                                                 }
@@ -1451,7 +1536,7 @@ const TemporaryShelter = (props) => {
                                                                         }}
                                                                         >
                                                                             <span style={{ fontSize: '14px' }}>गा.पा./न.पाः</span>
-                                                                            <span>
+                                                                            <span style={{ fontSize: '14px' }}>
                                                                                 {user && user.profile && municipalityNameConverter(user.profile.municipality)}
                                                                             </span>
                                                                         </div>
@@ -1497,6 +1582,10 @@ const TemporaryShelter = (props) => {
                                                                     <span style={{ fontSize: '14px' }}>ना.प्र.न.</span>
                                                                     {' '}
                                                                     <input
+
+
+onFocus={() => nepaliInput('beneficiary_representative_citizenship_number')}
+id="beneficiary_representative_citizenship_number"
                                                                         type="text"
                                                                         name="beneficiary_representative_citizenship_number"
                                                                         value={data.beneficiary_representative_citizenship_number}
@@ -1520,6 +1609,10 @@ const TemporaryShelter = (props) => {
                                                                 <span style={{ fontSize: '14px' }}>बाजेेको नाम, थर:</span>
                                                                 {' '}
                                                                 <input
+
+
+onFocus={() => nepaliInput('beneficiary_representative_grandfather_name')}
+id="beneficiary_representative_grandfather_name"
                                                                     type="text"
                                                                     // className={styles.inputClassName}
                                                                     name="beneficiary_representative_grandfather_name"
@@ -1543,6 +1636,10 @@ const TemporaryShelter = (props) => {
                                                                 <span style={{ fontSize: '14px' }}>बाबुु/आमाको नाम, थर:</span>
                                                                 {' '}
                                                                 <input
+
+
+onFocus={() => nepaliInput('beneficiary_representative_parent_name')}
+id="beneficiary_representative_parent_name"
                                                                     type="text"
                                                                     // className={styles.inputClassName}
                                                                     name="beneficiary_representative_parent_name"
@@ -1574,6 +1671,10 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>खातावालाको नाम, थरः</span>
                                                 <input
+
+
+onFocus={() => nepaliInput('bank_account_holder_name')}
+id="bank_account_holder_name"
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     name="bank_account_holder_name"
@@ -1593,6 +1694,8 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>खाता नम्बरः</span>
                                                 <input
+                                                onFocus={null}
+
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -1614,6 +1717,10 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>बैंंक/वित्तीय संंस्थाको नामः</span>
                                                 <input
+
+
+onFocus={() => nepaliInput('bank_name')}
+id="bank_name"
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -1633,6 +1740,9 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>शाखाः</span>
                                                 <input
+
+onFocus={() => nepaliInput('bank_branch_name')}
+id="bank_branch_name"
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -1658,6 +1768,9 @@ const TemporaryShelter = (props) => {
                                         >
                                             <span style={{ fontSize: '14px' }}>बसाइँँसराइ प्रमाण-पत्र नंः</span>
                                             <input
+
+onFocus={() => nepaliInput('migration_certificate_number')}
+id="migration_certificate_number"
                                                 type="text"
                                                 // className={styles.inputClassName}
                                                 onChange={handleFormData}
@@ -1759,6 +1872,9 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>साक्षीको नाम, थर</span>
                                                 <input
+
+onFocus={() => nepaliInput('withness_name_nepali')}
+id="withness_name_nepali"
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -1781,6 +1897,8 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>लाभग्राहीसँँगको नाता</span>
                                                 <input
+
+                                                onFocus={() => nepaliInput('withness_relation')}
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -1800,6 +1918,7 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>सम्पर्क नंं.</span>
                                                 <input
+                                                onFocus={() => nepaliInput('withness_contact_number')}
                                                     type="number"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -1841,7 +1960,7 @@ const TemporaryShelter = (props) => {
                                             : (
                                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                     <span style={{ fontSize: '14px' }}> जिल्ला </span>
-                                                    <span>
+                                                    <span style={{ fontSize: '14px' }}>
                                                         {user && user.profile && districtNameConverter(user.profile.district)}
                                                     </span>
 
@@ -1902,6 +2021,8 @@ const TemporaryShelter = (props) => {
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             <span style={{ fontSize: '14px' }}>टोल</span>
                                             <input
+                                             onFocus={() => nepaliInput('temporary_shelter_land_tole')}
+                                            id="temporary_shelter_land_tole"
                                                 type="text"
                                                 name="temporary_shelter_land_tole"
                                                 value={data.temporary_shelter_land_tole}
@@ -1941,7 +2062,7 @@ const TemporaryShelter = (props) => {
                                                         </select>
                                                     </>
                                                 )
-                                                : municipalityNameConverter(user.profile.municipality)
+                                                : <span style={{ fontSize: '14px' }}> {municipalityNameConverter(user.profile.municipality)}</span>
 
                                         }
 
@@ -1965,6 +2086,8 @@ const TemporaryShelter = (props) => {
                                             >
                                                 <span style={{ fontSize: '14px' }}>प्रमुुख प्रशासकीय अधिकृृतको नामः</span>
                                                 <input
+                                                id="operating_municipality_officer_name"
+                                                onFocus={() => nepaliInput('operating_municipality_officer_name')}
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
