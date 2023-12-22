@@ -124,7 +124,6 @@ const TemporaryShelterPreview = (props) => {
     };
 
     const wardNameConverter = (id) => {
-        console.log('This is id', id);
         const finalData = fetchedData && wards.find(i => i.id === id).title;
         return finalData;
     };
@@ -151,13 +150,13 @@ const TemporaryShelterPreview = (props) => {
     };
     const splittedRouteId = pathname.split('/');
     const routeId = splittedRouteId[splittedRouteId.length - 1];
-    console.log('This is feteched data', fetchedData);
+
     useEffect(() => {
         if (errorFetchData) {
             navigate('/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data');
         }
     }, [errorFetchData]);
-    console.log('error fetch data', errorFetchData);
+
     return (
         <>
             <Page hideFilter hideMap />

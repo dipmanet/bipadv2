@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-closing-bracket-location */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent-props */
 /* eslint-disable no-alert */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -484,14 +487,14 @@ const TemporaryShelter = (props) => {
         ? user && user.profile && wards.filter(i => i.municipality === Number(data.beneficiary_representative_municipality)).sort((a, b) => Number(a.title) - Number(b.title))
         : user && user.profile && wards.filter(i => i.municipality === user.profile.municipality).sort((a, b) => Number(a.title) - Number(b.title));
 
-    console.log('This is selected ward', selectedWard);
+
     const test = selectedWard.sort((a, b) => Number(a.title) - Number(b.title));
-    console.log('This is final test', test);
+
     const handleSuccessMessage = (d) => {
         navigate(`/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${d.id}`);
     };
 
-    console.log('This is final data', data);
+
     const handleClick = () => {
         setBackendError(false);
         const errorCheckingFields = Object.keys(data);
@@ -570,9 +573,8 @@ const TemporaryShelter = (props) => {
                         ? latestErrorUpdate[i] = false
                         : latestErrorUpdate[i] = true;
             }
-            console.log('This is i', i);
+
             if (i === 'infrastructure_photo') {
-                console.log('How is this possible', data.infrastructure_photo.length);
                 if (data.infrastructure_photo.length === 0) {
                     return latestErrorUpdate[i] = true;
                 }
@@ -582,8 +584,7 @@ const TemporaryShelter = (props) => {
         });
         const phoneNumberRegex = /^\d{10}$/;
 
-        console.log('This is data final', latestErrorUpdate);
-        console.log('This is data', latestErrorUpdate);
+
         setErrorFields({ ...latestErrorUpdate });
         if (Object.values(latestErrorUpdate).filter(i => i === true).length) {
             return;
@@ -594,7 +595,7 @@ const TemporaryShelter = (props) => {
         };
         if (!phoneNumberRegex.test(data.beneficiary_contact_number)) {
             phoneValidation.benificiaryContactValidation = true;
-            console.log('This is output', phoneValidation);
+
             setPhoneNumberValidation(phoneValidation);
             return;
         }
@@ -705,7 +706,6 @@ const TemporaryShelter = (props) => {
                 setLoading(false);
             })
             .catch((error) => {
-                console.log('Error:', error);
                 setBackendError(true);
                 setLoading(false);
             });
@@ -822,7 +822,7 @@ const TemporaryShelter = (props) => {
         return finalData || '-';
     };
 
-    console.log('This is phone number validation', isApplicationClicked);
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -891,7 +891,7 @@ const TemporaryShelter = (props) => {
                         <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.ideaPara}>
-                                अस्थायी आवास सम्झौता फारममा भूकम्प प्रभावित क्षेत्रको विवरण र घरको विवरण समावेश हुन्छ।
+                            भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र (दफा ३ को उपदफा ५ सँँग सम्बन्धित)
 
                             </p>
                         </div>
@@ -901,20 +901,20 @@ const TemporaryShelter = (props) => {
                             </p>
                         </div> */}
                         <div className={styles.mainDataEntrySection}>
-                            <div className={styles.formGeneralInfo}>
+                            {/* <div className={styles.formGeneralInfo}>
                                 <h1>अनुुसूूची ३</h1>
                                 <h1>दफा ३ को उपदफा(५) सँँग सम्बन्धित</h1>
                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
-                            </div>
+                            </div> */}
                             <div>
                                 <div className={styles.locationDetails}>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', fontSize: '20px' }}>
-                                        <span style={{ textDecoration: 'underline' }}>
+                                        <span style={{ fontSize: '16px' }}>
                                             आवेदन उपलब्ध छ ?
                                         </span>
 
                                         <input
-                                            style={{ cursor: 'pointer', marginTop: '7px' }}
+                                            style={{ cursor: 'pointer', marginTop: '5px' }}
                                             type="checkbox"
                                             checked={isApplicationClicked}
                                             onChange={() => setIsApplicationClicked(!isApplicationClicked)}
@@ -923,9 +923,9 @@ const TemporaryShelter = (props) => {
                                     {
                                         isApplicationClicked
                                             ? (
-                                                <div style={{ display: 'flex' }}>
+                                                <div style={{ display: 'flex', marginTop: '20px' }}>
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 2, fontSize: '20px', alignItems: 'flex-start' }}>
-                                                        <span>आवेदनको फोटो वा pdf:</span>
+                                                        <span span style={{ fontSize: '14px' }}>आवेदनको फोटो वा pdf:</span>
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                                             <input
                                                                 type="file"
@@ -936,7 +936,7 @@ const TemporaryShelter = (props) => {
                                                                 name="application_file"
                                                             />
                                                             {errorFields.application_file
-                                                                ? <p style={{ margin: '0', color: 'red' }}>कृपया कागजात अपलोड गर्नुहोस्</p> : ''
+                                                                ? <p style={{ margin: '0', color: 'red', fontSize: '14px' }}>कृपया कागजात अपलोड गर्नुहोस्</p> : ''
                                                             }
                                                             {
                                                                 data.application_file ? <img height={100} width={100} src={handleShowImage(data.application_file)} alt="img" /> : ''
@@ -959,7 +959,7 @@ const TemporaryShelter = (props) => {
 
                                                         }}
                                                     >
-                                                        <span>आवेदनको मितिः</span>
+                                                        <span span style={{ fontSize: '14px' }}>आवेदनको मितिः</span>
 
 
                                                         <NepaliDatePicker
@@ -990,9 +990,7 @@ const TemporaryShelter = (props) => {
 
                                 </div>
                             </div>
-                            <div style={{ fontSize: '20px', display: 'flex', gap: '20px' }}>
-
-                                <div
+                            <div
                                     className={styles.datePickerForm}
                                     style={{
                                         display: 'flex',
@@ -1003,7 +1001,9 @@ const TemporaryShelter = (props) => {
 
                                     }}
                                 >
-                                    <span>मितिः</span>
+                                    <span style={{ fontSize: '14px' }}>
+दर्ता मितिः
+                                    </span>
                                     {/* <input
                                     type="text"
                                     name="entry_date_bs"
@@ -1013,7 +1013,6 @@ const TemporaryShelter = (props) => {
                                 /> */}
 
                                     <NepaliDatePicker
-
                                         inputClassName="form-control"
                                         // className={styles.datePick}
                                         // value={ADToBS(dateAlt)}
@@ -1032,110 +1031,16 @@ const TemporaryShelter = (props) => {
                                             valueLocale: 'en',
                                         }}
                                     />
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    {user.isSuperuser ? (
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span>लाभग्राहीको जिल्ला</span>
-                                            <select
-                                                name="beneficiary_district"
-                                                value={data.beneficiary_district || ''}
-                                                id="districts-benificery"
-                                                onChange={handleFormData}
-                                                style={errorFields.beneficiary_district ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                            >
-                                                <option>लाभग्राहीको जिल्ला</option>
-                                                {
-                                                    districts.map(item => (
-                                                        <option value={item.id}>{item.title_ne}</option>
-                                                    ))
-                                                }
-
-
-                                            </select>
-                                        </div>
-                                    )
-                                        : (
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span>लाभग्राहीको जिल्ला</span>
-                                                <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
-
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    {user.isSuperuser ? (
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span>लाभग्राहीको गा.पा/न.पा.</span>
-                                            <select
-                                                id="beneficiary_municipality"
-                                                name="beneficiary_municipality"
-                                                value={data.beneficiary_municipality || ''}
-                                                onChange={handleFormData}
-                                                style={errorFields.beneficiary_municipality ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                            >
-                                                <option>लाभग्राहीको गा.पा/न.पा.</option>
-                                                {
-                                                    selectedMunicipality.map(item => (
-                                                        <option value={item.id}>{item.title_ne}</option>
-                                                    ))
-                                                }
-                                            </select>
-
-                                        </div>
-                                    )
-                                        : (
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span>लाभग्राहीको गा.पा/न.पा.</span>
-                                                <span>
-                                                    {user && user.profile && municipalityNameConverter(user.profile.municipality)}
-                                                </span>
-
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>लाभग्राहीको वडा नंं.</span>
-                                        <select
-                                            id="beneficiary_ward"
-                                            name="beneficiary_ward"
-                                            value={data.beneficiary_ward || ''}
-                                            onChange={handleFormData}
-                                            style={errorFields.beneficiary_ward ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                        >
-                                            <option>लाभग्राहीको वडा नंं.</option>
-                                            {
-                                                selectedWard.map(item => (
-                                                    <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
-                                                ))
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
+                            <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्राही)</h2>
+                            <span style={{ fontSize: '16px' }}>१. व्यक्तिगत विवरण</span>
+
                             <div style={{ fontSize: '20px', display: 'flex', gap: '20px', flex: 1 }}>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>
-                                            लाभग्राहीको गाउँँ/टोल
-                                        </span>
-                                        <input
-                                            type="text"
-                                            className={styles.inputClassName}
-                                            name="tole_name"
-                                            value={data.tole_name}
-                                            onChange={handleFormData}
-                                            style={errorFields.tole_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                        />
-                                    </div>
-                                </div>
+
 
                                 <div style={{ flex: 2 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>
+                                        <span style={{ fontSize: '14px' }}>
                                             हजुरबुबाको नाम
                                         </span>
                                         <input
@@ -1150,7 +1055,7 @@ const TemporaryShelter = (props) => {
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>
+                                        <span style={{ fontSize: '14px' }}>
                                             नाती/नातीनी/बुुहारी
                                         </span>
                                         <select
@@ -1171,7 +1076,7 @@ const TemporaryShelter = (props) => {
                             <div style={{ fontSize: '20px', display: 'flex', gap: '20px', flex: 1 }}>
                                 <div style={{ flex: 2 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>
+                                        <span style={{ fontSize: '14px' }}>
                                             आमा/बाबुको नाम
                                         </span>
                                         <input
@@ -1186,7 +1091,7 @@ const TemporaryShelter = (props) => {
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>
+                                        <span style={{ fontSize: '14px' }}>
                                             छोरा/छोरी/श्रीमती
                                         </span>
                                         <select
@@ -1204,9 +1109,40 @@ const TemporaryShelter = (props) => {
                                         </select>
                                     </div>
                                 </div>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span>
+
+
+                            </div>
+                            <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
+                                    <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
+                                        <span style={{ fontSize: '14px' }}>नाम, थर नेेपालीमाः</span>
+                                        <input
+                                            type="text"
+                                            onChange={handleFormData}
+                                            name="beneficiary_name_nepali"
+                                            value={data.beneficiary_name_nepali}
+                                            style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                            className={styles.inputClassName}
+                                        />
+                                    </div>
+                                    <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
+                                        <span style={{ fontSize: '14px' }}>नाम, थर अंंग्रेजीमाः</span>
+                                        <input
+                                            type="text"
+                                            className={styles.inputClassName}
+                                            onChange={handleFormData}
+                                            name="beneficiary_name_english"
+                                            value={data.beneficiary_name_english}
+                                            style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                        />
+                                    </div>
+                            </div>
+                            <div>
+
+
+                               <div style={{ display: 'flex', gap: '20px', fontSize: '20px', margin: '0px 0px' }}>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                        <span style={{ fontSize: '14px' }}>
                                             उमेर
                                         </span>
                                         <input
@@ -1218,10 +1154,58 @@ const TemporaryShelter = (props) => {
                                             style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         />
                                     </div>
+
+                                   <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                       <span style={{ fontSize: '14px' }}>ना.प्र.न.</span>
+                                       {' '}
+                                       <input
+                                           type="text"
+                                           name="beneficiary_citizenship_number"
+                                           value={data.beneficiary_citizenship_number}
+                                           onChange={handleFormData}
+                                           className={styles.inputClassName}
+                                           style={errorFields.beneficiary_citizenship_number ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                       />
+                                   </div>
+                                   <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                       <span style={{ fontSize: '14px' }}>सम्पर्क नंं.</span>
+                                       {' '}
+                                       <input
+                                           type="number"
+                                           name="beneficiary_contact_number"
+                                           value={data.beneficiary_contact_number}
+                                           onChange={handleFormData}
+                                           style={(errorFields.beneficiary_contact_number || phoneNumberValidation.benificiaryContactValidation) ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
+                                           className={styles.inputClassName}
+                                       />
+                                   </div>
+
+                               </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 2, alignItems: 'flex-start', marginTop: '20px' }}>
+                                       <span style={{ fontSize: '14px' }}>लाभग्राहीको फोटो:</span>
+                                       <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                           <input
+                                               type="file"
+                                               accept="image/*"
+                                               id="file-input"
+                                               // style={{ display: 'none' }}
+                                               onChange={handleFileInputChange}
+                                               name="beneficiary_photo"
+                                           />
+                                           {errorFields.beneficiary_photo
+                                               ? <p style={{ margin: '0', color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                           }
+                                           {
+                                               data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
+                                           }
+                                           {
+                                               imageOrFileValidation.profilePic_validation ? <p style={{ margin: '0', color: 'red' }}>फोटो jpeg, jpg वा png हुनुपर्छ</p> : ''
+                                           }
+                                       </div>
+
+
                                 </div>
                             </div>
-
-
                             {/* <div>
                                 <div style={{ display: 'flex', flexDirection: 'column', fontSize: '20px' }}>
                                     <span>
@@ -1239,184 +1223,109 @@ const TemporaryShelter = (props) => {
                                     />
                                 </div>
                             </div> */}
-                            <div>
-                                <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
-                                <div style={{ display: 'flex', fontSize: '20px', gap: '20px' }}>
-                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
-                                        {user.isSuperuser
-                                            ? (
-                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <span> जिल्ला </span>
-                                                    {' '}
-                                                    <select
-                                                        id="temporary_shelter_land_district"
-                                                        name="temporary_shelter_land_district"
-                                                        value={data.temporary_shelter_land_district || ''}
-                                                        onChange={handleFormData}
-                                                        style={errorFields.temporary_shelter_land_district ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                                    >
-                                                        <option> जिल्ला</option>
-                                                        {
-                                                            districts.map(item => (
-                                                                <option value={item.id}>{item.title_ne}</option>
-                                                            ))
-                                                        }
-                                                    </select>
-                                                </div>
-                                            )
-                                            : (
-                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <span> जिल्ला </span>
-                                                    <span>
-                                                        {user && user.profile && districtNameConverter(user.profile.district)}
-                                                    </span>
 
-                                                </div>
-                                            )
-                                        }
 
-                                    </div>
-                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                              <span style={{ fontSize: '16px' }}>{`${englishToNepaliNumber(2)}. ठेगाना`}</span>
+                              <div style={{ fontSize: '20px', display: 'flex', gap: '20px' }}>
+
+                                <div style={{ flex: 1 }}>
+                                    {user.isSuperuser ? (
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-
-                                            <span> गा.पा/न.पा </span>
-
+                                            <span style={{ fontSize: '14px' }}>लाभग्राहीको जिल्ला</span>
                                             <select
-                                                id="temporary_shelter_land_municipality"
-                                                name="temporary_shelter_land_municipality"
-                                                value={data.temporary_shelter_land_municipality || ''}
+                                                name="beneficiary_district"
+                                                value={data.beneficiary_district || ''}
+                                                id="districts-benificery"
                                                 onChange={handleFormData}
-                                                style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                                style={errorFields.beneficiary_district ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                             >
-                                                <option> गा.पा/न.पा.</option>
+                                                <option>लाभग्राहीको जिल्ला</option>
                                                 {
-                                                    tempSelectedMunicipality.map(item => (
+                                                    districts.map(item => (
+                                                        <option value={item.id}>{item.title_ne}</option>
+                                                    ))
+                                                }
+
+
+                                            </select>
+                                        </div>
+                                    )
+                                        : (
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span style={{ fontSize: '14px' }}>लाभग्राहीको जिल्ला</span>
+                                                <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
+
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    {user.isSuperuser ? (
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span style={{ fontSize: '14px' }}>लाभग्राहीको गा.पा/न.पा.</span>
+                                            <select
+                                                id="beneficiary_municipality"
+                                                name="beneficiary_municipality"
+                                                value={data.beneficiary_municipality || ''}
+                                                onChange={handleFormData}
+                                                style={errorFields.beneficiary_municipality ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                            >
+                                                <option>लाभग्राहीको गा.पा/न.पा.</option>
+                                                {
+                                                    selectedMunicipality.map(item => (
                                                         <option value={item.id}>{item.title_ne}</option>
                                                     ))
                                                 }
                                             </select>
+
                                         </div>
-                                    </div>
-
-
-                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
-                                        <div className={styles.tempAddressIndividualDiv}>
+                                    )
+                                        : (
                                             <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span style={{ fontSize: '14px' }}>लाभग्राहीको गा.पा/न.पा.</span>
+                                                <span>
+                                                    {user && user.profile && municipalityNameConverter(user.profile.municipality)}
+                                                </span>
 
-                                                <span> वडा नंं:</span>
-                                                <select
-                                                    id="temporary_shelter_land_ward"
-                                                    name="temporary_shelter_land_ward"
-                                                    value={data.temporary_shelter_land_ward || ''}
-                                                    onChange={handleFormData}
-                                                    style={errorFields.temporary_shelter_land_ward ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                                >
-                                                    <option>वडा नंं.</option>
-                                                    {
-                                                        tempSelectedWard.map(item => (
-                                                            <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
-                                                        ))
-                                                    }
-                                                </select>
                                             </div>
-                                        </div>
-
-                                    </div>
-                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span>टोल</span>
-                                            <input
-                                                type="text"
-                                                name="temporary_shelter_land_tole"
-                                                value={data.temporary_shelter_land_tole}
-                                                onChange={handleFormData}
-                                                className={styles.inputClassName}
-                                                style={errorFields.temporary_shelter_land_tole ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
-                                            />
-                                        </div>
-                                    </div>
+                                        )
+                                    }
                                 </div>
-                            </div>
-                            <div>
-                                <h2 style={{ textDecoration: 'underline' }}>क. प्रथम पक्ष (लाभग्राही)</h2>
-                                <span style={{ fontSize: '16px' }}>१. व्यक्तिगत विवरण</span>
-                                <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
-                                    <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
-                                        <span>नाम, थर नेेपालीमाः</span>
-                                        <input
-                                            type="text"
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span style={{ fontSize: '14px' }}>लाभग्राहीको वडा नंं.</span>
+                                        <select
+                                            id="beneficiary_ward"
+                                            name="beneficiary_ward"
+                                            value={data.beneficiary_ward || ''}
                                             onChange={handleFormData}
-                                            name="beneficiary_name_nepali"
-                                            value={data.beneficiary_name_nepali}
-                                            style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
-                                            className={styles.inputClassName}
-                                        />
-                                    </div>
-                                    <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
-                                        <span>नाम, थर अंंग्रेजीमाः</span>
-                                        <input
-                                            type="text"
-                                            className={styles.inputClassName}
-                                            onChange={handleFormData}
-                                            name="beneficiary_name_english"
-                                            value={data.beneficiary_name_english}
-                                            style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
-                                        />
-                                    </div>
-                                </div>
-
-
-                                <div style={{ display: 'flex', gap: '20px', fontSize: '20px', margin: '20px 0px' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                                        <span>ना.प्र.न.</span>
-                                        {' '}
-                                        <input
-                                            type="text"
-                                            name="beneficiary_citizenship_number"
-                                            value={data.beneficiary_citizenship_number}
-                                            onChange={handleFormData}
-                                            className={styles.inputClassName}
-                                            style={errorFields.beneficiary_citizenship_number ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
-                                        />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                                        <span>सम्पर्क नंं.</span>
-                                        {' '}
-                                        <input
-                                            type="number"
-                                            name="beneficiary_contact_number"
-                                            value={data.beneficiary_contact_number}
-                                            onChange={handleFormData}
-                                            style={(errorFields.beneficiary_contact_number || phoneNumberValidation.benificiaryContactValidation) ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
-                                            className={styles.inputClassName}
-                                        />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 2, alignItems: 'flex-start' }}>
-                                        <span>लाभग्राहीको फोटो:</span>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                id="file-input"
-                                                // style={{ display: 'none' }}
-                                                onChange={handleFileInputChange}
-                                                name="beneficiary_photo"
-                                            />
-                                            {errorFields.beneficiary_photo
-                                                ? <p style={{ margin: '0', color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
-                                            }
+                                            style={errorFields.beneficiary_ward ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        >
+                                            <option>लाभग्राहीको वडा नंं.</option>
                                             {
-                                                data.beneficiary_photo ? <img height={100} width={100} src={handleShowImage(data.beneficiary_photo)} alt="img" /> : ''
+                                                selectedWard.map(item => (
+                                                    <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
+                                                ))
                                             }
-                                            {
-                                                imageOrFileValidation.profilePic_validation ? <p style={{ margin: '0', color: 'red' }}>फोटो jpeg, jpg वा png हुनुपर्छ</p> : ''
-                                            }
-                                        </div>
-
-
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
+                              </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span style={{ fontSize: '14px' }}>
+                                            लाभग्राहीको गाउँँ/टोल
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className={styles.inputClassName}
+                                            name="tole_name"
+                                            value={data.tole_name}
+                                            onChange={handleFormData}
+                                            style={errorFields.tole_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                        />
+                                    </div>
+                                </div>
 
 
                             <div className={styles.firstPartDetails}>
@@ -1425,12 +1334,12 @@ const TemporaryShelter = (props) => {
                                     <div className={styles.formElements}>
                                         <div className={styles.locationDetails}>
                                             <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                <span>
+                                                <span style={{ fontSize: '14px' }}>
                                                     लाभग्राही हस्ताक्षर गर्न उपलब्ध छैन?
                                                 </span>
 
                                                 <input
-                                                    style={{ cursor: 'pointer', marginTop: '7px' }}
+                                                    style={{ cursor: 'pointer', marginTop: '2px' }}
                                                     type="checkbox"
                                                     checked={data.is_beneficiary_available_to_sign}
                                                     onChange={handleCheckboxChange}
@@ -1442,7 +1351,7 @@ const TemporaryShelter = (props) => {
                                             data.is_beneficiary_available_to_sign
                                                 ? (
                                                     <div>
-                                                        <h2 style={{ textDecoration: 'underline', fontSize: '18px' }}>संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण</h2>
+                                                        <h2 style={{ textDecoration: 'underline', fontSize: '18px', marginBottom: '20px' }}>संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण</h2>
                                                         <div style={{ display: 'flex', gap: '20px' }}>
                                                             <div
                                                                 // className={styles.freeText}
@@ -1454,7 +1363,7 @@ const TemporaryShelter = (props) => {
                                                                     flex: 2,
                                                                 }}
                                                             >
-                                                                <span>नाम, थर नेेपालीमाः</span>
+                                                                <span style={{ fontSize: '14px' }}>नाम, थर नेेपालीमाः</span>
                                                                 <input
                                                                     type="text"
                                                                     onChange={handleFormData}
@@ -1473,7 +1382,7 @@ const TemporaryShelter = (props) => {
 
                                                                     }}
                                                                     >
-                                                                        <span>जिल्ला:</span>
+                                                                        <span style={{ fontSize: '14px' }}>जिल्ला:</span>
                                                                         <select
                                                                             name="beneficiary_representative_district"
                                                                             value={data.beneficiary_representative_district || ''}
@@ -1498,7 +1407,7 @@ const TemporaryShelter = (props) => {
 
                                                                         }}
                                                                         >
-                                                                            <span>जिल्ला:</span>
+                                                                            <span style={{ fontSize: '14px' }}>जिल्ला:</span>
                                                                             <span>{user && user.profile && districtNameConverter(user.profile.district)}</span>
                                                                         </div>
                                                                     )
@@ -1515,7 +1424,7 @@ const TemporaryShelter = (props) => {
                                                                         flex: 1,
                                                                     }}
                                                                     >
-                                                                        <span>गा.पा./न.पाः</span>
+                                                                        <span style={{ fontSize: '14px' }}>गा.पा./न.पाः</span>
                                                                         {' '}
                                                                         <select
                                                                             name="beneficiary_representative_municipality"
@@ -1541,7 +1450,7 @@ const TemporaryShelter = (props) => {
                                                                             flex: 1,
                                                                         }}
                                                                         >
-                                                                            <span>गा.पा./न.पाः</span>
+                                                                            <span style={{ fontSize: '14px' }}>गा.पा./न.पाः</span>
                                                                             <span>
                                                                                 {user && user.profile && municipalityNameConverter(user.profile.municipality)}
                                                                             </span>
@@ -1559,7 +1468,7 @@ const TemporaryShelter = (props) => {
                                                                 flex: 1,
                                                             }}
                                                             >
-                                                                <span>वडा नंं.</span>
+                                                                <span style={{ fontSize: '14px' }}>वडा नंं.</span>
                                                                 {' '}
                                                                 <select
                                                                     name="beneficiary_representative_ward"
@@ -1585,7 +1494,7 @@ const TemporaryShelter = (props) => {
                                                                     flex: 1,
                                                                 }}
                                                                 >
-                                                                    <span>ना.प्र.न.</span>
+                                                                    <span style={{ fontSize: '14px' }}>ना.प्र.न.</span>
                                                                     {' '}
                                                                     <input
                                                                         type="text"
@@ -1608,7 +1517,7 @@ const TemporaryShelter = (props) => {
                                                                     flex: 2,
                                                                 }}
                                                             >
-                                                                <span>बाजेेको नाम, थर:</span>
+                                                                <span style={{ fontSize: '14px' }}>बाजेेको नाम, थर:</span>
                                                                 {' '}
                                                                 <input
                                                                     type="text"
@@ -1631,7 +1540,7 @@ const TemporaryShelter = (props) => {
                                                                     flex: 1,
                                                                 }}
                                                             >
-                                                                <span>बाबुु/आमाको नाम, थर:</span>
+                                                                <span style={{ fontSize: '14px' }}>बाबुु/आमाको नाम, थर:</span>
                                                                 {' '}
                                                                 <input
                                                                     type="text"
@@ -1651,7 +1560,7 @@ const TemporaryShelter = (props) => {
                                     </div>
                                 </div>
                                 <div className={styles.firstPartContainer}>
-                                    <span>२. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण</span>
+                                    <span style={{ fontSize: '16px' }}>{`${englishToNepaliNumber(3)}. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण`}</span>
                                     <div className={styles.formElements}>
                                         <div style={{ display: 'flex', gap: '20px' }}>
                                             <div
@@ -1663,7 +1572,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 2,
                                                 }}
                                             >
-                                                <span>खातावालाको नाम, थरः</span>
+                                                <span style={{ fontSize: '14px' }}>खातावालाको नाम, थरः</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1682,7 +1591,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 2,
                                                 }}
                                             >
-                                                <span>खाता नम्बरः</span>
+                                                <span style={{ fontSize: '14px' }}>खाता नम्बरः</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1703,7 +1612,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 2,
                                                 }}
                                             >
-                                                <span>बैंंक/वित्तीय संंस्थाको नामः</span>
+                                                <span style={{ fontSize: '14px' }}>बैंंक/वित्तीय संंस्थाको नामः</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1722,7 +1631,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 2,
                                                 }}
                                             >
-                                                <span>शाखाः</span>
+                                                <span style={{ fontSize: '14px' }}>शाखाः</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1736,7 +1645,7 @@ const TemporaryShelter = (props) => {
                                     </div>
                                 </div>
                                 <div className={styles.firstPartContainer}>
-                                    <span>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)</span>
+                                    <span style={{ fontSize: '16px' }}>{`${englishToNepaliNumber(4)}. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)`}</span>
                                     <div className={styles.formElements} style={{ display: 'flex', gap: '20px', flexDirection: 'row' }}>
                                         <div
                                             className={styles.freeText}
@@ -1747,7 +1656,7 @@ const TemporaryShelter = (props) => {
                                                 flex: 2,
                                             }}
                                         >
-                                            <span>बसाइँँसराइ प्रमाण-पत्र नंः</span>
+                                            <span style={{ fontSize: '14px' }}>बसाइँँसराइ प्रमाण-पत्र नंः</span>
                                             <input
                                                 type="text"
                                                 // className={styles.inputClassName}
@@ -1766,7 +1675,7 @@ const TemporaryShelter = (props) => {
                                                 flex: 2,
                                             }}
                                         >
-                                            <span>बसाइँँसराइको मितिः</span>
+                                            <span style={{ fontSize: '14px' }}>बसाइँँसराइको मितिः</span>
                                             {/* <input
                                                 type="text"
                                                 className={styles.inputClassName}
@@ -1798,7 +1707,7 @@ const TemporaryShelter = (props) => {
                                     </div>
                                 </div>
                                 <div className={styles.firstPartContainer}>
-                                    <span>४. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर</span>
+                                    <span style={{ fontSize: '16px' }}>{`${englishToNepaliNumber(5)}. लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको औंठा छाप लाभग्राही/संंरक्षक/अधिकार प्राप्त व्यक्तिको हस्ताक्षर`}</span>
                                     <div className={styles.formElements}>
                                         <div style={{ display: 'flex', gap: '20px' }}>
                                             <div
@@ -1810,7 +1719,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 1,
                                                 }}
                                             >
-                                                <span>मितिः</span>
+                                                <span style={{ fontSize: '14px' }}>मितिः</span>
                                                 {/* <input
                                                 type="text"
                                                 className={styles.inputClassName}
@@ -1848,7 +1757,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 3,
                                                 }}
                                             >
-                                                <span>साक्षीको नाम, थर</span>
+                                                <span style={{ fontSize: '14px' }}>साक्षीको नाम, थर</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1870,7 +1779,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 2,
                                                 }}
                                             >
-                                                <span>लाभग्राहीसँँगको नाता</span>
+                                                <span style={{ fontSize: '14px' }}>लाभग्राहीसँँगको नाता</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1889,7 +1798,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 2,
                                                 }}
                                             >
-                                                <span>सम्पर्क नंं.</span>
+                                                <span style={{ fontSize: '14px' }}>सम्पर्क नंं.</span>
                                                 <input
                                                     type="number"
                                                     // className={styles.inputClassName}
@@ -1904,6 +1813,105 @@ const TemporaryShelter = (props) => {
                                 </div>
 
                             </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <span style={{ fontSize: '16px' }}>{`${englishToNepaliNumber(6)}.अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण`}</span>
+                                <div style={{ display: 'flex', fontSize: '20px', gap: '20px' }}>
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        {user.isSuperuser
+                                            ? (
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span style={{ fontSize: '14px' }}> जिल्ला </span>
+                                                    {' '}
+                                                    <select
+                                                        id="temporary_shelter_land_district"
+                                                        name="temporary_shelter_land_district"
+                                                        value={data.temporary_shelter_land_district || ''}
+                                                        onChange={handleFormData}
+                                                        style={errorFields.temporary_shelter_land_district ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                                    >
+                                                        <option> जिल्ला</option>
+                                                        {
+                                                            districts.map(item => (
+                                                                <option value={item.id}>{item.title_ne}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                </div>
+                                            )
+                                            : (
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span style={{ fontSize: '14px' }}> जिल्ला </span>
+                                                    <span>
+                                                        {user && user.profile && districtNameConverter(user.profile.district)}
+                                                    </span>
+
+                                                </div>
+                                            )
+                                        }
+
+                                    </div>
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                            <span style={{ fontSize: '14px' }}> गा.पा/न.पा </span>
+
+                                            <select
+                                                id="temporary_shelter_land_municipality"
+                                                name="temporary_shelter_land_municipality"
+                                                value={data.temporary_shelter_land_municipality || ''}
+                                                onChange={handleFormData}
+                                                style={errorFields.temporary_shelter_land_municipality ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                            >
+                                                <option> गा.पा/न.पा.</option>
+                                                {
+                                                    tempSelectedMunicipality.map(item => (
+                                                        <option value={item.id}>{item.title_ne}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        <div className={styles.tempAddressIndividualDiv}>
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                                <span style={{ fontSize: '14px' }}> वडा नंं:</span>
+                                                <select
+                                                    id="temporary_shelter_land_ward"
+                                                    name="temporary_shelter_land_ward"
+                                                    value={data.temporary_shelter_land_ward || ''}
+                                                    onChange={handleFormData}
+                                                    style={errorFields.temporary_shelter_land_ward ? { border: '1px solid red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                                >
+                                                    <option>वडा नंं.</option>
+                                                    {
+                                                        tempSelectedWard.map(item => (
+                                                            <option value={item.id}>{englishToNepaliNumber(item.title)}</option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div className={styles.tempAddressIndividualDiv} style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span style={{ fontSize: '14px' }}>टोल</span>
+                                            <input
+                                                type="text"
+                                                name="temporary_shelter_land_tole"
+                                                value={data.temporary_shelter_land_tole}
+                                                onChange={handleFormData}
+                                                className={styles.inputClassName}
+                                                style={errorFields.temporary_shelter_land_tole ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
+                                            />
+                                        </div>
+                                </div>
+                            </div>
                             <div className={styles.firstPartDetails}>
                                 <h2 style={{ textDecoration: 'underline' }}>ख. दोश्रो पक्ष</h2>
                                 <div className={styles.firstPartContainer} style={{ gap: '20px' }}>
@@ -1913,7 +1921,9 @@ const TemporaryShelter = (props) => {
                                             user.isSuperuser
                                                 ? (
                                                     <>
+                                                    <span style={{ fontSize: '16px' }}>
                                                         गा.पा/न.पा:
+                                                    </span>
                                                         {' '}
                                                         <select
                                                             id="operating_municipality123"
@@ -1953,7 +1963,7 @@ const TemporaryShelter = (props) => {
                                                     flex: 3,
                                                 }}
                                             >
-                                                <span>प्रमुुख प्रशासकीय अधिकृृतको नामः</span>
+                                                <span style={{ fontSize: '14px' }}>प्रमुुख प्रशासकीय अधिकृृतको नामः</span>
                                                 <input
                                                     type="text"
                                                     // className={styles.inputClassName}
@@ -1964,7 +1974,7 @@ const TemporaryShelter = (props) => {
                                                 />
                                             </div>
                                             <div className={styles.freeText} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                                <span>मितिः</span>
+                                                <span style={{ fontSize: '14px' }}>मितिः</span>
 
                                                 <NepaliDatePicker
                                                     inputClassName="form-control"
@@ -1992,10 +2002,10 @@ const TemporaryShelter = (props) => {
                             </div>
                             <div>
                                 <h2>आवश्यक कागजातहरुः</h2>
-                                <div style={{ margin: '10px 0px' }}>
-                                    <h2> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h2>
+                                <div style={{ margin: '10px 0px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <span style={{ fontSize: '16px' }}> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</span>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <span style={{ fontSize: '14px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <input
                                                 type="file"
@@ -2022,11 +2032,11 @@ const TemporaryShelter = (props) => {
 
                                     </div>
                                 </div>
-                                <div style={{ margin: '10px 0px' }}>
-                                    <h2> {`${englishToNepaliNumber(2)}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
-                                    </h2>
+                                <div style={{ margin: '10px 0px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <span style={{ fontSize: '16px' }}> {`${englishToNepaliNumber(2)}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
+                                </span>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <span style={{ fontSize: '14px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
 
                                             <input
@@ -2091,11 +2101,11 @@ const TemporaryShelter = (props) => {
 
 
                                         ? (
-                                            <div style={{ margin: '10px 0px' }}>
-                                                <h2> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
-                                                </h2>
+                                            <div style={{ margin: '10px 0px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                               <span style={{ fontSize: '16px' }}> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
+                                               </span>
                                                 <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                                    <span style={{ fontSize: '14px' }}>फोटो:</span>
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                                         <input
                                                             type="file"
@@ -2121,10 +2131,10 @@ const TemporaryShelter = (props) => {
                                                 </div>
                                             </div>
                                         ) : ''}
-                                <div style={{ margin: '10px 0px' }}>
-                                    <h2>{`${data.is_beneficiary_available_to_sign ? englishToNepaliNumber(4) : englishToNepaliNumber(3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h2>
+                                <div style={{ margin: '10px 0px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <span style={{ fontSize: '16px' }}>{`${data.is_beneficiary_available_to_sign ? englishToNepaliNumber(4) : englishToNepaliNumber(3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</span>
                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                        <span style={{ fontSize: '20px' }}>फोटो:</span>
+                                        <span style={{ fontSize: '14px' }}>फोटो:</span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <input
                                                 type="file"

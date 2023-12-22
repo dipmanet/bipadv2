@@ -441,7 +441,7 @@ const Tranche1 = (props) => {
         }
     }, [errorFetchData]);
 
-    console.log('fetehced dta', fetchedDataWhole);
+
     return (
         <>
             <Page hideFilter hideMap />

@@ -222,7 +222,6 @@ const Tranche2 = (props) => {
         const allowedExtensionsFile = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
         const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
         if (e.target.name === 'temporary_shelter_photo_front' && !allowedExtensions.exec(file.name)) {
-            console.log('Entered here or not');
             imageValidation.temporary_shelter_photo_front = true;
             setImageOrFileValidation(imageValidation);
             return;
@@ -230,7 +229,6 @@ const Tranche2 = (props) => {
         imageValidation.temporary_shelter_photo_front = false;
         setImageOrFileValidation(imageValidation);
         if (e.target.name === 'temporary_shelter_photo_back' && !allowedExtensions.exec(file.name)) {
-            console.log('Entered here or not');
             imageValidation.temporary_shelter_photo_back = true;
             setImageOrFileValidation(imageValidation);
             return;
@@ -402,7 +400,6 @@ const Tranche2 = (props) => {
                 setLoading(false);
             })
             .catch((error) => {
-                console.log('Error:', error);
                 setBackendError(true);
                 setLoading(false);
             });
@@ -499,7 +496,7 @@ const Tranche2 = (props) => {
             navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`);
         }
     }, [fetchedData]);
-    console.log('Fetched ata', fetchedTranche2Data);
+
     return (
         <>
             <Page hideFilter hideMap />
