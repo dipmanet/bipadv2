@@ -43,7 +43,7 @@ import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { englishToNepaliNumber } from 'nepali-number';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import close from '#resources/icons/close.svg';
-
+import Nepali from 'nepalify-react';
 import axios from 'axios';
 import { getAuthState } from '#utils/session';
 import SwitchToggle from 'react-switch';
@@ -247,8 +247,9 @@ const TemporaryShelter = (props) => {
     const [backendError, setBackendError] = useState(false);
     const [isApplicationClicked, setIsApplicationClicked] = useState(false);
     const [toggleSwitchChecked, setToggleSwitchChecked] = useState(false);
-    const [keyLayout, setKeyLayout] = useState('traditional');
+    const [keyLayout, setKeyLayout] = useState('romanized');
 
+    const [appendedNepalifyAttributes, setAppendedNepalifyAttributes] = useState([]);
 
     const fileInputRef = useRef(null);
     const { user,
@@ -269,9 +270,19 @@ const TemporaryShelter = (props) => {
           enable: true,
         };
 
-        const nepaliInput = (id) => {
-          nepalify.interceptElementById(id, { layout: keyLayout, enabled: true });
-        };
+const nepaliInput = (e) => {
+  const isNepalifyEnabled = e.target.getAttribute('data-nepalify');
+
+  if (isNepalifyEnabled === 'not inialized') {
+  const attribute = nepalify.interceptElementById(e.target.id, { layout: keyLayout, enabled: true });
+  const finalAttributes = appendedNepalifyAttributes.filter(i => i.el.id !== e.target.id);
+  setAppendedNepalifyAttributes([...finalAttributes, attribute]);
+
+    e.target.setAttribute('data-nepalify', 'inialized');
+  }
+};
+
+
     const handleInfrastructurePhoto = (e) => {
         setErrorFields({
             ...errorFields,
@@ -467,23 +478,6 @@ const TemporaryShelter = (props) => {
                 ...data, [e.target.name]: e.target.value,
             });
         }
-
-
-        // if (!phoneNumberRegex.test(data.beneficiary_contact_number)) {
-        //     setPhoneNumberValidation({
-        //         ...phoneNumberValidation,
-        //         benificiaryContactValidation: true,
-        //     });
-        //     return;
-        // }
-
-        // if (!phoneNumberRegex.test(data.withness_contact_number)) {
-        //     setPhoneNumberValidation({
-        //         ...phoneNumberValidation,
-        //         witnessContactValidation: true,
-        //     });
-        //     return;
-        // }
     };
 
     const selectedMunicipality = municipalities.filter(i => i.district === Number(data.beneficiary_district));
@@ -841,11 +835,20 @@ const TemporaryShelter = (props) => {
     };
     const handleChange = (checked) => {
       if (checked) {
-        setKeyLayout('romanized');
-      } else {
         setKeyLayout('traditional');
+        //   const test = nepalify.interceptElementById(e.target.id, { layout: keyLayout, enabled: true });
+        //   test.disabled();
+      } else {
+        setKeyLayout('romanized');
       }
+      appendedNepalifyAttributes.map((i) => {
+        const element = i.el;
 
+        element.setAttribute('data-nepalify', 'not inialized');
+
+        i.disable();
+        // i.target.setAttribute('data-nepalify', 'data-nepalify');
+      });
       setToggleSwitchChecked(checked);
     };
 
@@ -1095,16 +1098,18 @@ const TemporaryShelter = (props) => {
                                         <span style={{ fontSize: '14px' }}>
                                             हजुरबुबाको नाम
                                         </span>
+
+
                                         <input
-
-
-                                            onFocus={() => nepaliInput('grand_parent_name')}
+                                        onBlur={handleFormData}
+                                        onFocus={nepaliInput}
+                                         data-nepalify={'not inialized'}
                                             id="grand_parent_name"
                                             type="text"
                                             name="grand_parent_name"
-                                            value={data.grand_parent_name}
+                                            // value={data.grand_parent_name}
                                             className={styles.inputClassName}
-                                            onChange={handleFormData}
+                                            // onChange={handleFormData}
                                             style={errorFields.grand_parent_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         />
                                     </div>
@@ -1136,15 +1141,14 @@ const TemporaryShelter = (props) => {
                                             आमा/बाबुको नाम
                                         </span>
                                         <input
-
-
-onFocus={() => nepaliInput('parent_name')}
-id="parent_name"
+                                            data-nepalify={'not inialized'}
+                                            id="parent_name"
+                                            onBlur={handleFormData}
+                                            onFocus={nepaliInput}
                                             type="text"
                                             className={styles.inputClassName}
-                                            onChange={handleFormData}
                                             name="parent_name"
-                                            value={data.parent_name}
+                                            // value={data.parent_name}
                                             style={errorFields.parent_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         />
                                     </div>
@@ -1176,14 +1180,13 @@ id="parent_name"
                                     <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
                                         <span style={{ fontSize: '14px' }}>नाम, थर नेेपालीमाः</span>
                                         <input
-
-
-onFocus={() => nepaliInput('beneficiary_name_nepali')}
-id="beneficiary_name_nepali"
+                                            data-nepalify={'not inialized'}
+                                            onBlur={handleFormData}
+                                            onFocus={nepaliInput}
+                                            id="beneficiary_name_nepali"
                                             type="text"
-                                            onChange={handleFormData}
                                             name="beneficiary_name_nepali"
-                                            value={data.beneficiary_name_nepali}
+                                            // value={data.beneficiary_name_nepali}
                                             style={errorFields.beneficiary_name_nepali ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                             className={styles.inputClassName}
                                         />
@@ -1191,12 +1194,17 @@ id="beneficiary_name_nepali"
                                     <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
                                         <span style={{ fontSize: '14px' }}>नाम, थर अंंग्रेजीमाः</span>
                                         <input
-        onFocus={null}
+ data-nepalify={'not inialized'}
+ onBlur={handleFormData}
+//  onFocus={nepaliInput}
+ id="beneficiary_name_english"
+
+
                                             type="text"
                                             className={styles.inputClassName}
-                                            onChange={handleFormData}
+
                                             name="beneficiary_name_english"
-                                            value={data.beneficiary_name_english}
+                                            // value={data.beneficiary_name_english}
                                             style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                         />
                                     </div>
@@ -1211,14 +1219,16 @@ id="beneficiary_name_nepali"
                                             उमेर
                                         </span>
                                         <input
+data-nepalify={'not inialized'}
+onBlur={handleFormData}
+onFocus={nepaliInput}
 
 
-onFocus={() => nepaliInput('beneficiary_age')}
 id="beneficiary_age"
                                             type="number"
                                             name="beneficiary_age"
-                                            onChange={handleFormData}
-                                            value={data.beneficiary_age}
+
+                                            // value={data.beneficiary_age}
                                             className={styles.inputClassName}
                                             style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         />
@@ -1230,12 +1240,18 @@ id="beneficiary_age"
                                        <input
 
 
-onFocus={() => nepaliInput('beneficiary_citizenship_number')}
+data-nepalify={'not inialized'}
 id="beneficiary_citizenship_number"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
+
+
                                            type="text"
                                            name="beneficiary_citizenship_number"
-                                           value={data.beneficiary_citizenship_number}
-                                           onChange={handleFormData}
+                                          //  value={data.beneficiary_citizenship_number}
+
                                            className={styles.inputClassName}
                                            style={errorFields.beneficiary_citizenship_number ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                        />
@@ -1246,12 +1262,15 @@ id="beneficiary_citizenship_number"
                                        <input
 
 
-onFocus={() => nepaliInput('beneficiary_contact_number')}
+onBlur={handleFormData}
+onFocus={nepaliInput}
+
+data-nepalify={'not inialized'}
 id="beneficiary_contact_number"
                                            type="number"
                                            name="beneficiary_contact_number"
-                                           value={data.beneficiary_contact_number}
-                                           onChange={handleFormData}
+                                          //  value={data.beneficiary_contact_number}
+
                                            style={(errorFields.beneficiary_contact_number || phoneNumberValidation.benificiaryContactValidation) ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                            className={styles.inputClassName}
                                        />
@@ -1396,13 +1415,18 @@ id="beneficiary_contact_number"
                                         <input
 
 
-onFocus={() => nepaliInput('tole_name')}
+data-nepalify={'not inialized'}
 id="tole_name"
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
+
+
                                             type="text"
                                             className={styles.inputClassName}
                                             name="tole_name"
-                                            value={data.tole_name}
-                                            onChange={handleFormData}
+                                            // value={data.tole_name}
+
                                             style={errorFields.tole_name ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         />
                                     </div>
@@ -1428,10 +1452,8 @@ id="tole_name"
                                             </div>
 
                                         </div>
-                                        {
-                                            data.is_beneficiary_available_to_sign
-                                                ? (
-                                                    <div>
+
+                                                    <div style={data.is_beneficiary_available_to_sign ? { display: 'block' } : { display: 'none' }}>
                                                         <h2 style={{ textDecoration: 'underline', fontSize: '18px', marginBottom: '20px' }}>संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण</h2>
                                                         <div style={{ display: 'flex', gap: '20px' }}>
                                                             <div
@@ -1448,12 +1470,15 @@ id="tole_name"
                                                                 <input
 
 
-onFocus={() => nepaliInput('beneficiary_representative_name_nepali')}
-id="beneficiary_representative_name_nepali"
+onBlur={handleFormData}
+onFocus={nepaliInput}
+
+                                                                    data-nepalify={'not inialized'}
+                                                                    id="beneficiary_representative_name_nepali"
                                                                     type="text"
-                                                                    onChange={handleFormData}
+
                                                                     name="beneficiary_representative_name_nepali"
-                                                                    value={data.beneficiary_representative_name_nepali}
+                                                                    // value={data.beneficiary_representative_name_nepali}
                                                                     style={errorFields.beneficiary_representative_name_nepali ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                     className={styles.inputClassName}
                                                                 />
@@ -1584,12 +1609,17 @@ id="beneficiary_representative_name_nepali"
                                                                     <input
 
 
-onFocus={() => nepaliInput('beneficiary_representative_citizenship_number')}
+data-nepalify={'not inialized'}
 id="beneficiary_representative_citizenship_number"
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
+
+
                                                                         type="text"
                                                                         name="beneficiary_representative_citizenship_number"
-                                                                        value={data.beneficiary_representative_citizenship_number}
-                                                                        onChange={handleFormData}
+                                                                        // value={data.beneficiary_representative_citizenship_number}
+
                                                                         className={styles.inputClassName}
                                                                         style={errorFields.beneficiary_representative_citizenship_number ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                     />
@@ -1611,12 +1641,16 @@ id="beneficiary_representative_citizenship_number"
                                                                 <input
 
 
-onFocus={() => nepaliInput('beneficiary_representative_grandfather_name')}
+data-nepalify={'not inialized'}
 id="beneficiary_representative_grandfather_name"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                                     type="text"
                                                                     // className={styles.inputClassName}
                                                                     name="beneficiary_representative_grandfather_name"
-                                                                    value={data.beneficiary_representative_grandfather_name}
+                                                                    // value={data.beneficiary_representative_grandfather_name}
                                                                     onChange={handleFormData}
                                                                     style={errorFields.beneficiary_representative_grandfather_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                 />
@@ -1637,21 +1671,22 @@ id="beneficiary_representative_grandfather_name"
                                                                 {' '}
                                                                 <input
 
-
-onFocus={() => nepaliInput('beneficiary_representative_parent_name')}
+data-nepalify={'not inialized'}
 id="beneficiary_representative_parent_name"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                                     type="text"
                                                                     // className={styles.inputClassName}
                                                                     name="beneficiary_representative_parent_name"
-                                                                    value={data.beneficiary_representative_parent_name}
-                                                                    onChange={handleFormData}
+                                                                    // value={data.beneficiary_representative_parent_name}
+
                                                                     style={errorFields.beneficiary_representative_parent_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                                 />
                                                             </div>
                                                         </div>
                                                     </div>
-                                                ) : ''
-                                        }
 
 
                                     </div>
@@ -1673,13 +1708,17 @@ id="beneficiary_representative_parent_name"
                                                 <input
 
 
-onFocus={() => nepaliInput('bank_account_holder_name')}
+data-nepalify={'not inialized'}
 id="bank_account_holder_name"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                     type="text"
                                                     // className={styles.inputClassName}
                                                     name="bank_account_holder_name"
-                                                    value={data.bank_account_holder_name}
-                                                    onChange={handleFormData}
+                                                    // value={data.bank_account_holder_name}
+
                                                     style={errorFields.bank_account_holder_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
@@ -1719,13 +1758,17 @@ id="bank_account_holder_name"
                                                 <input
 
 
-onFocus={() => nepaliInput('bank_name')}
+data-nepalify={'not inialized'}
 id="bank_name"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                     type="text"
                                                     // className={styles.inputClassName}
-                                                    onChange={handleFormData}
+
                                                     name="bank_name"
-                                                    value={data.bank_name}
+                                                    // value={data.bank_name}
                                                     style={errorFields.bank_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
@@ -1741,13 +1784,17 @@ id="bank_name"
                                                 <span style={{ fontSize: '14px' }}>शाखाः</span>
                                                 <input
 
-onFocus={() => nepaliInput('bank_branch_name')}
+data-nepalify={'not inialized'}
 id="bank_branch_name"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                     type="text"
                                                     // className={styles.inputClassName}
-                                                    onChange={handleFormData}
+
                                                     name="bank_branch_name"
-                                                    value={data.bank_branch_name}
+                                                    // value={data.bank_branch_name}
                                                     style={errorFields.bank_branch_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
@@ -1769,13 +1816,17 @@ id="bank_branch_name"
                                             <span style={{ fontSize: '14px' }}>बसाइँँसराइ प्रमाण-पत्र नंः</span>
                                             <input
 
-onFocus={() => nepaliInput('migration_certificate_number')}
+data-nepalify={'not inialized'}
 id="migration_certificate_number"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                 type="text"
                                                 // className={styles.inputClassName}
-                                                onChange={handleFormData}
+
                                                 name="migration_certificate_number"
-                                                value={data.migration_certificate_number}
+                                                // value={data.migration_certificate_number}
                                                 style={{ height: '34px', width: '100%' }}
                                             />
                                         </div>
@@ -1873,13 +1924,17 @@ id="migration_certificate_number"
                                                 <span style={{ fontSize: '14px' }}>साक्षीको नाम, थर</span>
                                                 <input
 
-onFocus={() => nepaliInput('withness_name_nepali')}
+data-nepalify={'not inialized'}
 id="withness_name_nepali"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                     type="text"
                                                     // className={styles.inputClassName}
-                                                    onChange={handleFormData}
+
                                                     name="withness_name_nepali"
-                                                    value={data.withness_name_nepali}
+                                                    // value={data.withness_name_nepali}
                                                     style={errorFields.withness_name_nepali ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
@@ -1898,12 +1953,17 @@ id="withness_name_nepali"
                                                 <span style={{ fontSize: '14px' }}>लाभग्राहीसँँगको नाता</span>
                                                 <input
 
-                                                onFocus={() => nepaliInput('withness_relation')}
+data-nepalify={'not inialized'}
+id="withness_relation"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                     type="text"
                                                     // className={styles.inputClassName}
-                                                    onChange={handleFormData}
+
                                                     name="withness_relation"
-                                                    value={data.withness_relation}
+                                                    // value={data.withness_relation}
                                                     style={errorFields.withness_relation ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
@@ -1918,7 +1978,8 @@ id="withness_name_nepali"
                                             >
                                                 <span style={{ fontSize: '14px' }}>सम्पर्क नंं.</span>
                                                 <input
-                                                onFocus={() => nepaliInput('withness_contact_number')}
+                                                data-nepalify={'not inialized'}
+                                                id="withness_contact_number"
                                                     type="number"
                                                     // className={styles.inputClassName}
                                                     onChange={handleFormData}
@@ -2021,12 +2082,16 @@ id="withness_name_nepali"
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             <span style={{ fontSize: '14px' }}>टोल</span>
                                             <input
-                                             onFocus={() => nepaliInput('temporary_shelter_land_tole')}
+                                                 data-nepalify={'not inialized'}
                                             id="temporary_shelter_land_tole"
+
+
+onBlur={handleFormData}
+onFocus={nepaliInput}
                                                 type="text"
                                                 name="temporary_shelter_land_tole"
-                                                value={data.temporary_shelter_land_tole}
-                                                onChange={handleFormData}
+                                                // value={data.temporary_shelter_land_tole}
+
                                                 className={styles.inputClassName}
                                                 style={errorFields.temporary_shelter_land_tole ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                             />
@@ -2087,12 +2152,16 @@ id="withness_name_nepali"
                                                 <span style={{ fontSize: '14px' }}>प्रमुुख प्रशासकीय अधिकृृतको नामः</span>
                                                 <input
                                                 id="operating_municipality_officer_name"
-                                                onFocus={() => nepaliInput('operating_municipality_officer_name')}
+                                                data-nepalify={'not inialized'}
+
+
+    onBlur={handleFormData}
+    onFocus={nepaliInput}
                                                     type="text"
                                                     // className={styles.inputClassName}
-                                                    onChange={handleFormData}
+
                                                     name="operating_municipality_officer_name"
-                                                    value={data.operating_municipality_officer_name}
+                                                    // value={data.operating_municipality_officer_name}
                                                     style={errorFields.operating_municipality_officer_name ? { borderBottom: '2px dotted red', height: '34px', width: '100%' } : { height: '34px', width: '100%' }}
                                                 />
                                             </div>
