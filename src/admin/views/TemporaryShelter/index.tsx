@@ -43,7 +43,6 @@ import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { englishToNepaliNumber } from 'nepali-number';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import close from '#resources/icons/close.svg';
-import Nepali from 'nepalify-react';
 import axios from 'axios';
 import { getAuthState } from '#utils/session';
 import SwitchToggle from 'react-switch';
