@@ -834,11 +834,11 @@ const nepaliInput = (e) => {
     };
     const handleChange = (checked) => {
       if (checked) {
-        setKeyLayout('traditional');
+        setKeyLayout('romanized');
         //   const test = nepalify.interceptElementById(e.target.id, { layout: keyLayout, enabled: true });
         //   test.disabled();
       } else {
-        setKeyLayout('romanized');
+        setKeyLayout('traditional');
       }
       appendedNepalifyAttributes.map((i) => {
         const element = i.el;
@@ -936,8 +936,10 @@ const nepaliInput = (e) => {
                                 checked={toggleSwitchChecked}
 
                               onChange={handleChange}
+                              offColor="#86d3ff"
                               onColor="#86d3ff"
                               onHandleColor="#2693e6"
+                              offHandleColor="#2693e6"
                               handleDiameter={30}
                               uncheckedIcon={false}
                               checkedIcon={false}
@@ -1193,8 +1195,8 @@ const nepaliInput = (e) => {
                                     <div className={styles.freeText} style={{ flex: 1, flexDirection: 'column', display: 'flex' }}>
                                         <span style={{ fontSize: '14px' }}>नाम, थर अंंग्रेजीमाः</span>
                                         <input
- data-nepalify={'not inialized'}
- onBlur={handleFormData}
+//  data-nepalify={'not inialized'}
+ onChange={handleFormData}
 //  onFocus={nepaliInput}
  id="beneficiary_name_english"
 
@@ -1203,7 +1205,7 @@ const nepaliInput = (e) => {
                                             className={styles.inputClassName}
 
                                             name="beneficiary_name_english"
-                                            // value={data.beneficiary_name_english}
+                                            value={data.beneficiary_name_english}
                                             style={errorFields.beneficiary_name_english ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                         />
                                     </div>
@@ -1218,16 +1220,16 @@ const nepaliInput = (e) => {
                                             उमेर
                                         </span>
                                         <input
-data-nepalify={'not inialized'}
-onBlur={handleFormData}
-onFocus={nepaliInput}
+// data-nepalify={'not inialized'}
+onChange={handleFormData}
+// onFocus={nepaliInput}
 
 
 id="beneficiary_age"
                                             type="number"
                                             name="beneficiary_age"
 
-                                            // value={data.beneficiary_age}
+                                            value={data.beneficiary_age}
                                             className={styles.inputClassName}
                                             style={errorFields.beneficiary_age ? { borderBottom: '2px dotted red', height: '34px', width: 'auto' } : { height: '34px', width: 'auto' }}
                                         />
@@ -1261,14 +1263,14 @@ onFocus={nepaliInput}
                                        <input
 
 
-onBlur={handleFormData}
-onFocus={nepaliInput}
+onChange={handleFormData}
+// onFocus={nepaliInput}
 
-data-nepalify={'not inialized'}
+// data-nepalify={'not inialized'}
 id="beneficiary_contact_number"
                                            type="number"
                                            name="beneficiary_contact_number"
-                                          //  value={data.beneficiary_contact_number}
+                                           value={data.beneficiary_contact_number}
 
                                            style={(errorFields.beneficiary_contact_number || phoneNumberValidation.benificiaryContactValidation) ? { borderBottom: '2px dotted red', height: '34px' } : { height: '34px' }}
                                            className={styles.inputClassName}
