@@ -657,7 +657,7 @@ console.log('filtered row data', fetchedData);
                 />
             )
                 : ''}
-            <Box sx={{ width: '80vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
+            <Box sx={{ width: '87vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
 
                 <div className={styles.credentialSearch}>
                     <div className={styles.rightOptions}>

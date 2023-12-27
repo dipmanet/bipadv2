@@ -28,17 +28,17 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 
     .tableMenuContainer {
         min-height: 500px;
-        display: flex;
-        align-items: flex-start;
-        padding-top: 20px;
-        // border: 1px solid gray;
-        width: 78vw;
+        // display: flex;
+        // align-items: flex-start;
+        // padding-top: 20px;
+      
+        width: 87vw;
         min-width: 500px;
 
         .mainContent {
             .formDataContainer {
                 background-color: #fefefe;
-                padding: 25px 0;
+                // padding: 25px 0;
             }
         }
     }
