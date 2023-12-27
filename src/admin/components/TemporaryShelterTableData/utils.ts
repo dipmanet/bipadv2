@@ -38,14 +38,14 @@ export const epidemicDetails = {
     totalDeadDisabled: null,
 };
 export const tableTitleRef = {
-    id: 'आईडी',
-    paNumber: 'pa नम्बर',
+    id: 'लाभग्राही क्रम संंख्या',
+    paNumber: 'सम्झौता क्रमााङ्क संंख्या',
     entryDateBs: 'पहिलो किस्ता दर्ता मिति',
     beneficiaryNameNepali: 'नाम',
     beneficiaryDistrict: 'जिल्ला',
     beneficiaryMunicipality: 'नगरपालिका',
     beneficiaryWard: 'वार्ड',
-    toleName: 'tole नाम',
+    toleName: 'टोल',
     grandParentName: 'हजुरबुबाको नाम',
     parentName: 'अभिभावकको नाम',
     withnessNameNepali: 'साक्षीको नाम',
