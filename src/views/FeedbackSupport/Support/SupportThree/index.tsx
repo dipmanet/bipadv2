@@ -8,7 +8,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import Button from 'src/vendor/react-store/v2/Action/Button';
 import { _cs } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
@@ -19,6 +18,7 @@ import {
     createRequestClient,
     methods,
 } from '#request';
+import Button from '../../../../vendor/react-store/v2/Action/Button';
 import styles from './styles.scss';
 
 const requestOptions: {

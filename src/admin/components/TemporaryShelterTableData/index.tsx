@@ -365,13 +365,38 @@ const TemporaryShelterTableData = (props) => {
         if (fetchedData) {
             const tableRows = fetchedData.map((row) => {
                 const epidemicObj = {
-                    id: row.id,
-                    entryDateBs: row.entryDateBs,
-                    beneficiaryNameNepali: row.beneficiaryNameNepali,
-                    beneficiaryDistrict: row.beneficiaryDistrict, // use local address field
-                    beneficiaryMunicipality: row.beneficiaryMunicipality,
-                    beneficiaryWard: row.beneficiaryWard,
-                    action: null,
+                  id: row.id,
+                  paNumber: row.paNumber,
+                  entryDateBs: row.entryDateBs,
+                  beneficiaryNameNepali: row.beneficiaryNameNepali,
+                  beneficiaryDistrict: row.beneficiaryDistrict,
+                  beneficiaryMunicipality: row.beneficiaryMunicipality,
+                  beneficiaryWard: row.beneficiaryWard,
+                  toleName: row.toleName,
+                  grandParentName: row.grandParentName,
+                  parentName: row.parentName,
+                  beneficiaryRepresentativeNameNepali: row.beneficiaryRepresentativeNameNepali,
+                  beneficiaryRepresentativeGrandfatherName: row.beneficiaryRepresentativeGrandfatherName,
+                  beneficiaryRepresentativeParentName: row.beneficiaryRepresentativeParentName,
+                  beneficiaryRepresentativeCitizenshipNumber: row.beneficiaryRepresentativeCitizenshipNumber,
+                  beneficiaryRepresentativeDistrict: row.beneficiaryRepresentativeDistrict,
+                  beneficiaryRepresentativeMunicipality: row.beneficiaryRepresentativeMunicipality,
+                  migrationCertificateNumber: row.migrationCertificateNumber,
+                  migrationDateBs: row.migrationDateBs,
+                  withnessNameNepali: row.withnessNameNepali,
+                  withnessRelation: row.withnessRelation,
+                  withnessContactNumber: row.withnessContactNumber,
+                  temporaryShelterLandDistrict: row.temporaryShelterLandDistrict,
+                  temporaryShelterLandMunicipality: row.temporaryShelterLandMunicipality,
+                  temporaryShelterLandWard: row.temporaryShelterLandWard,
+                  temporaryShelterLandTole: row.temporaryShelterLandTole,
+                  bankAccountHolderName: row.bankAccountHolderName,
+                  bankAccountNumber: row.bankAccountNumber,
+                  bankBranchName: row.bankBranchName,
+                  bankName: row.bankName,
+                  amount: row.firstTrancheEnrollmentUpload ? row.firstTrancheEnrollmentUpload.amount : '-',
+                  secondTrancheEnrollmentForm: row.secondTrancheEnrollmentForm ? 'हो' : 'छैन',
+                  action: null,
 
                 };
 
@@ -381,7 +406,7 @@ const TemporaryShelterTableData = (props) => {
         }
     }, [fetchedData]);
 
-
+console.log('filtered row data', fetchedData);
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
         setLoader(true);
@@ -525,29 +550,29 @@ const TemporaryShelterTableData = (props) => {
 
 
     const districtNameConverter = (id) => {
-        const finalData = fetchedData && districts.find(i => i.id === id).title_ne;
+        const finalData = fetchedData && id ? districts.find(i => i.id === id).title_ne : '-';
 
         return finalData;
     };
 
     const municipalityNameConverter = (id) => {
         // const finalData = fetchedData && municipalities.find(i => i.id === id).title_ne;
-        const finalData = fetchedData && municipalities.find(i => i.id === id);
-        if (finalData.type === 'Rural Municipality') {
+        const finalData = fetchedData && id ? municipalities.find(i => i.id === id) : '';
+        if (finalData && (finalData.type === 'Rural Municipality')) {
             const municipality = `${finalData.title_ne} गाउँपालिका`;
             return municipality;
-        } if (finalData.type === 'Submetropolitan City') {
+        } if (finalData && (finalData.type === 'Submetropolitan City')) {
             const municipality = `${finalData.title_ne} उप-महानगरपालिका`;
             return municipality;
-        } if (finalData.type === 'Metropolitan City') {
+        } if (finalData && (finalData.type === 'Metropolitan City')) {
             const municipality = `${finalData.title_ne} महानगरपालिका`;
             return municipality;
         }
-        return `${finalData.title_ne} नगरपालिका`;
+        return finalData ? `${finalData.title_ne} नगरपालिका` : '-';
     };
 
     const wardNameConverter = (id) => {
-        const finalData = fetchedData && wards.find(i => i.id === id).title;
+        const finalData = fetchedData && id ? wards.find(i => i.id === id).title : '-';
         return finalData;
     };
 
@@ -953,6 +978,149 @@ const TemporaryShelterTableData = (props) => {
                                                                         </TableCell>
                                                                     );
                                                                 }
+                                                                if (val === 'beneficiaryRepresentativeDistrict') {
+                                                                  return (
+                                                                      <TableCell
+                                                                          align="center"
+                                                                          className={styles.setStyleForTableCell}
+                                                                          component="th"
+                                                                          id={labelId}
+                                                                          scope="row"
+                                                                          padding="none"
+                                                                          key={val}
+                                                                      >
+                                                                          {`${(districtNameConverter(row[val]))}`}
+                                                                      </TableCell>
+                                                                  );
+                                                              }
+
+                                                              if (val === 'beneficiaryRepresentativeMunicipality') {
+                                                                return (
+                                                                    <TableCell
+                                                                        align="center"
+                                                                        className={styles.setStyleForTableCell}
+                                                                        component="th"
+                                                                        id={labelId}
+                                                                        scope="row"
+                                                                        padding="none"
+                                                                        key={val}
+                                                                    >
+                                                                        {`${(municipalityNameConverter(row[val]))}`}
+                                                                    </TableCell>
+                                                                );
+                                                            }
+
+                                                            if (val === 'migrationCertificateNumber') {
+                                                              return (
+                                                                  <TableCell
+                                                                      align="center"
+                                                                      className={styles.setStyleForTableCell}
+                                                                      component="th"
+                                                                      id={labelId}
+                                                                      scope="row"
+                                                                      padding="none"
+                                                                      key={val}
+                                                                  >
+                                                                      {`${row[val] ? (englishToNepaliNumber(row[val])) : '-'}`}
+                                                                  </TableCell>
+                                                              );
+                                                          }
+
+                                                          if (val === 'migrationDateBs') {
+                                                            return (
+                                                                <TableCell
+                                                                    align="center"
+                                                                    className={styles.setStyleForTableCell}
+                                                                    component="th"
+                                                                    id={labelId}
+                                                                    scope="row"
+                                                                    padding="none"
+                                                                    key={val}
+                                                                >
+                                                                    {`${row[val] ? dateFormatter(row[val]) : '-'}`}
+                                                                </TableCell>
+                                                            );
+                                                        }
+
+                                                        if (val === 'withnessContactNumber') {
+                                                          return (
+                                                              <TableCell
+                                                                  align="center"
+                                                                  className={styles.setStyleForTableCell}
+                                                                  component="th"
+                                                                  id={labelId}
+                                                                  scope="row"
+                                                                  padding="none"
+                                                                  key={val}
+                                                              >
+                                                                  {`${englishToNepaliNumber(row[val])}`}
+                                                              </TableCell>
+                                                          );
+                                                      }
+                                                      if (val === 'amount') {
+                                                        return (
+                                                            <TableCell
+                                                                align="center"
+                                                                className={styles.setStyleForTableCell}
+                                                                component="th"
+                                                                id={labelId}
+                                                                scope="row"
+                                                                padding="none"
+                                                                key={val}
+                                                            >
+                                                                {`${englishToNepaliNumber(row[val])}`}
+                                                            </TableCell>
+                                                        );
+                                                    }
+
+                                                      if (val === 'temporaryShelterLandDistrict') {
+                                                        return (
+                                                            <TableCell
+                                                                align="center"
+                                                                className={styles.setStyleForTableCell}
+                                                                component="th"
+                                                                id={labelId}
+                                                                scope="row"
+                                                                padding="none"
+                                                                key={val}
+                                                            >
+                                                                {`${(districtNameConverter(row[val]))}`}
+                                                            </TableCell>
+                                                        );
+                                                    }
+
+                                                    if (val === 'temporaryShelterLandMunicipality') {
+                                                      return (
+                                                          <TableCell
+                                                              align="center"
+                                                              className={styles.setStyleForTableCell}
+                                                              component="th"
+                                                              id={labelId}
+                                                              scope="row"
+                                                              padding="none"
+                                                              key={val}
+                                                          >
+                                                              {`${(municipalityNameConverter(row[val]))}`}
+                                                          </TableCell>
+                                                      );
+                                                  }
+
+                                                  if (val === 'temporaryShelterLandWard') {
+                                                    return (
+                                                        <TableCell
+                                                            align="center"
+                                                            className={styles.setStyleForTableCell}
+                                                            component="th"
+                                                            id={labelId}
+                                                            scope="row"
+                                                            padding="none"
+                                                            key={val}
+                                                        >
+                                                            {`${englishToNepaliNumber(wardNameConverter(row[val]))}`}
+                                                        </TableCell>
+                                                    );
+                                                }
+
 
                                                                 if (val === 'action') {
                                                                     return (

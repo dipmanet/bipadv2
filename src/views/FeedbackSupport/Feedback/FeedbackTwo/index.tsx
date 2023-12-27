@@ -13,7 +13,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable react/jsx-closing-tag-location */
 import React, { useEffect, useRef, useState } from 'react';
-import Button from 'src/vendor/react-store/v2/Action/Button';
 import { navigate } from '@reach/router';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
@@ -22,6 +21,7 @@ import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import Button from '../../../../vendor/react-store/v2/Action/Button';
 import styles from './styles.scss';
 
 
