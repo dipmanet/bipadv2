@@ -48,6 +48,7 @@ import { englishToNepaliNumber } from 'nepali-number';
 import eyeSolid from '#resources/icons/eye-solid.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Reset from '#resources/icons/reset.svg';
+import { ADToBS } from 'bikram-sambat-js';
 import { tableTitleRef } from './utils';
 import styles from './styles.module.scss';
 
@@ -361,12 +362,21 @@ const TemporaryShelterTableData = (props) => {
             label: englishToNepaliNumber(d.title),
         }))
         .sort((a, b) => a.label - b.label);
+
+        const dateFormatter = (date) => {
+          const slicedDate = date.split('-');
+          const year = englishToNepaliNumber(slicedDate[0]);
+          const month = englishToNepaliNumber(slicedDate[1]);
+          const day = englishToNepaliNumber(slicedDate[2]);
+          const finalDate = `${year}/${month}/${day}`;
+          return finalDate;
+      };
     useEffect(() => {
         if (fetchedData) {
             const tableRows = fetchedData.map((row) => {
                 const epidemicObj = {
                   id: row.id,
-                  paNumber: row.paNumber,
+                  paNumber: englishToNepaliNumber(row.paNumber),
                   entryDateBs: row.entryDateBs,
                   beneficiaryNameNepali: row.beneficiaryNameNepali,
                   beneficiaryDistrict: row.beneficiaryDistrict,
@@ -375,14 +385,6 @@ const TemporaryShelterTableData = (props) => {
                   toleName: row.toleName,
                   grandParentName: row.grandParentName,
                   parentName: row.parentName,
-                  beneficiaryRepresentativeNameNepali: row.beneficiaryRepresentativeNameNepali,
-                  beneficiaryRepresentativeGrandfatherName: row.beneficiaryRepresentativeGrandfatherName,
-                  beneficiaryRepresentativeParentName: row.beneficiaryRepresentativeParentName,
-                  beneficiaryRepresentativeCitizenshipNumber: row.beneficiaryRepresentativeCitizenshipNumber,
-                  beneficiaryRepresentativeDistrict: row.beneficiaryRepresentativeDistrict,
-                  beneficiaryRepresentativeMunicipality: row.beneficiaryRepresentativeMunicipality,
-                  migrationCertificateNumber: row.migrationCertificateNumber,
-                  migrationDateBs: row.migrationDateBs,
                   withnessNameNepali: row.withnessNameNepali,
                   withnessRelation: row.withnessRelation,
                   withnessContactNumber: row.withnessContactNumber,
@@ -390,12 +392,12 @@ const TemporaryShelterTableData = (props) => {
                   temporaryShelterLandMunicipality: row.temporaryShelterLandMunicipality,
                   temporaryShelterLandWard: row.temporaryShelterLandWard,
                   temporaryShelterLandTole: row.temporaryShelterLandTole,
-                  bankAccountHolderName: row.bankAccountHolderName,
-                  bankAccountNumber: row.bankAccountNumber,
-                  bankBranchName: row.bankBranchName,
-                  bankName: row.bankName,
-                  amount: row.firstTrancheEnrollmentUpload ? row.firstTrancheEnrollmentUpload.amount : '-',
-                  secondTrancheEnrollmentForm: row.secondTrancheEnrollmentForm ? 'हो' : 'छैन',
+
+                  amount: row.firstTrancheEnrollmentUpload ? 'हो' : 'छैन',
+                  secondTrancheRegisteredDate: row.secondTrancheEnrollmentForm ? dateFormatter(row.secondTrancheEnrollmentForm.entryDateBs) : '-',
+                  firstTrancheObtainedDate: row.firstTrancheEnrollmentUpload ? dateFormatter(ADToBS((row.firstTrancheEnrollmentUpload.createdOn.split('T')[0]))) : '-',
+                  secondTrancheEnrollmentForm: row.secondTrancheEnrollmentUpload ? 'हो' : 'छैन',
+                  secondTrancheObtainedDate: row.secondTrancheEnrollmentUpload ? dateFormatter(ADToBS(row.secondTrancheEnrollmentUpload.createdOn.split('T')[0])) : '-',
                   action: null,
 
                 };
@@ -576,14 +578,7 @@ console.log('filtered row data', fetchedData);
         return finalData;
     };
 
-    const dateFormatter = (date) => {
-        const slicedDate = date.split('-');
-        const year = englishToNepaliNumber(slicedDate[0]);
-        const month = englishToNepaliNumber(slicedDate[1]);
-        const day = englishToNepaliNumber(slicedDate[2]);
-        const finalDate = `${year}/${month}/${day}`;
-        return finalDate;
-    };
+
     const handleProvincialFormDataNepaliValue = (value, dataList, isWard = false) => {
         const finalValueToStore = dataList
             .filter(i => i.id === value)
@@ -1057,21 +1052,21 @@ console.log('filtered row data', fetchedData);
                                                               </TableCell>
                                                           );
                                                       }
-                                                      if (val === 'amount') {
-                                                        return (
-                                                            <TableCell
-                                                                align="center"
-                                                                className={styles.setStyleForTableCell}
-                                                                component="th"
-                                                                id={labelId}
-                                                                scope="row"
-                                                                padding="none"
-                                                                key={val}
-                                                            >
-                                                                {row[val] === '-' ? `${englishToNepaliNumber(row[val])}` : `रु. ${englishToNepaliNumber(row[val])}`}
-                                                            </TableCell>
-                                                        );
-                                                    }
+                                                    //   if (val === 'amount') {
+                                                    //     return (
+                                                    //         <TableCell
+                                                    //             align="center"
+                                                    //             className={styles.setStyleForTableCell}
+                                                    //             component="th"
+                                                    //             id={labelId}
+                                                    //             scope="row"
+                                                    //             padding="none"
+                                                    //             key={val}
+                                                    //         >
+                                                    //             {row[val] === '-' ? `${englishToNepaliNumber(row[val])}` : `रु. ${englishToNepaliNumber(row[val])}`}
+                                                    //         </TableCell>
+                                                    //     );
+                                                    // }
 
                                                       if (val === 'temporaryShelterLandDistrict') {
                                                         return (
