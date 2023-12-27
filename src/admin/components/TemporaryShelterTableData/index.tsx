@@ -1068,7 +1068,7 @@ console.log('filtered row data', fetchedData);
                                                                 padding="none"
                                                                 key={val}
                                                             >
-                                                                {`${englishToNepaliNumber(row[val])}`}
+                                                                {row[val] === '-' ? `${englishToNepaliNumber(row[val])}` : `रु. ${englishToNepaliNumber(row[val])}`}
                                                             </TableCell>
                                                         );
                                                     }
