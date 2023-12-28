@@ -38,12 +38,29 @@ export const epidemicDetails = {
     totalDeadDisabled: null,
 };
 export const tableTitleRef = {
-    id: 'आईडी',
-    entryDateBs: 'मिति',
+    id: 'लाभग्राही क्रम संंख्या',
+    paNumber: 'सम्झौता क्रमााङ्क संंख्या',
+    entryDateBs: 'पहिलो किस्ता दर्ता मिति',
     beneficiaryNameNepali: 'नाम',
     beneficiaryDistrict: 'जिल्ला',
     beneficiaryMunicipality: 'नगरपालिका',
     beneficiaryWard: 'वार्ड',
+    toleName: 'टोल',
+    grandParentName: 'हजुरबुबाको नाम',
+    parentName: 'अभिभावकको नाम',
+    withnessNameNepali: 'साक्षीको नाम',
+    withnessRelation: 'साक्षीसंग सम्बन्ध',
+    withnessContactNumber: 'साक्षी सम्पर्क नम्बर',
+    temporaryShelterLandDistrict: 'अस्थायी आश्रय भूमि जिल्ला',
+    temporaryShelterLandMunicipality: 'अस्थायी आश्रय भूमि नगरपालिका',
+    temporaryShelterLandWard: 'अस्थायी आश्रय भूमि वार्ड',
+    temporaryShelterLandTole: 'अस्थायी आश्रय भूमि टोल',
+    amount: 'पहिलो किस्ताको रकम लिइएको हो',
+    firstTrancheObtainedDate: 'पहिलो किस्ता प्राप्त मिति',
+    secondTrancheRegisteredDate: 'दोस्रो किस्ताको दर्ता मिति',
+    secondTrancheEnrollmentForm: 'दोस्रो किस्ताको रकम लिइएको हो',
+    secondTrancheObtainedDate: 'दोस्रो किस्ता प्राप्त मिति',
     action: 'कार्य',
+
 
 };

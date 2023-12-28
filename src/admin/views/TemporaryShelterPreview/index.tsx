@@ -53,10 +53,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.fetchedData(response);
         },
         onFailure: ({ error, params }) => {
-            if (params && params.setEpidemicsPage) {
-                // TODO: handle error
-                console.warn('failure', error);
-            }
+            params.ErrorFetchData();
         },
         onFatal: ({ error, params }) => {
             console.warn('failure', error);
@@ -76,6 +73,7 @@ const TemporaryShelterPreview = (props) => {
 
 
     const [fetchedData, setFetchedData] = useState(null);
+    const [errorFetchData, setErrorFetchData] = useState(false);
     const { pathname } = useLocation();
     let componentRef = useRef();
     const {
@@ -99,7 +97,7 @@ const TemporaryShelterPreview = (props) => {
         const splittedRoute = pathname.split('/');
         const id = splittedRoute[splittedRoute.length - 1];
         if (id) {
-            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData });
+            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData, ErrorFetchData: () => setErrorFetchData(true) });
         }
     }, [pathname]);
 
@@ -126,7 +124,6 @@ const TemporaryShelterPreview = (props) => {
     };
 
     const wardNameConverter = (id) => {
-        console.log('This is id', id);
         const finalData = fetchedData && wards.find(i => i.id === id).title;
         return finalData;
     };
@@ -153,6 +150,12 @@ const TemporaryShelterPreview = (props) => {
     };
     const splittedRouteId = pathname.split('/');
     const routeId = splittedRouteId[splittedRouteId.length - 1];
+
+    useEffect(() => {
+        if (errorFetchData) {
+            navigate('/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data');
+        }
+    }, [errorFetchData]);
 
     return (
         <>
@@ -198,8 +201,11 @@ const TemporaryShelterPreview = (props) => {
                             className="reporting123"
                             style={{ cursor: 'pointer' }}
                             role="button"
+                            aria-disabled
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`);
+                                if (fetchedData.firstTrancheEnrollmentUpload) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`);
+                                }
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
@@ -213,7 +219,9 @@ const TemporaryShelterPreview = (props) => {
                             style={{ cursor: 'pointer' }}
                             role="button"
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                if (fetchedData.secondTrancheEnrollmentForm) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                }
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
@@ -252,9 +260,9 @@ const TemporaryShelterPreview = (props) => {
                                     <div style={{ width: '8.3in', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', padding: '15px 0px' }}>
                                         <div className="mainDataEntrySection123" ref={el => (componentRef = el)} id="downloadDiv">
                                             <div className="formGeneralInfo123">
-                                                <h2>अनुुसूूची ३</h2>
-                                                <h2>दफा ३(५) सँँग सम्बन्धित</h2>
-                                                <h2 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h2>
+                                                <h2>अनुसूची ३</h2>
+                                                <h2>दफा ३(५) सँग सम्बन्धित</h2>
+                                                <h2 style={{ textDecoration: 'underline' }}>भूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुदान सम्झौता-पत्र</h2>
                                             </div>
                                             <div
                                                 className="datePickerForm123"
@@ -264,43 +272,44 @@ const TemporaryShelterPreview = (props) => {
                                                     fontSize: '16px',
                                                 }}
                                             >
-                                                <span>{`मितिः ${dateFormatter(fetchedData.entryDateBs)}`}</span>
+                                                <span>मितिः<span style={{ fontWeight: 'bold' }}> {dateFormatter(fetchedData.entryDateBs)}</span></span>
+
                                             </div>
                                             <div className="countData123">
                                                 <div className="countDataIndividual123">
-                                                    <span>{`लाभग्राही क्रम संंख्याः ${englishToNepaliNumber(fetchedData.id)}`}</span>
+                                                    <span>लाभग्राही क्रम संंख्याः <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.id)}</span></span>
 
                                                 </div>
                                                 <div className="countDataIndividual123">
-                                                    <span>{`सम्झौता क्रमााङ्क संंख्याः ${englishToNepaliNumber(fetchedData.paNumber) || '-'}`}</span>
+                                                    <span>सम्झौता क्रमााङ्क संंख्याः <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.paNumber) || '-'}</span></span>
 
                                                 </div>
                                             </div>
                                             <div className="formDetails123">
                                                 <p style={{ margin: 0, lineHeight: '25px' }}>
-                                                    {`भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि ${districtNameConverter(fetchedData.beneficiaryDistrict)}
-                                                  जिल्ला ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)} वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))} गाउँँ/टोल ${fetchedData.toleName} बस्नेे श्री ${fetchedData.grandParentName} को ${fetchedData.grandChildRelation} श्री ${fetchedData.parentName}
-                                                  को ${fetchedData.childRelation} बर्ष ${englishToNepaliNumber(fetchedData.beneficiaryAge)} को लाभग्राही श्री ${fetchedData.beneficiaryNameNepali}
-                                                  (यसपछि प्रथम पक्ष भनिनेे) र ${municipalityNameConverter(fetchedData.operatingMunicipality)} कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूूकम्पबाट प्रभावित
-                                                  घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्यविधि,२०८०, बमोजिम अस्थायी आवास निर्माण गर्न यो अनुुदान
-                                                  सम्झौता-पत्रमा सहीछाप गरेेका छौंं । 
-                                                `}
+                                                    भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि{' '} <span style={{ fontWeight: 'bold' }}>{districtNameConverter(fetchedData.beneficiaryDistrict)}</span>{' '}
+                                                    जिल्ला <span style={{ fontWeight: 'bold' }}>{municipalityNameConverter(fetchedData.beneficiaryMunicipality)}</span> वडा नंं. <span style={{ fontWeight: 'bold' }}> {englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))}</span> गाउँँ/टोल <span style={{ fontWeight: 'bold' }}>{fetchedData.toleName}</span> बस्नेे श्री <span style={{ fontWeight: 'bold' }}>{fetchedData.grandParentName}</span> को <span style={{ fontWeight: 'bold' }}>{fetchedData.grandChildRelation}</span> श्री <span style={{ fontWeight: 'bold' }}>{fetchedData.parentName}</span>{' '}
+                                                    को <span style={{ fontWeight: 'bold' }}>{fetchedData.childRelation}</span> बर्ष <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.beneficiaryAge)}</span> को लाभग्राही श्री <span style={{ fontWeight: 'bold' }}>{fetchedData.beneficiaryNameNepali}</span>{' '}
+                                                    (यसपछि प्रथम पक्ष भनिनेे) र <span style={{ fontWeight: 'bold' }}>{municipalityNameConverter(fetchedData.operatingMunicipality)}</span> कार्यालय (यसपछि दोश्रो पक्ष भनिनेे) बीच देेहाय बमोजिमका शर्तहरुको अधिनमा रही भूकम्पबाट प्रभावित
+                                                    घरपरिवारलाई अस्थायी आवास निर्माण अनुदान कार्यविधि,२०८०, बमोजिम अस्थायी आवास निर्माण गर्न यो अनुदान
+                                                    सम्झौता-पत्रमा सहीछाप गरेेका छौंं ।
+
                                                 </p>
                                             </div>
                                             <div className="mainTempAddress123">
-                                                <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुुनेे जग्गाको विवरण</h2>
+                                                <h2 style={{ textDecoration: 'underline' }}>अस्थायी आवास निर्माण हुनेे जग्गाको विवरण</h2>
                                                 <div className="tempAddress123">
                                                     <div className="tempAddressIndividualDiv123">
-                                                        {`जिल्ला ${districtNameConverter(fetchedData.temporaryShelterLandDistrict)}`}
+                                                        जिल्ला <span style={{ fontWeight: 'bold' }}>{districtNameConverter(fetchedData.temporaryShelterLandDistrict)}</span>
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
-                                                        {`${municipalityNameConverter(fetchedData.temporaryShelterLandMunicipality)}`}
+                                                        <span style={{ fontWeight: 'bold' }}>{municipalityNameConverter(fetchedData.temporaryShelterLandMunicipality)}</span>
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
-                                                        {`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.temporaryShelterLandWard))}`}
+                                                        वडा नंं. <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(wardNameConverter(fetchedData.temporaryShelterLandWard))}</span>
                                                     </div>
                                                     <div className="tempAddressIndividualDiv123">
-                                                        {`टोल: ${(fetchedData.temporaryShelterLandTole)}`}
+                                                        टोल: <span style={{ fontWeight: 'bold' }}>{(fetchedData.temporaryShelterLandTole)}</span>
                                                     </div>
                                                     {/* <div className="tempAddressIndividualDiv123">
                                                         {`कित्ता नंं. ${englishToNepaliNumber(fetchedData.temporaryShelterLandKittaNumber)}`}
@@ -330,26 +339,26 @@ const TemporaryShelterPreview = (props) => {
                                                     <div className="firstPartContainer123" style={{ marginTop: '20px' }}>
                                                         <div className="formElements123">
                                                             <div className="freeText123">
-                                                                <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryNameNepali}`}</span>
+                                                                <span>नाम, थर नेेपालीमाः <span style={{ fontWeight: 'bold' }}>{fetchedData.beneficiaryNameNepali}</span></span>
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`नाम, थर अंंग्रेजीमाः ${fetchedData.beneficiaryNameEnglish}`}</span>
+                                                                <span>नाम, थर अंंग्रेजीमाः <span style={{ fontWeight: 'bold' }}>{fetchedData.beneficiaryNameEnglish}</span></span>
                                                             </div>
                                                             <div className="locationDetails123">
                                                                 <div>
-                                                                    <span>{`जिल्लाः ${districtNameConverter(fetchedData.beneficiaryDistrict)}`}</span>
+                                                                    <span>जिल्लाः <span style={{ fontWeight: 'bold' }}>{districtNameConverter(fetchedData.beneficiaryDistrict)}</span></span>
                                                                 </div>
                                                                 <div>
-                                                                    <span>{`गा.पा./न.पाः ${municipalityNameConverter(fetchedData.beneficiaryMunicipality)}`}</span>
+                                                                    <span>गा.पा./न.पाः <span style={{ fontWeight: 'bold' }}>{municipalityNameConverter(fetchedData.beneficiaryMunicipality)}</span></span>
                                                                 </div>
                                                                 <div>
-                                                                    <span>{`वडा नंं. ${englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))}`}</span>
+                                                                    <span>वडा नंं. <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryWard))}</span></span>
                                                                 </div>
                                                                 <div>
-                                                                    <span>{`ना.प्र.न. ${englishToNepaliNumber(fetchedData.beneficiaryCitizenshipNumber)}`}</span>
+                                                                    <span>ना.प्र.न. <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.beneficiaryCitizenshipNumber)}</span></span>
                                                                 </div>
                                                                 <div>
-                                                                    <span>{`सम्पर्क नंं. ${englishToNepaliNumber(fetchedData.beneficiaryContactNumber)}`}</span>
+                                                                    <span>सम्पर्क नंं. <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.beneficiaryContactNumber)}</span></span>
 
                                                                 </div>
                                                             </div>
@@ -362,44 +371,44 @@ const TemporaryShelterPreview = (props) => {
                                                             }}
                                                             >
                                                                 <p style={{ lineHeight: '25px', margin: 0, fontWeight: 'bold' }}>
-                                                                    सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुुरी प्राप्त व्यक्तिको
-                                                                    विवरण (लाभग्राही उपस्थित हुुन नसकेेको अवस्थामा मात्र)
-                                                                    संंरक्षक/अधिकार प्राप्त/मञ्जुुरी प्राप्त व्यक्तिको विवरण
+                                                                    सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुरी प्राप्त व्यक्तिको
+                                                                    विवरण (लाभग्राही उपस्थित हुन नसकेेको अवस्थामा मात्र)
+                                                                    संंरक्षक/अधिकार प्राप्त/मञ्जुरी प्राप्त व्यक्तिको विवरण
 
                                                                 </p>
                                                                 <div className="freeText123">
-                                                                    <span>{`नाम, थर नेेपालीमाः ${fetchedData.beneficiaryRepresentativeNameNepali}`}</span>
+                                                                    <span>नाम, थर नेेपालीमाः <span style={{ fontWeight: 'bold' }}>{fetchedData.beneficiaryRepresentativeNameNepali}</span></span>
 
                                                                 </div>
                                                                 <div className="locationDetails123">
 
                                                                     <div>
-                                                                        <span>{`जिल्लाः ${fetchedData.beneficiaryRepresentativeDistrict ? districtNameConverter(fetchedData.beneficiaryRepresentativeDistrict) : ''}`}</span>
+                                                                        <span>जिल्लाः {fetchedData.beneficiaryRepresentativeDistrict ? <span style={{ fontWeight: 'bold' }}>{districtNameConverter(fetchedData.beneficiaryRepresentativeDistrict)}</span> : ''}</span>
 
 
                                                                     </div>
                                                                     <div>
-                                                                        <span>{`गा.पा./न.पाः ${fetchedData.beneficiaryRepresentativeMunicipality ? municipalityNameConverter(fetchedData.beneficiaryRepresentativeMunicipality) : ''}`}</span>
+                                                                        <span>गा.पा./न.पाः {fetchedData.beneficiaryRepresentativeMunicipality ? <span style={{ fontWeight: 'bold' }}>{municipalityNameConverter(fetchedData.beneficiaryRepresentativeMunicipality)}</span> : ''}</span>
 
 
                                                                     </div>
                                                                     <div>
-                                                                        <span>{`वडा नंं: ${fetchedData.beneficiaryRepresentativeWard ? englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryRepresentativeWard)) : ''}`}</span>
+                                                                        <span>वडा नंं: {fetchedData.beneficiaryRepresentativeWard ? <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(wardNameConverter(fetchedData.beneficiaryRepresentativeWard))}</span> : ''}</span>
 
                                                                     </div>
                                                                     <div>
-                                                                        <span>{`ना.प्र.न: ${fetchedData.beneficiaryRepresentativeCitizenshipNumber ? englishToNepaliNumber(fetchedData.beneficiaryRepresentativeCitizenshipNumber) : ''}`}</span>
+                                                                        <span>ना.प्र.न: {fetchedData.beneficiaryRepresentativeCitizenshipNumber ? <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.beneficiaryRepresentativeCitizenshipNumber)}</span> : ''}</span>
 
                                                                     </div>
 
                                                                 </div>
                                                                 <div className="freeText123">
-                                                                    <span>{`बाजेेको नाम, थर: ${fetchedData.beneficiaryRepresentativeGrandfatherName}`}</span>
+                                                                    <span>बाजेेको नाम, थर: <span style={{ fontWeight: 'bold' }}>{fetchedData.beneficiaryRepresentativeGrandfatherName}</span></span>
 
 
                                                                 </div>
                                                                 <div className="freeText123">
-                                                                    <span>{`बाबुु/आमाको नाम, थर: ${fetchedData.beneficiaryRepresentativeParentName}`}</span>
+                                                                    <span>बाबु/आमाको नाम, थर: <span style={{ fontWeight: 'bold' }}>{fetchedData.beneficiaryRepresentativeParentName}</span></span>
 
                                                                 </div>
                                                             </div>
@@ -425,14 +434,14 @@ const TemporaryShelterPreview = (props) => {
                                                                     borderCollapse: 'collapse',
                                                                     textAlign: 'center',
                                                                 }}
-                                                                >दायाँँ
+                                                                >दायाँ
                                                                 </th>
                                                                 <th style={{
                                                                     border: '1px solid black',
                                                                     borderCollapse: 'collapse',
                                                                     textAlign: 'center',
                                                                 }}
-                                                                >बायाँँ
+                                                                >बायाँ
                                                                 </th>
 
                                                             </tr>
@@ -464,31 +473,31 @@ const TemporaryShelterPreview = (props) => {
                                                         <span style={{ fontWeight: 'bold' }}>२. बैंंक/वित्तीय संंस्थामा रहेेको खाताको विवरण</span>
                                                         <div className="formElements123">
                                                             <div className="freeText123">
-                                                                <span>{`खातावालाको नाम, थरः ${fetchedData.bankAccountHolderName}`}</span>
+                                                                <span>खातावालाको नाम, थरः <span style={{ fontWeight: 'bold' }}>{fetchedData.bankAccountHolderName}</span></span>
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`खाता नम्बरः ${englishToNepaliNumber(fetchedData.bankAccountNumber)}`}</span>
+                                                                <span>खाता नम्बरः <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.bankAccountNumber)}</span></span>
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`बैंंक/वित्तीय संंस्थाको नामः ${fetchedData.bankName}`}</span>
+                                                                <span>बैंंक/वित्तीय संंस्थाको नामः <span style={{ fontWeight: 'bold' }}>{fetchedData.bankName}</span></span>
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`शाखाः ${fetchedData.bankBranchName}`}</span>
+                                                                <span>शाखाः <span style={{ fontWeight: 'bold' }}>{fetchedData.bankBranchName}</span></span>
 
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="firstPartContainer123">
-                                                        <span style={{ fontWeight: 'bold', lineHeight: '30px' }}>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसाइँँसराइको विवरण उल्लेेख गर्नेे)</span>
+                                                        <span style={{ fontWeight: 'bold', lineHeight: '30px' }}>३. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसाइँसराइको विवरण उल्लेेख गर्नेे)</span>
                                                         <div className="formElements123">
                                                             <div className="freeText123">
-                                                                <span>{`बसाइँँसराइ प्रमाण-पत्र नंः ${englishToNepaliNumber(fetchedData.migrationCertificateNumber)}`}</span>
+                                                                <span>बसाइँसराइ प्रमाण-पत्र नंः <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.migrationCertificateNumber)}</span></span>
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`बसाइँँसराइको मितिः ${fetchedData.migrationCertificateNumber ? dateFormatter(fetchedData.migrationDateBs) : ''}`}</span>
+                                                                <span>बसाइँसराइको मितिः {fetchedData.migrationCertificateNumber ? <span style={{ fontWeight: 'bold' }}>{dateFormatter(fetchedData.migrationDateBs)}</span> : ''}</span>
 
                                                             </div>
 
@@ -502,11 +511,11 @@ const TemporaryShelterPreview = (props) => {
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`मितिः ${dateFormatter(fetchedData.signedDate)}`}</span>
+                                                                <span>मितिः <span style={{ fontWeight: 'bold' }}>{dateFormatter(fetchedData.signedDate)}</span></span>
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`साक्षीको नाम, थर: ${fetchedData.withnessNameNepali}`}</span>
+                                                                <span>साक्षीको नाम, थर: <span style={{ fontWeight: 'bold' }}>{fetchedData.withnessNameNepali}</span></span>
 
                                                             </div>
                                                             <div className="freeText123">
@@ -514,11 +523,11 @@ const TemporaryShelterPreview = (props) => {
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`लाभग्राहीसँँगको नाता: ${fetchedData.withnessRelation}`}</span>
+                                                                <span>लाभग्राहीसँगको नाता: <span style={{ fontWeight: 'bold' }}>{fetchedData.withnessRelation}</span></span>
 
                                                             </div>
                                                             <div className="freeText123">
-                                                                <span>{`सम्पर्क नंं. ${englishToNepaliNumber(fetchedData.withnessContactNumber)}`}</span>
+                                                                <span>सम्पर्क नंं. <span style={{ fontWeight: 'bold' }}>{englishToNepaliNumber(fetchedData.withnessContactNumber)}</span></span>
 
                                                             </div>
 
@@ -529,13 +538,13 @@ const TemporaryShelterPreview = (props) => {
                                                         <div className="firstPartContainer123" style={{ gap: '20px' }}>
                                                             <div className="formElements123">
                                                                 <div className="freeTextPart2">
-                                                                    (<input type="text" disabled className="inputClassName123" style={{ width: '48%' }} />
-                                                                    <span>कार्यपालिका कार्यालयको छाप</span>)
+                                                                    (<span>कार्यपालिका कार्यालयको छाप</span>
+                                                                    <input type="text" disabled className="inputClassName123" style={{ width: '48%' }} />)
                                                                 </div>
                                                                 <div className="freeText123">
                                                                     (
 
-                                                                    <span>{`${municipalityNameConverter(fetchedData.operatingMunicipality)}`}</span>
+                                                                    <span style={{ fontWeight: 'bold' }}>{`${municipalityNameConverter(fetchedData.operatingMunicipality)}`}</span>
                                                                     )
                                                                 </div>
                                                                 <div className="freeText123">
@@ -543,14 +552,14 @@ const TemporaryShelterPreview = (props) => {
 
                                                                 </div>
                                                                 <div className="freeText123">
-                                                                    <span>{`नामः ${fetchedData.operatingMunicipalityOfficerName}`}</span>
+                                                                    <span>नामः <span style={{ fontWeight: 'bold' }}>{fetchedData.operatingMunicipalityOfficerName}</span></span>
                                                                 </div>
                                                                 <div className="freeText123">
-                                                                    <span>पदः प्रमुुख प्रशासकीय अधिकृृत</span>
+                                                                    <span>पदः प्रमुख प्रशासकीय अधिकृृत</span>
 
                                                                 </div>
                                                                 <div className="freeText123">
-                                                                    <span>{`मितिः ${dateFormatter(fetchedData.operatingMunicipalitySignedDate)}`}</span>
+                                                                    <span>मितिः <span style={{ fontWeight: 'bold' }}>{dateFormatter(fetchedData.operatingMunicipalitySignedDate)}</span></span>
 
                                                                 </div>
 
@@ -563,35 +572,35 @@ const TemporaryShelterPreview = (props) => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुुर गरेेका शर्तहरुः</h2>
+                                                <h2>प्रथम पक्ष लाभग्राहीलेे मञ्जुर गरेेका शर्तहरुः</h2>
                                                 <div>
-                                                    <h3> {`${englishToNepaliNumber(1)}. मैैलेे भूूकम्पबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्र अनुुरुप बनाउनेे छुु ।`}</h3>
+                                                    <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(1)}. मैलेे भूकम्पबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुदान कार्ययविधि, २०८० एबंं यस सम्झौता-पत्र अनुरुप बनाउनेे छु ।`}</h3>
                                                 </div>
                                                 <div>
-                                                    <h3> {`${englishToNepaliNumber(2)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
-जुुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुुनेेछ ।`}
+                                                    <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(2)}. निर्माण सामग्रीको खरिद गर्नेे तथा डकर्मी, सिकर्मी, प्लम्बर, इलेेक्ट्रिसियन, तथा अन्य निर्माण कार्य गर्न तथा श्रमिक
+जुटाउनेे र काममा लगाउनेे जिम्मेेवारी मेेरो हुनेेछ ।`}
                                                     </h3>
                                                 </div>
                                                 <div>
-                                                    <h3>  {`${englishToNepaliNumber(3)}. मैैलेे प्राप्त गर्नेे अस्थायी आवास निर्माण अनुुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेेछुु ।`}
+                                                    <h3 style={{ fontWeight: 'normal' }}>  {`${englishToNepaliNumber(3)}. मैलेे प्राप्त गर्ने अस्थायी आवास निर्माण अनुदान रकम अस्थायी आवास निर्माणका लागि मात्र गर्नेछु ।`}
                                                     </h3>
                                                 </div>
                                                 <div>
-                                                    <h3> {`${englishToNepaliNumber(4)}. उपलब्ध अनुुदान नपुुग भएमा अतिरिक्त ‍‍लागत म आफैँँलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछुु।`}</h3>
+                                                    <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(4)}. उपलब्ध अनुदान नपुग भएमा अतिरिक्त ‍‍लागत म आफैलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछु।`}</h3>
                                                 </div>
                                                 <div>
-                                                    <h3>
-                                                        {`${englishToNepaliNumber(5)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछुु।`}
+                                                    <h3 style={{ fontWeight: 'normal' }}>
+                                                        {`${englishToNepaliNumber(5)}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेेछु।`}
                                                     </h3>
                                                 </div>
 
 
                                             </div>
                                             <div>
-                                                <h3>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुुरी गरेेका शर्तहरुः</h3>
+                                                <h3>दोश्रो पक्ष (स्थानीय तह) लेे मञ्जुरी गरेेका शर्तहरुः</h3>
                                                 <div>
-                                                    <h3>
-                                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट यस कार्यविधि अनुुसार अस्थायी आवास निर्मााणको कार्य भएमा अनुुदान रकम सरकारको तर्फ बाट दफा
+                                                    <h3 style={{ fontWeight: 'normal' }}>
+                                                        {`${englishToNepaliNumber(1)}. प्रथम पक्षबाट यस कार्यविधि अनुसार अस्थायी आवास निर्मााणको कार्य भएमा अनुदान रकम सरकारको तर्फ बाट दफा
 ५ बमोजिम उपलब्ध गराइनेे छ ।`}
                                                     </h3>
                                                 </div>
@@ -601,7 +610,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.identityDocument ? (
                                                         <div>
-                                                            <h3> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h3>
+                                                            <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
                                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -619,7 +628,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.infrastructurePhoto ? (
                                                         <div>
-                                                            <h3> {`${englishToNepaliNumber(2)}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
+                                                            <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(2)}. पूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
                                                             </h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
@@ -640,7 +649,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.applicationDocument ? (
                                                         <div>
-                                                            <h3> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
+                                                            <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(3)}. घरमूली उपस्थित नभएको अवस्थामा, मञ्जुरीनामा सहितको निवेेदन`}
                                                             </h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
@@ -660,7 +669,7 @@ const TemporaryShelterPreview = (props) => {
                                                 {
                                                     fetchedData.policeReport ? (
                                                         <div>
-                                                            <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h3>
+                                                            <h3 style={{ fontWeight: 'normal' }}>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुचुल्का (प्रत्येेक घरधुरीको मुचुल्का नभएको अवस्थामा सामुहिक मुचुल्का पनि मान्य हुनेे)`}</h3>
                                                             {/* <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                 <span style={{ fontSize: '20px' }}>फोटो:</span>
                                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -683,7 +692,7 @@ const TemporaryShelterPreview = (props) => {
                                                 <h3>प्राप्त कागजातका फोटोहरुः</h3>
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h3>
+                                                    <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(1)}. नागरिकता प्रमाण-पत्रको प्रतिलिपि वा राष्ट्रिय परिचयपत्रको प्रतिलिपि वा मतदाता परिचयपत्रको प्रतिलिपि वा वडाको सिफारिस`}</h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -699,7 +708,7 @@ const TemporaryShelterPreview = (props) => {
 
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3> {`${englishToNepaliNumber(2)}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
+                                                    <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(2)}. पूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
                                                     </h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
@@ -719,7 +728,7 @@ const TemporaryShelterPreview = (props) => {
 
                                                         ? (
                                                             <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                                <h3> {`${englishToNepaliNumber(3)}. घरमूूली उपस्थित नभएको अवस्थामा, मञ्जुुरीनामा सहितको निवेेदन`}
+                                                                <h3 style={{ fontWeight: 'normal' }}> {`${englishToNepaliNumber(3)}. घरमूली उपस्थित नभएको अवस्थामा, मञ्जुरीनामा सहितको निवेेदन`}
                                                                 </h3>
                                                                 <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                                     {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
@@ -739,7 +748,7 @@ const TemporaryShelterPreview = (props) => {
 
 
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                                    <h3>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}</h3>
+                                                    <h3 style={{ fontWeight: 'normal' }}>{`${englishToNepaliNumber(fetchedData.applicationDocument ? 4 : 3)}. प्रहरीको मुचुल्का (प्रत्येेक घरधुरीको मुचुल्का नभएको अवस्थामा सामुहिक मुचुल्का पनि मान्य हुनेे)`}</h3>
                                                     <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
                                                         {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>

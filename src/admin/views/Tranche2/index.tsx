@@ -158,7 +158,11 @@ const Tranche2 = (props) => {
             ward_officer_name: '',
             ward_officer_signed_date: '',
             temp_shelter_entrollment_form: '',
-            temporary_shelter_photo: [],
+            // temporary_shelter_photo: [],
+            temporary_shelter_photo_front: '',
+            temporary_shelter_photo_back: '',
+            application_file: '',
+            application_date: '',
 
         },
     );
@@ -171,14 +175,27 @@ const Tranche2 = (props) => {
         ward_officer_name: false,
         ward_officer_signed_date: false,
         temp_shelter_entrollment_form: false,
-        temporary_shelter_photo: false,
+        // temporary_shelter_photo: false,
+        temporary_shelter_photo_front: false,
+        temporary_shelter_photo_back: false,
+        application_date: false,
+        application_file: false,
+
     });
     const [loading, setLoading] = useState(false);
     const [backendError, setBackendError] = useState(false);
     const [fetchedData, setFetchedData] = useState(null);
     const [fetchedTranche2Data, setFetchedTranche2Data] = useState(null);
+    const [isApplicationClicked, setIsApplicationClicked] = useState(false);
     const { pathname } = useLocation();
     const fileInputRef = useRef(null);
+
+    const [imageOrFileValidation, setImageOrFileValidation] = useState({
+        temporary_shelter_photo_front: false,
+        temporary_shelter_photo_back: false,
+        application_file: false,
+
+    });
     const { user,
         districts,
         municipalities,
@@ -197,6 +214,33 @@ const Tranche2 = (props) => {
             [e.target.name]: false,
         });
         const file = e.target.files[0];
+        const imageValidation = {
+            temporary_shelter_photo_front: false,
+            temporary_shelter_photo_back: false,
+            application_file: false,
+        };
+        const allowedExtensionsFile = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (e.target.name === 'temporary_shelter_photo_front' && !allowedExtensions.exec(file.name)) {
+            imageValidation.temporary_shelter_photo_front = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.temporary_shelter_photo_front = false;
+        setImageOrFileValidation(imageValidation);
+        if (e.target.name === 'temporary_shelter_photo_back' && !allowedExtensions.exec(file.name)) {
+            imageValidation.temporary_shelter_photo_back = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        if (e.target.name === 'application_file' && !allowedExtensionsFile.exec(file.name)) {
+            imageValidation.application_file = true;
+            setImageOrFileValidation(imageValidation);
+            return;
+        }
+        imageValidation.application_file = false;
+        imageValidation.temporary_shelter_photo_back = false;
+        setImageOrFileValidation(imageValidation);
         setData({ ...data, [e.target.name]: file });
         // setSelectedFile(file);
         // setSelectedFile(file);
@@ -303,6 +347,10 @@ const Tranche2 = (props) => {
 
         errorCheckingFields.map((i) => {
             if (!data[i]) {
+                if (!isApplicationClicked) {
+                    latestErrorUpdate.application_date = false;
+                    latestErrorUpdate.application_file = false;
+                }
                 if (i === 'temp_shelter_entrollment_form') {
                     return latestErrorUpdate[i] = false;
                 }
@@ -332,11 +380,15 @@ const Tranche2 = (props) => {
         finalFormData.append('ward_officer_name', finalUpdateData.ward_officer_name);
         finalFormData.append('ward_officer_signed_date', finalUpdateData.ward_officer_signed_date);
         finalFormData.append('temp_shelter_entrollment_form', finalUpdateData.temp_shelter_entrollment_form);
+        finalFormData.append('temporary_shelter_photo_front', finalUpdateData.temporary_shelter_photo_front);
+        finalFormData.append('temporary_shelter_photo_back', finalUpdateData.temporary_shelter_photo_back);
+        finalFormData.append('application_date', finalUpdateData.application_date);
+        finalFormData.append('application_file', finalUpdateData.application_file);
 
 
-        finalUpdateData.temporary_shelter_photo.length
-            ? finalUpdateData.temporary_shelter_photo.map(i => finalFormData.append('temporary_shelter_photo', i, i.name))
-            : null;
+        // finalUpdateData.temporary_shelter_photo.length
+        //     ? finalUpdateData.temporary_shelter_photo.map(i => finalFormData.append('temporary_shelter_photo', i, i.name))
+        //     : null;
         const checkCSRFToken = getAuthState();
         const baseUrl = process.env.REACT_APP_API_SERVER_URL;
         axios.post(`${baseUrl}/second-tranche-enrollment-form/`, finalFormData, {
@@ -348,7 +400,6 @@ const Tranche2 = (props) => {
                 setLoading(false);
             })
             .catch((error) => {
-                console.log('Error:', error);
                 setBackendError(true);
                 setLoading(false);
             });
@@ -385,6 +436,7 @@ const Tranche2 = (props) => {
             entry_date_bs: currentDate,
             engineer_signed_date: currentDate,
             ward_officer_signed_date: currentDate,
+            application_date: currentDate,
 
         });
     }, []);
@@ -399,7 +451,7 @@ const Tranche2 = (props) => {
         if (id) {
             props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedData });
         }
-    }, [pathname]);
+    }, [pathname, fetchedData, fetchedTranche2Data]);
 
     const districtNameConverter = (id) => {
         const finalData = id && districts.find(i => i.id === Number(id)).title_ne;
@@ -439,6 +491,12 @@ const Tranche2 = (props) => {
         const finalDate = `${year}/${month}/${day}`;
         return finalDate;
     };
+    useEffect(() => {
+        if (fetchedData && !fetchedData.firstTrancheEnrollmentUpload) {
+            navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche1/${routeId}`);
+        }
+    }, [fetchedData]);
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -488,7 +546,9 @@ const Tranche2 = (props) => {
                             style={{ cursor: 'pointer' }}
                             role="button"
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                if (fetchedData.secondTrancheEnrollmentForm) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                }
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
@@ -527,7 +587,7 @@ const Tranche2 = (props) => {
                                             >
                                                 <div className="formGeneralInfo123">
                                                     <h2>अनुुसूूची ४</h2>
-                                                    <h2>दफा ४(२) सँँग सम्बन्धित</h2>
+                                                    <h2>दफा ४ को उपदफा(२) सँँग सम्बन्धित</h2>
                                                     <h2 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h2>
                                                 </div>
                                                 <div
@@ -691,15 +751,21 @@ const Tranche2 = (props) => {
                                                 </div>
                                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', pageBreakBefore: 'always' }}>
                                                     <h3>अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो</h3>
-                                                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                                                    <div style={{ display: 'flex', gap: '60px' }}>
 
-                                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                            {/* <span style={{ fontSize: '20px' }}>फोटो:</span> */}
+                                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', flexDirection: 'column' }}>
+                                                            <span style={{ fontSize: '16px' }}>पहिलो मोहोडाको फोटो</span>
+                                                            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                                                                <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedTranche2Data[0].temporaryShelterPhotoFront} alt="img" />
+                                                            </div>
+
+
+                                                        </div>
+                                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', flexDirection: 'column' }}>
+                                                            <span style={{ fontSize: '16px' }}>दोस्रो मोहोडाको फोटो</span>
                                                             <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
 
-                                                                {
-                                                                    fetchedTranche2Data && fetchedTranche2Data.length && fetchedTranche2Data[0].temporaryShelterPhoto.length ? fetchedTranche2Data[0].temporaryShelterPhoto.map(i => <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={i} alt="img" />) : ''
-                                                                }
+                                                                <img style={{ objectFit: 'cover', objectPosition: 'top' }} height={150} width={150} src={fetchedTranche2Data[0].temporaryShelterPhotoBack} alt="img" />
                                                             </div>
 
 
@@ -743,7 +809,90 @@ const Tranche2 = (props) => {
                                                 <h1>दफा ४(२) सँँग सम्बन्धित</h1>
                                                 <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन गरेेको निवेेदन</h1>
                                             </div>
+                                            <div>
+                                                <div>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', fontSize: '20px' }}>
+                                                        <span style={{ textDecoration: 'underline' }}>
+                                                            आवेदन उपलब्ध छ ?
+                                                        </span>
 
+                                                        <input
+                                                            style={{ cursor: 'pointer', marginTop: '7px' }}
+                                                            type="checkbox"
+                                                            checked={isApplicationClicked}
+                                                            onChange={() => setIsApplicationClicked(!isApplicationClicked)}
+                                                        />
+                                                    </div>
+                                                    {
+                                                        isApplicationClicked
+                                                            ? (
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 2, fontSize: '20px', alignItems: 'flex-start' }}>
+                                                                        <span>आवेदनको फोटो वा pdf:</span>
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                                            <input
+                                                                                type="file"
+                                                                                accept=".pdf, image/*"
+                                                                                id="file-input"
+                                                                                // style={{ display: 'none' }}
+                                                                                onChange={handleFileInputChange}
+                                                                                name="application_file"
+                                                                            />
+                                                                            {errorFields.application_file
+                                                                                ? <p style={{ margin: '0', color: 'red' }}>कृपया कागजात अपलोड गर्नुहोस्</p> : ''
+                                                                            }
+                                                                            {
+                                                                                data.application_file ? <img height={100} width={100} src={handleShowImage(data.application_file)} alt="img" /> : ''
+                                                                            }
+                                                                            {
+                                                                                imageOrFileValidation.application_file ? <p style={{ margin: '0', color: 'red' }}>कागजात फोटो वा pdf हुनुपर्छ</p> : ''
+                                                                            }
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div
+                                                                        className={styles.datePickerForm}
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            justifyContent: 'start',
+                                                                            flexDirection: 'column',
+                                                                            alignItems: 'flex-start',
+                                                                            flex: 1,
+
+                                                                        }}
+                                                                    >
+                                                                        <span>आवेदनको मितिः</span>
+
+
+                                                                        <NepaliDatePicker
+
+                                                                            inputClassName="form-control"
+                                                                            // className={styles.datePick}
+                                                                            // value={ADToBS(dateAlt)}
+                                                                            value={data.application_date}
+                                                                            onChange={
+                                                                                (value: string) => {
+                                                                                    setData({
+                                                                                        ...data,
+                                                                                        application_date: value,
+
+                                                                                    });
+                                                                                }
+                                                                            }
+                                                                            options={{
+                                                                                calenderLocale: 'ne',
+                                                                                valueLocale: 'en',
+                                                                            }}
+                                                                        />
+                                                                    </div>
+
+                                                                </div>
+                                                            ) : ''
+                                                    }
+
+                                                </div>
+                                            </div>
                                             <div
                                                 className={styles.datePickerForm}
                                                 style={{
@@ -863,52 +1012,91 @@ const Tranche2 = (props) => {
 
                                                 </div>
                                             </div>
-                                            <div style={{ margin: '10px 0px' }}>
+                                            <div style={{ margin: '10px 0px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                                 <h2> {`${englishToNepaliNumber(2)}. अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो`}
                                                 </h2>
-                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
-                                                    <span style={{ fontSize: '20px' }}>फोटो:</span>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            id="file-input"
-                                                            // style={{ display: 'none' }}
-                                                            onChange={handleInfrastructurePhoto}
-                                                            name="temporary_shelter_photo"
-                                                            ref={fileInputRef}
-                                                        />
-                                                        {
-                                                            errorFields.temporary_shelter_photo
-                                                                ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
-                                                        }
-                                                        {
-                                                            data.temporary_shelter_photo.length
-                                                                ? data.temporary_shelter_photo.map((item, index) => (
-                                                                    <div style={{ display: 'flex' }}>
-                                                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                                                                            <img
-                                                                                height={100}
-                                                                                width={100}
-                                                                                src={handleShowImage(item)}
-                                                                                alt="img"
-                                                                            />
-                                                                            <img
-                                                                                src={close}
-                                                                                alt="close"
-                                                                                role="button"
-                                                                                onClick={() => handleRemoveImage(index)}
-                                                                                style={{ cursor: 'pointer' }}
-                                                                            />
+                                                <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                        <span style={{ fontSize: '20px' }}>पहिलो मोहोडाको फोटो:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                id="file-input"
+                                                                // style={{ display: 'none' }}
+                                                                onChange={handleFileInputChange}
+                                                                name="temporary_shelter_photo_front"
+                                                                ref={fileInputRef}
+                                                            />
+
+
+                                                            {
+                                                                errorFields.temporary_shelter_photo_front
+                                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                                            }
+                                                            {
+                                                                data.temporary_shelter_photo_front
+                                                                    ? (
+                                                                        <div style={{ display: 'flex' }}>
+                                                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                                                                <img
+                                                                                    height={100}
+                                                                                    width={100}
+                                                                                    src={handleShowImage(data.temporary_shelter_photo_front)}
+                                                                                    alt="img"
+                                                                                />
+
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                ))
+                                                                    ) : ''
 
-                                                                : ''
-                                                        }
+                                                            }
+                                                            {
+                                                                imageOrFileValidation.temporary_shelter_photo_front ? <p style={{ margin: 0, color: 'red' }}>पहिलो मोहोडाको फोटो Jpg,jpeg वा png हुनुपर्छ</p> : ''
+                                                            }
+                                                        </div>
                                                     </div>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-start' }}>
+                                                        <span style={{ fontSize: '20px' }}>दोस्रो मोहोडाको फोटो:</span>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                id="file-input"
+                                                                // style={{ display: 'none' }}
+                                                                onChange={handleFileInputChange}
+                                                                name="temporary_shelter_photo_back"
+                                                                ref={fileInputRef}
+                                                            />
+
+                                                            {
+                                                                errorFields.temporary_shelter_photo_back
+                                                                    ? <p style={{ margin: 0, color: 'red' }}>कृपया फोटो अपलोड गर्नुहोस्</p> : ''
+                                                            }
+                                                            {
+                                                                data.temporary_shelter_photo_back
+                                                                    ? (
+                                                                        <div style={{ display: 'flex' }}>
+                                                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                                                                <img
+                                                                                    height={100}
+                                                                                    width={100}
+                                                                                    src={handleShowImage(data.temporary_shelter_photo_back)}
+                                                                                    alt="img"
+                                                                                />
+
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : ''
+
+                                                            }
+                                                            {
+                                                                imageOrFileValidation.temporary_shelter_photo_back ? <p style={{ margin: 0, color: 'red' }}>दोस्रो मोहोडाको फोटो Jpg,jpeg वा png हुनुपर्छ</p> : ''
+                                                            }
+                                                        </div>
 
 
+                                                    </div>
                                                 </div>
                                             </div>
                                             {

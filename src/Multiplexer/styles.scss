@@ -23,6 +23,7 @@ button {
     width: 100vw;
     height: 100vh;
     overflow: auto;
+    overflow-x: hidden;
 
     .navbar {
         flex-shrink: 0;
@@ -35,7 +36,7 @@ button {
         position: relative;
         flex-grow: 1;
         overflow: auto;
-
+        overflow-x: hidden;
         .halfPageLeftPane {
             display: flex;
             flex-direction: column;

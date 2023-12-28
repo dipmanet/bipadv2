@@ -127,10 +127,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.fetchedData(response);
         },
         onFailure: ({ error, params }) => {
-            if (params && params.setEpidemicsPage) {
-                // TODO: handle error
-                console.warn('failure', error);
-            }
+            params.ErrorFetchData();
         },
         onFatal: ({ error, params }) => {
             console.warn('failure', error);
@@ -165,6 +162,7 @@ const Tranche1 = (props) => {
     const [fetchedDataWhole, setFetchedDataWhole] = useState(null);
     const { pathname } = useLocation();
     const [nofetchedTranche1DataError, setNofetchedTranche1DataError] = useState(false);
+    const [errorFetchData, setErrorFetchData] = useState(false);
     const { user,
         districts,
         municipalities,
@@ -427,15 +425,23 @@ const Tranche1 = (props) => {
         return finalData || '-';
     };
     const handleFetchedDataWhole = (finalReceivedData) => {
-        setFetchedDataWhole(finalReceivedData.results);
+        setFetchedDataWhole(finalReceivedData);
     };
     useEffect(() => {
         const splittedRoute = pathname.split('/');
         const id = splittedRoute[splittedRoute.length - 1];
         if (id) {
-            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedDataWhole });
+            props.requests.getEarthquakeRequest.do({ id, fetchedData: handleFetchedDataWhole, ErrorFetchData: () => setErrorFetchData(true) });
         }
-    }, [pathname]);
+    }, [pathname, fetchedData]);
+
+    useEffect(() => {
+        if (errorFetchData) {
+            navigate('/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data');
+        }
+    }, [errorFetchData]);
+
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -477,7 +483,11 @@ const Tranche1 = (props) => {
                             className="reporting123"
                             style={{ cursor: 'pointer' }}
                             role="button"
-                            onClick={() => navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`)}
+                            onClick={() => {
+                                if (fetchedDataWhole.firstTrancheEnrollmentUpload) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`);
+                                }
+                            }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />
                             <p className="reportingText123">
@@ -490,7 +500,9 @@ const Tranche1 = (props) => {
                             style={{ cursor: 'pointer' }}
                             role="button"
                             onClick={() => {
-                                navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                if (fetchedDataWhole.secondTrancheEnrollmentForm) {
+                                    navigate(`/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`);
+                                }
                             }}
                         >
                             <img className="listSvg123" src={ListSvg} alt="" />

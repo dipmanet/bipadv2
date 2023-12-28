@@ -437,6 +437,11 @@ const Tranche2FileUpload = (props) => {
         // setLoading(true);
         props.requests.getEarthquakeTranche2Response.do({ id: routeId, fetchedData: handleFetchedTranche2Data });
     }, []);
+    useEffect(() => {
+        if (fetchedTranche2Data && !fetchedTranche2Data.length) {
+            navigate(`/admin/temporary-shelter-enrollment-form/add-view-tranche2/${routeId}`);
+        }
+    }, [fetchedTranche2Data]);
 
 
     return (
