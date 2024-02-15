@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable comma-dangle */
 /* eslint-disable @typescript-eslint/member-delimiter-style */
 /* eslint-disable arrow-parens */
