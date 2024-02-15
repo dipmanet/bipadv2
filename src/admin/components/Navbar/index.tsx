@@ -1,3 +1,7 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable @typescript-eslint/member-delimiter-style */
+/* eslint-disable arrow-parens */
+/* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable no-tabs */
@@ -23,9 +27,14 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
   userDataMain: userSelector(state),
 });
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-  setNotificationPage: (params) => dispatch(SetNotificationPageAction(params)),
+  setNotificationPage: (params: any) =>
+    dispatch(SetNotificationPageAction(params)),
 });
-const Navbar = (props) => {
+const Navbar = (props: {
+  notificationPage: { notificationData: any; showNotification: any };
+  setNotificationPage: any;
+  userDataMain: any;
+}) => {
   const {
     notificationPage: { notificationData, showNotification },
     setNotificationPage,
@@ -58,12 +67,14 @@ const Navbar = (props) => {
         <div className={styles.navRightSide}>
           <div className={styles.profileSvg}>
             <div className={styles.notification}>
-              {notificationData.filter((item) => item.isNew === true).length >
-                0 && (
+              {notificationData.filter(
+                (item: { isNew: boolean }) => item.isNew === true
+              ).length > 0 && (
                 <div className={styles.dot}>
                   {
-                    notificationData.filter((item) => item.isNew === true)
-                      .length
+                    notificationData.filter(
+                      (item: { isNew: boolean }) => item.isNew === true
+                    ).length
                   }
                 </div>
               )}
