@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/camelcase */
 export const enTranslation = {
