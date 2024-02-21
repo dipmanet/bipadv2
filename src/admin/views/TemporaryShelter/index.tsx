@@ -148,6 +148,7 @@ const TemporaryShelter = (props: {
     entry_date_bs: "",
     pa_number: "",
     tole_name: "",
+    registration_number: "",
     grand_parent_title: "श्री",
     grand_parent_name: "",
     grand_child_relation: "",
@@ -201,6 +202,7 @@ const TemporaryShelter = (props: {
     application_file: false,
     entry_date_bs: false,
     pa_number: false,
+    registration_number: false,
     tole_name: false,
     grand_parent_title: false,
     grand_parent_name: false,
@@ -812,6 +814,7 @@ const TemporaryShelter = (props: {
     finalFormData.append("parent_name", finalUpdateData.parent_name);
     finalFormData.append("child_relation", finalUpdateData.child_relation);
     finalFormData.append("beneficiary_age", finalUpdateData.beneficiary_age);
+    finalFormData.append("registration_number", finalUpdateData.registration_number);
     finalFormData.append(
       "beneficiary_name_nepali",
       finalUpdateData.beneficiary_name_nepali
@@ -958,8 +961,7 @@ const TemporaryShelter = (props: {
 
     finalUpdateData.infrastructure_photo.length
       ? finalUpdateData.infrastructure_photo.map((i) =>
-          finalFormData.append("infrastructure_photo", i, i.name)
-        )
+          finalFormData.append("infrastructure_photo", i, i.name))
       : null;
     const baseUrl = process.env.REACT_APP_API_SERVER_URL;
     axios
@@ -1361,6 +1363,50 @@ const TemporaryShelter = (props: {
                     valueLocale: "en",
                   }}
                 />
+              </div>
+              <div
+                className={styles.datePickerForm}
+                style={{
+                  display: "flex",
+                  justifyContent: "start",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  flex: 1,
+                }}
+              >
+                <div style={{ display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: "5px" }}>
+                 <span style={{ color: "red" }}>*</span>
+                <span style={{ fontSize: "14px" }}>दर्ता नम्बर:</span>
+                </div>
+                <input
+                      onBlur={handleFormData}
+                      onFocus={nepaliInput}
+                      data-nepalify={"not inialized"}
+                      id="registration_number"
+                      type="text"
+                      name="registration_number"
+                      // value={data.registration_number}
+                      className={styles.inputClassName}
+                      // onChange={handleFormData}
+                      style={
+                        errorFields.registration_number
+                          ? {
+                            border: '0.5px solid black',
+                              borderBottom: "2px dotted red",
+                              height: "34px",
+                              width: "100%",
+                            }
+                          : { height: "34px",
+                            width: "100%",
+                            border: '0.5px solid black',
+                            background: 'white' }
+                      }
+                    />
+
+
               </div>
               <h2 style={{ textDecoration: "underline" }}>
                 क. प्रथम पक्ष (लाभग्राही)

@@ -268,10 +268,11 @@ const TemporaryShelterPreview = (props) => {
                                                 className="datePickerForm123"
                                                 style={{
                                                     display: 'flex',
-                                                    justifyContent: 'flex-end',
+                                                    justifyContent: 'space-between',
                                                     fontSize: '16px',
                                                 }}
                                             >
+                                                <span>दर्ता नम्बर:<span style={{ fontWeight: 'bold' }}> {(fetchedData.registrationNumber)}</span></span>
                                                 <span>मितिः<span style={{ fontWeight: 'bold' }}> {dateFormatter(fetchedData.entryDateBs)}</span></span>
 
                                             </div>
