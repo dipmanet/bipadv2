@@ -1,3 +1,5 @@
+/* eslint-disable brace-style */
+/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/member-delimiter-style */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable operator-linebreak */
@@ -51,7 +53,7 @@ import {
   methods,
 } from "#request";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
-import { englishToNepaliNumber } from "nepali-number";
+import { englishToNepaliNumber, nepaliToEnglishNumber } from "nepali-number";
 import "nepali-datepicker-reactjs/dist/index.css";
 import close from "#resources/icons/close.svg";
 import axios from "axios";
@@ -468,6 +470,21 @@ const TemporaryShelter = (props: {
       "/admin/temporary-shelter-enrollment-form/temporary-shelter-enrollment-form-data-table"
     );
   };
+
+
+const checkForUnicode = (value) => {
+  function hasUnicode(str: string) {
+    for (let i = 0; i < str.length; i++) {
+        if (str.charCodeAt(i) > 127) return true;
+    }
+    return false;
+}
+  const test = nepaliToEnglishNumber(value);
+  const validateUnicodeError = hasUnicode(test);
+  return validateUnicodeError;
+};
+
+
   const handleFormData = (e: { target: { name: string; value: number } }) => {
     setErrorFields({
       ...errorFields,
@@ -477,7 +494,7 @@ const TemporaryShelter = (props: {
       benificiaryContactValidation: false,
       witnessContactValidation: false,
     });
-    if (e.target.name === "beneficiary_district") {
+     if (e.target.name === "beneficiary_district") {
       setData({
         ...data,
         [e.target.name]: e.target.value,
@@ -516,19 +533,22 @@ const TemporaryShelter = (props: {
         [e.target.name]: e.target.value,
         beneficiary_representative_ward: null,
       });
-    } else if (e.target.name === "beneficiary_age") {
-      if (Number(e.target.value > 0)) {
-        setData({
-          ...data,
-          [e.target.name]: e.target.value,
-        });
-      } else {
-        setData({
-          ...data,
-          [e.target.name]: "",
-        });
-      }
-    } else {
+    }
+    // else if (e.target.name === "beneficiary_age") {
+    //   if (Number(e.target.value > 0)) {
+    //     setData({
+    //       ...data,
+    //       [e.target.name]: e.target.value,
+    //     });
+    //   } else {
+    //     setData({
+    //       ...data,
+    //       [e.target.name]: "",
+    //     });
+    //   }
+    // }
+
+    else {
       setData({
         ...data,
         [e.target.name]: e.target.value,
@@ -727,6 +747,22 @@ const TemporaryShelter = (props: {
           : (latestErrorUpdate[i] = true);
       }
 
+
+      if (i === 'withness_contact_number') {
+        if (checkForUnicode(data[i])) {
+          return (latestErrorUpdate[i] = true);
+        }
+      }
+      if (i === 'beneficiary_contact_number') {
+        if (checkForUnicode(data[i])) {
+          return (latestErrorUpdate[i] = true);
+        }
+      }
+   if (i === 'beneficiary_age') {
+    if (checkForUnicode(data[i])) {
+      return (latestErrorUpdate[i] = true);
+    }
+  }
       if (i === "infrastructure_photo") {
         if (data.infrastructure_photo.length === 0) {
           return (latestErrorUpdate[i] = true);
@@ -813,7 +849,7 @@ const TemporaryShelter = (props: {
     finalFormData.append("parent_title", finalUpdateData.parent_title);
     finalFormData.append("parent_name", finalUpdateData.parent_name);
     finalFormData.append("child_relation", finalUpdateData.child_relation);
-    finalFormData.append("beneficiary_age", finalUpdateData.beneficiary_age);
+    finalFormData.append("beneficiary_age", (Number(nepaliToEnglishNumber(finalUpdateData.beneficiary_age))));
     finalFormData.append("registration_number", finalUpdateData.registration_number);
     finalFormData.append(
       "beneficiary_name_nepali",
@@ -978,6 +1014,8 @@ const TemporaryShelter = (props: {
         setLoading(false);
       });
   };
+
+
   // Function to handle checkbox change
   const handleCheckboxChange = () => {
     // Update the state with the opposite value of the current state
@@ -1107,7 +1145,7 @@ const TemporaryShelter = (props: {
     });
     setToggleSwitchChecked(checked);
   };
-console.log("This is data", data);
+
   return (
     <>
       <Page hideFilter hideMap />
@@ -1313,7 +1351,9 @@ console.log("This is data", data);
                           onChange={(value: string) => {
                             setData({
                               ...data,
-                              application_date: value,
+                              application_date: value
+
+
                             });
                           }}
                           options={{
@@ -1356,6 +1396,7 @@ console.log("This is data", data);
                     setData({
                       ...data,
                       entry_date_bs: value,
+                      operating_municipality_signed_date: value
                     });
                   }}
                   options={{
@@ -1383,7 +1424,7 @@ console.log("This is data", data);
                 </div>
                 <input
                       onBlur={handleFormData}
-                      onFocus={nepaliInput}
+                      // onFocus={nepaliInput}
                       data-nepalify={"not inialized"}
                       id="registration_number"
                       type="text"
@@ -1668,14 +1709,14 @@ console.log("This is data", data);
                     </div>
 
                     <input
-                      // data-nepalify={'not inialized'}
-                      onChange={handleFormData}
-                      // onFocus={nepaliInput}
+                      data-nepalify={'not inialized'}
+                      onBlur={handleFormData}
+                      onFocus={nepaliInput}
 
                       id="beneficiary_age"
-                      type="number"
+                      type="text"
                       name="beneficiary_age"
-                      value={data.beneficiary_age}
+                      // value={data.beneficiary_age}
                       className={styles.inputClassName}
                       style={
                         errorFields.beneficiary_age
@@ -1687,6 +1728,14 @@ console.log("This is data", data);
                           : { height: "34px", width: "auto" }
                       }
                     />
+                      {errorFields.beneficiary_age && data.beneficiary_age ? (
+                      <p style={{ margin: "0", color: "red", fontSize: '14px' }}>
+                       उमेर नम्बरमा हुनुपर्छ
+                      </p>
+                    ) : (
+                      ""
+                    )}
+
                   </div>
 
                   <div
@@ -1743,14 +1792,14 @@ console.log("This is data", data);
                     </div>
 
                     <input
-                      onChange={handleFormData}
-                      // onFocus={nepaliInput}
+                      onBlur={handleFormData}
+                      onFocus={nepaliInput}
 
-                      // data-nepalify={'not inialized'}
+                      data-nepalify={'not inialized'}
                       id="beneficiary_contact_number"
-                      type="number"
+                      type="text"
                       name="beneficiary_contact_number"
-                      value={data.beneficiary_contact_number}
+                      // value={data.beneficiary_contact_number}
                       style={
                         errorFields.beneficiary_contact_number ||
                         phoneNumberValidation.benificiaryContactValidation
@@ -1759,6 +1808,13 @@ console.log("This is data", data);
                       }
                       className={styles.inputClassName}
                     />
+                      {errorFields.beneficiary_contact_number && data.beneficiary_contact_number ? (
+                      <p style={{ margin: "0", color: "red", fontSize: '14px' }}>
+                       सम्पर्क नम्बर नम्बरमा हुनुपर्छ
+                      </p>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div
@@ -2841,11 +2897,12 @@ console.log("This is data", data);
                         <input
                           data-nepalify={"not inialized"}
                           id="withness_contact_number"
-                          type="number"
+                          onFocus={nepaliInput}
+                          type="text"
                           // className={styles.inputClassName}
-                          onChange={handleFormData}
+                          onBlur={handleFormData}
                           name="withness_contact_number"
-                          value={data.withness_contact_number}
+                          // value={data.withness_contact_number}
                           style={
                             errorFields.withness_contact_number ||
                             phoneNumberValidation.witnessContactValidation
@@ -2857,6 +2914,13 @@ console.log("This is data", data);
                               : { height: "34px", width: "100%" }
                           }
                         />
+                         {errorFields.withness_contact_number && data.withness_contact_number ? (
+                      <p style={{ margin: "0", color: "red", fontSize: '14px' }}>
+                       सम्पर्क नम्बर नम्बरमा हुनुपर्छ
+                      </p>
+                    ) : (
+                      ""
+                    )}
                       </div>
                     </div>
                   </div>
