@@ -183,6 +183,7 @@ const Tranche2 = (props) => {
     // temporary_shelter_photo: [],
     temporary_shelter_photo_front: "",
     temporary_shelter_photo_back: "",
+    temporary_shelter_damaged_house: "",
     application_file: "",
     application_date: "",
   });
@@ -195,6 +196,7 @@ const Tranche2 = (props) => {
     ward_officer_name: false,
     ward_officer_signed_date: false,
     temp_shelter_entrollment_form: false,
+    temporary_shelter_damaged_house: false,
     // temporary_shelter_photo: false,
     temporary_shelter_photo_front: false,
     temporary_shelter_photo_back: false,
@@ -213,6 +215,7 @@ const Tranche2 = (props) => {
     temporary_shelter_photo_front: false,
     temporary_shelter_photo_back: false,
     application_file: false,
+    temporary_shelter_damaged_house: false
   });
   const {
     user,
@@ -232,12 +235,24 @@ const Tranche2 = (props) => {
     });
     const file = e.target.files[0];
     const imageValidation = {
+
       temporary_shelter_photo_front: false,
       temporary_shelter_photo_back: false,
       application_file: false,
+      temporary_shelter_damaged_house: false
     };
     const allowedExtensionsFile = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
     const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    if (
+      e.target.name === "temporary_shelter_damaged_house" &&
+      !allowedExtensions.exec(file.name)
+    ) {
+      imageValidation.temporary_shelter_damaged_house = true;
+      setImageOrFileValidation(imageValidation);
+      return;
+    }
+    imageValidation.temporary_shelter_damaged_house = false;
+    setImageOrFileValidation(imageValidation);
     if (
       e.target.name === "temporary_shelter_photo_front" &&
       !allowedExtensions.exec(file.name)
@@ -460,6 +475,10 @@ const Tranche2 = (props) => {
     finalFormData.append(
       "temporary_shelter_photo_back",
       finalUpdateData.temporary_shelter_photo_back
+    );
+    finalFormData.append(
+      "temporary_shelter_damaged_house",
+      finalUpdateData.temporary_shelter_damaged_house
     );
     finalFormData.append("application_date", finalUpdateData.application_date);
     finalFormData.append("application_file", finalUpdateData.application_file);
@@ -1029,6 +1048,50 @@ const Tranche2 = (props) => {
                         pageBreakBefore: "always",
                       }}
                     >
+                      <h3>भत्किएको घरको फोटो</h3>
+                      <div style={{ display: "flex", gap: "60px" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            alignItems: "flex-start",
+                            flexDirection: "column",
+                          }}
+                        >
+
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "20px",
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            <img
+                              style={{
+                                objectFit: "cover",
+                                objectPosition: "top",
+                              }}
+                              height={150}
+                              width={150}
+                              src={
+                                fetchedTranche2Data[0]
+                                  .temporaryShelterDamagedHouse
+                              }
+                              alt="img"
+                            />
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        flexDirection: "column",
+                        pageBreakBefore: "always",
+                      }}
+                    >
                       <h3>अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो</h3>
                       <div style={{ display: "flex", gap: "60px" }}>
                         <div
@@ -1314,6 +1377,8 @@ const Tranche2 = (props) => {
                           setData({
                             ...data,
                             entry_date_bs: value,
+                            ward_officer_signed_date: value,
+                            engineer_signed_date: value
                           });
                         }}
                         options={{
@@ -1504,6 +1569,105 @@ const Tranche2 = (props) => {
                             valueLocale: "en",
                           }}
                         />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        margin: "10px 0px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "20px",
+                      }}
+                    >
+                      <h2>
+                        {" "}
+                        {`${englishToNepaliNumber(
+                          1
+                        )}. भत्किएको घर`}
+                      </h2>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "20px",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "5px",
+                            }}
+                          >
+                            <span style={{ color: "red" }}>*</span>
+                            <span style={{ fontSize: "20px" }}>
+                               फोटो:
+                            </span>
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "5px",
+                            }}
+                          >
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="file-input"
+                              // style={{ display: 'none' }}
+                              onChange={handleFileInputChange}
+                              name="temporary_shelter_damaged_house"
+                              ref={fileInputRef}
+                            />
+
+                            {errorFields.temporary_shelter_damaged_house ? (
+                              <p style={{ margin: 0, color: "red" }}>
+                                कृपया फोटो अपलोड गर्नुहोस्
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {data.temporary_shelter_damaged_house ? (
+                              <div style={{ display: "flex" }}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: "10px",
+                                  }}
+                                >
+                                  <img
+                                    height={100}
+                                    width={100}
+                                    src={handleShowImage(
+                                      data.temporary_shelter_damaged_house
+                                    )}
+                                    alt="img"
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {imageOrFileValidation.temporary_shelter_damaged_house ? (
+                              <p style={{ margin: 0, color: "red" }}>
+                                भत्किएको घरको फोटो Jpg,jpeg वा png हुनुपर्छ
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                     <div
