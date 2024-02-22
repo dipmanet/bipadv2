@@ -782,14 +782,14 @@ const checkForUnicode = (value) => {
       benificiaryContactValidation: false,
       witnessContactValidation: false,
     };
-    if (!phoneNumberRegex.test(data.beneficiary_contact_number)) {
+    if (!phoneNumberRegex.test(nepaliToEnglishNumber(data.beneficiary_contact_number))) {
       phoneValidation.benificiaryContactValidation = true;
 
       setPhoneNumberValidation(phoneValidation);
       return;
     }
     phoneValidation.benificiaryContactValidation = false;
-    if (!phoneNumberRegex.test(data.withness_contact_number)) {
+    if (!phoneNumberRegex.test(nepaliToEnglishNumber(data.withness_contact_number))) {
       phoneValidation.witnessContactValidation = true;
       setPhoneNumberValidation(phoneValidation);
       return;
