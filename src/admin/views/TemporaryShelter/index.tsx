@@ -797,7 +797,7 @@ const checkForUnicode = (value) => {
     phoneValidation.witnessContactValidation = false;
     setPhoneNumberValidation(phoneValidation);
 
-    // setLoading(true);
+    setLoading(true);
     const finalUpdateData = data;
     if (!finalUpdateData.migration_certificate_number) {
       finalUpdateData.migration_date_bs = "";
