@@ -667,9 +667,9 @@ const TemporaryShelter = (props: {
         if (i === "migration_certificate_number") {
           return (latestErrorUpdate[i] = false);
         }
-        // if (i === 'responsible_municipality') {
-        //     return latestErrorUpdate[i] = false;
-        // }
+        if (i === 'registration_number') {
+            return latestErrorUpdate[i] = false;
+        }
         if (i === "bank_account_holder_name") {
           return (latestErrorUpdate[i] = false);
         }
@@ -1107,7 +1107,7 @@ const TemporaryShelter = (props: {
     });
     setToggleSwitchChecked(checked);
   };
-
+console.log("This is data", data);
   return (
     <>
       <Page hideFilter hideMap />
@@ -1378,7 +1378,7 @@ const TemporaryShelter = (props: {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: "5px" }}>
-                 <span style={{ color: "red" }}>*</span>
+
                 <span style={{ fontSize: "14px" }}>दर्ता नम्बर:</span>
                 </div>
                 <input
@@ -1489,7 +1489,7 @@ const TemporaryShelter = (props: {
                       <option />
                       <option value="नाती">नाती</option>
                       <option value="नातीनी">नातीनी</option>
-                      <option value="बुुहारी">बुुहारी</option>
+                      <option value="बुहारी">बुहारी</option>
                     </select>
                   </div>
                 </div>
