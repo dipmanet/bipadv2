@@ -79,7 +79,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     method: methods.GET,
     onMount: false,
     query: ({ params }) => ({
-      limit: 10,
+      limit: 100,
       offset: params.offset,
       count: true,
       beneficiary_district: params.district,
