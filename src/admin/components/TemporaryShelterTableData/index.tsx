@@ -79,6 +79,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     method: methods.GET,
     onMount: false,
     query: ({ params }) => ({
+      limit: 100,
+      offset: params.offset,
       count: true,
       beneficiary_district: params.district,
       beneficiary_municipality: params.municipality,
@@ -334,8 +336,9 @@ const TemporaryShelterTableData = (props) => {
     props.requests.getEarthquakeRequest.do({
       fetchedData: handleFetchedData,
       countData: handleCount,
+      offset
     });
-  }, []);
+  }, [offset]);
   const handleFetchedDataById = (finalData) => {
     setLoader(false);
     if (finalData === null) {
@@ -407,6 +410,7 @@ const TemporaryShelterTableData = (props) => {
           action: null,
           id: row.id,
           paNumber: englishToNepaliNumber(row.paNumber),
+          registrationNumber: row.registrationNumber,
           entryDateBs: row.entryDateBs,
           beneficiaryNameNepali: row.beneficiaryNameNepali,
           beneficiaryDistrict: row.beneficiaryDistrict,
@@ -460,6 +464,8 @@ const TemporaryShelterTableData = (props) => {
       setOffset(newPage * 100);
     }
   };
+
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data

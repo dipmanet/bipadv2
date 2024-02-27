@@ -43,6 +43,7 @@ export const tableTitleRef = {
   action: "कार्य",
   id: "लाभग्राही क्रम संंख्या",
   paNumber: "सम्झौता क्रमााङ्क संंख्या",
+  registrationNumber: "दर्ता नम्बर",
   entryDateBs: "पहिलो किस्ता दर्ता मिति",
   beneficiaryNameNepali: "नाम",
   beneficiaryDistrict: "जिल्ला",
