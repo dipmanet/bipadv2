@@ -1,3 +1,6 @@
+/* eslint-disable no-mixed-operators */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable operator-linebreak */
 /* eslint-disable arrow-parens */
@@ -82,6 +85,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       limit: 100,
       offset: params.offset,
       count: true,
+      search: params.search,
       beneficiary_district: params.district,
       beneficiary_municipality: params.municipality,
       beneficiary_ward: params.ward,
@@ -100,27 +104,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       console.warn("failure", error);
     },
   },
-  getEarthquakeRequestFilterById: {
-    url: ({ params }) => `/temporary-shelter-enrollment-form/${params.id}/`,
-    method: methods.GET,
-    onMount: false,
-    onSuccess: ({ response, props, params }) => {
-      params.fetchedData(response);
-      if (response) {
-        params.countData(1);
-      } else {
-        params.countData(0);
-      }
-    },
-    onFailure: ({ error, params }) => {
-      console.warn("failure", error);
-      params.fetchedData(null);
-      params.countData(0);
-    },
-    onFatal: ({ error, params }) => {
-      console.warn("failure", error);
-    },
-  },
+
 };
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -315,6 +299,7 @@ const TemporaryShelterTableData = (props) => {
   const [fetchedData, setFetchedData] = useState([]);
   const [count, setCount] = useState(null);
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
+  const [disableSearch, setDisableSearch] = useState(true);
   const [filterData, setFilterData] = useState({
     district: null,
     municipality: null,
@@ -347,28 +332,29 @@ const TemporaryShelterTableData = (props) => {
       setFetchedData([finalData]);
     }
   };
+
+  // props.user.isSuperuser
+
   const handleSearch = () => {
     setLoader(true);
     setIsFilteredEnabled(true);
-    if (filterData.id) {
-      props.requests.getEarthquakeRequestFilterById.do({
-        id: filterData.id,
-        fetchedData: handleFetchedDataById,
-        countData: handleCount,
-      });
-    } else {
+
       props.requests.getEarthquakeRequest.do({
         fetchedData: handleFetchedData,
-        district: filterData.municipality
+        search: filterData.id,
+        offset,
+        district: props.user.isSuperuser ? filterData.municipality
           ? ""
-          : filterData.district && filterData.district.value,
-        municipality: filterData.ward
+          : filterData.district && filterData.district.value
+          : props.user.profile.district,
+        municipality: props.user.isSuperuser ? filterData.ward
           ? ""
-          : filterData.municipality && filterData.municipality.value,
+          : filterData.municipality && filterData.municipality.value
+          : props.user.profile.municipality,
         ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
         countData: handleCount,
       });
-    }
+    // }
   };
 
   const DistrictListSelect = districts.map((d) => ({
@@ -385,17 +371,30 @@ const TemporaryShelterTableData = (props) => {
         label: d.title_ne,
       }));
 
+
   const WardList =
-    filterData.municipality &&
+  props.user.isSuperuser ? filterData.municipality &&
     wards
       .filter((i) => i.municipality === Number(filterData.municipality.value))
+      .map((title) => ({ ...title, title: Number(title.title) }))
+      .sort((a, b) => a.title - b.title)
       .map((d) => ({
         value: d.id,
         label: englishToNepaliNumber(d.title),
       }))
-      .sort((a, b) => a.label - b.label);
 
-  const dateFormatter = (date) => {
+      :
+      wards
+        .filter((i) => i.municipality === Number(props.user.profile.municipality))
+        .map((title) => ({ ...title, title: Number(title.title) }))
+        .sort((a, b) => a.title - b.title)
+        .map((d) => ({
+          value: d.id,
+          label: englishToNepaliNumber(d.title),
+        }));
+
+
+const dateFormatter = (date) => {
     const slicedDate = date.split("-");
     const year = englishToNepaliNumber(slicedDate[0]);
     const month = englishToNepaliNumber(slicedDate[1]);
@@ -645,16 +644,34 @@ const TemporaryShelterTableData = (props) => {
     return finalValueToStore[0];
   };
   const handleChangeId = (e) => {
+    if (props.user.isSuperuser) {
+      setDisableSearch(false);
+      if (e.target.value === "" && !filterData.district) {
+        setDisableSearch(true);
+      }
+    } else if (e.target.value === "" && !filterData.ward) {
+        setDisableSearch(true);
+      } else {
+        setDisableSearch(false);
+      }
+
+
     setFilterData({
       ...filterData,
       [e.target.name]: e.target.value,
-      district: "",
-      municipality: "",
-      ward: "",
+      // district: "",
+      // municipality: "",
+      // ward: "",
     });
   };
   const handleDropdown = (name, value) => {
     if (name === "district") {
+      if (props.user.isSuperuser) {
+        setDisableSearch(false);
+      }
+      if (value === null && !filterData.id) {
+        setDisableSearch(true);
+      }
       setFilterData({
         ...filterData,
         [name]: value,
@@ -669,6 +686,12 @@ const TemporaryShelterTableData = (props) => {
         ward: "",
       });
     } else {
+      if (!props.user.isSuperuser) {
+        setDisableSearch(false);
+      }
+      if (value === null && !filterData.id) {
+        setDisableSearch(true);
+      }
       setFilterData({
         ...filterData,
         [name]: value,
@@ -692,9 +715,11 @@ const TemporaryShelterTableData = (props) => {
       district: "",
       municipality: "",
       ward: "",
+      search: "",
       countData: handleCount,
     });
   };
+
 
   return (
     <>
@@ -738,13 +763,17 @@ const TemporaryShelterTableData = (props) => {
               onPageChange={handleChangePage}
             />
           </div>
-          <div style={{ display: "flex", gap: "5px" }}>
+          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px' }}>
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
+                isDisabled={!props.user.isSuperuser}
                 value={
-                  filterData.district === ""
-                    ? ""
+                  !filterData.district
+                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                      props.user.profile.district,
+                      districts
+                    ) : ''
                     : handleProvincialFormDataNepaliValue(
                         filterData.district,
                         districts
@@ -765,12 +794,16 @@ const TemporaryShelterTableData = (props) => {
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
+                isDisabled={!props.user.isSuperuser}
                 value={
-                  filterData.municipality === ""
-                    ? ""
+                  !filterData.municipality
+                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                      props.user.profile.municipality,
+                      municipalities
+                    ) : ''
                     : handleProvincialFormDataNepaliValue(
                         filterData.municipality,
-                        districts
+                        municipalities
                       )
                 }
                 name="municipality"
@@ -825,7 +858,7 @@ const TemporaryShelterTableData = (props) => {
 
                             </InputLabel> */}
               <Input
-                type="number"
+                type="text"
                 // value={covid24hrsStatData[field]}
                 // onChange={e => handleCovid24hrStat(e, field)}
                 // className={styles.select}
@@ -836,7 +869,7 @@ const TemporaryShelterTableData = (props) => {
                 name="id"
                 value={filterData.id}
                 onChange={handleChangeId}
-                placeholder="आईडी द्वारा खोज्नुहोस्"
+                placeholder="कृपया खोज्नुहोस्"
                 style={{
                   border: "1px solid hsl(0, 0%, 80%)",
                   width: "fit-content",
@@ -851,7 +884,7 @@ const TemporaryShelterTableData = (props) => {
                 // disabled={!!(filterData.district && !filterData.district.value)}
                 onClick={handleSearch}
                 type="submit"
-                disabled={!(filterData.district || filterData.id)}
+                disabled={disableSearch}
               >
                 {"खोज्नुहोस्"}
               </button>

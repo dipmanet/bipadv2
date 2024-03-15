@@ -7,6 +7,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     font-size: 16px;
     color: #303030 !important;
     font-family: $Fira !important;
+    text-wrap: nowrap;
 }
 
 .setStyleForTableCell {
@@ -16,6 +17,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     font-weight: 500 !important;
     line-height: 24px !important;
     padding: 16px !important;
+    text-wrap: nowrap !important;
 
     // font-weight: bold !important;
     .curdOptions {
@@ -29,8 +31,14 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 .MuiTableCell-root {
     padding: 0 !important;
 }
+// @media only screen and (max-width: 1024px) {
+//   .credentialSearch {
 
+//   }
+// }
 .credentialSearch {
+  flex-wrap: wrap;
+  // padding-bottom: 12px;
     .saveOrAddButtons {
         display: flex;
         justify-content: flex-end;
