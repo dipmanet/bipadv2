@@ -763,7 +763,7 @@ const dateFormatter = (date) => {
               onPageChange={handleChangePage}
             />
           </div>
-          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px' }}>
+          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap' }}>
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
