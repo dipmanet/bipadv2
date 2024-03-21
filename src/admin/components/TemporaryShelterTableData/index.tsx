@@ -575,7 +575,7 @@ const dateFormatter = (date) => {
       //     ])
       //     .addRows(Dataforcsv())
       //     .exportFile();
-console.log("This is municipaity", filterData);
+
       window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?beneficiary_district=${props.user.isSuperuser ? filterData.municipality
         ? ""
         : filterData.district && filterData.district.value
