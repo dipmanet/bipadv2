@@ -301,10 +301,10 @@ const TemporaryShelterTableData = (props) => {
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
   const [filterData, setFilterData] = useState({
-    district: null,
-    municipality: null,
-    ward: null,
-    id: null,
+    district: "",
+    municipality: "",
+    ward: "",
+    id: "",
   });
   const loadingCondition = (boolean) => {
     setLoader(boolean);
@@ -575,7 +575,14 @@ const dateFormatter = (date) => {
       //     ])
       //     .addRows(Dataforcsv())
       //     .exportFile();
-      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?format=xlsx`, "_blank");
+console.log("This is municipaity", filterData);
+      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?beneficiary_district=${props.user.isSuperuser ? filterData.municipality
+        ? ""
+        : filterData.district && filterData.district.value
+        : props.user.profile.district}&beneficiary_municipality=${props.user.isSuperuser ? filterData.ward
+          ? ""
+          : filterData.municipality && filterData.municipality.value
+          : props.user.profile.municipality}&beneficiary_ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}&format=xlsx`, "_blank");
   };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
