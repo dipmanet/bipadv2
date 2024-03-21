@@ -38,6 +38,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 // }
 .credentialSearch {
   flex-wrap: wrap;
+  justify-content: space-between;
   // padding-bottom: 12px;
     .saveOrAddButtons {
         display: flex;
@@ -97,7 +98,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     // border-left: 1px solid rgb(228, 228, 228);
     // border-right: 1px solid rgb(228, 228, 228);
     margin-top: 25px;
-    padding-right: 24px;
+    // padding-right: 24px;
 
     img {
         padding-left: 25px;

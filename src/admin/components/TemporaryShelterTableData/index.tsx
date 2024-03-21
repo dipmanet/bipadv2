@@ -301,10 +301,10 @@ const TemporaryShelterTableData = (props) => {
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
   const [filterData, setFilterData] = useState({
-    district: null,
-    municipality: null,
-    ward: null,
-    id: null,
+    district: "",
+    municipality: "",
+    ward: "",
+    id: "",
   });
   const loadingCondition = (boolean) => {
     setLoader(boolean);
@@ -538,44 +538,52 @@ const dateFormatter = (date) => {
     return csvData;
   };
 
-  // const handleDownload = () => {
-  //     const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
-  //         .setColumns([
-  //             'id',
-  //             'Province',
-  //             'District',
-  //             'Municipality',
-  //             'Ward',
-  //             'Local Address',
-  //             'Reported Date (A.D.)(eg. 2021/07/31)',
-  //             'Hazard',
-  //             'Hazard Inducer',
-  //             'Total Estimated Loss(NPR)',
-  //             'Agriculture Economic Loss(NPR)',
-  //             'Infrastructure Economic Loss(NPR)',
-  //             'Total Infrastructure Destroyed',
-  //             'House Destroyed',
-  //             'House Affected',
-  //             'Total Livestock Destroyed',
-  //             'Total Injured Male',
-  //             'Total Injured Female',
-  //             'Total Injured Others',
-  //             'Total Injured Disabled',
-  //             'Total Missing Male',
-  //             'Total Missing Female',
-  //             'Total Missing Other',
-  //             'Total Missing Disabled',
-  //             'Total Male Death',
-  //             'Total Female Death',
-  //             'Total Other Death',
-  //             'Total Disabled Death',
-  //             'Verified (eg. Yes)',
-  //             'Verification message',
-  //             'Approved (eg. Yes)',
-  //         ])
-  //         .addRows(Dataforcsv())
-  //         .exportFile();
-  // };
+  const handleDownload = () => {
+      // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
+      //     .setColumns([
+      //         'id',
+      //         'Province',
+      //         'District',
+      //         'Municipality',
+      //         'Ward',
+      //         'Local Address',
+      //         'Reported Date (A.D.)(eg. 2021/07/31)',
+      //         'Hazard',
+      //         'Hazard Inducer',
+      //         'Total Estimated Loss(NPR)',
+      //         'Agriculture Economic Loss(NPR)',
+      //         'Infrastructure Economic Loss(NPR)',
+      //         'Total Infrastructure Destroyed',
+      //         'House Destroyed',
+      //         'House Affected',
+      //         'Total Livestock Destroyed',
+      //         'Total Injured Male',
+      //         'Total Injured Female',
+      //         'Total Injured Others',
+      //         'Total Injured Disabled',
+      //         'Total Missing Male',
+      //         'Total Missing Female',
+      //         'Total Missing Other',
+      //         'Total Missing Disabled',
+      //         'Total Male Death',
+      //         'Total Female Death',
+      //         'Total Other Death',
+      //         'Total Disabled Death',
+      //         'Verified (eg. Yes)',
+      //         'Verification message',
+      //         'Approved (eg. Yes)',
+      //     ])
+      //     .addRows(Dataforcsv())
+      //     .exportFile();
+console.log("This is municipaity", filterData);
+      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?beneficiary_district=${props.user.isSuperuser ? filterData.municipality
+        ? ""
+        : filterData.district && filterData.district.value
+        : props.user.profile.district}&beneficiary_municipality=${props.user.isSuperuser ? filterData.ward
+          ? ""
+          : filterData.municipality && filterData.municipality.value
+          : props.user.profile.municipality}&beneficiary_ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}&format=xlsx`, "_blank");
+  };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
   //     const selectedIndex = selected.indexOf(name);
@@ -745,24 +753,7 @@ const dateFormatter = (date) => {
         }}
       >
         <div className={styles.credentialSearch}>
-          <div className={styles.rightOptions}>
-            {/* <IconButton
-                            onClick={handleDownload}
-                            style={{ cursor: 'pointer' }}
-                        >
 
-                            <DownloadIcon />
-                        </IconButton> */}
-            <TablePagination
-              className={styles.tablePagination}
-              rowsPerPageOptions={[100]}
-              component="div"
-              count={count}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-            />
-          </div>
           <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap' }}>
             <div style={{ width: "230px" }}>
               <Select
@@ -904,6 +895,25 @@ const dateFormatter = (date) => {
                 ""
               )}
             </div>
+          </div>
+          <div className={styles.rightOptions}>
+            <IconButton
+                            onClick={handleDownload}
+                            style={{ cursor: 'pointer', borderRadius: '20px' }}
+            >
+
+                            <DownloadIcon />
+                            <span style={{ fontSize: '16px' }}>Download</span>
+            </IconButton>
+            <TablePagination
+              className={styles.tablePagination}
+              rowsPerPageOptions={[100]}
+              component="div"
+              count={count}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+            />
           </div>
         </div>
 
