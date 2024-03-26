@@ -728,7 +728,7 @@ const dateFormatter = (date) => {
     });
   };
 
-
+console.log("Ward", filterData.ward);
   return (
     <>
       {loader ? (
@@ -898,12 +898,13 @@ const dateFormatter = (date) => {
           </div>
           <div className={styles.rightOptions}>
             <IconButton
+            disabled={!filterData.ward}
                             onClick={handleDownload}
                             style={{ cursor: 'pointer', borderRadius: '20px' }}
             >
 
                             <DownloadIcon />
-                            <span style={{ fontSize: '16px' }}>Download</span>
+                            <span style={{ fontSize: '16px' }}>Download Ward</span>
             </IconButton>
             <TablePagination
               className={styles.tablePagination}
