@@ -904,7 +904,7 @@ console.log("Ward", filterData.ward);
             >
 
                             <DownloadIcon />
-                            <span style={{ fontSize: '16px' }}>Download Ward</span>
+                            <span style={{ fontSize: '16px' }}>Download</span>
             </IconButton>
             <TablePagination
               className={styles.tablePagination}
