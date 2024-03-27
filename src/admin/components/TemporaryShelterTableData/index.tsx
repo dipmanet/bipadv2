@@ -575,7 +575,7 @@ const dateFormatter = (date) => {
       //     ])
       //     .addRows(Dataforcsv())
       //     .exportFile();
-console.log("This is municipaity", filterData);
+
       window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?beneficiary_district=${props.user.isSuperuser ? filterData.municipality
         ? ""
         : filterData.district && filterData.district.value
@@ -728,7 +728,7 @@ console.log("This is municipaity", filterData);
     });
   };
 
-
+console.log("Ward", filterData.ward);
   return (
     <>
       {loader ? (
@@ -898,12 +898,13 @@ console.log("This is municipaity", filterData);
           </div>
           <div className={styles.rightOptions}>
             <IconButton
+            disabled={!filterData.municipality}
                             onClick={handleDownload}
                             style={{ cursor: 'pointer', borderRadius: '20px' }}
             >
 
                             <DownloadIcon />
-                            <span style={{ fontSize: '16px' }}>Download</span>
+                            <span style={{ fontSize: '16px' }}>Download Ward</span>
             </IconButton>
             <TablePagination
               className={styles.tablePagination}
