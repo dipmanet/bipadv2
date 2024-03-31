@@ -898,7 +898,7 @@ console.log("Ward", filterData.ward);
           </div>
           <div className={styles.rightOptions}>
             <IconButton
-            disabled={!filterData.municipality}
+            disabled={!filterData.ward}
                             onClick={handleDownload}
                             style={{ cursor: 'pointer', borderRadius: '20px' }}
             >
