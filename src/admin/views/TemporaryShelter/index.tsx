@@ -45,7 +45,9 @@ import {
   userSelector,
 } from "#selectors";
 import { SetEpidemicsPageAction } from "#actionCreators";
-import { ADToBS } from "bikram-sambat-js";
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from "bikram-sambat-js";
 import {
   ClientAttributes,
   createConnectedRequestCoordinator,
@@ -1145,7 +1147,7 @@ const checkForUnicode = (value) => {
     });
     setToggleSwitchChecked(checked);
   };
-
+console.log("This is data,", data);
   return (
     <>
       <Page hideFilter hideMap />

@@ -28,7 +28,9 @@ import {
     userSelector,
 } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
-import { ADToBS } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from 'bikram-sambat-js';
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { englishToNepaliNumber } from 'nepali-number';

@@ -21,7 +21,9 @@ import { connect } from 'react-redux';
 import GovLogo from 'src/admin/resources/govtLogo.svg';
 import NepaliDate from 'src/admin/components/NepaliDate';
 import { Translation } from 'react-i18next';
-import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
+import adToBs from '#utils/AdBSConverter/AdToBs';
+import bsToAd from '#utils/AdBSConverter/BsToAd';
+// import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
 import {
     bulletinPageSelector, hazardTypeListSelector,
     languageSelector,

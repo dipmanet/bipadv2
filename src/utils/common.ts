@@ -7,7 +7,9 @@ import {
         isTruthy,
         addSeparator,
 } from '@togglecorp/fujs';
-import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS, BSToAD } from 'bikram-sambat-js';
 
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';

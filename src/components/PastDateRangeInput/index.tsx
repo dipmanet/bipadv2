@@ -22,7 +22,9 @@ import {
 } from '#selectors';
 
 import { convertDateAccToLanguage, hofLangToValue } from '#utils/common';
-import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 
 const pastDataKeySelector = d => d.key;
