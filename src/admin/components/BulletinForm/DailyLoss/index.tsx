@@ -18,6 +18,8 @@ import 'nepali-datepicker-reactjs/dist/index.css';
 import ADToBS from '#utils/AdBSConverter/AdToBs';
 import BSToAD from '#utils/AdBSConverter/BsToAd';
 // import { ADToBS, BSToAD } from 'bikram-sambat-js';
+// import Calendar from '@sbmdkl/nepali-datepicker-reactjs';
+// import '@sbmdkl/nepali-datepicker-reactjs/dist/index.css';
 import Loader from 'react-loader';
 import {
     hazardTypesSelector,
@@ -328,6 +330,7 @@ const Bulletin = (props: Props) => {
                                         </h3>
                                     )
                                     : (
+
                                         <NepaliDatePicker
                                             inputClassName="form-control"
                                             className={styles.datePick}
