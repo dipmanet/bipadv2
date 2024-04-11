@@ -1032,7 +1032,7 @@ const checkForUnicode = (value) => {
     const day = curDate.getDate() > 9 ? curDate.getDate() : `0${curDate.getDate()}`;
     const month = curDate.getMonth() + 1 > 9 ? curDate.getMonth() + 1 : `0${curDate.getMonth() + 1}`;
     const year = curDate.getFullYear();
-console.log("this type", typeof month);
+
     // This arrangement can be altered based on how we want the date's format to appear.
     const currentDate = ADToBS(`${year}-${month}-${day}`);
     setData({
