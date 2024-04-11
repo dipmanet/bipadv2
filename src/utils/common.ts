@@ -319,7 +319,7 @@ export const checkSameRegionPermission = (user, region) => {
 
 // convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
-        console.log('This is date finally final', date);
+       
         if (!date) {
                 return '';
         }

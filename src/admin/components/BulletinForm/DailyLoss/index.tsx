@@ -221,7 +221,7 @@ const Bulletin = (props: Props) => {
                 today = new Date();
                 // today.setDate(today.getDate() - 1);
             }
-            console.log('today', today);
+            
             const dd = String(today.getDate() - 1).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
@@ -248,20 +248,20 @@ const Bulletin = (props: Props) => {
             } else {
                 today = new Date();
             }
-            console.log('This is final date', today.getDate());
+            
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
 
             const finalDate = `${yyyy}-${mm}-${dd}`;
-            console.log('Final date', finalDate);
+           
             const selectedDate = new Date(finalDate);
             recordSelectedDateTo(selectedDate);
             setDateAltTo(finalDate);
             handleDateTo(finalDate);
         }
     }, [dateAltTo, bulletinEditData]);
-    console.log('This is start and end date', dateAlt, dateAltTo);
+    
     useEffect(() => {
         if (!startingTime && !endingTime) {
             const currentDate = new Date();
@@ -281,8 +281,7 @@ const Bulletin = (props: Props) => {
         setFilterDateType('');
     };
 
-    console.log('This is daily bulletin', dateAltTo, ADToBS(dateAltTo));
-    console.log('This is daily bulletin', ADToBS(dateAlt));
+   
     return (
         <>
             {loading

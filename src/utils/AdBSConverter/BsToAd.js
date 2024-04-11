@@ -36,7 +36,7 @@ function BSToAD(selectedDate) {
 		}
 	}
 
-    console.log('This is final date', evaluateEnglishDate('1943-04-14', daysDiff));
+   
 	return evaluateEnglishDate('1943-04-14', daysDiff);
 }
 

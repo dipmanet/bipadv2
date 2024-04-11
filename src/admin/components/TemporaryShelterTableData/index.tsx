@@ -730,7 +730,7 @@ const dateFormatter = (date) => {
     });
   };
 
-console.log("Ward", filterData.ward);
+
   return (
     <>
       {loader ? (
