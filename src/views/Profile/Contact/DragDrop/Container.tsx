@@ -68,8 +68,6 @@ export const Container = () => {
       },
     ]);
     const moveCard = useCallback((dragIndex, hoverIndex) => {
-      console.log("This is drag index", dragIndex);
-      console.log("This is hoverIndex", hoverIndex);
       setCards((prevCards) =>
         update(prevCards, {
           $splice: [

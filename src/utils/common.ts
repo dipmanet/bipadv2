@@ -7,7 +7,9 @@ import {
         isTruthy,
         addSeparator,
 } from '@togglecorp/fujs';
-import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS, BSToAD } from 'bikram-sambat-js';
 
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
@@ -317,6 +319,7 @@ export const checkSameRegionPermission = (user, region) => {
 
 // convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
+       
         if (!date) {
                 return '';
         }
@@ -326,7 +329,7 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
         } else if (language === 'np') {
                 try {
                         // dateToReturn = englishToNepaliNumber(ADToBS(date));
-                        dateToReturn = ADToBS(date);
+                        dateToReturn = (date);
                 } catch (e) {
                         dateToReturn = date;
                 }

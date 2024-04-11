@@ -65,7 +65,9 @@ import { englishToNepaliNumber } from "nepali-number";
 import eyeSolid from "#resources/icons/eye-solid.svg";
 import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 import Reset from "#resources/icons/reset.svg";
-import { ADToBS } from "bikram-sambat-js";
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from "bikram-sambat-js";
 import { tableTitleRef } from "./utils";
 import styles from "./styles.module.scss";
 
@@ -728,7 +730,7 @@ const dateFormatter = (date) => {
     });
   };
 
-console.log("Ward", filterData.ward);
+
   return (
     <>
       {loader ? (

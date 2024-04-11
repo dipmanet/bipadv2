@@ -22,7 +22,9 @@ import {
 } from '#selectors';
 
 import { convertDateAccToLanguage, hofLangToValue } from '#utils/common';
-import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 
 const pastDataKeySelector = d => d.key;
@@ -194,6 +196,7 @@ class PastDateRangeInput extends React.Component<Props> {
 
 
     private handleStartDateInputChange = (newStartDate: string) => {
+        
         const { switchDateValue } = this.state;
         this.setState({ switchDateValue: !switchDateValue });
 
@@ -255,9 +258,12 @@ class PastDateRangeInput extends React.Component<Props> {
         } = this.state;
         const { activeRouteDetails: { name: activePage } } = this.context;
         const test = convertDateAccToLanguage(
-            value.endDate,
+            value.startDate,
             language,
         );
+
+       
+
 
         return (
             <div className={_cs(styles.pastDateRangeInput, className)}>

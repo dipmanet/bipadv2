@@ -5,7 +5,9 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 // import Loader from 'react-loader-spinner';
 import Loader from 'react-loader';
-import { ADToBS } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from 'bikram-sambat-js';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {

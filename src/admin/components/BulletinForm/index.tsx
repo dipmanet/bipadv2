@@ -1234,7 +1234,6 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [covidQuaratine]);
-
     const formSections = [
         <DailyLoss
             handleIncidentChange={handleIncidentChange}

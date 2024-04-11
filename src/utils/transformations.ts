@@ -1,6 +1,8 @@
 import { Obj } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-import { ADToBS } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from 'bikram-sambat-js';
 import { FiltersWithRegion } from '#store/atom/page/types';
 import {
     RegionAdminLevel,

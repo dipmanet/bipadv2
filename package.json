@@ -141,6 +141,7 @@
     "@reach/router": "1.3.4",
     "@reglendo/canvas2image": "1.0.5-2",
     "@sbmdkl/nepali-date-converter": "1.3.3",
+    "@sbmdkl/nepali-datepicker-reactjs": "^1.2.1",
     "@togglecorp/faram": "1.2.1",
     "@togglecorp/fujs": "1.8.0",
     "@togglecorp/ravl": "1.2.3",
