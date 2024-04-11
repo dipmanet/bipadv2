@@ -319,6 +319,7 @@ export const checkSameRegionPermission = (user, region) => {
 
 // convert date according to language
 export const convertDateAccToLanguage = (date, language, forceAD = false) => {
+        console.log('This is date finally final', date);
         if (!date) {
                 return '';
         }
@@ -328,7 +329,7 @@ export const convertDateAccToLanguage = (date, language, forceAD = false) => {
         } else if (language === 'np') {
                 try {
                         // dateToReturn = englishToNepaliNumber(ADToBS(date));
-                        dateToReturn = ADToBS(date);
+                        dateToReturn = (date);
                 } catch (e) {
                         dateToReturn = date;
                 }
