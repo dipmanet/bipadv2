@@ -221,7 +221,7 @@ const Bulletin = (props: Props) => {
                 today = new Date();
                 // today.setDate(today.getDate() - 1);
             }
-            
+
             const dd = String(today.getDate() - 1).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
@@ -248,20 +248,20 @@ const Bulletin = (props: Props) => {
             } else {
                 today = new Date();
             }
-            
+
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
 
             const finalDate = `${yyyy}-${mm}-${dd}`;
-           
+
             const selectedDate = new Date(finalDate);
             recordSelectedDateTo(selectedDate);
             setDateAltTo(finalDate);
             handleDateTo(finalDate);
         }
     }, [dateAltTo, bulletinEditData]);
-    
+
     useEffect(() => {
         if (!startingTime && !endingTime) {
             const currentDate = new Date();
@@ -576,7 +576,7 @@ const Bulletin = (props: Props) => {
                                         <Input
                                             disabled={!filterDateType}
                                             type="number"
-                                            value={peopleLossData[field][subField]}
+                                            value={peopleLossData && peopleLossData[field][subField]}
                                             onChange={e => handlePeopleLossChange(e, field, subField)}
                                             className={styles.select}
                                             disableUnderline

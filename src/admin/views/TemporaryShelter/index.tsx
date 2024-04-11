@@ -1147,7 +1147,7 @@ const checkForUnicode = (value) => {
     });
     setToggleSwitchChecked(checked);
   };
-console.log("This is data", data);
+
   return (
     <>
       <Page hideFilter hideMap />
