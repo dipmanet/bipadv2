@@ -196,7 +196,6 @@ class PastDateRangeInput extends React.Component<Props> {
 
 
     private handleStartDateInputChange = (newStartDate: string) => {
-        
         const { switchDateValue } = this.state;
         this.setState({ switchDateValue: !switchDateValue });
 
@@ -261,8 +260,6 @@ class PastDateRangeInput extends React.Component<Props> {
             value.startDate,
             language,
         );
-
-       
 
 
         return (

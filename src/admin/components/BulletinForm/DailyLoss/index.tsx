@@ -281,7 +281,7 @@ const Bulletin = (props: Props) => {
         setFilterDateType('');
     };
 
-   
+
     return (
         <>
             {loading

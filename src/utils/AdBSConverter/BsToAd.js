@@ -36,7 +36,7 @@ function BSToAD(selectedDate) {
 		}
 	}
 
-   
+
 	return evaluateEnglishDate('1943-04-14', daysDiff);
 }
 

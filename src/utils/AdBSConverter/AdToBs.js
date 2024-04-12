@@ -29,7 +29,6 @@ function evaluateNepaliDate(daysElpased) {
 	// return { currentYear, currentMonth, currentDay };
 }
 function ADToBS(selectedDate) {
-	
 	const startDate = new Date('1943-04-14');
 	const today = new Date(selectedDate);
 	const daysDifference = Math.floor((today.getTime() - startDate.getTime()) / 86400000);
