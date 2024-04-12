@@ -52,6 +52,7 @@ import { SetEpidemicsPageAction, SetIncidentPageAction } from "#actionCreators";
 import {
   districtsSelector,
   municipalitiesSelector,
+  provincesSelector,
   userSelector,
   wardsSelector,
 } from "#selectors";
@@ -76,6 +77,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
   districts: districtsSelector(state),
   municipalities: municipalitiesSelector(state),
   wards: wardsSelector(state),
+  provinces: provincesSelector(state)
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -297,12 +299,13 @@ const TemporaryShelterTableData = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [offset, setOffset] = useState(0);
   const [loader, setLoader] = useState(false);
-  const { districts, municipalities, wards } = props;
+  const { districts, municipalities, wards, provinces } = props;
   const [fetchedData, setFetchedData] = useState([]);
   const [count, setCount] = useState(null);
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
   const [filterData, setFilterData] = useState({
+    province: "",
     district: "",
     municipality: "",
     ward: "",
@@ -358,12 +361,18 @@ const TemporaryShelterTableData = (props) => {
       });
     // }
   };
-
-  const DistrictListSelect = districts.map((d) => ({
+  // props.user.profile.district
+  const DistrictListSelect = filterData.province &&
+  districts
+    .filter((i) => i.province === Number(filterData.province.value))
+    .map((d) => ({
+      value: d.id,
+      label: d.title_ne,
+    }));
+  const ProvinceListSelect = provinces.map((d) => ({
     value: d.id,
     label: d.title_ne,
   }));
-
   const MunicipalityList =
     filterData.district &&
     municipalities
@@ -372,12 +381,19 @@ const TemporaryShelterTableData = (props) => {
         value: d.id,
         label: d.title_ne,
       }));
-
+useEffect(() => {
+setFilterData({
+  ...filterData,
+  province: props.user.isSuperuser ? "" : { value: props.user.profile.province },
+      district: props.user.isSuperuser ? "" : { value: props.user.profile.district },
+      municipality: props.user.isSuperuser ? "" : { value: props.user.profile.municipality }
+});
+}, [props.user]);
 
   const WardList =
   props.user.isSuperuser ? filterData.municipality &&
     wards
-      .filter((i) => i.municipality === Number(filterData.municipality.value))
+      .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
       .map((title) => ({ ...title, title: Number(title.title) }))
       .sort((a, b) => a.title - b.title)
       .map((d) => ({
@@ -387,7 +403,7 @@ const TemporaryShelterTableData = (props) => {
 
       :
       wards
-        .filter((i) => i.municipality === Number(props.user.profile.municipality))
+        .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
         .map((title) => ({ ...title, title: Number(title.title) }))
         .sort((a, b) => a.title - b.title)
         .map((d) => ({
@@ -578,14 +594,32 @@ const dateFormatter = (date) => {
       //     .addRows(Dataforcsv())
       //     .exportFile();
 
-      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?beneficiary_district=${props.user.isSuperuser ? filterData.municipality
-        ? ""
-        : filterData.district && filterData.district.value
-        : props.user.profile.district}&beneficiary_municipality=${props.user.isSuperuser ? filterData.ward
-          ? ""
-          : filterData.municipality && filterData.municipality.value
-          : props.user.profile.municipality}&beneficiary_ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}&format=xlsx`, "_blank");
-  };
+      // window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${
+      //   props.user.isSuperuser ? filterData.district
+      //   ? ""
+      //   : filterData.province && filterData.province.value
+      //   : filterData.district
+      //   ? ""
+      //   : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province
+      // }&`}
+
+      // ${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality
+      //   ? ""
+      //   : filterData.district && filterData.district.value
+      //   : filterData.municipality
+      //   ? ""
+      //   : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser
+      //     ? filterData.ward
+      //     ? ""
+      //     : filterData.municipality && filterData.municipality.value
+      //     : filterData.ward
+      //     ? ""
+      //     : filterData.municipality ? filterData.municipality && filterData.municipality.value :
+
+      //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
+
+      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
+    };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
   //     const selectedIndex = selected.indexOf(name);
@@ -675,7 +709,23 @@ const dateFormatter = (date) => {
     });
   };
   const handleDropdown = (name, value) => {
-    if (name === "district") {
+    if (name === "province") {
+      if (props.user.isSuperuser) {
+        setDisableSearch(false);
+      }
+      if (value === null && !filterData.id) {
+        setDisableSearch(true);
+      }
+
+      setFilterData({
+        ...filterData,
+        [name]: value === null ? "" : value,
+        district: "",
+        municipality: "",
+        ward: "",
+        id: "",
+      });
+    } else if (name === "district") {
       if (props.user.isSuperuser) {
         setDisableSearch(false);
       }
@@ -684,7 +734,7 @@ const dateFormatter = (date) => {
       }
       setFilterData({
         ...filterData,
-        [name]: value,
+        [name]: value === null ? "" : value,
         municipality: "",
         ward: "",
         id: "",
@@ -692,7 +742,7 @@ const dateFormatter = (date) => {
     } else if (name === "municipality") {
       setFilterData({
         ...filterData,
-        [name]: value,
+        [name]: value === null ? "" : value,
         ward: "",
       });
     } else {
@@ -704,7 +754,7 @@ const dateFormatter = (date) => {
       }
       setFilterData({
         ...filterData,
-        [name]: value,
+        [name]: value === null ? "" : value,
       });
     }
 
@@ -757,10 +807,36 @@ const dateFormatter = (date) => {
         <div className={styles.credentialSearch}>
 
           <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap' }}>
-            <div style={{ width: "230px" }}>
+          <div style={{ width: "230px" }}>
               <Select
                 isClearable
                 isDisabled={!props.user.isSuperuser}
+                value={
+                  !filterData.province
+                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                      props.user.profile.province,
+                      provinces
+                    ) : ''
+                    : handleProvincialFormDataNepaliValue(
+                        filterData.province,
+                        provinces
+                      )
+                }
+                name="province"
+                placeholder={"प्रदेश छान्नुहोस्"}
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                options={ProvinceListSelect}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+              />
+          </div>
+            <div style={{ width: "230px" }}>
+              <Select
+                isClearable
+                isDisabled={!props.user.isSuperuser || !props.user.isSuperuser && !props.user.profile.municipality || !props.user.isSuperuser && props.user.profile.province && props.user.profile.district && props.user.profile.municipality}
                 value={
                   !filterData.district
                     ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
@@ -787,7 +863,7 @@ const dateFormatter = (date) => {
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
-                isDisabled={!props.user.isSuperuser}
+                isDisabled={!props.user.isSuperuser && props.user.profile.province && props.user.profile.district && props.user.profile.municipality}
                 value={
                   !filterData.municipality
                     ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
@@ -900,7 +976,7 @@ const dateFormatter = (date) => {
           </div>
           <div className={styles.rightOptions}>
             <IconButton
-            disabled={!filterData.municipality}
+            // disabled={!filterData.municipality}
                             onClick={handleDownload}
                             style={{ cursor: 'pointer', borderRadius: '20px' }}
             >
