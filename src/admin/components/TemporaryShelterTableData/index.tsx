@@ -1,3 +1,5 @@
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-mixed-operators */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
@@ -685,6 +687,7 @@ console.log("This is filtered data", filterData);
           ? englishToNepaliNumber(d.title_ne || d.title)
           : d.title_ne || d.title,
       }));
+      console.log("fial value", finalValueToStore);
     return finalValueToStore[0];
   };
   const handleChangeId = (e) => {
@@ -780,7 +783,7 @@ console.log("This is filtered data", filterData);
     });
   };
 
-
+console.log("props.user.profile.region", filterData);
   return (
     <>
       {loader ? (
@@ -836,7 +839,8 @@ console.log("This is filtered data", filterData);
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
-                isDisabled={!props.user.isSuperuser || !props.user.isSuperuser && !props.user.profile.municipality || !props.user.isSuperuser && props.user.profile.province && props.user.profile.district && props.user.profile.municipality}
+                // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
+                isDisabled={props.user.isSuperuser ? false : props.user.profile.region !== 'province'}
                 value={
                   !filterData.district
                     ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
@@ -863,7 +867,8 @@ console.log("This is filtered data", filterData);
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
-                isDisabled={!props.user.isSuperuser && props.user.profile.province && props.user.profile.district && props.user.profile.municipality}
+                // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
+                isDisabled={props.user.isSuperuser ? false : props.user.profile.region === 'province' ? false : props.user.profile.region === 'district' ? false : props.user.profile.region === 'municipality' ? true : true}
                 value={
                   !filterData.municipality
                     ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
