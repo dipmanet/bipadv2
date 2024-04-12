@@ -45,7 +45,9 @@ import {
   userSelector,
 } from "#selectors";
 import { SetEpidemicsPageAction } from "#actionCreators";
-import { ADToBS } from "bikram-sambat-js";
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from "bikram-sambat-js";
 import {
   ClientAttributes,
   createConnectedRequestCoordinator,
@@ -1027,8 +1029,8 @@ const checkForUnicode = (value) => {
 
   useEffect(() => {
     const curDate = new Date();
-    const day = curDate.getDate();
-    const month = curDate.getMonth() + 1;
+    const day = curDate.getDate() > 9 ? curDate.getDate() : `0${curDate.getDate()}`;
+    const month = curDate.getMonth() + 1 > 9 ? curDate.getMonth() + 1 : `0${curDate.getMonth() + 1}`;
     const year = curDate.getFullYear();
 
     // This arrangement can be altered based on how we want the date's format to appear.

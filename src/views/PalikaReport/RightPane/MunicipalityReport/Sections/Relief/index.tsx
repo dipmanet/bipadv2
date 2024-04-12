@@ -15,7 +15,9 @@ import {
 } from 'recharts';
 import { encodeDate, _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
-import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';

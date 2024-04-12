@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
-
-import { ADToBS } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from 'bikram-sambat-js';
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';

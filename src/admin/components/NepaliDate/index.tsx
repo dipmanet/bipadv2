@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
+import adToBs from '#utils/AdBSConverter/AdToBs';
+import bsToAd from '#utils/AdBSConverter/BsToAd';
+// import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
 import {
     languageSelector,
 } from '#selectors';

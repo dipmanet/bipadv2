@@ -15,7 +15,11 @@ import TextField from '@mui/material/TextField';
 import { FormHelperText } from '@material-ui/core';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import 'nepali-datepicker-reactjs/dist/index.css';
-import { ADToBS, BSToAD } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS, BSToAD } from 'bikram-sambat-js';
+// import Calendar from '@sbmdkl/nepali-datepicker-reactjs';
+// import '@sbmdkl/nepali-datepicker-reactjs/dist/index.css';
 import Loader from 'react-loader';
 import {
     hazardTypesSelector,
@@ -215,9 +219,10 @@ const Bulletin = (props: Props) => {
                 today = new Date(bulletinEditData.fromDateTime);
             } else {
                 today = new Date();
-                today.setDate(today.getDate() - 1);
+                // today.setDate(today.getDate() - 1);
             }
-            const dd = String(today.getDate()).padStart(2, '0');
+
+            const dd = String(today.getDate() - 1).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
 
@@ -243,6 +248,7 @@ const Bulletin = (props: Props) => {
             } else {
                 today = new Date();
             }
+
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
@@ -255,6 +261,7 @@ const Bulletin = (props: Props) => {
             handleDateTo(finalDate);
         }
     }, [dateAltTo, bulletinEditData]);
+
     useEffect(() => {
         if (!startingTime && !endingTime) {
             const currentDate = new Date();
@@ -322,6 +329,7 @@ const Bulletin = (props: Props) => {
                                         </h3>
                                     )
                                     : (
+
                                         <NepaliDatePicker
                                             inputClassName="form-control"
                                             className={styles.datePick}
@@ -568,7 +576,7 @@ const Bulletin = (props: Props) => {
                                         <Input
                                             disabled={!filterDateType}
                                             type="number"
-                                            value={peopleLossData[field][subField]}
+                                            value={peopleLossData && peopleLossData[field][subField]}
                                             onChange={e => handlePeopleLossChange(e, field, subField)}
                                             className={styles.select}
                                             disableUnderline

@@ -1,3 +1,5 @@
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-mixed-operators */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
@@ -52,6 +54,7 @@ import { SetEpidemicsPageAction, SetIncidentPageAction } from "#actionCreators";
 import {
   districtsSelector,
   municipalitiesSelector,
+  provincesSelector,
   userSelector,
   wardsSelector,
 } from "#selectors";
@@ -65,7 +68,9 @@ import { englishToNepaliNumber } from "nepali-number";
 import eyeSolid from "#resources/icons/eye-solid.svg";
 import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 import Reset from "#resources/icons/reset.svg";
-import { ADToBS } from "bikram-sambat-js";
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from "bikram-sambat-js";
 import { tableTitleRef } from "./utils";
 import styles from "./styles.module.scss";
 
@@ -74,6 +79,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
   districts: districtsSelector(state),
   municipalities: municipalitiesSelector(state),
   wards: wardsSelector(state),
+  provinces: provincesSelector(state)
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -295,12 +301,13 @@ const TemporaryShelterTableData = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [offset, setOffset] = useState(0);
   const [loader, setLoader] = useState(false);
-  const { districts, municipalities, wards } = props;
+  const { districts, municipalities, wards, provinces } = props;
   const [fetchedData, setFetchedData] = useState([]);
   const [count, setCount] = useState(null);
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
   const [filterData, setFilterData] = useState({
+    province: "",
     district: "",
     municipality: "",
     ward: "",
@@ -356,12 +363,18 @@ const TemporaryShelterTableData = (props) => {
       });
     // }
   };
-
-  const DistrictListSelect = districts.map((d) => ({
+  // props.user.profile.district
+  const DistrictListSelect = filterData.province &&
+  districts
+    .filter((i) => i.province === Number(filterData.province.value))
+    .map((d) => ({
+      value: d.id,
+      label: d.title_ne,
+    }));
+  const ProvinceListSelect = provinces.map((d) => ({
     value: d.id,
     label: d.title_ne,
   }));
-
   const MunicipalityList =
     filterData.district &&
     municipalities
@@ -370,12 +383,19 @@ const TemporaryShelterTableData = (props) => {
         value: d.id,
         label: d.title_ne,
       }));
-
+useEffect(() => {
+setFilterData({
+  ...filterData,
+  province: props.user.isSuperuser ? "" : props.user.profile.province ? { value: props.user.profile.province } : "",
+      district: props.user.isSuperuser ? "" : props.user.profile.district ? { value: props.user.profile.district } : "",
+      municipality: props.user.isSuperuser ? "" : props.user.profile.municipality ? { value: props.user.profile.municipality } : ""
+});
+}, [props.user]);
 
   const WardList =
   props.user.isSuperuser ? filterData.municipality &&
     wards
-      .filter((i) => i.municipality === Number(filterData.municipality.value))
+      .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
       .map((title) => ({ ...title, title: Number(title.title) }))
       .sort((a, b) => a.title - b.title)
       .map((d) => ({
@@ -385,7 +405,7 @@ const TemporaryShelterTableData = (props) => {
 
       :
       wards
-        .filter((i) => i.municipality === Number(props.user.profile.municipality))
+        .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
         .map((title) => ({ ...title, title: Number(title.title) }))
         .sort((a, b) => a.title - b.title)
         .map((d) => ({
@@ -537,7 +557,7 @@ const dateFormatter = (date) => {
       });
     return csvData;
   };
-
+console.log("This is filtered data", filterData);
   const handleDownload = () => {
       // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
       //     .setColumns([
@@ -576,14 +596,32 @@ const dateFormatter = (date) => {
       //     .addRows(Dataforcsv())
       //     .exportFile();
 
-      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-enrollment-form/?beneficiary_district=${props.user.isSuperuser ? filterData.municipality
-        ? ""
-        : filterData.district && filterData.district.value
-        : props.user.profile.district}&beneficiary_municipality=${props.user.isSuperuser ? filterData.ward
-          ? ""
-          : filterData.municipality && filterData.municipality.value
-          : props.user.profile.municipality}&beneficiary_ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}&format=xlsx`, "_blank");
-  };
+      // window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${
+      //   props.user.isSuperuser ? filterData.district
+      //   ? ""
+      //   : filterData.province && filterData.province.value
+      //   : filterData.district
+      //   ? ""
+      //   : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province
+      // }&`}
+
+      // ${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality
+      //   ? ""
+      //   : filterData.district && filterData.district.value
+      //   : filterData.municipality
+      //   ? ""
+      //   : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser
+      //     ? filterData.ward
+      //     ? ""
+      //     : filterData.municipality && filterData.municipality.value
+      //     : filterData.ward
+      //     ? ""
+      //     : filterData.municipality ? filterData.municipality && filterData.municipality.value :
+
+      //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
+
+      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province || ""}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district || ""}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality || ""}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : "ward="}`, "_blank");
+    };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
   //     const selectedIndex = selected.indexOf(name);
@@ -649,6 +687,7 @@ const dateFormatter = (date) => {
           ? englishToNepaliNumber(d.title_ne || d.title)
           : d.title_ne || d.title,
       }));
+      console.log("fial value", finalValueToStore);
     return finalValueToStore[0];
   };
   const handleChangeId = (e) => {
@@ -673,7 +712,23 @@ const dateFormatter = (date) => {
     });
   };
   const handleDropdown = (name, value) => {
-    if (name === "district") {
+    if (name === "province") {
+      if (props.user.isSuperuser) {
+        setDisableSearch(false);
+      }
+      if (value === null && !filterData.id) {
+        setDisableSearch(true);
+      }
+
+      setFilterData({
+        ...filterData,
+        [name]: value === null ? "" : value,
+        district: "",
+        municipality: "",
+        ward: "",
+        id: "",
+      });
+    } else if (name === "district") {
       if (props.user.isSuperuser) {
         setDisableSearch(false);
       }
@@ -682,7 +737,7 @@ const dateFormatter = (date) => {
       }
       setFilterData({
         ...filterData,
-        [name]: value,
+        [name]: value === null ? "" : value,
         municipality: "",
         ward: "",
         id: "",
@@ -690,7 +745,7 @@ const dateFormatter = (date) => {
     } else if (name === "municipality") {
       setFilterData({
         ...filterData,
-        [name]: value,
+        [name]: value === null ? "" : value,
         ward: "",
       });
     } else {
@@ -702,7 +757,7 @@ const dateFormatter = (date) => {
       }
       setFilterData({
         ...filterData,
-        [name]: value,
+        [name]: value === null ? "" : value,
       });
     }
 
@@ -728,7 +783,7 @@ const dateFormatter = (date) => {
     });
   };
 
-console.log("Ward", filterData.ward);
+console.log("props.user.profile.region", filterData);
   return (
     <>
       {loader ? (
@@ -755,10 +810,37 @@ console.log("Ward", filterData.ward);
         <div className={styles.credentialSearch}>
 
           <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap' }}>
-            <div style={{ width: "230px" }}>
+          <div style={{ width: "230px" }}>
               <Select
                 isClearable
                 isDisabled={!props.user.isSuperuser}
+                value={
+                  !filterData.province
+                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                      props.user.profile.province,
+                      provinces
+                    ) : ''
+                    : handleProvincialFormDataNepaliValue(
+                        filterData.province,
+                        provinces
+                      )
+                }
+                name="province"
+                placeholder={"प्रदेश छान्नुहोस्"}
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                options={ProvinceListSelect}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+              />
+          </div>
+            <div style={{ width: "230px" }}>
+              <Select
+                isClearable
+                // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
+                isDisabled={props.user.isSuperuser ? false : props.user.profile.region !== 'province'}
                 value={
                   !filterData.district
                     ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
@@ -785,7 +867,8 @@ console.log("Ward", filterData.ward);
             <div style={{ width: "230px" }}>
               <Select
                 isClearable
-                isDisabled={!props.user.isSuperuser}
+                // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
+                isDisabled={props.user.isSuperuser ? false : props.user.profile.region === 'province' ? false : props.user.profile.region === 'district' ? false : props.user.profile.region === 'municipality' ? true : true}
                 value={
                   !filterData.municipality
                     ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
@@ -898,7 +981,7 @@ console.log("Ward", filterData.ward);
           </div>
           <div className={styles.rightOptions}>
             <IconButton
-            disabled={!filterData.ward}
+            // disabled={!filterData.municipality}
                             onClick={handleDownload}
                             style={{ cursor: 'pointer', borderRadius: '20px' }}
             >

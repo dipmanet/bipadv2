@@ -12,7 +12,9 @@ import {
     isDefined,
     listToMap,
 } from '@togglecorp/fujs';
-import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
+import adToBs from '#utils/AdBSConverter/AdToBs';
+import bsToAd from '#utils/AdBSConverter/BsToAd';
+// import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
 import Loading from '#components/Loading';
 
 import {

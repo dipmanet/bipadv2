@@ -804,45 +804,45 @@ const Bulletin = (props: Props) => {
             const { numberOfIncidents, numberOfInjured, numberOfDeath, numberOfMissing } = tempIncidentData;
             const provincialLevelData = {
                 bagmati: {
-                    death: tempPeopleLossData.bagmati.death,
-                    missing: tempPeopleLossData.bagmati.missing,
-                    injured: tempPeopleLossData.bagmati.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.bagmati.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.bagmati.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.bagmati.injured,
 
                 },
                 gandaki: {
-                    death: tempPeopleLossData.gandaki.death,
-                    missing: tempPeopleLossData.gandaki.missing,
-                    injured: tempPeopleLossData.gandaki.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.gandaki.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.gandaki.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.gandaki.injured,
 
                 },
                 karnali: {
-                    death: tempPeopleLossData.karnali.death,
-                    missing: tempPeopleLossData.karnali.missing,
-                    injured: tempPeopleLossData.karnali.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.karnali.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.karnali.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.karnali.injured,
 
                 },
                 lumbini: {
-                    death: tempPeopleLossData.lumbini.death,
-                    missing: tempPeopleLossData.lumbini.missing,
-                    injured: tempPeopleLossData.lumbini.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.lumbini.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.lumbini.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.lumbini.injured,
 
                 },
                 p1: {
-                    death: tempPeopleLossData.p1.death,
-                    missing: tempPeopleLossData.p1.missing,
-                    injured: tempPeopleLossData.p1.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.p1.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.p1.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.p1.injured,
 
                 },
                 p2: {
-                    death: tempPeopleLossData.p2.death,
-                    missing: tempPeopleLossData.p2.missing,
-                    injured: tempPeopleLossData.p2.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.p2.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.p2.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.p2.injured,
 
                 },
                 sudurpaschim: {
-                    death: tempPeopleLossData.sudurpaschim.death,
-                    missing: tempPeopleLossData.sudurpaschim.missing,
-                    injured: tempPeopleLossData.sudurpaschim.injured,
+                    death: tempPeopleLossData && tempPeopleLossData.sudurpaschim.death,
+                    missing: tempPeopleLossData && tempPeopleLossData.sudurpaschim.missing,
+                    injured: tempPeopleLossData && tempPeopleLossData.sudurpaschim.injured,
                 },
 
             };
@@ -1234,7 +1234,6 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [covidQuaratine]);
-
     const formSections = [
         <DailyLoss
             handleIncidentChange={handleIncidentChange}

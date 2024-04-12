@@ -3,7 +3,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-import { ADToBS } from 'bikram-sambat-js';
+import ADToBS from '#utils/AdBSConverter/AdToBs';
+import BSToAD from '#utils/AdBSConverter/BsToAd';
+// import { ADToBS } from 'bikram-sambat-js';
 import Loader from 'react-loader';
 import Icon from '#rscg/Icon';
 import Translations from '#views/PalikaReport/Constants/Translations';
