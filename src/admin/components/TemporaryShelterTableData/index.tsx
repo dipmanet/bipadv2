@@ -384,9 +384,9 @@ const TemporaryShelterTableData = (props) => {
 useEffect(() => {
 setFilterData({
   ...filterData,
-  province: props.user.isSuperuser ? "" : { value: props.user.profile.province },
-      district: props.user.isSuperuser ? "" : { value: props.user.profile.district },
-      municipality: props.user.isSuperuser ? "" : { value: props.user.profile.municipality }
+  province: props.user.isSuperuser ? "" : props.user.profile.province ? { value: props.user.profile.province } : "",
+      district: props.user.isSuperuser ? "" : props.user.profile.district ? { value: props.user.profile.district } : "",
+      municipality: props.user.isSuperuser ? "" : props.user.profile.municipality ? { value: props.user.profile.municipality } : ""
 });
 }, [props.user]);
 
@@ -555,7 +555,7 @@ const dateFormatter = (date) => {
       });
     return csvData;
   };
-
+console.log("This is filtered data", filterData);
   const handleDownload = () => {
       // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
       //     .setColumns([
@@ -618,7 +618,7 @@ const dateFormatter = (date) => {
 
       //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
 
-      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
+      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province || ""}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district || ""}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality || ""}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : "ward="}`, "_blank");
     };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
