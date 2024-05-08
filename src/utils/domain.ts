@@ -3088,7 +3088,7 @@ export const capacityResource = [
     },
     {
         id: 29,
-        name: 'Ware House',
+        name: 'Godam',
         nameNe: 'गोदाम',
         resourceType: 'warehouse',
         attribute: '',

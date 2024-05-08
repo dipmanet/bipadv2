@@ -329,7 +329,7 @@ const sidepanelLogo = [
         image: evacuationCentre,
     },
     {
-        name: 'Ware House',
+        name: 'Godam',
         image: evacuationCentre,
     },
 ];
