@@ -312,7 +312,7 @@ class AddStockInForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal
-                className={_cs(styles.addInventoryModal, className)}    
+                className={_cs(styles.addInventoryModal, className)}
             // onClose={closeModal}
             // closeOnEscape
             >

@@ -49,7 +49,7 @@ const TableDataList = ({ population, literacy,
                                 <table className={_cs(styles.contacts,
                                     language === 'np' && styles.languageFont)}
                                 >
-                                    <thead style={{position:'sticky',top:'0'}} >
+                                    <thead style={{ position: 'sticky', top: '0' }}>
                                         <tr>
                                             <th colSpan="10" scope="colgroup" style={{ textAlign: 'center' }}>{t('Items')}</th>
                                             <th rowSpan="2">{t('Quantity')}</th>
