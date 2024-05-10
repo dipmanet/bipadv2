@@ -237,7 +237,7 @@ const state: PageState = {
         {
             id: 22,
             title: 'warehouse',
-            label: 'Ware House',
+            label: 'Godam',
             labelNe: 'गोदाम',
         },
     ],

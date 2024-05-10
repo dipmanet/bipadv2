@@ -32,7 +32,7 @@ const capacityAndResourcesLegendItems: LegendItems[] = [
     { color: '#2F6209', key: 'sanitation', label: 'Sanitation', style: styles.symbol },
     { color: '#3BC7F8', key: 'watersupply', label: 'Water Supply', style: styles.symbol },
     { color: '#F47267', key: 'evacuationcentre', label: 'Evacuation Center', style: styles.symbol },
-    { color: '#F47267', key: 'warehouse', label: 'Ware House', style: styles.symbol },
+    { color: '#F47267', key: 'warehouse', label: 'Godam', style: styles.symbol },
 ];
 
 export default capacityAndResourcesLegendItems;

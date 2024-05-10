@@ -135,7 +135,7 @@ const resourceComponentsProps = language => ({
         icon: openSpaceIcon,
     },
     warehouse: {
-        heading: language === 'en' ? 'Ware House' : 'गोदाम',
+        heading: language === 'en' ? 'Godam' : 'गोदाम',
         icon: warehouseIcon,
     },
 });
