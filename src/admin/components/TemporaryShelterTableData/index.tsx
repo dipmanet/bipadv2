@@ -687,7 +687,7 @@ const dateFormatter = (date) => {
           ? englishToNepaliNumber(d.title_ne || d.title)
           : d.title_ne || d.title,
       }));
-      
+
     return finalValueToStore[0];
   };
   const handleChangeId = (e) => {
