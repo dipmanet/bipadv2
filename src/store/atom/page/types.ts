@@ -391,6 +391,7 @@ export interface Incident {
 }
 
 export interface Resource extends Field {
+    label(label: any): unknown;
     id: number;
     title: string;
     description: string;
