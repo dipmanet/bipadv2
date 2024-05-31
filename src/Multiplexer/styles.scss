@@ -371,6 +371,7 @@ button {
     }
 
     .modal {
+        overflow-y: auto;
         border-radius: 5px;
         padding: var(--spacing-small);
         // overflow-y: scroll;

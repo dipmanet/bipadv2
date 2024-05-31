@@ -3280,7 +3280,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             filterSubCategory: filteredSubCategory,
         });
         this.handleTooltipClose();
-        
 
 
         if (subCategoryCheckboxChecked.find((item: any) => item === id)) {
@@ -3292,12 +3291,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
             const selectedCategory = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory);
             const selectedSubCategorynameList = selectedCategory.map((data: { subCategory: any }) => data.subCategory)[0].filter((ide: { id: any }) => removedSubCategoryInUncheck.includes(ide.id)).map((d: { name: any }) => d.name);
-            
+
 
 if (resourceType==='warehouse') {
     const filtering = PreserveresourceCollection[resourceType].filter((d: { categories: any[] }) => d.categories.some((category: any) => selectedSubCategorynameList.includes(category)));
 
-   
+
     const resourceCollectionUpdate = { ...resourceCollection };
     resourceCollectionUpdate[resourceType] = filtering;
 
@@ -3306,7 +3305,7 @@ if (resourceType==='warehouse') {
     });
 } else {
     const filtering = PreserveresourceCollection[resourceType].filter((d: { [x: string]: string }) => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
-    
+
     const resourceCollectionUpdate = { ...resourceCollection };
     resourceCollectionUpdate[resourceType] = filtering;
 
