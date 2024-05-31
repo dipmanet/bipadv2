@@ -29,6 +29,7 @@ const TableDataList = ({ population, literacy,
         const selectedData = id && array.length ? lang === 'en' ? data.title : data.titleNe || data.title : '-';
         return selectedData;
     };
+
     return (
         <>
             <Loading pending={disable} />
@@ -132,6 +133,7 @@ const TableDataList = ({ population, literacy,
                                 >
                                     <thead>
                                         <tr>
+                                            <th>{t('Resource')}</th>
                                             <th>{t('Items')}</th>
                                             <th>{t('Rate')}</th>
                                             <th>{t('Quantity')}</th>
@@ -148,6 +150,7 @@ const TableDataList = ({ population, literacy,
                                     <tbody>
                                         {stockInList.map(item => (
                                             <tr key={item.id}>
+                                                <td>{language === 'en' ? item.resource.title : item.resource.titleNe}</td>
                                                 <td>{idToTitle(itemList, item.item, language)}</td>
                                                 <td>{item.rate}</td>
                                                 <td>{item.quantity}</td>
@@ -184,6 +187,8 @@ const TableDataList = ({ population, literacy,
                                 >
                                     <thead>
                                         <tr>
+                                            <th>{t('Resource')}</th>
+                                            <th>{t('TransferToResource')}</th>
                                             <th>{t('Items')}</th>
                                             <th>{t('Rate')}</th>
                                             <th>{t('Quantity')}</th>
@@ -200,7 +205,8 @@ const TableDataList = ({ population, literacy,
                                     <tbody>
                                         {stockOutList.map(item => (
                                             <tr key={item.id}>
-
+                                                <td>{language === 'en' ? item.resource.title : item.resource.titleNe}</td>
+                                                <td>{language === 'en' ? item.transferedToResource.title : item.transferedToResource.titleNe}</td>
                                                 <td>{idToTitle(itemList, item.item, language)}</td>
                                                 <td>{item.rate}</td>
                                                 <td>{item.quantity}</td>
