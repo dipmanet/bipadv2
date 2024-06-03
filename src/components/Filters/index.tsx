@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable indent */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/no-did-update-set-state */
@@ -64,6 +65,7 @@ import RainStationSelector from '#views/DataArchive/Filters/Rain/Station/index';
 import RiverBasinSelector from '#views/DataArchive/Filters/River/Basin/index';
 import RiverStationSelector from '#views/DataArchive/Filters/River/Station/index';
 import { convertDateAccToLanguage } from '#utils/common';
+import InventoryItemFilter from '#components/InventoryItemFilter';
 import styles from './styles.scss';
 
 interface ComponentProps {
@@ -120,7 +122,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     ),
 });
 
-type TabKey = 'location' | 'hazard' | 'dataRange' | 'rainBasin' | 'riverBasin' | 'others';
+type TabKey = 'location' | 'hazard' | 'dataRange' | 'rainBasin' | 'riverBasin' | 'others'|'inventoryItems';
 
 
 const FilterIcon = ({
@@ -153,6 +155,7 @@ const filterSchema = {
         rainStation: {},
         riverBasin: {},
         riverStation: {},
+        inventoryItems: [],
     },
 };
 
@@ -171,6 +174,7 @@ const getIsFiltered = (key: TabKey | undefined, filters: RiverFiltersElement) =>
         rainStation: 'rainStation',
         riverBasin: 'riverBasin',
         riverStation: 'riverStation',
+        inventoryItems: 'inventoryItems',
     };
 
     const filter = filters[tabKeyToFilterMap[key]];
@@ -184,6 +188,21 @@ const getIsFiltered = (key: TabKey | undefined, filters: RiverFiltersElement) =>
 };
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
+    inventoryItemGetRequest: {
+        url: '/inventory-item/',
+        method: methods.GET,
+        onMount: true,
+        query: () => ({
+
+            limit: -1,
+            count: true,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            const resources = response as MultiResponse<PageType.Resource>;
+            params.inventoryItemsListSelect(resources.results);
+        },
+    },
     resourceGetRequest: {
         url: '/resource/',
         method: methods.GET,
@@ -274,7 +293,9 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 class Filters extends React.PureComponent<Props, State> {
     public static contextType = PageContext;
 
-    public state = {
+    public constructor(props: Props) {
+        super(props);
+        this.state = {
         activeView: undefined,
         allStationsRain: [],
         allStationsRiver: [],
@@ -290,17 +311,31 @@ class Filters extends React.PureComponent<Props, State> {
             rainStation: {},
             riverBasin: {},
             riverStation: {},
+            inventoryItems: [],
         },
         filteredRainStation: [],
         filteredRiverStation: [],
         subdomainLoc: {},
         locRecv: false,
         disableSubmitButton: false,
+        invertoryItemList: [],
     };
+    const {
+        requests: {
+            inventoryItemGetRequest,
+        },
+
+    } = this.props;
+
+    inventoryItemGetRequest.setDefaultParams({
+        inventoryItemsListSelect: this.inventoryItemsListSelect,
+    });
+}
 
     public componentDidMount() {
         const {
             filters: faramValues,
+
         } = this.props;
 
         this.setState({ faramValues });
@@ -352,6 +387,7 @@ class Filters extends React.PureComponent<Props, State> {
     public componentDidUpdate(prevProps, prevState) {
         const { filters, rainStations, riverStations } = this.props;
         const { faramValues } = this.state;
+
         if (prevProps.filters !== filters) {
             this.setState({ faramValues: filters });
             delete this.getTabs();
@@ -413,6 +449,7 @@ class Filters extends React.PureComponent<Props, State> {
         return '';
     }
 
+
     private views = {
         location: {
             component: () => {
@@ -435,6 +472,20 @@ class Filters extends React.PureComponent<Props, State> {
                     className={styles.activeView}
                     faramElementName="hazard"
                 // autoFocus
+                />
+            ),
+        },
+        inventoryItems: {
+            component: () => (
+                <InventoryItemFilter
+                        faramElementName="riverBasin"
+                        basins={this.props.riverFilters.basin}
+                        invertoryItemList={this.state.invertoryItemList}
+                        language={this.props.language.language}
+                        filters={this.props.filters}
+                        onChange={this.handleInventoryItemChange}
+                        filterList={this.props.filters.inventoryItems}
+
                 />
             ),
         },
@@ -500,6 +551,11 @@ class Filters extends React.PureComponent<Props, State> {
         this.setState({ activeView });
     }
 
+private inventoryItemsListSelect=(data) => {
+    this.setState({
+        invertoryItemList: data,
+    });
+}
     // private iconNames = {
     //     location: 'distance',
     //     rainBasin: this.state.activeView === 'rainBasin' ? 'rainiconactive' : 'rainicon',
@@ -518,6 +574,7 @@ class Filters extends React.PureComponent<Props, State> {
             hazard: 'warning',
             dataRange: 'dataRange',
             others: 'filter',
+            inventoryItems: 'filter',
         };
         return ({
             name: iconNames[key],
@@ -744,6 +801,17 @@ class Filters extends React.PureComponent<Props, State> {
         }
     }
 
+private handleInventoryItemChange=(dataList) => {
+    this.setState(prevState => ({
+        ...prevState,
+        faramValues: {
+            ...prevState.faramValues,
+            inventoryItems: dataList,
+        },
+        disableSubmitButton: false,
+    }));
+    this.setState({ disableSubmitButton: false });
+}
 
     private handleFaramChange = (faramValues: RiverFiltersElement) => {
         this.setState({ faramValues });
@@ -788,6 +856,7 @@ class Filters extends React.PureComponent<Props, State> {
                 });
             }
             this.setState({ disableSubmitButton: true });
+
             setFilters({ filters: faramValues });
         }
 
@@ -844,6 +913,7 @@ class Filters extends React.PureComponent<Props, State> {
                 hazard: language === 'en' ? 'Hazard' : 'प्रकोप',
                 dataRange: language === 'en' ? 'Data range' : 'डाटाको समय',
                 others: language === 'en' ? 'Project' : 'परियोजना',
+                inventoryItems: language === 'en' ? 'Stockpile Items' : 'भण्डार वस्तुहरू',
             };
 
             if (!extraContent) {
@@ -860,6 +930,9 @@ class Filters extends React.PureComponent<Props, State> {
 
             if (hideDataRangeFilter) {
                 delete tabs.dataRange;
+            }
+            if ((activeRouteDetails && activeRouteDetails.path !== '/risk-info/')) {
+                delete tabs.inventoryItems;
             }
             if ((activeRouteDetails && activeRouteDetails.path !== '/realtime/')
                 || !this.checkRealTimeFilter(3)) {
@@ -884,11 +957,12 @@ class Filters extends React.PureComponent<Props, State> {
             hideLocationFilter,
             user,
             projectFilters,
+
             language: { language },
         } = this.props;
 
 
-        const { faramValues: fv, disableSubmitButton } = this.state;
+        const { faramValues: fv, disableSubmitButton, invertoryItemList } = this.state;
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
@@ -945,7 +1019,7 @@ class Filters extends React.PureComponent<Props, State> {
                     <Faram
                         schema={filterSchema}
                         onChange={this.handleFaramChange}
-                        // value={faramValues}
+
                         value={fv}
                         className={styles.filterViewContainer}
                     >
@@ -972,7 +1046,7 @@ class Filters extends React.PureComponent<Props, State> {
                             views={this.views}
                             active={validActiveView}
                         />
-                        {/* <RiverFilters /> */}
+
                     </Faram>
                     {validActiveView && activeView !== 'others' && (
                         <div
