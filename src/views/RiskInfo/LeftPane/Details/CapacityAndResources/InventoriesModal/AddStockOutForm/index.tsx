@@ -249,11 +249,30 @@ class AddStockOutForm extends React.PureComponent<Props, State> {
             requests: { addStockOutPostRequest },
             resourceId,
         } = this.props;
-
+        const finalData = {};
+        Object.keys(faramValues).map((i) => {
+            // if (faramValues[i] === null) {
+            //     finalData[i] = '';
+            // } else {
+            //     finalData[i] = faramValues[i];
+            // }
+            // if (i === 'organization') {
+            //     if (faramValues[i] === null) {
+            //         finalData[i] = [];
+            //     }
+            // }
+            // if (faramValues[i] !== null) {
+            //     finalData[i] = faramValues[i];
+            // }
+            if (faramValues[i] !== null) {
+                finalData[i] = faramValues[i];
+            }
+            return null;
+        });
 
         addStockOutPostRequest.do({
             body: {
-                ...faramValues,
+                ...finalData,
                 resource: resourceId,
             },
             setFaramErrors: this.handleFaramValidationFailure,
