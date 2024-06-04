@@ -557,7 +557,7 @@ const dateFormatter = (date) => {
       });
     return csvData;
   };
-console.log("This is filtered data", filterData);
+
   const handleDownload = () => {
       // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
       //     .setColumns([
@@ -687,7 +687,7 @@ console.log("This is filtered data", filterData);
           ? englishToNepaliNumber(d.title_ne || d.title)
           : d.title_ne || d.title,
       }));
-      console.log("fial value", finalValueToStore);
+
     return finalValueToStore[0];
   };
   const handleChangeId = (e) => {
@@ -783,7 +783,7 @@ console.log("This is filtered data", filterData);
     });
   };
 
-console.log("props.user.profile.region", filterData);
+
   return (
     <>
       {loader ? (

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable react/sort-comp */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-unused-state */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable indent */
@@ -32,7 +36,7 @@ import {
     isDefined,
     mapToList,
 } from '@togglecorp/fujs';
-import { Translation } from 'react-i18next';
+import { ReactI18NextChild, Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 
 import {
@@ -66,6 +70,7 @@ import {
     enumOptionsSelector,
     regionSelector,
     languageSelector,
+    filtersSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -91,7 +96,7 @@ import { mapStyles } from '#constants';
 import HealthIcon from '#resources/icons/Health-facility.png';
 import FinanceIcon from '#resources/icons/Financing.png';
 import FoodWarehouseIcon from '#resources/icons/Food-warehouse.png';
-import { ResourceTypeKeys } from '#types';
+import { FiltersElement, ResourceTypeKeys } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import { capacityResource } from '#utils/domain';
@@ -459,6 +464,10 @@ interface PropsFromState {
 }
 
 interface Params {
+    ErrorData: Params | undefined;
+    DeletedResourceApiRecall(): unknown;
+    setFaramErrors: Params | undefined;
+    getWarehouseData: Params | undefined;
     resourceType?: string;
     resourceId?: number;
     coordinates?: [number, number][];
@@ -477,6 +486,7 @@ type Props = NewProps<ComponentProps & PropsFromState, Params>
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     authState: authStateSelector(state),
+    filterss: filtersSelector(state),
     filters: filtersSelectorDP(state),
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -490,9 +500,9 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setFilters: params => dispatch(setFiltersAction(params)),
-    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
-    setCarKeys: params => dispatch(setCarKeysAction(params)),
+    setFilters: (params: { filters: FiltersElement }) => dispatch(setFiltersAction(params)),
+    setPalikaRedirect: (params: any) => dispatch(setPalikaRedirectAction(params)),
+    setCarKeys: (params: any) => dispatch(setCarKeysAction(params)),
 
 
 });
@@ -502,6 +512,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         url: ({ params }) => {
             const region = params.getRegionDetails(params.region);
             const resource_type = params.resourceType;
+            const finalInventoryItems = params.inventoryItems && params.inventoryItems.map(i => `inventory_item=${i}`).join('&');
 
             // const region = {municipality: 5002, province: 1, district: 3};
             const regionArr = Object.keys(region);
@@ -511,14 +522,12 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             } else {
                 a = '';
             }
-
             const result1 = a.join('&');
-
-            const result2 = resource_type.map(item => `resource_type=${item}`);
+            const result2 = resource_type.map((item: any) => `resource_type=${item}`);
 
             return params.filterClickCheckCondition
-                ? `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`
-                : `/resource/?resource_type=${resource_type[0]}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
+                ? `/resource/?${result1}&${`${result2.join('&')}`}${finalInventoryItems?result2.length?`&${finalInventoryItems}`:finalInventoryItems:''}&limit=-1&meta=true`
+                : `/resource/?resource_type=${resource_type[0]}${finalInventoryItems?result2.length?`&${finalInventoryItems}`:finalInventoryItems:''}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
             // return `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`;
         },
         method: methods.GET,
@@ -590,6 +599,25 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                     $internal: ['Some problem occurred'],
                 });
             }
+        },
+    },
+    warehouseSubCategoryGet: {
+        url: ({ params }) => '/inventory-category/?count=true',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ params, response }) => {
+            const resources = response as MultiResponse<PageType.Resource>;
+
+
+            if (params && params.getWarehouseData) {
+                params.getWarehouseData(resources.results);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            // if (params && params.ErrorData) {
+            //     params.ErrorData(error);
+            // }
+            console.log('This is error',error);
         },
     },
 };
@@ -714,7 +742,7 @@ const sidepanelLogo = [
         image: evacuationCentre,
     },
 ];
-const indeterminateArray = capacityResource.map(item => item.name);
+
 
 // let selectedCategory = [];
 
@@ -724,6 +752,7 @@ const indeterminateArray = capacityResource.map(item => item.name);
 // let resourceTypeName = '';
 let editResources = false;
 let ResourceType = '';
+const stopLoop = true;
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -733,6 +762,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
             filters,
             palikaRedirect,
+            filterss,
         } = this.props;
         // const { isFilterClicked, FilterClickedStatus } = this.context;
         this.state = {
@@ -830,21 +860,1157 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             filteredSearchResource: [],
             showTooltip: false,
             selectedCategoryId: null,
+            warehouseSubCategory: [],
+            capacity_resource: [
+                {
+                    id: 1,
+                    name: 'Education',
+                    nameNe: 'शैक्षिक संस्था',
+                    resourceType: 'education',
+                    attribute: 'type',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 1,
+                            name: 'Preprimary',
+                            nameNe: 'पूर्व-प्राथमिक',
+                            type: 'Preprimary',
+                        },
+                        {
+                            id: 2,
+                            name: 'Basic Education',
+                            nameNe: 'आधारभूत शिक्षा',
+                            type: 'Basic Education',
+                        },
+                        {
+                            id: 3,
+                            name: 'High School',
+                            nameNe: 'उच्च माध्यमिक विद्यालय',
+                            type: 'High School',
+                        },
+                        {
+                            id: 4,
+                            name: 'College',
+                            nameNe: 'कलेज',
+                            type: 'College',
+                        },
+                        {
+                            id: 5,
+                            name: 'University',
+                            nameNe: 'विश्वविद्यालय',
+                            type: 'University',
+                        },
+                        {
+                            id: 6,
+                            name: 'Traditional Education',
+                            nameNe: 'परम्परागत शिक्षा',
+                            type: 'Traditional Education',
+                        },
+                        {
+                            id: 7,
+                            name: 'Library',
+                            nameNe: 'पुस्तकालय',
+                            type: 'Library',
+                        },
+                        {
+                            id: 8,
+                            name: 'Other',
+                            nameNe: 'अन्य',
+                            type: 'Other',
+                        },
+                    ],
+                },
+                {
+                    id: 2,
+                    name: 'Health',
+                    nameNe: 'स्वास्थ्य संस्था',
+                    resourceType: 'health',
+                    attribute: 'type',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 9,
+                            name: 'Specialized Hospital',
+                            nameNe: 'विशेष अस्पताल',
+                            type: 'Specialized Hospital',
+                        },
+                        {
+                            id: 10,
+                            name: 'Center Hospital',
+                            nameNe: 'केन्द्र अस्पताल',
+                            type: 'Center Hospital',
+                        },
+                        {
+                            id: 11,
+                            name: 'Teaching Hospital',
+                            nameNe: 'शिक्षण अस्पताल',
+                            type: 'Teaching Hospital',
+                        },
+                        {
+                            id: 12,
+                            name: 'Regional Hospital',
+                            nameNe: 'क्षेत्रीय अस्पताल',
+                            type: 'Regional Hospital',
+                        },
+                        {
+                            id: 13,
+                            name: 'Sub Regional Hospital',
+                            nameNe: 'उपक्षेत्रीय अस्पताल',
+                            type: 'Sub Regional Hospital',
+                        },
+                        {
+                            id: 14,
+                            name: 'Zonal Hospital',
+                            nameNe: 'अञ्चल अस्पताल',
+                            type: 'Zonal Hospital',
+                        },
+                        {
+                            id: 15,
+                            name: 'District Hospital',
+                            nameNe: 'जिल्ला अस्पताल',
+                            type: 'District Hospital',
+                        },
+                        {
+                            id: 16,
+                            name: 'Basic Hospital',
+                            nameNe: 'आधारभूत अस्पताल',
+                            type: 'Basic Hospital',
+                        },
+                        {
+                            id: 17,
+                            name: 'General Hospital',
+                            nameNe: 'सामान्य अस्पताल',
+                            type: 'General Hospital',
+                        },
+                        {
+                            id: 18,
+                            name: 'Primary Health Care Center',
+                            nameNe: 'प्राथमिक स्वास्थ्य सेवा केन्द्र',
+                            type: 'Primary Health Care Center',
+                        },
+                        {
+                            id: 19,
+                            name: 'Health Post',
+                            nameNe: 'स्वास्थ्य चौकी ',
+                            type: 'Health Post',
+                        },
+                        {
+                            id: 20,
+                            name: 'District Clinic (Including Institutional)',
+                            nameNe: 'जिल्ला क्लिनिक ',
+                            type: 'District Clinic (Including Institutional)',
+
+                        },
+                        {
+                            id: 21,
+                            name: 'Urban Health Center',
+                            nameNe: 'शहरी स्वास्थ्य केन्द्र',
+                            type: 'Urban Health Center',
+
+                        },
+                        {
+                            id: 22,
+                            name: 'Community Health Unit',
+                            nameNe: 'सामुदायिक स्वास्थ्य इकाई',
+                            type: 'Community Health Unit',
+
+                        },
+                        {
+                            id: 23,
+                            name: 'Poly Clinic',
+                            nameNe: 'पोली क्लिनिक',
+                            type: 'Poly Clinic',
+
+                        },
+                        {
+                            id: 24,
+                            name: 'Clinic',
+                            nameNe: 'क्लिनिक',
+                            type: 'Clinic',
+
+                        },
+                        {
+                            id: 25,
+                            name: 'Dental Clinic',
+                            nameNe: 'दन्त चिकित्सा क्लिनिक',
+                            type: 'Dental Clinic',
+
+                        },
+                        {
+                            id: 26,
+                            name: 'Diagnostic Center',
+                            nameNe: 'निदान केन्द्र',
+                            type: 'Diagnostic Center',
+
+                        },
+                        {
+                            id: 27,
+                            name: 'Nursing Home',
+                            nameNe: 'नर्सिंग होम',
+                            type: 'Nursing Home',
+
+                        },
+                        {
+                            id: 28,
+                            name: 'Rehabilitation',
+                            nameNe: 'पुनर्स्थापना केन्द्र',
+                            type: 'Rehabilitation',
+
+                        },
+                        {
+                            id: 29,
+                            name: 'Ayurveda Hospital',
+                            nameNe: 'आयुर्वेदिक अस्पताल',
+                            type: 'Ayurveda Hospital',
+
+                        },
+                        {
+                            id: 30,
+                            name: 'Zonal Ayurveda Aushadhalaya',
+                            nameNe: 'अञ्चल आयुर्वेद औषधालय',
+                            type: 'Zonal Ayurveda Aushadhalaya',
+
+                        },
+                        {
+                            id: 31,
+                            name: 'District Ayurveda Health Center',
+                            nameNe: 'जिल्ला आयुर्वेद स्वास्थ्य केन्द्र',
+                            type: 'District Ayurveda Health Center',
+
+                        },
+                        {
+                            id: 32,
+                            name: 'Ayurveda Aushadhalaya',
+                            nameNe: 'आयुर्वेद औषधालय',
+                            type: 'Ayurveda Aushadhalaya',
+
+                        },
+                        {
+                            id: 33,
+                            name: 'Homeopathy Hospital',
+                            nameNe: 'होमियोप्याथी अस्पताल',
+                            type: 'Homeopathy Hospital',
+
+                        },
+                        {
+                            id: 34,
+                            name: 'Unani Hospital',
+                            nameNe: 'युनानी अस्पताल',
+                            type: 'Unani Hospital',
+
+                        },
+                        {
+                            id: 35,
+                            name: 'Primary Hospital',
+                            nameNe: 'प्राथमिक अस्पताल',
+                            type: 'Primary Hospital',
+
+                        },
+                        {
+                            id: 36,
+                            name: 'Secondary A Hospital',
+                            nameNe: 'माध्यमिक ए अस्पताल',
+                            type: 'Secondary A Hospital',
+
+                        },
+                        {
+                            id: 37,
+                            name: 'Secondary B Hospital',
+                            nameNe: 'माध्यमिक बी अस्पताल',
+                            type: 'Secondary B Hospital',
+
+                        },
+                        {
+                            id: 38,
+                            name: 'Tertiary Hospital',
+                            nameNe: 'Tertiary अस्पताल',
+                            type: 'Tertiary Hospital',
+
+                        },
+                        {
+                            id: 39,
+                            name: 'Super Specialized Hospital',
+                            nameNe: 'सुपर स्पेशलाइज्ड अस्पताल',
+                            type: 'Super Specialized Hospital',
+
+                        },
+                        {
+                            id: 40,
+                            name: 'Basic Health Care Center',
+                            nameNe: 'आधारभूत स्वास्थ्य सेवा केन्द्र',
+                            type: 'Basic Health Care Center',
+
+                        },
+                        {
+                            id: 41,
+                            name: 'Veterinary',
+                            nameNe: 'पशु चिकित्सा',
+                            type: 'Veterinary',
+
+                        },
+                        {
+                            id: 42,
+                            name: 'Pathology',
+                            nameNe: 'रोगविज्ञान',
+                            type: 'Pathology',
+
+                        },
+                        {
+                            id: 43,
+                            name: 'Pharmacy',
+                            nameNe: 'फार्मेसी',
+                            type: 'Pharmacy',
+
+                        },
+                    ],
+                },
+                {
+                    id: 3,
+                    name: 'Banking & Finance',
+                    nameNe: 'बैंकिङ तथा वित्त संस्था ',
+                    resourceType: 'finance',
+                    attribute: 'type',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 44,
+                            name: 'Commercial',
+                            nameNe: 'वाणिज्यि बैंक',
+                            type: 'Commercial',
+                        },
+                        {
+                            id: 45,
+                            name: 'Micro Credit Development',
+                            nameNe: 'माइक्रो क्रेडिट विकास बैंक',
+                            type: 'Micro Credit Development',
+                        },
+                        {
+                            id: 46,
+                            name: 'Finance',
+                            nameNe: 'वित्त संस्था ',
+                            type: 'Finance',
+                        },
+                        {
+                            id: 47,
+                            name: 'Development Bank',
+                            nameNe: 'विकास बैंक',
+                            type: 'Development Bank',
+                        },
+                        {
+                            id: 48,
+                            name: 'Cooperative',
+                            nameNe: 'सहकारीसंस्था ',
+                            type: 'Cooperative',
+                        },
+                        {
+                            id: 49,
+                            name: 'Money Exchange',
+                            nameNe: 'मनी एक्सचेन्ज',
+                            type: 'Money Exchange',
+                        },
+                        {
+                            id: 50,
+                            name: 'ATM',
+                            nameNe: 'एटीएम',
+                            type: 'ATM',
+                        },
+
+                    ],
+                },
+                {
+                    id: 4,
+                    name: 'Communication',
+                    nameNe: 'सञ्चार सुबिधा',
+                    resourceType: 'communication',
+                    attribute: 'type',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 51,
+                            name: 'FM Radio',
+                            nameNe: 'एफएम रेडियो',
+                            type: 'FM Radio',
+                        },
+                        {
+                            id: 52,
+                            name: 'TV Station',
+                            nameNe: 'टिभी स्टेशन',
+                            type: 'TV Station',
+                        },
+                        {
+                            id: 53,
+                            name: 'Newspapers',
+                            nameNe: 'पत्रपत्रिकाहरू',
+                            type: 'Newspapers',
+                        },
+                        {
+                            id: 54,
+                            name: 'Phone Service',
+                            nameNe: 'मोबाइल फोन',
+                            type: 'Phone Service',
+                        },
+                        {
+                            id: 55,
+                            name: 'Cable',
+                            nameNe: 'केबल',
+                            type: 'Cable',
+                        },
+                        {
+                            id: 56,
+                            name: 'Online Media',
+                            nameNe: 'अनलाइन मिडिया',
+                            type: 'Online Media',
+                        },
+                        {
+                            id: 57,
+                            name: 'Internet Service Provider',
+                            nameNe: 'इन्टरनेट सेवा प्रदायक',
+                            type: 'Internet Service Provider',
+                        },
+
+                    ],
+                },
+                {
+                    id: 5,
+                    name: 'Governance',
+                    nameNe: 'संस्थागत विवरण',
+                    resourceType: 'governance',
+                    attribute: 'type',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 58,
+                            name: 'Government',
+                            nameNe: 'सरकारी',
+                            type: 'Government',
+                        },
+                        {
+                            id: 59,
+                            name: 'INGO',
+                            nameNe: 'अन्तर्राष्ट्रिय गैर सरकारी संस्था',
+                            type: 'INGO',
+                        },
+                        {
+                            id: 60,
+                            name: 'NGO',
+                            nameNe: 'गैर सरकारी संस्था',
+                            type: 'NGO',
+                        },
+                        {
+                            id: 61,
+                            name: 'CSO',
+                            nameNe: 'सामुदायीक संस्था',
+                            type: 'CSO',
+                        },
+                        {
+                            id: 62,
+                            name: 'Other',
+                            nameNe: 'अन्‍य',
+                            type: 'Other',
+                        },
+
+                    ],
+                },
+                {
+                    id: 6,
+                    name: 'Hotel & Restaurant',
+                    nameNe: 'होटल तथा रेस्टुरेन्ट',
+                    resourceType: 'hotelandrestaurant',
+                    level: 1,
+                    attribute: 'type',
+                    subCategory: [
+                        {
+                            id: 63,
+                            name: 'Hotel',
+                            nameNe: 'होटल',
+                            type: 'Hotel',
+                        },
+                        {
+                            id: 64,
+                            name: 'Restaurant',
+                            nameNe: 'रेष्‍टुरेन्‍ट',
+                            type: 'Restaurant',
+                        },
+                        {
+                            id: 65,
+                            name: 'Lodge',
+                            nameNe: 'लज',
+                            type: 'Lodge',
+                        },
+                        {
+                            id: 66,
+                            name: 'Resort',
+                            nameNe: 'रिसोर्ट',
+                            type: 'Resort',
+                        },
+                        {
+                            id: 67,
+                            name: 'Homestay',
+                            nameNe: 'होमस्टे',
+                            type: 'Homestay',
+                        },
+
+
+                    ],
+                },
+                {
+                    id: 7,
+                    name: 'Culture',
+                    nameNe: 'धार्मिक स्थान',
+                    resourceType: 'cultural',
+                    attribute: 'religion',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 68,
+                            name: 'Hindu',
+                            nameNe: 'हिन्दू धर्म',
+                            type: 'Hindu',
+                        },
+                        {
+                            id: 69,
+                            name: 'Islam',
+                            nameNe: 'इस्लाम धर्म',
+                            type: 'Islam',
+                        },
+                        {
+                            id: 70,
+                            name: 'Christian',
+                            nameNe: 'क्रिस्चियन धर्म',
+                            type: 'Christian',
+                        },
+                        {
+                            id: 71,
+                            name: 'Buddhist',
+                            nameNe: 'बौद्ध',
+                            type: 'Buddhist',
+                        },
+                        {
+                            id: 72,
+                            name: 'Kirat',
+                            nameNe: 'किरात',
+                            type: 'Kirat',
+                        },
+                        {
+                            id: 73,
+                            name: 'Sikhism',
+                            nameNe: 'सिख धर्म',
+                            type: 'Sikhism',
+                        },
+                        {
+                            id: 74,
+                            name: 'Judaism',
+                            nameNe: 'यहूदी धर्म',
+                            type: 'Judaism',
+                        },
+                        {
+                            id: 75,
+                            name: 'Other',
+                            nameNe: 'अन्य',
+                            type: 'Other',
+                        },
+
+                    ],
+                },
+                {
+                    id: 8,
+                    name: 'Industry',
+                    nameNe: 'उद्योग',
+                    resourceType: 'industry',
+                    attribute: 'subtype',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 76,
+                            name: 'Cottage Industry',
+                            nameNe: 'घरेलु उद्योग',
+                            type: 'Cottage Industry',
+                        },
+                        {
+                            id: 77,
+                            name: 'Micro Industry',
+                            nameNe: 'माइक्रो उद्योग',
+                            type: 'Micro Industry',
+                        },
+                        {
+                            id: 78,
+                            name: 'Small Industry',
+                            nameNe: 'साना उद्योग',
+                            type: 'Small Industry',
+                        },
+                        {
+                            id: 79,
+                            name: 'Medium Industry',
+                            nameNe: 'मध्यम उद्योग',
+                            type: 'Medium Industry',
+                        },
+                        {
+                            id: 80,
+                            name: 'Large Industry',
+                            nameNe: 'ठूला उद्योग',
+                            type: 'Large Industry',
+                        },
+                        {
+                            id: 999,
+                            name: 'Other',
+                            nameNe: 'अन्‍य',
+                            type: 'Other',
+                        },
+                    ],
+                },
+                {
+                    id: 9,
+                    name: 'Bridge',
+                    nameNe: 'पुल',
+                    resourceType: 'bridge',
+                    level: 1,
+                    attribute: 'type',
+                    subCategory: [
+                        {
+                            id: 81,
+                            name: 'Arch Bridge',
+                            nameNe: 'आर्क पुल',
+                            type: 'Arch',
+                        },
+                        {
+                            id: 82,
+                            name: 'Beam Bridge',
+                            nameNe: 'बिम पुल',
+                            type: 'Beam',
+                        },
+                        {
+                            id: 83,
+                            name: 'Cantilever Bridge',
+                            nameNe: 'क्यान्टिलिभर पुल',
+                            type: 'Cantilever',
+                        },
+                        {
+                            id: 84,
+                            name: 'Wooden Bridge',
+                            nameNe: 'काठको पुल',
+                            type: 'Wooden',
+                        },
+                        {
+                            id: 85,
+                            name: 'Suspension Bridge',
+                            nameNe: 'सस्पेंशन पुल',
+                            type: 'Suspension',
+                        },
+                        {
+                            id: 86,
+                            name: 'Cable-stayed Bridge',
+                            nameNe: 'केबल रहेको पुल',
+                            type: 'Cable-stayed',
+                        },
+                        {
+                            id: 87,
+                            name: 'Culvert Bridge',
+                            nameNe: 'कल्भर्ट पुल',
+                            type: 'Culvert',
+                        },
+                        {
+                            id: 88,
+                            name: 'Bailey Bridge',
+                            nameNe: 'बेली पुल',
+                            type: 'Bailey',
+                        },
+                        {
+                            id: 89,
+                            name: 'Truss Bridge',
+                            nameNe: 'ट्रस पुल',
+                            type: 'Truss',
+                        },
+                        {
+                            id: 90,
+                            name: 'Other',
+                            nameNe: 'अन्‍य',
+                            type: 'Other',
+
+                        },
+
+
+                    ],
+                },
+                // {
+                //     // id: 10,
+                //     name: 'Transportation',
+                //     // resourceType: 'transportation',
+                //     typeName: 'transportation',
+                //     level: 2,
+                //     // attribute: 'type',
+                //     Category: [
+                //         {
+                //             id: 10,
+                //             name: 'Roadway',
+                //             resourceType: 'roadway',
+                //             attribute: 'kindOfVehicle',
+                //             subCategory: [
+                //                 {
+                //                     id: 91,
+                //                     name: 'Bus',
+                //                     type: 'Bus',
+                //                 },
+                //                 {
+                //                     id: 92,
+                //                     name: 'Micro',
+                //                     type: 'Micro',
+                //                 },
+                //                 {
+                //                     id: 93,
+                //                     name: 'Van',
+                //                     type: 'Van',
+                //                 },
+                //                 {
+                //                     id: 94,
+                //                     name: 'Other',
+                //                     type: 'Other',
+                //                 },
+
+                //             ],
+                //         },
+                //         {
+                //             id: 11,
+                //             name: 'Waterway',
+                //             resourceType: 'waterway',
+                //             attribute: 'type',
+                //             subCategory: [
+                //                 {
+                //                     id: 95,
+                //                     name: 'General Boat',
+                //                     type: 'General Boat',
+                //                 },
+                //                 {
+                //                     id: 96,
+                //                     name: 'Electrical Boat',
+                //                     type: 'Electrical Boat',
+                //                 },
+                //                 {
+                //                     id: 97,
+                //                     name: 'Other',
+                //                     type: 'Other',
+                //                 },
+
+                //             ],
+                //         },
+                //         {
+                //             id: 12,
+                //             name: 'Airway',
+                //             resourceType: 'airway',
+                //             attribute: 'type',
+                //             subCategory: [
+                //                 {
+                //                     id: 98,
+                //                     name: 'National',
+                //                     type: 'National',
+                //                 },
+                //                 {
+                //                     id: 99,
+                //                     name: 'International',
+                //                     type: 'International',
+                //                 },
+
+
+                //             ],
+                //         },
+                //         {
+                //             id: 13,
+                //             name: 'Helipad',
+                //             resourceType: 'helipad',
+                //             attribute: '',
+                //             subCategory: [],
+                //         },
+
+
+                //     ],
+                // },
+
+                {
+                    id: 14,
+                    name: 'Electricity',
+                    nameNe: 'ऊर्जा सेवा',
+                    resourceType: 'electricity',
+                    attribute: 'components',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 100,
+                            name: 'Hydropower',
+                            nameNe: 'जलविद्युत',
+                            type: 'Hydropower',
+                        },
+                        {
+                            id: 101,
+                            name: 'Substation',
+                            nameNe: 'सब स्टेशन',
+                            type: 'Substation',
+                        },
+                        {
+                            id: 102,
+                            name: 'Dam',
+                            nameNe: 'बाँध',
+                            type: 'Dam',
+                        },
+                        {
+                            id: 103,
+                            name: 'Transmission Pole',
+                            nameNe: 'प्रसारण लाइन',
+                            type: 'Transmission Pole',
+                        },
+                        {
+                            id: 104,
+                            name: 'Other',
+                            nameNe: 'अन्‍य',
+                            type: 'Other',
+
+                        },
+
+
+                    ],
+                },
+
+
+                // {
+
+                //     name: 'Fire Fighting Apparatus',
+
+                //     typeName: 'Fire Fighting Apparatus',
+                //     level: 2,
+
+                //     Category: [
+                //         {
+                //             id: 15,
+                //             name: 'Fire Engine',
+                //             resourceType: 'fireengine',
+                //             attribute: 'type',
+                //             subCategory: [],
+                //         },
+
+
+                //     ],
+                // },
+
+
+                // {
+                //     id: 15,
+                //     name: 'Fire Fighting Apparatus',
+                //     resourceType: 'firefightingapparatus',
+                //     attribute: 'type',
+                //     level: 1,
+                //     subCategory: [
+                //         {
+                //             id: 86,
+                //             name: 'Fire Engine',
+                //             type: 'Fire Engine',
+                //         },
+                //         {
+                //             id: 87,
+                //             name: 'Fire Bike',
+                //             type: 'Fire Bike',
+                //         },
+                //         {
+                //             id: 88,
+                //             name: 'Other',
+                //             type: 'Other',
+                //         },
+
+
+                //     ],
+                // },
+                {
+                    id: 16,
+                    name: 'Sanitation Service',
+                    nameNe: 'सरसफाई सेवा',
+                    resourceType: 'sanitation',
+                    attribute: 'type',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 105,
+                            name: 'Landfill',
+                            nameNe: 'ल्यान्डफिल',
+                            type: 'Landfill',
+                        },
+                        {
+                            id: 106,
+                            name: 'Dumping Site',
+                            nameNe: 'डम्पिङ साइट',
+                            type: 'Dumping Site',
+                        },
+                        {
+                            id: 107,
+                            name: 'Public Toilet',
+                            nameNe: 'सार्वजनिक शौचालय',
+                            type: 'Public Toilet',
+                        },
+
+
+                    ],
+                },
+                {
+                    id: 17,
+                    name: 'Water Supply Infrastructure',
+                    nameNe: 'पानी आपूर्ति आयोजना',
+                    resourceType: 'watersupply',
+                    attribute: 'scale',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 108,
+                            name: 'Small',
+                            nameNe: 'सानो आयोजना ',
+                            type: 'Small',
+                        },
+                        {
+                            id: 109,
+                            name: 'Medium',
+                            nameNe: 'मध्यम आयोजन ',
+                            type: 'Medium',
+                        },
+                        {
+                            id: 110,
+                            name: 'Large',
+                            nameNe: 'ठूला आयोजन',
+                            type: 'Large',
+                        },
+
+
+                    ],
+                },
+                {
+                    id: 24,
+                    name: 'Roadway',
+                    nameNe: 'स्थलमार्ग सुबिधा',
+                    resourceType: 'roadway',
+                    level: 1,
+                    attribute: 'kindOfVehicle',
+                    subCategory: [
+                        {
+                            id: 91,
+                            name: 'Bus',
+                            nameNe: 'बस',
+                            type: 'Bus',
+                        },
+                        {
+                            id: 92,
+                            name: 'Micro',
+                            nameNe: 'माइक्रो  बस',
+                            type: 'Micro',
+                        },
+                        {
+                            id: 93,
+                            name: 'Van',
+                            nameNe: 'भ्यान',
+                            type: 'Van',
+                        },
+                        {
+                            id: 94,
+                            name: 'Other',
+                            nameNe: 'अन्‍य',
+                            type: 'Other',
+                        },
+
+                    ],
+                },
+                {
+                    id: 25,
+                    name: 'Waterway',
+                    nameNe: 'जलमार्ग',
+                    resourceType: 'waterway',
+                    level: 1,
+                    attribute: 'type',
+                    subCategory: [
+                        {
+                            id: 95,
+                            name: 'General Boat',
+                            nameNe: 'सामान्य डुङ्गा',
+                            type: 'General Boat',
+                        },
+                        {
+                            id: 96,
+                            name: 'Electrical Boat',
+                            nameNe: 'विद्युतीय डुङ्गा',
+                            type: 'Electrical Boat',
+                        },
+                        {
+                            id: 97,
+                            name: 'Other',
+                            nameNe: 'अन्‍य',
+                            type: 'Other',
+                        },
+
+                    ],
+                },
+                {
+                    id: 26,
+                    name: 'Airway',
+                    nameNe: 'हवाई सुबिधा',
+                    resourceType: 'airway',
+                    level: 1,
+                    attribute: 'type',
+                    subCategory: [
+                        {
+                            id: 98,
+                            name: 'National',
+                            nameNe: 'राष्ट्रिय हवाई सुबिधा',
+                            type: 'National',
+                        },
+                        {
+                            id: 99,
+                            name: 'International',
+                            nameNe: 'अन्तर्राष्ट्रिय हवाई सुबिधा',
+                            type: 'International',
+                        },
+
+
+                    ],
+                },
+                {
+                    id: 28,
+                    name: 'Fire Fighting Apparatus',
+                    nameNe: 'अग्नी नियनत्रण उपकरण',
+                    resourceType: 'firefightingapparatus',
+                    attribute: 'typeOfApparatus',
+                    level: 1,
+                    subCategory: [
+                        {
+                            id: 86,
+                            name: 'Fire Engine',
+                            nameNe: 'दमकल',
+                            type: 'Fire Engine',
+                        },
+                        {
+                            id: 87,
+                            name: 'Fire Bike',
+                            nameNe: 'फायर बाइक',
+                            type: 'Fire Bike',
+                        },
+                        {
+                            id: 88,
+                            name: 'Other',
+                            nameNe: 'अन्य',
+                            type: 'Other',
+                        },
+
+
+                    ],
+                },
+                {
+                    id: 27,
+                    name: 'Helipad',
+                    nameNe: 'हेलिप्याड',
+                    resourceType: 'helipad',
+                    attribute: '',
+                    level: 1,
+                    subCategory: [],
+                },
+                // {
+                //     id: 23,
+                //     name: 'Fire Engine',
+                //     resourceType: 'fireengine',
+                //     attribute: 'type',
+                //     level: 1,
+                //     subCategory: [
+                //         {
+                //             id: 86,
+                //             name: 'Fire Engine',
+                //             type: 'Fire Engine',
+                //         },
+                //         {
+                //             id: 87,
+                //             name: 'Fire Bike',
+                //             type: 'Fire Bike',
+                //         },
+                //         {
+                //             id: 88,
+                //             name: 'Other',
+                //             type: 'Other',
+                //         },
+
+
+                //     ],
+                // },
+                // {
+
+                //     name: 'Open Space',
+
+                //     typeName: 'Open Space',
+                //     level: 2,
+
+                //     Category: [
+                //         {
+                //             id: 18,
+                //             name: 'Humanitarian Open Space',
+                //             resourceType: 'openspace',
+                //             attribute: '',
+                //             subCategory: [],
+                //         },
+                //         {
+                //             id: 19,
+                //             name: 'Community Space',
+                //             resourceType: 'communityspace',
+                //             attribute: '',
+                //             subCategory: [],
+                //         },
+
+
+                //     ],
+                // },
+                {
+                    id: 20,
+                    name: 'Humanitarian Open Space',
+                    nameNe: 'मानवीय खुल्ला स्थान',
+                    resourceType: 'openspace',
+                    attribute: '',
+                    level: 1,
+                    subCategory: [],
+                },
+                {
+                    id: 21,
+                    name: 'Community Space',
+                    nameNe: 'सामुदायिक खुल्ला स्थान',
+                    resourceType: 'communityspace',
+                    attribute: '',
+                    level: 1,
+                    subCategory: [],
+                },
+                {
+                    id: 22,
+                    name: 'Evacuation Centre',
+                    nameNe: 'आपतकालीन सेल्टर',
+                    resourceType: 'evacuationcentre',
+                    attribute: '',
+                    level: 1,
+                    subCategory: [],
+                },
+                {
+                    id: 29,
+                    name: 'Godam',
+                    nameNe: 'गोदाम',
+                    resourceType: 'warehouse',
+                    attribute: '',
+                    level: 1,
+                    subCategory: [],
+                },
+            ],
 
         };
 
-        const { faramValues: { region } } = filters;
-
+        const { faramValues: { region },faramValues } = filters;
+        const { inventoryItems } = filterss;
         resourceGetRequest.setDefaultParams(
             {
                 setResourceList: this.setResourceList,
                 setIndividualResourceList: this.setIndividualResourceList,
                 getRegionDetails: this.getRegionDetails,
                 region,
+                inventoryItems,
                 ErrorData: this.handleErrorData,
                 // filterClickCheckCondition: isFilterClicked,
             },
         );
+        this.props.requests.warehouseSubCategoryGet.setDefaultParams({
+            getWarehouseData: this.getWarehouseSubCategory,
+        });
     }
 
 
@@ -879,13 +2045,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ wardsRef: temp });
     }
 
-    public componentDidUpdate(prevProps, prevState, snapshot) {
+    public componentDidUpdate(prevProps: { filters: { faramValues: { region: any } } }, prevState: { PreserveresourceCollection: any }, snapshot: any) {
         const { faramValues: { region } } = this.props.filters;
+        const { inventoryItems } = this.props.filterss;
         const { carKeys } = this.props;
         const { isFilterClicked, FilterClickedStatus } = this.context;
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
-        if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
+        if ((prevProps.filters.faramValues.region !== this.props.filters.faramValues.region)) {
             this.setState({ disableCheckbox: true });
             if (carKeys.length === 0) {
                 this.setState({ disableCheckbox: false });
@@ -928,21 +2095,23 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                 ));
 
-                this.setState({
-                    // resourceCollection: {
-                    //     ...this.state.resourceCollection,
+                // this.setState({
+                //     // resourceCollection: {
+                //     //     ...this.state.resourceCollection,
 
-                    //     education: [],
-                    // },
+                //     //     education: [],
+                //     // },
 
+                //     PreserveresourceCollection: tempResourceCollection,
+
+                // });
+                this.setState(() => ({
                     PreserveresourceCollection: tempResourceCollection,
-
-                });
-
-
+                  }));
                 this.props.requests.resourceGetRequest.do(
                     {
                         region,
+                        inventoryItems,
                         resourceType: carKeys,
                         filterClickCheckCondition: isFilterClicked,
                         handleErrorData: this.handleErrorData,
@@ -950,7 +2119,32 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 );
             }
         }
+        if ((prevProps.filterss.inventoryItems !== this.props.filterss.inventoryItems)) {
+            if (carKeys.length) {
+                const tempResourceCollection = PreserveresourceCollection;
+                let tempResourcelistKey = Object.keys(tempResourceCollection);
+                tempResourcelistKey = tempResourcelistKey.filter(item => !carKeys.includes(item));
 
+                tempResourcelistKey.map((item, index) => (
+                    tempResourceCollection[item] = []
+
+                ));
+                this.setState(() => ({
+                    PreserveresourceCollection: tempResourceCollection,
+                }));
+
+
+                this.props.requests.resourceGetRequest.do(
+                    {
+                        region,
+                        inventoryItems,
+                        resourceType: carKeys,
+                        filterClickCheckCondition: isFilterClicked,
+                        handleErrorData: this.handleErrorData,
+                    },
+                );
+            }
+        }
         if (prevState.PreserveresourceCollection !== this.state.PreserveresourceCollection) {
             if (isFilterClicked) {
                 this.setState({
@@ -959,7 +2153,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 });
             } else if (selectedSubCategoryName) {
                 const resourceColln = resourceCollection || PreserveresourceCollection;
-                const filtering = PreserveresourceCollection[selectedSubCategoryName].filter(d => selectedSubCategorynameList.includes(d[selectCategoryForinitialFilter[0].attribute]));
+                const filtering = PreserveresourceCollection[selectedSubCategoryName].filter((d: { [x: string]: any }) => selectedSubCategorynameList.includes(d[selectCategoryForinitialFilter[0].attribute]));
                 const resourceCollectionUpdate = { ...resourceCollection };
 
 
@@ -1023,41 +2217,61 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             return '';
         }
         if (adminLevel === 1) {
-            return { province: provinces.find(p => p.id === geoarea).id };
+            return { province: provinces.find((p: { id: any }) => p.id === geoarea).id };
         }
 
         if (adminLevel === 2) {
-            return { district: districts.find(p => p.id === geoarea).id };
+            return { district: districts.find((p: { id: any }) => p.id === geoarea).id };
         }
 
         if (adminLevel === 3) {
-            return { municipality: municipalities.find(p => p.id === geoarea).id };
+            return { municipality: municipalities.find((p: { id: any }) => p.id === geoarea).id };
         }
         return '';
+    }
+
+    private getWarehouseSubCategory=(data: any) => {
+        const { capacity_resource }=this.state;
+        const finalData=data.map((i: { id: any; title: any }) => ({
+            id: i.id+500,
+            originalId: i.id,
+            name: i.title,
+            nameNe: i.title,
+            type: i.title,
+        }));
+        const updatedCapacityResource = capacity_resource.map((item: { id: number }) => (item.id === 29 ? { ...item, subCategory: finalData } : item));
+
+        this.setState({
+            warehouseSubCategory: finalData,
+            capacity_resource: updatedCapacityResource,
+        });
     }
 
     private DeletedResourceApiRecall = () => {
         const { isFilterClicked } = this.context;
         const { carKeys, requests: { resourceGetRequest }, filters: { faramValues: { region } } } = this.props;
+        const { inventoryItems } = this.props.filterss;
         resourceGetRequest.do({
             resourceType: carKeys,
             region,
+            inventoryItems,
             filterClickCheckCondition: isFilterClicked,
             handleErrorData: this.handleErrorData,
         });
     }
 
-    private handleToggleClick = (key: toggleValues, value: boolean, typeName, filteredSubCategoriesLvl2ResourceType, lvl2UncheckCondition) => {
+    private handleToggleClick = (key: toggleValues, value: boolean, typeName: undefined, filteredSubCategoriesLvl2ResourceType: any[] | undefined, lvl2UncheckCondition: boolean | undefined) => {
         const { activeLayersIndication, resourceCollection, categoryLevel, selectedCategoryName, subCategoryCheckboxChecked } = this.state;
         const temp = filteredSubCategoriesLvl2ResourceType || key ? { ...activeLayersIndication } : { ...initialActiveLayersIndication };
         const { setCarKeys, carKeys } = this.props;
+        const { inventoryItems } = this.props.filterss;
         const { isFilterClicked, FilterClickedStatus } = this.context;
         temp[key] = value;
         if (key) {
             temp[key] = typeName ? true : value;
         }
         if (filteredSubCategoriesLvl2ResourceType) {
-            const data = filteredSubCategoriesLvl2ResourceType.map(item => (
+            const data = filteredSubCategoriesLvl2ResourceType.map((item: string | number) => (
                 temp[item] = lvl2UncheckCondition
             ));
         }
@@ -1065,19 +2279,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ activeLayersIndication: temp });
         const { handleActiveLayerIndication } = this.props;
         handleActiveLayerIndication(temp);
-        const checkingResourceCollection = filteredSubCategoriesLvl2ResourceType && filteredSubCategoriesLvl2ResourceType.map((item => (
+        const checkingResourceCollection = filteredSubCategoriesLvl2ResourceType && filteredSubCategoriesLvl2ResourceType.map(((item: string | number) => (
             !!resourceCollection[item].length
-        ))).filter(item => item === true);
-        const filterCarKeys = carKeys.find(d => d === key);
+        ))).filter((item: boolean) => item === true);
+        const filterCarKeys = carKeys.find((d: string) => d === key);
         if (filterCarKeys) {
-            const data = carKeys.filter(d => d !== key);
+            const data = carKeys.filter((d: string) => d !== key);
             setCarKeys(data);
         } else {
             setCarKeys([...carKeys, key]);
         }
         if (typeName && checkingResourceCollection && (checkingResourceCollection.length !== filteredSubCategoriesLvl2ResourceType.length)) {
             const newArr = [];
-            filteredSubCategoriesLvl2ResourceType.map(item => newArr.push(item));
+            filteredSubCategoriesLvl2ResourceType.map((item: any) => newArr.push(item));
             // newArr.push(filteredSubCategoriesLvl2ResourceType);
 
             if (carKeys.length === 1) {
@@ -1094,6 +2308,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 this.props.requests.resourceGetRequest.do({
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
+                    inventoryItems,
                     filterClickCheckCondition: isFilterClicked,
                     handleErrorData: this.handleErrorData,
                 });
@@ -1115,6 +2330,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 this.props.requests.resourceGetRequest.do({
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
+                    inventoryItems,
                     filterClickCheckCondition: isFilterClicked,
                     handleErrorData: this.handleErrorData,
                 });
@@ -1130,8 +2346,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ resourceList });
     }
 
-    private setIndividualResourceList = (key: toggleValues, resourceList: PageType.Resource[], resourceType, Result) => {
-        const { resourceCollection, subCategoryCheckboxChecked, reserveListForOtherFilter,
+    private setIndividualResourceList = (key: toggleValues, resourceList: PageType.Resource[], resourceType: any[], Result: any[]) => {
+        const { resourceCollection, subCategoryCheckboxChecked, reserveListForOtherFilter,capacity_resource,
             selectCategoryForinitialFilter, selectedSubCategoryName, categoryLevel, lvl2catName, filteredSubCategoriesLvl2ResourceType, PreserveresourceCollection, lvl2TypeName } = this.state;
         // const temp = { ...resourceCollection };
         const { carKeys } = this.props;
@@ -1139,19 +2355,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ disableCheckbox: false });
         if (isFilterClicked) {
             const temp = { ...PreserveresourceCollection };
-            carKeys.map(i => (
-                temp[i] = Result.filter(d => d.resourceType === i)
+            carKeys.map((i: string | number) => (
+                temp[i] = Result.filter((d: { resourceType: any }) => d.resourceType === i)
             ));
             this.setState({
                 PreserveresourceCollection: temp,
             });
             FilterClickedStatus(false);
-            const mainCat = carKeys.map(i => (capacityResource
-                .filter(d => d.resourceType === i)
-                .map(name => name.name)));
-            const subCat = carKeys.map(i => (capacityResource
-                .filter(d => d.resourceType === i)
-                .map(itm => itm.subCategory.map(subCate => subCate.id))));
+            const mainCat = carKeys.map((i: string) => (capacity_resource
+                .filter((d: { resourceType: string }) => d.resourceType === i)
+                .map((name: { name: any }) => name.name)));
+            const subCat = carKeys.map((i: string) => (capacity_resource
+                .filter((d: { resourceType: string }) => d.resourceType === i)
+                .map((itm: { subCategory: any[] }) => itm.subCategory.map((subCate: { id: any }) => subCate.id))));
             const finalCategoryList = [];
 
             for (let i = 0; i < mainCat.length; i++) {
@@ -1170,24 +2386,24 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         } else {
             const temp = { ...PreserveresourceCollection };
             if (lvl2TypeName) {
-                const resourceLists = resourceType.map(item => (
+                const resourceLists = resourceType.map((item: string | number) => (
 
-                    temp[item] = Result.filter(data => data.resourceType === item)
+                    temp[item] = Result.filter((data: { resourceType: any }) => data.resourceType === item)
                 ));
             } else {
                 // temp[key] = resourceList;
-                resourceType.map(item => (
+                resourceType.map((item: string | number) => (
 
-                    temp[item] = Result.filter(data => data.resourceType === item)));
+                    temp[item] = Result.filter((data: { resourceType: any }) => data.resourceType === item)));
             }
 
 
             const subCatList = categoryLevel === 2
-                ? lvl2TypeName ? capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0].filter(item => filteredSubCategoriesLvl2ResourceType.includes(item.resourceType)).map(r => r.subCategory)
-                    : capacityResource.filter(item => item.name === lvl2catName)
-                        .map(data => data.Category)[0].filter(item => item.resourceType === selectedSubCategoryName)[0].subCategory.map(data => data.type)
-                : capacityResource.filter(item => item.resourceType === selectedSubCategoryName)[0].subCategory.map(data => data.type);
+                ? lvl2TypeName ? capacity_resource.filter((item: { name: any }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0].filter((item: { resourceType: any }) => filteredSubCategoriesLvl2ResourceType.includes(item.resourceType)).map((r: { subCategory: any }) => r.subCategory)
+                    : capacity_resource.filter((item: { name: any }) => item.name === lvl2catName)
+                        .map((data: { Category: any }) => data.Category)[0].filter((item: { resourceType: any }) => item.resourceType === selectedSubCategoryName)[0].subCategory.map((data: { type: any }) => data.type)
+                : capacity_resource.filter((item: { resourceType: any }) => item.resourceType === selectedSubCategoryName)[0].subCategory.map((data: { type: any }) => data.type);
             let RawsubCatName = lvl2TypeName ? [] : subCatList;
 
             if (lvl2TypeName) {
@@ -1195,12 +2411,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     RawsubCatName = [...RawsubCatName, ...subCatList[i]];
                 }
             }
-            const subCatName = lvl2TypeName ? RawsubCatName.map(i => i.type) : subCatList;
+            const subCatName = lvl2TypeName ? RawsubCatName.map((i: { type: any }) => i.type) : subCatList;
 
-            const filteredOtherSubCat = !lvl2TypeName && temp[selectedSubCategoryName].filter(item => !subCatName.includes(item[selectCategoryForinitialFilter[0].attribute]));
+            const filteredOtherSubCat = !lvl2TypeName && temp[selectedSubCategoryName].filter((item: { [x: string]: any }) => !subCatName.includes(item[selectCategoryForinitialFilter[0].attribute]));
 
-            const finalFilteredOtherSubCat = !lvl2TypeName && temp[selectedSubCategoryName].map((data) => {
-                const filteredSubCatOther = filteredOtherSubCat.filter(itm => itm[selectCategoryForinitialFilter[0].attribute] === data[selectCategoryForinitialFilter[0].attribute]);
+            const finalFilteredOtherSubCat = !lvl2TypeName && temp[selectedSubCategoryName].map((data: { [x: string]: any }) => {
+                const filteredSubCatOther = filteredOtherSubCat.filter((itm: { [x: string]: any }) => itm[selectCategoryForinitialFilter[0].attribute] === data[selectCategoryForinitialFilter[0].attribute]);
                 return (
                     { ...data, [selectCategoryForinitialFilter[0].attribute]: filteredSubCatOther.length ? 'Other' : data[selectCategoryForinitialFilter[0].attribute] }
                 );
@@ -1339,8 +2555,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
         });
 
-        const newSingleResource = produce(singleResource, (safeSingleResource) => {
-            const index = singleResource.findIndex(r => r.id === resourceId);
+        const newSingleResource = produce(singleResource, (safeSingleResource: { [x: string]: PageType.Resource }) => {
+            const index = singleResource.findIndex((r: { id: number }) => r.id === resourceId);
             if (index !== -1) {
                 // eslint-disable-next-line no-param-reassign
                 safeSingleResource[index] = resource;
@@ -1718,7 +2934,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
     };
 
-    private routeToOpenspace = (point) => {
+    private routeToOpenspace = (point: { coordinates: any }) => {
         if (window.navigator.geolocation) {
             // Geolocation available
             const { coordinates } = point;
@@ -1770,7 +2986,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     };
 
-    private handleSubCategory = (selectedResource, showSubCat, boolean) => {
+    private handleSubCategory = (selectedResource: string, showSubCat: boolean, boolean: boolean | undefined) => {
         const { showSubCategory, resourceCategory, mainCategoryCheckboxChecked } = this.state;
 
 
@@ -1786,9 +3002,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             });
         }
         if (boolean !== undefined) {
-            if (mainCategoryCheckboxChecked.find(item => item === selectedResource)) {
+            if (mainCategoryCheckboxChecked.find((item: any) => item === selectedResource)) {
                 this.setState({
-                    resourceCategory: mainCategoryCheckboxChecked.filter(item => item !== selectedResource),
+                    resourceCategory: mainCategoryCheckboxChecked.filter((item: any) => item !== selectedResource),
 
                 });
             }
@@ -1796,7 +3012,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 this.setState({
                     resourceCategory: [...mainCategoryCheckboxChecked, selectedResource],
                 });
-            } else if (!mainCategoryCheckboxChecked.find(item => item === selectedResource)) {
+            } else if (!mainCategoryCheckboxChecked.find((item: any) => item === selectedResource)) {
                 this.setState({
                     resourceCategory: [...mainCategoryCheckboxChecked, selectedResource],
                 });
@@ -1804,9 +3020,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 return null;
             }
         } else {
-            if (resourceCategory.find(item => item === selectedResource)) {
+            if (resourceCategory.find((item: any) => item === selectedResource)) {
                 this.setState({
-                    resourceCategory: resourceCategory.filter(item => item !== selectedResource),
+                    resourceCategory: resourceCategory.filter((item: any) => item !== selectedResource),
 
                 });
             }
@@ -1814,7 +3030,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 this.setState({
                     resourceCategory: [...resourceCategory, selectedResource],
                 });
-            } else if (!resourceCategory.find(item => item === selectedResource)) {
+            } else if (!resourceCategory.find((item: any) => item === selectedResource)) {
                 this.setState({
                     resourceCategory: [...resourceCategory, selectedResource],
                 });
@@ -1827,8 +3043,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         return null;
     }
 
-    private handleMainCategoryCheckBox = (checkedCategory, resourceType, level, lvl2catName, typeName, showVisualization) => {
-        const { mainCategoryCheckboxChecked, subCategoryCheckboxChecked, resourceCollection, categoryLevel, indeterminantConditionArray, PreserveresourceCollection } = this.state;
+    private handleMainCategoryCheckBox = (checkedCategory: string, resourceType: string, level: number, lvl2catName: string, typeName: string | undefined, showVisualization: undefined) => {
+        const { mainCategoryCheckboxChecked, subCategoryCheckboxChecked, resourceCollection, categoryLevel, indeterminantConditionArray, PreserveresourceCollection,capacity_resource } = this.state;
 
 
         this.handleTooltipClose();
@@ -1842,7 +3058,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
 
         // this.handleSubCategory(checkedCategory);
-        if (mainCategoryCheckboxChecked.find(item => item === checkedCategory)) {
+        if (mainCategoryCheckboxChecked.find((item: any) => item === checkedCategory)) {
             if (showVisualization === undefined) {
                 this.handleSubCategory(checkedCategory, true, false);
             }
@@ -1851,49 +3067,49 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             //     .map(data => data.subCategory)[0].map(finalData => finalData.id);
 
             const filteredSubCategories = level === 2
-                ? capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0].map(finalData => finalData.id)
-                : capacityResource.filter(item => item.name === checkedCategory)
-                    .map(data => data.subCategory)[0].map(finalData => finalData.id);
-            const removedSubCategoryInUncheck = subCategoryCheckboxChecked.filter(item => !filteredSubCategories.includes(item));
+                ? capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0].map((finalData: { id: any }) => finalData.id)
+                : capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+                    .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
+            const removedSubCategoryInUncheck = subCategoryCheckboxChecked.filter((item: any) => !filteredSubCategories.includes(item));
 
-            const test = typeName && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.name);
+            const test = typeName && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { name: any }) => i.name);
 
-            const finalCategoryCheckBoxCheckedLvl2 = typeName ? mainCategoryCheckboxChecked.filter(item => !test.includes(item)) : mainCategoryCheckboxChecked;
-            const filteredSubCategoriesLvl2ResourceType = typeName && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.resourceType);
+            const finalCategoryCheckBoxCheckedLvl2 = typeName ? mainCategoryCheckboxChecked.filter((item: any) => !test.includes(item)) : mainCategoryCheckboxChecked;
+            const filteredSubCategoriesLvl2ResourceType = typeName && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { resourceType: any }) => i.resourceType);
 
 
             // testing
-            const fullCategoryNameList = level === 2 && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.name);
+            const fullCategoryNameList = level === 2 && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { name: any }) => i.name);
 
-            const mainCheckBoxChecked = mainCategoryCheckboxChecked.find(item => item === checkedCategory)
-                ? mainCategoryCheckboxChecked.filter(item => item !== checkedCategory)
+            const mainCheckBoxChecked = mainCategoryCheckboxChecked.find((item: any) => item === checkedCategory)
+                ? mainCategoryCheckboxChecked.filter((item: any) => item !== checkedCategory)
                 : [...mainCategoryCheckboxChecked, checkedCategory]; // [...new Set([...indeterminantConditionArray, checkedCategory])]
 
 
-            const comparisonFullCategoryData = fullCategoryNameList && mainCheckBoxChecked.filter(item => fullCategoryNameList.includes(item));
+            const comparisonFullCategoryData = fullCategoryNameList && mainCheckBoxChecked.filter((item: any) => fullCategoryNameList.includes(item));
 
             if (fullCategoryNameList && (fullCategoryNameList.length !== comparisonFullCategoryData.length)) {
                 this.setState({
-                    mainCategoryCheckboxChecked: finalCategoryCheckBoxCheckedLvl2.filter(item => item !== checkedCategory).filter(data => data !== lvl2catName),
+                    mainCategoryCheckboxChecked: finalCategoryCheckBoxCheckedLvl2.filter((item: any) => item !== checkedCategory).filter((data: any) => data !== lvl2catName),
                     subCategoryCheckboxChecked: removedSubCategoryInUncheck,
 
                     selectedCategoryName: checkedCategory,
-                    indeterminantConditionArray: comparisonFullCategoryData.length ? [...indeterminantConditionArray, lvl2catName] : indeterminantConditionArray.filter(data => data !== lvl2catName),
+                    indeterminantConditionArray: comparisonFullCategoryData.length ? [...indeterminantConditionArray, lvl2catName] : indeterminantConditionArray.filter((data: any) => data !== lvl2catName),
                 });
             } else {
                 this.setState({
-                    mainCategoryCheckboxChecked: finalCategoryCheckBoxCheckedLvl2.filter(item => item !== checkedCategory),
+                    mainCategoryCheckboxChecked: finalCategoryCheckBoxCheckedLvl2.filter((item: any) => item !== checkedCategory),
                     subCategoryCheckboxChecked: removedSubCategoryInUncheck,
 
                     selectedCategoryName: checkedCategory,
-                    indeterminantConditionArray: indeterminantConditionArray.filter(item => item !== lvl2catName),
+                    indeterminantConditionArray: indeterminantConditionArray.filter((item: any) => item !== lvl2catName),
 
                 });
             }
 
 
-            if (mainCategoryCheckboxChecked.find(data => data === checkedCategory)) {
+            if (mainCategoryCheckboxChecked.find((data: any) => data === checkedCategory)) {
                 this.setState({
                     checked: CHECKBOX_STATES.Empty,
                 });
@@ -1915,17 +3131,17 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
 
             const filteredSubCategories = level === 2
-                ? capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0].map(finalData => finalData.id)
-                : capacityResource.filter(item => item.name === checkedCategory)
-                    .map(data => data.subCategory)[0].map(finalData => finalData.id);
+                ? capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0].map((finalData: { id: any }) => finalData.id)
+                : capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+                    .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
 
 
             const selectedCategory = level === 2 ? typeName
-                ? capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0]
-                : capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0].filter(item => item.name === checkedCategory) : capacityResource.filter(item => item.name === checkedCategory);
+                ? capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0]
+                : capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0].filter((item: { name: any }) => item.name === checkedCategory) : capacity_resource.filter((item: { name: string }) => item.name === checkedCategory);
 
 
             this.setState({
@@ -1933,9 +3149,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 selectedSubCategoryName: resourceType,
                 selectCategoryForinitialFilter: selectedCategory,
             });
-            const test = typeName && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.name);
+            const test = typeName && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { name: any }) => i.name);
 
-            const fullCategoryNameList = level === 2 && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.name);
+            const fullCategoryNameList = level === 2 && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { name: any }) => i.name);
             const mainCheckBoxChecked = [...mainCategoryCheckboxChecked, checkedCategory];
             const comparisonFullCategoryData = fullCategoryNameList && mainCheckBoxChecked.filter(item => fullCategoryNameList.includes(item));
 
@@ -1965,16 +3181,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             });
 
 
-            if (mainCategoryCheckboxChecked.find(data => data === checkedCategory)) {
+            if (mainCategoryCheckboxChecked.find((data: any) => data === checkedCategory)) {
                 this.setState({
                     checked: CHECKBOX_STATES.Empty,
                 });
                 this.handleToggleClick(resourceType, false);
             } else {
-                const filteredSubCategoriesLvl2ResourceType = typeName && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.resourceType);
+                const filteredSubCategoriesLvl2ResourceType = typeName && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { resourceType: any }) => i.resourceType);
 
                 if (filteredSubCategoriesLvl2ResourceType) {
-                    filteredSubCategoriesLvl2ResourceType.map(item => (
+                    filteredSubCategoriesLvl2ResourceType.map((item: string | number) => (
                         this.setState({
                             resourceCollection: { ...resourceCollection, [item]: PreserveresourceCollection[item] },
                         })
@@ -1994,22 +3210,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 });
                 this.handleToggleClick(resourceType, true, typeName, filteredSubCategoriesLvl2ResourceType, true);
             }
-        } else if (!mainCategoryCheckboxChecked.find(item => item === checkedCategory)) {
+        } else if (!mainCategoryCheckboxChecked.find((item: any) => item === checkedCategory)) {
             if (showVisualization === undefined) {
                 this.handleSubCategory(checkedCategory, true, true);
             }
 
             const filteredSubCategories = level === 2
-                ? capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0].map(finalData => finalData.id)
-                : capacityResource.filter(item => item.name === checkedCategory)
-                    .map(data => data.subCategory)[0].map(finalData => finalData.id);
+                ? capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0].map((finalData: { id: any }) => finalData.id)
+                : capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+                    .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
 
             const selectedCategory = level === 2 ? typeName
-                ? capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0]
-                : capacityResource.filter(item => item.name === lvl2catName)
-                    .map(data => data.Category)[0].filter(item => item.name === checkedCategory) : capacityResource.filter(item => item.name === checkedCategory);
+                ? capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0]
+                : capacity_resource.filter((item: { name: string }) => item.name === lvl2catName)
+                    .map((data: { Category: any }) => data.Category)[0].filter((item: { name: any }) => item.name === checkedCategory) : capacity_resource.filter((item: { name: string }) => item.name === checkedCategory);
 
             this.setState({
 
@@ -2017,8 +3233,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 selectCategoryForinitialFilter: selectedCategory,
             });
 
-            const test = typeName && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.name);
-            const fullCategoryNameList = level === 2 && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.name);
+            const test = typeName && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { name: any }) => i.name);
+            const fullCategoryNameList = level === 2 && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { name: any }) => i.name);
             const mainCheckBoxChecked = [...mainCategoryCheckboxChecked, checkedCategory];
             const comparisonFullCategoryData = fullCategoryNameList && mainCheckBoxChecked.filter(item => fullCategoryNameList.includes(item));
 
@@ -2048,16 +3264,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             });
 
 
-            if (mainCategoryCheckboxChecked.find(data => data === checkedCategory)) {
+            if (mainCategoryCheckboxChecked.find((data: any) => data === checkedCategory)) {
                 this.setState({
                     checked: CHECKBOX_STATES.Empty,
                 });
                 this.handleToggleClick(resourceType, false);
             } else {
-                const filteredSubCategoriesLvl2ResourceType = typeName && capacityResource.filter(item => item.name === lvl2catName).map(data => data.Category)[0].map(i => i.resourceType);
+                const filteredSubCategoriesLvl2ResourceType = typeName && capacity_resource.filter((item: { name: string }) => item.name === lvl2catName).map((data: { Category: any }) => data.Category)[0].map((i: { resourceType: any }) => i.resourceType);
 
                 if (filteredSubCategoriesLvl2ResourceType) {
-                    filteredSubCategoriesLvl2ResourceType.map(item => (
+                    filteredSubCategoriesLvl2ResourceType.map((item: string | number) => (
                         this.setState({
                             resourceCollection: { ...resourceCollection, [item]: PreserveresourceCollection[item] },
                         })
@@ -2084,10 +3300,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
 
-    private handleSubCategoryCheckbox = (id, checkedCategory, resourceType) => {
+    private handleSubCategoryCheckbox = (id: number, checkedCategory: string, resourceType: string) => {
         const { mainCategoryCheckboxChecked, subCategoryCheckboxChecked,
             indeterminantConditionArray, selectedCategoryName,
-            enableCategoryCheckbox, filterSubCategory, activeLayersIndication, resourceCollection, PreserveresourceCollection } = this.state;
+            enableCategoryCheckbox, filterSubCategory, activeLayersIndication, resourceCollection, PreserveresourceCollection,capacity_resource } = this.state;
         const { handleActiveLayerIndication } = this.props;
         this.setState({
             categoryLevel: 1,
@@ -2095,40 +3311,54 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
         handleActiveLayerIndication({ ...activeLayersIndication, [resourceType]: true });
 
-        const filteredSubCategory = capacityResource.filter(item => item.name === checkedCategory)
-            .map(data => data.subCategory)[0].map(finalData => finalData.id);
+        const filteredSubCategory = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+            .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
         this.setState({
             filterSubCategory: filteredSubCategory,
         });
         this.handleTooltipClose();
-        if (subCategoryCheckboxChecked.find(item => item === id)) {
-            const filteredSubCategories = capacityResource.filter(item => item.name === checkedCategory)
-                .map(data => data.subCategory)[0].map(finalData => finalData.id);
-
-            const removedSubCategoryInUncheck = subCategoryCheckboxChecked.filter(item => item !== id);
-            const removedSubCategoryInUncheckSameGroup = filteredSubCategories.filter(itm => removedSubCategoryInUncheck.includes(itm));
-
-            const selectedCategory = capacityResource.filter(item => item.name === checkedCategory);
-            const selectedSubCategorynameList = selectedCategory.map(data => data.subCategory)[0].filter(ide => removedSubCategoryInUncheck.includes(ide.id)).map(d => d.name);
 
 
-            const filtering = PreserveresourceCollection[resourceType].filter(d => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
+        if (subCategoryCheckboxChecked.find((item: any) => item === id)) {
+            const filteredSubCategories = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+                .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
 
-            const resourceCollectionUpdate = { ...resourceCollection };
-            resourceCollectionUpdate[resourceType] = filtering;
+            const removedSubCategoryInUncheck = subCategoryCheckboxChecked.filter((item: any) => item !== id);
+            const removedSubCategoryInUncheckSameGroup = filteredSubCategories.filter((itm: any) => removedSubCategoryInUncheck.includes(itm));
 
-            this.setState({
-                resourceCollection: resourceCollectionUpdate,
-            });
+            const selectedCategory = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory);
+            const selectedSubCategorynameList = selectedCategory.map((data: { subCategory: any }) => data.subCategory)[0].filter((ide: { id: any }) => removedSubCategoryInUncheck.includes(ide.id)).map((d: { name: any }) => d.name);
+
+
+if (resourceType==='warehouse') {
+    const filtering = PreserveresourceCollection[resourceType].filter((d: { categories: any[] }) => d.categories.some((category: any) => selectedSubCategorynameList.includes(category)));
+
+
+    const resourceCollectionUpdate = { ...resourceCollection };
+    resourceCollectionUpdate[resourceType] = filtering;
+
+    this.setState({
+        resourceCollection: resourceCollectionUpdate,
+    });
+} else {
+    const filtering = PreserveresourceCollection[resourceType].filter((d: { [x: string]: string }) => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
+
+    const resourceCollectionUpdate = { ...resourceCollection };
+    resourceCollectionUpdate[resourceType] = filtering;
+
+    this.setState({
+        resourceCollection: resourceCollectionUpdate,
+    });
+}
 
 
             // resourceCollection[resourceType] = filtering;
 
 
-            const remainingCheckedSubCategory = removedSubCategoryInUncheck.filter(item => filteredSubCategories.includes(item));
+            const remainingCheckedSubCategory = removedSubCategoryInUncheck.filter((item: number) => filteredSubCategories.includes(item));
 
 
-            const data = resourceCollection[resourceType].filter(item => removedSubCategoryInUncheck.includes(item.type));
+            const data = resourceCollection[resourceType].filter((item: { type: any }) => removedSubCategoryInUncheck.includes(item.type));
 
             if (removedSubCategoryInUncheck.length === 0) {
                 this.setState({
@@ -2149,7 +3379,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
             if (filteredSubCategories.length !== removedSubCategoryInUncheckSameGroup.length) {
                 this.setState({
-                    mainCategoryCheckboxChecked: mainCategoryCheckboxChecked.filter(item => item !== checkedCategory),
+                    mainCategoryCheckboxChecked: mainCategoryCheckboxChecked.filter((item: any) => item !== checkedCategory),
                     // checked: CHECKBOX_STATES.Indeterminate,
                     selectedCategoryName: checkedCategory,
                     subCategoryCheckboxChecked: removedSubCategoryInUncheck,
@@ -2160,7 +3390,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
             if ((filteredSubCategories.length === removedSubCategoryInUncheckSameGroup.length) || (remainingCheckedSubCategory.length === 0)) {
                 this.setState({
-                    indeterminantConditionArray: indeterminantConditionArray.filter(item => item !== checkedCategory),
+                    indeterminantConditionArray: indeterminantConditionArray.filter((item: any) => item !== checkedCategory),
                 });
                 this.handleToggleClick(resourceType, false);
             }
@@ -2178,8 +3408,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
         if (subCategoryCheckboxChecked.length === 0) {
             // resourceTypeName = resourceType;
-            const filteredSubCategories = capacityResource.filter(item => item.name === checkedCategory)
-                .map(data => data.subCategory)[0].map(finalData => finalData.id);
+            const filteredSubCategories = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+                .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
 
             // eslint-disable-next-line prefer-const
             let addSubCategoryInUncheck = [...subCategoryCheckboxChecked, id];
@@ -2187,8 +3417,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
             addSubCategoryInUncheck = filteredAddedSubCategoryInUncheck;
 
-            const selectedCategory = capacityResource.filter(item => item.name === checkedCategory);
-            const selectedSubCategorynameList = selectedCategory.map(data => data.subCategory)[0].filter(ide => addSubCategoryInUncheck.includes(ide.id)).map(d => d.name);
+            const selectedCategory = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory);
+            const selectedSubCategorynameList = selectedCategory.map((data: { subCategory: any }) => data.subCategory)[0].filter((ide: { id: any }) => addSubCategoryInUncheck.includes(ide.id)).map((d: { name: any }) => d.name);
 
             this.setState({
                 selectCategoryForinitialFilter: selectedCategory,
@@ -2219,16 +3449,25 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 });
                 this.handleToggleClick(resourceType, true);
             }
+            if (resourceType==='warehouse') {
+                const filtering = PreserveresourceCollection[resourceType].filter((d: { categories: any[] }) => d.categories.some((category: any) => selectedSubCategorynameList.includes(category)));
+                const resourceCollectionUpdate = { ...resourceCollection };
+                resourceCollectionUpdate[resourceType] = filtering;
 
-            const filtering = PreserveresourceCollection[resourceType].filter(d => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
+                this.setState({
+                    resourceCollection: resourceCollectionUpdate,
+                });
+            } else {
+                const filtering = PreserveresourceCollection[resourceType].filter((d: { [x: string]: string }) => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
 
-            const resourceCollectionUpdate = { ...resourceCollection };
-            resourceCollectionUpdate[resourceType] = filtering;
+                const resourceCollectionUpdate = { ...resourceCollection };
+                resourceCollectionUpdate[resourceType] = filtering;
 
-            this.setState({
-                resourceCollection: resourceCollectionUpdate,
-            });
-            // resourceCollection[resourceType] = filtering;
+                this.setState({
+                    resourceCollection: resourceCollectionUpdate,
+                });
+                // resourceCollection[resourceType] = filtering;
+            }
 
 
             this.setState({
@@ -2237,9 +3476,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 selectedCategoryName: checkedCategory,
                 indeterminantConditionArray: [...indeterminantConditionArray, checkedCategory],
             });
-        } else if (!subCategoryCheckboxChecked.find(item => item === id)) {
-            const filteredSubCategories = capacityResource.filter(item => item.name === checkedCategory)
-                .map(data => data.subCategory)[0].map(finalData => finalData.id);
+        } else if (!subCategoryCheckboxChecked.find((item: any) => item === id)) {
+            const filteredSubCategories = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory)
+                .map((data: { subCategory: any }) => data.subCategory)[0].map((finalData: { id: any }) => finalData.id);
 
 
             // eslint-disable-next-line prefer-const
@@ -2251,17 +3490,29 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             // if (!addSubCategoryInUncheck.find(item => item === id)) {
             //     addSubCategoryInUncheck.push(id);
             // }
-            const selectedCategory = capacityResource.filter(item => item.name === checkedCategory);
-            const selectedSubCategorynameList = selectedCategory.map(data => data.subCategory)[0].filter(ide => addSubCategoryInUncheck.includes(ide.id)).map(d => d.name);
+            const selectedCategory = capacity_resource.filter((item: { name: string }) => item.name === checkedCategory);
+            const selectedSubCategorynameList = selectedCategory.map((data: { subCategory: any }) => data.subCategory)[0].filter((ide: { id: any }) => addSubCategoryInUncheck.includes(ide.id)).map((d: { name: any }) => d.name);
+            if (resourceType==='warehouse') {
+                const filtering = PreserveresourceCollection[resourceType].filter((d: { categories: any[] }) => d.categories.some((category: any) => selectedSubCategorynameList.includes(category)));
+                const resourceCollectionUpdate = { ...resourceCollection };
+                resourceCollectionUpdate[resourceType] = filtering;
+
+                this.setState({
+                    resourceCollection: resourceCollectionUpdate,
+                });
+            } else {
+                const filtering = PreserveresourceCollection[resourceType].filter((d: { [x: string]: string }) => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
 
 
-            const filtering = PreserveresourceCollection[resourceType].filter(d => selectedSubCategorynameList.includes(d[selectedCategory[0].attribute]));
+                const resourceCollectionUpdate = { ...resourceCollection };
+                resourceCollectionUpdate[resourceType] = filtering;
+                this.setState({
+                    resourceCollection: resourceCollectionUpdate,
+                });
+            }
 
 
-            const resourceCollectionUpdate = { ...resourceCollection };
-            resourceCollectionUpdate[resourceType] = filtering;
             this.setState({
-                resourceCollection: resourceCollectionUpdate,
                 selectedSubCategorynameList,
                 selectedSubCategoryName: resourceType,
                 selectCategoryForinitialFilter: selectedCategory,
@@ -2297,7 +3548,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     // checked: CHECKBOX_STATES.Checked,
 
                     selectedCategoryName: checkedCategory,
-                    indeterminantConditionArray: indeterminantConditionArray.filter(item => item !== checkedCategory),
+                    indeterminantConditionArray: indeterminantConditionArray.filter((item: any) => item !== checkedCategory),
 
 
                 });
@@ -2335,22 +3586,26 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     };
 
-    private getIndexArr = (array) => {
-        const data = array.map((item, i) => indeterminateArray.indexOf(item));
+
+    private getIndexArr = (array: any[]) => {
+        const { capacity_resource } = this.state;
+        const indeterminateArray =capacity_resource.map((item: { name: any }) => item.name);
+        const data = array.map((item: string, i: any) => indeterminateArray.indexOf(item));
         return data;
     }
 
     private getCheckedIndexArr = () => {
-        const { mainCategoryCheckboxChecked } = this.state;
-        const data = mainCategoryCheckboxChecked.length && mainCategoryCheckboxChecked.map((item, i) => indeterminateArray.indexOf(item));
+        const { mainCategoryCheckboxChecked,capacity_resource } = this.state;
+        const indeterminateArray =capacity_resource.map((item: { name: any }) => item.name);
+        const data = mainCategoryCheckboxChecked.length && mainCategoryCheckboxChecked.map((item: string, i: any) => indeterminateArray.indexOf(item));
 
         return data || [];
     }
 
-    private resourceProfileImage = (level, name) => {
-        const ResourceCategory = capacityResource.filter(i => i.name === name)[0];
+    private resourceProfileImage = (level: number, name: string) => {
+        const ResourceCategory = capacity_resource.filter((i: { name: string }) => i.name === name)[0];
 
-        const ResourceCategoryLevel2 = capacityResource.filter(i => i.name === name)[0].Category;
+        const ResourceCategoryLevel2 = capacity_resource.filter((i: { name: string }) => i.name === name)[0].Category;
 
         if (level === 1) {
             const selectedResourceProfileImage = sidepanelLogo.filter(i => i.name === ResourceCategory.resourceType)[0].image;
@@ -2360,7 +3615,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             };
         }
         if (level === 2) {
-            const selectedResourceProfileImage = sidepanelLogo.filter(item => (ResourceCategoryLevel2.map((data) => {
+            const selectedResourceProfileImage = sidepanelLogo.filter(item => (ResourceCategoryLevel2.map((data: { resourceType: string }) => {
                 const finalData = item.name === data.resourceType;
                 return (finalData);
             })));
@@ -2369,7 +3624,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         return null;
     }
 
-    private updateResourceOnDataAddition = (resourceType) => {
+    private updateResourceOnDataAddition = (resourceType: any) => {
         const { resourceCollection, PreserveresourceCollection } = this.state;
         const updatedResourcesCollection = { ...resourceCollection, [resourceType]: [] };
 
@@ -2379,7 +3634,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleVisualization = (boolean, checkedCategory, resourceType, level, lvl2catName, typeName) => {
+    private handleVisualization = (boolean: boolean, checkedCategory: string, resourceType: string, level: number, lvl2catName: string, typeName: any) => {
         const { region, wards } = this.props;
         const { resourceCollection } = this.state;
         this.setState({ openVisualization: boolean });
@@ -2388,7 +3643,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         ResourceType = resourceType;
     }
 
-    private handleClearDataAfterAddition = (resourcetype) => {
+    private handleClearDataAfterAddition = (resourcetype: any) => {
         const { resourceCollection, PreserveresourceCollection } = this.state;
         this.setState({
             resourceCollection: { ...resourceCollection, [resourcetype]: [] },
@@ -2398,15 +3653,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
-    private verifyCheckboxChecked = (category) => {
+    private verifyCheckboxChecked = (category: any) => {
         const { mainCategoryCheckboxChecked } = this.state;
-        const value = !!mainCategoryCheckboxChecked.find(i => i === category);
+        const value = !!mainCategoryCheckboxChecked.find((i: any) => i === category);
         return value;
     }
 
-    private handleSearchResource = (resourceType, id, name) => {
+    private handleSearchResource = (resourceType: string, id: number, name: string) => {
         const { showSearchModal, PreserveresourceCollection, showTooltip, selectedCategoryId } = this.state;
-        const data = PreserveresourceCollection[resourceType].filter(i => i.resourceType === resourceType);
+        const data = PreserveresourceCollection[resourceType].filter((i: { resourceType: any }) => i.resourceType === resourceType);
         const isCheckboxChecked = this.verifyCheckboxChecked(name);
         if ((data.length && isCheckboxChecked)) {
             this.setState({
@@ -2437,9 +3692,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             palikaRedirect,
             language: { language },
             searchedResourceCoordinateData,
+            filters,
+            filterss,
         } = this.props;
-
-
         const {
             activeLayerKey,
             showResourceForm,
@@ -2481,6 +3736,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             filteredSearchResource,
             showTooltip,
             selectedCategoryId,
+            warehouseSubCategory,
+            capacity_resource,
         } = this.state;
 
         const { addResource, isFilterClicked } = this.context;
@@ -2538,9 +3795,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             closeButton: false,
             offset: 10,
         };
-        const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
+        const filteredCheckedSubCategory = filterSubCategory.filter((item: any) => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
+
         return (
             <>
                 <Loading pending={pending} />
@@ -2590,7 +3848,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 <div className={styles.actions}>
                                                     {filterPermissionGranted
                                                         ? (
-                                                            <Cloak hiddenIf={p => !p.add_resource}>
+                                                            <Cloak hiddenIf={(p: { add_resource: any }) => !p.add_resource}>
 
 
                                                                 <AccentModalButton
@@ -2623,13 +3881,13 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     }
                                 </Translation>
 
-                                {capacityResource.map((item, idx) => (
+                                {capacity_resource.map((item: { name: {} | null | undefined; resourceType: string; level: number; typeName: string | undefined; Category: { id: React.Key | null | undefined; name: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined; resourceType: any }[]; subCategory: any[]; nameNe: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined; id: number }, idx: any) => (
                                     <Translation>
                                         {
                                             t => (
                                                 <div key={item.name}>
                                                     <div
-                                                        className={resourceCategory.find(res => res === item.name)
+                                                        className={resourceCategory.find((res: string) => res === item.name)
                                                             ? styles.categorySelected : styles.categories}
                                                     >
                                                         <div style={{ marginTop: '5px' }}>
@@ -2637,7 +3895,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                 label="Value"
                                                                 value={checked}
                                                                 onChange={() => this.handleMainCategoryCheckBox(item.name, item.resourceType, item.level, item.name, item.typeName)}
-                                                                checkedCategory={!!mainCategoryCheckboxChecked.find(data => data === item.name)}
+                                                                checkedCategory={!!mainCategoryCheckboxChecked.find((data: string) => data === item.name)}
                                                                 showIndeterminateButton={showIndeterminateButton}
                                                                 index={this.getIndexArr(indeterminantConditionArray)}
                                                                 checkedMainCategoryIndex={this.getCheckedIndexArr()}
@@ -2690,7 +3948,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                                 type="button"
                                                                                 style={{
                                                                                     cursor: 'pointer',
-                                                                                    backgroundColor: resourceCategory.find(res => res === item.name)
+                                                                                    backgroundColor: resourceCategory.find((res: string) => res === item.name)
                                                                                         ? '#ddf2fd' : 'white',
                                                                                     border: 'none',
                                                                                 }}
@@ -2715,14 +3973,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                             }
 
                                                                         </div>
-                                                                        {
-                                                                            item.resourceType === 'warehouse' ? <div style={{ width: '75px' }} />
-
-                                                                                : (
+                                                                        {item.resourceType==='warehouse'?<div style={{ height: '14px',width: '73px' }} />
+                                                                             :(
                                                                                     <button
                                                                                         type="button"
                                                                                         style={{ border: 'none', background: 'none', cursor: 'pointer' }}
-                                                                                        onClick={() => this.handleVisualization(true, item.name, item.resourceType,
+                                                                                        onClick={item.resourceType === 'warehouse'?'':() => this.handleVisualization(true, item.name, item.resourceType,
                                                                                             item.level, item.name, item.typeName)}
                                                                                     >
 
@@ -2737,7 +3993,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                                 )}
                                                                     </>
                                                                 ) : ''}
-                                                                {item.resourceType === 'warehouse' ? '' : (item.Category || item.subCategory.length) ? resourceCategory.find(res => res === item.name)
+                                                                {(item.Category || item.subCategory.length) ? resourceCategory.find((res: string) => res === item.name)
                                                                     ? (
                                                                         <Icon
                                                                             name="dropdown"
@@ -2754,10 +4010,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         </div>
 
                                                     </div>
-                                                    {resourceCategory.find(elem => elem === item.name)
+                                                    {resourceCategory.find((elem: string) => elem === item.name)
                                                         ? item.level === 2
                                                             ? (
-                                                                item.Category.map(data => (
+                                                                item.Category.map((data: { id: React.Key | null | undefined; name: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined; resourceType: any }) => (
                                                                     <ul key={data.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                         <div
                                                                             style={{ display: 'flex', alignItems: 'center' }}
@@ -2768,7 +4024,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                             onKeyDown={undefined}
 
                                                                         >
-                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
+                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find((datas: any) => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
                                                                             <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
                                                                                 {' '}
                                                                                 <h4>{data.name}</h4>
@@ -2784,11 +4040,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                         </button>
                                                                     </ul>
                                                                 )))
-                                                            : (
-                                                                item.subCategory.map(data => (
+
+                                                                :item.subCategory.map((data: { id: React.Key | null | undefined; name: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined; nameNe: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined }) => (
                                                                     <ul key={data.id}>
                                                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
+                                                                            <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find((i: number) => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
                                                                             <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
                                                                                 {' '}
                                                                                 <h4>{language === 'en' ? data.name : data.nameNe}</h4>
@@ -2800,7 +4056,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                                 ))
 
 
-                                                            )
                                                         : ''}
 
                                                 </div>

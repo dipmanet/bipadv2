@@ -348,6 +348,8 @@ export const enTranslation = {
 
     "Get direction": "Get direction",
     Resources: "Resources",
+    Resource: "Resource",
+    TransferToResource: 'Transfer To Resource',
     "People Dead": "People Dead",
     "Livestock Destroyed": "Livestock Destroyed",
     "Infrastructures Destroyed": "Infrastructures Destroyed",
@@ -1516,6 +1518,8 @@ export const npTranslation = {
 
     "Get direction": "दिशा प्राप्‍त गर्नुहोस्",
     Resources: "स्रोतहरू",
+    Resource: "स्रोत",
+    TransferToResource: 'स्रोतहरू स्थानान्तरण',
     "People Dead": "मान्‍छे मृत्‍यु संख्‍या",
     "Livestock Destroyed": "पशुचौपाया क्षति",
     "Infrastructures Destroyed": "पूर्वाधारको क्षति",
