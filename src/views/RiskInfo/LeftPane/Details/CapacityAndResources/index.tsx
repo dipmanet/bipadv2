@@ -3973,8 +3973,8 @@ if (resourceType==='warehouse') {
                                                                             }
 
                                                                         </div>
-                                                                        {
-                                                                             (
+                                                                        {item.resourceType==='warehouse'?<div style={{ height: '14px',width: '73px' }} />
+                                                                             :(
                                                                                     <button
                                                                                         type="button"
                                                                                         style={{ border: 'none', background: 'none', cursor: 'pointer' }}
