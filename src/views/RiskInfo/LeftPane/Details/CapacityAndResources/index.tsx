@@ -70,6 +70,7 @@ import {
     enumOptionsSelector,
     regionSelector,
     languageSelector,
+    filtersSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -485,6 +486,7 @@ type Props = NewProps<ComponentProps & PropsFromState, Params>
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     authState: authStateSelector(state),
+    filterss: filtersSelector(state),
     filters: filtersSelectorDP(state),
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -510,6 +512,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         url: ({ params }) => {
             const region = params.getRegionDetails(params.region);
             const resource_type = params.resourceType;
+            const finalInventoryItems = params.inventoryItems && params.inventoryItems.map(i => `inventory_item=${i}`).join('&');
 
             // const region = {municipality: 5002, province: 1, district: 3};
             const regionArr = Object.keys(region);
@@ -519,14 +522,12 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             } else {
                 a = '';
             }
-
             const result1 = a.join('&');
-
             const result2 = resource_type.map((item: any) => `resource_type=${item}`);
 
             return params.filterClickCheckCondition
-                ? `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`
-                : `/resource/?resource_type=${resource_type[0]}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
+                ? `/resource/?${result1}&${`${result2.join('&')}`}${finalInventoryItems?result2.length?`&${finalInventoryItems}`:finalInventoryItems:''}&limit=-1&meta=true`
+                : `/resource/?resource_type=${resource_type[0]}${finalInventoryItems?result2.length?`&${finalInventoryItems}`:finalInventoryItems:''}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
             // return `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`;
         },
         method: methods.GET,
@@ -751,6 +752,7 @@ const sidepanelLogo = [
 // let resourceTypeName = '';
 let editResources = false;
 let ResourceType = '';
+const stopLoop = true;
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -760,6 +762,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
             filters,
             palikaRedirect,
+            filterss,
         } = this.props;
         // const { isFilterClicked, FilterClickedStatus } = this.context;
         this.state = {
@@ -1992,14 +1995,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         };
 
-        const { faramValues: { region } } = filters;
-
+        const { faramValues: { region },faramValues } = filters;
+        const { inventoryItems } = filterss;
         resourceGetRequest.setDefaultParams(
             {
                 setResourceList: this.setResourceList,
                 setIndividualResourceList: this.setIndividualResourceList,
                 getRegionDetails: this.getRegionDetails,
                 region,
+                inventoryItems,
                 ErrorData: this.handleErrorData,
                 // filterClickCheckCondition: isFilterClicked,
             },
@@ -2043,11 +2047,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     public componentDidUpdate(prevProps: { filters: { faramValues: { region: any } } }, prevState: { PreserveresourceCollection: any }, snapshot: any) {
         const { faramValues: { region } } = this.props.filters;
+        const { inventoryItems } = this.props.filterss;
         const { carKeys } = this.props;
         const { isFilterClicked, FilterClickedStatus } = this.context;
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
-        if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
+        if ((prevProps.filters.faramValues.region !== this.props.filters.faramValues.region)) {
             this.setState({ disableCheckbox: true });
             if (carKeys.length === 0) {
                 this.setState({ disableCheckbox: false });
@@ -2090,21 +2095,23 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                 ));
 
-                this.setState({
-                    // resourceCollection: {
-                    //     ...this.state.resourceCollection,
+                // this.setState({
+                //     // resourceCollection: {
+                //     //     ...this.state.resourceCollection,
 
-                    //     education: [],
-                    // },
+                //     //     education: [],
+                //     // },
 
+                //     PreserveresourceCollection: tempResourceCollection,
+
+                // });
+                this.setState(() => ({
                     PreserveresourceCollection: tempResourceCollection,
-
-                });
-
-
+                  }));
                 this.props.requests.resourceGetRequest.do(
                     {
                         region,
+                        inventoryItems,
                         resourceType: carKeys,
                         filterClickCheckCondition: isFilterClicked,
                         handleErrorData: this.handleErrorData,
@@ -2112,7 +2119,32 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 );
             }
         }
+        if ((prevProps.filterss.inventoryItems !== this.props.filterss.inventoryItems)) {
+            if (carKeys.length) {
+                const tempResourceCollection = PreserveresourceCollection;
+                let tempResourcelistKey = Object.keys(tempResourceCollection);
+                tempResourcelistKey = tempResourcelistKey.filter(item => !carKeys.includes(item));
 
+                tempResourcelistKey.map((item, index) => (
+                    tempResourceCollection[item] = []
+
+                ));
+                this.setState(() => ({
+                    PreserveresourceCollection: tempResourceCollection,
+                }));
+
+
+                this.props.requests.resourceGetRequest.do(
+                    {
+                        region,
+                        inventoryItems,
+                        resourceType: carKeys,
+                        filterClickCheckCondition: isFilterClicked,
+                        handleErrorData: this.handleErrorData,
+                    },
+                );
+            }
+        }
         if (prevState.PreserveresourceCollection !== this.state.PreserveresourceCollection) {
             if (isFilterClicked) {
                 this.setState({
@@ -2218,9 +2250,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private DeletedResourceApiRecall = () => {
         const { isFilterClicked } = this.context;
         const { carKeys, requests: { resourceGetRequest }, filters: { faramValues: { region } } } = this.props;
+        const { inventoryItems } = this.props.filterss;
         resourceGetRequest.do({
             resourceType: carKeys,
             region,
+            inventoryItems,
             filterClickCheckCondition: isFilterClicked,
             handleErrorData: this.handleErrorData,
         });
@@ -2230,6 +2264,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { activeLayersIndication, resourceCollection, categoryLevel, selectedCategoryName, subCategoryCheckboxChecked } = this.state;
         const temp = filteredSubCategoriesLvl2ResourceType || key ? { ...activeLayersIndication } : { ...initialActiveLayersIndication };
         const { setCarKeys, carKeys } = this.props;
+        const { inventoryItems } = this.props.filterss;
         const { isFilterClicked, FilterClickedStatus } = this.context;
         temp[key] = value;
         if (key) {
@@ -2273,6 +2308,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 this.props.requests.resourceGetRequest.do({
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
+                    inventoryItems,
                     filterClickCheckCondition: isFilterClicked,
                     handleErrorData: this.handleErrorData,
                 });
@@ -2294,6 +2330,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 this.props.requests.resourceGetRequest.do({
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
+                    inventoryItems,
                     filterClickCheckCondition: isFilterClicked,
                     handleErrorData: this.handleErrorData,
                 });
@@ -3655,9 +3692,9 @@ if (resourceType==='warehouse') {
             palikaRedirect,
             language: { language },
             searchedResourceCoordinateData,
+            filters,
+            filterss,
         } = this.props;
-
-
         const {
             activeLayerKey,
             showResourceForm,
@@ -3936,8 +3973,8 @@ if (resourceType==='warehouse') {
                                                                             }
 
                                                                         </div>
-                                                                        {
-                                                                             (
+                                                                        {item.resourceType==='warehouse'?<div style={{ height: '14px',width: '73px' }} />
+                                                                             :(
                                                                                     <button
                                                                                         type="button"
                                                                                         style={{ border: 'none', background: 'none', cursor: 'pointer' }}

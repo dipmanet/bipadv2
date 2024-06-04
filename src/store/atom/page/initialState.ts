@@ -33,6 +33,7 @@ const state: PageState = {
             startDate: undefined,
             endDate: undefined,
         },
+        inventoryItems: [],
     },
 
     daEarthquakeFilter: {
