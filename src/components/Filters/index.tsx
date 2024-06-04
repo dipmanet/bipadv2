@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable indent */
 /* eslint-disable react/no-access-state-in-setstate */
@@ -184,6 +185,7 @@ const getIsFiltered = (key: TabKey | undefined, filters: RiverFiltersElement) =>
     }
 
     const filterKeys = filter && Object.keys(filter);
+
     return filterKeys && filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
 };
 
@@ -387,7 +389,6 @@ class Filters extends React.PureComponent<Props, State> {
     public componentDidUpdate(prevProps, prevState) {
         const { filters, rainStations, riverStations } = this.props;
         const { faramValues } = this.state;
-
         if (prevProps.filters !== filters) {
             this.setState({ faramValues: filters });
             delete this.getTabs();
@@ -960,8 +961,6 @@ private handleInventoryItemChange=(dataList) => {
 
             language: { language },
         } = this.props;
-
-
         const { faramValues: fv, disableSubmitButton, invertoryItemList } = this.state;
         const tabs = this.getTabs(
             extraContent,
@@ -970,7 +969,6 @@ private handleInventoryItemChange=(dataList) => {
             hideDataRangeFilter,
             language,
         );
-
         const { activeView } = this.state;
 
 

@@ -522,14 +522,12 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             } else {
                 a = '';
             }
-
             const result1 = a.join('&');
-
             const result2 = resource_type.map((item: any) => `resource_type=${item}`);
 
             return params.filterClickCheckCondition
                 ? `/resource/?${result1}&${`${result2.join('&')}`}${finalInventoryItems?result2.length?`&${finalInventoryItems}`:finalInventoryItems:''}&limit=-1&meta=true`
-                : `/resource/?resource_type=${resource_type[0]}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
+                : `/resource/?resource_type=${resource_type[0]}${finalInventoryItems?result2.length?`&${finalInventoryItems}`:finalInventoryItems:''}&${a.length ? a[0] : ''}&limit=-1&meta=true`;
             // return `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1&meta=true`;
         },
         method: methods.GET,
@@ -754,7 +752,7 @@ const sidepanelLogo = [
 // let resourceTypeName = '';
 let editResources = false;
 let ResourceType = '';
-let stopLoop = true;
+const stopLoop = true;
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -2054,9 +2052,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { isFilterClicked, FilterClickedStatus } = this.context;
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
-            console.log('This is prev props', prevProps);
-            console.log('This is prev props', this.props.filterss);
-            console.log('This is car key', carKeys);
         if ((prevProps.filters.faramValues.region !== this.props.filters.faramValues.region)) {
             this.setState({ disableCheckbox: true });
             if (carKeys.length === 0) {
@@ -2090,7 +2085,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     },
                 });
             }
-            console.log('This is data', PreserveresourceCollection);
             if (carKeys.length) {
                 const tempResourceCollection = PreserveresourceCollection;
                 let tempResourcelistKey = Object.keys(tempResourceCollection);
@@ -2111,7 +2105,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 //     PreserveresourceCollection: tempResourceCollection,
 
                 // });
-                
                 this.setState(() => ({
                     PreserveresourceCollection: tempResourceCollection,
                   }));
@@ -2126,36 +2119,32 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 );
             }
         }
-        // if ((prevProps.filterss.inventoryItems !== this.props.filterss.inventoryItems)||(this.props.filterss.inventoryItems)) {
-        //     if (carKeys.length) {
-        //         const tempResourceCollection = PreserveresourceCollection;
-        //         let tempResourcelistKey = Object.keys(tempResourceCollection);
-        //         tempResourcelistKey = tempResourcelistKey.filter(item => !carKeys.includes(item));
+        if ((prevProps.filterss.inventoryItems !== this.props.filterss.inventoryItems)) {
+            if (carKeys.length) {
+                const tempResourceCollection = PreserveresourceCollection;
+                let tempResourcelistKey = Object.keys(tempResourceCollection);
+                tempResourcelistKey = tempResourcelistKey.filter(item => !carKeys.includes(item));
 
-        //         tempResourcelistKey.map((item, index) => (
-        //             tempResourceCollection[item] = []
+                tempResourcelistKey.map((item, index) => (
+                    tempResourceCollection[item] = []
 
-        //         ));
-        //         console.log('stopLoop', stopLoop);
-        //     if (stopLoop) {
-        //         this.setState(() => ({
-        //             PreserveresourceCollection: tempResourceCollection,
-        //         }));
-        //         stopLoop = false;
-        //     }
+                ));
+                this.setState(() => ({
+                    PreserveresourceCollection: tempResourceCollection,
+                }));
 
 
-        //         this.props.requests.resourceGetRequest.do(
-        //             {
-        //                 region,
-        //                 inventoryItems,
-        //                 resourceType: carKeys,
-        //                 filterClickCheckCondition: isFilterClicked,
-        //                 handleErrorData: this.handleErrorData,
-        //             },
-        //         );
-        //     }
-        // }
+                this.props.requests.resourceGetRequest.do(
+                    {
+                        region,
+                        inventoryItems,
+                        resourceType: carKeys,
+                        filterClickCheckCondition: isFilterClicked,
+                        handleErrorData: this.handleErrorData,
+                    },
+                );
+            }
+        }
         if (prevState.PreserveresourceCollection !== this.state.PreserveresourceCollection) {
             if (isFilterClicked) {
                 this.setState({
