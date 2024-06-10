@@ -206,7 +206,7 @@ const TableDataList = ({ population, literacy,
                                         {stockOutList.map(item => (
                                             <tr key={item.id}>
                                                 <td>{language === 'en' ? item.resource.title : item.resource.titleNe}</td>
-                                                <td>{language === 'en' ? item.transferedToResource.title : item.transferedToResource.titleNe}</td>
+                                                <td>{language === 'en' ? item.transferedToResource ? item.transferedToResource.title : '-' : item.transferedToResource ? item.transferedToResource.titleNe : '-'}</td>
                                                 <td>{idToTitle(itemList, item.item, language)}</td>
                                                 <td>{item.rate}</td>
                                                 <td>{item.quantity}</td>
@@ -224,7 +224,7 @@ const TableDataList = ({ population, literacy,
                                                 <td>{item.referenceNumber}</td>
                                                 <td>{item.remarks}</td>
                                                 <td>
-                                                    <a href={item.file} download>
+                                                    <a href={item.file} download style={{ cursor: 'pointer' }}>
                                                         {t('Download')}
                                                     </a>
 
