@@ -295,11 +295,10 @@ export const checkPermission = (user, codeName, app) => {
 // federal region and filtered federal region to check the accessibility of the data.
 export const checkSameRegionPermission = (user, region) => {
         let permission = false;
-        if (user && user.isSuperuser) {
+        if (user && (user.isSuperuser || user.profile.region === 'national')) {
                 permission = true;
         } else if (region.adminLevel === 1) {
-                if (user && user.profile.province === region.geoarea
-                        && user.profile.district === null && user.profile.municipality === null) {
+                if (user && user.profile.province === region.geoarea) {
                         permission = true;
                 }
         } else if (region.adminLevel === 2) {
