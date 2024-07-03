@@ -3844,26 +3844,17 @@ if (resourceType==='warehouse') {
                                     {
                                         t => (
                                             <header className={styles.header}>
-
                                                 <div className={styles.actions}>
-                                                    {filterPermissionGranted
-                                                        ? (
-                                                            <Cloak hiddenIf={(p: { add_resource: any }) => !p.add_resource}>
-
-
-                                                                <AccentModalButton
-                                                                    iconName="add"
-                                                                    title={t('Add New Resource')}
-                                                                    transparent
-                                                                    onClick={this.resourceAdd}
-
-
-                                                                >
-                                                                    {t('Add Resource')}
-                                                                </AccentModalButton>
-                                                            </Cloak>
-                                                        )
-                                                        : ''}
+                                                    <Cloak hiddenIf={(p: { add_resource: any }) => !p.add_resource}>
+                                                        <AccentModalButton
+                                                            iconName="add"
+                                                            title={t('Add New Resource')}
+                                                            transparent
+                                                            onClick={this.resourceAdd}
+                                                        >
+                                                            {t('Add Resource')}
+                                                        </AccentModalButton>
+                                                    </Cloak>
                                                     <DangerButton
                                                         // disabled={!activeLayerKey}
                                                         disabled={!Object.values(activeLayersIndication).some(Boolean)
@@ -3874,7 +3865,6 @@ if (resourceType==='warehouse') {
                                                     >
                                                         {t('Clear')}
                                                     </DangerButton>
-
                                                 </div>
                                             </header>
                                         )
