@@ -960,6 +960,13 @@ const TemporaryShelterPreview = (props) => {
                         )}. परिवारको व्यक्तिगत सरसफाई ध्यानमा राखी संंरचना निर्माण गर्नेछु।`}
                       </h3>
                     </div>
+                    <div>
+                      <h3 style={{ fontWeight: "normal" }}>
+                        {`${englishToNepaliNumber(
+                          6
+                        )}. अस्थायी आवासको अनुदान लिएपश्चात जोखिमयुक्त घरमा बस्ने छैन।`}
+                      </h3>
+                    </div>
                   </div>
                   <div>
                     <h3>
