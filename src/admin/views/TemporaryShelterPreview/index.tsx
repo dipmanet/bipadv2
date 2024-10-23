@@ -379,13 +379,13 @@ const TemporaryShelterPreview = (props) => {
                                 </span>{' '}
                       कार्यालय (यसपछि दोश्रो पक्ष भनिने) बीच देहाय बमोजिमका
                       शर्तहरुको अधिनमा रही विपदबाट प्रभावित घरपरिवारलाई अस्थायी
-                      आवास निर्माण अनुदान मापदण्ड,२०८१, बमोजिम अस्थायी आवास
-                      निर्माण गर्न यो अनुदान सम्झौता-पत्रमा सहीछाप गरेेका छौंं ।
+                      आवास निर्माण अनुदान मापदण्ड,२०८१ बमोजिम अस्थायी आवास
+                      निर्माण गर्न यो अनुदान सम्झौता-पत्रमा सहीछाप गरेका छौंं ।
                             </p>
                         </div>
                         <div className="mainTempAddress123">
                             <h2 style={{ textDecoration: 'underline' }}>
-                      अस्थायी आवास निर्माण हुनेे जग्गाको विवरण
+                      अस्थायी आवास निर्माण हुने जग्गाको विवरण
                             </h2>
                             <div className="tempAddress123">
                                 <div className="tempAddressIndividualDiv123">
@@ -564,12 +564,12 @@ const TemporaryShelterPreview = (props) => {
                                             >
                               सम्झौता-पत्रमा हस्ताक्षर गर्न अधिकार/मञ्जुरी
                               प्राप्त व्यक्तिको विवरण (लाभग्राही उपस्थित हुन
-                              नसकेेको अवस्थामा मात्र) संंरक्षक/अधिकार
+                              नसकेको अवस्थामा मात्र) संंरक्षक/अधिकार
                               प्राप्त/मञ्जुरी प्राप्त व्यक्तिको विवरण
                                             </p>
                                             <div className="freeText123">
                                                 <span>
-                                नाम, थर नेेपालीमाः{' '}
+                                नाम, थर नेपालीमाः{' '}
                                                     <span style={{ fontWeight: 'bold' }}>
                                                         {
                                     fetchedData.beneficiaryRepresentativeNameNepali
@@ -639,7 +639,7 @@ const TemporaryShelterPreview = (props) => {
                                             </div>
                                             <div className="freeText123">
                                                 <span>
-                                बाजेेको नाम, थर:{' '}
+                                बाजेको नाम, थर:{' '}
                                                     <span style={{ fontWeight: 'bold' }}>
                                                         {
                                     fetchedData.beneficiaryRepresentativeGrandfatherName
@@ -767,7 +767,7 @@ const TemporaryShelterPreview = (props) => {
                                         style={{ fontWeight: 'bold', lineHeight: '30px' }}
                                     >
                           ३. स्थायी ठेगाना र नागरिकतामा उल्लिखित ठेगाना फरक भएमा
-                          (बसाइँसराइको विवरण उल्लेख गर्नेे)
+                          (बसाइँसराइको विवरण उल्लेख गर्ने)
                                     </span>
                                     <div className="formElements123">
                                         <div className="freeText123">
@@ -925,7 +925,7 @@ const TemporaryShelterPreview = (props) => {
                                     {' '}
                                     {`${englishToNepaliNumber(
                           1,
-                        )}. मैलेे विपदबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुदान मापदण्ड, २०८१ एबंं यस सम्झौता-पत्र अनुरुप बनाउनेे छु ।`}
+                        )}. मैले विपदबाट प्राभाावित घरपरिवारलाई अस्थायी आवास निर्माण अनुदान मापदण्ड, २०८१ एबंं यस सम्झौता-पत्र अनुरुप बनाउनेे छु ।`}
                                 </h3>
                             </div>
                             <div>
@@ -950,7 +950,7 @@ const TemporaryShelterPreview = (props) => {
                                     {' '}
                                     {`${englishToNepaliNumber(
                           4,
-                        )}. उपलब्ध अनुदान नपुग भएमा अतिरिक्त ‍‍लागत म आफैलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेेछु।`}
+                        )}. उपलब्ध अनुदान नपुग भएमा अतिरिक्त ‍‍लागत म आफैलेे थप गरी अस्थायी आवास निर्माण सम्पन्न गर्नेछु।`}
                                 </h3>
                             </div>
                             <div>
