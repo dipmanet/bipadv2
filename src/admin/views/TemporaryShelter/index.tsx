@@ -45,8 +45,8 @@ import {
   userSelector,
 } from "#selectors";
 import { SetEpidemicsPageAction } from "#actionCreators";
-import ADToBS from '#utils/AdBSConverter/AdToBs';
-import BSToAD from '#utils/AdBSConverter/BsToAd';
+import ADToBS from "#utils/AdBSConverter/AdToBs";
+import BSToAD from "#utils/AdBSConverter/BsToAd";
 // import { ADToBS } from "bikram-sambat-js";
 import {
   ClientAttributes,
@@ -473,19 +473,17 @@ const TemporaryShelter = (props: {
     );
   };
 
-
-const checkForUnicode = (value) => {
-  function hasUnicode(str: string) {
-    for (let i = 0; i < str.length; i++) {
+  const checkForUnicode = (value) => {
+    function hasUnicode(str: string) {
+      for (let i = 0; i < str.length; i++) {
         if (str.charCodeAt(i) > 127) return true;
+      }
+      return false;
     }
-    return false;
-}
-  const test = nepaliToEnglishNumber(value);
-  const validateUnicodeError = hasUnicode(test);
-  return validateUnicodeError;
-};
-
+    const test = nepaliToEnglishNumber(value);
+    const validateUnicodeError = hasUnicode(test);
+    return validateUnicodeError;
+  };
 
   const handleFormData = (e: { target: { name: string; value: number } }) => {
     setErrorFields({
@@ -496,7 +494,7 @@ const checkForUnicode = (value) => {
       benificiaryContactValidation: false,
       witnessContactValidation: false,
     });
-     if (e.target.name === "beneficiary_district") {
+    if (e.target.name === "beneficiary_district") {
       setData({
         ...data,
         [e.target.name]: e.target.value,
@@ -549,7 +547,6 @@ const checkForUnicode = (value) => {
     //     });
     //   }
     // }
-
     else {
       setData({
         ...data,
@@ -689,8 +686,8 @@ const checkForUnicode = (value) => {
         if (i === "migration_certificate_number") {
           return (latestErrorUpdate[i] = false);
         }
-        if (i === 'registration_number') {
-            return latestErrorUpdate[i] = false;
+        if (i === "registration_number") {
+          return (latestErrorUpdate[i] = false);
         }
         if (i === "bank_account_holder_name") {
           return (latestErrorUpdate[i] = false);
@@ -749,22 +746,21 @@ const checkForUnicode = (value) => {
           : (latestErrorUpdate[i] = true);
       }
 
-
-      if (i === 'withness_contact_number') {
+      if (i === "withness_contact_number") {
         if (checkForUnicode(data[i])) {
           return (latestErrorUpdate[i] = true);
         }
       }
-      if (i === 'beneficiary_contact_number') {
+      if (i === "beneficiary_contact_number") {
         if (checkForUnicode(data[i])) {
           return (latestErrorUpdate[i] = true);
         }
       }
-   if (i === 'beneficiary_age') {
-    if (checkForUnicode(data[i])) {
-      return (latestErrorUpdate[i] = true);
-    }
-  }
+      if (i === "beneficiary_age") {
+        if (checkForUnicode(data[i])) {
+          return (latestErrorUpdate[i] = true);
+        }
+      }
       if (i === "infrastructure_photo") {
         if (data.infrastructure_photo.length === 0) {
           return (latestErrorUpdate[i] = true);
@@ -784,14 +780,22 @@ const checkForUnicode = (value) => {
       benificiaryContactValidation: false,
       witnessContactValidation: false,
     };
-    if (!phoneNumberRegex.test(nepaliToEnglishNumber(data.beneficiary_contact_number))) {
+    if (
+      !phoneNumberRegex.test(
+        nepaliToEnglishNumber(data.beneficiary_contact_number)
+      )
+    ) {
       phoneValidation.benificiaryContactValidation = true;
 
       setPhoneNumberValidation(phoneValidation);
       return;
     }
     phoneValidation.benificiaryContactValidation = false;
-    if (!phoneNumberRegex.test(nepaliToEnglishNumber(data.withness_contact_number))) {
+    if (
+      !phoneNumberRegex.test(
+        nepaliToEnglishNumber(data.withness_contact_number)
+      )
+    ) {
       phoneValidation.witnessContactValidation = true;
       setPhoneNumberValidation(phoneValidation);
       return;
@@ -851,8 +855,14 @@ const checkForUnicode = (value) => {
     finalFormData.append("parent_title", finalUpdateData.parent_title);
     finalFormData.append("parent_name", finalUpdateData.parent_name);
     finalFormData.append("child_relation", finalUpdateData.child_relation);
-    finalFormData.append("beneficiary_age", (Number(nepaliToEnglishNumber(finalUpdateData.beneficiary_age))));
-    finalFormData.append("registration_number", finalUpdateData.registration_number);
+    finalFormData.append(
+      "beneficiary_age",
+      Number(nepaliToEnglishNumber(finalUpdateData.beneficiary_age))
+    );
+    finalFormData.append(
+      "registration_number",
+      finalUpdateData.registration_number
+    );
     finalFormData.append(
       "beneficiary_name_nepali",
       finalUpdateData.beneficiary_name_nepali
@@ -999,7 +1009,8 @@ const checkForUnicode = (value) => {
 
     finalUpdateData.infrastructure_photo.length
       ? finalUpdateData.infrastructure_photo.map((i) =>
-          finalFormData.append("infrastructure_photo", i, i.name))
+          finalFormData.append("infrastructure_photo", i, i.name)
+        )
       : null;
     const baseUrl = process.env.REACT_APP_API_SERVER_URL;
     axios
@@ -1017,7 +1028,6 @@ const checkForUnicode = (value) => {
       });
   };
 
-
   // Function to handle checkbox change
   const handleCheckboxChange = () => {
     // Update the state with the opposite value of the current state
@@ -1029,8 +1039,12 @@ const checkForUnicode = (value) => {
 
   useEffect(() => {
     const curDate = new Date();
-    const day = curDate.getDate() > 9 ? curDate.getDate() : `0${curDate.getDate()}`;
-    const month = curDate.getMonth() + 1 > 9 ? curDate.getMonth() + 1 : `0${curDate.getMonth() + 1}`;
+    const day =
+      curDate.getDate() > 9 ? curDate.getDate() : `0${curDate.getDate()}`;
+    const month =
+      curDate.getMonth() + 1 > 9
+        ? curDate.getMonth() + 1
+        : `0${curDate.getMonth() + 1}`;
     const year = curDate.getFullYear();
 
     // This arrangement can be altered based on how we want the date's format to appear.
@@ -1200,8 +1214,8 @@ const checkForUnicode = (value) => {
             <div className={styles.shortGeneralInfo}>
               <img className={styles.ideaIcon} src={Ideaicon} alt="" />
               <p className={styles.ideaPara}>
-                भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान
-                सम्झौता-पत्र (दफा ३ को उपदफा ५ सँँग सम्बन्धित)
+                विपद् प्रभावितको अस्थायी आवास निर्माणका लागि अनुदान सम्झौता-पत्र
+                (दफा ३ को उपदफा ५ सँँग सम्बन्धित)
               </p>
             </div>
             {/* <div className={styles.infoBar}>
@@ -1353,9 +1367,7 @@ const checkForUnicode = (value) => {
                           onChange={(value: string) => {
                             setData({
                               ...data,
-                              application_date: value
-
-
+                              application_date: value,
                             });
                           }}
                           options={{
@@ -1398,7 +1410,7 @@ const checkForUnicode = (value) => {
                     setData({
                       ...data,
                       entry_date_bs: value,
-                      operating_municipality_signed_date: value
+                      operating_municipality_signed_date: value,
                     });
                   }}
                   options={{
@@ -1417,39 +1429,42 @@ const checkForUnicode = (value) => {
                   flex: 1,
                 }}
               >
-                <div style={{ display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: "5px" }}>
-
-                <span style={{ fontSize: "14px" }}>दर्ता नम्बर:</span>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <span style={{ fontSize: "14px" }}>दर्ता नम्बर:</span>
                 </div>
                 <input
-                      onBlur={handleFormData}
-                      // onFocus={nepaliInput}
-                      data-nepalify={"not inialized"}
-                      id="registration_number"
-                      type="text"
-                      name="registration_number"
-                      // value={data.registration_number}
-                      className={styles.inputClassName}
-                      // onChange={handleFormData}
-                      style={
-                        errorFields.registration_number
-                          ? {
-                            border: '0.5px solid black',
-                              borderBottom: "2px dotted red",
-                              height: "34px",
-                              width: "100%",
-                            }
-                          : { height: "34px",
-                            width: "100%",
-                            border: '0.5px solid black',
-                            background: 'white' }
-                      }
-                    />
-
-
+                  onBlur={handleFormData}
+                  // onFocus={nepaliInput}
+                  data-nepalify={"not inialized"}
+                  id="registration_number"
+                  type="text"
+                  name="registration_number"
+                  // value={data.registration_number}
+                  className={styles.inputClassName}
+                  // onChange={handleFormData}
+                  style={
+                    errorFields.registration_number
+                      ? {
+                          border: "0.5px solid black",
+                          borderBottom: "2px dotted red",
+                          height: "34px",
+                          width: "100%",
+                        }
+                      : {
+                          height: "34px",
+                          width: "100%",
+                          border: "0.5px solid black",
+                          background: "white",
+                        }
+                  }
+                />
               </div>
               <h2 style={{ textDecoration: "underline" }}>
                 क. प्रथम पक्ष (लाभग्राही)
@@ -1711,10 +1726,9 @@ const checkForUnicode = (value) => {
                     </div>
 
                     <input
-                      data-nepalify={'not inialized'}
+                      data-nepalify={"not inialized"}
                       onBlur={handleFormData}
                       onFocus={nepaliInput}
-
                       id="beneficiary_age"
                       type="text"
                       name="beneficiary_age"
@@ -1730,14 +1744,15 @@ const checkForUnicode = (value) => {
                           : { height: "34px", width: "auto" }
                       }
                     />
-                      {errorFields.beneficiary_age && data.beneficiary_age ? (
-                      <p style={{ margin: "0", color: "red", fontSize: '14px' }}>
-                       उमेर नम्बरमा हुनुपर्छ
+                    {errorFields.beneficiary_age && data.beneficiary_age ? (
+                      <p
+                        style={{ margin: "0", color: "red", fontSize: "14px" }}
+                      >
+                        उमेर नम्बरमा हुनुपर्छ
                       </p>
                     ) : (
                       ""
                     )}
-
                   </div>
 
                   <div
@@ -1796,8 +1811,7 @@ const checkForUnicode = (value) => {
                     <input
                       onBlur={handleFormData}
                       onFocus={nepaliInput}
-
-                      data-nepalify={'not inialized'}
+                      data-nepalify={"not inialized"}
                       id="beneficiary_contact_number"
                       type="text"
                       name="beneficiary_contact_number"
@@ -1810,9 +1824,12 @@ const checkForUnicode = (value) => {
                       }
                       className={styles.inputClassName}
                     />
-                      {errorFields.beneficiary_contact_number && data.beneficiary_contact_number ? (
-                      <p style={{ margin: "0", color: "red", fontSize: '14px' }}>
-                       सम्पर्क नम्बर नम्बरमा हुनुपर्छ
+                    {errorFields.beneficiary_contact_number &&
+                    data.beneficiary_contact_number ? (
+                      <p
+                        style={{ margin: "0", color: "red", fontSize: "14px" }}
+                      >
+                        सम्पर्क नम्बर नम्बरमा हुनुपर्छ
                       </p>
                     ) : (
                       ""
@@ -2672,7 +2689,7 @@ const checkForUnicode = (value) => {
                   <span style={{ fontSize: "16px" }}>
                     {`${englishToNepaliNumber(
                       4
-                    )}. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसााइँँसराइको विवरण उल्लेेख गर्नेे)`}
+                    )}. स्थायी ठेेगाना र नागरिकतामा उल्लिखित ठेेगाना फरक भएमा (बसाइँँसराइको विवरण उल्लेेख गर्नेे)`}
                   </span>
                   <div
                     className={styles.formElements}
@@ -2916,13 +2933,20 @@ const checkForUnicode = (value) => {
                               : { height: "34px", width: "100%" }
                           }
                         />
-                         {errorFields.withness_contact_number && data.withness_contact_number ? (
-                      <p style={{ margin: "0", color: "red", fontSize: '14px' }}>
-                       सम्पर्क नम्बर नम्बरमा हुनुपर्छ
-                      </p>
-                    ) : (
-                      ""
-                    )}
+                        {errorFields.withness_contact_number &&
+                        data.withness_contact_number ? (
+                          <p
+                            style={{
+                              margin: "0",
+                              color: "red",
+                              fontSize: "14px",
+                            }}
+                          >
+                            सम्पर्क नम्बर नम्बरमा हुनुपर्छ
+                          </p>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   </div>
@@ -3387,7 +3411,7 @@ const checkForUnicode = (value) => {
                       {" "}
                       {`${englishToNepaliNumber(
                         2
-                      )}. पूूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेेको संंरचनाको फोटो`}
+                      )}. पूर्ण रूपलेे क्षति भएको वा आंंशिक क्षति भएता पनि बसोवास गर्न योग्य नरहेको संंरचनाको फोटो`}
                     </span>
                   </div>
 
@@ -3573,7 +3597,7 @@ const checkForUnicode = (value) => {
                         data.is_beneficiary_available_to_sign
                           ? englishToNepaliNumber(4)
                           : englishToNepaliNumber(3)
-                      }. प्रहरीको मुुचुल्का (प्रत्येेक घरधुुरीको मुुचुल्का नभएको अवस्थामा सामुुहिक मुुचुल्का पनि मान्य हुुनेे)`}
+                      }. प्रहरीको मुचुल्का (प्रत्येेक घरधुरीको मुचुल्का नभएको अवस्थामा सामुहिक मुचुल्का पनि मान्य हुनेे)`}
                     </span>
                   </div>
 
