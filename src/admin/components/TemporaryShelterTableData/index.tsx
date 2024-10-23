@@ -92,9 +92,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       offset: params.offset,
       count: true,
       search: params.search,
+      beneficiary_province: params.province,
       beneficiary_district: params.district,
       beneficiary_municipality: params.municipality,
       beneficiary_ward: params.ward,
+      is_second_tranche_provided: params.is_second_tranche_provided,
+      is_first_tranche_provided: params.is_first_tranche_provided
     }),
     onSuccess: ({ response, props, params }) => {
       params.fetchedData(response);
@@ -312,6 +315,8 @@ const TemporaryShelterTableData = (props) => {
     municipality: "",
     ward: "",
     id: "",
+    is_second_tranche_provided: "",
+    is_first_tranche_provided: ""
   });
   const loadingCondition = (boolean) => {
     setLoader(boolean);
@@ -345,11 +350,15 @@ const TemporaryShelterTableData = (props) => {
   const handleSearch = () => {
     setLoader(true);
     setIsFilteredEnabled(true);
-
+console.log("This is filter data", filterData);
       props.requests.getEarthquakeRequest.do({
         fetchedData: handleFetchedData,
         search: filterData.id,
         offset,
+        province: props.user.isSuperuser ? filterData.district
+        ? ""
+        : filterData.province && filterData.province.value
+        : props.user.profile.province,
         district: props.user.isSuperuser ? filterData.municipality
           ? ""
           : filterData.district && filterData.district.value
@@ -359,6 +368,8 @@ const TemporaryShelterTableData = (props) => {
           : filterData.municipality && filterData.municipality.value
           : props.user.profile.municipality,
         ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
+        is_first_tranche_provided: filterData.is_first_tranche_provided ? filterData.is_first_tranche_provided.value : "",
+        is_second_tranche_provided: filterData.is_second_tranche_provided ? filterData.is_second_tranche_provided.value : "",
         countData: handleCount,
       });
     // }
@@ -711,15 +722,23 @@ const dateFormatter = (date) => {
       // ward: "",
     });
   };
+  console.log("This is disable search", disableSearch);
   const handleDropdown = (name, value) => {
+    setDisableSearch(false);
+    // if (props.user.isSuperuser) {
+    //   if (!filterData.province || !filterData.district || !filterData.municipality || !filterData.ward || !filterData.id || !filterData.is_first_tranche_provided || !filterData.is_second_tranche_provided) {
+    //     setDisableSearch(true);
+    //     } else {
+    //       setDisableSearch(false);
+    //     }
+    // }
+    // if (value === null && !filterData.id) {
+    //   setDisableSearch(true);
+    // }
+// if ((!props.user.isSuperuser && (value === null && !filterData.id)) || (!props.user.isSuperuser && (value === null && !filterData.is_first_tranche_provided)) || ((!props.user.isSuperuser && (value === null && !filterData.is_second_tranche_provided)))) {
+// setDisableSearch(true);
+// }
     if (name === "province") {
-      if (props.user.isSuperuser) {
-        setDisableSearch(false);
-      }
-      if (value === null && !filterData.id) {
-        setDisableSearch(true);
-      }
-
       setFilterData({
         ...filterData,
         [name]: value === null ? "" : value,
@@ -748,6 +767,19 @@ const dateFormatter = (date) => {
         [name]: value === null ? "" : value,
         ward: "",
       });
+    } else if (name === "is_first_tranche_provided") {
+      setFilterData({
+        ...filterData,
+        [name]: value === null ? "" : value,
+        is_second_tranche_provided: ""
+
+      });
+    } else if (name === "is_second_tranche_provided") {
+      setFilterData({
+        ...filterData,
+        [name]: value === null ? "" : value,
+
+      });
     } else {
       if (!props.user.isSuperuser) {
         setDisableSearch(false);
@@ -772,6 +804,8 @@ const dateFormatter = (date) => {
       municipality: "",
       ward: "",
       id: "",
+      is_second_tranche_provided: "",
+      is_first_tranche_provided: ""
     });
     props.requests.getEarthquakeRequest.do({
       fetchedData: handleFetchedData,
@@ -779,10 +813,20 @@ const dateFormatter = (date) => {
       municipality: "",
       ward: "",
       search: "",
+      is_second_tranche_provided: "",
+      is_first_tranche_provided: "",
       countData: handleCount,
     });
   };
-
+console.log("WardList", filterData);
+const yesNoOptionList = [
+  {
+    label: 'हो', value: 1
+  },
+  {
+    label: 'छैन', value: 2
+  }
+];
 
   return (
     <>
@@ -809,7 +853,9 @@ const dateFormatter = (date) => {
       >
         <div className={styles.credentialSearch}>
 
-          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap' }}>
+          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '5px' }}>
           <div style={{ width: "230px" }}>
               <Select
                 isClearable
@@ -926,6 +972,51 @@ const dateFormatter = (date) => {
                 }}
               />
             </div>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+            <div style={{ width: "230px" }}>
+              <Select
+                isClearable
+                value={filterData.is_first_tranche_provided}
+                name="is_first_tranche_provided"
+                placeholder={"पहिलो किस्ताको रकम लिइएको हो?"}
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                options={yesNoOptionList}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+              />
+            </div>
+            <div style={{ width: "230px" }}>
+              <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.is_second_tranche_provided}
+                name="is_second_tranche_provided"
+                placeholder={"दोस्रो किस्ताको रकम लिइएको हो"}
+
+                options={filterData.is_first_tranche_provided ? yesNoOptionList : []}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+              />
+            </div>
             <FormControl>
               {/* <InputLabel>
                                 Test
@@ -952,6 +1043,8 @@ const dateFormatter = (date) => {
                 }}
               />
             </FormControl>
+            </div>
+            </div>
             <div className={styles.saveOrAddButtons}>
               <button
                 className={styles.submitButtons}

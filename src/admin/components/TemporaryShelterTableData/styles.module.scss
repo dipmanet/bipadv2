@@ -39,6 +39,8 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 .credentialSearch {
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: flex-start !important;
+  
   // padding-bottom: 12px;
     .saveOrAddButtons {
         display: flex;
@@ -87,6 +89,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
         justify-content: flex-end;
         align-items: center;
         padding: 10px 4px;
+        padding-top: 20px;
 
     }
 
