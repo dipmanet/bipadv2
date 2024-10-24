@@ -350,7 +350,7 @@ const TemporaryShelterTableData = (props) => {
   const handleSearch = () => {
     setLoader(true);
     setIsFilteredEnabled(true);
-console.log("This is filter data", filterData);
+
       props.requests.getEarthquakeRequest.do({
         fetchedData: handleFetchedData,
         search: filterData.id,
@@ -722,7 +722,7 @@ const dateFormatter = (date) => {
       // ward: "",
     });
   };
-  console.log("This is disable search", disableSearch);
+
   const handleDropdown = (name, value) => {
     setDisableSearch(false);
     // if (props.user.isSuperuser) {
@@ -818,13 +818,13 @@ const dateFormatter = (date) => {
       countData: handleCount,
     });
   };
-console.log("WardList", filterData);
+
 const yesNoOptionList = [
   {
-    label: 'हो', value: 1
+    label: 'हो', value: 2
   },
   {
-    label: 'छैन', value: 2
+    label: 'छैन', value: 3
   }
 ];
 
