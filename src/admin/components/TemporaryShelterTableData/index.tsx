@@ -92,7 +92,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       offset: params.offset,
       count: true,
       search: params.search,
-      beneficiary_province: params.province,
+      beneficiary_district__province: params.province,
       beneficiary_district: params.district,
       beneficiary_municipality: params.municipality,
       beneficiary_ward: params.ward,
@@ -771,8 +771,6 @@ const dateFormatter = (date) => {
       setFilterData({
         ...filterData,
         [name]: value === null ? "" : value,
-        is_second_tranche_provided: ""
-
       });
     } else if (name === "is_second_tranche_provided") {
       setFilterData({
@@ -1005,7 +1003,7 @@ const yesNoOptionList = [
                 name="is_second_tranche_provided"
                 placeholder={"दोस्रो किस्ताको रकम लिइएको हो"}
 
-                options={filterData.is_first_tranche_provided ? yesNoOptionList : []}
+                options={yesNoOptionList}
                 className="dropdownZindex"
                 menuPortalTarget={document.body}
                 styles={{
