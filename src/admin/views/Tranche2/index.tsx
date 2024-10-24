@@ -45,8 +45,8 @@ import {
   userSelector,
 } from "#selectors";
 import { SetEpidemicsPageAction } from "#actionCreators";
-import ADToBS from '#utils/AdBSConverter/AdToBs';
-import BSToAD from '#utils/AdBSConverter/BsToAd';
+import ADToBS from "#utils/AdBSConverter/AdToBs";
+import BSToAD from "#utils/AdBSConverter/BsToAd";
 // import { ADToBS } from "bikram-sambat-js";
 import {
   ClientAttributes,
@@ -217,7 +217,7 @@ const Tranche2 = (props) => {
     temporary_shelter_photo_front: false,
     temporary_shelter_photo_back: false,
     application_file: false,
-    temporary_shelter_damaged_house: false
+    temporary_shelter_damaged_house: false,
   });
   const {
     user,
@@ -237,11 +237,10 @@ const Tranche2 = (props) => {
     });
     const file = e.target.files[0];
     const imageValidation = {
-
       temporary_shelter_photo_front: false,
       temporary_shelter_photo_back: false,
       application_file: false,
-      temporary_shelter_damaged_house: false
+      temporary_shelter_damaged_house: false,
     };
     const allowedExtensionsFile = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
     const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
@@ -551,8 +550,12 @@ const Tranche2 = (props) => {
   };
   useEffect(() => {
     const curDate = new Date();
-    const day = curDate.getDate() > 9 ? curDate.getDate() : `0${curDate.getDate()}`;
-    const month = curDate.getMonth() + 1 > 9 ? curDate.getMonth() + 1 : `0${curDate.getMonth() + 1}`;
+    const day =
+      curDate.getDate() > 9 ? curDate.getDate() : `0${curDate.getDate()}`;
+    const month =
+      curDate.getMonth() + 1 > 9
+        ? curDate.getMonth() + 1
+        : `0${curDate.getMonth() + 1}`;
     const year = curDate.getFullYear();
 
     // This arrangement can be altered based on how we want the date's format to appear.
@@ -739,7 +742,7 @@ const Tranche2 = (props) => {
                       <h2>अनुुसूूची ४</h2>
                       <h2>दफा ४ को उपदफा(२) सँँग सम्बन्धित</h2>
                       <h2 style={{ textDecoration: "underline" }}>
-                        भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन
+                        विपद् प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन
                         गरेेको निवेेदन
                       </h2>
                     </div>
@@ -764,7 +767,7 @@ const Tranche2 = (props) => {
                         lineHeight: "30px",
                       }}
                     >
-                      <span>श्रीमान प्रमुुख प्रशासकीय अधिकृृतज्यूू,</span>
+                      <span>श्रीमान प्रमुख प्रशासकीय अधिकृतज्यू,</span>
                       <span>
                         {fetchedData &&
                           municipalityNameConverter(
@@ -782,7 +785,7 @@ const Tranche2 = (props) => {
                       }}
                     >
                       <span>
-                        विषयः भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता
+                        विषयः विपद् प्रभावितको अस्थायी आवासको दोस्रो किस्ता
                         पाऊँँ ।
                       </span>
                     </div>
@@ -800,7 +803,7 @@ const Tranche2 = (props) => {
                     </div>
                     <div className="formDetails123">
                       <p style={{ margin: 0 }}>
-                        {`भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लाागि ${districtNameConverter(
+                        {`विपद् प्रभावितको अस्थायी आवास निर्माणका लाागि ${districtNameConverter(
                           fetchedData.beneficiaryDistrict
                         )} जिल्ला
                                                              ${municipalityNameConverter(
@@ -810,7 +813,7 @@ const Tranche2 = (props) => {
                         )}
                                                               गाउँँ/टोल ${
                                                                 fetchedData.toleName
-                                                              } बस्नेे श्री ${
+                                                              } बस्ने श्री ${
                           fetchedData.grandParentName
                         } को ${fetchedData.grandChildRelation} श्री ${
                           fetchedData.parentName
@@ -823,7 +826,7 @@ const Tranche2 = (props) => {
                                                                  `}
                         मिति {dateFormatter(fetchedData.entryDateBs)} मा भएको
                         अस्थायी आवास निर्मााण सम्झौता बमोजिम प्रथम किस्ता रकमबाट
-                        आवास निर्मााण भइरहेेको/सम्पन्न भएकोलेे सो को फोटो यसैै
+                        आवास निर्मााण भइरहेको/सम्पन्न भएकोलेे सो को फोटो यसैै
                         साथ संंलग्न गरी दोस्रो किस्ता भुक्तानी पाउनको लागि
                         निवेेदन पेेश गरेेको छुु ।
                       </p>
@@ -861,8 +864,8 @@ const Tranche2 = (props) => {
                           }}
                         >
                           <span>
-                            नोटः अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो यसैै
-                            निवेेदनका साथ संंलग्न गर्नेे ।
+                            नोटः अस्थायी आवासको दुई तर्फका मोहोडाको फोटो यसैै
+                            निवेदनका साथ संंलग्न गर्ने ।
                           </span>
                         </div>
                       </div>
@@ -926,16 +929,16 @@ const Tranche2 = (props) => {
                         style={{ fontSize: "16px", lineHeight: "30px" }}
                       >
                         <p style={{ margin: 0 }}>
-                          {`भूूकम्प प्रभावितको अस्थायी आवास निर्मााणका लाागि लाभग्राही श्री ${
+                          {`विपद् प्रभावितको अस्थायी आवास निर्मााणका लाागि लाभग्राही श्री ${
                             fetchedData.beneficiaryNameNepali
                           }लेे दोसरो किस्ता भुक्तानीको
-                                                लाागि निवेेदन पेेश गरेेकोलेे अस्थायी आवासको प्राविधिकको स्थलगत निरीक्षणबाट भूूकम्प प्रभावित घरपरिवारलाई अस्थायी
-                                                आवास निर्मााण अनुुदान कार्यविधि, २०८० तथा मिति ${dateFormatter(
+                                                लाागि निवेेदन पेेश गरेकोलेे अस्थायी आवासको प्राविधिकको स्थलगत निरीक्षणबाट विपद् प्रभावित घरपरिवारलाई अस्थायी
+                                                आवास निर्मााण अनुदान मापदण्ड, २०८१ तथा मिति ${dateFormatter(
                                                   fetchedData.entryDateBs
                                                 )} `}
-                          मा भएको सम्झौता बमोजिम नैै अस्थायी आवास निमाण
-                          भइरहेेको/समपन्न भएको देेखिएको हुँँदा निजलाई दोस्रो
-                          किस्ता भुक्तानी दिन उपयुुक्त छ भनी सिफाारिस गर्दछौंं।
+                          मा भएको सम्झौता बमोजिम नै अस्थायी आवास निमाण
+                          भइरहेको/समपन्न भएको देेखिएको हुँदा निजलाई दोस्रो
+                          किस्ता भुक्तानी दिन उपयुक्त छ भनी सिफाारिस गर्दछौंं।
                         </p>
                       </div>
                     </div>
@@ -1060,7 +1063,6 @@ const Tranche2 = (props) => {
                             flexDirection: "column",
                           }}
                         >
-
                           <div
                             style={{
                               display: "flex",
@@ -1083,7 +1085,6 @@ const Tranche2 = (props) => {
                             />
                           </div>
                         </div>
-
                       </div>
                     </div>
                     <div
@@ -1094,7 +1095,7 @@ const Tranche2 = (props) => {
                         pageBreakBefore: "always",
                       }}
                     >
-                      <h3>अस्थायी आवासको दुुई तर्फका मोहोडाको फोटो</h3>
+                      <h3>अस्थायी आवासको दुई तर्फका मोहोडाको फोटो</h3>
                       <div style={{ display: "flex", gap: "60px" }}>
                         <div
                           style={{
@@ -1236,7 +1237,7 @@ const Tranche2 = (props) => {
                       <h1>अनुुसूूची ४</h1>
                       <h1>दफा ४(२) सँँग सम्बन्धित</h1>
                       <h1 style={{ textDecoration: "underline" }}>
-                        भूूकम्प प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन
+                        विपद् प्रभावितको अस्थायी आवासको दोस्रो किस्ता पाउन
                         गरेेको निवेेदन
                       </h1>
                     </div>
@@ -1380,7 +1381,7 @@ const Tranche2 = (props) => {
                             ...data,
                             entry_date_bs: value,
                             ward_officer_signed_date: value,
-                            engineer_signed_date: value
+                            engineer_signed_date: value,
                           });
                         }}
                         options={{
@@ -1581,12 +1582,7 @@ const Tranche2 = (props) => {
                         gap: "20px",
                       }}
                     >
-                      <h2>
-                        {" "}
-                        {`${englishToNepaliNumber(
-                          1
-                        )}. भत्किएको घर`}
-                      </h2>
+                      <h2> {`${englishToNepaliNumber(1)}. भत्किएको घर`}</h2>
                       <div
                         style={{
                           display: "flex",
@@ -1609,9 +1605,7 @@ const Tranche2 = (props) => {
                             }}
                           >
                             <span style={{ color: "red" }}>*</span>
-                            <span style={{ fontSize: "20px" }}>
-                               फोटो:
-                            </span>
+                            <span style={{ fontSize: "20px" }}>फोटो:</span>
                           </div>
 
                           <div
@@ -1669,7 +1663,6 @@ const Tranche2 = (props) => {
                             )}
                           </div>
                         </div>
-
                       </div>
                     </div>
                     <div
