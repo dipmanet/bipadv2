@@ -722,7 +722,7 @@ const dateFormatter = (date) => {
       // ward: "",
     });
   };
- 
+
   const handleDropdown = (name, value) => {
     setDisableSearch(false);
     // if (props.user.isSuperuser) {
