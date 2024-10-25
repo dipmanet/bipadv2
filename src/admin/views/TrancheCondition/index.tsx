@@ -229,7 +229,7 @@ useEffect(() => {
 const handleSubmit = () => {
     setLoading(true);
     if (fetchedData.allStatus) {
-        fetch(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-overall-status/`, {
+        fetch(`${process.env.REACT_APP_API_SERVER_URL}/${fetchedData.allStatus.id}/temporary-shelter-overall-status/`, {
             credentials: 'include',
             mode: 'cors',
             method: 'PATCH',

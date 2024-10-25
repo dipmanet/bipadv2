@@ -66,10 +66,10 @@ import {
 import { AppState } from "#types";
 import { englishToNepaliNumber } from "nepali-number";
 import eyeSolid from "#resources/icons/eye-solid.svg";
-import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 import Reset from "#resources/icons/reset.svg";
 import ADToBS from '#utils/AdBSConverter/AdToBs';
 import BSToAD from '#utils/AdBSConverter/BsToAd';
+import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 // import { ADToBS } from "bikram-sambat-js";
 import { tableTitleRef } from "./utils";
 import styles from "./styles.module.scss";
@@ -97,7 +97,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       beneficiary_municipality: params.municipality,
       beneficiary_ward: params.ward,
       is_second_tranche_provided: params.is_second_tranche_provided,
-      is_first_tranche_provided: params.is_first_tranche_provided
+      is_first_tranche_provided: params.is_first_tranche_provided,
+      all_status__funding_source: params.all_status__funding_source,
+      all_status__payment_received_status: params.all_status__payment_received_status,
+      all_status__tranche_two_status: params.all_status__tranche_two_status,
+      all_status__tranche_one_status: params.all_status__tranche_one_status,
+      all_status__overall_beneficiary_status: params.all_status__overall_beneficiary_status,
+      event: params.event
     }),
     onSuccess: ({ response, props, params }) => {
       params.fetchedData(response);
@@ -314,6 +320,8 @@ const [tranche1StatusList, setTranche1StatusList] = useState([]);
 const [tranche2StatusList, setTranche2StatusList] = useState([]);
 const [paymentReceiveList, setPaymentReceiveList] = useState([]);
 const [fundingSourceList, setFundingSourceList] = useState([]);
+const [fetchIncident, setFetchIncident] = useState([]);
+
   const [filterData, setFilterData] = useState({
     province: "",
     district: "",
@@ -321,7 +329,14 @@ const [fundingSourceList, setFundingSourceList] = useState([]);
     ward: "",
     id: "",
     is_second_tranche_provided: "",
-    is_first_tranche_provided: ""
+    is_first_tranche_provided: "",
+    all_status__funding_source: "",
+    all_status__payment_received_status: "",
+    all_status__tranche_two_status: "",
+    all_status__tranche_one_status: "",
+    all_status__overall_beneficiary_status: "",
+    event: ""
+
   });
   const loadingCondition = (boolean) => {
     setLoader(boolean);
@@ -375,6 +390,12 @@ const [fundingSourceList, setFundingSourceList] = useState([]);
         ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
         is_first_tranche_provided: filterData.is_first_tranche_provided ? filterData.is_first_tranche_provided.value : "",
         is_second_tranche_provided: filterData.is_second_tranche_provided ? filterData.is_second_tranche_provided.value : "",
+        all_status__funding_source: filterData.all_status__funding_source ? filterData.all_status__funding_source.value : "",
+        all_status__payment_received_status: filterData.all_status__payment_received_status ? filterData.all_status__payment_received_status.value : "",
+        all_status__tranche_two_status: filterData.all_status__tranche_two_status ? filterData.all_status__tranche_two_status.value : "",
+        all_status__tranche_one_status: filterData.all_status__tranche_one_status ? filterData.all_status__tranche_one_status.value : "",
+        all_status__overall_beneficiary_status: filterData.all_status__overall_beneficiary_status ? filterData.all_status__overall_beneficiary_status.value : "",
+        event: filterData.event ? filterData.event.value : "",
         countData: handleCount,
       });
     // }
@@ -810,7 +831,13 @@ const dateFormatter = (date) => {
       ward: "",
       id: "",
       is_second_tranche_provided: "",
-      is_first_tranche_provided: ""
+      is_first_tranche_provided: "",
+      all_status__funding_source: "",
+      all_status__payment_received_status: "",
+      all_status__tranche_two_status: "",
+      all_status__tranche_one_status: "",
+      all_status__overall_beneficiary_status: "",
+      event: ""
     });
     props.requests.getEarthquakeRequest.do({
       fetchedData: handleFetchedData,
@@ -820,6 +847,12 @@ const dateFormatter = (date) => {
       search: "",
       is_second_tranche_provided: "",
       is_first_tranche_provided: "",
+      all_status__funding_source: "",
+      all_status__payment_received_status: "",
+      all_status__tranche_two_status: "",
+      all_status__tranche_one_status: "",
+      all_status__overall_beneficiary_status: "",
+      event: "",
       countData: handleCount,
     });
   };
@@ -854,6 +887,9 @@ useEffect(() => {
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/payment-received-status/`, { credentials: 'include' })
   .then(res => res.json())
   .then(final_resp => setPaymentReceiveList(final_resp.results));
+  fetch(`${process.env.REACT_APP_API_SERVER_URL}/event/?fields=id,title`, { credentials: 'include' })
+.then(res => res.json())
+.then(final_resp => setFetchIncident(final_resp.results));
     }, []);
   return (
     <>
