@@ -234,6 +234,17 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
         id: '',
     },
+
+    {
+        name: 'add-new-temporary-shelter-enrollment-data-preview',
+        title: 'Add New Temporary shelter enrollment data preview',
+        titleNep: 'Add New Temporary shelter enrollment data preview',
+        path: '/admin/temporary-shelter-enrollment-form/add-tranche-condition/:id',
+        load: () => import('../admin/views/TrancheCondition'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: '',
+    },
     {
         name: 'add-view-tranche1',
         title: 'Add View Tranche1',

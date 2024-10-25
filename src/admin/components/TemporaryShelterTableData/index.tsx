@@ -435,10 +435,11 @@ const dateFormatter = (date) => {
   };
   useEffect(() => {
     if (fetchedData) {
-      const tableRows = fetchedData.map((row) => {
+      const tableRows = fetchedData.map((row, index) => {
         const epidemicObj = {
           action: null,
           id: row.id,
+          eventTitle: row.eventTitle,
           paNumber: englishToNepaliNumber(row.paNumber),
           registrationNumber: row.registrationNumber,
           entryDateBs: row.entryDateBs,
@@ -459,14 +460,15 @@ const dateFormatter = (date) => {
           temporaryShelterLandTole: row.temporaryShelterLandTole,
 
           amount: row.firstTrancheEnrollmentUpload ? "हो" : "छैन",
+          firstTrancheObtainedDate: row.firstTrancheEnrollmentUpload
+          ? dateFormatter(
+              ADToBS(row.firstTrancheEnrollmentUpload.createdOn.split("T")[0])
+            )
+          : "-",
           secondTrancheRegisteredDate: row.secondTrancheEnrollmentForm
             ? dateFormatter(row.secondTrancheEnrollmentForm.entryDateBs)
             : "-",
-          firstTrancheObtainedDate: row.firstTrancheEnrollmentUpload
-            ? dateFormatter(
-                ADToBS(row.firstTrancheEnrollmentUpload.createdOn.split("T")[0])
-              )
-            : "-",
+
           secondTrancheEnrollmentForm: row.secondTrancheEnrollmentUpload
             ? "हो"
             : "छैन",
@@ -977,7 +979,7 @@ const yesNoOptionList = [
                 isClearable
                 value={filterData.is_first_tranche_provided}
                 name="is_first_tranche_provided"
-                placeholder={"पहिलो किस्ताको रकम लिइएको हो?"}
+                placeholder={"पहिलो किस्ताको फारम अपलोड गरिएको हो?"}
                 onChange={(value, actionMeta) =>
                   handleDropdown(actionMeta.name, value)
                 }
@@ -1001,7 +1003,7 @@ const yesNoOptionList = [
                 }
                 value={filterData.is_second_tranche_provided}
                 name="is_second_tranche_provided"
-                placeholder={"दोस्रो किस्ताको रकम लिइएको हो"}
+                placeholder={"दोस्रो किस्ताको फारम अपलोड गरिएको हो?"}
 
                 options={yesNoOptionList}
                 className="dropdownZindex"
@@ -1442,7 +1444,6 @@ const yesNoOptionList = [
                               </TableCell>
                             );
                           }
-
                           if (val === "action") {
                             return (
                               <TableCell
@@ -1470,6 +1471,7 @@ const yesNoOptionList = [
                               </TableCell>
                             );
                           }
+
                           return (
                             <>
                               <TableCell

@@ -68,7 +68,7 @@ const TemporaryShelterPreview = (props) => {
   const [validationError, setvalidationError] = useState(null);
 
   const [loadPrint, setLoadPrint] = useState(false);
-
+  const [fetchIncident, setFetchIncident] = useState([]);
   // const [formError, setFormError] = useState(ErrorObj);
 
   const [fetchedData, setFetchedData] = useState(null);
@@ -225,15 +225,29 @@ const TemporaryShelterPreview = (props) => {
                           style={{ cursor: 'pointer' }}
                           role="button"
                           onClick={() => {
-                if (fetchedData.secondTrancheEnrollmentForm) {
-                  navigate(
-                    `/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`,
-                  );
-                }
-              }}
+                            if (fetchedData.secondTrancheEnrollmentForm) {
+                            navigate(
+                                `/admin/temporary-shelter-enrollment-form/add-tranche2-file-upload/${routeId}`,
+                            );
+                            }
+                        }}
                       >
                           <img className="listSvg123" src={ListSvg} alt="" />
                           <p className="reportingText123">दोस्रो किस्ता फारम अपलोड</p>
+                          <p className="grayCircle123" />
+                      </div>
+                      <div
+                          className="reporting123"
+                          style={{ cursor: 'pointer' }}
+                          role="button"
+                          onClick={() => {
+                            navigate(
+                              `/admin/temporary-shelter-enrollment-form/add-tranche-condition/${routeId}`,
+                            );
+                        }}
+                      >
+                          <img className="listSvg123" src={ListSvg} alt="" />
+                          <p className="reportingText123">अवस्था</p>
                           <p className="grayCircle123" />
                       </div>
                   </div>
@@ -247,6 +261,9 @@ const TemporaryShelterPreview = (props) => {
                           >
                 डाटा तालिका हेर्नुहोस्
                           </button>
+                      </div>
+                      <div style={{ marginBottom: '10px' }}>
+                          <h2>{`घटना: ${fetchedData && fetchedData.eventTitle ? fetchedData.eventTitle : '-'}`}</h2>
                       </div>
                       {/* <div className="shortGeneralInfo123">
                             <img className="ideaIcon123" src={Ideaicon} alt="" />

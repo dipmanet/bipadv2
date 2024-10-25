@@ -700,6 +700,20 @@ const Tranche2 = (props) => {
               <p className="reportingText123">दोस्रो किस्ता फारम अपलोड</p>
               <p className="grayCircle123" />
             </div>
+            <div
+                          className="reporting123"
+                          style={{ cursor: 'pointer' }}
+                          role="button"
+                          onClick={() => {
+                            navigate(
+                              `/admin/temporary-shelter-enrollment-form/add-tranche-condition/${routeId}`,
+                            );
+                        }}
+            >
+                          <img className="listSvg123" src={ListSvg} alt="" />
+                          <p className="reportingText123">अवस्था</p>
+                          <p className="grayCircle123" />
+                      </div>
           </div>
 
           <div className={styles.mainForm}>
