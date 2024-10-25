@@ -309,6 +309,11 @@ const TemporaryShelterTableData = (props) => {
   const [count, setCount] = useState(null);
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
+  const [benificeryList, setBenificeryList] = useState([]);
+const [tranche1StatusList, setTranche1StatusList] = useState([]);
+const [tranche2StatusList, setTranche2StatusList] = useState([]);
+const [paymentReceiveList, setPaymentReceiveList] = useState([]);
+const [fundingSourceList, setFundingSourceList] = useState([]);
   const [filterData, setFilterData] = useState({
     province: "",
     district: "",
@@ -827,7 +832,29 @@ const yesNoOptionList = [
     label: 'छैन', value: 3
   }
 ];
+useEffect(() => {
+  fetch(`${process.env.REACT_APP_API_SERVER_URL}/overall-beneficiary-status/`, { credentials: 'include' })
+  .then(res => res.json())
+  .then(final_resp => setBenificeryList(final_resp.results));
 
+
+  fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-two-status/`, { credentials: 'include' })
+  .then(res => res.json())
+  .then(final_resp => setTranche2StatusList(final_resp.results));
+
+  fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-one-status/`, { credentials: 'include' })
+  .then(res => res.json())
+  .then(final_resp => setTranche1StatusList(final_resp.results));
+
+
+  fetch(`${process.env.REACT_APP_API_SERVER_URL}/funding-source/`, { credentials: 'include' })
+  .then(res => res.json())
+  .then(final_resp => setFundingSourceList(final_resp.results));
+
+  fetch(`${process.env.REACT_APP_API_SERVER_URL}/payment-received-status/`, { credentials: 'include' })
+  .then(res => res.json())
+  .then(final_resp => setPaymentReceiveList(final_resp.results));
+    }, []);
   return (
     <>
       {loader ? (
