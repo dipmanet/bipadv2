@@ -868,28 +868,49 @@ const yesNoOptionList = [
 useEffect(() => {
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/overall-beneficiary-status/`, { credentials: 'include' })
   .then(res => res.json())
-  .then(final_resp => setBenificeryList(final_resp.results));
+  .then(final_resp => {
+    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+    setBenificeryList(data);
+});
 
 
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-two-status/`, { credentials: 'include' })
   .then(res => res.json())
-  .then(final_resp => setTranche2StatusList(final_resp.results));
+
+  .then(final_resp => {
+    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+    setTranche2StatusList(data);
+});
 
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-one-status/`, { credentials: 'include' })
   .then(res => res.json())
-  .then(final_resp => setTranche1StatusList(final_resp.results));
+
+  .then(final_resp => {
+    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+    setTranche1StatusList(data);
+});
 
 
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/funding-source/`, { credentials: 'include' })
   .then(res => res.json())
-  .then(final_resp => setFundingSourceList(final_resp.results));
+  .then(final_resp => {
+    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+    setFundingSourceList(data);
+});
 
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/payment-received-status/`, { credentials: 'include' })
   .then(res => res.json())
-  .then(final_resp => setPaymentReceiveList(final_resp.results));
+  .then(final_resp => {
+    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+    setPaymentReceiveList(data);
+});
+
   fetch(`${process.env.REACT_APP_API_SERVER_URL}/event/?fields=id,title`, { credentials: 'include' })
 .then(res => res.json())
-.then(final_resp => setFetchIncident(final_resp.results));
+.then(final_resp => {
+  const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+  setFetchIncident(data);
+});
     }, []);
   return (
     <>
@@ -1106,6 +1127,155 @@ useEffect(() => {
                 }}
               />
             </FormControl>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+            <div style={{ width: "230px" }}>
+
+               <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.all_status__funding_source}
+                name="all_status__funding_source"
+                placeholder={"all_status__funding_source"}
+
+                options={fundingSourceList}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+               />
+            </div>
+            <div style={{ width: "230px" }}>
+
+
+               <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.all_status__payment_received_status}
+                name="all_status__payment_received_status"
+                placeholder={"all_status__payment_received_status"}
+
+                options={paymentReceiveList}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+               />
+            </div>
+            <div style={{ width: "230px" }}>
+
+
+               <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.all_status__tranche_two_status}
+                name="all_status__tranche_two_status"
+                placeholder={"all_status__tranche_two_status"}
+
+                options={tranche2StatusList}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+               />
+            </div>
+
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+            <div style={{ width: "230px" }}>
+
+
+               <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.all_status__tranche_one_status}
+                name="all_status__tranche_one_status"
+                placeholder={"all_status__tranche_one_status"}
+
+                options={tranche1StatusList}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+               />
+            </div>
+            <div style={{ width: "230px" }}>
+
+
+               <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.all_status__overall_beneficiary_status}
+                name="all_status__overall_beneficiary_status"
+                placeholder={"all_status__overall_beneficiary_status"}
+
+                options={benificeryList}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+               />
+            </div>
+            <div style={{ width: "230px" }}>
+
+
+               <Select
+                isClearable
+                onChange={(value, actionMeta) =>
+                  handleDropdown(actionMeta.name, value)
+                }
+                value={filterData.event}
+                name="event"
+                placeholder={"event"}
+
+                options={fetchIncident}
+                className="dropdownZindex"
+                menuPortalTarget={document.body}
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                    width: "220px",
+                  }),
+                }}
+               />
+            </div>
+
             </div>
             </div>
             <div className={styles.saveOrAddButtons}>
