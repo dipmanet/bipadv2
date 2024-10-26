@@ -435,15 +435,15 @@ console.log("This is table header", fetchedData.lowerLevelAggrigated.data);
         setTableHeaderList(tableHeader);
       const tableRows = fetchedData.lowerLevelAggrigated.data.map((row, index) => {
         const epidemicObj = {
-            sn: index + 1,
+            sn: englishToNepaliNumber(index + 1),
             province: row.beneficiaryDistrict_Province_TitleNe,
             district: row.beneficiaryDistrict_TitleNe ? row.beneficiaryDistrict_TitleNe : "",
             municipality: row.beneficiaryMunicipality_TitleNe ? row.beneficiaryMunicipality_TitleNe : "",
             ward: row.beneficiaryWard_Title ? row.beneficiaryWard_Title : "",
-            totalFirstTrancheFormFilled: row.totalFirstTrancheFormFilled,
-            totalFirstTrancheFormUploaded: row.totalFirstTrancheFormUploaded,
-            totalSecondTrancheFormFilled: row.totalSecondTrancheFormFilled,
-            totalSecondTrancheFormUploaded: row.totalSecondTrancheFormUploaded,
+            totalFirstTrancheFormFilled: englishToNepaliNumber(row.totalFirstTrancheFormFilled),
+            totalFirstTrancheFormUploaded: englishToNepaliNumber(row.totalFirstTrancheFormUploaded),
+            totalSecondTrancheFormFilled: englishToNepaliNumber(row.totalSecondTrancheFormFilled),
+            totalSecondTrancheFormUploaded: englishToNepaliNumber(row.totalSecondTrancheFormUploaded),
 
 
         };
