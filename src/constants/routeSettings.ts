@@ -215,6 +215,16 @@ const routeSettings: SomeRoute[] = [
         id: 'TemporaryShelter-table',
     },
     {
+        name: 'temporary-shelter-enrollment-form-data-table',
+        title: 'Temporary shelter enrollment form Data Table',
+        titleNep: 'Temporary shelter enrollment form Data Table',
+        path: '/admin/temporary-shelter-enrollment-form/dashboard',
+        load: () => import('../admin/views/TemporaryShelterDashboard'),
+        navbar: false,
+        disableIfNoAuth: true,
+        id: 'TemporaryShelter-table',
+    },
+    {
         name: 'add-new-temporary-shelter-enrollment-data',
         title: 'Add New Temporary shelter enrollment data',
         titleNep: 'Add New Temporary shelter enrollment data',

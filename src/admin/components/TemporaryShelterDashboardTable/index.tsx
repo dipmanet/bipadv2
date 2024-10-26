@@ -84,28 +84,19 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
   getEarthquakeRequest: {
-    url: ({ params }) => "/temporary-shelter-enrollment-form/",
+    url: ({ params }) => "/temporary-shelter-data-overview/",
     method: methods.GET,
     onMount: false,
     query: ({ params }) => ({
-      limit: 100,
-      offset: params.offset,
-      count: true,
-      search: params.search,
-      beneficiary_district__province: params.province,
-      beneficiary_district: params.district,
-      beneficiary_municipality: params.municipality,
-      beneficiary_ward: params.ward,
-      is_second_tranche_provided: params.is_second_tranche_provided,
-      is_first_tranche_provided: params.is_first_tranche_provided,
-      all_status__funding_source: params.all_status__funding_source,
-      all_status__payment_received_status: params.all_status__payment_received_status,
-      all_status__tranche_two_status: params.all_status__tranche_two_status,
-      all_status__tranche_one_status: params.all_status__tranche_one_status,
-      all_status__overall_beneficiary_status: params.all_status__overall_beneficiary_status,
+
+        province: params.province,
+        district: params.district,
+        municipality: params.municipality,
+        ward: params.ward,
       event: params.event
     }),
     onSuccess: ({ response, props, params }) => {
+        console.log("This is response", response);
       params.fetchedData(response);
       params.countData(response.count);
     },
@@ -186,6 +177,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     orderBy,
     numSelected,
     rowCount,
+    filter,
+    fetchedData,
     onRequestSort,
   } = props;
 
@@ -201,7 +194,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     disablePadding: false,
     label: tableTitleRef[invD],
   }));
-
+console.log("This is head cell", headCells);
   return (
     <TableHead>
       <TableRow>
@@ -218,7 +211,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         style={{ visibility: 'hidden' }}
                     />
                 </TableCell> */}
-        {headCells.map((headCell) => (
+        {headCells.map((headCell) => {
+            console.log("This is row count", fetchedData);
+            console.log("This is row head", headCell);
+         const data = fetchedData && fetchedData[0].district === "" && headCell.id === "district" ? ""
+         : fetchedData && fetchedData[0].municipality === "" && headCell.id === "municipality" ? ""
+            : fetchedData && fetchedData[0].province === "" && headCell.id === 'province' ? "" :
+            (
           <TableCell
             align="center"
             key={headCell.id}
@@ -239,7 +238,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               ) : null}
             </TableSortLabel>
           </TableCell>
-        ))}
+        );
+        console.log("This is data", data);
+       return data;
+    })}
       </TableRow>
     </TableHead>
   );
@@ -253,54 +255,7 @@ interface EnhancedTableToolbarProps {
   epidemicFormEdit: ActionCreator;
 }
 
-// const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-//     const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData, loadingCondition } = props;
-
-//     // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
-
-//     const handleDelete = () => {
-//         console.log('...delete');
-//     };
-//     const handleEdit = () => {
-//         loadingCondition(true);
-//         epidemicFormEdit.do({ id: selected, loadingCondition });
-//     };
-//     useEffect(() => {
-//         if (Object.keys(incidentEditData).length > 0) {
-//             loadingCondition(false);
-//             navigate('/admin/incident/add-new-incident');
-//         }
-//     }, [incidentEditData]);
-
-//     return (
-//         <Toolbar
-//             sx={{
-//                 pl: { sm: 2 },
-//                 pr: { xs: 1, sm: 1 },
-//                 ...(numSelected > 0 && {
-//                     bgcolor: theme => alpha(
-//                         theme.palette.primary.main, theme.palette.action.activatedOpacity,
-//                     ),
-//                 }),
-//             }}
-//         >
-//             {numSelected > 0 && (
-//                 <>
-//                     <Tooltip title="Edit">
-
-//                         <IconButton
-//                             onClick={handleEdit}
-//                         >
-//                             <EditIcon />
-//                         </IconButton>
-//                     </Tooltip>
-//                 </>
-//             )}
-//         </Toolbar>
-//     );
-// };
-
-const TemporaryShelterTableData = (props) => {
+const TemporaryShelterDashboardTable = (props) => {
   const [filteredRowData, setFilteredRowData] = useState();
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("calories");
@@ -343,7 +298,7 @@ const [fetchIncident, setFetchIncident] = useState([]);
   };
   const handleFetchedData = (finalData) => {
     setLoader(false);
-    setFetchedData(finalData.results);
+    setFetchedData(finalData);
   };
   const handleCount = (countData) => {
     setCount(countData);
@@ -373,8 +328,6 @@ const [fetchIncident, setFetchIncident] = useState([]);
 
       props.requests.getEarthquakeRequest.do({
         fetchedData: handleFetchedData,
-        search: filterData.id,
-        offset,
         province: props.user.isSuperuser ? filterData.district
         ? ""
         : filterData.province && filterData.province.value
@@ -388,13 +341,6 @@ const [fetchIncident, setFetchIncident] = useState([]);
           : filterData.municipality && filterData.municipality.value
           : props.user.profile.municipality,
         ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
-        is_first_tranche_provided: filterData.is_first_tranche_provided ? filterData.is_first_tranche_provided.value : "",
-        is_second_tranche_provided: filterData.is_second_tranche_provided ? filterData.is_second_tranche_provided.value : "",
-        all_status__funding_source: filterData.all_status__funding_source ? filterData.all_status__funding_source.value : "",
-        all_status__payment_received_status: filterData.all_status__payment_received_status ? filterData.all_status__payment_received_status.value : "",
-        all_status__tranche_two_status: filterData.all_status__tranche_two_status ? filterData.all_status__tranche_two_status.value : "",
-        all_status__tranche_one_status: filterData.all_status__tranche_one_status ? filterData.all_status__tranche_one_status.value : "",
-        all_status__overall_beneficiary_status: filterData.all_status__overall_beneficiary_status ? filterData.all_status__overall_beneficiary_status.value : "",
         event: filterData.event ? filterData.event.value : "",
         countData: handleCount,
       });
@@ -460,51 +406,19 @@ const dateFormatter = (date) => {
     return finalDate;
   };
   useEffect(() => {
-    if (fetchedData) {
-      const tableRows = fetchedData.map((row, index) => {
+    if (fetchedData && fetchedData.lowerLevelAggrigated) {
+      const tableRows = fetchedData.lowerLevelAggrigated.data.map((row, index) => {
         const epidemicObj = {
-          action: null,
-          id: row.id,
-          eventTitle: row.eventTitle,
-          paNumber: englishToNepaliNumber(row.paNumber),
-          registrationNumber: row.registrationNumber,
-          entryDateBs: row.entryDateBs,
-          beneficiaryNameNepali: row.beneficiaryNameNepali,
-          beneficiaryDistrict: row.beneficiaryDistrict,
-          beneficiaryMunicipality: row.beneficiaryMunicipality,
-          beneficiaryWard: row.beneficiaryWard,
-          toleName: row.toleName,
-          grandParentName: row.grandParentName,
-          parentName: row.parentName,
-          withnessNameNepali: row.withnessNameNepali,
-          withnessRelation: row.withnessRelation,
-          withnessContactNumber: row.withnessContactNumber,
-          temporaryShelterLandDistrict: row.temporaryShelterLandDistrict,
-          temporaryShelterLandMunicipality:
-            row.temporaryShelterLandMunicipality,
-          temporaryShelterLandWard: row.temporaryShelterLandWard,
-          temporaryShelterLandTole: row.temporaryShelterLandTole,
+            sn: index + 1,
+            province: row.beneficiaryDistrict_Province_TitleNe,
+            district: row.beneficiaryDistrict_TitleNe ? row.beneficiaryDistrict_TitleNe : "",
+            municipality: row.beneficiaryDistrict_TitleNe ? row.beneficiaryMunicipality_TitleNe : "",
+            totalFirstTrancheFormFilled: row.totalFirstTrancheFormFilled,
+            totalFirstTrancheFormUploaded: row.totalFirstTrancheFormUploaded,
+            totalSecondTrancheFormFilled: row.totalSecondTrancheFormFilled,
+            totalSecondTrancheFormUploaded: row.totalSecondTrancheFormUploaded,
 
-          amount: row.firstTrancheEnrollmentUpload ? "हो" : "छैन",
-          firstTrancheObtainedDate: row.firstTrancheEnrollmentUpload
-          ? dateFormatter(
-              ADToBS(row.firstTrancheEnrollmentUpload.createdOn.split("T")[0])
-            )
-          : "-",
-          secondTrancheRegisteredDate: row.secondTrancheEnrollmentForm
-            ? dateFormatter(row.secondTrancheEnrollmentForm.entryDateBs)
-            : "-",
 
-          secondTrancheEnrollmentForm: row.secondTrancheEnrollmentUpload
-            ? "हो"
-            : "छैन",
-          secondTrancheObtainedDate: row.secondTrancheEnrollmentUpload
-            ? dateFormatter(
-                ADToBS(
-                  row.secondTrancheEnrollmentUpload.createdOn.split("T")[0]
-                )
-              )
-            : "-",
         };
 
         return epidemicObj;
@@ -512,7 +426,7 @@ const dateFormatter = (date) => {
       setFilteredRowData(tableRows);
     }
   }, [fetchedData]);
-
+console.log("filtered row data", filteredRowData);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
     setLoader(true);
@@ -829,14 +743,7 @@ const dateFormatter = (date) => {
       district: "",
       municipality: "",
       ward: "",
-      id: "",
-      is_second_tranche_provided: "",
-      is_first_tranche_provided: "",
-      all_status__funding_source: "",
-      all_status__payment_received_status: "",
-      all_status__tranche_two_status: "",
-      all_status__tranche_one_status: "",
-      all_status__overall_beneficiary_status: "",
+     province: "",
       event: ""
     });
     props.requests.getEarthquakeRequest.do({
@@ -844,14 +751,7 @@ const dateFormatter = (date) => {
       district: "",
       municipality: "",
       ward: "",
-      search: "",
-      is_second_tranche_provided: "",
-      is_first_tranche_provided: "",
-      all_status__funding_source: "",
-      all_status__payment_received_status: "",
-      all_status__tranche_two_status: "",
-      all_status__tranche_one_status: "",
-      all_status__overall_beneficiary_status: "",
+      province: "",
       event: "",
       countData: handleCount,
     });
@@ -912,6 +812,7 @@ useEffect(() => {
   setFetchIncident(data);
 });
     }, []);
+    console.log("This is fetched data", fetchedData);
   return (
     <>
       {loader ? (
@@ -937,10 +838,11 @@ useEffect(() => {
       >
         <div className={styles.credentialSearch}>
 
-          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{ display: 'flex', gap: '5px' }}>
           <div style={{ width: "230px" }}>
+            <h3>प्रदेश</h3>
               <Select
                 isClearable
                 isDisabled={!props.user.isSuperuser}
@@ -967,6 +869,7 @@ useEffect(() => {
               />
           </div>
             <div style={{ width: "230px" }}>
+                <h3>जिल्ला</h3>
               <Select
                 isClearable
                 // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
@@ -995,6 +898,7 @@ useEffect(() => {
             </div>
 
             <div style={{ width: "230px" }}>
+                <h3>पालिका</h3>
               <Select
                 isClearable
                 // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
@@ -1029,6 +933,7 @@ useEffect(() => {
             </div>
 
             <div style={{ width: "230px" }}>
+                <h3>वडा</h3>
               <Select
                 isClearable
                 value={
@@ -1056,208 +961,13 @@ useEffect(() => {
                 }}
               />
             </div>
-            </div>
-            <div style={{ display: 'flex', gap: '5px' }}>
             <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                value={filterData.is_first_tranche_provided}
-                name="is_first_tranche_provided"
-                placeholder={"पहिलो किस्ताको फारम अपलोड गरिएको हो?"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={yesNoOptionList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-            <div style={{ width: "230px" }}>
-              <Select
+<h3>घटना</h3>
+
+                <Select
                 isClearable
                 onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.is_second_tranche_provided}
-                name="is_second_tranche_provided"
-                placeholder={"दोस्रो किस्ताको फारम अपलोड गरिएको हो?"}
-
-                options={yesNoOptionList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-            <FormControl>
-              {/* <InputLabel>
-                                Test
-
-                            </InputLabel> */}
-              <Input
-                type="text"
-                // value={covid24hrsStatData[field]}
-                // onChange={e => handleCovid24hrStat(e, field)}
-                // className={styles.select}
-                disableUnderline
-                inputProps={{
-                  disableUnderline: true,
-                }}
-                name="id"
-                value={filterData.id}
-                onChange={handleChangeId}
-                placeholder="कृपया खोज्नुहोस्"
-                style={{
-                  border: "1px solid hsl(0, 0%, 80%)",
-                  width: "fit-content",
-                  borderRadius: "3px",
-                  padding: "2px 10px",
-                }}
-              />
-            </FormControl>
-            </div>
-            <div style={{ display: 'flex', gap: '5px' }}>
-            <div style={{ width: "230px" }}>
-
-               <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.all_status__funding_source}
-                name="all_status__funding_source"
-                placeholder={"कोषको स्रोत"}
-
-                options={fundingSourceList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-               />
-            </div>
-            <div style={{ width: "230px" }}>
-
-
-               <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.all_status__payment_received_status}
-                name="all_status__payment_received_status"
-                placeholder={"भुक्तानी प्राप्त स्थिति"}
-
-                options={paymentReceiveList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-               />
-            </div>
-            <div style={{ width: "230px" }}>
-
-
-               <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.all_status__tranche_two_status}
-                name="all_status__tranche_two_status"
-                placeholder={"दोस्रो किस्ता स्थिति"}
-
-                options={tranche2StatusList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-               />
-            </div>
-
-            </div>
-            <div style={{ display: 'flex', gap: '5px' }}>
-            <div style={{ width: "230px" }}>
-
-
-               <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.all_status__tranche_one_status}
-                name="all_status__tranche_one_status"
-                placeholder={"पहिलो किस्ता स्थिति"}
-
-                options={tranche1StatusList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-               />
-            </div>
-            <div style={{ width: "230px" }}>
-
-
-               <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.all_status__overall_beneficiary_status}
-                name="all_status__overall_beneficiary_status"
-                placeholder={"समग्र लाभार्थी स्थिति"}
-
-                options={benificeryList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-               />
-            </div>
-            <div style={{ width: "230px" }}>
-
-
-               <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
+                handleDropdown(actionMeta.name, value)
                 }
                 value={filterData.event}
                 name="event"
@@ -1267,16 +977,17 @@ useEffect(() => {
                 className="dropdownZindex"
                 menuPortalTarget={document.body}
                 styles={{
-                  menuPortal: (base) => ({
+                menuPortal: (base) => ({
                     ...base,
                     zIndex: 9999,
                     width: "220px",
-                  }),
+                }),
                 }}
-               />
+                />
+            </div>
             </div>
 
-            </div>
+
             </div>
             <div className={styles.saveOrAddButtons}>
               <button
@@ -1305,17 +1016,30 @@ useEffect(() => {
               )}
             </div>
           </div>
-          <div className={styles.rightOptions}>
-            <IconButton
-            // disabled={!filterData.municipality}
-                            onClick={handleDownload}
-                            style={{ cursor: 'pointer', borderRadius: '20px' }}
-            >
 
-                            <DownloadIcon />
-                            <span style={{ fontSize: '16px' }}>Download</span>
-            </IconButton>
-            <TablePagination
+          <div style={{ display: 'flex', margin: '0px 27px', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap' }}>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormFilled)}</h1>
+            <h3>पहिलो किस्ता फारम भरियो</h3>
+            </div>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormUploaded)}</h1>
+            <h3>पहिलो किस्ता फारम अपलोड गरियो</h3>
+            </div>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalSecondTrancheFormFilled)}</h1>
+            <h3>दोस्रो किस्ता फारम भरियो</h3>
+            </div>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalSecondTrancheFormUploaded)}</h1>
+            <h3>दोस्रो किस्ता फारम अपलोड गरियो</h3>
+            </div>
+
+          </div>
+          <div className={styles.rightOptions}>
+          <h1 style={{ fontSize: '30px', marginLeft: '27px' }}>तल्लो तह एग्रिगेशन</h1>
+
+            {/* <TablePagination
               className={styles.tablePagination}
               rowsPerPageOptions={[100]}
               component="div"
@@ -1323,21 +1047,13 @@ useEffect(() => {
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
-            />
+            /> */}
           </div>
         </div>
+{
+    fetchedData && fetchedData.lowerLevelAggrigated && fetchedData.lowerLevelAggrigated.data.length ? (
+<Paper sx={{ width: "100%", mb: 2 }}>
 
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          {/* <EnhancedTableToolbar
-                        selected={selected}
-                        numSelected={selected.length}
-                        // dispatch={dispatch}
-                        // deleteEpidemmicTable={deleteEpidemicTable}
-                        epidemicFormEdit={props.requests.incidentEditData}
-                        incidentEditData={incidentEditData}
-                        loadingCondition={loadingCondition}
-
-                    /> */}
           <TableContainer
             sx={{ maxHeight: 800 }}
             style={{ width: "100%", overflowX: "scroll" }}
@@ -1355,6 +1071,8 @@ useEffect(() => {
                 // onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={fetchedData && fetchedData.length}
+                fetchedData={filteredRowData}
+                filter={filterData}
               />
               <TableBody>
                 {filteredRowData ? (
@@ -1364,63 +1082,24 @@ useEffect(() => {
                   ).map((row, index) => {
                     // const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
-
+console.log("This is row", row);
                     return (
                       <TableRow
                         hover
                         role="checkbox"
-                        // aria-checked={isItemSelected}
+
                         tabIndex={-1}
                         key={row.id}
-                        // selected={isItemSelected}
+
                       >
-                        {/* <TableCell
-                                                        align="center"
-                                                        padding="normal"
-                                                    >
-                                                        <Checkbox
-                                                            color="primary"
-                                                            onChange={e => handleCheck(e, row.id)}
-                                                            checked={testCheckboxCondition(row.id)}
-                                                            inputProps={{
-                                                                'aria-labelledby': labelId,
-                                                            }}
-                                                            disabled={row.dataSource === 'drr_api'}
-                                                        />
-                                                    </TableCell> */}
+
                         {Object.keys(row).map((val) => {
-                          if (val === "verified") {
-                            return (
-                              <TableCell
-                                align={
-                                  typeof val === "string" ? "left" : "center"
-                                }
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {row[val] === true ? "YES" : "No"}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "wards") {
-                            return (
-                              <>
-                                <TableCell>
-                                  {
-                                    row[val][0].municipality.district.province
-                                      .title
-                                  }
-                                </TableCell>
-                                <TableCell>
-                                  {row[val][0].municipality.district.title}
-                                </TableCell>
-                                <TableCell>
-                                  {row[val][0].municipality.title}
-                                </TableCell>
+                           const output = filteredRowData && filteredRowData[0].district === "" && val === "district" ? ""
+                           : filteredRowData && filteredRowData[0].municipality === "" && val === "municipality" ? ""
+                              : filteredRowData && filteredRowData[0].province === "" && val === 'province' ? ""
+
+
+                            : (
                                 <TableCell
                                   align={
                                     typeof val === "string" ? "left" : "center"
@@ -1432,298 +1111,30 @@ useEffect(() => {
                                   padding="none"
                                   key={val}
                                 >
-                                  {row[val][0].title}
+                                  {row[val] || "-"}
                                 </TableCell>
-                              </>
-                            );
-                          }
-                          if (val === "id") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${englishToNepaliNumber(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "entryDateBs") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${dateFormatter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "beneficiaryNameNepali") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${row[val]}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "beneficiaryDistrict") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${districtNameConverter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "beneficiaryMunicipality") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${municipalityNameConverter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "beneficiaryWard") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${englishToNepaliNumber(
-                                  wardNameConverter(row[val])
-                                )}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "beneficiaryRepresentativeDistrict") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${districtNameConverter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
+                              );
+return output;
 
-                          if (val === "beneficiaryRepresentativeMunicipality") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${municipalityNameConverter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-
-                          if (val === "migrationCertificateNumber") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${
-                                  row[val]
-                                    ? englishToNepaliNumber(row[val])
-                                    : "-"
-                                }`}
-                              </TableCell>
-                            );
-                          }
-
-                          if (val === "migrationDateBs") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${row[val] ? dateFormatter(row[val]) : "-"}`}
-                              </TableCell>
-                            );
-                          }
-
-                          if (val === "withnessContactNumber") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${englishToNepaliNumber(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-                          //   if (val === 'amount') {
-                          //     return (
-                          //         <TableCell
-                          //             align="center"
-                          //             className={styles.setStyleForTableCell}
-                          //             component="th"
-                          //             id={labelId}
-                          //             scope="row"
-                          //             padding="none"
-                          //             key={val}
-                          //         >
-                          //             {row[val] === '-' ? `${englishToNepaliNumber(row[val])}` : `रु. ${englishToNepaliNumber(row[val])}`}
-                          //         </TableCell>
-                          //     );
-                          // }
-
-                          if (val === "temporaryShelterLandDistrict") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${districtNameConverter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-
-                          if (val === "temporaryShelterLandMunicipality") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${municipalityNameConverter(row[val])}`}
-                              </TableCell>
-                            );
-                          }
-
-                          if (val === "temporaryShelterLandWard") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {`${englishToNepaliNumber(
-                                  wardNameConverter(row[val])
-                                )}`}
-                              </TableCell>
-                            );
-                          }
-                          if (val === "action") {
-                            return (
-                              <TableCell
-                                align="center"
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                <img
-                                  title="डाटा विवरण हेर्न क्लिक गर्नुहोस्"
-                                  height={20}
-                                  width={20}
-                                  src={eyeSolid}
-                                  alt="eyeSolid"
-                                  role="button"
-                                  onClick={() =>
-                                    navigate(
-                                      `/admin/temporary-shelter-enrollment-form/add-new-temporary-shelter-enrollment-data-preview/${row.id}`
-                                    )
-                                  }
-                                />
-                              </TableCell>
-                            );
-                          }
-
-                          return (
-                            <>
-                              <TableCell
-                                align={
-                                  typeof row[val] === "string"
-                                    ? "left"
-                                    : "center"
-                                }
-                                className={styles.setStyleForTableCell}
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={val}
-                              >
-                                {row[val] || "-"}
-                              </TableCell>
-                            </>
-                          );
+                        //   return (
+                        //     <>
+                        //       <TableCell
+                        //         align={
+                        //           typeof row[val] === "string"
+                        //             ? "left"
+                        //             : "center"
+                        //         }
+                        //         className={styles.setStyleForTableCell}
+                        //         component="th"
+                        //         id={labelId}
+                        //         scope="row"
+                        //         padding="none"
+                        //         key={val}
+                        //       >
+                        //         {row[val] || "-"}
+                        //       </TableCell>
+                        //     </>
+                        //   );
                         })}
                       </TableRow>
                     );
@@ -1744,22 +1155,12 @@ useEffect(() => {
               >
                 <h3>डाटा लोड हुँदैछ कृपया प्रतीक्षा गर्नुहोस्...</h3>
               </div>
-            ) : fetchedData && !fetchedData.length ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                  marginBottom: "20px",
-                }}
-              >
-                <h3>डाटा उपलब्ध छैन</h3>
-              </div>
             ) : (
               ""
             )}
           </TableContainer>
-        </Paper>
+</Paper>
+) : ""}
       </Box>
     </>
   );
@@ -1770,6 +1171,6 @@ export default connect(
   null
 )(
   createConnectedRequestCoordinator<ReduxProps>()(
-    createRequestClient(requests)(TemporaryShelterTableData)
+    createRequestClient(requests)(TemporaryShelterDashboardTable)
   )
 );
