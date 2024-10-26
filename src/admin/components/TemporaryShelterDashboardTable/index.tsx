@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-mixed-operators */
@@ -71,7 +72,7 @@ import ADToBS from '#utils/AdBSConverter/AdToBs';
 import BSToAD from '#utils/AdBSConverter/BsToAd';
 import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 // import { ADToBS } from "bikram-sambat-js";
-import { tableTitleRef } from "./utils";
+// import { tableTitleRef } from "./utils";
 import styles from "./styles.module.scss";
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -96,7 +97,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       event: params.event
     }),
     onSuccess: ({ response, props, params }) => {
-        console.log("This is response", response);
       params.fetchedData(response);
       params.countData(response.count);
     },
@@ -179,6 +179,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     rowCount,
     filter,
     fetchedData,
+    tableTitleRef,
     onRequestSort,
   } = props;
 
@@ -194,7 +195,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     disablePadding: false,
     label: tableTitleRef[invD],
   }));
-console.log("This is head cell", headCells);
+
   return (
     <TableHead>
       <TableRow>
@@ -212,11 +213,9 @@ console.log("This is head cell", headCells);
                     />
                 </TableCell> */}
         {headCells.map((headCell) => {
-            console.log("This is row count", fetchedData);
-            console.log("This is row head", headCell);
-         const data = fetchedData && fetchedData[0].district === "" && headCell.id === "district" ? ""
-         : fetchedData && fetchedData[0].municipality === "" && headCell.id === "municipality" ? ""
-            : fetchedData && fetchedData[0].province === "" && headCell.id === 'province' ? "" :
+         const data = fetchedData && fetchedData.length && fetchedData.length && fetchedData[0].district === "" && headCell.id === "district" ? ""
+         : fetchedData && fetchedData.length && fetchedData[0].municipality === "" && headCell.id === "municipality" ? ""
+            : fetchedData && fetchedData.length && fetchedData[0].province === "" && headCell.id === 'province' ? "" :
             (
           <TableCell
             align="center"
@@ -239,7 +238,7 @@ console.log("This is head cell", headCells);
             </TableSortLabel>
           </TableCell>
         );
-        console.log("This is data", data);
+
        return data;
     })}
       </TableRow>
@@ -276,6 +275,7 @@ const [tranche2StatusList, setTranche2StatusList] = useState([]);
 const [paymentReceiveList, setPaymentReceiveList] = useState([]);
 const [fundingSourceList, setFundingSourceList] = useState([]);
 const [fetchIncident, setFetchIncident] = useState([]);
+const [tableHeaderList, setTableHeaderList] = useState({});
 
   const [filterData, setFilterData] = useState({
     province: "",
@@ -407,12 +407,39 @@ const dateFormatter = (date) => {
   };
   useEffect(() => {
     if (fetchedData && fetchedData.lowerLevelAggrigated) {
+        const tableHeader = { sn: 'क्रम संख्या',
+            province: "प्रदेश",
+            district: "जिल्ला",
+            municipality: "पालिका",
+            ward: 'वडा',
+            totalFirstTrancheFormFilled: "कुल पहिलो किस्ता फारम भरिएको",
+            totalFirstTrancheFormUploaded: "कुल पहिलो किस्ता फारम अपलोड गरिएको",
+            totalSecondTrancheFormFilled: "कुल दोस्रो किस्ता फारम भरिएको",
+            totalSecondTrancheFormUploaded: "कुल दोस्रो किस्ता फारम अपलोड गरिएको", };
+            fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryDistrict_Province_TitleNe
+        ?
+        ['district', 'municipality', 'ward'].forEach(key => {
+            delete tableHeader[key];
+        }) :
+        fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryDistrict_TitleNe ? ['province', 'municipality', 'ward'].forEach(key => {
+            delete tableHeader[key];
+        }) : fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryMunicipality_TitleNe ? ['province', 'district', 'ward'].forEach(key => {
+            delete tableHeader[key];
+        }) : fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryWard_Title ? ['province', 'district', 'municipality'].forEach(key => {
+            delete tableHeader[key];
+}) : "";
+console.log("This is table header", tableHeader);
+console.log("This is table header", fetchedData.lowerLevelAggrigated.data);
+
+
+        setTableHeaderList(tableHeader);
       const tableRows = fetchedData.lowerLevelAggrigated.data.map((row, index) => {
         const epidemicObj = {
             sn: index + 1,
             province: row.beneficiaryDistrict_Province_TitleNe,
             district: row.beneficiaryDistrict_TitleNe ? row.beneficiaryDistrict_TitleNe : "",
-            municipality: row.beneficiaryDistrict_TitleNe ? row.beneficiaryMunicipality_TitleNe : "",
+            municipality: row.beneficiaryMunicipality_TitleNe ? row.beneficiaryMunicipality_TitleNe : "",
+            ward: row.beneficiaryWard_Title ? row.beneficiaryWard_Title : "",
             totalFirstTrancheFormFilled: row.totalFirstTrancheFormFilled,
             totalFirstTrancheFormUploaded: row.totalFirstTrancheFormUploaded,
             totalSecondTrancheFormFilled: row.totalSecondTrancheFormFilled,
@@ -426,7 +453,7 @@ const dateFormatter = (date) => {
       setFilteredRowData(tableRows);
     }
   }, [fetchedData]);
-console.log("filtered row data", filteredRowData);
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
     setLoader(true);
@@ -812,7 +839,7 @@ useEffect(() => {
   setFetchIncident(data);
 });
     }, []);
-    console.log("This is fetched data", fetchedData);
+console.log("fetchedData", fetchedData);
   return (
     <>
       {loader ? (
@@ -1073,6 +1100,7 @@ useEffect(() => {
                 rowCount={fetchedData && fetchedData.length}
                 fetchedData={filteredRowData}
                 filter={filterData}
+                tableTitleRef={tableHeaderList}
               />
               <TableBody>
                 {filteredRowData ? (
@@ -1082,7 +1110,7 @@ useEffect(() => {
                   ).map((row, index) => {
                     // const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
-console.log("This is row", row);
+
                     return (
                       <TableRow
                         hover
@@ -1094,12 +1122,8 @@ console.log("This is row", row);
                       >
 
                         {Object.keys(row).map((val) => {
-                           const output = filteredRowData && filteredRowData[0].district === "" && val === "district" ? ""
-                           : filteredRowData && filteredRowData[0].municipality === "" && val === "municipality" ? ""
-                              : filteredRowData && filteredRowData[0].province === "" && val === 'province' ? ""
-
-
-                            : (
+                           const output = tableHeaderList[val] ?
+                          (
                                 <TableCell
                                   align={
                                     typeof val === "string" ? "left" : "center"
@@ -1113,7 +1137,7 @@ console.log("This is row", row);
                                 >
                                   {row[val] || "-"}
                                 </TableCell>
-                              );
+                              ) : "";
 return output;
 
                         //   return (
@@ -1160,7 +1184,18 @@ return output;
             )}
           </TableContainer>
 </Paper>
-) : ""}
+) : (
+<div
+style={{
+  display: "flex",
+  justifyContent: "center",
+  marginTop: "20px",
+  marginBottom: "20px",
+}}
+>
+<h3>डाटा उपलब्ध छैन</h3>
+</div>
+)}
       </Box>
     </>
   );
