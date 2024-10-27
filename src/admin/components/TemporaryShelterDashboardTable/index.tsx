@@ -428,8 +428,7 @@ const dateFormatter = (date) => {
         }) : fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryWard_Title ? ['province', 'district', 'municipality'].forEach(key => {
             delete tableHeader[key];
 }) : "";
-console.log("This is table header", tableHeader);
-console.log("This is table header", fetchedData.lowerLevelAggrigated.data);
+
 
 
         setTableHeaderList(tableHeader);
@@ -839,7 +838,7 @@ useEffect(() => {
   setFetchIncident(data);
 });
     }, []);
-console.log("fetchedData", fetchedData);
+
   return (
     <>
       {loader ? (
@@ -859,8 +858,9 @@ console.log("fetchedData", fetchedData);
       )}
       <Box
         sx={{
-          width: "87vw",
-          boxShadow: "0px 2px 5px rgba(151, 149, 148, 0.25);",
+          width: "71vw",
+
+
         }}
       >
         <div className={styles.credentialSearch}>
@@ -1044,7 +1044,7 @@ console.log("fetchedData", fetchedData);
             </div>
           </div>
 
-          <div style={{ display: 'flex', margin: '0px 27px', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', margin: '0px 27px', gap: '100px', width: '100%', flexWrap: 'wrap' }}>
             <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormFilled)}</h1>
             <h3>पहिलो किस्ता फारम भरियो</h3>
@@ -1063,23 +1063,18 @@ console.log("fetchedData", fetchedData);
             </div>
 
           </div>
-          <div className={styles.rightOptions}>
-          <h1 style={{ fontSize: '30px', marginLeft: '27px' }}>तल्लो तह एग्रिगेशन</h1>
+          {
+            fetchedData && fetchedData.lowerLevelAggrigated && fetchedData.lowerLevelAggrigated.data.length ? (
+              <div className={styles.rightOptions}>
+                        <h1 style={{ fontSize: '30px', marginLeft: '27px' }}>तल्लो तह एग्रिगेशन</h1>
 
-            {/* <TablePagination
-              className={styles.tablePagination}
-              rowsPerPageOptions={[100]}
-              component="div"
-              count={count}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-            /> */}
-          </div>
+
+              </div>
+              ) : ""}
         </div>
 {
     fetchedData && fetchedData.lowerLevelAggrigated && fetchedData.lowerLevelAggrigated.data.length ? (
-<Paper sx={{ width: "100%", mb: 2 }}>
+<Paper sx={{ width: "96%", mb: 2, margin: '0px 27px' }}>
 
           <TableContainer
             sx={{ maxHeight: 800 }}
@@ -1168,33 +1163,11 @@ return output;
                 )}
               </TableBody>
             </Table>
-            {fetchedData && !fetchedData.length && loader ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                  marginBottom: "20px",
-                }}
-              >
-                <h3>डाटा लोड हुँदैछ कृपया प्रतीक्षा गर्नुहोस्...</h3>
-              </div>
-            ) : (
-              ""
-            )}
+
           </TableContainer>
 </Paper>
 ) : (
-<div
-style={{
-  display: "flex",
-  justifyContent: "center",
-  marginTop: "20px",
-  marginBottom: "20px",
-}}
->
-<h3>डाटा उपलब्ध छैन</h3>
-</div>
+""
 )}
       </Box>
     </>
