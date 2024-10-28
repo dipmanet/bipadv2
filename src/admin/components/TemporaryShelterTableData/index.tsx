@@ -66,10 +66,10 @@ import {
 import { AppState } from "#types";
 import { englishToNepaliNumber } from "nepali-number";
 import eyeSolid from "#resources/icons/eye-solid.svg";
-import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 import Reset from "#resources/icons/reset.svg";
 import ADToBS from '#utils/AdBSConverter/AdToBs';
 import BSToAD from '#utils/AdBSConverter/BsToAd';
+import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
 // import { ADToBS } from "bikram-sambat-js";
 import { tableTitleRef } from "./utils";
 import styles from "./styles.module.scss";
@@ -97,7 +97,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
       beneficiary_municipality: params.municipality,
       beneficiary_ward: params.ward,
       is_second_tranche_provided: params.is_second_tranche_provided,
-      is_first_tranche_provided: params.is_first_tranche_provided
+      is_first_tranche_provided: params.is_first_tranche_provided,
+      all_status__funding_source: params.all_status__funding_source,
+      all_status__payment_received_status: params.all_status__payment_received_status,
+      all_status__tranche_two_status: params.all_status__tranche_two_status,
+      all_status__tranche_one_status: params.all_status__tranche_one_status,
+      all_status__overall_beneficiary_status: params.all_status__overall_beneficiary_status,
+      event: params.event
     }),
     onSuccess: ({ response, props, params }) => {
       params.fetchedData(response);
@@ -309,6 +315,13 @@ const TemporaryShelterTableData = (props) => {
   const [count, setCount] = useState(null);
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
+  const [benificeryList, setBenificeryList] = useState([]);
+  const [tranche1StatusList, setTranche1StatusList] = useState([]);
+  const [tranche2StatusList, setTranche2StatusList] = useState([]);
+  const [paymentReceiveList, setPaymentReceiveList] = useState([]);
+  const [fundingSourceList, setFundingSourceList] = useState([]);
+  const [fetchIncident, setFetchIncident] = useState([]);
+
   const [filterData, setFilterData] = useState({
     province: "",
     district: "",
@@ -316,7 +329,14 @@ const TemporaryShelterTableData = (props) => {
     ward: "",
     id: "",
     is_second_tranche_provided: "",
-    is_first_tranche_provided: ""
+    is_first_tranche_provided: "",
+    all_status__funding_source: "",
+    all_status__payment_received_status: "",
+    all_status__tranche_two_status: "",
+    all_status__tranche_one_status: "",
+    all_status__overall_beneficiary_status: "",
+    event: ""
+
   });
   const loadingCondition = (boolean) => {
     setLoader(boolean);
@@ -351,37 +371,43 @@ const TemporaryShelterTableData = (props) => {
     setLoader(true);
     setIsFilteredEnabled(true);
 
-      props.requests.getEarthquakeRequest.do({
-        fetchedData: handleFetchedData,
-        search: filterData.id,
-        offset,
-        province: props.user.isSuperuser ? filterData.district
+    props.requests.getEarthquakeRequest.do({
+      fetchedData: handleFetchedData,
+      search: filterData.id,
+      offset,
+      province: props.user.isSuperuser ? filterData.district
         ? ""
         : filterData.province && filterData.province.value
         : props.user.profile.province,
-        district: props.user.isSuperuser ? filterData.municipality
-          ? ""
-          : filterData.district && filterData.district.value
-          : props.user.profile.district,
-        municipality: props.user.isSuperuser ? filterData.ward
-          ? ""
-          : filterData.municipality && filterData.municipality.value
-          : props.user.profile.municipality,
-        ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
-        is_first_tranche_provided: filterData.is_first_tranche_provided ? filterData.is_first_tranche_provided.value : "",
-        is_second_tranche_provided: filterData.is_second_tranche_provided ? filterData.is_second_tranche_provided.value : "",
-        countData: handleCount,
-      });
+      district: props.user.isSuperuser ? filterData.municipality
+        ? ""
+        : filterData.district && filterData.district.value
+        : props.user.profile.district,
+      municipality: props.user.isSuperuser ? filterData.ward
+        ? ""
+        : filterData.municipality && filterData.municipality.value
+        : props.user.profile.municipality,
+      ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
+      is_first_tranche_provided: filterData.is_first_tranche_provided ? filterData.is_first_tranche_provided.value : "",
+      is_second_tranche_provided: filterData.is_second_tranche_provided ? filterData.is_second_tranche_provided.value : "",
+      all_status__funding_source: filterData.all_status__funding_source ? filterData.all_status__funding_source.value : "",
+      all_status__payment_received_status: filterData.all_status__payment_received_status ? filterData.all_status__payment_received_status.value : "",
+      all_status__tranche_two_status: filterData.all_status__tranche_two_status ? filterData.all_status__tranche_two_status.value : "",
+      all_status__tranche_one_status: filterData.all_status__tranche_one_status ? filterData.all_status__tranche_one_status.value : "",
+      all_status__overall_beneficiary_status: filterData.all_status__overall_beneficiary_status ? filterData.all_status__overall_beneficiary_status.value : "",
+      event: filterData.event ? filterData.event.value : "",
+      countData: handleCount,
+    });
     // }
   };
   // props.user.profile.district
   const DistrictListSelect = filterData.province &&
-  districts
-    .filter((i) => i.province === Number(filterData.province.value))
-    .map((d) => ({
-      value: d.id,
-      label: d.title_ne,
-    }));
+    districts
+      .filter((i) => i.province === Number(filterData.province.value))
+      .map((d) => ({
+        value: d.id,
+        label: d.title_ne,
+      }));
   const ProvinceListSelect = provinces.map((d) => ({
     value: d.id,
     label: d.title_ne,
@@ -394,25 +420,25 @@ const TemporaryShelterTableData = (props) => {
         value: d.id,
         label: d.title_ne,
       }));
-useEffect(() => {
-setFilterData({
-  ...filterData,
-  province: props.user.isSuperuser ? "" : props.user.profile.province ? { value: props.user.profile.province } : "",
+  useEffect(() => {
+    setFilterData({
+      ...filterData,
+      province: props.user.isSuperuser ? "" : props.user.profile.province ? { value: props.user.profile.province } : "",
       district: props.user.isSuperuser ? "" : props.user.profile.district ? { value: props.user.profile.district } : "",
       municipality: props.user.isSuperuser ? "" : props.user.profile.municipality ? { value: props.user.profile.municipality } : ""
-});
-}, [props.user]);
+    });
+  }, [props.user]);
 
   const WardList =
-  props.user.isSuperuser ? filterData.municipality &&
-    wards
-      .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
-      .map((title) => ({ ...title, title: Number(title.title) }))
-      .sort((a, b) => a.title - b.title)
-      .map((d) => ({
-        value: d.id,
-        label: englishToNepaliNumber(d.title),
-      }))
+    props.user.isSuperuser ? filterData.municipality &&
+      wards
+        .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
+        .map((title) => ({ ...title, title: Number(title.title) }))
+        .sort((a, b) => a.title - b.title)
+        .map((d) => ({
+          value: d.id,
+          label: englishToNepaliNumber(d.title),
+        }))
 
       :
       wards
@@ -425,7 +451,7 @@ setFilterData({
         }));
 
 
-const dateFormatter = (date) => {
+  const dateFormatter = (date) => {
     const slicedDate = date.split("-");
     const year = englishToNepaliNumber(slicedDate[0]);
     const month = englishToNepaliNumber(slicedDate[1]);
@@ -435,10 +461,11 @@ const dateFormatter = (date) => {
   };
   useEffect(() => {
     if (fetchedData) {
-      const tableRows = fetchedData.map((row) => {
+      const tableRows = fetchedData.map((row, index) => {
         const epidemicObj = {
           action: null,
           id: row.id,
+          eventTitle: row.eventTitle,
           paNumber: englishToNepaliNumber(row.paNumber),
           registrationNumber: row.registrationNumber,
           entryDateBs: row.entryDateBs,
@@ -459,23 +486,24 @@ const dateFormatter = (date) => {
           temporaryShelterLandTole: row.temporaryShelterLandTole,
 
           amount: row.firstTrancheEnrollmentUpload ? "हो" : "छैन",
+          firstTrancheObtainedDate: row.firstTrancheEnrollmentUpload
+            ? dateFormatter(
+              ADToBS(row.firstTrancheEnrollmentUpload.createdOn.split("T")[0])
+            )
+            : "-",
           secondTrancheRegisteredDate: row.secondTrancheEnrollmentForm
             ? dateFormatter(row.secondTrancheEnrollmentForm.entryDateBs)
             : "-",
-          firstTrancheObtainedDate: row.firstTrancheEnrollmentUpload
-            ? dateFormatter(
-                ADToBS(row.firstTrancheEnrollmentUpload.createdOn.split("T")[0])
-              )
-            : "-",
+
           secondTrancheEnrollmentForm: row.secondTrancheEnrollmentUpload
             ? "हो"
             : "छैन",
           secondTrancheObtainedDate: row.secondTrancheEnrollmentUpload
             ? dateFormatter(
-                ADToBS(
-                  row.secondTrancheEnrollmentUpload.createdOn.split("T")[0]
-                )
+              ADToBS(
+                row.secondTrancheEnrollmentUpload.createdOn.split("T")[0]
               )
+            )
             : "-",
         };
 
@@ -570,69 +598,69 @@ const dateFormatter = (date) => {
   };
 
   const handleDownload = () => {
-      // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
-      //     .setColumns([
-      //         'id',
-      //         'Province',
-      //         'District',
-      //         'Municipality',
-      //         'Ward',
-      //         'Local Address',
-      //         'Reported Date (A.D.)(eg. 2021/07/31)',
-      //         'Hazard',
-      //         'Hazard Inducer',
-      //         'Total Estimated Loss(NPR)',
-      //         'Agriculture Economic Loss(NPR)',
-      //         'Infrastructure Economic Loss(NPR)',
-      //         'Total Infrastructure Destroyed',
-      //         'House Destroyed',
-      //         'House Affected',
-      //         'Total Livestock Destroyed',
-      //         'Total Injured Male',
-      //         'Total Injured Female',
-      //         'Total Injured Others',
-      //         'Total Injured Disabled',
-      //         'Total Missing Male',
-      //         'Total Missing Female',
-      //         'Total Missing Other',
-      //         'Total Missing Disabled',
-      //         'Total Male Death',
-      //         'Total Female Death',
-      //         'Total Other Death',
-      //         'Total Disabled Death',
-      //         'Verified (eg. Yes)',
-      //         'Verification message',
-      //         'Approved (eg. Yes)',
-      //     ])
-      //     .addRows(Dataforcsv())
-      //     .exportFile();
+    // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
+    //     .setColumns([
+    //         'id',
+    //         'Province',
+    //         'District',
+    //         'Municipality',
+    //         'Ward',
+    //         'Local Address',
+    //         'Reported Date (A.D.)(eg. 2021/07/31)',
+    //         'Hazard',
+    //         'Hazard Inducer',
+    //         'Total Estimated Loss(NPR)',
+    //         'Agriculture Economic Loss(NPR)',
+    //         'Infrastructure Economic Loss(NPR)',
+    //         'Total Infrastructure Destroyed',
+    //         'House Destroyed',
+    //         'House Affected',
+    //         'Total Livestock Destroyed',
+    //         'Total Injured Male',
+    //         'Total Injured Female',
+    //         'Total Injured Others',
+    //         'Total Injured Disabled',
+    //         'Total Missing Male',
+    //         'Total Missing Female',
+    //         'Total Missing Other',
+    //         'Total Missing Disabled',
+    //         'Total Male Death',
+    //         'Total Female Death',
+    //         'Total Other Death',
+    //         'Total Disabled Death',
+    //         'Verified (eg. Yes)',
+    //         'Verification message',
+    //         'Approved (eg. Yes)',
+    //     ])
+    //     .addRows(Dataforcsv())
+    //     .exportFile();
 
-      // window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${
-      //   props.user.isSuperuser ? filterData.district
-      //   ? ""
-      //   : filterData.province && filterData.province.value
-      //   : filterData.district
-      //   ? ""
-      //   : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province
-      // }&`}
+    // window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${
+    //   props.user.isSuperuser ? filterData.district
+    //   ? ""
+    //   : filterData.province && filterData.province.value
+    //   : filterData.district
+    //   ? ""
+    //   : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province
+    // }&`}
 
-      // ${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality
-      //   ? ""
-      //   : filterData.district && filterData.district.value
-      //   : filterData.municipality
-      //   ? ""
-      //   : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser
-      //     ? filterData.ward
-      //     ? ""
-      //     : filterData.municipality && filterData.municipality.value
-      //     : filterData.ward
-      //     ? ""
-      //     : filterData.municipality ? filterData.municipality && filterData.municipality.value :
+    // ${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality
+    //   ? ""
+    //   : filterData.district && filterData.district.value
+    //   : filterData.municipality
+    //   ? ""
+    //   : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser
+    //     ? filterData.ward
+    //     ? ""
+    //     : filterData.municipality && filterData.municipality.value
+    //     : filterData.ward
+    //     ? ""
+    //     : filterData.municipality ? filterData.municipality && filterData.municipality.value :
 
-      //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
+    //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
 
-      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province || ""}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district || ""}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality || ""}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : "ward="}`, "_blank");
-    };
+    window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province || ""}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district || ""}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality || ""}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : "ward="}`, "_blank");
+  };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
   //     const selectedIndex = selected.indexOf(name);
@@ -708,10 +736,10 @@ const dateFormatter = (date) => {
         setDisableSearch(true);
       }
     } else if (e.target.value === "" && !filterData.ward) {
-        setDisableSearch(true);
-      } else {
-        setDisableSearch(false);
-      }
+      setDisableSearch(true);
+    } else {
+      setDisableSearch(false);
+    }
 
 
     setFilterData({
@@ -735,9 +763,9 @@ const dateFormatter = (date) => {
     // if (value === null && !filterData.id) {
     //   setDisableSearch(true);
     // }
-// if ((!props.user.isSuperuser && (value === null && !filterData.id)) || (!props.user.isSuperuser && (value === null && !filterData.is_first_tranche_provided)) || ((!props.user.isSuperuser && (value === null && !filterData.is_second_tranche_provided)))) {
-// setDisableSearch(true);
-// }
+    // if ((!props.user.isSuperuser && (value === null && !filterData.id)) || (!props.user.isSuperuser && (value === null && !filterData.is_first_tranche_provided)) || ((!props.user.isSuperuser && (value === null && !filterData.is_second_tranche_provided)))) {
+    // setDisableSearch(true);
+    // }
     if (name === "province") {
       setFilterData({
         ...filterData,
@@ -803,7 +831,13 @@ const dateFormatter = (date) => {
       ward: "",
       id: "",
       is_second_tranche_provided: "",
-      is_first_tranche_provided: ""
+      is_first_tranche_provided: "",
+      all_status__funding_source: "",
+      all_status__payment_received_status: "",
+      all_status__tranche_two_status: "",
+      all_status__tranche_one_status: "",
+      all_status__overall_beneficiary_status: "",
+      event: ""
     });
     props.requests.getEarthquakeRequest.do({
       fetchedData: handleFetchedData,
@@ -813,19 +847,71 @@ const dateFormatter = (date) => {
       search: "",
       is_second_tranche_provided: "",
       is_first_tranche_provided: "",
+      all_status__funding_source: "",
+      all_status__payment_received_status: "",
+      all_status__tranche_two_status: "",
+      all_status__tranche_one_status: "",
+      all_status__overall_beneficiary_status: "",
+      event: "",
       countData: handleCount,
     });
   };
 
-const yesNoOptionList = [
-  {
-    label: 'हो', value: 2
-  },
-  {
-    label: 'छैन', value: 3
-  }
-];
+  const yesNoOptionList = [
+    {
+      label: 'हो', value: 2
+    },
+    {
+      label: 'छैन', value: 3
+    }
+  ];
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/overall-beneficiary-status/`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setBenificeryList(data);
+      });
 
+
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-two-status/`, { credentials: 'include' })
+      .then(res => res.json())
+
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setTranche2StatusList(data);
+      });
+
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-one-status/`, { credentials: 'include' })
+      .then(res => res.json())
+
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setTranche1StatusList(data);
+      });
+
+
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/funding-source/`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setFundingSourceList(data);
+      });
+
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/payment-received-status/`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setPaymentReceiveList(data);
+      });
+
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/event/?fields=id,title`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setFetchIncident(data);
+      });
+  }, []);
   return (
     <>
       {loader ? (
@@ -850,245 +936,377 @@ const yesNoOptionList = [
         }}
       >
         <div className={styles.credentialSearch}>
-
-          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ display: 'flex', gap: '5px' }}>
-          <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                isDisabled={!props.user.isSuperuser}
-                value={
-                  !filterData.province
-                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
-                      props.user.profile.province,
-                      provinces
-                    ) : ''
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.province,
-                        provinces
-                      )
-                }
-                name="province"
-                placeholder={"प्रदेश छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={ProvinceListSelect}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-              />
-          </div>
-            <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
-                isDisabled={props.user.isSuperuser ? false : props.user.profile.region !== 'province'}
-                value={
-                  !filterData.district
-                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
-                      props.user.profile.district,
-                      districts
-                    ) : ''
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.district,
-                        districts
-                      )
-                }
-                name="district"
-                placeholder={"जिल्ला छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={DistrictListSelect}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-              />
-            </div>
-
-            <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
-                isDisabled={props.user.isSuperuser ? false : props.user.profile.region === 'province' ? false : props.user.profile.region === 'district' ? false : props.user.profile.region === 'municipality' ? true : true}
-                value={
-                  !filterData.municipality
-                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
-                      props.user.profile.municipality,
-                      municipalities
-                    ) : ''
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.municipality,
-                        municipalities
-                      )
-                }
-                name="municipality"
-                placeholder={"पालिका छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={MunicipalityList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-
-            <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                value={
-                  filterData.ward === ""
-                    ? ""
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.ward,
-                        districts
-                      )
-                }
-                name="ward"
-                placeholder={"वडा छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={WardList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-            </div>
-            <div style={{ display: 'flex', gap: '5px' }}>
-            <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                value={filterData.is_first_tranche_provided}
-                name="is_first_tranche_provided"
-                placeholder={"पहिलो किस्ताको रकम लिइएको हो?"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={yesNoOptionList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-            <div style={{ width: "230px" }}>
-              <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.is_second_tranche_provided}
-                name="is_second_tranche_provided"
-                placeholder={"दोस्रो किस्ताको रकम लिइएको हो"}
-
-                options={yesNoOptionList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-            <FormControl>
-              {/* <InputLabel>
-                                Test
-
-                            </InputLabel> */}
-              <Input
-                type="text"
-                // value={covid24hrsStatData[field]}
-                // onChange={e => handleCovid24hrStat(e, field)}
-                // className={styles.select}
-                disableUnderline
-                inputProps={{
-                  disableUnderline: true,
-                }}
-                name="id"
-                value={filterData.id}
-                onChange={handleChangeId}
-                placeholder="कृपया खोज्नुहोस्"
-                style={{
-                  border: "1px solid hsl(0, 0%, 80%)",
-                  width: "fit-content",
-                  borderRadius: "3px",
-                  padding: "2px 10px",
-                }}
-              />
-            </FormControl>
-            </div>
-            </div>
-            <div className={styles.saveOrAddButtons}>
-              <button
-                className={styles.submitButtons}
-                // disabled={!!(filterData.district && !filterData.district.value)}
-                onClick={handleSearch}
-                type="submit"
-                disabled={disableSearch}
-              >
-                {"खोज्नुहोस्"}
-              </button>
-              {isFilterEnabled ? (
-                <div
-                  style={{ display: "flex", alignItems: "center" }}
-                  role="button"
-                  title="फिल्टर रिसेट गर्नुहोस्"
-                  onClick={handleReset}
-                >
-                  <ScalableVectorGraphics
-                    className={styles.infoIcon}
-                    src={Reset}
+          <div style={{ display: "flex", gap: "15px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap', alignItems: 'flex-start', width: '95%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+              <h2>फिल्टर</h2>
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                <div style={{ width: "230px" }}>
+                  <Select
+                    isClearable
+                    isDisabled={!props.user.isSuperuser}
+                    value={
+                      !filterData.province
+                        ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                          props.user.profile.province,
+                          provinces
+                        ) : ''
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.province,
+                          provinces
+                        )
+                    }
+                    name="province"
+                    placeholder={"प्रदेश छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={ProvinceListSelect}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                   />
                 </div>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
-          <div className={styles.rightOptions}>
-            <IconButton
-            // disabled={!filterData.municipality}
-                            onClick={handleDownload}
-                            style={{ cursor: 'pointer', borderRadius: '20px' }}
-            >
+                <div style={{ width: "230px" }}>
+                  <Select
+                    isClearable
+                    // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
+                    isDisabled={props.user.isSuperuser ? false : props.user.profile.region !== 'province'}
+                    value={
+                      !filterData.district
+                        ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                          props.user.profile.district,
+                          districts
+                        ) : ''
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.district,
+                          districts
+                        )
+                    }
+                    name="district"
+                    placeholder={"जिल्ला छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={DistrictListSelect}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  />
+                </div>
+                <div style={{ width: "280px" }}>
+                  <Select
+                    isClearable
+                    // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
+                    isDisabled={props.user.isSuperuser ? false : props.user.profile.region === 'province' ? false : props.user.profile.region === 'district' ? false : props.user.profile.region === 'municipality' ? true : true}
+                    value={
+                      !filterData.municipality
+                        ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                          props.user.profile.municipality,
+                          municipalities
+                        ) : ''
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.municipality,
+                          municipalities
+                        )
+                    }
+                    name="municipality"
+                    placeholder={"पालिका छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={MunicipalityList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "280px",
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ width: "145px" }}>
+                  <Select
+                    isClearable
+                    value={
+                      filterData.ward === ""
+                        ? ""
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.ward,
+                          districts
+                        )
+                    }
+                    name="ward"
+                    placeholder={"वडा छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={WardList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "145px",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.event}
+                    name="event"
+                    placeholder={"घटना"}
 
-                            <DownloadIcon />
-                            <span style={{ fontSize: '16px' }}>Download</span>
-            </IconButton>
-            <TablePagination
-              className={styles.tablePagination}
-              rowsPerPageOptions={[100]}
-              component="div"
-              count={count}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-            />
+                    options={fetchIncident}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    value={filterData.is_first_tranche_provided}
+                    name="is_first_tranche_provided"
+                    placeholder={"पहिलो किस्ताको फारम अपलोड गरिएको हो?"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={yesNoOptionList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.is_second_tranche_provided}
+                    name="is_second_tranche_provided"
+                    placeholder={"दोस्रो किस्ताको फारम अपलोड गरिएको हो?"}
+
+                    options={yesNoOptionList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.all_status__tranche_one_status}
+                    name="all_status__tranche_one_status"
+                    placeholder={"पहिलो किस्ताको स्थिति"}
+
+                    options={tranche1StatusList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.all_status__tranche_two_status}
+                    name="all_status__tranche_two_status"
+                    placeholder={"दोस्रो किस्ताको स्थिति"}
+
+                    options={tranche2StatusList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.all_status__payment_received_status}
+                    name="all_status__payment_received_status"
+                    placeholder={"भुक्तानी प्राप्तीको स्थिति"}
+
+                    options={paymentReceiveList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                <div style={{ width: "300px" }}>
+                  <Select
+                      isClearable
+                      onChange={(value, actionMeta) =>
+                        handleDropdown(actionMeta.name, value)
+                      }
+                      value={filterData.all_status__funding_source}
+                      name="all_status__funding_source"
+                      placeholder={"भुक्तानी कोषको स्रोत"}
+
+                      options={fundingSourceList}
+                      className="dropdownZindex"
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: (base) => ({
+                          ...base,
+                          zIndex: 9999,
+                          width: "300px",
+                        }),
+                      }}
+                  />
+                </div>
+                <div style={{ width: "300px" }}>
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.all_status__overall_beneficiary_status}
+                    name="all_status__overall_beneficiary_status"
+                    placeholder={"लाभार्थीको स्थिति समग्रमा"}
+
+                    options={benificeryList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+              <h2>टाईप गरेर खोज्नुहोस्</h2>
+              <FormControl>
+                <Input
+                  type="text"
+                  // value={covid24hrsStatData[field]}
+                  // onChange={e => handleCovid24hrStat(e, field)}
+                  // className={styles.select}
+                  disableUnderline
+                  inputProps={{
+                    disableUnderline: true,
+                  }}
+                  name="id"
+                  value={filterData.id}
+                  onChange={handleChangeId}
+                  placeholder="सम्झौता क्रमााङ्क संंख्या, लाभग्राही क्रम संंख्या, दर्ता नम्बर, नाम (नेपाली), नाम (अंग्रेजी), ना.प्र.न."
+                  style={{
+                    width: "930px",
+                    maxWidth: "90%",
+                    border: "1px solid hsl(0, 0%, 80%)",
+                    borderRadius: "3px",
+                    padding: "2px 10px",
+                  }}
+                />
+              </FormControl>
+              <div className={styles.saveOrAddButtons}>
+                <button
+                  className={styles.submitButtons}
+                  // disabled={!!(filterData.district && !filterData.district.value)}
+                  onClick={handleSearch}
+                  type="submit"
+                  disabled={disableSearch}
+                >
+                  {"खोज्नुहोस्"}
+                </button>
+                {isFilterEnabled ? (
+                  <div
+                    style={{ display: "flex", alignItems: "center" }}
+                    role="button"
+                    title="फिल्टर रिसेट गर्नुहोस्"
+                    onClick={handleReset}
+                  >
+                    <ScalableVectorGraphics
+                      className={styles.infoIcon}
+                      src={Reset}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className={styles.rightOptions}>
+                  <IconButton
+                    // disabled={!filterData.municipality}
+                    onClick={handleDownload}
+                    style={{ cursor: 'pointer', borderRadius: '20px' }}
+                  >
+
+                    <DownloadIcon />
+                    <span style={{ fontSize: '16px' }}>Download</span>
+                  </IconButton>
+                  <TablePagination
+                    className={styles.tablePagination}
+                    rowsPerPageOptions={[100]}
+                    component="div"
+                    count={count}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1137,7 +1355,7 @@ const yesNoOptionList = [
                         // aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
-                        // selected={isItemSelected}
+                      // selected={isItemSelected}
                       >
                         {/* <TableCell
                                                         align="center"
@@ -1337,11 +1555,10 @@ const yesNoOptionList = [
                                 padding="none"
                                 key={val}
                               >
-                                {`${
-                                  row[val]
+                                {`${row[val]
                                     ? englishToNepaliNumber(row[val])
                                     : "-"
-                                }`}
+                                  }`}
                               </TableCell>
                             );
                           }
@@ -1442,7 +1659,6 @@ const yesNoOptionList = [
                               </TableCell>
                             );
                           }
-
                           if (val === "action") {
                             return (
                               <TableCell
@@ -1470,6 +1686,7 @@ const yesNoOptionList = [
                               </TableCell>
                             );
                           }
+
                           return (
                             <>
                               <TableCell

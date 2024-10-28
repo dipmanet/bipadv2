@@ -147,7 +147,7 @@ const TemporaryShelter = (props: {
 }) => {
   const [added, setAdded] = useState(false);
   const [updated, setUpdated] = useState(false);
-
+const [fetchIncident, setFetchIncident] = useState([]);
   const [data, setData] = useState({
     entry_date_bs: "",
     pa_number: "",
@@ -199,6 +199,7 @@ const TemporaryShelter = (props: {
     operating_municipality: "",
     application_file: "",
     application_date: "",
+    event: ""
   });
 
   const [errorFields, setErrorFields] = useState({
@@ -208,6 +209,7 @@ const TemporaryShelter = (props: {
     pa_number: false,
     registration_number: false,
     tole_name: false,
+    event: false,
     grand_parent_title: false,
     grand_parent_name: false,
     grand_child_relation: false,
@@ -840,6 +842,7 @@ const TemporaryShelter = (props: {
     finalFormData.append("entry_date_bs", finalUpdateData.entry_date_bs);
     finalFormData.append("pa_number", finalUpdateData.pa_number);
     finalFormData.append("tole_name", finalUpdateData.tole_name);
+    finalFormData.append("event", finalUpdateData.event);
     finalFormData.append(
       "grand_parent_title",
       finalUpdateData.grand_parent_title
@@ -1009,8 +1012,7 @@ const TemporaryShelter = (props: {
 
     finalUpdateData.infrastructure_photo.length
       ? finalUpdateData.infrastructure_photo.map((i) =>
-          finalFormData.append("infrastructure_photo", i, i.name)
-        )
+          finalFormData.append("infrastructure_photo", i, i.name))
       : null;
     const baseUrl = process.env.REACT_APP_API_SERVER_URL;
     axios
@@ -1162,6 +1164,12 @@ const TemporaryShelter = (props: {
     setToggleSwitchChecked(checked);
   };
 
+  useEffect(() => {
+fetch(`${process.env.REACT_APP_API_SERVER_URL}/event/?fields=id,title`, { credentials: 'include' })
+.then(res => res.json())
+.then(final_resp => setFetchIncident(final_resp.results));
+  }, []);
+
   return (
     <>
       <Page hideFilter hideMap />
@@ -1197,6 +1205,11 @@ const TemporaryShelter = (props: {
             <div className="reporting123" style={{ cursor: "pointer" }}>
               <img className="listSvg123" src={ListSvg} alt="" />
               <p className="reportingText123">दोस्रो किस्ता फारम अपलोड</p>
+              <p className="grayCircle123" />
+            </div>
+            <div className="reporting123" style={{ cursor: "pointer" }}>
+              <img className="listSvg123" src={ListSvg} alt="" />
+              <p className="reportingText123">अवस्था</p>
               <p className="grayCircle123" />
             </div>
           </div>
@@ -1247,11 +1260,48 @@ const TemporaryShelter = (props: {
               <span>रोमनीकृत</span>
             </label>
             <div className={styles.mainDataEntrySection}>
-              {/* <div className={styles.formGeneralInfo}>
-                                <h1>अनुुसूूची ३</h1>
-                                <h1>दफा ३ को उपदफा(५) सँँग सम्बन्धित</h1>
-                                <h1 style={{ textDecoration: 'underline' }}>भूूकम्प प्रभावितको अस्थायी आवास निर्माणका लागि अनुुदान सम्झौता-पत्र</h1>
-                            </div> */}
+            <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <span style={{ color: "red" }}>*</span>
+                      <h2 style={{ textDecoration: "underline" }}>
+                               बिपद्को घटना छान्नुहोस्
+                      </h2>
+                    </div>
+
+                    <select
+                      id="event"
+                      name="event"
+                      value={data.event}
+                      onChange={handleFormData}
+                      style={
+                        errorFields.event
+                          ? {
+                              border: "1px solid red",
+                              height: "34px",
+                              width: "auto",
+                            }
+                          : { height: "34px", width: "auto" }
+                      }
+                    >
+                       <option />
+                      {
+                        fetchIncident.map((i) => (
+                          <option value={i.id} key={i.id}>{i.title}</option>
+                        ))
+                      }
+
+
+                    </select>
+                  </div>
+            </div>
+
               <div>
                 <div className={styles.locationDetails}>
                   <div

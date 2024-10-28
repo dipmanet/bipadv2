@@ -42,6 +42,7 @@ export const epidemicDetails = {
 export const tableTitleRef = {
   action: "कार्य",
   id: "लाभग्राही क्रम संंख्या",
+  eventTitle: 'घटना',
   paNumber: "सम्झौता क्रमााङ्क संंख्या",
   registrationNumber: "दर्ता नम्बर",
   entryDateBs: "पहिलो किस्ता दर्ता मिति",
@@ -59,9 +60,9 @@ export const tableTitleRef = {
   temporaryShelterLandMunicipality: "अस्थायी आश्रय भूमि नगरपालिका",
   temporaryShelterLandWard: "अस्थायी आश्रय भूमि वार्ड",
   temporaryShelterLandTole: "अस्थायी आश्रय भूमि टोल",
-  amount: "पहिलो किस्ताको रकम लिइएको हो",
-  firstTrancheObtainedDate: "पहिलो किस्ता प्राप्त मिति",
+  amount: "पहिलो किस्ताको फारम अपलोड गरिएको हो",
+  firstTrancheObtainedDate: "पहिलो किस्ताको फारम अपलोड भएको मिति",
   secondTrancheRegisteredDate: "दोस्रो किस्ताको दर्ता मिति",
-  secondTrancheEnrollmentForm: "दोस्रो किस्ताको रकम लिइएको हो",
-  secondTrancheObtainedDate: "दोस्रो किस्ता प्राप्त मिति",
+  secondTrancheEnrollmentForm: "दोस्रो किस्ताको फारम अपलोड गरिएको हो",
+  secondTrancheObtainedDate: "दोस्रो किस्ताको फारम अपलोड भएको मिति",
 };

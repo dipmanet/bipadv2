@@ -44,8 +44,9 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
   // padding-bottom: 12px;
     .saveOrAddButtons {
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        justify-content: space-between;
+        padding-top: 14px;
 
         .infoIcon {
             margin: 0px 15px 0 5px;
@@ -97,9 +98,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     width: 100%;
     // justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgb(202, 202, 202);
-    // border-left: 1px solid rgb(228, 228, 228);
-    // border-right: 1px solid rgb(228, 228, 228);
+   
     margin-top: 25px;
     // padding-right: 24px;
 
