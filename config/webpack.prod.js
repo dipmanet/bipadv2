@@ -46,6 +46,7 @@ module.exports = (env) => {
         },
 
         mode: 'production',
+        stats: 'errors-only',
 
         devtool: 'source-map',
         node: {

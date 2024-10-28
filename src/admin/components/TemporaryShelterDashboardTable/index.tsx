@@ -429,8 +429,6 @@ const dateFormatter = (date) => {
             delete tableHeader[key];
 }) : "";
 
-
-
         setTableHeaderList(tableHeader);
       const tableRows = fetchedData.lowerLevelAggrigated.data.map((row, index) => {
         const epidemicObj = {
@@ -443,8 +441,6 @@ const dateFormatter = (date) => {
             totalFirstTrancheFormUploaded: englishToNepaliNumber(row.totalFirstTrancheFormUploaded),
             totalSecondTrancheFormFilled: englishToNepaliNumber(row.totalSecondTrancheFormFilled),
             totalSecondTrancheFormUploaded: englishToNepaliNumber(row.totalSecondTrancheFormUploaded),
-
-
         };
 
         return epidemicObj;
