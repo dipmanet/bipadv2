@@ -308,6 +308,18 @@ const TemporaryShelterDashboardTable = (props) => {
     props.requests.getEarthquakeRequest.do({
       fetchedData: handleFetchedData,
       countData: handleCount,
+      province: props.user.isSuperuser ? filterData.district
+        ? ""
+        : filterData.province && filterData.province.value
+        : props.user.profile.province,
+      district: props.user.isSuperuser ? filterData.municipality
+        ? ""
+        : filterData.district && filterData.district.value
+        : props.user.profile.district,
+      municipality: props.user.isSuperuser ? filterData.ward
+        ? ""
+        : filterData.municipality && filterData.municipality.value
+        : props.user.profile.municipality,
       offset
     });
   }, [offset]);
