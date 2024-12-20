@@ -9,7 +9,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
     margin: 0 auto;
     position: relative;
     padding: 5vh 5vw;
-    width: 100vw;
+    width: calc(100vw - 63px);
     font-family: 'Fira Sans';
     $boxShadow: 0px 2px 6px rgba(151, 149, 148, 0.45);
 

@@ -90,10 +90,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     onMount: false,
     query: ({ params }) => ({
 
-        province: params.province,
-        district: params.district,
-        municipality: params.municipality,
-        ward: params.ward,
+      province: params.province,
+      district: params.district,
+      municipality: params.municipality,
+      ward: params.ward,
       event: params.event
     }),
     onSuccess: ({ response, props, params }) => {
@@ -213,34 +213,34 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     />
                 </TableCell> */}
         {headCells.map((headCell) => {
-         const data = fetchedData && fetchedData.length && fetchedData.length && fetchedData[0].district === "" && headCell.id === "district" ? ""
-         : fetchedData && fetchedData.length && fetchedData[0].municipality === "" && headCell.id === "municipality" ? ""
-            : fetchedData && fetchedData.length && fetchedData[0].province === "" && headCell.id === 'province' ? "" :
-            (
-          <TableCell
-            align="center"
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ backgroundColor: "#DCECFE", fontWeight: "bold" }}
-          >
-            <TableSortLabel
-              className={styles.setStyleForHead}
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        );
+          const data = fetchedData && fetchedData.length && fetchedData.length && fetchedData[0].district === "" && headCell.id === "district" ? ""
+            : fetchedData && fetchedData.length && fetchedData[0].municipality === "" && headCell.id === "municipality" ? ""
+              : fetchedData && fetchedData.length && fetchedData[0].province === "" && headCell.id === 'province' ? "" :
+                (
+                  <TableCell
+                    align="center"
+                    key={headCell.id}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                    sx={{ backgroundColor: "#DCECFE", fontWeight: "bold" }}
+                  >
+                    <TableSortLabel
+                      className={styles.setStyleForHead}
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : "asc"}
+                      onClick={createSortHandler(headCell.id)}
+                    >
+                      {headCell.label}
+                      {orderBy === headCell.id ? (
+                        <Box component="span" sx={visuallyHidden}>
+                          {order === "desc" ? "sorted descending" : "sorted ascending"}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  </TableCell>
+                );
 
-       return data;
-    })}
+          return data;
+        })}
       </TableRow>
     </TableHead>
   );
@@ -270,12 +270,12 @@ const TemporaryShelterDashboardTable = (props) => {
   const [isFilterEnabled, setIsFilteredEnabled] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
   const [benificeryList, setBenificeryList] = useState([]);
-const [tranche1StatusList, setTranche1StatusList] = useState([]);
-const [tranche2StatusList, setTranche2StatusList] = useState([]);
-const [paymentReceiveList, setPaymentReceiveList] = useState([]);
-const [fundingSourceList, setFundingSourceList] = useState([]);
-const [fetchIncident, setFetchIncident] = useState([]);
-const [tableHeaderList, setTableHeaderList] = useState({});
+  const [tranche1StatusList, setTranche1StatusList] = useState([]);
+  const [tranche2StatusList, setTranche2StatusList] = useState([]);
+  const [paymentReceiveList, setPaymentReceiveList] = useState([]);
+  const [fundingSourceList, setFundingSourceList] = useState([]);
+  const [fetchIncident, setFetchIncident] = useState([]);
+  const [tableHeaderList, setTableHeaderList] = useState({});
 
   const [filterData, setFilterData] = useState({
     province: "",
@@ -326,34 +326,34 @@ const [tableHeaderList, setTableHeaderList] = useState({});
     setLoader(true);
     setIsFilteredEnabled(true);
 
-      props.requests.getEarthquakeRequest.do({
-        fetchedData: handleFetchedData,
-        province: props.user.isSuperuser ? filterData.district
+    props.requests.getEarthquakeRequest.do({
+      fetchedData: handleFetchedData,
+      province: props.user.isSuperuser ? filterData.district
         ? ""
         : filterData.province && filterData.province.value
         : props.user.profile.province,
-        district: props.user.isSuperuser ? filterData.municipality
-          ? ""
-          : filterData.district && filterData.district.value
-          : props.user.profile.district,
-        municipality: props.user.isSuperuser ? filterData.ward
-          ? ""
-          : filterData.municipality && filterData.municipality.value
-          : props.user.profile.municipality,
-        ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
-        event: filterData.event ? filterData.event.value : "",
-        countData: handleCount,
-      });
+      district: props.user.isSuperuser ? filterData.municipality
+        ? ""
+        : filterData.district && filterData.district.value
+        : props.user.profile.district,
+      municipality: props.user.isSuperuser ? filterData.ward
+        ? ""
+        : filterData.municipality && filterData.municipality.value
+        : props.user.profile.municipality,
+      ward: filterData.ward ? filterData.ward && filterData.ward.value : "",
+      event: filterData.event ? filterData.event.value : "",
+      countData: handleCount,
+    });
     // }
   };
   // props.user.profile.district
   const DistrictListSelect = filterData.province &&
-  districts
-    .filter((i) => i.province === Number(filterData.province.value))
-    .map((d) => ({
-      value: d.id,
-      label: d.title_ne,
-    }));
+    districts
+      .filter((i) => i.province === Number(filterData.province.value))
+      .map((d) => ({
+        value: d.id,
+        label: d.title_ne,
+      }));
   const ProvinceListSelect = provinces.map((d) => ({
     value: d.id,
     label: d.title_ne,
@@ -366,25 +366,25 @@ const [tableHeaderList, setTableHeaderList] = useState({});
         value: d.id,
         label: d.title_ne,
       }));
-useEffect(() => {
-setFilterData({
-  ...filterData,
-  province: props.user.isSuperuser ? "" : props.user.profile.province ? { value: props.user.profile.province } : "",
+  useEffect(() => {
+    setFilterData({
+      ...filterData,
+      province: props.user.isSuperuser ? "" : props.user.profile.province ? { value: props.user.profile.province } : "",
       district: props.user.isSuperuser ? "" : props.user.profile.district ? { value: props.user.profile.district } : "",
       municipality: props.user.isSuperuser ? "" : props.user.profile.municipality ? { value: props.user.profile.municipality } : ""
-});
-}, [props.user]);
+    });
+  }, [props.user]);
 
   const WardList =
-  props.user.isSuperuser ? filterData.municipality &&
-    wards
-      .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
-      .map((title) => ({ ...title, title: Number(title.title) }))
-      .sort((a, b) => a.title - b.title)
-      .map((d) => ({
-        value: d.id,
-        label: englishToNepaliNumber(d.title),
-      }))
+    props.user.isSuperuser ? filterData.municipality &&
+      wards
+        .filter((i) => i.municipality === Number(filterData.municipality && filterData.municipality.value))
+        .map((title) => ({ ...title, title: Number(title.title) }))
+        .sort((a, b) => a.title - b.title)
+        .map((d) => ({
+          value: d.id,
+          label: englishToNepaliNumber(d.title),
+        }))
 
       :
       wards
@@ -397,7 +397,7 @@ setFilterData({
         }));
 
 
-const dateFormatter = (date) => {
+  const dateFormatter = (date) => {
     const slicedDate = date.split("-");
     const year = englishToNepaliNumber(slicedDate[0]);
     const month = englishToNepaliNumber(slicedDate[1]);
@@ -407,40 +407,42 @@ const dateFormatter = (date) => {
   };
   useEffect(() => {
     if (fetchedData && fetchedData.lowerLevelAggrigated) {
-        const tableHeader = { sn: 'क्रम संख्या',
-            province: "प्रदेश",
-            district: "जिल्ला",
-            municipality: "पालिका",
-            ward: 'वडा',
-            totalFirstTrancheFormFilled: "कुल पहिलो किस्ता फारम भरिएको",
-            totalFirstTrancheFormUploaded: "कुल पहिलो किस्ता फारम अपलोड गरिएको",
-            totalSecondTrancheFormFilled: "कुल दोस्रो किस्ता फारम भरिएको",
-            totalSecondTrancheFormUploaded: "कुल दोस्रो किस्ता फारम अपलोड गरिएको", };
-            fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryDistrict_Province_TitleNe
+      const tableHeader = {
+        sn: 'क्रम संख्या',
+        province: "प्रदेश",
+        district: "जिल्ला",
+        municipality: "पालिका",
+        ward: 'वडा',
+        totalFirstTrancheFormFilled: "पहिलो किस्ता फारम भरिएको",
+        totalFirstTrancheFormUploaded: "पहिलो किस्ता फारम अपलोड गरिएको",
+        totalSecondTrancheFormFilled: "दोस्रो किस्ता फारम भरिएको",
+        totalSecondTrancheFormUploaded: "दोस्रो किस्ता फारम अपलोड गरिएको",
+      };
+      fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryDistrict_Province_TitleNe
         ?
         ['district', 'municipality', 'ward'].forEach(key => {
-            delete tableHeader[key];
+          delete tableHeader[key];
         }) :
         fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryDistrict_TitleNe ? ['province', 'municipality', 'ward'].forEach(key => {
-            delete tableHeader[key];
+          delete tableHeader[key];
         }) : fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryMunicipality_TitleNe ? ['province', 'district', 'ward'].forEach(key => {
-            delete tableHeader[key];
+          delete tableHeader[key];
         }) : fetchedData.lowerLevelAggrigated.data.length && fetchedData.lowerLevelAggrigated.data[0].beneficiaryWard_Title ? ['province', 'district', 'municipality'].forEach(key => {
-            delete tableHeader[key];
-}) : "";
+          delete tableHeader[key];
+        }) : "";
 
-        setTableHeaderList(tableHeader);
+      setTableHeaderList(tableHeader);
       const tableRows = fetchedData.lowerLevelAggrigated.data.map((row, index) => {
         const epidemicObj = {
-            sn: englishToNepaliNumber(index + 1),
-            province: row.beneficiaryDistrict_Province_TitleNe,
-            district: row.beneficiaryDistrict_TitleNe ? row.beneficiaryDistrict_TitleNe : "",
-            municipality: row.beneficiaryMunicipality_TitleNe ? row.beneficiaryMunicipality_TitleNe : "",
-            ward: row.beneficiaryWard_Title ? row.beneficiaryWard_Title : "",
-            totalFirstTrancheFormFilled: englishToNepaliNumber(row.totalFirstTrancheFormFilled),
-            totalFirstTrancheFormUploaded: englishToNepaliNumber(row.totalFirstTrancheFormUploaded),
-            totalSecondTrancheFormFilled: englishToNepaliNumber(row.totalSecondTrancheFormFilled),
-            totalSecondTrancheFormUploaded: englishToNepaliNumber(row.totalSecondTrancheFormUploaded),
+          sn: englishToNepaliNumber(index + 1),
+          province: row.beneficiaryDistrict_Province_TitleNe,
+          district: row.beneficiaryDistrict_TitleNe ? row.beneficiaryDistrict_TitleNe : "",
+          municipality: row.beneficiaryMunicipality_TitleNe ? row.beneficiaryMunicipality_TitleNe : "",
+          ward: row.beneficiaryWard_Title ? row.beneficiaryWard_Title : "",
+          totalFirstTrancheFormFilled: englishToNepaliNumber(row.totalFirstTrancheFormFilled),
+          totalFirstTrancheFormUploaded: englishToNepaliNumber(row.totalFirstTrancheFormUploaded),
+          totalSecondTrancheFormFilled: englishToNepaliNumber(row.totalSecondTrancheFormFilled),
+          totalSecondTrancheFormUploaded: englishToNepaliNumber(row.totalSecondTrancheFormUploaded),
         };
 
         return epidemicObj;
@@ -534,69 +536,69 @@ const dateFormatter = (date) => {
   };
 
   const handleDownload = () => {
-      // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
-      //     .setColumns([
-      //         'id',
-      //         'Province',
-      //         'District',
-      //         'Municipality',
-      //         'Ward',
-      //         'Local Address',
-      //         'Reported Date (A.D.)(eg. 2021/07/31)',
-      //         'Hazard',
-      //         'Hazard Inducer',
-      //         'Total Estimated Loss(NPR)',
-      //         'Agriculture Economic Loss(NPR)',
-      //         'Infrastructure Economic Loss(NPR)',
-      //         'Total Infrastructure Destroyed',
-      //         'House Destroyed',
-      //         'House Affected',
-      //         'Total Livestock Destroyed',
-      //         'Total Injured Male',
-      //         'Total Injured Female',
-      //         'Total Injured Others',
-      //         'Total Injured Disabled',
-      //         'Total Missing Male',
-      //         'Total Missing Female',
-      //         'Total Missing Other',
-      //         'Total Missing Disabled',
-      //         'Total Male Death',
-      //         'Total Female Death',
-      //         'Total Other Death',
-      //         'Total Disabled Death',
-      //         'Verified (eg. Yes)',
-      //         'Verification message',
-      //         'Approved (eg. Yes)',
-      //     ])
-      //     .addRows(Dataforcsv())
-      //     .exportFile();
+    // const csvBuilder = new CsvBuilder(`EpidemicData_${Date.now()}.csv`)
+    //     .setColumns([
+    //         'id',
+    //         'Province',
+    //         'District',
+    //         'Municipality',
+    //         'Ward',
+    //         'Local Address',
+    //         'Reported Date (A.D.)(eg. 2021/07/31)',
+    //         'Hazard',
+    //         'Hazard Inducer',
+    //         'Total Estimated Loss(NPR)',
+    //         'Agriculture Economic Loss(NPR)',
+    //         'Infrastructure Economic Loss(NPR)',
+    //         'Total Infrastructure Destroyed',
+    //         'House Destroyed',
+    //         'House Affected',
+    //         'Total Livestock Destroyed',
+    //         'Total Injured Male',
+    //         'Total Injured Female',
+    //         'Total Injured Others',
+    //         'Total Injured Disabled',
+    //         'Total Missing Male',
+    //         'Total Missing Female',
+    //         'Total Missing Other',
+    //         'Total Missing Disabled',
+    //         'Total Male Death',
+    //         'Total Female Death',
+    //         'Total Other Death',
+    //         'Total Disabled Death',
+    //         'Verified (eg. Yes)',
+    //         'Verification message',
+    //         'Approved (eg. Yes)',
+    //     ])
+    //     .addRows(Dataforcsv())
+    //     .exportFile();
 
-      // window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${
-      //   props.user.isSuperuser ? filterData.district
-      //   ? ""
-      //   : filterData.province && filterData.province.value
-      //   : filterData.district
-      //   ? ""
-      //   : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province
-      // }&`}
+    // window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${
+    //   props.user.isSuperuser ? filterData.district
+    //   ? ""
+    //   : filterData.province && filterData.province.value
+    //   : filterData.district
+    //   ? ""
+    //   : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province
+    // }&`}
 
-      // ${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality
-      //   ? ""
-      //   : filterData.district && filterData.district.value
-      //   : filterData.municipality
-      //   ? ""
-      //   : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser
-      //     ? filterData.ward
-      //     ? ""
-      //     : filterData.municipality && filterData.municipality.value
-      //     : filterData.ward
-      //     ? ""
-      //     : filterData.municipality ? filterData.municipality && filterData.municipality.value :
+    // ${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality
+    //   ? ""
+    //   : filterData.district && filterData.district.value
+    //   : filterData.municipality
+    //   ? ""
+    //   : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser
+    //     ? filterData.ward
+    //     ? ""
+    //     : filterData.municipality && filterData.municipality.value
+    //     : filterData.ward
+    //     ? ""
+    //     : filterData.municipality ? filterData.municipality && filterData.municipality.value :
 
-      //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
+    //     props.user.profile.municipality}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : ""}`, "_blank");
 
-      window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province || ""}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district || ""}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality || ""}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : "ward="}`, "_blank");
-    };
+    window.open(`${process.env.REACT_APP_API_SERVER_URL}/temporary-shelter-download-xlsx/?${filterData.district ? "" : `province=${props.user.isSuperuser ? filterData.district ? "" : filterData.province && filterData.province.value : filterData.district ? "" : filterData.province ? filterData.province && filterData.province.value : props.user.profile.province || ""}&`}${filterData.municipality ? "" : `district=${props.user.isSuperuser ? filterData.municipality ? "" : filterData.district && filterData.district.value : filterData.municipality ? "" : filterData.district ? filterData.district && filterData.district.value : props.user.profile.district || ""}&`}${filterData.ward ? "" : `municipality=${props.user.isSuperuser ? filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : "" : filterData.ward ? "" : filterData.municipality ? filterData.municipality && filterData.municipality.value : props.user.profile.municipality || ""}&`}${filterData.ward ? `ward=${filterData.ward ? filterData.ward && filterData.ward.value : ""}` : "ward="}`, "_blank");
+  };
 
   // const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
   //     const selectedIndex = selected.indexOf(name);
@@ -672,10 +674,10 @@ const dateFormatter = (date) => {
         setDisableSearch(true);
       }
     } else if (e.target.value === "" && !filterData.ward) {
-        setDisableSearch(true);
-      } else {
-        setDisableSearch(false);
-      }
+      setDisableSearch(true);
+    } else {
+      setDisableSearch(false);
+    }
 
 
     setFilterData({
@@ -699,9 +701,9 @@ const dateFormatter = (date) => {
     // if (value === null && !filterData.id) {
     //   setDisableSearch(true);
     // }
-// if ((!props.user.isSuperuser && (value === null && !filterData.id)) || (!props.user.isSuperuser && (value === null && !filterData.is_first_tranche_provided)) || ((!props.user.isSuperuser && (value === null && !filterData.is_second_tranche_provided)))) {
-// setDisableSearch(true);
-// }
+    // if ((!props.user.isSuperuser && (value === null && !filterData.id)) || (!props.user.isSuperuser && (value === null && !filterData.is_first_tranche_provided)) || ((!props.user.isSuperuser && (value === null && !filterData.is_second_tranche_provided)))) {
+    // setDisableSearch(true);
+    // }
     if (name === "province") {
       setFilterData({
         ...filterData,
@@ -765,7 +767,7 @@ const dateFormatter = (date) => {
       district: "",
       municipality: "",
       ward: "",
-     province: "",
+      province: "",
       event: ""
     });
     props.requests.getEarthquakeRequest.do({
@@ -779,61 +781,61 @@ const dateFormatter = (date) => {
     });
   };
 
-const yesNoOptionList = [
-  {
-    label: 'हो', value: 2
-  },
-  {
-    label: 'छैन', value: 3
-  }
-];
-useEffect(() => {
-  fetch(`${process.env.REACT_APP_API_SERVER_URL}/overall-beneficiary-status/`, { credentials: 'include' })
-  .then(res => res.json())
-  .then(final_resp => {
-    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
-    setBenificeryList(data);
-});
+  const yesNoOptionList = [
+    {
+      label: 'हो', value: 2
+    },
+    {
+      label: 'छैन', value: 3
+    }
+  ];
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/overall-beneficiary-status/`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setBenificeryList(data);
+      });
 
 
-  fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-two-status/`, { credentials: 'include' })
-  .then(res => res.json())
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-two-status/`, { credentials: 'include' })
+      .then(res => res.json())
 
-  .then(final_resp => {
-    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
-    setTranche2StatusList(data);
-});
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setTranche2StatusList(data);
+      });
 
-  fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-one-status/`, { credentials: 'include' })
-  .then(res => res.json())
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/tranche-one-status/`, { credentials: 'include' })
+      .then(res => res.json())
 
-  .then(final_resp => {
-    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
-    setTranche1StatusList(data);
-});
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setTranche1StatusList(data);
+      });
 
 
-  fetch(`${process.env.REACT_APP_API_SERVER_URL}/funding-source/`, { credentials: 'include' })
-  .then(res => res.json())
-  .then(final_resp => {
-    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
-    setFundingSourceList(data);
-});
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/funding-source/`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setFundingSourceList(data);
+      });
 
-  fetch(`${process.env.REACT_APP_API_SERVER_URL}/payment-received-status/`, { credentials: 'include' })
-  .then(res => res.json())
-  .then(final_resp => {
-    const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
-    setPaymentReceiveList(data);
-});
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/payment-received-status/`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setPaymentReceiveList(data);
+      });
 
-  fetch(`${process.env.REACT_APP_API_SERVER_URL}/event/?fields=id,title`, { credentials: 'include' })
-.then(res => res.json())
-.then(final_resp => {
-  const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
-  setFetchIncident(data);
-});
-    }, []);
+    fetch(`${process.env.REACT_APP_API_SERVER_URL}/event/?fields=id,title`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(final_resp => {
+        const data = final_resp.results.map(i => ({ label: i.title, value: i.id }));
+        setFetchIncident(data);
+      });
+  }, []);
 
   return (
     <>
@@ -854,161 +856,158 @@ useEffect(() => {
       )}
       <Box
         sx={{
-          width: "71vw",
-
-
         }}
       >
         <div className={styles.credentialSearch}>
 
-          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '25px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          <div style={{ display: "flex", gap: "5px", marginLeft: '27px', marginTop: '25px', marginBottom: '54px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ display: 'flex', gap: '5px' }}>
-          <div style={{ width: "230px" }}>
-            <h3>प्रदेश</h3>
-              <Select
-                isClearable
-                isDisabled={!props.user.isSuperuser}
-                value={
-                  !filterData.province
-                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
-                      props.user.profile.province,
-                      provinces
-                    ) : ''
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.province,
-                        provinces
-                      )
-                }
-                name="province"
-                placeholder={"प्रदेश छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={ProvinceListSelect}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-              />
-          </div>
-            <div style={{ width: "230px" }}>
-                <h3>जिल्ला</h3>
-              <Select
-                isClearable
-                // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
-                isDisabled={props.user.isSuperuser ? false : props.user.profile.region !== 'province'}
-                value={
-                  !filterData.district
-                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
-                      props.user.profile.district,
-                      districts
-                    ) : ''
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.district,
-                        districts
-                      )
-                }
-                name="district"
-                placeholder={"जिल्ला छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={DistrictListSelect}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-              />
-            </div>
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                <div style={{ width: "230px" }}>
+                  <h3>प्रदेश</h3>
+                  <Select
+                    isClearable
+                    isDisabled={!props.user.isSuperuser}
+                    value={
+                      !filterData.province
+                        ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                          props.user.profile.province,
+                          provinces
+                        ) : ''
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.province,
+                          provinces
+                        )
+                    }
+                    name="province"
+                    placeholder={"प्रदेश छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={ProvinceListSelect}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  />
+                </div>
+                <div style={{ width: "230px" }}>
+                  <h3>जिल्ला</h3>
+                  <Select
+                    isClearable
+                    // isDisabled={(props.user.isSuperuser === false) || (props.user.profile.region !== "province")}
+                    isDisabled={props.user.isSuperuser ? false : props.user.profile.region !== 'province'}
+                    value={
+                      !filterData.district
+                        ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                          props.user.profile.district,
+                          districts
+                        ) : ''
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.district,
+                          districts
+                        )
+                    }
+                    name="district"
+                    placeholder={"जिल्ला छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={DistrictListSelect}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  />
+                </div>
 
-            <div style={{ width: "230px" }}>
-                <h3>पालिका</h3>
-              <Select
-                isClearable
-                // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
-                isDisabled={props.user.isSuperuser ? false : props.user.profile.region === 'province' ? false : props.user.profile.region === 'district' ? false : props.user.profile.region === 'municipality' ? true : true}
-                value={
-                  !filterData.municipality
-                    ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
-                      props.user.profile.municipality,
-                      municipalities
-                    ) : ''
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.municipality,
-                        municipalities
-                      )
-                }
-                name="municipality"
-                placeholder={"पालिका छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={MunicipalityList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
+                <div style={{ width: "230px" }}>
+                  <h3>पालिका</h3>
+                  <Select
+                    isClearable
+                    // isDisabled={!props.user.isSuperuser || props.user.profile.region !== "district"}
+                    isDisabled={props.user.isSuperuser ? false : props.user.profile.region === 'province' ? false : props.user.profile.region === 'district' ? false : props.user.profile.region === 'municipality' ? true : true}
+                    value={
+                      !filterData.municipality
+                        ? !props.user.isSuperuser ? handleProvincialFormDataNepaliValue(
+                          props.user.profile.municipality,
+                          municipalities
+                        ) : ''
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.municipality,
+                          municipalities
+                        )
+                    }
+                    name="municipality"
+                    placeholder={"पालिका छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={MunicipalityList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "220px",
+                      }),
+                    }}
+                  />
+                </div>
 
-            <div style={{ width: "230px" }}>
-                <h3>वडा</h3>
-              <Select
-                isClearable
-                value={
-                  filterData.ward === ""
-                    ? ""
-                    : handleProvincialFormDataNepaliValue(
-                        filterData.ward,
-                        districts
-                      )
-                }
-                name="ward"
-                placeholder={"वडा छान्नुहोस्"}
-                onChange={(value, actionMeta) =>
-                  handleDropdown(actionMeta.name, value)
-                }
-                options={WardList}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                  }),
-                }}
-              />
-            </div>
-            <div style={{ width: "230px" }}>
-<h3>घटना</h3>
+                <div style={{ width: "230px" }}>
+                  <h3>वडा</h3>
+                  <Select
+                    isClearable
+                    value={
+                      filterData.ward === ""
+                        ? ""
+                        : handleProvincialFormDataNepaliValue(
+                          filterData.ward,
+                          districts
+                        )
+                    }
+                    name="ward"
+                    placeholder={"वडा छान्नुहोस्"}
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    options={WardList}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "220px",
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ width: "300px" }}>
+                  <h3>घटना</h3>
 
-                <Select
-                isClearable
-                onChange={(value, actionMeta) =>
-                handleDropdown(actionMeta.name, value)
-                }
-                value={filterData.event}
-                name="event"
-                placeholder={"घटना"}
+                  <Select
+                    isClearable
+                    onChange={(value, actionMeta) =>
+                      handleDropdown(actionMeta.name, value)
+                    }
+                    value={filterData.event}
+                    name="event"
+                    placeholder={"घटना"}
 
-                options={fetchIncident}
-                className="dropdownZindex"
-                menuPortalTarget={document.body}
-                styles={{
-                menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                    width: "220px",
-                }),
-                }}
-                />
-            </div>
-            </div>
+                    options={fetchIncident}
+                    className="dropdownZindex"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                        width: "300px",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
 
 
             </div>
@@ -1040,131 +1039,131 @@ useEffect(() => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', margin: '0px 27px', gap: '100px', width: '100%', flexWrap: 'wrap' }}>
-            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormFilled)}</h1>
-            <h3>पहिलो किस्ता फारम भरियो</h3>
+          <div style={{ display: 'flex', margin: '0px 27px', gap: '24px', width: '100%', flexWrap: 'wrap' }}>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '150px', height: '150px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', background: 'rgba(255, 255, 255, 0.6)' }}>
+              <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormFilled)}</h1>
+              <h3>पहिलो किस्ता फारम भरियो</h3>
             </div>
-            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormUploaded)}</h1>
-            <h3>पहिलो किस्ता फारम अपलोड गरियो</h3>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '150px', height: '150px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', background: 'rgba(255, 255, 255, 0.6)' }}>
+              <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalFirstTrancheFormUploaded)}</h1>
+              <h3>पहिलो किस्ता फारम अपलोड गरियो</h3>
             </div>
-            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalSecondTrancheFormFilled)}</h1>
-            <h3>दोस्रो किस्ता फारम भरियो</h3>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '150px', height: '150px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', background: 'rgba(255, 255, 255, 0.6)' }}>
+              <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalSecondTrancheFormFilled)}</h1>
+              <h3>दोस्रो किस्ता फारम भरियो</h3>
             </div>
-            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '250px', height: '250px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalSecondTrancheFormUploaded)}</h1>
-            <h3>दोस्रो किस्ता फारम अपलोड गरियो</h3>
+            <div style={{ padding: '10px', margin: '10px 0px', border: '2px solid #b6b6b6', width: '150px', height: '150px', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', background: 'rgba(255, 255, 255, 0.6)' }}>
+              <h1 style={{ fontSize: '30px' }}>{fetchedData && fetchedData.totalCounts && englishToNepaliNumber(fetchedData.totalCounts.totalSecondTrancheFormUploaded)}</h1>
+              <h3>दोस्रो किस्ता फारम अपलोड गरियो</h3>
             </div>
 
           </div>
           {
             fetchedData && fetchedData.lowerLevelAggrigated && fetchedData.lowerLevelAggrigated.data.length ? (
               <div className={styles.rightOptions}>
-                        <h1 style={{ fontSize: '30px', marginLeft: '27px' }}>तल्लो तह एग्रिगेशन</h1>
+                <h1 style={{ fontSize: '30px', marginLeft: '27px', marginTop: '24px' }}>तल्लो तह अनुसारको डाटा</h1>
 
 
               </div>
-              ) : ""}
+            ) : ""}
         </div>
-{
-    fetchedData && fetchedData.lowerLevelAggrigated && fetchedData.lowerLevelAggrigated.data.length ? (
-<Paper sx={{ width: "96%", mb: 2, margin: '0px 27px' }}>
+        {
+          fetchedData && fetchedData.lowerLevelAggrigated && fetchedData.lowerLevelAggrigated.data.length ? (
+            <Paper sx={{ width: "96%", mb: 2, margin: '0px 27px' }}>
 
-          <TableContainer
-            sx={{ maxHeight: 800 }}
-            style={{ width: "100%", overflowX: "scroll" }}
-          >
-            <Table
-              sx={{ minWidth: 750 }}
-              stickyHeader
-              aria-label="sticky table"
-              padding="normal"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                // onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={fetchedData && fetchedData.length}
-                fetchedData={filteredRowData}
-                filter={filterData}
-                tableTitleRef={tableHeaderList}
-              />
-              <TableBody>
-                {filteredRowData ? (
-                  stableSort(
-                    filteredRowData,
-                    getComparator(order, orderBy)
-                  ).map((row, index) => {
-                    // const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+              <TableContainer
+                sx={{ maxHeight: 800 }}
+                style={{ width: "100%", overflowX: "scroll" }}
+              >
+                <Table
+                  sx={{ minWidth: 750 }}
+                  stickyHeader
+                  aria-label="sticky table"
+                  padding="normal"
+                >
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    // onSelectAllClick={handleSelectAllClick}
+                    onRequestSort={handleRequestSort}
+                    rowCount={fetchedData && fetchedData.length}
+                    fetchedData={filteredRowData}
+                    filter={filterData}
+                    tableTitleRef={tableHeaderList}
+                  />
+                  <TableBody>
+                    {filteredRowData ? (
+                      stableSort(
+                        filteredRowData,
+                        getComparator(order, orderBy)
+                      ).map((row, index) => {
+                        // const isItemSelected = isSelected(row.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
 
-                        tabIndex={-1}
-                        key={row.id}
+                            tabIndex={-1}
+                            key={row.id}
 
-                      >
+                          >
 
-                        {Object.keys(row).map((val) => {
-                           const output = tableHeaderList[val] ?
-                          (
-                                <TableCell
-                                  align={
-                                    typeof val === "string" ? "left" : "center"
-                                  }
-                                  className={styles.setStyleForTableCell}
-                                  component="th"
-                                  id={labelId}
-                                  scope="row"
-                                  padding="none"
-                                  key={val}
-                                >
-                                  {row[val] || "-"}
-                                </TableCell>
-                              ) : "";
-return output;
+                            {Object.keys(row).map((val) => {
+                              const output = tableHeaderList[val] ?
+                                (
+                                  <TableCell
+                                    align={
+                                      typeof val === "string" ? "left" : "center"
+                                    }
+                                    className={styles.setStyleForTableCell}
+                                    component="th"
+                                    id={labelId}
+                                    scope="row"
+                                    padding="none"
+                                    key={val}
+                                  >
+                                    {row[val] || "-"}
+                                  </TableCell>
+                                ) : "";
+                              return output;
 
-                        //   return (
-                        //     <>
-                        //       <TableCell
-                        //         align={
-                        //           typeof row[val] === "string"
-                        //             ? "left"
-                        //             : "center"
-                        //         }
-                        //         className={styles.setStyleForTableCell}
-                        //         component="th"
-                        //         id={labelId}
-                        //         scope="row"
-                        //         padding="none"
-                        //         key={val}
-                        //       >
-                        //         {row[val] || "-"}
-                        //       </TableCell>
-                        //     </>
-                        //   );
-                        })}
-                      </TableRow>
-                    );
-                  })
-                ) : (
-                  <p />
-                )}
-              </TableBody>
-            </Table>
+                              //   return (
+                              //     <>
+                              //       <TableCell
+                              //         align={
+                              //           typeof row[val] === "string"
+                              //             ? "left"
+                              //             : "center"
+                              //         }
+                              //         className={styles.setStyleForTableCell}
+                              //         component="th"
+                              //         id={labelId}
+                              //         scope="row"
+                              //         padding="none"
+                              //         key={val}
+                              //       >
+                              //         {row[val] || "-"}
+                              //       </TableCell>
+                              //     </>
+                              //   );
+                            })}
+                          </TableRow>
+                        );
+                      })
+                    ) : (
+                      <p />
+                    )}
+                  </TableBody>
+                </Table>
 
-          </TableContainer>
-</Paper>
-) : (
-""
-)}
+              </TableContainer>
+            </Paper>
+          ) : (
+            ""
+          )}
       </Box>
     </>
   );
