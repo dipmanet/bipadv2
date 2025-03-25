@@ -1,3 +1,8 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
+/* eslint-disable consistent-return */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
@@ -26,7 +31,7 @@ import {
 import { format } from 'd3-format';
 import { extent } from 'd3-array';
 
-import { Translation } from 'react-i18next';
+import { ReactI18NextChild, Translation } from 'react-i18next';
 import memoize from 'memoize-one';
 import { compose } from 'redux';
 import { navigate } from '@reach/router';
@@ -86,6 +91,7 @@ import {
     districtsSelector,
     wardsSelector,
     provincesSelector,
+    filtersSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import {
@@ -183,6 +189,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     wards: wardsSelector(state),
     provinces: provincesSelector(state),
+    filters: filtersSelector(state),
 });
 
 // const colorGrade = [
@@ -229,6 +236,10 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     demographicsGetRequest: {
         url: '/demographic/',
         method: methods.GET,
+        query: ({ params, props }) => ({
+            census_year: params.census_year,
+
+        }),
         onMount: true,
         onSuccess: ({ params, response }) => {
             if (params && params.onSuccess) {
@@ -240,22 +251,26 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
     },
 };
-const pastDataKeySelector = d => d.key;
+const pastDataKeySelector = (d: { key: any }) => d.key;
 
-const pastDataLabelSelector = d => d.label;
+const pastDataLabelSelector = (d: { label: any }) => d.label;
 
-const pastDateRangeOptions = language => ([
+const pastDateRangeOptions = (language: string) => ([
     {
-        label: language === 'en' ? 'Census 2011' : 'जनगणना २०११',
+        label: language === 'en' ? 'Census 2021' : 'जनगणना २०२१',
         key: 1,
     },
     {
-        label: language === 'en' ? 'LG Profile' : 'LG प्रोफाइल',
+        label: language === 'en' ? 'Census 2011' : 'जनगणना २०११',
         key: 2,
+    },
+    {
+        label: language === 'en' ? 'LG Profile' : 'LG प्रोफाइल',
+        key: 3,
     },
 
 ]);
-const NumberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const NumberWithCommas = (x: number) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 const LGProfileCustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         if (payload.length === 2) {
@@ -273,7 +288,7 @@ const LGProfileCustomTooltip = ({ active, payload, label }) => {
                                     {' '}
                                 </p>
                                 {
-                                    payload.map(item => (
+                                    payload.map((item: { name: React.Key | null | undefined; value: any }) => (
                                         <p key={item.name}>
                                             {t(item.name.charAt(0).toUpperCase() + item.name.slice(1))}
                                             {' '}
@@ -353,7 +368,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                                     {' '}
                                 </p>
                                 {
-                                    payload.map(item => (
+                                    payload.map((item: { name: React.Key | null | undefined; value: any }) => (
                                         <p key={item.name}>
                                             {t(item.name.charAt(0).toUpperCase() + item.name.slice(1))}
                                             {' '}
@@ -416,7 +431,7 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }) => (
         </text>
     </g>
 );
-const renderLegend = (props) => {
+const renderLegend = (props: { payload: any }) => {
     const { payload } = props;
 
     return (
@@ -425,7 +440,7 @@ const renderLegend = (props) => {
                 t => (
                     <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '50px' }}>
                         {
-                            payload.map((entry, index) => (
+                            payload.map((entry: { color: any; value: string }, index: any) => (
                                 <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                                     <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
                                     <h2 style={{ marginTop: '5px' }}>{t(entry.value.charAt(0).toUpperCase() + entry.value.slice(1))}</h2>
@@ -439,13 +454,13 @@ const renderLegend = (props) => {
 
     );
 };
-const LGProfileRenderLegend = (props) => {
+const LGProfileRenderLegend = (props: { payload: any }) => {
     const { payload } = props;
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '50px' }}>
             {
-                payload.map((entry, index) => (
+                payload.map((entry: { color: any }, index: any) => (
                     <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                         <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
                         <Translation>
@@ -462,7 +477,7 @@ const LGProfileRenderLegend = (props) => {
     );
 };
 class Demographics extends React.PureComponent<Props> {
-    public constructor(props) {
+    public constructor(props: Props | Readonly<Props>) {
         super(props);
         this.state = {
             selectedAttribute: 'totalPopulation',
@@ -487,12 +502,14 @@ class Demographics extends React.PureComponent<Props> {
 
             },
         } = this.props;
+
         demographicsGetRequest.setDefaultParams({
+            census_year: '2021',
             onSuccess: this.demographicData,
         });
     }
 
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: { closedVisualization: any }) {
         const { closedVisualization, region, region: { adminLevel, geoarea }, provinces, districts, municipalities } = this.props;
         if (prevProps.closedVisualization !== closedVisualization) {
             this.setState({ closedVisualization });
@@ -502,10 +519,10 @@ class Demographics extends React.PureComponent<Props> {
             const selectedFederal = municipalities.find(m => m.id === geoarea).title_en;
             this.setState({ selectedFederalName: selectedFederal });
         } else if (adminLevel === 2) {
-            const selectedFederal = districts.find(d => d.id === geoarea).title_en;
+            const selectedFederal = districts.find((d: { id: number | undefined }) => d.id === geoarea).title_en;
             this.setState({ selectedFederalName: selectedFederal });
         } else if (adminLevel === 1) {
-            const selectedFederal = provinces.find(d => d.id === geoarea).title_en;
+            const selectedFederal = provinces.find((d: { id: number | undefined }) => d.id === geoarea).title_en;
             this.setState({ selectedFederalName: selectedFederal });
         } else {
             this.setState({ selectedFederalName: 'National' });
@@ -529,11 +546,13 @@ class Demographics extends React.PureComponent<Props> {
     public static contextType = TitleContext;
 
 
-    private demographicData = (data) => {
+    private demographicData = (data: any) => {
+        const { handleStoreDemographyData } = this.props;
+        handleStoreDemographyData(data);
         this.setState({ demographyData: data });
     }
 
-    private handleSaveClick = (id) => {
+    private handleSaveClick = (id: string) => {
         saveChart(id, id);
         // saveChart('polulation', 'population');
         // saveChart('literacy', 'literacy');
@@ -748,18 +767,17 @@ class Demographics extends React.PureComponent<Props> {
 
     private rendererParams = (_: string, data: KeyValue) => ({ data });
 
-    private handleAttributeSelectInputChange = (selectedAttribute) => {
+    private handleAttributeSelectInputChange = (selectedAttribute: any) => {
         this.setState({ selectedAttribute });
     }
 
-    private getMapState = (data, selectedAttribute) => {
-        const { wards, region: { adminLevel, geoarea }, municipalities, districts } = this.props;
-
+    private getMapState = (data: any[], selectedAttribute: string | number) => {
+        const { wards, region: { adminLevel, geoarea }, municipalities, districts, provinces } = this.props;
         if (adminLevel === 3) {
-            const filteredWardList = wards.filter(i => i.municipality === geoarea);
-            const value = data.find(d => d.municipality === geoarea);
+            const filteredWardList = wards.filter((i: { municipality: number | undefined }) => i.municipality === geoarea);
+            const value = data.find((d: { municipality: number | undefined }) => d.municipality === geoarea);
 
-            const mapState = filteredWardList.map(i => ({
+            const mapState = filteredWardList.map((i: { id: any }) => ({
                 id: i.id,
                 value: value[selectedAttribute],
             }));
@@ -767,7 +785,7 @@ class Demographics extends React.PureComponent<Props> {
             return mapState;
         }
         if (adminLevel === 2) {
-            const mapState = data.map(d => ({
+            const mapState = data.map((d: { [x: string]: string | number; municipality: any }) => ({
                 id: d.municipality,
                 value: +d[selectedAttribute] || 0,
             }));
@@ -775,28 +793,75 @@ class Demographics extends React.PureComponent<Props> {
             return mapState;
         }
 
+        if (adminLevel === 1) {
+            const selectedProvinceMunicipalities = districts.map((m: { id: number }) => {
+                const filtered_municipality = municipalities.filter(d => d.district === m.id);
+                return filtered_municipality;
+            });
+            const districtWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                const finaldata = mun.map((dat: { id: any; district: any }) => {
+                    const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
 
-        const selectedProvinceMunicipalities = districts.map((m) => {
-            const test = municipalities.filter(d => d.district === m.id);
-            return test;
+                    return ({ ...datas, district: dat.district });
+                });
+                return finaldata;
+            });
+
+            const finalsummationData = districtWiseMuniList.map((mun: any[]) => {
+                const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate ? currValue.femaleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
+                const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
+                const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate ? currValue.literacyRate : 0), 0)) / mun.length).toFixed(2);
+                const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
+                const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
+                const district = mun.reduce((acc: any, currValue: { district: any }) => currValue.district, 0);
+                return ({
+                    femaleLiteracyRate,
+                    femalePopulation,
+                    householdCount,
+                    literacyRate,
+                    maleLiteracyRate,
+                    malePopulation,
+                    totalPopulation,
+                    district,
+                });
+            });
+
+
+            const mapState = finalsummationData.map((d: { [x: string]: string | number; district: any }) => ({
+                id: d.district,
+                value: +d[selectedAttribute] || 0,
+            }));
+
+            return mapState;
+        }
+        const selectedProvinceMunicipalities = provinces.map((m: { id: number }) => {
+            const filtered_municipality = municipalities.filter(d => d.province === m.id);
+            return filtered_municipality;
         });
-        const districtWiseMuniList = selectedProvinceMunicipalities.map((mun) => {
-            const finaldata = mun.map((dat) => {
-                const datas = data.filter(itm => itm.municipality === dat.id)[0];
 
-                return ({ ...datas, district: dat.district });
+
+        const provinceWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+            const finaldata = mun.map((dat) => {
+                const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
+                if (datas) {
+                    return ({ ...datas, district: dat.id, province: dat.province });
+                }
             });
             return finaldata;
         });
-        const finalsummationData = districtWiseMuniList.map((mun) => {
-            const femaleLiteracyRate = ((mun.reduce((acc, currValue) => (acc + currValue.femaleLiteracyRate ? currValue.femaleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
-            const femalePopulation = mun.reduce((acc, currValue) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
-            const householdCount = mun.reduce((acc, currValue) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
-            const literacyRate = ((mun.reduce((acc, currValue) => (acc + currValue.literacyRate ? currValue.literacyRate : 0), 0)) / mun.length).toFixed(2);
-            const maleLiteracyRate = ((mun.reduce((acc, currValue) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
-            const malePopulation = mun.reduce((acc, currValue) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
-            const totalPopulation = mun.reduce((acc, currValue) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
-            const district = mun.reduce((acc, currValue) => currValue.district, 0);
+        const filtered_undefined_array = provinceWiseMuniList.map(d => d.filter(x => x !== undefined));
+
+        const finalsummationDataProvince = filtered_undefined_array.map((mun: any[]) => {
+            const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate), 0)) / mun.length).toFixed(2);
+            const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation), 0);
+            const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount), 0);
+            const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate), 0)) / mun.length).toFixed(2);
+            const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate), 0)) / mun.length).toFixed(2);
+            const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation), 0);
+            const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation), 0);
+            const province = mun.reduce((acc: any, currValue: { province: any }) => currValue.province, 0);
             return ({
                 femaleLiteracyRate,
                 femalePopulation,
@@ -805,13 +870,14 @@ class Demographics extends React.PureComponent<Props> {
                 maleLiteracyRate,
                 malePopulation,
                 totalPopulation,
-                district,
+                province,
             });
         });
 
+        // const finalProvinceWiseSummationData =
 
-        const mapState = finalsummationData.map(d => ({
-            id: d.district,
+        const mapState = finalsummationDataProvince.map((d: { [x: string]: string | number; district: any }) => ({
+            id: d.province,
             value: +d[selectedAttribute] || 0,
         }));
 
@@ -875,6 +941,19 @@ class Demographics extends React.PureComponent<Props> {
         });
     }
 
+    private handleRadioButtonClick = (e: any) => {
+        const { requests: { demographicsGetRequest } } = this.props;
+
+        this.setState({ selectedDataType: e });
+        if (e === 1 || e === 2) {
+            demographicsGetRequest.do({
+                census_year: e === 1 ? '2021' : '2011',
+                onSuccess: this.demographicData,
+            });
+        }
+    }
+
+
     public render() {
         const {
             pending,
@@ -894,7 +973,7 @@ class Demographics extends React.PureComponent<Props> {
             districts,
             municipalities,
             LGProfilehouseHoldData,
-            lgProfileWardLevelData,
+            lgProfileWardLevelData, filters,
 
         } = this.props;
 
@@ -908,11 +987,12 @@ class Demographics extends React.PureComponent<Props> {
             enableSensitivePopulationDiv,
             selectedFederalName } = this.state;
 
+
         const mapState = this.getMapState(data, selectedAttribute);
 
         const [min, max] = extent(mapState, d => d.value);
         const colors = attributes[selectedAttribute].type === 'positive' ? [...colorGrade].reverse() : [...colorGrade];
-        const specificData: number[] = mapState.map(d => d.value || 0);
+        const specificData: number[] = mapState.map((d: { value: any }) => d.value || 0);
 
         // const { paint, legend } = generatePaint(colors, min, max);
         const { paint, legend, legendPaint } = generatePaintByQuantile(
@@ -952,8 +1032,14 @@ class Demographics extends React.PureComponent<Props> {
 
         const LGProfilehouseHold = this.getGeojson(LGProfilehouseHoldData);
 
-
-        const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions(language) : pastDateRangeOptions(language).filter(i => i.key === 1);
+        const Tool = (datas: any) => (
+            <h2 style={{ padding: '10px', borderRadius: '16px', fontSize: '14px' }}>
+                {`${language === 'en' ? datas.feature.properties.title_en : datas.feature.properties.title_ne}`}
+                :
+                {`${datas.feature.state.value}`}
+            </h2>
+        );
+        const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions(language) : pastDateRangeOptions(language).filter(i => i.key !== 3);
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
                 if (profile.mainModule === 'Summary' && prevProfile.subModule !== selectedAttribute) {
@@ -1026,7 +1112,7 @@ class Demographics extends React.PureComponent<Props> {
         const LGProfileBuildingFoundation = LGProfileBuildingFoundationData(lgProfileData, summationLGProfileBuildingFoundation, language);
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
         const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
-        const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total, currentValue) => total + currentValue.totalPeople || 0, 0) : '-';
+        const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total: any, currentValue: { totalPeople: any }) => total + currentValue.totalPeople || 0, 0) : '-';
 
         return (
             <>
@@ -2371,7 +2457,7 @@ class Demographics extends React.PureComponent<Props> {
                                             keySelector={pastDataKeySelector}
                                             labelSelector={pastDataLabelSelector}
                                             options={dateRangeOption}
-                                            onChange={e => this.setState({ selectedDataType: e })}
+                                            onChange={this.handleRadioButtonClick}
                                             value={selectedDataType}
                                             contentClassName={styles.dateRanges}
                                         />
@@ -2381,7 +2467,7 @@ class Demographics extends React.PureComponent<Props> {
 
 
                                 <div className={styles.dataDisplayDiv}>
-                                    {selectedDataType === 1
+                                    {selectedDataType === 1 || selectedDataType === 2
                                         ? (
                                             <div>
                                                 <div className={styles.dataDetails}>
@@ -2960,12 +3046,15 @@ class Demographics extends React.PureComponent<Props> {
 
 
                 {
-                    selectedDataType === 1 ? (
+                    selectedDataType === 1 || selectedDataType === 2 ? (
                         <>
                             <ChoroplethMap
                                 sourceKey={'demographics-profile'}
                                 paint={legendPaint}
                                 mapState={mapState}
+                                tooltipRenderer={(prop: any) => Tool(prop)}
+                                isDamageAndLoss
+                                regionLevel={filters && filters.region && filters.region.adminLevel + 1 || 1}
                             />
 
                             {/* <CommonMap
@@ -3246,7 +3335,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     <td>{t('Major Occupation')}</td>
 
                                                                                     <td>
-                                                                                        {majorOccupationList && majorOccupationList.length ? majorOccupationList.map((i, index) => (
+                                                                                        {majorOccupationList && majorOccupationList.length ? majorOccupationList.map((i: string | number | boolean | {} | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactNodeArray | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined, index: React.Key | null | undefined) => (
                                                                                             <b key={index}>
                                                                                                 {i}
                                                                                                 {index === majorOccupationList.length - 1 ? '' : ','}
@@ -3258,7 +3347,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     <td>{t('Supporting Occupation')}</td>
 
                                                                                     <td>
-                                                                                        {supportingOccupationList && supportingOccupationList.length ? supportingOccupationList.map((i, index) => (
+                                                                                        {supportingOccupationList && supportingOccupationList.length ? supportingOccupationList.map((i: string | number | boolean | {} | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactNodeArray | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined, index: React.Key | null | undefined) => (
                                                                                             <b key={index}>
                                                                                                 {i}
                                                                                                 {index === supportingOccupationList.length - 1 ? '' : ','}

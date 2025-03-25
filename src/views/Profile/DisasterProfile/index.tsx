@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-len */
 /* eslint-disable lines-between-class-members */
 import React from 'react';
@@ -89,6 +90,10 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     demographicsGetRequest: {
         url: '/demographic/',
         method: methods.GET,
+        query: ({ params, props }) => ({
+            census_year: 2021,
+
+        }),
         onMount: true,
         onSuccess: ({ params, response }) => {
             if (params && params.onSuccess) {
@@ -120,7 +125,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             if (params && params.onSuccess) {
                 const lgProfileWardLevelData = response as MultiResponse<PageType.Incident>;
                 const { onSuccess } = params;
-                onSuccess(lgProfileWardLevelData.results.sort((a, b) => a.ward - b.ward));
+                onSuccess(lgProfileWardLevelData.results.sort((a: { ward: number }, b: { ward: number }) => a.ward - b.ward));
             }
         },
 
@@ -161,7 +166,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 });
 
 
-const tabList = language => (
+const tabList = (language: string) => (
     [
         { key: 'resources', label: language === 'en' ? 'Resources' : 'स्रोतहरू' },
         { key: 'disasters', label: language === 'en' ? 'Losses' : 'घाटा' },
@@ -218,7 +223,7 @@ class DisasterProfile extends React.PureComponent<Props> {
 
         });
     }
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: { region: any }) {
         const { region: { adminLevel, geoarea }, region,
             requests: {
 
@@ -245,23 +250,23 @@ class DisasterProfile extends React.PureComponent<Props> {
         }
     }
 
-    private wardLevelData = (data) => {
+    private wardLevelData = (data: any) => {
         this.setState({
             lgProfileWardLevelData: data,
         });
     }
-    private houseHoldData = (data) => {
+    private houseHoldData = (data: any) => {
         this.setState({
             houseHoldData: data,
         });
     }
-    private lgProfileData = (data) => {
+    private lgProfileData = (data: any) => {
         this.setState({
             lgProfileData: data,
             pendingLgProfileData: false,
         });
     }
-    private demographicData = (data) => {
+    private demographicData = (data: any) => {
         this.setState({ demographyData: data });
     }
     private views = {
@@ -314,6 +319,9 @@ class DisasterProfile extends React.PureComponent<Props> {
         const { requests: { resourceProfileGetRequest } } = this.props;
         resourceProfileGetRequest.do();
     }
+    private handleStoreDemographyData = (data: any) => {
+        this.setState({ demographyData: data });
+    }
 
     public render() {
         const {
@@ -352,6 +360,7 @@ class DisasterProfile extends React.PureComponent<Props> {
                             <Demographics
                                 pending={pending}
                                 data={demographyData}
+                                handleStoreDemographyData={this.handleStoreDemographyData}
                                 className={styles.view}
                                 closedVisualization={closedVisualization}
                                 handleCloseVisualizationOnModalCloseClick={handleCloseVisualizationOnModalCloseClick}
