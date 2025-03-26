@@ -1113,7 +1113,6 @@ class Demographics extends React.PureComponent<Props> {
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
         const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
         const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total: any, currentValue: { totalPeople: any }) => total + currentValue.totalPeople || 0, 0) : '-';
-
         return (
             <>
                 {!closedVisualization
@@ -1177,7 +1176,7 @@ class Demographics extends React.PureComponent<Props> {
                                             </div>
                                             <div className={styles.categoryName}>
                                                 <div className={styles.categoryLogo}>
-                                                    {selectedDataType === 1 ? (
+                                                    {selectedDataType !== 3 ? (
                                                         <ScalableVectorGraphics
                                                             className={styles.categoryLogoIcon}
 
@@ -1186,7 +1185,7 @@ class Demographics extends React.PureComponent<Props> {
                                                     ) : ''
                                                     }
 
-                                                    <h3>{selectedDataType === 1 ? t('Demography (Census 2011)') : ''}</h3>
+                                                    <h3>{selectedDataType === 1 ? t('Demography (Census 2021)') : selectedDataType === 2 ? t('Demography (Census 2011)') : ''}</h3>
                                                 </div>
                                                 {/* <div
                     style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
@@ -1210,7 +1209,7 @@ class Demographics extends React.PureComponent<Props> {
 
                 </div> */}
                                             </div>
-                                            {selectedDataType === 1 ? isDataSetClicked
+                                            {selectedDataType !== 3 ? isDataSetClicked
                                                 ? (
                                                     <TableDataCensus
                                                         population={sexRatio}
