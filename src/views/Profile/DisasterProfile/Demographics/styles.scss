@@ -67,6 +67,10 @@
             margin-right: 10px;
             height: 20px;
         }
+
+        .categoryLogoIconSmall {
+            height: 30px;
+        }
     }
 
     .barChartSection {
@@ -201,11 +205,23 @@
             border: 1px solid #e1e1e1;
             flex-direction: column;
 
+            .categoryLogoIcon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .categoryLogoIconSmall {
+                height: 20px;
+                width: 20px;
+            }
+
             .demographyHeading {
                 background-color: #dcf2fc;
                 color: #2a7bbb;
                 cursor: pointer;
+
                 // font-size: 24px;
+
             }
 
             h2 {

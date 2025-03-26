@@ -107,6 +107,10 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import RadioInput from '#components/RadioInput';
 import iconImage from '#resources/icons/Train.svg';
+import Positive from '#resources/icons/Positive.svg';
+import Negative from '#resources/icons/Negative.svg';
+import Positive_Down from '#resources/icons/Positive_Down.svg';
+import Positive_Up from '#resources/icons/Positive_Up.svg';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -561,7 +565,13 @@ class Demographics extends React.PureComponent<Props> {
     }
 
     private getPopulationData = (data: DemographicsData[], region: Region) => {
-        let filteredData = data;
+        let filteredData = data.map(i => ({
+            ...i,
+            changed_malePopulation: i.changes ? i.changes.malePopulation : 0,
+            changed_femalePopulation: i.changes ? i.changes.femalePopulation : 0,
+            changed_literacyRate: i.changes ? i.changes.literacyRate : 0,
+            changed_householdCount: i.changes ? i.changes.householdCount : 0,
+        }));
         if (!doesObjectHaveNoData(region)) {
             const { adminLevel, geoarea } = region;
             const { municipalities } = this.props;
@@ -584,6 +594,10 @@ class Demographics extends React.PureComponent<Props> {
 
         const demographics = filteredData.reduce((acc, value, i) => {
             const {
+                changed_malePopulation = 0,
+                changed_femalePopulation = 0,
+                changed_literacyRate = 0,
+                changed_householdCount = 0,
                 totalPopulation = 0,
                 malePopulation = 0,
                 femalePopulation = 0,
@@ -596,6 +610,10 @@ class Demographics extends React.PureComponent<Props> {
                     female: {},
                 },
             } = value;
+            acc.changed_malePopulation += changed_malePopulation;
+            acc.changed_femalePopulation += changed_femalePopulation;
+            acc.changed_literacyRate += changed_literacyRate;
+            acc.changed_householdCount += changed_householdCount;
             acc.totalPopulation += totalPopulation;
             acc.malePopulation += malePopulation;
             acc.femalePopulation += femalePopulation;
@@ -614,6 +632,10 @@ class Demographics extends React.PureComponent<Props> {
 
             return acc;
         }, {
+            changed_malePopulation: 0,
+            changed_femalePopulation: 0,
+            changed_literacyRate: 0,
+            changed_householdCount: 0,
             totalPopulation: 0,
             malePopulation: 0,
             femalePopulation: 0,
@@ -665,28 +687,34 @@ class Demographics extends React.PureComponent<Props> {
     }
 
     private getPopulationSummary = (data: SummaryData) => {
-        const { totalPopulation, malePopulation, femalePopulation } = data;
+        const { totalPopulation, malePopulation, femalePopulation, changed_malePopulation,
+            changed_femalePopulation } = data;
         const { language: { language } } = this.props;
-        return ([
-            {
-                key: 'totalPopulation',
-                label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
-                value: totalPopulation,
-            },
-            {
-                key: 'malePopulation',
-                label: language === 'en' ? 'Male' : 'पुरुष',
-                value: malePopulation,
-                color: '#2A7BBB',
-                percent: Number(((malePopulation / totalPopulation) * 100).toFixed(2)),
-            },
-            {
-                key: 'femalePopulation',
-                label: language === 'en' ? 'Female' : 'महिला',
-                value: femalePopulation,
-                color: '#83A4D3',
-                percent: Number(((femalePopulation / totalPopulation) * 100).toFixed(2)),
-            },
+        const changed_total_population = changed_malePopulation + changed_femalePopulation;
+        return ([{
+            key: 'changed_total_population',
+            label: language === 'en' ? 'Changed Total Population' : 'कुल जनसंख्या परिवर्तन',
+            value: changed_total_population,
+        },
+        {
+            key: 'totalPopulation',
+            label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
+            value: totalPopulation,
+        },
+        {
+            key: 'malePopulation',
+            label: language === 'en' ? 'Male' : 'पुरुष',
+            value: malePopulation,
+            color: '#2A7BBB',
+            percent: Number(((malePopulation / totalPopulation) * 100).toFixed(2)),
+        },
+        {
+            key: 'femalePopulation',
+            label: language === 'en' ? 'Female' : 'महिला',
+            value: femalePopulation,
+            color: '#83A4D3',
+            percent: Number(((femalePopulation / totalPopulation) * 100).toFixed(2)),
+        },
         ]);
     }
 
@@ -704,9 +732,15 @@ class Demographics extends React.PureComponent<Props> {
     })
 
     private getLiteracySummary = (data: SummaryData) => {
-        const { literacyRate, maleLiteracyRate, femaleLiteracyRate } = data;
-        const { language: { language } } = this.props;
+        const { literacyRate, maleLiteracyRate, femaleLiteracyRate, changed_literacyRate } = data;
+        const { language: { language }, data: overallData } = this.props;
+        const overall_changed_literacy_rate = changed_literacyRate / overallData.length;
         return ([
+            {
+                key: 'changed_literacyRate',
+                label: language === 'en' ? 'Changed Literacy Rate' : 'परिबर्तन साक्षरता दर',
+                value: Number(overall_changed_literacy_rate.toFixed(2)),
+            },
             {
                 key: 'literacyRate',
                 label: language === 'en' ? 'Literacy Rate' : 'साक्षरता दर',
@@ -729,22 +763,33 @@ class Demographics extends React.PureComponent<Props> {
     }
 
     private getHouseholdSummary = (data: SummaryData) => {
-        const { totalPopulation, householdCount } = data;
+        const { totalPopulation, householdCount, changed_householdCount } = data;
         const { language: { language } } = this.props;
-        return ([
-            {
-                key: 'totalPopulation',
-                label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
-                value: totalPopulation,
+        return ({
+            changed_householdCount: {
+                key: 'changed_householdCount',
+                label: language === 'en' ? 'Changed Household Count' : 'परिवर्तन घरपरिवार गणना',
+                value: changed_householdCount,
                 color: '#2A7BBB',
             },
-            {
-                key: 'householdCount',
-                label: language === 'en' ? 'Household Count' : 'घरपरिवार गणना',
-                value: householdCount,
-                color: '#83A4D3',
-            },
-        ]);
+            householdSummary: [
+
+                {
+                    key: 'totalPopulation',
+                    label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
+                    value: totalPopulation,
+                    color: '#2A7BBB',
+                },
+                {
+                    key: 'householdCount',
+                    label: language === 'en' ? 'Household Count' : 'घरपरिवार गणना',
+                    value: householdCount,
+                    color: '#83A4D3',
+                },
+            ],
+        }
+
+        );
     }
 
     private getAgeGroupSummary = (data: SummaryData) => {
@@ -1000,7 +1045,10 @@ class Demographics extends React.PureComponent<Props> {
         );
 
         const demographics = this.getPopulationData(data, region);
+
+
         const populationSummary = this.getPopulationSummary(demographics);
+
         const sexRatio = populationSummary
             .filter(v => ['malePopulation', 'femalePopulation'].includes(v.key));
         const sexRatioTotalPopulationLGProfile = lgProfileData.gender.male + lgProfileData.gender.female + lgProfileData.gender.other;
@@ -1018,7 +1066,8 @@ class Demographics extends React.PureComponent<Props> {
         const finalLiteracyRate = [{ label: 'literacyRate', male: literacyRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: literacyRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
 
         const householdSummary = this.getHouseholdSummary(demographics);
-        const finalHouseholdSummary = [{ label: 'houseHoldInfo', totalPopulation: householdSummary.find(d => d.key === 'totalPopulation').value, householdCount: householdSummary.find(d => d.key === 'householdCount').value }];
+
+        const finalHouseholdSummary = [{ label: 'houseHoldInfo', totalPopulation: householdSummary.householdSummary.find(d => d.key === 'totalPopulation').value, householdCount: householdSummary.householdSummary.find(d => d.key === 'householdCount').value }];
         const ageGroupSummary = this.getAgeGroupSummary(demographics);
         const title = `${regionName}`;
 
@@ -1113,22 +1162,14 @@ class Demographics extends React.PureComponent<Props> {
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
         const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
         const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total: any, currentValue: { totalPeople: any }) => total + currentValue.totalPeople || 0, 0) : '-';
+
+
         return (
             <>
                 {!closedVisualization
                     ? (
                         <Modal className={styles.contactFormModal}>
-                            {/* <ModalHeader
-                    // title={'Add Contact'}
-                    rightComponent={(
-                        <DangerButton
-                    transparent
-                    iconName="close"
-                    // onClick={closeModal}
-                    title="Close Modal"
-                />
-                    )}
-                /> */}
+
                             <Translation>
                                 {
                                     t => (
@@ -1187,27 +1228,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                     <h3>{selectedDataType === 1 ? t('Demography (Census 2021)') : selectedDataType === 2 ? t('Demography (Census 2011)') : ''}</h3>
                                                 </div>
-                                                {/* <div
-                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                    role="button"
-                    tabIndex={0}
-                // eslint-disable-next-line max-len
-                    onClick={() => this.handleSaveClick('overallDownload')}
-                    onKeyDown={undefined}
 
-
-                >
-                    <h4>DOWNLOAD</h4>
-                    {' '}
-                    <Button
-                        title="Download Chart"
-                        className={styles.chartDownload}
-                        transparent
-                        // onClick={() => this.handleSaveClick('overallDownload')}
-                        iconName="download"
-                    />
-
-                </div> */}
                                             </div>
                                             {selectedDataType !== 3 ? isDataSetClicked
                                                 ? (
@@ -1215,7 +1236,7 @@ class Demographics extends React.PureComponent<Props> {
                                                         population={sexRatio}
                                                         literacy={literacyRatio}
                                                         ageGroup={ageGroupSummary}
-                                                        householdSummary={householdSummary}
+                                                        householdSummary={householdSummary.householdSummary}
                                                         selectedFederalName={selectedFederalName}
                                                         language={language}
                                                     />
@@ -1276,10 +1297,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                 <div className={styles.graphicalVisualization}>
 
-                                                                    {/* <div style={{ display: 'flex',
-                                                                justifyContent: 'flex-end',
-                                                        fontSize: '25px' }}
-                                                    /> */}
+
                                                                     <div id="genderBreakdown">
                                                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                             <h3>{t('Gender Breakdown')}</h3>
@@ -1370,7 +1388,7 @@ class Demographics extends React.PureComponent<Props> {
                                                             <div className={styles.percentageValue}>
                                                                 {/* <h1>Education Institution</h1> */}
                                                                 <h1>
-                                                                    {NumberWithCommas(householdSummary.find(i => i.key === 'householdCount').value)}
+                                                                    {NumberWithCommas(householdSummary.householdSummary.find(i => i.key === 'householdCount').value)}
                                                                 </h1>
 
 
@@ -1408,7 +1426,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 iconName="download"
                                                                             />
                                                                         </div>
-                                                                        <BarchartVisualization item={householdSummary} language={language} />
+                                                                        <BarchartVisualization item={householdSummary.householdSummary} language={language} />
                                                                     </div>
 
 
@@ -2481,20 +2499,69 @@ class Demographics extends React.PureComponent<Props> {
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{t('Population')}</h2>
+
                                                         </div>
 
                                                         {sexRatio && sexRatio.length ? (
-                                                            <h2 style={{
-                                                                fontSize: '30px',
-                                                                paddingLeft: '10px',
-                                                                paddingRight: '10px',
-                                                                paddingTop: '0px',
-                                                                paddingBottom: '0px',
-                                                            }}
-                                                            >
-                                                                {NumberWithCommas(populationSummary
-                                                                    .find(i => i.key === 'totalPopulation').value)}
-                                                            </h2>
+                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                <h2 style={{
+                                                                    fontSize: '30px',
+                                                                    paddingLeft: '10px',
+                                                                    paddingRight: '10px',
+                                                                    paddingTop: '0px',
+                                                                    paddingBottom: '0px',
+                                                                }}
+                                                                >
+                                                                    {NumberWithCommas(populationSummary
+                                                                        .find(i => i.key === 'totalPopulation').value)}
+                                                                </h2>
+                                                                {
+                                                                    selectedDataType === 1
+
+                                                                        ? ((populationSummary
+                                                                            .find(i => i.key === 'changed_total_population').value) > 0
+                                                                            ? (
+                                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                    <ScalableVectorGraphics
+                                                                                        className={styles.categoryLogoIcon}
+
+                                                                                        src={Positive}
+                                                                                    />
+                                                                                    <ScalableVectorGraphics
+                                                                                        className={styles.categoryLogoIconSmall}
+
+                                                                                        src={Positive_Up}
+                                                                                    />
+                                                                                    <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                        {NumberWithCommas(populationSummary
+                                                                                            .find(i => i.key === 'changed_total_population').value)}
+                                                                                        {' '}
+                                                                                        Since 2011
+                                                                                    </h2>
+                                                                                </div>
+                                                                            )
+                                                                            : (
+                                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                    <ScalableVectorGraphics
+                                                                                        className={styles.categoryLogoIcon}
+
+                                                                                        src={Negative}
+                                                                                    />
+                                                                                    <ScalableVectorGraphics
+                                                                                        className={styles.categoryLogoIconSmall}
+
+                                                                                        src={Positive_Down}
+                                                                                    />
+                                                                                    <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                        {NumberWithCommas(populationSummary
+                                                                                            .find(i => i.key === 'changed_total_population').value)}
+                                                                                        {' '}
+                                                                                        Since 2011
+                                                                                    </h2>
+                                                                                </div>
+                                                                            )
+                                                                        ) : ''}
+                                                            </div>
                                                         ) : ''}
                                                     </div>
                                                     <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
@@ -2562,10 +2629,58 @@ class Demographics extends React.PureComponent<Props> {
                                                         </div>
                                                         {literacyRatio && literacyRatio.length
                                                             ? (
-                                                                <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
-                                                                    {NumberWithCommas(literacySummary.find(i => i.key === 'literacyRate').value)}
-                                                                    %
-                                                                </h2>
+                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                    <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
+                                                                        {NumberWithCommas(literacySummary.find(i => i.key === 'literacyRate').value)}
+                                                                        %
+                                                                    </h2>
+                                                                    {
+                                                                        selectedDataType === 1
+
+                                                                            ? ((literacySummary
+                                                                                .find(i => i.key === 'changed_literacyRate').value) > 0
+                                                                                ? (
+                                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                        <ScalableVectorGraphics
+                                                                                            className={styles.categoryLogoIcon}
+
+                                                                                            src={Positive}
+                                                                                        />
+                                                                                        <ScalableVectorGraphics
+                                                                                            className={styles.categoryLogoIconSmall}
+
+                                                                                            src={Positive_Up}
+                                                                                        />
+                                                                                        <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                            {NumberWithCommas(literacySummary
+                                                                                                .find(i => i.key === 'changed_literacyRate').value)}
+                                                                                            %
+                                                                                            {' '}
+                                                                                            Since 2011
+                                                                                        </h2>
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                        <ScalableVectorGraphics
+                                                                                            className={styles.categoryLogoIcon}
+
+                                                                                            src={Negative}
+                                                                                        />
+                                                                                        <ScalableVectorGraphics
+                                                                                            className={styles.categoryLogoIconSmall}
+
+                                                                                            src={Positive_Down}
+                                                                                        />
+                                                                                        <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                            {NumberWithCommas(literacySummary
+                                                                                                .find(i => i.key === 'changed_literacyRate').value)}
+                                                                                            %
+                                                                                            {' '}
+                                                                                            Since 2011
+                                                                                        </h2>
+                                                                                    </div>
+                                                                                )) : ''}
+                                                                </div>
                                                             ) : ''}
                                                     </div>
                                                     <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
@@ -2620,23 +2735,66 @@ class Demographics extends React.PureComponent<Props> {
                                                     <div style={{ padding: '10px' }}>
                                                         <div
                                                             className={selectedAttribute === 'householdCount' ? styles.demographyHeading : ''}
-                                                            style={{ cursor: 'pointer' }}
+                                                            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
                                                             role="button"
                                                             tabIndex={0}
                                                             onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{language === 'en' ? 'Household' : 'घरायसी विवरण'}</h2>
+                                                            {
+                                                                selectedDataType === 1
+
+                                                                    ? (householdSummary.changed_householdCount.value > 0
+                                                                        ? (
+                                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.categoryLogoIcon}
+
+                                                                                    src={Positive}
+                                                                                />
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.categoryLogoIconSmall}
+
+                                                                                    src={Positive_Up}
+                                                                                />
+                                                                                <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                    {NumberWithCommas(householdSummary.changed_householdCount.value)}
+                                                                                    {' '}
+                                                                                    Since 2011
+                                                                                </h2>
+                                                                            </div>
+                                                                        )
+                                                                        : (
+                                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.categoryLogoIcon}
+
+                                                                                    src={Negative}
+                                                                                />
+                                                                                <ScalableVectorGraphics
+                                                                                    className={styles.categoryLogoIconSmall}
+
+                                                                                    src={Positive_Down}
+                                                                                />
+                                                                                <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                    {NumberWithCommas(householdSummary.changed_householdCount.value)}
+                                                                                    {' '}
+                                                                                    Since 2011
+                                                                                </h2>
+                                                                            </div>
+                                                                        )
+                                                                    ) : ''}
                                                         </div>
 
                                                     </div>
                                                     {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
-                                                    {householdSummary && householdSummary.length
+                                                    {householdSummary && householdSummary.householdSummary.length
                                                         ? (
                                                             <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
                                                                 <ResponsiveContainer>
                                                                     <BarChart
-                                                                        data={householdSummary}
+                                                                        data={householdSummary.householdSummary}
                                                                         layout="vertical"
                                                                         // margin={chartMargin}
                                                                         margin={{
@@ -2663,7 +2821,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                             fill="#dcdcde"
                                                                             barSize={25}
                                                                         >
-                                                                            {householdSummary.map(v => (
+                                                                            {householdSummary.householdSummary.map(v => (
                                                                                 <Cell
                                                                                     key={v.key}
                                                                                     fill={v.color}
