@@ -1055,11 +1055,12 @@ class Demographics extends React.PureComponent<Props> {
         };
         const majorOccupationList = houseHoldInformation && houseHoldInformation.majorOccupations && JSON.parse(houseHoldInformation.majorOccupations);
         const supportingOccupationList = houseHoldInformation && houseHoldInformation.supportingOccupations && JSON.parse(houseHoldInformation.supportingOccupations);
-        const lgProfileAgeGroup = lgProfileAgeGroupData(lgProfileData);
+        const lgProfileAgeGroup = lgProfileData && lgProfileAgeGroupData(lgProfileData);
 
-        const filteredLGProfileAgeGroup = lgProfileAgeGroup.filter(i => i.value !== 0);
-        const SummationLGProfileEducationLevel = SummationLGProfileEducationLevelData(lgProfileData);
-        const LGProfileEducationLevel = LGProfileEducationLevelData(lgProfileData, SummationLGProfileEducationLevel, language);
+        const filteredLGProfileAgeGroup = lgProfileAgeGroup && lgProfileAgeGroup.filter(i => i.value !== 0);
+        const SummationLGProfileEducationLevel = lgProfileData && SummationLGProfileEducationLevelData(lgProfileData);
+
+        const LGProfileEducationLevel = lgProfileData && LGProfileEducationLevelData(lgProfileData, SummationLGProfileEducationLevel, language);
         const filteredLGProfileEducationLevel = LGProfileEducationLevel.filter(i => i.value !== 0);
         const summationLGProfileMigration = summationLGProfileMigrationData(lgProfileData);
 
