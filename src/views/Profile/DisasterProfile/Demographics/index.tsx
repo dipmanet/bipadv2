@@ -1082,11 +1082,36 @@ class Demographics extends React.PureComponent<Props> {
         const LGProfilehouseHold = this.getGeojson(LGProfilehouseHoldData);
 
         const Tool = (datas: any) => (
-            <h2 style={{ padding: '10px', borderRadius: '16px', fontSize: '14px' }}>
-                {`${language === 'en' ? datas.feature.properties.title_en : datas.feature.properties.title_ne}`}
-                :
-                {`${datas.feature.state.value}`}
-            </h2>
+            <>
+                <h3 style={{
+                    fontSize: '12px',
+                    margin: 0,
+                    padding: '10px 20px 0px 20px',
+                    textTransform: 'uppercase',
+                    textAlign: 'center',
+                }}
+                >
+                    {`${language === 'en' ? datas.feature.properties.title_en : datas.feature.properties.title_ne}`}
+
+                </h3>
+
+                <p style={{
+                    margin: 0,
+                    padding: '0 20px 10px 20px',
+                    fontSize: '12px',
+                    textAlign: 'center',
+                }}
+                >
+                    {
+                        language === 'en'
+                            ? `Population: ${NumberWithCommas(datas.feature.state.value)}`
+                            : `जनसंख्या: ${NumberWithCommas(datas.feature.state.value)}`
+                    }
+                </p>
+
+
+            </>
+
         );
         const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions(language) : pastDateRangeOptions(language).filter(i => i.key !== 3);
         if (setProfile) {
@@ -2523,16 +2548,10 @@ class Demographics extends React.PureComponent<Props> {
                                                                             .find(i => i.key === 'changed_total_population').value) > 0
                                                                             ? (
                                                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                                    <ScalableVectorGraphics
-                                                                                        className={styles.categoryLogoIcon}
+                                                                                    <img src={Positive} alt="positive" style={{ height: '50px', width: '50px' }} />
 
-                                                                                        src={Positive}
-                                                                                    />
-                                                                                    <ScalableVectorGraphics
-                                                                                        className={styles.categoryLogoIconSmall}
+                                                                                    <img src={Positive_Up} alt="positive" style={{ height: '20px', width: '20px' }} />
 
-                                                                                        src={Positive_Up}
-                                                                                    />
                                                                                     <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
                                                                                         {NumberWithCommas(populationSummary
                                                                                             .find(i => i.key === 'changed_total_population').value)}
@@ -2543,16 +2562,9 @@ class Demographics extends React.PureComponent<Props> {
                                                                             )
                                                                             : (
                                                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                                    <ScalableVectorGraphics
-                                                                                        className={styles.categoryLogoIcon}
+                                                                                    <img src={Negative} alt="Negative" style={{ height: '50px', width: '50px' }} />
+                                                                                    <img src={Positive_Down} alt="Positive_Down" style={{ height: '20px', width: '20px' }} />
 
-                                                                                        src={Negative}
-                                                                                    />
-                                                                                    <ScalableVectorGraphics
-                                                                                        className={styles.categoryLogoIconSmall}
-
-                                                                                        src={Positive_Down}
-                                                                                    />
                                                                                     <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
                                                                                         {NumberWithCommas(populationSummary
                                                                                             .find(i => i.key === 'changed_total_population').value)}
@@ -2642,16 +2654,10 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 .find(i => i.key === 'changed_literacyRate').value) > 0
                                                                                 ? (
                                                                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                                        <ScalableVectorGraphics
-                                                                                            className={styles.categoryLogoIcon}
+                                                                                        <img src={Positive} alt="positive" style={{ height: '50px', width: '50px' }} />
 
-                                                                                            src={Positive}
-                                                                                        />
-                                                                                        <ScalableVectorGraphics
-                                                                                            className={styles.categoryLogoIconSmall}
+                                                                                        <img src={Positive_Up} alt="positive" style={{ height: '20px', width: '20px' }} />
 
-                                                                                            src={Positive_Up}
-                                                                                        />
                                                                                         <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
                                                                                             {NumberWithCommas(literacySummary
                                                                                                 .find(i => i.key === 'changed_literacyRate').value)}
@@ -2662,16 +2668,11 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     </div>
                                                                                 ) : (
                                                                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                                        <ScalableVectorGraphics
-                                                                                            className={styles.categoryLogoIcon}
 
-                                                                                            src={Negative}
-                                                                                        />
-                                                                                        <ScalableVectorGraphics
-                                                                                            className={styles.categoryLogoIconSmall}
+                                                                                        <img src={Negative} alt="Negative" style={{ height: '50px', width: '50px' }} />
 
-                                                                                            src={Positive_Down}
-                                                                                        />
+                                                                                        <img src={Positive_Down} alt="Positive_Down" style={{ height: '20px', width: '20px' }} />
+
                                                                                         <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
                                                                                             {NumberWithCommas(literacySummary
                                                                                                 .find(i => i.key === 'changed_literacyRate').value)}
@@ -2749,16 +2750,10 @@ class Demographics extends React.PureComponent<Props> {
                                                                     ? (householdSummary.changed_householdCount.value > 0
                                                                         ? (
                                                                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                                <ScalableVectorGraphics
-                                                                                    className={styles.categoryLogoIcon}
+                                                                                <img src={Positive} alt="Positive" style={{ height: '50px', width: '50px' }} />
 
-                                                                                    src={Positive}
-                                                                                />
-                                                                                <ScalableVectorGraphics
-                                                                                    className={styles.categoryLogoIconSmall}
+                                                                                <img src={Positive_Up} alt="Positive_Up" style={{ height: '20px', width: '20px' }} />
 
-                                                                                    src={Positive_Up}
-                                                                                />
                                                                                 <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
                                                                                     {NumberWithCommas(householdSummary.changed_householdCount.value)}
                                                                                     {' '}
@@ -2768,16 +2763,10 @@ class Demographics extends React.PureComponent<Props> {
                                                                         )
                                                                         : (
                                                                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                                <ScalableVectorGraphics
-                                                                                    className={styles.categoryLogoIcon}
+                                                                                <img src={Negative} alt="Negative" style={{ height: '50px', width: '50px' }} />
 
-                                                                                    src={Negative}
-                                                                                />
-                                                                                <ScalableVectorGraphics
-                                                                                    className={styles.categoryLogoIconSmall}
+                                                                                <img src={Positive_Down} alt="Positive_Down" style={{ height: '20px', width: '20px' }} />
 
-                                                                                    src={Positive_Down}
-                                                                                />
                                                                                 <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
                                                                                     {NumberWithCommas(householdSummary.changed_householdCount.value)}
                                                                                     {' '}
