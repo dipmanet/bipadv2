@@ -225,12 +225,12 @@ const attributeList = [
     {
         key: 'householdCount',
         title: 'Household count',
-        type: 'positive',
+        type: 'negative',
     },
     {
         key: 'literacyRate',
         title: 'Literacy rate',
-        type: 'positive',
+        type: 'negative',
     },
 ];
 
@@ -589,9 +589,14 @@ class Demographics extends React.PureComponent<Props> {
                     .filter(v => v.id === geoarea)
                     .map(v => v.id);
             }
-            filteredData = data.filter(d => selectedMunicipalities.includes(d.municipality));
+            filteredData = data.map(i => ({
+                ...i,
+                changed_malePopulation: i.changes ? i.changes.malePopulation : 0,
+                changed_femalePopulation: i.changes ? i.changes.femalePopulation : 0,
+                changed_literacyRate: i.changes ? i.changes.literacyRate : 0,
+                changed_householdCount: i.changes ? i.changes.householdCount : 0,
+            })).filter(d => selectedMunicipalities.includes(d.municipality));
         }
-
         const demographics = filteredData.reduce((acc, value, i) => {
             const {
                 changed_malePopulation = 0,
@@ -925,7 +930,6 @@ class Demographics extends React.PureComponent<Props> {
             id: d.province,
             value: +d[selectedAttribute] || 0,
         }));
-
         return mapState;
     }
 
@@ -1036,6 +1040,7 @@ class Demographics extends React.PureComponent<Props> {
         const mapState = this.getMapState(data, selectedAttribute);
 
         const [min, max] = extent(mapState, d => d.value);
+
         const colors = attributes[selectedAttribute].type === 'positive' ? [...colorGrade].reverse() : [...colorGrade];
         const specificData: number[] = mapState.map((d: { value: any }) => d.value || 0);
 
