@@ -687,7 +687,7 @@ class Demographics extends React.PureComponent<Props> {
                 },
             },
         });
-
+        demographics.changed_literacyRate /= filteredData.length;
         return demographics;
     }
 
@@ -738,13 +738,13 @@ class Demographics extends React.PureComponent<Props> {
 
     private getLiteracySummary = (data: SummaryData) => {
         const { literacyRate, maleLiteracyRate, femaleLiteracyRate, changed_literacyRate } = data;
-        const { language: { language }, data: overallData } = this.props;
-        const overall_changed_literacy_rate = changed_literacyRate / overallData.length;
+        const { language: { language } } = this.props;
+
         return ([
             {
                 key: 'changed_literacyRate',
                 label: language === 'en' ? 'Changed Literacy Rate' : 'परिबर्तन साक्षरता दर',
-                value: Number(overall_changed_literacy_rate.toFixed(2)),
+                value: Number(changed_literacyRate.toFixed(2)),
             },
             {
                 key: 'literacyRate',
