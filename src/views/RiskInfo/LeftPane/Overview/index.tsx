@@ -69,6 +69,31 @@ class Overview extends React.PureComponent<Props, State> {
         color: attribute.color,
     })
 
+    // getAttributeList = (attrList: any, categories: any) => {
+    //     console.log(attrList, categories);
+    //     const attrKeys = attrList.map((attrItem: any) => {
+    //         if (attrItem.key === 'capacity-and-resources') {
+    //             return 'capacity_resource';
+    //         }
+    //         if (attrItem.key === 'climate-change') {
+    //             return 'climate_change';
+    //         }
+    //         return attrItem.key;
+    //     });
+    //     const attrNewList = attrKeys.filter((item: any) => categories.includes(item));
+    //     const attrActualList = attrNewList.map((item: any) => {
+    //         if (item === 'capacity_resource') {
+    //             return 'capacity-and-resources';
+    //         }
+    //         if (item === 'climate_change') {
+    //             return 'climate-change';
+    //         }
+    //         return item;
+    //     });
+    //     const attrValues = attrList.filter((item: any) => attrActualList.includes(item.key));
+    //     return attrValues;
+    // }
+
     public render() {
         const {
             className,
@@ -82,6 +107,7 @@ class Overview extends React.PureComponent<Props, State> {
                 key={hash}
                 className={_cs(styles.overview, className, !titleShown && styles.iconOnly)}
                 data={attributeList}
+                // data={this.getAttributeList(attributeList, uniqueCategories)}
                 renderer={Attribute}
                 rendererParams={this.getAttributeRendererParams}
                 keySelector={attributeListKeySelector}
