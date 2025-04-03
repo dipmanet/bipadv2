@@ -415,7 +415,7 @@ const BulletinPDFAnnex = (props) => {
 
                     </table>
                 </div>
-                <div className={styles.annexTable}>
+                {/* <div className={styles.annexTable}>
                     <div className={styles.nobreak}>
                         <Translation>
                             {
@@ -449,7 +449,7 @@ const BulletinPDFAnnex = (props) => {
                         </tbody>
 
                     </table>
-                </div>
+                </div> */}
             </div>
             <div className={styles.twoCols}>
                 <div className={styles.annexTable}>

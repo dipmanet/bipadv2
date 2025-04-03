@@ -21,13 +21,13 @@ export const Menu = {
             icon: LossesLogo,
             position: 0,
         },
-        {
-            name: 'COVID-19 बुलेटिन',
-            name_en: 'COVID-19 Bulletin',
-            icon: CovidLogo,
-            position: 1,
+        // {
+        //     name: 'COVID-19 बुलेटिन',
+        //     name_en: 'COVID-19 Bulletin',
+        //     icon: CovidLogo,
+        //     position: 1,
 
-        },
+        // },
         {
             name: 'प्रतिकार्य',
             name_en: 'Response',

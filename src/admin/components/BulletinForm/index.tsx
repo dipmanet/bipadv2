@@ -511,7 +511,7 @@ const Bulletin = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulletinEditData]);
 
-
+    console.log('activeProgressMenu', activeProgressMenu);
     useEffect(() => {
         if (dateAltTo) {
             covidNationalInfo.do();
@@ -1275,18 +1275,18 @@ const Bulletin = (props: Props) => {
             handleSameHazardRemove={handleSameHazardRemove}
 
         />,
-        <Covid
-            covid24hrsStatData={covid24hrsStatData}
-            covidTotalStatData={covidTotalStatData}
-            vaccineStatData={vaccineStatData}
-            covidProvinceWiseData={covidProvinceWiseData}
-            handleCovidTotalStat={handleCovidTotalStat}
-            handleCovid24hrStat={handleCovid24hrStat}
-            handleVaccineStat={handleVaccineStat}
-            handleprovincewiseTotal={handleprovincewiseTotal}
-            dateAlt={dateAlt}
-            handleRefreshCovidData={handleRefreshCovidData}
-        />,
+        // <Covid
+        //     covid24hrsStatData={covid24hrsStatData}
+        //     covidTotalStatData={covidTotalStatData}
+        //     vaccineStatData={vaccineStatData}
+        //     covidProvinceWiseData={covidProvinceWiseData}
+        //     handleCovidTotalStat={handleCovidTotalStat}
+        //     handleCovid24hrStat={handleCovid24hrStat}
+        //     handleVaccineStat={handleVaccineStat}
+        //     handleprovincewiseTotal={handleprovincewiseTotal}
+        //     dateAlt={dateAlt}
+        //     handleRefreshCovidData={handleRefreshCovidData}
+        // />,
         <Response
             handleFeedbackChange={handleFeedbackChange}
             feedback={feedback}
