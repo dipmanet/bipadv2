@@ -511,7 +511,7 @@ const Bulletin = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulletinEditData]);
 
-    console.log('activeProgressMenu', activeProgressMenu);
+
     useEffect(() => {
         if (dateAltTo) {
             covidNationalInfo.do();
@@ -902,7 +902,7 @@ const Bulletin = (props: Props) => {
             //         feedback,
             //     });
             // }
-            if (progress === 3) {
+            if (progress === 2) {
                 setBulletinTemperature({
                     tempMin: minTemp,
                     tempMax: maxTemp,
@@ -1381,7 +1381,7 @@ const Bulletin = (props: Props) => {
             <div className={styles.rightFormSection}>
                 {formSections[activeProgressMenu]}
                 {
-                    progress < 4
+                    progress < 3
                     && (
                         <div className={styles.buttonsContainer}>
                             {progress > 0
@@ -1398,7 +1398,7 @@ const Bulletin = (props: Props) => {
                             <button
                                 type="button"
                                 onClick={handleNextBtn}
-                                className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
+                                className={progress !== 3 ? styles.nextBtn : styles.disabledBtn}
                                 disabled={loading}
                             >
                                 Next

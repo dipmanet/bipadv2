@@ -275,18 +275,24 @@ const BulletinPDFLoss = (props: Props) => {
                             <XAxis
                                 type="number"
                                 tickFormatter={e => DataFormater(e, language)}
+                                tick={{ fontSize: 14 }}
                             />
                             <YAxis
                                 type="category"
                                 dataKey="hazard"
+                                tick={{ fontSize: 14 }}
                             />
 
                             <Legend content={e => renderLegendContent(e, 'vertical')} />
-                            <Bar dataKey="death" fill="#D10000" barSize={7} />
-                            <Bar dataKey="incident" fill="#D4A367" barSize={7} />
+                            <Bar dataKey="death" fill="#D10000" barSize={30} />
+                            <Bar dataKey="incident" fill="#D4A367" barSize={30} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
+
+            </div>
+            <div className={styles.container12}>
+
                 <div className={styles.genderWiseStats}>
                     <h2>
                         <Translation>
@@ -315,8 +321,8 @@ const BulletinPDFLoss = (props: Props) => {
                                     >
                                         <Pie
                                             data={genderWiseLossChart}
-                                            innerRadius={40}
-                                            outerRadius={60}
+                                            innerRadius={80}
+                                            outerRadius={140}
                                             fill="#8884d8"
                                             paddingAngle={0}
                                             dataKey="value"
