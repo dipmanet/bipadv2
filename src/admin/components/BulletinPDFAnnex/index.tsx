@@ -451,7 +451,7 @@ const BulletinPDFAnnex = (props) => {
                     </table>
                 </div> */}
             </div>
-            <div className={styles.twoCols}>
+            {/* <div className={styles.twoCols}>
                 <div className={styles.annexTable}>
                     <div className={styles.nobreak}>
                         <Translation>
@@ -487,48 +487,17 @@ const BulletinPDFAnnex = (props) => {
 
                     </table>
                 </div>
-                {/* <div className={styles.annexTable}>
-                    <Translation>
-                        {
-                            t => <h3>{t('Vaccine Stats')}</h3>
-                        }
-                    </Translation>
-                    <table>
-                        <thead>
-                            <tr>
-                                {vaccineStat && Object.keys(vaccineStat).map(iS => (
-                                    <th key={iS}>
-                                        {
-                                            language === 'np'
-                                                ? nepaliRef[iS]
-                                                : englishRef[iS]
-                                        }
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                {vaccineStat && Object.keys(vaccineStat).map(iS => (
-                                    <td key={iS}>
-                                        {Number(vaccineStat[iS]).toLocaleString()}
-                                    </td>
-                                ))}
-                            </tr>
-                        </tbody>
 
-                    </table>
-                </div> */}
-            </div>
-            <div className={styles.nobreak}>
+            </div> */}
+            {/* <div className={styles.nobreak}>
                 <Translation>
                     {
                         t => <h3>{t('Provincewise stats till date')}</h3>
                     }
                 </Translation>
-            </div>
+            </div> */}
 
-            <table className={styles.provTable}>
+            {/* <table className={styles.provTable}>
                 <thead>
                     <tr>
                         <th>{' '}</th>
@@ -573,7 +542,7 @@ const BulletinPDFAnnex = (props) => {
                         ))
                     }
                 </tbody>
-            </table>
+            </table> */}
 
         </div>
 
