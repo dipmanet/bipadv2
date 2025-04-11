@@ -498,6 +498,10 @@ class Demographics extends React.PureComponent<Props> {
             enableBuildingStructureDiv: false,
             enableEconomicAspectDiv: false,
             selectedFederalName: '',
+            popupDataType: {
+                en: 'Population',
+                ne: 'जनसंख्या',
+            },
 
         };
         const {
@@ -1367,7 +1371,7 @@ class Demographics extends React.PureComponent<Props> {
             enableEconomicAspectDiv,
             enableBuildingStructureDiv,
             enableSensitivePopulationDiv,
-            selectedFederalName } = this.state;
+            selectedFederalName, popupDataType } = this.state;
 
 
         const mapState = this.getMapState(data, selectedAttribute);
@@ -1420,19 +1424,29 @@ class Demographics extends React.PureComponent<Props> {
 
         const LGProfilehouseHold = this.getGeojson(LGProfilehouseHoldData);
 
-        const Tool = (datas: any) => (
-            <>
-                <h3 style={{
-                    fontSize: '12px',
-                    margin: 0,
-                    padding: '10px 20px 0px 20px',
-                    textTransform: 'uppercase',
-                    textAlign: 'center',
-                }}
-                >
-                    {`${language === 'en' ? datas.feature.properties.title_en : datas.feature.properties.title_ne}`}
+        const municipalityName = (ids, lang) => {
+            const name = lang === 'en'
+                ? municipalities.find(d => d.id === ids).title_en
+                : municipalities.find(d => d.id === ids).title_ne;
+            return name;
+        };
 
-                </h3>
+        const Tool = (datas: any, popupData: any) => (
+            <>
+                {
+                    (
+                        <h3 style={{
+                            fontSize: '12px',
+                            margin: 0,
+                            padding: '10px 20px 0px 20px',
+                            textTransform: 'uppercase',
+                            textAlign: 'center',
+                        }}
+                        >
+                            {`${adminLevel === 3 ? municipalityName(datas.feature.properties.municipality, language) : language === 'en' ? datas.feature.properties.title_en : datas.feature.properties.title_ne}`}
+
+                        </h3>
+                    )}
 
                 <p style={{
                     margin: 0,
@@ -1443,8 +1457,8 @@ class Demographics extends React.PureComponent<Props> {
                 >
                     {
                         language === 'en'
-                            ? `Population: ${NumberWithCommas(datas.feature.state.value)}`
-                            : `जनसंख्या: ${NumberWithCommas(datas.feature.state.value)}`
+                            ? `${popupData.en}: ${NumberWithCommas(datas.feature.state.value)}`
+                            : `${popupData.ne}: ${NumberWithCommas(datas.feature.state.value)}`
                     }
                 </p>
 
@@ -2859,7 +2873,13 @@ class Demographics extends React.PureComponent<Props> {
                                                             style={{ cursor: 'pointer' }}
                                                             role="button"
                                                             tabIndex={0}
-                                                            onClick={() => this.setState({ selectedAttribute: 'totalPopulation' })}
+                                                            onClick={() => this.setState({
+                                                                selectedAttribute: 'totalPopulation',
+                                                                popupDataType: {
+                                                                    en: 'Population',
+                                                                    ne: 'जनसंख्या',
+                                                                },
+                                                            })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{t('Population')}</h2>
@@ -2973,7 +2993,13 @@ class Demographics extends React.PureComponent<Props> {
                                                             style={{ cursor: 'pointer' }}
                                                             role="button"
                                                             tabIndex={0}
-                                                            onClick={() => this.setState({ selectedAttribute: 'literacyRate' })}
+                                                            onClick={() => this.setState({
+                                                                selectedAttribute: 'literacyRate',
+                                                                popupDataType: {
+                                                                    en: 'Literacy Rate',
+                                                                    ne: 'साक्षरता दर',
+                                                                },
+                                                            })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{t('Literacy Rate')}</h2>
@@ -3078,7 +3104,13 @@ class Demographics extends React.PureComponent<Props> {
                                                             style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
                                                             role="button"
                                                             tabIndex={0}
-                                                            onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
+                                                            onClick={() => this.setState({
+                                                                selectedAttribute: 'householdCount',
+                                                                popupDataType: {
+                                                                    en: 'Household count',
+                                                                    ne: 'घरपरिवार गणना',
+                                                                },
+                                                            })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{language === 'en' ? 'Household' : 'घरायसी विवरण'}</h2>
@@ -3537,7 +3569,7 @@ class Demographics extends React.PureComponent<Props> {
                                 sourceKey={'demographics-profile'}
                                 paint={legendPaint}
                                 mapState={mapState}
-                                tooltipRenderer={(prop: any) => Tool(prop)}
+                                tooltipRenderer={(prop: any) => Tool(prop, popupDataType)}
                                 isDamageAndLoss
                                 regionLevel={filters && filters.region && filters.region.adminLevel + 1 || 1}
                             />
