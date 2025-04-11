@@ -242,7 +242,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ params, props }) => ({
             census_year: params.census_year,
-
+            federal_level: params.federal_level,
         }),
         onMount: true,
         onSuccess: ({ params, response }) => {
@@ -486,7 +486,7 @@ class Demographics extends React.PureComponent<Props> {
         this.state = {
             selectedAttribute: 'totalPopulation',
             demographyData: [],
-            selectedDataType: 1,
+
             isDataSetClicked: false,
             closedVisualization: true,
             enableProvinceMapFilter: false,
@@ -504,13 +504,25 @@ class Demographics extends React.PureComponent<Props> {
             requests: {
                 demographicsGetRequest,
 
-            },
+            }, region: { adminLevel, geoarea },
+            selectedDataType,
         } = this.props;
 
-        demographicsGetRequest.setDefaultParams({
-            census_year: '2021',
-            onSuccess: this.demographicData,
-        });
+        if (selectedDataType === 1) {
+            if (adminLevel === 2 || adminLevel === 3) {
+                demographicsGetRequest.setDefaultParams({
+                    onSuccess: this.demographicData,
+                    federal_level: 'local',
+                    census_year: '2021',
+                });
+            } else {
+                demographicsGetRequest.setDefaultParams({
+                    census_year: '2021',
+                    federal_level: 'district',
+                    onSuccess: this.demographicData,
+                });
+            }
+        }
     }
 
     public componentDidUpdate(prevProps: { closedVisualization: any }) {
@@ -564,13 +576,13 @@ class Demographics extends React.PureComponent<Props> {
         // saveChart('household', 'household');
     }
 
-    private getPopulationData = (data: DemographicsData[], region: Region) => {
+    private getPopulationData_municipality = (data: DemographicsData[], region: Region) => {
         let filteredData = data.map(i => ({
             ...i,
-            changed_malePopulation: i.changes ? i.changes.malePopulation : 0,
-            changed_femalePopulation: i.changes ? i.changes.femalePopulation : 0,
-            changed_literacyRate: i.changes ? i.changes.literacyRate : 0,
-            changed_householdCount: i.changes ? i.changes.householdCount : 0,
+            changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+            changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+            changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+            changed_householdCount: i.previous ? i.previous.householdCount : 0,
         }));
         if (!doesObjectHaveNoData(region)) {
             const { adminLevel, geoarea } = region;
@@ -591,103 +603,291 @@ class Demographics extends React.PureComponent<Props> {
             }
             filteredData = data.map(i => ({
                 ...i,
-                changed_malePopulation: i.changes ? i.changes.malePopulation : 0,
-                changed_femalePopulation: i.changes ? i.changes.femalePopulation : 0,
-                changed_literacyRate: i.changes ? i.changes.literacyRate : 0,
-                changed_householdCount: i.changes ? i.changes.householdCount : 0,
+                changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+                changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+                changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+                changed_householdCount: i.previous ? i.previous.householdCount : 0,
             })).filter(d => selectedMunicipalities.includes(d.municipality));
         }
-        const demographics = filteredData.reduce((acc, value, i) => {
-            const {
-                changed_malePopulation = 0,
-                changed_femalePopulation = 0,
-                changed_literacyRate = 0,
-                changed_householdCount = 0,
-                totalPopulation = 0,
-                malePopulation = 0,
-                femalePopulation = 0,
-                householdCount = 0,
-                literacyRate = 0,
-                maleLiteracyRate = 0,
-                femaleLiteracyRate = 0,
-                ageGroupPopulation = {
-                    male: {},
-                    female: {},
-                },
-            } = value;
-            acc.changed_malePopulation += changed_malePopulation;
-            acc.changed_femalePopulation += changed_femalePopulation;
-            acc.changed_literacyRate += changed_literacyRate;
-            acc.changed_householdCount += changed_householdCount;
-            acc.totalPopulation += totalPopulation;
-            acc.malePopulation += malePopulation;
-            acc.femalePopulation += femalePopulation;
-            acc.householdCount += householdCount;
-            acc.literacyRate += (literacyRate - acc.literacyRate) / (i + 1);
-            acc.maleLiteracyRate += (maleLiteracyRate - acc.maleLiteracyRate) / (i + 1);
-            acc.femaleLiteracyRate += (femaleLiteracyRate - acc.femaleLiteracyRate) / (i + 1);
-            Object.entries(ageGroupPopulation.male).forEach(([key, count]) => {
-                const { ageGroupPopulation: { male } } = acc;
-                male[key as keyof AgeGroup] += count;
-            });
-            Object.entries(ageGroupPopulation.female).forEach(([key, count]) => {
-                const { ageGroupPopulation: { female } } = acc;
-                female[key as keyof AgeGroup] += count;
-            });
 
-            return acc;
-        }, {
-            changed_malePopulation: 0,
-            changed_femalePopulation: 0,
-            changed_literacyRate: 0,
-            changed_householdCount: 0,
-            totalPopulation: 0,
-            malePopulation: 0,
-            femalePopulation: 0,
-            householdCount: 0,
-            literacyRate: 0,
-            maleLiteracyRate: 0,
-            femaleLiteracyRate: 0,
-            ageGroupPopulation: {
-                male: {
-                    '00-04': 0,
-                    '05-09': 0,
-                    '10-14': 0,
-                    '15-19': 0,
-                    '20-24': 0,
-                    '25-29': 0,
-                    '30-34': 0,
-                    '35-39': 0,
-                    '40-44': 0,
-                    '45-49': 0,
-                    '50-54': 0,
-                    '55-59': 0,
-                    '60-64': 0,
-                    '65-69': 0,
-                    '70-74': 0,
-                    '75+': 0,
+        const demographics = filteredData
+            .reduce((acc, value, i) => {
+                const {
+                    changed_malePopulation = 0,
+                    changed_femalePopulation = 0,
+                    changed_literacyRate = 0,
+                    changed_householdCount = 0,
+                    totalPopulation = 0,
+                    malePopulation = 0,
+                    femalePopulation = 0,
+                    householdCount = 0,
+                    literacyRate = 0,
+                    maleLiteracyRate = 0,
+                    femaleLiteracyRate = 0,
+
+                    ageGroupPopulation = {
+                        male: {},
+                        female: {},
+                    },
+                } = value;
+                acc.changed_malePopulation += changed_malePopulation;
+                acc.changed_femalePopulation += changed_femalePopulation;
+                acc.changed_literacyRate += changed_literacyRate;
+                acc.changed_householdCount += changed_householdCount;
+                acc.totalPopulation += totalPopulation;
+                acc.malePopulation += malePopulation;
+                acc.femalePopulation += femalePopulation;
+                acc.householdCount += householdCount;
+                acc.literacyRate += (literacyRate - acc.literacyRate) / (i + 1);
+                acc.maleLiteracyRate += (maleLiteracyRate - acc.maleLiteracyRate) / (i + 1);
+                acc.femaleLiteracyRate += (femaleLiteracyRate - acc.femaleLiteracyRate) / (i + 1);
+
+
+                Object.entries(ageGroupPopulation.male).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { male } } = acc;
+                    male[key as keyof AgeGroup] += count;
+                });
+                Object.entries(ageGroupPopulation.female).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { female } } = acc;
+                    female[key as keyof AgeGroup] += count;
+                });
+
+                return acc;
+            }, {
+                changed_malePopulation: 0,
+                changed_femalePopulation: 0,
+                changed_literacyRate: 0,
+                changed_householdCount: 0,
+                totalPopulation: 0,
+                malePopulation: 0,
+                femalePopulation: 0,
+                householdCount: 0,
+                literacyRate: 0,
+                maleLiteracyRate: 0,
+                femaleLiteracyRate: 0,
+                maleLiterate: 0,
+                maleAboveFiveYears: 0,
+                femaleLiterate: 0,
+                femaleAboveFiveYears: 0,
+
+                ageGroupPopulation: {
+                    male: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
+                    female: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
                 },
-                female: {
-                    '00-04': 0,
-                    '05-09': 0,
-                    '10-14': 0,
-                    '15-19': 0,
-                    '20-24': 0,
-                    '25-29': 0,
-                    '30-34': 0,
-                    '35-39': 0,
-                    '40-44': 0,
-                    '45-49': 0,
-                    '50-54': 0,
-                    '55-59': 0,
-                    '60-64': 0,
-                    '65-69': 0,
-                    '70-74': 0,
-                    '75+': 0,
-                },
-            },
-        });
+            });
         demographics.changed_literacyRate /= filteredData.length;
+
+
+        return demographics;
+    }
+
+    private getPopulationData_district = (data: DemographicsData[], region: Region) => {
+        let filteredData = data.map(i => ({
+            ...i,
+            changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+            changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+            changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+            changed_householdCount: i.previous ? i.previous.householdCount : 0,
+        }));
+        if (!doesObjectHaveNoData(region)) {
+            const { adminLevel, geoarea } = region;
+            const { municipalities, districts } = this.props;
+
+            let selectedMunicipalities: number[] = [];
+            if (adminLevel === 1) {
+                selectedMunicipalities = districts
+                    .filter(v => v.province === geoarea)
+                    .map(v => v.id);
+            } else if (adminLevel === 2) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.district === geoarea)
+                    .map(v => v.id);
+            } else if (adminLevel === 3) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.id === geoarea)
+                    .map(v => v.id);
+            }
+            filteredData = data.map(i => ({
+                ...i,
+                changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+                changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+                changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+                changed_householdCount: i.previous ? i.previous.householdCount : 0,
+            })).filter(d => selectedMunicipalities.includes(adminLevel === 1 ? d.district : d.municipality));
+        }
+
+        const demographics = filteredData.map((d) => {
+            const temp_total_totalLiterate = (d.totalLiterate);
+            const temp_total_totalAboveFiveYears = d.totalAboveFiveYears;
+            const temp_total_maleLiterate = d.maleLiterate;
+            const temp_total_maleAboveFiveYears = d.maleAboveFiveYears;
+            const temp_total_femaleLiterate = d.femaleLiterate;
+            const temp_total_femaleAboveFiveYears = d.femaleAboveFiveYears;
+
+            return ({
+                ...d,
+                temp_total_totalLiterate,
+                temp_total_totalAboveFiveYears,
+                temp_total_maleLiterate,
+                temp_total_maleAboveFiveYears,
+                temp_total_femaleLiterate,
+                temp_total_femaleAboveFiveYears,
+            });
+        })
+            .reduce((acc, value, i) => {
+                const {
+                    changed_malePopulation = 0,
+                    changed_femalePopulation = 0,
+                    changed_literacyRate = 0,
+                    changed_householdCount = 0,
+                    totalPopulation = 0,
+                    malePopulation = 0,
+                    femalePopulation = 0,
+                    householdCount = 0,
+                    // literacyRate = 0,
+                    // maleLiteracyRate = 0,
+                    // femaleLiteracyRate = 0,
+                    temp_total_totalLiterate = 0,
+                    temp_total_totalAboveFiveYears = 0,
+                    temp_total_maleLiterate = 0,
+                    temp_total_maleAboveFiveYears = 0,
+                    temp_total_femaleLiterate = 0,
+                    temp_total_femaleAboveFiveYears = 0,
+                    ageGroupPopulation = {
+                        male: {},
+                        female: {},
+                    },
+                } = value;
+                acc.changed_malePopulation += changed_malePopulation;
+                acc.changed_femalePopulation += changed_femalePopulation;
+                acc.changed_literacyRate += changed_literacyRate;
+                acc.changed_householdCount += changed_householdCount;
+                acc.totalPopulation += totalPopulation;
+                acc.malePopulation += malePopulation;
+                acc.femalePopulation += femalePopulation;
+                acc.householdCount += householdCount;
+                // acc.literacyRate += (literacyRate - acc.literacyRate) / (i + 1);
+                // acc.maleLiteracyRate += (maleLiteracyRate - acc.maleLiteracyRate) / (i + 1);
+                // acc.femaleLiteracyRate += (femaleLiteracyRate - acc.femaleLiteracyRate) / (i + 1);
+                // acc.literacyRate += literacyRate;
+                // acc.maleLiteracyRate += maleLiteracyRate;
+                // acc.femaleLiteracyRate += femaleLiteracyRate;
+                acc.temp_total_totalLiterate += temp_total_totalLiterate;
+                acc.temp_total_totalAboveFiveYears += temp_total_totalAboveFiveYears;
+                acc.temp_total_maleLiterate += temp_total_maleLiterate;
+                acc.temp_total_maleAboveFiveYears += temp_total_maleAboveFiveYears;
+                acc.temp_total_femaleLiterate += temp_total_femaleLiterate;
+                acc.temp_total_femaleAboveFiveYears += temp_total_femaleAboveFiveYears;
+                Object.entries(ageGroupPopulation.male).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { male } } = acc;
+                    male[key as keyof AgeGroup] += count;
+                });
+                Object.entries(ageGroupPopulation.female).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { female } } = acc;
+                    female[key as keyof AgeGroup] += count;
+                });
+
+                return acc;
+            }, {
+                changed_malePopulation: 0,
+                changed_femalePopulation: 0,
+                changed_literacyRate: 0,
+                changed_householdCount: 0,
+                totalPopulation: 0,
+                malePopulation: 0,
+                femalePopulation: 0,
+                householdCount: 0,
+                literacyRate: 0,
+                maleLiteracyRate: 0,
+                femaleLiteracyRate: 0,
+                maleLiterate: 0,
+                maleAboveFiveYears: 0,
+                femaleLiterate: 0,
+                femaleAboveFiveYears: 0,
+                temp_total_totalLiterate: 0,
+                temp_total_totalAboveFiveYears: 0,
+                temp_total_maleLiterate: 0,
+                temp_total_maleAboveFiveYears: 0,
+                temp_total_femaleLiterate: 0,
+                temp_total_femaleAboveFiveYears: 0,
+                ageGroupPopulation: {
+                    male: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
+                    female: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
+                },
+            });
+        demographics.changed_literacyRate /= filteredData.length;
+        demographics.femaleLiteracyRate = (demographics.temp_total_femaleLiterate / demographics.temp_total_femaleAboveFiveYears) * 100;
+        demographics.maleLiteracyRate = (demographics.temp_total_maleLiterate / demographics.temp_total_maleAboveFiveYears) * 100;
+        demographics.literacyRate = (demographics.temp_total_totalLiterate / demographics.temp_total_totalAboveFiveYears) * 100;
+
         return demographics;
     }
 
@@ -695,7 +895,7 @@ class Demographics extends React.PureComponent<Props> {
         const { totalPopulation, malePopulation, femalePopulation, changed_malePopulation,
             changed_femalePopulation } = data;
         const { language: { language } } = this.props;
-        const changed_total_population = changed_malePopulation + changed_femalePopulation;
+        const changed_total_population = totalPopulation - (changed_malePopulation + changed_femalePopulation);
         return ([{
             key: 'changed_total_population',
             label: language === 'en' ? 'Changed Total Population' : 'कुल जनसंख्या परिवर्तन',
@@ -739,29 +939,30 @@ class Demographics extends React.PureComponent<Props> {
     private getLiteracySummary = (data: SummaryData) => {
         const { literacyRate, maleLiteracyRate, femaleLiteracyRate, changed_literacyRate } = data;
         const { language: { language } } = this.props;
+        const final_changed_literacy_rate = literacyRate - changed_literacyRate;
 
         return ([
             {
                 key: 'changed_literacyRate',
                 label: language === 'en' ? 'Changed Literacy Rate' : 'परिबर्तन साक्षरता दर',
-                value: Number(changed_literacyRate.toFixed(2)),
+                value: Number(final_changed_literacy_rate.toFixed(1)),
             },
             {
                 key: 'literacyRate',
                 label: language === 'en' ? 'Literacy Rate' : 'साक्षरता दर',
-                value: Number(literacyRate.toFixed(2)),
+                value: Number((literacyRate).toFixed(1)),
             },
             {
                 key: 'maleLiteracyRate',
                 label: language === 'en' ? 'Male' : 'पुरुष',
                 color: '#2A7BBB',
-                value: Number(maleLiteracyRate.toFixed(2)),
+                value: Number(maleLiteracyRate.toFixed(1)),
             },
             {
                 key: 'femaleLiteracyRate',
                 label: language === 'en' ? 'Female' : 'महिला',
                 color: '#83A4D3',
-                value: Number(femaleLiteracyRate.toFixed(2)),
+                value: Number(femaleLiteracyRate.toFixed(1)),
 
             },
         ]);
@@ -774,7 +975,7 @@ class Demographics extends React.PureComponent<Props> {
             changed_householdCount: {
                 key: 'changed_householdCount',
                 label: language === 'en' ? 'Changed Household Count' : 'परिवर्तन घरपरिवार गणना',
-                value: changed_householdCount,
+                value: householdCount - changed_householdCount,
                 color: '#2A7BBB',
             },
             householdSummary: [
@@ -822,50 +1023,101 @@ class Demographics extends React.PureComponent<Props> {
     }
 
     private getMapState = (data: any[], selectedAttribute: string | number) => {
-        const { wards, region: { adminLevel, geoarea }, municipalities, districts, provinces } = this.props;
-        if (adminLevel === 3) {
-            const filteredWardList = wards.filter((i: { municipality: number | undefined }) => i.municipality === geoarea);
-            const value = data.find((d: { municipality: number | undefined }) => d.municipality === geoarea);
+        const { wards, region: { adminLevel, geoarea }, municipalities, districts, provinces, selectedDataType } = this.props;
 
-            const mapState = filteredWardList.map((i: { id: any }) => ({
-                id: i.id,
-                value: value[selectedAttribute],
-            }));
 
-            return mapState;
-        }
-        if (adminLevel === 2) {
-            const mapState = data.map((d: { [x: string]: string | number; municipality: any }) => ({
-                id: d.municipality,
-                value: +d[selectedAttribute] || 0,
-            }));
+        if (selectedDataType === 2) {
+            if (adminLevel === 3) {
+                const filteredWardList = wards.filter((i: { municipality: number | undefined }) => i.municipality === geoarea);
+                const value = data.find((d: { municipality: number | undefined }) => d.municipality === geoarea);
 
-            return mapState;
-        }
+                const mapState = filteredWardList.map((i: { id: any }) => ({
+                    id: i.id,
+                    value: value[selectedAttribute],
+                }));
 
-        if (adminLevel === 1) {
-            const selectedProvinceMunicipalities = districts.map((m: { id: number }) => {
-                const filtered_municipality = municipalities.filter(d => d.district === m.id);
+                return mapState;
+            }
+            if (adminLevel === 2) {
+                const mapState = data.map((d: { [x: string]: string | number; municipality: any }) => ({
+                    id: d.municipality,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+            if (adminLevel === 1) {
+                const selectedProvinceMunicipalities = districts.map((m: { id: number }) => {
+                    const filtered_municipality = municipalities.filter(d => d.district === m.id);
+                    return filtered_municipality;
+                });
+                const districtWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                    const finaldata = mun.map((dat: { id: any; district: any }) => {
+                        const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
+
+                        return ({ ...datas, district: dat.district });
+                    });
+                    return finaldata;
+                });
+
+                const finalsummationData = districtWiseMuniList.map((mun: any[]) => {
+                    const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate ? currValue.femaleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                    const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
+                    const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
+                    const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate ? currValue.literacyRate : 0), 0)) / mun.length).toFixed(2);
+                    const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                    const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
+                    const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
+                    const district = mun.reduce((acc: any, currValue: { district: any }) => currValue.district, 0);
+                    return ({
+                        femaleLiteracyRate,
+                        femalePopulation,
+                        householdCount,
+                        literacyRate,
+                        maleLiteracyRate,
+                        malePopulation,
+                        totalPopulation,
+                        district,
+                    });
+                });
+
+
+                const mapState = finalsummationData.map((d: { [x: string]: string | number; district: any }) => ({
+                    id: d.district,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+
+            const selectedProvinceMunicipalities = provinces.map((m: { id: number }) => {
+                const filtered_municipality = municipalities.filter(d => d.province === m.id);
                 return filtered_municipality;
             });
-            const districtWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
-                const finaldata = mun.map((dat: { id: any; district: any }) => {
-                    const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
 
-                    return ({ ...datas, district: dat.district });
+
+            const provinceWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                const finaldata = mun.map((dat) => {
+                    const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
+                    if (datas) {
+                        return ({ ...datas, district: dat.id, province: dat.province });
+                    }
                 });
                 return finaldata;
             });
+            const filtered_undefined_array = provinceWiseMuniList.map(d => d.filter(x => x !== undefined));
 
-            const finalsummationData = districtWiseMuniList.map((mun: any[]) => {
-                const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate ? currValue.femaleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
-                const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
-                const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
-                const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate ? currValue.literacyRate : 0), 0)) / mun.length).toFixed(2);
-                const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
-                const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
-                const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
-                const district = mun.reduce((acc: any, currValue: { district: any }) => currValue.district, 0);
+            const finalsummationDataProvince = filtered_undefined_array.map((mun: any[]) => {
+                const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate), 0)) / mun.length).toFixed(2);
+                const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation), 0);
+                const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount), 0);
+                const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate), 0)) / mun.length).toFixed(2);
+                const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate), 0)) / mun.length).toFixed(2);
+                const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation), 0);
+                const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation), 0);
+                const province = mun.reduce((acc: any, currValue: { province: any }) => currValue.province, 0);
                 return ({
                     femaleLiteracyRate,
                     femalePopulation,
@@ -874,63 +1126,136 @@ class Demographics extends React.PureComponent<Props> {
                     maleLiteracyRate,
                     malePopulation,
                     totalPopulation,
-                    district,
+                    province,
                 });
             });
 
+            // const finalProvinceWiseSummationData =
 
-            const mapState = finalsummationData.map((d: { [x: string]: string | number; district: any }) => ({
-                id: d.district,
+            const mapState = finalsummationDataProvince.map((d: { [x: string]: string | number; district: any }) => ({
+                id: d.province,
+                value: +d[selectedAttribute] || 0,
+            }));
+            return mapState;
+        }
+        if (selectedDataType === 1) {
+            if (adminLevel === 3 && data[0].municipality) {
+                const filteredWardList = wards.filter((i: { municipality: number | undefined }) => i.municipality === geoarea);
+                const value = data.find((d: { municipality: number | undefined }) => d.municipality === geoarea);
+                const mapState = filteredWardList.map((i: { id: any }) => ({
+                    id: i.id,
+                    value: value[selectedAttribute],
+                }));
+
+                return mapState;
+            }
+            if (adminLevel === 2) {
+                const mapState = data.map((d: { [x: string]: string | number; municipality: any }) => ({
+                    id: d.municipality,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+            if (adminLevel === 1) {
+                const selectedProvinceMunicipalities = districts.map((m: { id: number }) => {
+                    const filtered_municipality = municipalities.filter(d => d.district === m.id);
+                    return filtered_municipality;
+                });
+
+                const districtWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                    const finaldata = mun.map((dat: { id: any; district: any }) => {
+                        const datas = data.filter((itm: { municipality: any }) => itm.district === dat.district)[0];
+
+                        return ({ ...datas, district: dat.district });
+                    });
+                    return finaldata;
+                });
+
+                const finalsummationData = districtWiseMuniList.map((mun: any[]) => {
+                    const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleAboveFiveYears: any; femaleLiterate: any }) => (acc + currValue.femaleLiterate ? (currValue.femaleLiterate / currValue.femaleAboveFiveYears) : 0), 0)) / mun.length).toFixed(2);
+                    const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
+                    const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
+                    const totalLiterate = mun.reduce((acc: any, currValue: { totalLiterate: any }) => (acc + currValue.totalLiterate ? currValue.totalLiterate : 0), 0);
+                    const totalAboveFiveYears = mun.reduce((acc: any, currValue: { totalAboveFiveYears: any }) => (acc + currValue.totalAboveFiveYears ? currValue.totalAboveFiveYears : 0), 0);
+                    const literacyRate = ((totalLiterate / totalAboveFiveYears) * 100).toFixed(1);
+                    const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                    const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
+                    const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
+                    const district = mun.reduce((acc: any, currValue: { district: any }) => currValue.district, 0);
+                    return ({
+                        femaleLiteracyRate,
+                        femalePopulation,
+                        householdCount,
+                        literacyRate,
+                        maleLiteracyRate,
+                        malePopulation,
+                        totalPopulation,
+                        district,
+                    });
+                });
+
+
+                const mapState = finalsummationData.map((d: { [x: string]: string | number; district: any }) => ({
+                    id: d.district,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+            // For Overall Data
+            const selectedProvinceDistricts = provinces.map((m: { id: number }) => {
+                const filtered_districts = districts.filter(d => d.province === m.id);
+                return filtered_districts;
+            });
+
+            const provinceWiseDistList = selectedProvinceDistricts.map((mun: any[]) => {
+                const finaldata = mun.map((dat) => {
+                    const datas = data.filter((itm: { municipality: any }) => itm.district === dat.id)[0];
+                    if (datas) {
+                        return ({ ...datas, district: dat.id, province: dat.province });
+                    }
+                });
+                return finaldata;
+            });
+
+            const filtered_undefined_array = provinceWiseDistList.map(d => d.filter(x => x !== undefined));
+
+            const finalsummationDataProvince = filtered_undefined_array.map((mun: any[]) => {
+                const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiterate: any; femaleAboveFiveYears: any }) => (acc + (currValue.femaleLiterate / currValue.femaleAboveFiveYears)), 0)) / mun.length).toFixed(2);
+                const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation), 0);
+                const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount), 0);
+                const totalLiterate = mun.reduce((acc: any, currValue: { totalLiterate: any }) => (acc + currValue.totalLiterate ? currValue.totalLiterate : 0), 0);
+                const totalAboveFiveYears = mun.reduce((acc: any, currValue: { totalAboveFiveYears: any }) => (acc + currValue.totalAboveFiveYears ? currValue.totalAboveFiveYears : 0), 0);
+                const literacyRate = ((totalLiterate / totalAboveFiveYears) * 100).toFixed(1);
+                const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate), 0)) / mun.length).toFixed(2);
+                const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation), 0);
+                const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation), 0);
+                const province = mun.reduce((acc: any, currValue: { province: any }) => currValue.province, 0);
+
+                return ({
+                    femaleLiteracyRate,
+                    femalePopulation,
+                    householdCount,
+                    literacyRate,
+                    maleLiteracyRate,
+                    malePopulation,
+                    totalPopulation,
+                    province,
+                    totalLiterate,
+                    totalAboveFiveYears,
+                });
+            });
+
+            const mapState = finalsummationDataProvince.map((d: { [x: string]: string | number; district: any }) => ({
+                id: d.province,
                 value: +d[selectedAttribute] || 0,
             }));
 
             return mapState;
         }
-        const selectedProvinceMunicipalities = provinces.map((m: { id: number }) => {
-            const filtered_municipality = municipalities.filter(d => d.province === m.id);
-            return filtered_municipality;
-        });
-
-
-        const provinceWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
-            const finaldata = mun.map((dat) => {
-                const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
-                if (datas) {
-                    return ({ ...datas, district: dat.id, province: dat.province });
-                }
-            });
-            return finaldata;
-        });
-        const filtered_undefined_array = provinceWiseMuniList.map(d => d.filter(x => x !== undefined));
-
-        const finalsummationDataProvince = filtered_undefined_array.map((mun: any[]) => {
-            const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate), 0)) / mun.length).toFixed(2);
-            const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation), 0);
-            const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount), 0);
-            const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate), 0)) / mun.length).toFixed(2);
-            const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate), 0)) / mun.length).toFixed(2);
-            const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation), 0);
-            const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation), 0);
-            const province = mun.reduce((acc: any, currValue: { province: any }) => currValue.province, 0);
-            return ({
-                femaleLiteracyRate,
-                femalePopulation,
-                householdCount,
-                literacyRate,
-                maleLiteracyRate,
-                malePopulation,
-                totalPopulation,
-                province,
-            });
-        });
-
-        // const finalProvinceWiseSummationData =
-
-        const mapState = finalsummationDataProvince.map((d: { [x: string]: string | number; district: any }) => ({
-            id: d.province,
-            value: +d[selectedAttribute] || 0,
-        }));
-        return mapState;
     }
 
     private handleCloseVisualization = () => {
@@ -991,12 +1316,20 @@ class Demographics extends React.PureComponent<Props> {
     }
 
     private handleRadioButtonClick = (e: any) => {
-        const { requests: { demographicsGetRequest } } = this.props;
+        const { requests: { demographicsGetRequest }, setchangeSelectedDataType } = this.props;
 
-        this.setState({ selectedDataType: e });
-        if (e === 1 || e === 2) {
+
+        setchangeSelectedDataType(e);
+        if (e === 2) {
             demographicsGetRequest.do({
-                census_year: e === 1 ? '2021' : '2011',
+                census_year: '2011',
+                federal_level: '',
+                onSuccess: this.demographicData,
+            });
+        } else {
+            demographicsGetRequest.do({
+                census_year: '2021',
+                federal_level: 'district',
                 onSuccess: this.demographicData,
             });
         }
@@ -1023,13 +1356,13 @@ class Demographics extends React.PureComponent<Props> {
             municipalities,
             LGProfilehouseHoldData,
             lgProfileWardLevelData, filters,
-
+            selectedDataType,
         } = this.props;
 
         const { demographyData, resourceLngLat, houseHoldInformation } = this.state;
 
 
-        const { selectedAttribute, selectedDataType,
+        const { selectedAttribute,
             isDataSetClicked, closedVisualization,
             enableEconomicAspectDiv,
             enableBuildingStructureDiv,
@@ -1049,7 +1382,7 @@ class Demographics extends React.PureComponent<Props> {
             colors, min, max, specificData, colorGrade.length, adminLevel,
         );
 
-        const demographics = this.getPopulationData(data, region);
+        const demographics = selectedDataType === 1 ? this.getPopulationData_district(data, region) : this.getPopulationData_municipality(data, region);
 
 
         const populationSummary = this.getPopulationSummary(demographics);
@@ -1066,6 +1399,7 @@ class Demographics extends React.PureComponent<Props> {
         const finalSexRatio = [{ label: 'genderRatio', male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
         const finalSexRatioPercentage = [{ male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').percent, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').percent }];
         const literacySummary = this.getLiteracySummary(demographics);
+
         const literacyRatio = literacySummary
             .filter(v => ['maleLiteracyRate', 'femaleLiteracyRate'].includes(v.key));
         const finalLiteracyRate = [{ label: 'literacyRate', male: literacyRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: literacyRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
@@ -1193,7 +1527,6 @@ class Demographics extends React.PureComponent<Props> {
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
         const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
         const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total: any, currentValue: { totalPeople: any }) => total + currentValue.totalPeople || 0, 0) : '-';
-
 
         return (
             <>

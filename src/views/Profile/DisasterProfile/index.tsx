@@ -92,6 +92,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ params, props }) => ({
             census_year: 2021,
+            federal_level: params.federal_level,
 
         }),
         onMount: true,
@@ -188,6 +189,7 @@ class DisasterProfile extends React.PureComponent<Props> {
             pendingLgProfileData: true,
             houseHoldData: [],
             lgProfileWardLevelData: [],
+            selectedDataType: 1,
 
         };
         const {
@@ -203,6 +205,7 @@ class DisasterProfile extends React.PureComponent<Props> {
         demographicsGetRequest.setDefaultParams({
             onSuccess: this.demographicData,
         });
+
         if (adminLevel === 3) {
             lgProfileGetHouseHoldInfo.setDefaultParams({
                 onSuccess: this.houseHoldData,
@@ -229,6 +232,7 @@ class DisasterProfile extends React.PureComponent<Props> {
 
                 lgProfileGetRequest,
                 lgProfileGetHouseHoldInfo,
+                demographicsGetRequest,
 
             } } = this.props;
         if (prevProps.region !== region) {
@@ -249,7 +253,11 @@ class DisasterProfile extends React.PureComponent<Props> {
             });
         }
     }
-
+    private changeSelectedDataType = (id: number) => {
+        this.setState({
+            selectedDataType: id,
+        });
+    }
     private wardLevelData = (data: any) => {
         this.setState({
             lgProfileWardLevelData: data,
@@ -344,7 +352,7 @@ class DisasterProfile extends React.PureComponent<Props> {
                 return prevProfile;
             });
         }
-        const { activeView, demographyData, houseHoldData, lgProfileWardLevelData } = this.state;
+        const { activeView, demographyData, houseHoldData, lgProfileWardLevelData, selectedDataType } = this.state;
 
 
         const pending = isAnyRequestPending(requests);
@@ -368,6 +376,8 @@ class DisasterProfile extends React.PureComponent<Props> {
                                 lgProfileData={lgProfileData}
                                 LGProfilehouseHoldData={houseHoldData}
                                 lgProfileWardLevelData={lgProfileWardLevelData}
+                                setchangeSelectedDataType={this.changeSelectedDataType}
+                                selectedDataType={selectedDataType}
                             />
                         </>
                     )
