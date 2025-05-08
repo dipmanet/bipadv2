@@ -108,7 +108,7 @@ const TemperatureMax = (props: Props) => {
                             picFromEdit
                             && (
                                 <>
-                                    <img src={picLink} alt="temperature" />
+                                    <img src={picLink} alt="temperature" style={{ objectFit: 'contain' }} />
                                 </>
                             )
                         }
@@ -116,7 +116,7 @@ const TemperatureMax = (props: Props) => {
                             !picFromEdit && !maxTemp
                             && (
                                 <>
-                                    <img className={styles.placeholder} src={Placeholder} alt="temperature" />
+                                    <img className={styles.placeholder} src={Placeholder} alt="temperature" style={{ objectFit: 'contain' }} />
 
                                 </>
                             )

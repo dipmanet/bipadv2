@@ -275,18 +275,24 @@ const BulletinPDFLoss = (props: Props) => {
                             <XAxis
                                 type="number"
                                 tickFormatter={e => DataFormater(e, language)}
+                                tick={{ fontSize: 14 }}
                             />
                             <YAxis
                                 type="category"
                                 dataKey="hazard"
+                                tick={{ fontSize: 14 }}
                             />
 
                             <Legend content={e => renderLegendContent(e, 'vertical')} />
-                            <Bar dataKey="death" fill="#D10000" barSize={7} />
-                            <Bar dataKey="incident" fill="#D4A367" barSize={7} />
+                            <Bar dataKey="death" fill="#D10000" barSize={30} />
+                            <Bar dataKey="incident" fill="#D4A367" barSize={30} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
+
+            </div>
+            <div className={styles.container12}>
+
                 <div className={styles.genderWiseStats}>
                     <h2>
                         <Translation>
@@ -315,8 +321,8 @@ const BulletinPDFLoss = (props: Props) => {
                                     >
                                         <Pie
                                             data={genderWiseLossChart}
-                                            innerRadius={40}
-                                            outerRadius={60}
+                                            innerRadius={80}
+                                            outerRadius={140}
                                             fill="#8884d8"
                                             paddingAngle={0}
                                             dataKey="value"
@@ -344,7 +350,7 @@ const BulletinPDFLoss = (props: Props) => {
                     }
                 </div>
             </div>
-            <div className={styles.container2}>
+            {/* <div className={styles.container2}>
                 <div className={styles.covid24}>
 
                     <h2>
@@ -469,8 +475,8 @@ const BulletinPDFLoss = (props: Props) => {
                     </div>
 
                 </div>
-            </div>
-            <div className={styles.provinceWiseTotal}>
+            </div> */}
+            {/* <div className={styles.provinceWiseTotal}>
                 <h2>
                     <Translation>
                         {
@@ -493,10 +499,10 @@ const BulletinPDFLoss = (props: Props) => {
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
                         <XAxis
                             type="number"
-                            // tickFormatter={tick => tick.toLocaleString()}
+
                             tickFormatter={e => DataFormater(e, language)}
                             tick={{ fontSize: 10, width: 250 }}
-                        // unit={'लाख'}
+
                         />
                         <YAxis
                             type="category"
@@ -504,7 +510,7 @@ const BulletinPDFLoss = (props: Props) => {
                             tick={{ fontSize: 11, width: 250 }}
                         />
 
-                        {/* <Tooltip /> */}
+
                         <Bar
                             stackId={'a'}
                             dataKey={
@@ -512,19 +518,7 @@ const BulletinPDFLoss = (props: Props) => {
                             fill="#A6B2DE"
                             barSize={12}
                         />
-                        {/* <Bar
-                            stackId={'a'}
-                            dataKey={language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active'}
-                            fill="#3F69C8"
-                            barSize={12}
-                        />
-                        <Bar
 
-                            stackId={'a'}
-                            dataKey={language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths'}
-                            fill="#3457A6"
-                            barSize={12}
-                        /> */}
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -580,7 +574,7 @@ const BulletinPDFLoss = (props: Props) => {
                         }
                     </tbody>
                 </table>
-            </div>
+            </div> */}
         </div>
     );
 };

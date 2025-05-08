@@ -21,6 +21,10 @@
         }
 
         .picture {
+            img {
+                object-fit: contain;
+            }
+
             .reportPic {
                 width: 160mm;
                 height: 80mm !important;
@@ -47,6 +51,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        .picture {
+            img {
+                object-fit: contain;
+            }
+        }
 
         img {
             width: 100% !important;
