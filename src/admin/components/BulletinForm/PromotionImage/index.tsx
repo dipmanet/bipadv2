@@ -119,6 +119,7 @@ const PromotionImage = (props: Props) => {
                                     <img
                                         src={picLink}
                                         alt="temperature"
+                                        style={{ objectFit: 'contain' }}
                                     />
                                 </>
                             )
@@ -132,6 +133,7 @@ const PromotionImage = (props: Props) => {
                                         alt="temperature"
                                         title="Click to select picture"
                                         className={styles.placeholder}
+                                        style={{ objectFit: 'contain' }}
                                     />
                                 </>
                             )

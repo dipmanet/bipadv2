@@ -22,8 +22,8 @@
         height: 80mm;
 
         .hazardWiseStats {
-            width: 80mm;
-            height: 80mm;
+            width: 100%;
+            height: 120mm;
             position: absolute;
             // bottom: 15mm;
             left: 0mm;
@@ -42,6 +42,54 @@
             height: 70mm;
             position: absolute;
             right: 0;
+
+            // border: 1px solid red;
+            .noDataPie {
+                border: 1px dotted rgb(199, 198, 198);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 70mm;
+            }
+
+            h2 {
+                font-size: 14px;
+                margin-bottom: 2mm;
+                position: relative;
+                right: 3mm;
+                color: rgb(15, 11, 11);
+            }
+        }
+    }
+
+    .container12 {
+        display: flex;
+        position: relative;
+        justify-content: space-between;
+        height: 80mm;
+
+        .hazardWiseStats {
+            width: 80mm;
+            height: 80mm;
+            position: absolute;
+            // bottom: 15mm;
+            left: 0mm;
+
+            h2 {
+                font-size: 14px;
+                margin-bottom: 2mm;
+                position: relative;
+                left: 0mm;
+                color: rgb(15, 11, 11);
+            }
+        }
+
+        .genderWiseStats {
+            width: 100%;
+            height: 80mm;
+            position: absolute;
+            left: 25px;
+            top: 90mm;
 
             // border: 1px solid red;
             .noDataPie {

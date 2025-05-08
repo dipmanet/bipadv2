@@ -21,6 +21,10 @@
         }
 
         .picture {
+            img {
+                object-fit: contain;
+            }
+
             .reportPic {
                 width: 160mm;
                 height: 80mm !important;
