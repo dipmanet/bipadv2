@@ -1,3 +1,8 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
+/* eslint-disable consistent-return */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
@@ -26,7 +31,7 @@ import {
 import { format } from 'd3-format';
 import { extent } from 'd3-array';
 
-import { Translation } from 'react-i18next';
+import { ReactI18NextChild, Translation } from 'react-i18next';
 import memoize from 'memoize-one';
 import { compose } from 'redux';
 import { navigate } from '@reach/router';
@@ -86,6 +91,7 @@ import {
     districtsSelector,
     wardsSelector,
     provincesSelector,
+    filtersSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import {
@@ -101,6 +107,10 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import RadioInput from '#components/RadioInput';
 import iconImage from '#resources/icons/Train.svg';
+import Positive from '#resources/icons/Positive.svg';
+import Negative from '#resources/icons/Negative.svg';
+import Positive_Down from '#resources/icons/Positive_Down.svg';
+import Positive_Up from '#resources/icons/Positive_Up.svg';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -183,6 +193,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     wards: wardsSelector(state),
     provinces: provincesSelector(state),
+    filters: filtersSelector(state),
 });
 
 // const colorGrade = [
@@ -214,12 +225,12 @@ const attributeList = [
     {
         key: 'householdCount',
         title: 'Household count',
-        type: 'positive',
+        type: 'negative',
     },
     {
         key: 'literacyRate',
         title: 'Literacy rate',
-        type: 'positive',
+        type: 'negative',
     },
 ];
 
@@ -229,6 +240,10 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     demographicsGetRequest: {
         url: '/demographic/',
         method: methods.GET,
+        query: ({ params, props }) => ({
+            census_year: params.census_year,
+            federal_level: params.federal_level,
+        }),
         onMount: true,
         onSuccess: ({ params, response }) => {
             if (params && params.onSuccess) {
@@ -240,22 +255,26 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
     },
 };
-const pastDataKeySelector = d => d.key;
+const pastDataKeySelector = (d: { key: any }) => d.key;
 
-const pastDataLabelSelector = d => d.label;
+const pastDataLabelSelector = (d: { label: any }) => d.label;
 
-const pastDateRangeOptions = language => ([
+const pastDateRangeOptions = (language: string) => ([
     {
-        label: language === 'en' ? 'Census 2011' : 'जनगणना २०११',
+        label: language === 'en' ? 'Census 2021' : 'जनगणना २०२१',
         key: 1,
     },
     {
-        label: language === 'en' ? 'LG Profile' : 'LG प्रोफाइल',
+        label: language === 'en' ? 'Census 2011' : 'जनगणना २०११',
         key: 2,
+    },
+    {
+        label: language === 'en' ? 'LG Profile' : 'LG प्रोफाइल',
+        key: 3,
     },
 
 ]);
-const NumberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const NumberWithCommas = (x: number) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 const LGProfileCustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         if (payload.length === 2) {
@@ -273,7 +292,7 @@ const LGProfileCustomTooltip = ({ active, payload, label }) => {
                                     {' '}
                                 </p>
                                 {
-                                    payload.map(item => (
+                                    payload.map((item: { name: React.Key | null | undefined; value: any }) => (
                                         <p key={item.name}>
                                             {t(item.name.charAt(0).toUpperCase() + item.name.slice(1))}
                                             {' '}
@@ -353,7 +372,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                                     {' '}
                                 </p>
                                 {
-                                    payload.map(item => (
+                                    payload.map((item: { name: React.Key | null | undefined; value: any }) => (
                                         <p key={item.name}>
                                             {t(item.name.charAt(0).toUpperCase() + item.name.slice(1))}
                                             {' '}
@@ -416,7 +435,7 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }) => (
         </text>
     </g>
 );
-const renderLegend = (props) => {
+const renderLegend = (props: { payload: any }) => {
     const { payload } = props;
 
     return (
@@ -425,7 +444,7 @@ const renderLegend = (props) => {
                 t => (
                     <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '50px' }}>
                         {
-                            payload.map((entry, index) => (
+                            payload.map((entry: { color: any; value: string }, index: any) => (
                                 <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                                     <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
                                     <h2 style={{ marginTop: '5px' }}>{t(entry.value.charAt(0).toUpperCase() + entry.value.slice(1))}</h2>
@@ -439,13 +458,13 @@ const renderLegend = (props) => {
 
     );
 };
-const LGProfileRenderLegend = (props) => {
+const LGProfileRenderLegend = (props: { payload: any }) => {
     const { payload } = props;
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '50px' }}>
             {
-                payload.map((entry, index) => (
+                payload.map((entry: { color: any }, index: any) => (
                     <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
                         <div style={{ height: '15px', width: '15px', backgroundColor: `${entry.color}` }} />
                         <Translation>
@@ -462,12 +481,12 @@ const LGProfileRenderLegend = (props) => {
     );
 };
 class Demographics extends React.PureComponent<Props> {
-    public constructor(props) {
+    public constructor(props: Props | Readonly<Props>) {
         super(props);
         this.state = {
             selectedAttribute: 'totalPopulation',
             demographyData: [],
-            selectedDataType: 1,
+
             isDataSetClicked: false,
             closedVisualization: true,
             enableProvinceMapFilter: false,
@@ -479,20 +498,38 @@ class Demographics extends React.PureComponent<Props> {
             enableBuildingStructureDiv: false,
             enableEconomicAspectDiv: false,
             selectedFederalName: '',
+            popupDataType: {
+                en: 'Population',
+                ne: 'जनसंख्या',
+            },
 
         };
         const {
             requests: {
                 demographicsGetRequest,
 
-            },
+            }, region: { adminLevel, geoarea },
+            selectedDataType,
         } = this.props;
-        demographicsGetRequest.setDefaultParams({
-            onSuccess: this.demographicData,
-        });
+
+        if (selectedDataType === 1) {
+            if (adminLevel === 2 || adminLevel === 3) {
+                demographicsGetRequest.setDefaultParams({
+                    onSuccess: this.demographicData,
+                    federal_level: 'local',
+                    census_year: '2021',
+                });
+            } else {
+                demographicsGetRequest.setDefaultParams({
+                    census_year: '2021',
+                    federal_level: 'district',
+                    onSuccess: this.demographicData,
+                });
+            }
+        }
     }
 
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: { closedVisualization: any }) {
         const { closedVisualization, region, region: { adminLevel, geoarea }, provinces, districts, municipalities } = this.props;
         if (prevProps.closedVisualization !== closedVisualization) {
             this.setState({ closedVisualization });
@@ -502,10 +539,10 @@ class Demographics extends React.PureComponent<Props> {
             const selectedFederal = municipalities.find(m => m.id === geoarea).title_en;
             this.setState({ selectedFederalName: selectedFederal });
         } else if (adminLevel === 2) {
-            const selectedFederal = districts.find(d => d.id === geoarea).title_en;
+            const selectedFederal = districts.find((d: { id: number | undefined }) => d.id === geoarea).title_en;
             this.setState({ selectedFederalName: selectedFederal });
         } else if (adminLevel === 1) {
-            const selectedFederal = provinces.find(d => d.id === geoarea).title_en;
+            const selectedFederal = provinces.find((d: { id: number | undefined }) => d.id === geoarea).title_en;
             this.setState({ selectedFederalName: selectedFederal });
         } else {
             this.setState({ selectedFederalName: 'National' });
@@ -529,11 +566,13 @@ class Demographics extends React.PureComponent<Props> {
     public static contextType = TitleContext;
 
 
-    private demographicData = (data) => {
+    private demographicData = (data: any) => {
+        const { handleStoreDemographyData } = this.props;
+        handleStoreDemographyData(data);
         this.setState({ demographyData: data });
     }
 
-    private handleSaveClick = (id) => {
+    private handleSaveClick = (id: string) => {
         saveChart(id, id);
         // saveChart('polulation', 'population');
         // saveChart('literacy', 'literacy');
@@ -541,8 +580,14 @@ class Demographics extends React.PureComponent<Props> {
         // saveChart('household', 'household');
     }
 
-    private getPopulationData = (data: DemographicsData[], region: Region) => {
-        let filteredData = data;
+    private getPopulationData_municipality = (data: DemographicsData[], region: Region) => {
+        let filteredData = data.map(i => ({
+            ...i,
+            changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+            changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+            changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+            changed_householdCount: i.previous ? i.previous.householdCount : 0,
+        }));
         if (!doesObjectHaveNoData(region)) {
             const { adminLevel, geoarea } = region;
             const { municipalities } = this.props;
@@ -560,114 +605,325 @@ class Demographics extends React.PureComponent<Props> {
                     .filter(v => v.id === geoarea)
                     .map(v => v.id);
             }
-            filteredData = data.filter(d => selectedMunicipalities.includes(d.municipality));
+            filteredData = data.map(i => ({
+                ...i,
+                changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+                changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+                changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+                changed_householdCount: i.previous ? i.previous.householdCount : 0,
+            })).filter(d => selectedMunicipalities.includes(d.municipality));
         }
 
-        const demographics = filteredData.reduce((acc, value, i) => {
-            const {
-                totalPopulation = 0,
-                malePopulation = 0,
-                femalePopulation = 0,
-                householdCount = 0,
-                literacyRate = 0,
-                maleLiteracyRate = 0,
-                femaleLiteracyRate = 0,
-                ageGroupPopulation = {
-                    male: {},
-                    female: {},
-                },
-            } = value;
-            acc.totalPopulation += totalPopulation;
-            acc.malePopulation += malePopulation;
-            acc.femalePopulation += femalePopulation;
-            acc.householdCount += householdCount;
-            acc.literacyRate += (literacyRate - acc.literacyRate) / (i + 1);
-            acc.maleLiteracyRate += (maleLiteracyRate - acc.maleLiteracyRate) / (i + 1);
-            acc.femaleLiteracyRate += (femaleLiteracyRate - acc.femaleLiteracyRate) / (i + 1);
-            Object.entries(ageGroupPopulation.male).forEach(([key, count]) => {
-                const { ageGroupPopulation: { male } } = acc;
-                male[key as keyof AgeGroup] += count;
-            });
-            Object.entries(ageGroupPopulation.female).forEach(([key, count]) => {
-                const { ageGroupPopulation: { female } } = acc;
-                female[key as keyof AgeGroup] += count;
-            });
+        const demographics = filteredData
+            .reduce((acc, value, i) => {
+                const {
+                    changed_malePopulation = 0,
+                    changed_femalePopulation = 0,
+                    changed_literacyRate = 0,
+                    changed_householdCount = 0,
+                    totalPopulation = 0,
+                    malePopulation = 0,
+                    femalePopulation = 0,
+                    householdCount = 0,
+                    literacyRate = 0,
+                    maleLiteracyRate = 0,
+                    femaleLiteracyRate = 0,
 
-            return acc;
-        }, {
-            totalPopulation: 0,
-            malePopulation: 0,
-            femalePopulation: 0,
-            householdCount: 0,
-            literacyRate: 0,
-            maleLiteracyRate: 0,
-            femaleLiteracyRate: 0,
-            ageGroupPopulation: {
-                male: {
-                    '00-04': 0,
-                    '05-09': 0,
-                    '10-14': 0,
-                    '15-19': 0,
-                    '20-24': 0,
-                    '25-29': 0,
-                    '30-34': 0,
-                    '35-39': 0,
-                    '40-44': 0,
-                    '45-49': 0,
-                    '50-54': 0,
-                    '55-59': 0,
-                    '60-64': 0,
-                    '65-69': 0,
-                    '70-74': 0,
-                    '75+': 0,
+                    ageGroupPopulation = {
+                        male: {},
+                        female: {},
+                    },
+                } = value;
+                acc.changed_malePopulation += changed_malePopulation;
+                acc.changed_femalePopulation += changed_femalePopulation;
+                acc.changed_literacyRate += changed_literacyRate;
+                acc.changed_householdCount += changed_householdCount;
+                acc.totalPopulation += totalPopulation;
+                acc.malePopulation += malePopulation;
+                acc.femalePopulation += femalePopulation;
+                acc.householdCount += householdCount;
+                acc.literacyRate += (literacyRate - acc.literacyRate) / (i + 1);
+                acc.maleLiteracyRate += (maleLiteracyRate - acc.maleLiteracyRate) / (i + 1);
+                acc.femaleLiteracyRate += (femaleLiteracyRate - acc.femaleLiteracyRate) / (i + 1);
+
+
+                Object.entries(ageGroupPopulation.male).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { male } } = acc;
+                    male[key as keyof AgeGroup] += count;
+                });
+                Object.entries(ageGroupPopulation.female).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { female } } = acc;
+                    female[key as keyof AgeGroup] += count;
+                });
+
+                return acc;
+            }, {
+                changed_malePopulation: 0,
+                changed_femalePopulation: 0,
+                changed_literacyRate: 0,
+                changed_householdCount: 0,
+                totalPopulation: 0,
+                malePopulation: 0,
+                femalePopulation: 0,
+                householdCount: 0,
+                literacyRate: 0,
+                maleLiteracyRate: 0,
+                femaleLiteracyRate: 0,
+                maleLiterate: 0,
+                maleAboveFiveYears: 0,
+                femaleLiterate: 0,
+                femaleAboveFiveYears: 0,
+
+                ageGroupPopulation: {
+                    male: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
+                    female: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
                 },
-                female: {
-                    '00-04': 0,
-                    '05-09': 0,
-                    '10-14': 0,
-                    '15-19': 0,
-                    '20-24': 0,
-                    '25-29': 0,
-                    '30-34': 0,
-                    '35-39': 0,
-                    '40-44': 0,
-                    '45-49': 0,
-                    '50-54': 0,
-                    '55-59': 0,
-                    '60-64': 0,
-                    '65-69': 0,
-                    '70-74': 0,
-                    '75+': 0,
+            });
+        demographics.changed_literacyRate /= filteredData.length;
+
+
+        return demographics;
+    }
+
+    private getPopulationData_district = (data: DemographicsData[], region: Region) => {
+        let filteredData = data.map(i => ({
+            ...i,
+            changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+            changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+            changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+            changed_householdCount: i.previous ? i.previous.householdCount : 0,
+        }));
+        if (!doesObjectHaveNoData(region)) {
+            const { adminLevel, geoarea } = region;
+            const { municipalities, districts } = this.props;
+
+            let selectedMunicipalities: number[] = [];
+            if (adminLevel === 1) {
+                selectedMunicipalities = districts
+                    .filter(v => v.province === geoarea)
+                    .map(v => v.id);
+            } else if (adminLevel === 2) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.district === geoarea)
+                    .map(v => v.id);
+            } else if (adminLevel === 3) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.id === geoarea)
+                    .map(v => v.id);
+            }
+            filteredData = data.map(i => ({
+                ...i,
+                changed_malePopulation: i.previous ? i.previous.malePopulation : 0,
+                changed_femalePopulation: i.previous ? i.previous.femalePopulation : 0,
+                changed_literacyRate: i.previous ? i.previous.literacyRate : 0,
+                changed_householdCount: i.previous ? i.previous.householdCount : 0,
+            })).filter(d => selectedMunicipalities.includes(adminLevel === 1 ? d.district : d.municipality));
+        }
+
+        const demographics = filteredData.map((d) => {
+            const temp_total_totalLiterate = (d.totalLiterate);
+            const temp_total_totalAboveFiveYears = d.totalAboveFiveYears;
+            const temp_total_maleLiterate = d.maleLiterate;
+            const temp_total_maleAboveFiveYears = d.maleAboveFiveYears;
+            const temp_total_femaleLiterate = d.femaleLiterate;
+            const temp_total_femaleAboveFiveYears = d.femaleAboveFiveYears;
+
+            return ({
+                ...d,
+                temp_total_totalLiterate,
+                temp_total_totalAboveFiveYears,
+                temp_total_maleLiterate,
+                temp_total_maleAboveFiveYears,
+                temp_total_femaleLiterate,
+                temp_total_femaleAboveFiveYears,
+            });
+        })
+            .reduce((acc, value, i) => {
+                const {
+                    changed_malePopulation = 0,
+                    changed_femalePopulation = 0,
+                    changed_literacyRate = 0,
+                    changed_householdCount = 0,
+                    totalPopulation = 0,
+                    malePopulation = 0,
+                    femalePopulation = 0,
+                    householdCount = 0,
+                    // literacyRate = 0,
+                    // maleLiteracyRate = 0,
+                    // femaleLiteracyRate = 0,
+                    temp_total_totalLiterate = 0,
+                    temp_total_totalAboveFiveYears = 0,
+                    temp_total_maleLiterate = 0,
+                    temp_total_maleAboveFiveYears = 0,
+                    temp_total_femaleLiterate = 0,
+                    temp_total_femaleAboveFiveYears = 0,
+                    ageGroupPopulation = {
+                        male: {},
+                        female: {},
+                    },
+                } = value;
+                acc.changed_malePopulation += changed_malePopulation;
+                acc.changed_femalePopulation += changed_femalePopulation;
+                acc.changed_literacyRate += changed_literacyRate;
+                acc.changed_householdCount += changed_householdCount;
+                acc.totalPopulation += totalPopulation;
+                acc.malePopulation += malePopulation;
+                acc.femalePopulation += femalePopulation;
+                acc.householdCount += householdCount;
+                // acc.literacyRate += (literacyRate - acc.literacyRate) / (i + 1);
+                // acc.maleLiteracyRate += (maleLiteracyRate - acc.maleLiteracyRate) / (i + 1);
+                // acc.femaleLiteracyRate += (femaleLiteracyRate - acc.femaleLiteracyRate) / (i + 1);
+                // acc.literacyRate += literacyRate;
+                // acc.maleLiteracyRate += maleLiteracyRate;
+                // acc.femaleLiteracyRate += femaleLiteracyRate;
+                acc.temp_total_totalLiterate += temp_total_totalLiterate;
+                acc.temp_total_totalAboveFiveYears += temp_total_totalAboveFiveYears;
+                acc.temp_total_maleLiterate += temp_total_maleLiterate;
+                acc.temp_total_maleAboveFiveYears += temp_total_maleAboveFiveYears;
+                acc.temp_total_femaleLiterate += temp_total_femaleLiterate;
+                acc.temp_total_femaleAboveFiveYears += temp_total_femaleAboveFiveYears;
+                Object.entries(ageGroupPopulation.male).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { male } } = acc;
+                    male[key as keyof AgeGroup] += count;
+                });
+                Object.entries(ageGroupPopulation.female).forEach(([key, count]) => {
+                    const { ageGroupPopulation: { female } } = acc;
+                    female[key as keyof AgeGroup] += count;
+                });
+
+                return acc;
+            }, {
+                changed_malePopulation: 0,
+                changed_femalePopulation: 0,
+                changed_literacyRate: 0,
+                changed_householdCount: 0,
+                totalPopulation: 0,
+                malePopulation: 0,
+                femalePopulation: 0,
+                householdCount: 0,
+                literacyRate: 0,
+                maleLiteracyRate: 0,
+                femaleLiteracyRate: 0,
+                maleLiterate: 0,
+                maleAboveFiveYears: 0,
+                femaleLiterate: 0,
+                femaleAboveFiveYears: 0,
+                temp_total_totalLiterate: 0,
+                temp_total_totalAboveFiveYears: 0,
+                temp_total_maleLiterate: 0,
+                temp_total_maleAboveFiveYears: 0,
+                temp_total_femaleLiterate: 0,
+                temp_total_femaleAboveFiveYears: 0,
+                ageGroupPopulation: {
+                    male: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
+                    female: {
+                        '00-04': 0,
+                        '05-09': 0,
+                        '10-14': 0,
+                        '15-19': 0,
+                        '20-24': 0,
+                        '25-29': 0,
+                        '30-34': 0,
+                        '35-39': 0,
+                        '40-44': 0,
+                        '45-49': 0,
+                        '50-54': 0,
+                        '55-59': 0,
+                        '60-64': 0,
+                        '65-69': 0,
+                        '70-74': 0,
+                        '75+': 0,
+                    },
                 },
-            },
-        });
+            });
+        demographics.changed_literacyRate /= filteredData.length;
+        demographics.femaleLiteracyRate = (demographics.temp_total_femaleLiterate / demographics.temp_total_femaleAboveFiveYears) * 100;
+        demographics.maleLiteracyRate = (demographics.temp_total_maleLiterate / demographics.temp_total_maleAboveFiveYears) * 100;
+        demographics.literacyRate = (demographics.temp_total_totalLiterate / demographics.temp_total_totalAboveFiveYears) * 100;
 
         return demographics;
     }
 
     private getPopulationSummary = (data: SummaryData) => {
-        const { totalPopulation, malePopulation, femalePopulation } = data;
+        const { totalPopulation, malePopulation, femalePopulation, changed_malePopulation,
+            changed_femalePopulation } = data;
         const { language: { language } } = this.props;
-        return ([
-            {
-                key: 'totalPopulation',
-                label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
-                value: totalPopulation,
-            },
-            {
-                key: 'malePopulation',
-                label: language === 'en' ? 'Male' : 'पुरुष',
-                value: malePopulation,
-                color: '#2A7BBB',
-                percent: Number(((malePopulation / totalPopulation) * 100).toFixed(2)),
-            },
-            {
-                key: 'femalePopulation',
-                label: language === 'en' ? 'Female' : 'महिला',
-                value: femalePopulation,
-                color: '#83A4D3',
-                percent: Number(((femalePopulation / totalPopulation) * 100).toFixed(2)),
-            },
+        const changed_total_population = totalPopulation - (changed_malePopulation + changed_femalePopulation);
+        return ([{
+            key: 'changed_total_population',
+            label: language === 'en' ? 'Changed Total Population' : 'कुल जनसंख्या परिवर्तन',
+            value: changed_total_population,
+        },
+        {
+            key: 'totalPopulation',
+            label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
+            value: totalPopulation,
+        },
+        {
+            key: 'malePopulation',
+            label: language === 'en' ? 'Male' : 'पुरुष',
+            value: malePopulation,
+            color: '#2A7BBB',
+            percent: Number(((malePopulation / totalPopulation) * 100).toFixed(2)),
+        },
+        {
+            key: 'femalePopulation',
+            label: language === 'en' ? 'Female' : 'महिला',
+            value: femalePopulation,
+            color: '#83A4D3',
+            percent: Number(((femalePopulation / totalPopulation) * 100).toFixed(2)),
+        },
         ]);
     }
 
@@ -685,47 +941,65 @@ class Demographics extends React.PureComponent<Props> {
     })
 
     private getLiteracySummary = (data: SummaryData) => {
-        const { literacyRate, maleLiteracyRate, femaleLiteracyRate } = data;
+        const { literacyRate, maleLiteracyRate, femaleLiteracyRate, changed_literacyRate } = data;
         const { language: { language } } = this.props;
+        const final_changed_literacy_rate = literacyRate - changed_literacyRate;
+
         return ([
+            {
+                key: 'changed_literacyRate',
+                label: language === 'en' ? 'Changed Literacy Rate' : 'परिबर्तन साक्षरता दर',
+                value: Number(final_changed_literacy_rate.toFixed(1)),
+            },
             {
                 key: 'literacyRate',
                 label: language === 'en' ? 'Literacy Rate' : 'साक्षरता दर',
-                value: Number(literacyRate.toFixed(2)),
+                value: Number((literacyRate).toFixed(1)),
             },
             {
                 key: 'maleLiteracyRate',
                 label: language === 'en' ? 'Male' : 'पुरुष',
                 color: '#2A7BBB',
-                value: Number(maleLiteracyRate.toFixed(2)),
+                value: Number(maleLiteracyRate.toFixed(1)),
             },
             {
                 key: 'femaleLiteracyRate',
                 label: language === 'en' ? 'Female' : 'महिला',
                 color: '#83A4D3',
-                value: Number(femaleLiteracyRate.toFixed(2)),
+                value: Number(femaleLiteracyRate.toFixed(1)),
 
             },
         ]);
     }
 
     private getHouseholdSummary = (data: SummaryData) => {
-        const { totalPopulation, householdCount } = data;
+        const { totalPopulation, householdCount, changed_householdCount } = data;
         const { language: { language } } = this.props;
-        return ([
-            {
-                key: 'totalPopulation',
-                label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
-                value: totalPopulation,
+        return ({
+            changed_householdCount: {
+                key: 'changed_householdCount',
+                label: language === 'en' ? 'Changed Household Count' : 'परिवर्तन घरपरिवार गणना',
+                value: householdCount - changed_householdCount,
                 color: '#2A7BBB',
             },
-            {
-                key: 'householdCount',
-                label: language === 'en' ? 'Household Count' : 'घरपरिवार गणना',
-                value: householdCount,
-                color: '#83A4D3',
-            },
-        ]);
+            householdSummary: [
+
+                {
+                    key: 'totalPopulation',
+                    label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
+                    value: totalPopulation,
+                    color: '#2A7BBB',
+                },
+                {
+                    key: 'householdCount',
+                    label: language === 'en' ? 'Household Count' : 'घरपरिवार गणना',
+                    value: householdCount,
+                    color: '#83A4D3',
+                },
+            ],
+        }
+
+        );
     }
 
     private getAgeGroupSummary = (data: SummaryData) => {
@@ -748,74 +1022,244 @@ class Demographics extends React.PureComponent<Props> {
 
     private rendererParams = (_: string, data: KeyValue) => ({ data });
 
-    private handleAttributeSelectInputChange = (selectedAttribute) => {
+    private handleAttributeSelectInputChange = (selectedAttribute: any) => {
         this.setState({ selectedAttribute });
     }
 
-    private getMapState = (data, selectedAttribute) => {
-        const { wards, region: { adminLevel, geoarea }, municipalities, districts } = this.props;
+    private getMapState = (data: any[], selectedAttribute: string | number) => {
+        const { wards, region: { adminLevel, geoarea }, municipalities, districts, provinces, selectedDataType } = this.props;
 
-        if (adminLevel === 3) {
-            const filteredWardList = wards.filter(i => i.municipality === geoarea);
-            const value = data.find(d => d.municipality === geoarea);
 
-            const mapState = filteredWardList.map(i => ({
-                id: i.id,
-                value: value[selectedAttribute],
+        if (selectedDataType === 2) {
+            if (adminLevel === 3) {
+                const filteredWardList = wards.filter((i: { municipality: number | undefined }) => i.municipality === geoarea);
+                const value = data.find((d: { municipality: number | undefined }) => d.municipality === geoarea);
+
+                const mapState = filteredWardList.map((i: { id: any }) => ({
+                    id: i.id,
+                    value: value[selectedAttribute],
+                }));
+
+                return mapState;
+            }
+            if (adminLevel === 2) {
+                const mapState = data.map((d: { [x: string]: string | number; municipality: any }) => ({
+                    id: d.municipality,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+            if (adminLevel === 1) {
+                const selectedProvinceMunicipalities = districts.map((m: { id: number }) => {
+                    const filtered_municipality = municipalities.filter(d => d.district === m.id);
+                    return filtered_municipality;
+                });
+                const districtWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                    const finaldata = mun.map((dat: { id: any; district: any }) => {
+                        const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
+
+                        return ({ ...datas, district: dat.district });
+                    });
+                    return finaldata;
+                });
+
+                const finalsummationData = districtWiseMuniList.map((mun: any[]) => {
+                    const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate ? currValue.femaleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                    const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
+                    const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
+                    const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate ? currValue.literacyRate : 0), 0)) / mun.length).toFixed(2);
+                    const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                    const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
+                    const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
+                    const district = mun.reduce((acc: any, currValue: { district: any }) => currValue.district, 0);
+                    return ({
+                        femaleLiteracyRate,
+                        femalePopulation,
+                        householdCount,
+                        literacyRate,
+                        maleLiteracyRate,
+                        malePopulation,
+                        totalPopulation,
+                        district,
+                    });
+                });
+
+
+                const mapState = finalsummationData.map((d: { [x: string]: string | number; district: any }) => ({
+                    id: d.district,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+
+            const selectedProvinceMunicipalities = provinces.map((m: { id: number }) => {
+                const filtered_municipality = municipalities.filter(d => d.province === m.id);
+                return filtered_municipality;
+            });
+
+
+            const provinceWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                const finaldata = mun.map((dat) => {
+                    const datas = data.filter((itm: { municipality: any }) => itm.municipality === dat.id)[0];
+                    if (datas) {
+                        return ({ ...datas, district: dat.id, province: dat.province });
+                    }
+                });
+                return finaldata;
+            });
+            const filtered_undefined_array = provinceWiseMuniList.map(d => d.filter(x => x !== undefined));
+
+            const finalsummationDataProvince = filtered_undefined_array.map((mun: any[]) => {
+                const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiteracyRate: any }) => (acc + currValue.femaleLiteracyRate), 0)) / mun.length).toFixed(2);
+                const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation), 0);
+                const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount), 0);
+                const literacyRate = ((mun.reduce((acc: any, currValue: { literacyRate: any }) => (acc + currValue.literacyRate), 0)) / mun.length).toFixed(2);
+                const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate), 0)) / mun.length).toFixed(2);
+                const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation), 0);
+                const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation), 0);
+                const province = mun.reduce((acc: any, currValue: { province: any }) => currValue.province, 0);
+                return ({
+                    femaleLiteracyRate,
+                    femalePopulation,
+                    householdCount,
+                    literacyRate,
+                    maleLiteracyRate,
+                    malePopulation,
+                    totalPopulation,
+                    province,
+                });
+            });
+
+            // const finalProvinceWiseSummationData =
+
+            const mapState = finalsummationDataProvince.map((d: { [x: string]: string | number; district: any }) => ({
+                id: d.province,
+                value: +d[selectedAttribute] || 0,
             }));
-
             return mapState;
         }
-        if (adminLevel === 2) {
-            const mapState = data.map(d => ({
-                id: d.municipality,
+        if (selectedDataType === 1) {
+            if (adminLevel === 3 && data[0].municipality) {
+                const filteredWardList = wards.filter((i: { municipality: number | undefined }) => i.municipality === geoarea);
+                const value = data.find((d: { municipality: number | undefined }) => d.municipality === geoarea);
+                const mapState = filteredWardList.map((i: { id: any }) => ({
+                    id: i.id,
+                    value: value[selectedAttribute],
+                }));
+
+                return mapState;
+            }
+            if (adminLevel === 2) {
+                const mapState = data.map((d: { [x: string]: string | number; municipality: any }) => ({
+                    id: d.municipality,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+            if (adminLevel === 1) {
+                const selectedProvinceMunicipalities = districts.map((m: { id: number }) => {
+                    const filtered_municipality = municipalities.filter(d => d.district === m.id);
+                    return filtered_municipality;
+                });
+
+                const districtWiseMuniList = selectedProvinceMunicipalities.map((mun: any[]) => {
+                    const finaldata = mun.map((dat: { id: any; district: any }) => {
+                        const datas = data.filter((itm: { municipality: any }) => itm.district === dat.district)[0];
+
+                        return ({ ...datas, district: dat.district });
+                    });
+                    return finaldata;
+                });
+
+                const finalsummationData = districtWiseMuniList.map((mun: any[]) => {
+                    const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleAboveFiveYears: any; femaleLiterate: any }) => (acc + currValue.femaleLiterate ? (currValue.femaleLiterate / currValue.femaleAboveFiveYears) : 0), 0)) / mun.length).toFixed(2);
+                    const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
+                    const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
+                    const totalLiterate = mun.reduce((acc: any, currValue: { totalLiterate: any }) => (acc + currValue.totalLiterate ? currValue.totalLiterate : 0), 0);
+                    const totalAboveFiveYears = mun.reduce((acc: any, currValue: { totalAboveFiveYears: any }) => (acc + currValue.totalAboveFiveYears ? currValue.totalAboveFiveYears : 0), 0);
+                    const literacyRate = ((totalLiterate / totalAboveFiveYears) * 100).toFixed(1);
+                    const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
+                    const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
+                    const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
+                    const district = mun.reduce((acc: any, currValue: { district: any }) => currValue.district, 0);
+                    return ({
+                        femaleLiteracyRate,
+                        femalePopulation,
+                        householdCount,
+                        literacyRate,
+                        maleLiteracyRate,
+                        malePopulation,
+                        totalPopulation,
+                        district,
+                    });
+                });
+
+
+                const mapState = finalsummationData.map((d: { [x: string]: string | number; district: any }) => ({
+                    id: d.district,
+                    value: +d[selectedAttribute] || 0,
+                }));
+
+                return mapState;
+            }
+
+            // For Overall Data
+            const selectedProvinceDistricts = provinces.map((m: { id: number }) => {
+                const filtered_districts = districts.filter(d => d.province === m.id);
+                return filtered_districts;
+            });
+
+            const provinceWiseDistList = selectedProvinceDistricts.map((mun: any[]) => {
+                const finaldata = mun.map((dat) => {
+                    const datas = data.filter((itm: { municipality: any }) => itm.district === dat.id)[0];
+                    if (datas) {
+                        return ({ ...datas, district: dat.id, province: dat.province });
+                    }
+                });
+                return finaldata;
+            });
+
+            const filtered_undefined_array = provinceWiseDistList.map(d => d.filter(x => x !== undefined));
+
+            const finalsummationDataProvince = filtered_undefined_array.map((mun: any[]) => {
+                const femaleLiteracyRate = ((mun.reduce((acc: any, currValue: { femaleLiterate: any; femaleAboveFiveYears: any }) => (acc + (currValue.femaleLiterate / currValue.femaleAboveFiveYears)), 0)) / mun.length).toFixed(2);
+                const femalePopulation = mun.reduce((acc: any, currValue: { femalePopulation: any }) => (acc + currValue.femalePopulation), 0);
+                const householdCount = mun.reduce((acc: any, currValue: { householdCount: any }) => (acc + currValue.householdCount), 0);
+                const totalLiterate = mun.reduce((acc: any, currValue: { totalLiterate: any }) => (acc + currValue.totalLiterate ? currValue.totalLiterate : 0), 0);
+                const totalAboveFiveYears = mun.reduce((acc: any, currValue: { totalAboveFiveYears: any }) => (acc + currValue.totalAboveFiveYears ? currValue.totalAboveFiveYears : 0), 0);
+                const literacyRate = ((totalLiterate / totalAboveFiveYears) * 100).toFixed(1);
+                const maleLiteracyRate = ((mun.reduce((acc: any, currValue: { maleLiteracyRate: any }) => (acc + currValue.maleLiteracyRate), 0)) / mun.length).toFixed(2);
+                const malePopulation = mun.reduce((acc: any, currValue: { malePopulation: any }) => (acc + currValue.malePopulation), 0);
+                const totalPopulation = mun.reduce((acc: any, currValue: { totalPopulation: any }) => (acc + currValue.totalPopulation), 0);
+                const province = mun.reduce((acc: any, currValue: { province: any }) => currValue.province, 0);
+
+                return ({
+                    femaleLiteracyRate,
+                    femalePopulation,
+                    householdCount,
+                    literacyRate,
+                    maleLiteracyRate,
+                    malePopulation,
+                    totalPopulation,
+                    province,
+                    totalLiterate,
+                    totalAboveFiveYears,
+                });
+            });
+
+            const mapState = finalsummationDataProvince.map((d: { [x: string]: string | number; district: any }) => ({
+                id: d.province,
                 value: +d[selectedAttribute] || 0,
             }));
 
             return mapState;
         }
-
-
-        const selectedProvinceMunicipalities = districts.map((m) => {
-            const test = municipalities.filter(d => d.district === m.id);
-            return test;
-        });
-        const districtWiseMuniList = selectedProvinceMunicipalities.map((mun) => {
-            const finaldata = mun.map((dat) => {
-                const datas = data.filter(itm => itm.municipality === dat.id)[0];
-
-                return ({ ...datas, district: dat.district });
-            });
-            return finaldata;
-        });
-        const finalsummationData = districtWiseMuniList.map((mun) => {
-            const femaleLiteracyRate = ((mun.reduce((acc, currValue) => (acc + currValue.femaleLiteracyRate ? currValue.femaleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
-            const femalePopulation = mun.reduce((acc, currValue) => (acc + currValue.femalePopulation ? currValue.femalePopulation : 0), 0);
-            const householdCount = mun.reduce((acc, currValue) => (acc + currValue.householdCount ? currValue.householdCount : 0), 0);
-            const literacyRate = ((mun.reduce((acc, currValue) => (acc + currValue.literacyRate ? currValue.literacyRate : 0), 0)) / mun.length).toFixed(2);
-            const maleLiteracyRate = ((mun.reduce((acc, currValue) => (acc + currValue.maleLiteracyRate ? currValue.maleLiteracyRate : 0), 0)) / mun.length).toFixed(2);
-            const malePopulation = mun.reduce((acc, currValue) => (acc + currValue.malePopulation ? currValue.malePopulation : 0), 0);
-            const totalPopulation = mun.reduce((acc, currValue) => (acc + currValue.totalPopulation ? currValue.totalPopulation : 0), 0);
-            const district = mun.reduce((acc, currValue) => currValue.district, 0);
-            return ({
-                femaleLiteracyRate,
-                femalePopulation,
-                householdCount,
-                literacyRate,
-                maleLiteracyRate,
-                malePopulation,
-                totalPopulation,
-                district,
-            });
-        });
-
-
-        const mapState = finalsummationData.map(d => ({
-            id: d.district,
-            value: +d[selectedAttribute] || 0,
-        }));
-
-        return mapState;
     }
 
     private handleCloseVisualization = () => {
@@ -875,6 +1319,27 @@ class Demographics extends React.PureComponent<Props> {
         });
     }
 
+    private handleRadioButtonClick = (e: any) => {
+        const { requests: { demographicsGetRequest }, setchangeSelectedDataType } = this.props;
+
+
+        setchangeSelectedDataType(e);
+        if (e === 2) {
+            demographicsGetRequest.do({
+                census_year: '2011',
+                federal_level: '',
+                onSuccess: this.demographicData,
+            });
+        } else {
+            demographicsGetRequest.do({
+                census_year: '2021',
+                federal_level: 'district',
+                onSuccess: this.demographicData,
+            });
+        }
+    }
+
+
     public render() {
         const {
             pending,
@@ -894,33 +1359,38 @@ class Demographics extends React.PureComponent<Props> {
             districts,
             municipalities,
             LGProfilehouseHoldData,
-            lgProfileWardLevelData,
-
+            lgProfileWardLevelData, filters,
+            selectedDataType,
         } = this.props;
 
         const { demographyData, resourceLngLat, houseHoldInformation } = this.state;
 
 
-        const { selectedAttribute, selectedDataType,
+        const { selectedAttribute,
             isDataSetClicked, closedVisualization,
             enableEconomicAspectDiv,
             enableBuildingStructureDiv,
             enableSensitivePopulationDiv,
-            selectedFederalName } = this.state;
+            selectedFederalName, popupDataType } = this.state;
+
 
         const mapState = this.getMapState(data, selectedAttribute);
 
         const [min, max] = extent(mapState, d => d.value);
+
         const colors = attributes[selectedAttribute].type === 'positive' ? [...colorGrade].reverse() : [...colorGrade];
-        const specificData: number[] = mapState.map(d => d.value || 0);
+        const specificData: number[] = mapState.map((d: { value: any }) => d.value || 0);
 
         // const { paint, legend } = generatePaint(colors, min, max);
         const { paint, legend, legendPaint } = generatePaintByQuantile(
             colors, min, max, specificData, colorGrade.length, adminLevel,
         );
 
-        const demographics = this.getPopulationData(data, region);
+        const demographics = selectedDataType === 1 ? this.getPopulationData_district(data, region) : this.getPopulationData_municipality(data, region);
+
+
         const populationSummary = this.getPopulationSummary(demographics);
+
         const sexRatio = populationSummary
             .filter(v => ['malePopulation', 'femalePopulation'].includes(v.key));
         const sexRatioTotalPopulationLGProfile = lgProfileData.gender.male + lgProfileData.gender.female + lgProfileData.gender.other;
@@ -933,12 +1403,14 @@ class Demographics extends React.PureComponent<Props> {
         const finalSexRatio = [{ label: 'genderRatio', male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
         const finalSexRatioPercentage = [{ male: sexRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').percent, female: sexRatio.find(d => d.label === 'Female' || d.label === 'महिला').percent }];
         const literacySummary = this.getLiteracySummary(demographics);
+
         const literacyRatio = literacySummary
             .filter(v => ['maleLiteracyRate', 'femaleLiteracyRate'].includes(v.key));
         const finalLiteracyRate = [{ label: 'literacyRate', male: literacyRatio.find(d => d.label === 'Male' || d.label === 'पुरुष').value, female: literacyRatio.find(d => d.label === 'Female' || d.label === 'महिला').value }];
 
         const householdSummary = this.getHouseholdSummary(demographics);
-        const finalHouseholdSummary = [{ label: 'houseHoldInfo', totalPopulation: householdSummary.find(d => d.key === 'totalPopulation').value, householdCount: householdSummary.find(d => d.key === 'householdCount').value }];
+
+        const finalHouseholdSummary = [{ label: 'houseHoldInfo', totalPopulation: householdSummary.householdSummary.find(d => d.key === 'totalPopulation').value, householdCount: householdSummary.householdSummary.find(d => d.key === 'householdCount').value }];
         const ageGroupSummary = this.getAgeGroupSummary(demographics);
         const title = `${regionName}`;
 
@@ -952,8 +1424,49 @@ class Demographics extends React.PureComponent<Props> {
 
         const LGProfilehouseHold = this.getGeojson(LGProfilehouseHoldData);
 
+        const municipalityName = (ids, lang) => {
+            const name = lang === 'en'
+                ? municipalities.find(d => d.id === ids).title_en
+                : municipalities.find(d => d.id === ids).title_ne;
+            return name;
+        };
 
-        const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions(language) : pastDateRangeOptions(language).filter(i => i.key === 1);
+        const Tool = (datas: any, popupData: any) => (
+            <>
+                {
+                    (
+                        <h3 style={{
+                            fontSize: '12px',
+                            margin: 0,
+                            padding: '10px 20px 0px 20px',
+                            textTransform: 'uppercase',
+                            textAlign: 'center',
+                        }}
+                        >
+                            {`${adminLevel === 3 ? municipalityName(datas.feature.properties.municipality, language) : language === 'en' ? datas.feature.properties.title_en : datas.feature.properties.title_ne}`}
+
+                        </h3>
+                    )}
+
+                <p style={{
+                    margin: 0,
+                    padding: '0 20px 10px 20px',
+                    fontSize: '12px',
+                    textAlign: 'center',
+                }}
+                >
+                    {
+                        language === 'en'
+                            ? `${popupData.en}: ${NumberWithCommas(datas.feature.state.value)}`
+                            : `${popupData.ne}: ${NumberWithCommas(datas.feature.state.value)}`
+                    }
+                </p>
+
+
+            </>
+
+        );
+        const dateRangeOption = region && region.adminLevel === 3 ? pastDateRangeOptions(language) : pastDateRangeOptions(language).filter(i => i.key !== 3);
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
                 if (profile.mainModule === 'Summary' && prevProfile.subModule !== selectedAttribute) {
@@ -969,11 +1482,12 @@ class Demographics extends React.PureComponent<Props> {
         };
         const majorOccupationList = houseHoldInformation && houseHoldInformation.majorOccupations && JSON.parse(houseHoldInformation.majorOccupations);
         const supportingOccupationList = houseHoldInformation && houseHoldInformation.supportingOccupations && JSON.parse(houseHoldInformation.supportingOccupations);
-        const lgProfileAgeGroup = lgProfileAgeGroupData(lgProfileData);
+        const lgProfileAgeGroup = lgProfileData && lgProfileAgeGroupData(lgProfileData);
 
-        const filteredLGProfileAgeGroup = lgProfileAgeGroup.filter(i => i.value !== 0);
-        const SummationLGProfileEducationLevel = SummationLGProfileEducationLevelData(lgProfileData);
-        const LGProfileEducationLevel = LGProfileEducationLevelData(lgProfileData, SummationLGProfileEducationLevel, language);
+        const filteredLGProfileAgeGroup = lgProfileAgeGroup && lgProfileAgeGroup.filter(i => i.value !== 0);
+        const SummationLGProfileEducationLevel = lgProfileData && SummationLGProfileEducationLevelData(lgProfileData);
+
+        const LGProfileEducationLevel = lgProfileData && LGProfileEducationLevelData(lgProfileData, SummationLGProfileEducationLevel, language);
         const filteredLGProfileEducationLevel = LGProfileEducationLevel.filter(i => i.value !== 0);
         const summationLGProfileMigration = summationLGProfileMigrationData(lgProfileData);
 
@@ -1026,24 +1540,14 @@ class Demographics extends React.PureComponent<Props> {
         const LGProfileBuildingFoundation = LGProfileBuildingFoundationData(lgProfileData, summationLGProfileBuildingFoundation, language);
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
         const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
-        const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total, currentValue) => total + currentValue.totalPeople || 0, 0) : '-';
+        const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total: any, currentValue: { totalPeople: any }) => total + currentValue.totalPeople || 0, 0) : '-';
 
         return (
             <>
                 {!closedVisualization
                     ? (
                         <Modal className={styles.contactFormModal}>
-                            {/* <ModalHeader
-                    // title={'Add Contact'}
-                    rightComponent={(
-                        <DangerButton
-                    transparent
-                    iconName="close"
-                    // onClick={closeModal}
-                    title="Close Modal"
-                />
-                    )}
-                /> */}
+
                             <Translation>
                                 {
                                     t => (
@@ -1091,7 +1595,7 @@ class Demographics extends React.PureComponent<Props> {
                                             </div>
                                             <div className={styles.categoryName}>
                                                 <div className={styles.categoryLogo}>
-                                                    {selectedDataType === 1 ? (
+                                                    {selectedDataType !== 3 ? (
                                                         <ScalableVectorGraphics
                                                             className={styles.categoryLogoIcon}
 
@@ -1100,37 +1604,17 @@ class Demographics extends React.PureComponent<Props> {
                                                     ) : ''
                                                     }
 
-                                                    <h3>{selectedDataType === 1 ? t('Demography (Census 2011)') : ''}</h3>
+                                                    <h3>{selectedDataType === 1 ? t('Demography (Census 2021)') : selectedDataType === 2 ? t('Demography (Census 2011)') : ''}</h3>
                                                 </div>
-                                                {/* <div
-                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                    role="button"
-                    tabIndex={0}
-                // eslint-disable-next-line max-len
-                    onClick={() => this.handleSaveClick('overallDownload')}
-                    onKeyDown={undefined}
 
-
-                >
-                    <h4>DOWNLOAD</h4>
-                    {' '}
-                    <Button
-                        title="Download Chart"
-                        className={styles.chartDownload}
-                        transparent
-                        // onClick={() => this.handleSaveClick('overallDownload')}
-                        iconName="download"
-                    />
-
-                </div> */}
                                             </div>
-                                            {selectedDataType === 1 ? isDataSetClicked
+                                            {selectedDataType !== 3 ? isDataSetClicked
                                                 ? (
                                                     <TableDataCensus
                                                         population={sexRatio}
                                                         literacy={literacyRatio}
                                                         ageGroup={ageGroupSummary}
-                                                        householdSummary={householdSummary}
+                                                        householdSummary={householdSummary.householdSummary}
                                                         selectedFederalName={selectedFederalName}
                                                         language={language}
                                                     />
@@ -1191,10 +1675,7 @@ class Demographics extends React.PureComponent<Props> {
 
                                                                 <div className={styles.graphicalVisualization}>
 
-                                                                    {/* <div style={{ display: 'flex',
-                                                                justifyContent: 'flex-end',
-                                                        fontSize: '25px' }}
-                                                    /> */}
+
                                                                     <div id="genderBreakdown">
                                                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                             <h3>{t('Gender Breakdown')}</h3>
@@ -1285,7 +1766,7 @@ class Demographics extends React.PureComponent<Props> {
                                                             <div className={styles.percentageValue}>
                                                                 {/* <h1>Education Institution</h1> */}
                                                                 <h1>
-                                                                    {NumberWithCommas(householdSummary.find(i => i.key === 'householdCount').value)}
+                                                                    {NumberWithCommas(householdSummary.householdSummary.find(i => i.key === 'householdCount').value)}
                                                                 </h1>
 
 
@@ -1323,7 +1804,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                 iconName="download"
                                                                             />
                                                                         </div>
-                                                                        <BarchartVisualization item={householdSummary} language={language} />
+                                                                        <BarchartVisualization item={householdSummary.householdSummary} language={language} />
                                                                     </div>
 
 
@@ -2371,7 +2852,7 @@ class Demographics extends React.PureComponent<Props> {
                                             keySelector={pastDataKeySelector}
                                             labelSelector={pastDataLabelSelector}
                                             options={dateRangeOption}
-                                            onChange={e => this.setState({ selectedDataType: e })}
+                                            onChange={this.handleRadioButtonClick}
                                             value={selectedDataType}
                                             contentClassName={styles.dateRanges}
                                         />
@@ -2381,7 +2862,7 @@ class Demographics extends React.PureComponent<Props> {
 
 
                                 <div className={styles.dataDisplayDiv}>
-                                    {selectedDataType === 1
+                                    {selectedDataType === 1 || selectedDataType === 2
                                         ? (
                                             <div>
                                                 <div className={styles.dataDetails}>
@@ -2392,24 +2873,66 @@ class Demographics extends React.PureComponent<Props> {
                                                             style={{ cursor: 'pointer' }}
                                                             role="button"
                                                             tabIndex={0}
-                                                            onClick={() => this.setState({ selectedAttribute: 'totalPopulation' })}
+                                                            onClick={() => this.setState({
+                                                                selectedAttribute: 'totalPopulation',
+                                                                popupDataType: {
+                                                                    en: 'Population',
+                                                                    ne: 'जनसंख्या',
+                                                                },
+                                                            })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{t('Population')}</h2>
+
                                                         </div>
 
                                                         {sexRatio && sexRatio.length ? (
-                                                            <h2 style={{
-                                                                fontSize: '30px',
-                                                                paddingLeft: '10px',
-                                                                paddingRight: '10px',
-                                                                paddingTop: '0px',
-                                                                paddingBottom: '0px',
-                                                            }}
-                                                            >
-                                                                {NumberWithCommas(populationSummary
-                                                                    .find(i => i.key === 'totalPopulation').value)}
-                                                            </h2>
+                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                <h2 style={{
+                                                                    fontSize: '30px',
+                                                                    paddingLeft: '10px',
+                                                                    paddingRight: '10px',
+                                                                    paddingTop: '0px',
+                                                                    paddingBottom: '0px',
+                                                                }}
+                                                                >
+                                                                    {NumberWithCommas(populationSummary
+                                                                        .find(i => i.key === 'totalPopulation').value)}
+                                                                </h2>
+                                                                {
+                                                                    selectedDataType === 1
+
+                                                                        ? ((populationSummary
+                                                                            .find(i => i.key === 'changed_total_population').value) > 0
+                                                                            ? (
+                                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                    <img src={Positive} alt="positive" style={{ height: '50px', width: '50px' }} />
+
+                                                                                    <img src={Positive_Up} alt="positive" style={{ height: '20px', width: '20px' }} />
+
+                                                                                    <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                        {NumberWithCommas(populationSummary
+                                                                                            .find(i => i.key === 'changed_total_population').value)}
+                                                                                        {' '}
+                                                                                        Since 2011
+                                                                                    </h2>
+                                                                                </div>
+                                                                            )
+                                                                            : (
+                                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                    <img src={Negative} alt="Negative" style={{ height: '50px', width: '50px' }} />
+                                                                                    <img src={Positive_Down} alt="Positive_Down" style={{ height: '20px', width: '20px' }} />
+
+                                                                                    <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                        {NumberWithCommas(populationSummary
+                                                                                            .find(i => i.key === 'changed_total_population').value)}
+                                                                                        {' '}
+                                                                                        Since 2011
+                                                                                    </h2>
+                                                                                </div>
+                                                                            )
+                                                                        ) : ''}
+                                                            </div>
                                                         ) : ''}
                                                     </div>
                                                     <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
@@ -2470,17 +2993,60 @@ class Demographics extends React.PureComponent<Props> {
                                                             style={{ cursor: 'pointer' }}
                                                             role="button"
                                                             tabIndex={0}
-                                                            onClick={() => this.setState({ selectedAttribute: 'literacyRate' })}
+                                                            onClick={() => this.setState({
+                                                                selectedAttribute: 'literacyRate',
+                                                                popupDataType: {
+                                                                    en: 'Literacy Rate',
+                                                                    ne: 'साक्षरता दर',
+                                                                },
+                                                            })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{t('Literacy Rate')}</h2>
                                                         </div>
                                                         {literacyRatio && literacyRatio.length
                                                             ? (
-                                                                <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
-                                                                    {NumberWithCommas(literacySummary.find(i => i.key === 'literacyRate').value)}
-                                                                    %
-                                                                </h2>
+                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                    <h2 style={{ fontSize: '30px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '0px', paddingBottom: '0px' }}>
+                                                                        {NumberWithCommas(literacySummary.find(i => i.key === 'literacyRate').value)}
+                                                                        %
+                                                                    </h2>
+                                                                    {
+                                                                        selectedDataType === 1
+
+                                                                            ? ((literacySummary
+                                                                                .find(i => i.key === 'changed_literacyRate').value) > 0
+                                                                                ? (
+                                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                        <img src={Positive} alt="positive" style={{ height: '50px', width: '50px' }} />
+
+                                                                                        <img src={Positive_Up} alt="positive" style={{ height: '20px', width: '20px' }} />
+
+                                                                                        <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                            {NumberWithCommas(literacySummary
+                                                                                                .find(i => i.key === 'changed_literacyRate').value)}
+                                                                                            %
+                                                                                            {' '}
+                                                                                            Since 2011
+                                                                                        </h2>
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                                                                                        <img src={Negative} alt="Negative" style={{ height: '50px', width: '50px' }} />
+
+                                                                                        <img src={Positive_Down} alt="Positive_Down" style={{ height: '20px', width: '20px' }} />
+
+                                                                                        <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                            {NumberWithCommas(literacySummary
+                                                                                                .find(i => i.key === 'changed_literacyRate').value)}
+                                                                                            %
+                                                                                            {' '}
+                                                                                            Since 2011
+                                                                                        </h2>
+                                                                                    </div>
+                                                                                )) : ''}
+                                                                </div>
                                                             ) : ''}
                                                     </div>
                                                     <h3 style={{ marginLeft: '20px' }}>{t('Gender Breakdown')}</h3>
@@ -2535,23 +3101,60 @@ class Demographics extends React.PureComponent<Props> {
                                                     <div style={{ padding: '10px' }}>
                                                         <div
                                                             className={selectedAttribute === 'householdCount' ? styles.demographyHeading : ''}
-                                                            style={{ cursor: 'pointer' }}
+                                                            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
                                                             role="button"
                                                             tabIndex={0}
-                                                            onClick={() => this.setState({ selectedAttribute: 'householdCount' })}
+                                                            onClick={() => this.setState({
+                                                                selectedAttribute: 'householdCount',
+                                                                popupDataType: {
+                                                                    en: 'Household count',
+                                                                    ne: 'घरपरिवार गणना',
+                                                                },
+                                                            })}
                                                             onKeyDown={undefined}
                                                         >
                                                             <h2>{language === 'en' ? 'Household' : 'घरायसी विवरण'}</h2>
+                                                            {
+                                                                selectedDataType === 1
+
+                                                                    ? (householdSummary.changed_householdCount.value > 0
+                                                                        ? (
+                                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                <img src={Positive} alt="Positive" style={{ height: '50px', width: '50px' }} />
+
+                                                                                <img src={Positive_Up} alt="Positive_Up" style={{ height: '20px', width: '20px' }} />
+
+                                                                                <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                    {NumberWithCommas(householdSummary.changed_householdCount.value)}
+                                                                                    {' '}
+                                                                                    Since 2011
+                                                                                </h2>
+                                                                            </div>
+                                                                        )
+                                                                        : (
+                                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                <img src={Negative} alt="Negative" style={{ height: '50px', width: '50px' }} />
+
+                                                                                <img src={Positive_Down} alt="Positive_Down" style={{ height: '20px', width: '20px' }} />
+
+                                                                                <h2 style={{ fontWeight: '300', fontSize: '12px', paddingLeft: '2px' }}>
+                                                                                    {NumberWithCommas(householdSummary.changed_householdCount.value)}
+                                                                                    {' '}
+                                                                                    Since 2011
+                                                                                </h2>
+                                                                            </div>
+                                                                        )
+                                                                    ) : ''}
                                                         </div>
 
                                                     </div>
                                                     {/* <h3 style={{ marginLeft: '20px' }}>Gender Breakdown</h3> */}
-                                                    {householdSummary && householdSummary.length
+                                                    {householdSummary && householdSummary.householdSummary.length
                                                         ? (
                                                             <div style={{ height: '90px', width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
                                                                 <ResponsiveContainer>
                                                                     <BarChart
-                                                                        data={householdSummary}
+                                                                        data={householdSummary.householdSummary}
                                                                         layout="vertical"
                                                                         // margin={chartMargin}
                                                                         margin={{
@@ -2578,7 +3181,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                             fill="#dcdcde"
                                                                             barSize={25}
                                                                         >
-                                                                            {householdSummary.map(v => (
+                                                                            {householdSummary.householdSummary.map(v => (
                                                                                 <Cell
                                                                                     key={v.key}
                                                                                     fill={v.color}
@@ -2960,12 +3563,15 @@ class Demographics extends React.PureComponent<Props> {
 
 
                 {
-                    selectedDataType === 1 ? (
+                    selectedDataType === 1 || selectedDataType === 2 ? (
                         <>
                             <ChoroplethMap
                                 sourceKey={'demographics-profile'}
                                 paint={legendPaint}
                                 mapState={mapState}
+                                tooltipRenderer={(prop: any) => Tool(prop, popupDataType)}
+                                isDamageAndLoss
+                                regionLevel={filters && filters.region && filters.region.adminLevel + 1 || 1}
                             />
 
                             {/* <CommonMap
@@ -3246,7 +3852,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     <td>{t('Major Occupation')}</td>
 
                                                                                     <td>
-                                                                                        {majorOccupationList && majorOccupationList.length ? majorOccupationList.map((i, index) => (
+                                                                                        {majorOccupationList && majorOccupationList.length ? majorOccupationList.map((i: string | number | boolean | {} | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactNodeArray | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined, index: React.Key | null | undefined) => (
                                                                                             <b key={index}>
                                                                                                 {i}
                                                                                                 {index === majorOccupationList.length - 1 ? '' : ','}
@@ -3258,7 +3864,7 @@ class Demographics extends React.PureComponent<Props> {
                                                                                     <td>{t('Supporting Occupation')}</td>
 
                                                                                     <td>
-                                                                                        {supportingOccupationList && supportingOccupationList.length ? supportingOccupationList.map((i, index) => (
+                                                                                        {supportingOccupationList && supportingOccupationList.length ? supportingOccupationList.map((i: string | number | boolean | {} | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactNodeArray | React.ReactPortal | Iterable<ReactI18NextChild> | null | undefined, index: React.Key | null | undefined) => (
                                                                                             <b key={index}>
                                                                                                 {i}
                                                                                                 {index === supportingOccupationList.length - 1 ? '' : ','}
