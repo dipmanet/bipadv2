@@ -119,6 +119,7 @@ const TemperaturesMin = (props: Props) => {
                                     <img
                                         src={picLink}
                                         alt="temperature"
+                                        style={{ objectFit: 'contain' }}
                                     />
                                 </>
                             )
@@ -128,6 +129,7 @@ const TemperaturesMin = (props: Props) => {
                             && (
                                 <>
                                     <img
+                                        style={{ objectFit: 'contain' }}
                                         src={Placeholder}
                                         alt="temperature"
                                         title="Click to select picture"

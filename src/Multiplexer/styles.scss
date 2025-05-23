@@ -5,6 +5,8 @@
     size-adjust: 85%;
 }
 
+
+
 .languageFont {
     font-family: 'Kalimati Regular', 'Fira Sans', sans-serif !important;
 }
@@ -37,6 +39,7 @@ button {
         flex-grow: 1;
         overflow: auto;
         overflow-x: hidden;
+
         .halfPageLeftPane {
             display: flex;
             flex-direction: column;
