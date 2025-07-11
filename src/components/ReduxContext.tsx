@@ -1,8 +1,8 @@
-import { Persistor } from 'redux-persist';
-import React from 'react';
+import { Persistor } from "redux-persist";
+import React from "react";
 
 interface ReduxContextType {
-    persistor?: Persistor;
+	persistor?: Persistor;
 }
 
 export default React.createContext<ReduxContextType>({});

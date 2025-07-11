@@ -1,0 +1,8 @@
+@use "../../stylesheets/dimens";
+
+.cell {
+	padding: dimens.$spacing-small;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

@@ -1,12 +1,12 @@
-import cookies from 'js-cookie';
+import cookies from "js-cookie";
 
-import { AuthState } from '#store/atom/auth/types';
+import { AuthState } from "#store/atom/auth/types";
 
-const sessionCookieName = process.env.REACT_APP_SESSION_COOKIE_NAME;
+const sessionCookieName = import.meta.env.REACT_APP_SESSION_COOKIE_NAME;
 
 // eslint-disable-next-line import/prefer-default-export
 export const getAuthState = (): AuthState => ({
-    sessionId: cookies.get(sessionCookieName),
-    csrftoken: cookies.get('csrftoken'),
-    authenticated: !!cookies.get(sessionCookieName),
+	sessionId: cookies.get(sessionCookieName),
+	csrftoken: cookies.get("csrftoken"),
+	authenticated: !!cookies.get(sessionCookieName),
 });

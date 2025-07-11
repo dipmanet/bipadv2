@@ -1,120 +1,103 @@
-import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import React from "react";
+import { _cs } from "@togglecorp/fujs";
 
-import { Translation } from 'react-i18next';
-import {
-    createRequestClient,
-    NewProps,
-    ClientAttributes,
-    methods,
-} from '#request';
+import { Translation } from "react-i18next";
+import { createRequestClient, NewProps, ClientAttributes, methods } from "#request";
 
-import Cloak from '#components/Cloak';
-import LoadingAnimation from '#rscv/LoadingAnimation';
-import ListView from '#rscv/List/ListView';
-import AccentButton from '#rsca/Button/AccentButton';
-import modalize from '#rscg/Modalize';
+import Cloak from "#components/Cloak";
+import LoadingAnimation from "#rscv/LoadingAnimation";
+import ListView from "#rscv/List/ListView";
+import AccentButton from "#rsca/Button/AccentButton";
+import modalize from "#rscg/Modalize";
 
-import { Flow } from '#types';
-import { MultiResponse } from '#store/atom/response/types';
+import { Flow } from "#types";
+import { MultiResponse } from "#store/atom/response/types";
 
-import FlowItem from './FlowItem';
-import AddFlowForm from './AddFlowForm';
+import FlowItem from "./FlowItem";
+import AddFlowForm from "./AddFlowForm";
 
-import styles from './styles.scss';
+import styles from "./styles.module.scss";
 
 interface OwnProps {
-    onUpdate?: () => void;
-    className?: string;
+	onUpdate?: () => void;
+	className?: string;
 }
 
-interface State {
-}
+interface State {}
 
 interface Params {
-    body?: object;
+	body?: object;
 }
 const ModalAccentButton = modalize(AccentButton);
 
-const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
-    reliefFlowGetRequest: {
-        url: '/relief-flow/',
-        method: methods.GET,
-        onMount: true,
-    },
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params> } = {
+	reliefFlowGetRequest: {
+		url: "/relief-flow/",
+		method: methods.GET,
+		onMount: true,
+	},
 };
 
 type Props = NewProps<OwnProps, Params>;
 const flowKeySelector = (flow: Flow) => flow.id;
 
 class ReliefFlow extends React.PureComponent<Props, State> {
-    private getFlowRendererParams = (_: number, flow: Flow) => ({
-        data: flow,
-        onUpdate: this.handleReliefFlowChange,
-    });
+	private getFlowRendererParams = (_: number, flow: Flow) => ({
+		data: flow,
+		onUpdate: this.handleReliefFlowChange,
+	});
 
-    private handleReliefFlowChange = () => {
-        const { requests: { reliefFlowGetRequest } } = this.props;
-        reliefFlowGetRequest.do();
-    }
+	private handleReliefFlowChange = () => {
+		const {
+			requests: { reliefFlowGetRequest },
+		} = this.props;
+		reliefFlowGetRequest.do();
+	};
 
-    public render() {
-        const {
-            requests: {
-                reliefFlowGetRequest: {
-                    response,
-                    pending,
-                },
-            },
-            className,
-        } = this.props;
+	public render() {
+		const {
+			requests: {
+				reliefFlowGetRequest: { response, pending },
+			},
+			className,
+		} = this.props;
 
-        let flowList: Flow[] = [];
-        if (!pending && response) {
-            const flowResponse = response as MultiResponse<Flow>;
-            flowList = flowResponse.results;
-        }
+		let flowList: Flow[] = [];
+		if (!pending && response) {
+			const flowResponse = response as MultiResponse<Flow>;
+			flowList = flowResponse.results;
+		}
 
-        return (
-            <Translation>
-                {
-                    t => (
-                        <div className={_cs(className, styles.flow)}>
-                            { pending && <LoadingAnimation />}
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    {t('Flows')}
-                                </h3>
-                                <Cloak hiddenIf={p => !p.add_flow}>
-                                    <ModalAccentButton
-                                        className={styles.addFlowButton}
-                                        title={t('Add Flow')}
-                                        iconName="add"
-                                        transparent
-                                        modal={(
-                                            <AddFlowForm
-                                                onUpdate={this.handleReliefFlowChange}
-                                            />
-                                        )}
-                                    >
-                                        {t('New Flow')}
-                                    </ModalAccentButton>
-                                </Cloak>
-                            </header>
-                            <ListView
-                                className={styles.content}
-                                data={flowList}
-                                keySelector={flowKeySelector}
-                                renderer={FlowItem}
-                                rendererParams={this.getFlowRendererParams}
-                            />
-                        </div>
-                    )
-                }
-            </Translation>
-
-        );
-    }
+		return (
+			<Translation>
+				{(t) => (
+					<div className={_cs(className, styles.flow)}>
+						{pending && <LoadingAnimation />}
+						<header className={styles.header}>
+							<h3 className={styles.heading}>{t("Flows")}</h3>
+							<Cloak hiddenIf={(p) => !p.add_flow}>
+								<ModalAccentButton
+									className={styles.addFlowButton}
+									title={t("Add Flow")}
+									iconName="add"
+									transparent
+									modal={<AddFlowForm onUpdate={this.handleReliefFlowChange} />}>
+									{t("New Flow")}
+								</ModalAccentButton>
+							</Cloak>
+						</header>
+						<ListView
+							className={styles.content}
+							data={flowList}
+							keySelector={flowKeySelector}
+							renderer={FlowItem}
+							rendererParams={this.getFlowRendererParams}
+						/>
+					</div>
+				)}
+			</Translation>
+		);
+	}
 }
 
 export default createRequestClient(requestOptions)(ReliefFlow);

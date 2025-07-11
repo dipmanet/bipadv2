@@ -1,21 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable indent */
+
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-tabs */
-/* eslint-disable max-len */
-import React from 'react';
-import styles from '../LeftPane/styles.scss';
-import { ChartData } from '../../../DataArchive/Modals/Pollution/types';
+
+import React from "react";
+import styles from "../LeftPan./styles.module.scss";
+import { ChartData } from "../../../DataArchive/Modals/Pollution/types";
 
 export const parseStringToNumber = (content) => {
 	// const changedNumber = parseInt(content, 10);
-	const str = content && content.toString().split('.');
+	const str = content && content.toString().split(".");
 	if (str) {
-		str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-		return str.join('.');
+		str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return str.join(".");
 	}
 	return null;
 };
@@ -78,7 +75,6 @@ export function CustomTooltip({ active, payload, label }) {
 
 	return null;
 }
-
 
 export function populationCustomTooltip({ active, payload, label }) {
 	if (active && payload && payload.length) {
@@ -147,89 +143,89 @@ export function urbanCustomTooltip({ active, payload, label }) {
 export function getChartData(clickedItem, incidentFilterYear, incidentList) {
 	let fullhazardTitle = [];
 
-	if (clickedItem !== 'all') {
+	if (clickedItem !== "all") {
 		fullhazardTitle = [clickedItem];
 	} else {
-		fullhazardTitle = [...new Set(incidentList.features.map(
-			item => item.properties.hazardTitle,
-		))];
+		fullhazardTitle = [
+			...new Set(incidentList.features.map((item) => item.properties.hazardTitle)),
+		];
 	}
-	return fullhazardTitle.map(item => ({
+	return fullhazardTitle.map((item) => ({
 		name: item,
 		// total incidents
-		value: incidentList.features
-			.filter(
-				ht => ht.properties.hazardTitle === item
-					&& new Date(ht.properties.incidentOn)
-						.getFullYear() === Number(incidentFilterYear),
-			)
-			.length,
-		color: (incidentList.features.filter(hcolor => hcolor.properties.hazardTitle === item)
-			.map(mainColor => mainColor.properties.hazardColor))[0],
-
+		value: incidentList.features.filter(
+			(ht) =>
+				ht.properties.hazardTitle === item &&
+				new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear)
+		).length,
+		color: incidentList.features
+			.filter((hcolor) => hcolor.properties.hazardTitle === item)
+			.map((mainColor) => mainColor.properties.hazardColor)[0],
 	}));
 }
-
 
 export function getArrforDesc(clickedItem, chartData, incidentList) {
 	let fullhazardTitle = [];
 
-	if (clickedItem !== 'all') {
+	if (clickedItem !== "all") {
 		fullhazardTitle = [clickedItem];
 	} else {
-		fullhazardTitle = [...new Set(incidentList.features.map(
-			item => item.properties.hazardTitle,
-		))];
+		fullhazardTitle = [
+			...new Set(incidentList.features.map((item) => item.properties.hazardTitle)),
+		];
 	}
 	const arr = fullhazardTitle.map((item) => {
-		if (chartData.filter(n => n.name === item).length > 0) {
-			if (chartData.filter(n => n.name === item)[0].Total !== 0) {
+		if (chartData.filter((n) => n.name === item).length > 0) {
+			if (chartData.filter((n) => n.name === item)[0].Total !== 0) {
 				return item;
 			}
 		}
 		return null;
 	});
 
-	return arr.filter(n => n !== null);
+	return arr.filter((n) => n !== null);
 }
-
 
 export function getDescription(props, nonZeroArr, chartData) {
 	const { clickedItem } = props;
-	if (clickedItem === 'all') {
+	if (clickedItem === "all") {
 		if (nonZeroArr.length > 0) {
 			return nonZeroArr.map((item, i) => {
 				if (
-					i === nonZeroArr.length - 1
-					&& i === 0
+					i === nonZeroArr.length - 1 &&
+					i === 0 &&
 					// && chartData.filter(n => n.name === item)[0]
-					&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+					chartData.filter((n) => n.name === item)[0].Total !== 0
+				) {
 					return ` ${item} `;
 				}
 				if (
-					i !== nonZeroArr.length - 1
-					&& i === 0
+					i !== nonZeroArr.length - 1 &&
+					i === 0 &&
 					// && chartData.filter(n => n.name === item)[0]
-					&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+					chartData.filter((n) => n.name === item)[0].Total !== 0
+				) {
 					return ` ${item} `;
 				}
 				if (
-					i === nonZeroArr.length - 1
+					i === nonZeroArr.length - 1 &&
 					// && chartData.filter(n => n.name === item)[0]
-					&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+					chartData.filter((n) => n.name === item)[0].Total !== 0
+				) {
 					return ` and ${item} `;
 				}
 				if (
-					i !== nonZeroArr.length - 1
+					i !== nonZeroArr.length - 1 &&
 					// && chartData.filter(n => n.name === item)[0]
-					&& chartData.filter(n => n.name === item)[0].Total !== 0) {
+					chartData.filter((n) => n.name === item)[0].Total !== 0
+				) {
 					return `, ${item} `;
 				}
-				return '';
+				return "";
 			});
 		}
 	} else {
 		return ` of ${clickedItem} `;
 	}
-	return '';
+	return "";
 }

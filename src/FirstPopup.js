@@ -12,7 +12,7 @@ import SearchInput from '#rsci/SearchInput';
 import ListView from '#rscv/List/ListView';
 import Modal from '#rscv/Modal';
 import Wizard from '#rscv/Wizard';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 
 const keySelector = item => item.id;
 

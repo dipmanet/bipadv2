@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary */
+ 
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
@@ -7,7 +7,7 @@ import { setIbfPageAction } from '#actionCreators';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import * as utils from '#views/IBF/utils';
 
-import style from './styles.scss';
+import style from './styles.module.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     ibfPage: ibfPageSelector(state),

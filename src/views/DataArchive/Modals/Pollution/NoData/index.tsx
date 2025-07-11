@@ -1,28 +1,24 @@
-import React from 'react';
+import React from "react";
 
-import styles from './styles.scss';
+import styles from "./styles.module.scss";
 
 interface Props {
-    message?: string;
-    title?: string;
+	message?: string;
+	title?: string;
 }
 
-const DEFAULT_MESSAGE = 'No data available for selected Filter';
+const DEFAULT_MESSAGE = "No data available for selected Filter";
 
 const NoData = (props: Props) => {
-    const { message, title } = props;
-    return (
-        <div className={styles.noData}>
-            <div className={styles.title}>
-                {title}
-            </div>
-            <div className={styles.message}>
-                <div>
-                    { message || DEFAULT_MESSAGE }
-                </div>
-            </div>
-        </div>
-    );
+	const { message, title } = props;
+	return (
+		<div className={styles.noData}>
+			<div className={styles.title}>{title}</div>
+			<div className={styles.message}>
+				<div>{message || DEFAULT_MESSAGE}</div>
+			</div>
+		</div>
+	);
 };
 
 export default NoData;

@@ -1,87 +1,78 @@
-import React, { useState } from 'react';
-import Hexagon from 'react-hexagon';
-import styles from './styles.scss';
+import React, { useState } from "react";
+import Hexagon from "react-hexagon";
+import styles from "./styles.module.scss";
 
 const DemoGraphicsLegends = (props) => {
-    const [showSus, setshowSus] = useState(false);
-    const [showSes, setshowSes] = useState(false);
-    const {
-        handleSesmicLayerChange,
-    } = props;
+	const [showSus, setshowSus] = useState(false);
+	const [showSes, setshowSes] = useState(false);
+	const { handleSesmicLayerChange } = props;
 
+	const handlePopulationClick = (val) => {
+		if (val === "sus") {
+			if (showSus) {
+				setshowSus(false);
+				// setshowSes(false);
+				handleSesmicLayerChange("susHide");
+			} else {
+				setshowSus(true);
+				if (showSes) {
+					setshowSes(false);
+					handleSesmicLayerChange("sesHide");
+				}
+				handleSesmicLayerChange("sus");
+			}
+		}
+		if (val === "ses") {
+			if (showSes) {
+				setshowSes(false);
+				handleSesmicLayerChange("sesHide");
+			} else {
+				setshowSes(true);
+				if (showSus) {
+					setshowSus(false);
+					handleSesmicLayerChange("susHide");
+				}
+				handleSesmicLayerChange("ses");
+			}
+		}
+	};
 
-    const handlePopulationClick = (val) => {
-        if (val === 'sus') {
-            if (showSus) {
-                setshowSus(false);
-                // setshowSes(false);
-                handleSesmicLayerChange('susHide');
-            } else {
-                setshowSus(true);
-                if (showSes) {
-                    setshowSes(false);
-                    handleSesmicLayerChange('sesHide');
-                }
-                handleSesmicLayerChange('sus');
-            }
-        }
-        if (val === 'ses') {
-            if (showSes) {
-                setshowSes(false);
-                handleSesmicLayerChange('sesHide');
-            } else {
-                setshowSes(true);
-                if (showSus) {
-                    setshowSus(false);
-                    handleSesmicLayerChange('susHide');
-                }
-                handleSesmicLayerChange('ses');
-            }
-        }
-    };
-
-    return (
-        <>
-
-            <div className={styles.hazardItemContainer}>
-                <button
-                    type="button"
-                    className={showSus ? styles.legendBtnSelected : styles.legendBtn}
-                    onClick={() => handlePopulationClick('sus')}
-                >
-                    <Hexagon
-                        style={{
-                            stroke: '#fff',
-                            strokeWidth: 50,
-                            fill: showSus ? '#036ef0' : 'transparent',
-                        }}
-                        className={styles.educationHexagon}
-                    />
-                           Landslide Suseptibility Map
-                </button>
-            </div>
-            <div className={styles.hazardItemContainer}>
-                <button
-                    type="button"
-                    className={showSes ? styles.legendBtnSelected : styles.legendBtn}
-                    onClick={() => handlePopulationClick('ses')}
-
-                >
-                    <Hexagon
-                        style={{
-                            stroke: '#fff',
-                            strokeWidth: 50,
-                            fill: showSes ? '#036ef0' : 'transparent',
-
-                        }}
-                        className={styles.educationHexagon}
-                    />
-
-                          Seismic Hazard Map
-                </button>
-            </div>
-        </>
-    );
+	return (
+		<>
+			<div className={styles.hazardItemContainer}>
+				<button
+					type="button"
+					className={showSus ? styles.legendBtnSelected : styles.legendBtn}
+					onClick={() => handlePopulationClick("sus")}>
+					<Hexagon
+						style={{
+							stroke: "#fff",
+							strokeWidth: 50,
+							fill: showSus ? "#036ef0" : "transparent",
+						}}
+						className={styles.educationHexagon}
+					/>
+					Landslide Suseptibility Map
+				</button>
+			</div>
+			<div className={styles.hazardItemContainer}>
+				<button
+					type="button"
+					className={showSes ? styles.legendBtnSelected : styles.legendBtn}
+					onClick={() => handlePopulationClick("ses")}>
+					<Hexagon
+						style={{
+							stroke: "#fff",
+							strokeWidth: 50,
+							fill: showSes ? "#036ef0" : "transparent",
+						}}
+						className={styles.educationHexagon}
+					/>
+					Seismic Hazard Map
+				</button>
+			</div>
+		</>
+	);
 };
 
 export default DemoGraphicsLegends;

@@ -2,9 +2,7 @@
 
 [![pipeline status](https://gitlab.com/bipad/client/badges/develop/pipeline.svg)](https://gitlab.com/bipad/client/commits/develop) [![coverage status](https://gitlab.com/bipad/client/badges/develop/coverage.svg)](https://gitlab.com/bipad/client/commits/develop)
 
-
-This is the web client for *Bipad*
-
+This is the web client for _Bipad_
 
 ## Getting started
 
@@ -75,7 +73,6 @@ Our client will be running at `DEV_SERVER_URL` and our server on
 `ACTUAL_DOMAIN` so we need to set up proxy in our nginx. Create
 `/etc/nginx/custom.conf` file with following content:
 
-
 ```
 server {
     listen 81;
@@ -145,11 +142,11 @@ sudo systemctl restart nginx
 Also, add the following environment variables to `.env` file:
 
 ```
-REACT_APP_SESSION_COOKIE_NAME=ACTUAL_DOMAIN
+VITE_APP_SESSION_COOKIE_NAME=ACTUAL_DOMAIN
 
-REACT_APP_DOMAIN=PROXY_DOMAIN
+VITE_APP_DOMAIN=PROXY_DOMAIN
 
-REACT_APP_API_SERVER_URL=http://PROXY_DOMAIN/api/v1
+VITE_APP_API_SERVER_URL=http://PROXY_DOMAIN/api/v1
 
-REACT_APP_ADMIN_LOGIN_URL=http://PROXY_DOMAIN/admin
+VITE_APP_ADMIN_LOGIN_URL=http://PROXY_DOMAIN/admin
 ```

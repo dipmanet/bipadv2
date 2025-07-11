@@ -1,12 +1,12 @@
-@import "colors";
-@import "dimens";
-@import "utils";
+@use "colors";
+@use "dimens";
+@use "utils";
 
 @font-face {
-  font-family: "Kalimati Regular";
-  src: url("#Kalimati") format("truetype");
-  unicode-range: U+30-39;
-  size-adjust: 90%;
+	font-family: "Kalimati Regular";
+	src: url("#Kalimati") format("truetype");
+	unicode-range: U+30-39;
+	size-adjust: 90%;
 }
 
 $font-family-sans-serif: "Fira Sans", sans-serif;
@@ -17,94 +17,94 @@ $font-family-icons: "Ionicons";
 $font-weight-heading: 900;
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 
-  .languageFont {
-    font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
-  }
+	.languageFont {
+		font-family: "Kalimati Regular", "Fira Sans", sans-serif !important;
+	}
 
-  ::-webkit-scrollbar-track {
-    background-color: $color-background-scrollbar;
-  }
+	::-webkit-scrollbar-track {
+		background-color: colors.$color-background-scrollbar;
+	}
 
-  ::-webkit-scrollbar {
-    background-color: $color-background-scrollbar;
-    width: $width-scrollbar;
-    height: $width-scrollbar;
-  }
+	::-webkit-scrollbar {
+		background-color: colors.$color-background-scrollbar;
+		width: dimens.$width-scrollbar;
+		height: dimens.$width-scrollbar;
+	}
 
-  ::-webkit-scrollbar-thumb {
-    border-radius: calc(var(--width-scrollbar) / 2);
-    background-color: $color-foreground-scrollbar;
-  }
+	::-webkit-scrollbar-thumb {
+		border-radius: calc(var(--width-scrollbar) / 2);
+		background-color: colors.$color-foreground-scrollbar;
+	}
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  line-height: 1.41;
-  color: $color-text;
-  font-family: $font-family-sans-serif;
-  font-size: $font-size-medium;
-  font-weight: $font-weight-medium;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	line-height: 1.41;
+	color: colors.$color-text;
+	font-family: $font-family-sans-serif;
+	font-size: dimens.$font-size-medium;
+	font-weight: dimens.$font-weight-medium;
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0;
-  }
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: 0;
+	}
 
-  a {
-    outline: none;
-    text-transform: none;
-    text-decoration: none;
-    color: inherit;
-  }
+	a {
+		outline: none;
+		text-transform: none;
+		text-decoration: none;
+		color: inherit;
+	}
 }
 
 :global {
-  .bipad-main-content {
-    position: relative;
-    height: 100vh;
-    // height: calc(100vh - #{$height-navbar});
-  }
+	.bipad-main-content {
+		position: relative;
+		height: 100vh;
+		// height: calc(100vh - #{$height-navbar});
+	}
 
-  .mapboxgl-ctrl-top-right {
-    right: 48px !important;
-  }
+	.mapboxgl-ctrl-top-right {
+		right: 48px !important;
+	}
 
-  .mapboxgl-map {
-    font: inherit !important;
-  }
+	.mapboxgl-map {
+		font: inherit !important;
+	}
 
-  .portal-child-shown {
-    overflow: hidden;
+	.portal-child-shown {
+		overflow: hidden;
 
-    #root {
-      filter: brightness(50%);
-      pointer-events: none;
-      user-select: none;
-    }
+		#root {
+			filter: brightness(50%);
+			pointer-events: none;
+			user-select: none;
+		}
 
-    .focus-trap-wrapper {
-      .focus-trap {
-        .modal:not([data-last-modal="true"]) {
-          filter: brightness(50%);
-          pointer-events: none;
-        }
-      }
-    }
-  }
+		.focus-trap-wrapper {
+			.focus-trap {
+				.modal:not([data-last-modal="true"]) {
+					filter: brightness(50%);
+					pointer-events: none;
+				}
+			}
+		}
+	}
 }
 
 %main-content {
-  // @frozenhelium
-  transform-origin: bottom;
-  border: $width-separator-thin solid $color-separator-alt;
-  height: 100%;
-  animation: slide-in $duration-slow ease forwards;
+	// @frozenhelium
+	transform-origin: bottom;
+	border: dimens.$width-separator-thin solid colors.$color-separator-alt;
+	height: 100%;
+	animation: slide-in dimens.$duration-slow ease forwards;
 }

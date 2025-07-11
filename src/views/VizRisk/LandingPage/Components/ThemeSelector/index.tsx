@@ -1,55 +1,45 @@
-import React, { useEffect } from 'react';
-import styles from './styles.scss';
+import React, { useEffect } from "react";
+import styles from "./styles.module.scss";
 
 interface Props {
-    selectFieldValue: any[];
-    selctFieldCurrentValue: string;
-    setSelctFieldCurrentValue: React.Dispatch<React.SetStateAction<string>>;
-    disabled: boolean;
+	selectFieldValue: any[];
+	selctFieldCurrentValue: string;
+	setSelctFieldCurrentValue: React.Dispatch<React.SetStateAction<string>>;
+	disabled: boolean;
 }
 
 const SelectComponent = (props: Props) => {
-    const [disable, setDisable] = React.useState(false);
-    const { selectFieldValue, selctFieldCurrentValue, setSelctFieldCurrentValue, disabled } = props;
-    const title = 'Select By Themes';
-    // eslint-disable-next-line consistent-return
-    const checkDisable = () => {
-        if (disabled) {
-            return null;
-        } if (disable) {
-            return true;
-        }
-    };
+	const [disable, setDisable] = React.useState(false);
+	const { selectFieldValue, selctFieldCurrentValue, setSelctFieldCurrentValue, disabled } = props;
+	const title = "Select By Themes";
 
-    return (
-        <div className={styles.theme}>
-            <select
-                className={styles.mainSelect}
-                value={selctFieldCurrentValue}
-                // defaultValue={'Select By Themes'}
-                onChange={e => setSelctFieldCurrentValue(e.target.value)}
-                onClick={() => setDisable(true)}
-            >
-                <option
-                    className={styles.mainOptions}
-                    disabled={checkDisable}
-                >
-                    {title}
-                </option>
-                {
-                    selectFieldValue.map(item => (
-                        <option
-                            className={styles.mainOptions}
-                            key={`select-${item}`}
-                            value={item}
-                        >
-                            {item}
+	const checkDisable = () => {
+		if (disabled) {
+			return null;
+		}
+		if (disable) {
+			return true;
+		}
+	};
 
-                        </option>
-                    ))
-                }
-            </select>
-        </div>
-    );
+	return (
+		<div className={styles.theme}>
+			<select
+				className={styles.mainSelect}
+				value={selctFieldCurrentValue}
+				// defaultValue={'Select By Themes'}
+				onChange={(e) => setSelctFieldCurrentValue(e.target.value)}
+				onClick={() => setDisable(true)}>
+				<option className={styles.mainOptions} disabled={checkDisable}>
+					{title}
+				</option>
+				{selectFieldValue.map((item) => (
+					<option className={styles.mainOptions} key={`select-${item}`} value={item}>
+						{item}
+					</option>
+				))}
+			</select>
+		</div>
+	);
 };
 export default SelectComponent;

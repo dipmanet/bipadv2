@@ -1,0 +1,63 @@
+{
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"target": "ES2020",
+		"useDefineForClassFields": true,
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"skipLibCheck": true,
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": false,
+		"moduleDetection": "force",
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"allowJs": true,
+
+		/* Linting */
+		"strict": true,
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"importsNotUsedAsValues": "remove",
+		// "erasableSyntaxOnly": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+		"allowUnusedLabels": true,
+		"baseUrl": ".",
+		"paths": {
+			"#components/*": ["./src/components/*"],
+			"#lib/*": ["./src/lib/*"],
+			"#constants": ["./src/constants"],
+			"#notify": ["./src/notify"],
+			"#actionCreators": ["./src/store/actionCreators"],
+			"#selectors": ["./src/store/selectors"],
+			"#request": ["./src/request"],
+			"#resources/*": ["./src/resources/*"],
+			"#openseadragon-images/*": ["./src/resources/openseadragon-images/*"],
+			"#schema": ["./src/schema"],
+			"#store": ["./src/store"],
+			"#store/*": ["./src/store/*"],
+			"#ts": ["./src/ts"],
+			"#utils/*": ["./src/utils/*"],
+			"#rsca/*": ["./src/vendor/react-store/components/Action/*"],
+			"#rscg/*": ["./src/vendor/react-store/components/General/*"],
+			"#rsci/*": ["./src/vendor/react-store/components/Input/*"],
+			"#rscv/*": ["./src/vendor/react-store/components/View/*"],
+			"#rscz/*": ["./src/vendor/react-store/components/Visualization/*"],
+			"#rsck/*": ["./src/vendor/react-store/constants/*"],
+			"#rscu/*": ["./src/vendor/react-store/utils/*"],
+			"#views/*": ["./src/views/*"],
+			"#types": ["./src/types"],
+			"#mapStyles/*": ["./src/vendor/osm-liberty/*"],
+			"#mapStyles": ["./src/vendor/osm-liberty"],
+			"#re-map/*": ["./src/vendor/re-map/*"],
+			"#re-map": ["./src/vendor/re-map"],
+			"#Kalimati": ["./src/resources/fonts/Kalimati Regular.ttf"],
+			"~base-scss/*": ["./src/stylesheets/*"]
+		}
+	},
+	"include": ["src"]
+}

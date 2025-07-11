@@ -1,125 +1,110 @@
 /* eslint-disable react/jsx-indent */
-/* eslint-disable indent */
+
 /* eslint-disable react/jsx-tag-spacing */
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable max-len */
-import React from 'react';
-import { _cs } from '@togglecorp/fujs';
 
-import { navigate } from '@reach/router';
+import React from "react";
+import { _cs } from "@togglecorp/fujs";
 
-import { Translation } from 'react-i18next';
-import AccentButton from '#rsca/Button/AccentButton';
+import { navigate } from "@reach/router";
 
-import modalize from '#rscg/Modalize';
+import { Translation } from "react-i18next";
+import AccentButton from "#rsca/Button/AccentButton";
 
-import Page from '#components/Page';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Button from '#rsca/Button';
-import Demographics from '#views/Profile/DisasterProfile/Demographics';
-import Icon from '#rscg/Icon';
-import DisasterProfile from '../../DisasterProfile';
-import ProjectsProfile from '../../ProjectsProfile';
-import Indicator from '../../Indicator';
-import Contact from '../../Contact';
-import Document from '../../Document';
-import styles from '../../styles.scss';
+import modalize from "#rscg/Modalize";
 
+import Page from "#components/Page";
+import ScalableVectorGraphics from "#rscv/ScalableVectorGraphics";
+import Button from "#rsca/Button";
+import Demographics from "#views/Profile/DisasterProfile/Demographics";
+import Icon from "#rscg/Icon";
+import DisasterProfile from "../../DisasterProfile";
+import ProjectsProfile from "../../ProjectsProfile";
+import Indicator from "../../Indicator";
+import Contact from "../../Contact";
+import Document from "../../Document";
+import styles from "../../styles.module.scss";
 
-type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document' | 'nepDatProfile';
+type TabKeys = "summary" | "projectsProfile" | "contact" | "document" | "nepDatProfile";
 
-interface Props {
-}
+interface Props {}
 
 interface State {
-    activeView: TabKeys;
+	activeView: TabKeys;
 }
 
 const IndicatorButton = modalize(AccentButton);
 
-
 export default class Profile extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
+	public constructor(props: Props) {
+		super(props);
 
-        this.state = {
+		this.state = {
+			selectedDataType: 1,
+			closedVisualization: true,
+			pending: true,
+		};
+	}
 
-            selectedDataType: 1,
-            closedVisualization: true,
-            pending: true,
+	private handleSummaryButtonClick = () => {
+		this.setState({ activeView: "summary" });
+	};
 
-        };
-    }
+	private handleProjectButtonClick = () => {
+		this.setState({ activeView: "projectsProfile" });
+	};
 
-    private handleSummaryButtonClick = () => {
-        this.setState({ activeView: 'summary' });
-    }
+	private handleContactButtonClick = () => {
+		this.setState({ activeView: "contact" });
+	};
 
-    private handleProjectButtonClick = () => {
-        this.setState({ activeView: 'projectsProfile' });
-    }
+	private handleDocumentButtonClick = () => {
+		this.setState({ activeView: "document" });
+	};
 
-    private handleContactButtonClick = () => {
-        this.setState({ activeView: 'contact' });
-    }
+	private handleCloseVisualizationOnModalCloseClick = (boolean) => {
+		this.setState({ closedVisualization: boolean });
+	};
 
-    private handleDocumentButtonClick = () => {
-        this.setState({ activeView: 'document' });
-    }
+	private checkPendingCondition = (condition) => {
+		this.setState({ pending: condition });
+	};
 
-    private handleCloseVisualizationOnModalCloseClick = (boolean) => {
-        this.setState({ closedVisualization: boolean });
-    }
+	public render() {
+		const { activeView, selectedDataType, isDataSetClicked, closedVisualization, pending } =
+			this.state;
 
-    private checkPendingCondition = (condition) => {
-        this.setState({ pending: condition });
-    }
+		return (
+			<Page
+				leftContentContainerClassName={styles.leftContentContainer}
+				hideHazardFilter
+				hideDataRangeFilter
+				leftContent={
+					<Translation>
+						{(t) => (
+							<>
+								<header className={styles.header}>
+									<div className={styles.backButtonProfile}>
+										<Button
+											className={styles.backButton}
+											onClick={() => navigate("/profile/")}
+											iconName="back"
+											transparent
+										/>
 
-    public render() {
-        const { activeView, selectedDataType, isDataSetClicked, closedVisualization, pending } = this.state;
+										<h1>{t("Demography")}</h1>
+									</div>
+									<button
+										type="button"
+										style={{ border: "none", background: "none", cursor: "pointer" }}
+										onClick={() => this.setState({ closedVisualization: false })}
+										disabled={pending}
+										title={t("Visualization")}>
+										<Icon name="bars" className={styles.inputIcon} />
+									</button>
+								</header>
 
-
-        return (
-            <Page
-                leftContentContainerClassName={styles.leftContentContainer}
-                hideHazardFilter
-                hideDataRangeFilter
-                leftContent={(
-                    <Translation>
-                        {
-                            t => (
-                                <>
-
-                                    <header className={styles.header}>
-                                        <div className={styles.backButtonProfile}>
-                                            <Button
-                                                className={styles.backButton}
-                                                onClick={() => navigate('/profile/')}
-                                                iconName="back"
-                                                transparent
-                                            />
-
-                                            <h1>{t('Demography')}</h1>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
-                                            onClick={() => this.setState({ closedVisualization: false })}
-                                            disabled={pending}
-                                            title={t('Visualization')}
-                                        >
-                                            <Icon
-                                                name="bars"
-                                                className={styles.inputIcon}
-                                            />
-
-                                        </button>
-
-
-                                    </header>
-
-
-                                    {/* <div className={styles.dataDisplayDiv}>
+								{/* <div className={styles.dataDisplayDiv}>
                                     <div className={styles.radioInputHeading}>
                                         <>
                                             <h1>Select Data Format</h1>
@@ -167,22 +152,19 @@ export default class Profile extends React.PureComponent<Props, State> {
 
                                 </div> */}
 
-
-                                    <DisasterProfile
-                                        className={styles.view}
-                                        closedVisualization={closedVisualization}
-                                        handleCloseVisualizationOnModalCloseClick={this.handleCloseVisualizationOnModalCloseClick}
-                                        checkPendingCondition={this.checkPendingCondition}
-                                    />
-
-
-                                </>
-                            )
-                        }
-                    </Translation>
-
-                )}
-            />
-        );
-    }
+								<DisasterProfile
+									className={styles.view}
+									closedVisualization={closedVisualization}
+									handleCloseVisualizationOnModalCloseClick={
+										this.handleCloseVisualizationOnModalCloseClick
+									}
+									checkPendingCondition={this.checkPendingCondition}
+								/>
+							</>
+						)}
+					</Translation>
+				}
+			/>
+		);
+	}
 }

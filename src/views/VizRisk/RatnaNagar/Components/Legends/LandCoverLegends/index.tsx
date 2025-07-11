@@ -1,12 +1,11 @@
-import React from 'react';
-import Hexagon from 'react-hexagon';
-import styles from './styles.scss';
+import React from "react";
+import Hexagon from "react-hexagon";
+import styles from "./styles.module.scss";
 
 const LandCoverLegends = () => (
-    <>
-
-        <div className={styles.mainDivLand}>
-            {/* <p className={styles.landcoverIconContainer}>
+	<>
+		<div className={styles.mainDivLand}>
+			{/* <p className={styles.landcoverIconContainer}>
                 <span>
 
                     <Hexagon
@@ -22,7 +21,7 @@ const LandCoverLegends = () => (
                 Buildings
 
             </p> */}
-            {/* <p className={styles.landcoverIconContainer}>
+			{/* <p className={styles.landcoverIconContainer}>
                 <span>
                     <Hexagon
                         style={{
@@ -38,20 +37,16 @@ const LandCoverLegends = () => (
                 Water Bodies
             </p> */}
 
+			<div className={styles.landcoverIconContainer}>
+				<div className={styles.roadIcon} />
+				Roads
+			</div>
+			<div className={styles.landcoverIconContainer}>
+				<div className={styles.bridgeLine} />
+				Bridges
+			</div>
 
-            <div className={styles.landcoverIconContainer}>
-                <div className={styles.roadIcon} />
-
-                Roads
-            </div>
-            <div className={styles.landcoverIconContainer}>
-                <div className={styles.bridgeLine} />
-
-                Bridges
-            </div>
-
-
-            {/* <p className={styles.landcoverIconContainer}>
+			{/* <p className={styles.landcoverIconContainer}>
                 <Hexagon
                     style={{
                         stroke: '#fff',
@@ -90,8 +85,8 @@ const LandCoverLegends = () => (
                 </span>
                 Other
             </p> */}
-        </div>
-    </>
+		</div>
+	</>
 );
 
 export default LandCoverLegends;

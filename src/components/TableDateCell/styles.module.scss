@@ -1,0 +1,9 @@
+@use "../../stylesheets/dimens";
+
+.date-cell {
+	display: block;
+	padding: dimens.$spacing-small;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

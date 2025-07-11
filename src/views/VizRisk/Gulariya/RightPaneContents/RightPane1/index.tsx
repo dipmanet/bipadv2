@@ -1,286 +1,300 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React from "react";
 import {
-    CartesianGrid,
-    Legend,
-    Line,
-    LineChart,
-    ResponsiveContainer,
-    Tooltip, XAxis, YAxis,
-} from 'recharts';
-import VizRiskContext from '#components/VizRiskContext';
-import RealTimeValues from '#views/VizRisk/Common/RealTimeValues';
-import styles from './styles.scss';
-
+	CartesianGrid,
+	Legend,
+	Line,
+	LineChart,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
+import VizRiskContext from "#components/VizRiskContext";
+import RealTimeValues from "#views/VizRisk/Common/RealTimeValues";
+import styles from "./styles.module.scss";
 
 interface State {
-    showInfo: boolean;
+	showInfo: boolean;
 }
 
-interface ComponentProps { }
+interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const lineData = [
-    {
-        name: 'Jan', AvgMax: 18.9, DailyAvg: 14.1, AvgMin: 9.3,
-    },
-    {
-        name: 'Feb', AvgMax: 23.7, DailyAvg: 16.55, AvgMin: 9.4,
-    },
-    {
-        name: 'Mar', AvgMax: 28.1, DailyAvg: 21.05, AvgMin: 14,
-    },
-    {
-        name: 'Apr', AvgMax: 34.3, DailyAvg: 26.85, AvgMin: 19.4,
-    },
-    {
-        name: 'May', AvgMax: 34.8, DailyAvg: 28.35, AvgMin: 21.9,
-    },
-    {
-        name: 'Jun', AvgMax: 33.8, DailyAvg: 29.65, AvgMin: 25.5,
-    },
-    {
-        name: 'Jul', AvgMax: 32.9, DailyAvg: 29.85, AvgMin: 26.8,
-    },
-    {
-        name: 'Aug', AvgMax: 33.8, DailyAvg: 30.25, AvgMin: 26.7,
-    },
-    {
-        name: 'Sep', AvgMax: 33.7, DailyAvg: 29.9, AvgMin: 26.1,
-    },
-    {
-        name: 'Oct', AvgMax: 33.6, DailyAvg: 26.55, AvgMin: 19.5,
-    },
-    {
-        name: 'Nov', AvgMax: 27.1, DailyAvg: 19.6, AvgMin: 12.1,
-    },
-    {
-        name: 'Dec', AvgMax: 22.2, DailyAvg: 15.2, AvgMin: 8.2,
-    },
+	{
+		name: "Jan",
+		AvgMax: 18.9,
+		DailyAvg: 14.1,
+		AvgMin: 9.3,
+	},
+	{
+		name: "Feb",
+		AvgMax: 23.7,
+		DailyAvg: 16.55,
+		AvgMin: 9.4,
+	},
+	{
+		name: "Mar",
+		AvgMax: 28.1,
+		DailyAvg: 21.05,
+		AvgMin: 14,
+	},
+	{
+		name: "Apr",
+		AvgMax: 34.3,
+		DailyAvg: 26.85,
+		AvgMin: 19.4,
+	},
+	{
+		name: "May",
+		AvgMax: 34.8,
+		DailyAvg: 28.35,
+		AvgMin: 21.9,
+	},
+	{
+		name: "Jun",
+		AvgMax: 33.8,
+		DailyAvg: 29.65,
+		AvgMin: 25.5,
+	},
+	{
+		name: "Jul",
+		AvgMax: 32.9,
+		DailyAvg: 29.85,
+		AvgMin: 26.8,
+	},
+	{
+		name: "Aug",
+		AvgMax: 33.8,
+		DailyAvg: 30.25,
+		AvgMin: 26.7,
+	},
+	{
+		name: "Sep",
+		AvgMax: 33.7,
+		DailyAvg: 29.9,
+		AvgMin: 26.1,
+	},
+	{
+		name: "Oct",
+		AvgMax: 33.6,
+		DailyAvg: 26.55,
+		AvgMin: 19.5,
+	},
+	{
+		name: "Nov",
+		AvgMax: 27.1,
+		DailyAvg: 19.6,
+		AvgMin: 12.1,
+	},
+	{
+		name: "Dec",
+		AvgMax: 22.2,
+		DailyAvg: 15.2,
+		AvgMin: 8.2,
+	},
 ];
 const rainfallData = [
-    {
-        name: 'Jan', Rainfall: 59.6,
-    },
-    {
-        name: 'Feb', Rainfall: 32.2,
-    },
-    {
-        name: 'Mar', Rainfall: 31.9,
-    },
-    {
-        name: 'Apr', Rainfall: 31.8,
-    },
-    {
-        name: 'May', Rainfall: 89.9,
-    },
-    {
-        name: 'Jun', Rainfall: 246.4,
-    },
-    {
-        name: 'Jul', Rainfall: 528.6,
-    },
-    {
-        name: 'Aug', Rainfall: 470.7,
-    },
-    {
-        name: 'Sep', Rainfall: 90.9,
-    },
-    {
-        name: 'Oct', Rainfall: 0,
-    },
-    {
-        name: 'Nov', Rainfall: 3.5,
-    },
-    {
-        name: 'Dec', Rainfall: 0,
-    },
+	{
+		name: "Jan",
+		Rainfall: 59.6,
+	},
+	{
+		name: "Feb",
+		Rainfall: 32.2,
+	},
+	{
+		name: "Mar",
+		Rainfall: 31.9,
+	},
+	{
+		name: "Apr",
+		Rainfall: 31.8,
+	},
+	{
+		name: "May",
+		Rainfall: 89.9,
+	},
+	{
+		name: "Jun",
+		Rainfall: 246.4,
+	},
+	{
+		name: "Jul",
+		Rainfall: 528.6,
+	},
+	{
+		name: "Aug",
+		Rainfall: 470.7,
+	},
+	{
+		name: "Sep",
+		Rainfall: 90.9,
+	},
+	{
+		name: "Oct",
+		Rainfall: 0,
+	},
+	{
+		name: "Nov",
+		Rainfall: 3.5,
+	},
+	{
+		name: "Dec",
+		Rainfall: 0,
+	},
 ];
 class Rajapur extends React.PureComponent<Props, State> {
-    public static contextType = VizRiskContext;
+	public static contextType = VizRiskContext;
 
-    public constructor(props: Props) {
-        super(props);
+	public constructor(props: Props) {
+		super(props);
 
-        this.state = {
-            showInfo: false,
-        };
-    }
+		this.state = {
+			showInfo: false,
+		};
+	}
 
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
-                        Avg Max
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
-                        Avg Min
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
-                        Daily Avg
-                    </div>
-                </div>
-            </div>
-        );
-    }
+	public renderLegend = (props) => {
+		const { payload } = props;
+		return (
+			<div className={styles.climateLegendContainer}>
+				<div className={styles.climatelegend}>
+					<div className={styles.legendMax} />
+					<div className={styles.legendText}>Avg Max</div>
+				</div>
+				<div className={styles.climatelegend}>
+					<div className={styles.legendMin} />
+					<div className={styles.legendText}>Avg Min</div>
+				</div>
+				<div className={styles.climatelegend}>
+					<div className={styles.legendDaily} />
+					<div className={styles.legendText}>Daily Avg</div>
+				</div>
+			</div>
+		);
+	};
 
-    public renderLegendRainfall = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
-                        Avg Rainfall
-                    </div>
-                </div>
+	public renderLegendRainfall = (props) => {
+		const { payload } = props;
+		return (
+			<div className={styles.climateLegendContainer}>
+				<div className={styles.climatelegend}>
+					<div className={styles.legendMax} />
+					<div className={styles.legendText}>Avg Rainfall</div>
+				</div>
+			</div>
+		);
+	};
 
-            </div>
-        );
-    }
+	public CustomTooltip = ({ active, payload, label }) => {
+		if (active && payload && payload.length) {
+			return (
+				<div className={styles.customTooltip}>
+					<h2>{payload[0].payload.name}</h2>
+					<p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
+					<p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
+					<p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+				</div>
+			);
+		}
 
-    public CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className={styles.customTooltip}>
-                    <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
-                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
-                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
-                </div>
-            );
-        }
+		return null;
+	};
 
-        return null;
-    };
+	public CustomTooltipRain = ({ active, payload, label }) => {
+		if (active && payload && payload.length) {
+			return (
+				<div className={styles.customTooltip}>
+					<h2>{payload[0].payload.name}</h2>
+					<p>{`Avg Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
+				</div>
+			);
+		}
 
-    public CustomTooltipRain = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className={styles.customTooltip}>
-                    <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
+		return null;
+	};
 
-                </div>
-            );
-        }
+	public render() {
+		const { currentPage } = this.context;
 
-        return null;
-    };
+		const { municipalities } = this.props;
 
-    public render() {
-        const { currentPage } = this.context;
+		const { showInfo } = this.state;
 
-        const {
-            municipalities,
-        } = this.props;
+		return (
+			<div className={styles.vrSideBar}>
+				<h1> Gulariya Municipality </h1>
+				<p>
+					Gulariya municipality lies in the Terai region of Bardiya district in Lumbini Province. It
+					covers a total area of 118 sq. km and is situated at an elevation of 145m from sea level.
+				</p>
+				<h2>Climate</h2>
+				<p>
+					Gulariya experiences a subtropical climate. Summer starts in March and lasts till June.
+					Winter begins in November and lasts till February. Gulariya faces heavy downpours during
+					the monsoon, from June to October.
+				</p>
+				<RealTimeValues
+					stationSeriesIdRain={13065}
+					stationSeriesIdRiver={4136}
+					pollutionStName={"Nepalgunj"}
+					hideWaterLevel
+				/>
 
-        const {
-            showInfo,
-        } = this.state;
-
-        return (
-            <div className={styles.vrSideBar}>
-                <h1> Gulariya Municipality  </h1>
-                <p>
-                    Gulariya municipality lies in the Terai region of Bardiya district in Lumbini Province. It covers a total area of 118 sq. km and is situated at an elevation of 145m from sea level.
-                </p>
-                <h2>Climate</h2>
-                <p>
-                    Gulariya experiences a subtropical climate. Summer starts in March and lasts till June. Winter begins in November and lasts till February. Gulariya faces heavy downpours during the monsoon, from June to October.
-
-                </p>
-                <RealTimeValues
-                    stationSeriesIdRain={13065}
-                    stationSeriesIdRiver={4136}
-                    pollutionStName={'Nepalgunj'}
-                    hideWaterLevel
-                />
-
-                <div className={styles.source}>Source: DHM, 2020 Data </div>
-                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}>Temperature</p>
-                <ResponsiveContainer className={styles.chartContainer} height={300}>
-                    <LineChart
-                        margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
-                        data={lineData}
-                    >
-                        <CartesianGrid
-                            vertical={false}
-                            strokeDasharray="3 3"
-                        />
-                        <XAxis
-                            dataKey="name"
-                            interval="preserveStart"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <YAxis
-                            unit={'℃'}
-                            axisLine={false}
-                            domain={[0, 40]}
-                            padding={{ top: 20 }}
-                            tick={{ fill: '#94bdcf' }}
-                            tickCount={10}
-                            interval="preserveEnd"
-                            allowDataOverflow
-                        />
-                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
-                        <Tooltip
-                            content={this.CustomTooltip}
-                        />
-                        <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
-                        <Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
-                        <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
-                    </LineChart>
-                </ResponsiveContainer>
-                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
-                <ResponsiveContainer className={styles.chartContainer} height={300}>
-                    <LineChart
-                        margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
-                        data={rainfallData}
-                    >
-                        <CartesianGrid
-                            vertical={false}
-                            strokeDasharray="3 3"
-                        />
-                        <XAxis
-                            dataKey="name"
-                            interval="preserveStart"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <YAxis
-                            unit={'mm'}
-                            axisLine={false}
-                            domain={[0, 600]}
-                            padding={{ top: 20 }}
-                            tick={{ fill: '#94bdcf' }}
-                            tickCount={10}
-                            interval="preserveEnd"
-                            allowDataOverflow
-                        />
-                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegendRainfall} />
-                        <Tooltip
-                            content={this.CustomTooltipRain}
-                        />
-                        <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
-
-                    </LineChart>
-                </ResponsiveContainer>
-                {/* <SourceInfo /> */}
-
-
-            </div>
-        );
-    }
+				<div className={styles.source}>Source: DHM, 2020 Data </div>
+				<p style={{ marginBottom: "0px", marginTop: "30px", fontWeight: "bold" }}>Temperature</p>
+				<ResponsiveContainer className={styles.chartContainer} height={300}>
+					<LineChart margin={{ top: 0, right: 10, left: 10, bottom: 10 }} data={lineData}>
+						<CartesianGrid vertical={false} strokeDasharray="3 3" />
+						<XAxis dataKey="name" interval="preserveStart" tick={{ fill: "#94bdcf" }} />
+						<YAxis
+							unit={"℃"}
+							axisLine={false}
+							domain={[0, 40]}
+							padding={{ top: 20 }}
+							tick={{ fill: "#94bdcf" }}
+							tickCount={10}
+							interval="preserveEnd"
+							allowDataOverflow
+						/>
+						<Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
+						<Tooltip content={this.CustomTooltip} />
+						<Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
+						<Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
+						<Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
+					</LineChart>
+				</ResponsiveContainer>
+				<p style={{ marginBottom: "0px", marginTop: "30px", fontWeight: "bold" }}> Rainfall</p>
+				<ResponsiveContainer className={styles.chartContainer} height={300}>
+					<LineChart margin={{ top: 0, right: 10, left: 10, bottom: 10 }} data={rainfallData}>
+						<CartesianGrid vertical={false} strokeDasharray="3 3" />
+						<XAxis dataKey="name" interval="preserveStart" tick={{ fill: "#94bdcf" }} />
+						<YAxis
+							unit={"mm"}
+							axisLine={false}
+							domain={[0, 600]}
+							padding={{ top: 20 }}
+							tick={{ fill: "#94bdcf" }}
+							tickCount={10}
+							interval="preserveEnd"
+							allowDataOverflow
+						/>
+						<Legend
+							iconType="square"
+							iconSize={10}
+							align="center"
+							content={this.renderLegendRainfall}
+						/>
+						<Tooltip content={this.CustomTooltipRain} />
+						<Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
+					</LineChart>
+				</ResponsiveContainer>
+				{/* <SourceInfo /> */}
+			</div>
+		);
+	}
 }
 
 export default Rajapur;

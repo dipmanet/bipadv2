@@ -1,7 +1,7 @@
-/* eslint-disable max-len */
+ 
 import React from 'react';
 import { Table } from 'semantic-ui-react';
-import styles from '../../OpenspaceMetaDataModal/MetadataComponents/styles.scss';
+import styles from '../../OpenspaceMetaDataModal/MetadataComponent./styles.module.scss';
 // import './table.css';
 import 'semantic-ui-css/components/table.min.css';
 

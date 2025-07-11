@@ -1,0 +1,76 @@
+@use "~../../../../stylesheets/dimens";
+@use "~../../../../stylesheets/colors";
+
+.normal {
+	display: flex;
+	align-items: center;
+	padding: 7px;
+	.label {
+		flex-shrink: 0;
+		text-transform: uppercase;
+		color: var(--color-text-light);
+		font-size: dimens.$font-size-small;
+		font-weight: var(--font-weight-bold);
+
+		&:after {
+			margin-right: dimens.$spacing-small;
+			content: ":";
+		}
+	}
+
+	.icon-label {
+		flex-shrink: 0;
+		margin-right: dimens.$spacing-small;
+		color: colors.$color-text-label;
+	}
+
+	.value {
+		flex-grow: 1;
+	}
+}
+
+.table {
+	display: table-row;
+	align-items: center;
+	font-size: dimens.$font-size-large;
+
+	.label {
+		display: table-cell;
+		padding: dimens.$spacing-extra-small;
+		color: colors.$color-text-label;
+	}
+
+	.icon-label {
+		flex-shrink: 0;
+		margin-right: dimens.$spacing-small;
+		color: colors.$color-text-label;
+	}
+
+	.value {
+		display: table-cell;
+		padding-left: dimens.$spacing-medium;
+	}
+}
+
+.block {
+	display: flex;
+	flex-direction: column;
+
+	.label {
+		color: colors.$color-text-label;
+		font-weight: dimens.$font-weight-bold;
+	}
+	.infoIcon {
+		color: #444;
+		padding-right: 4px;
+		font-size: 12px;
+		margin-left: 20px;
+		cursor: pointer;
+	}
+	.value {
+		color: colors.$color-accent;
+		font-size: dimens.$font-size-large;
+		font-weight: dimens.$font-weight-bold;
+		cursor: pointer;
+	}
+}

@@ -25,7 +25,7 @@ import {
 } from '#selectors';
 import { groupList, sum } from '#utils/common';
 import { hazardTypesList } from '#utils/domain';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 
 const propTypes = {
     className: PropTypes.string,

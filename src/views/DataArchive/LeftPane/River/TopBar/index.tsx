@@ -1,45 +1,40 @@
-import React from 'react';
+import React from "react";
 
-import DateRangeInfo from '#components/DateRangeInfo';
-import modalize from '#rscg/Modalize';
-import Button from '#rsca/Button';
-import * as PageType from '#store/atom/page/types';
-import RiverModal from '../Modal';
+import DateRangeInfo from "#components/DateRangeInfo";
+import modalize from "#rscg/Modalize";
+import Button from "#rsca/Button";
+import * as PageType from "#store/atom/page/types";
+import RiverModal from "../Modal";
 
-
-import styles from './styles.scss';
+import styles from "./styles.module.scss";
 
 const ModalButton = modalize(Button);
 
 interface Props {
-    startDate?: string;
-    endDate?: string;
-    riverList: PageType.DataArchiveRiver[];
+	startDate?: string;
+	endDate?: string;
+	riverList: PageType.DataArchiveRiver[];
 }
 
 const TopBar = (props: Props) => {
-    const { riverList, startDate, endDate } = props;
+	const { riverList, startDate, endDate } = props;
 
-    return (
-        <div className={styles.topBar}>
-            <DateRangeInfo
-                className={styles.dateRange}
-                startDate={startDate || 'N/A'}
-                endDate={endDate || 'N/A'}
-            />
-            <ModalButton
-                className={styles.showDetailsButton}
-                transparent
-                iconName="table"
-                title="Show all data"
-                modal={(
-                    <RiverModal
-                        dataArchiveRiver={riverList}
-                    />
-                )}
-            />
-        </div>
-    );
+	return (
+		<div className={styles.topBar}>
+			<DateRangeInfo
+				className={styles.dateRange}
+				startDate={startDate || "N/A"}
+				endDate={endDate || "N/A"}
+			/>
+			<ModalButton
+				className={styles.showDetailsButton}
+				transparent
+				iconName="table"
+				title="Show all data"
+				modal={<RiverModal dataArchiveRiver={riverList} />}
+			/>
+		</div>
+	);
 };
 
 export default TopBar;

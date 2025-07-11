@@ -1,121 +1,116 @@
-import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import React from "react";
+import { _cs } from "@togglecorp/fujs";
 
-import MultiViewContainer from '#rscv/MultiViewContainer';
-import { MapChildContext } from '#re-map/context';
-import { LayerMap, LayerGroup } from '#store/atom/page/types';
-import { AttributeKey } from '#types';
-import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import Hazard from './Hazard';
-import Exposure from './Exposure';
-import Vulnerability from './Vulnerability';
-import Risk from './Risk';
-import CapacityAndResources from './CapacityAndResources';
-import ClimateChange from './ClimateChange';
-import styles from './styles.scss';
-
+import MultiViewContainer from "#rscv/MultiViewContainer";
+import { MapChildContext } from "#re-map/context";
+import { LayerMap, LayerGroup } from "#store/atom/page/types";
+import { AttributeKey } from "#types";
+import RiskInfoLayerContext from "#components/RiskInfoLayerContext";
+import Hazard from "./Hazard";
+import Exposure from "./Exposure";
+import Vulnerability from "./Vulnerability";
+import Risk from "./Risk";
+import CapacityAndResources from "./CapacityAndResources";
+import ClimateChange from "./ClimateChange";
+import styles from "./styles.module.scss";
 
 interface Props {
-    className?: string;
-    layerMap: LayerMap;
-    layerGroupList: LayerGroup[];
-    attribute?: AttributeKey;
-    activeView: string;
-    handleCarActive: Function;
-    handleActiveLayerIndication: Function;
-    setResourceId: Function;
+	className?: string;
+	layerMap: LayerMap;
+	layerGroupList: LayerGroup[];
+	attribute?: AttributeKey;
+	activeView: string;
+	handleCarActive: Function;
+	handleActiveLayerIndication: Function;
+	setResourceId: Function;
 }
 
-interface State {
-}
+interface State {}
 
 export default class Details extends React.PureComponent<Props, State> {
-    private handleMapLayer = (coordinates) => {
-        const { map } = this.context;
-        map.flyTo({ center: coordinates, zoom: 22 });
-    }
+	private handleMapLayer = (coordinates) => {
+		const { map } = this.context;
+		map.flyTo({ center: coordinates, zoom: 22 });
+	};
 
-    private views = {
-        hazard: {
-            title: 'Hazard',
-            component: Hazard,
-            rendererParams: () => ({
-                className: styles.content,
-                layerList: this.props.layerMap.hazard || [],
-                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'hazard'),
-            }),
-        },
-        exposure: {
-            title: 'Exposure',
-            component: Exposure,
-            rendererParams: () => ({
-                className: styles.content,
-                // layerList: this.props.layerMap.exposure || [],
-                // layerGroupList: this.props.layerGroupList,
-                layerList: this.props.layerMap.exposure || [],
-                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'exposure'),
-            }),
-        },
-        vulnerability: {
-            title: 'Vulnerability',
-            component: Vulnerability,
-            rendererParams: () => ({
-                className: styles.content,
-            }),
-        },
-        risk: {
-            title: 'Risk',
-            component: Risk,
-            rendererParams: () => ({
-                className: styles.content,
-                layerList: this.props.layerMap.risk || [],
-                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'risk'),
-            }),
-        },
-        'capacity-and-resources': {
-            title: 'Capacity and resources',
-            component: CapacityAndResources,
-            rendererParams: () => ({
-                className: styles.content,
-                layerList: this.props.layerMap.capacity_resource || [],
-                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'capacity_resource'),
-                handleCarActive: this.props.handleCarActive,
-                handleActiveLayerIndication: this.props.handleActiveLayerIndication,
-                handleDroneImage: this.props.handleDroneImage,
-                setResourceId: this.props.setResourceId,
-                droneImagePending: this.props.droneImagePending,
-                searchedResourceCoordinateData: this.handleMapLayer,
-            }),
-        },
-        'climate-change': {
-            title: 'Climate change',
-            component: ClimateChange,
-            rendererParams: () => ({
-                className: styles.content,
-                layerList: this.props.layerMap.climate_change || [],
-                // layerGroupList: this.props.layerGroupList,
-                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'climate_change'),
-            }),
-        },
-    }
+	private views = {
+		hazard: {
+			title: "Hazard",
+			component: Hazard,
+			rendererParams: () => ({
+				className: styles.content,
+				layerList: this.props.layerMap.hazard || [],
+				layerGroupList: this.props.layerGroupList.filter((group) => group.category === "hazard"),
+			}),
+		},
+		exposure: {
+			title: "Exposure",
+			component: Exposure,
+			rendererParams: () => ({
+				className: styles.content,
+				// layerList: this.props.layerMap.exposure || [],
+				// layerGroupList: this.props.layerGroupList,
+				layerList: this.props.layerMap.exposure || [],
+				layerGroupList: this.props.layerGroupList.filter((group) => group.category === "exposure"),
+			}),
+		},
+		vulnerability: {
+			title: "Vulnerability",
+			component: Vulnerability,
+			rendererParams: () => ({
+				className: styles.content,
+			}),
+		},
+		risk: {
+			title: "Risk",
+			component: Risk,
+			rendererParams: () => ({
+				className: styles.content,
+				layerList: this.props.layerMap.risk || [],
+				layerGroupList: this.props.layerGroupList.filter((group) => group.category === "risk"),
+			}),
+		},
+		"capacity-and-resources": {
+			title: "Capacity and resources",
+			component: CapacityAndResources,
+			rendererParams: () => ({
+				className: styles.content,
+				layerList: this.props.layerMap.capacity_resource || [],
+				layerGroupList: this.props.layerGroupList.filter(
+					(group) => group.category === "capacity_resource"
+				),
+				handleCarActive: this.props.handleCarActive,
+				handleActiveLayerIndication: this.props.handleActiveLayerIndication,
+				handleDroneImage: this.props.handleDroneImage,
+				setResourceId: this.props.setResourceId,
+				droneImagePending: this.props.droneImagePending,
+				searchedResourceCoordinateData: this.handleMapLayer,
+			}),
+		},
+		"climate-change": {
+			title: "Climate change",
+			component: ClimateChange,
+			rendererParams: () => ({
+				className: styles.content,
+				layerList: this.props.layerMap.climate_change || [],
+				// layerGroupList: this.props.layerGroupList,
+				layerGroupList: this.props.layerGroupList.filter(
+					(group) => group.category === "climate_change"
+				),
+			}),
+		},
+	};
 
-    public render() {
-        const {
-            className,
-            activeView,
-        } = this.props;
+	public render() {
+		const { className, activeView } = this.props;
 
-        // const headingText = this.views[activeView].title;
+		// const headingText = this.views[activeView].title;
 
-        return (
-            <div className={_cs(styles.details, className)}>
-
-                <MultiViewContainer
-                    views={this.views}
-                    active={activeView}
-                />
-            </div>
-        );
-    }
+		return (
+			<div className={_cs(styles.details, className)}>
+				<MultiViewContainer views={this.views} active={activeView} />
+			</div>
+		);
+	}
 }
 Details.contextType = MapChildContext;

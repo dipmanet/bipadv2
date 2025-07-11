@@ -1,32 +1,27 @@
-import { compose, createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { compose, createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
 
-import { isDevelopment } from '#config/env';
+import createLogger from "./middlewares/logger";
 
-import createLogger from './middlewares/logger';
-
-import reducer from './reducer';
+import reducer from "./reducer";
 
 const actionsToSkipLogging: string[] = [
-    // Add action to skip logging
-    'auth/SET_AUTH',
+	// Add action to skip logging
+	"auth/SET_AUTH",
 ];
 
-const middleware = [
-    createLogger(actionsToSkipLogging),
-];
+const middleware = [createLogger(actionsToSkipLogging)];
 
 // Override compose if development mode and redux extension is installed
-const overrideCompose = !!composeWithDevTools && isDevelopment;
+const isDevelopmentMode = import.meta.env.DEV;
+const overrideCompose = !!composeWithDevTools && isDevelopmentMode;
 
 const applicableCompose = !overrideCompose
-    ? compose
-    : composeWithDevTools({
-        actionsBlacklist: actionsToSkipLogging,
-    });
+	? compose
+	: composeWithDevTools({
+			actionsBlacklist: actionsToSkipLogging,
+	  });
 
-const enhancer = applicableCompose(
-    applyMiddleware(...middleware),
-);
+const enhancer = applicableCompose(applyMiddleware(...middleware));
 
 export default createStore(reducer, undefined, enhancer);

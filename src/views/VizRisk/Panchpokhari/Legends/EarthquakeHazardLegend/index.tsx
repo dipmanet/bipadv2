@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Hexagon from 'react-hexagon';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 
 const DemoGraphicsLegends = (props) => {
     const {

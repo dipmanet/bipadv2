@@ -1,83 +1,69 @@
-import React from 'react';
-import { _cs } from '@togglecorp/fujs';
-import PropTypes from 'prop-types';
+import React from "react";
+import { _cs } from "@togglecorp/fujs";
+import PropTypes from "prop-types";
 
-import ListView from '#rscv/List/ListView';
-import styles from './styles.scss';
+import ListView from "#rscv/List/ListView";
+import styles from "./styles.module.scss";
 
-
-const Report = ({
-    className,
-    title,
-    isActive,
-    onClick,
-}) => (
-    <button
-        className={_cs(
-            styles.report,
-            className,
-            isActive && styles.active,
-        )}
-        type="button"
-        onClick={onClick}
-    >
-        {title}
-    </button>
+const Report = ({ className, title, isActive, onClick }) => (
+	<button
+		className={_cs(styles.report, className, isActive && styles.active)}
+		type="button"
+		onClick={onClick}>
+		{title}
+	</button>
 );
 
 Report.propTypes = {
-    className: PropTypes.string,
+	className: PropTypes.string,
 };
 
 Report.defaultProps = {
-    className: undefined,
+	className: undefined,
 };
 
 const propTypes = {
-    // eslint-disable-next-line react/forbid-prop-types
-    reports: PropTypes.array,
-    className: PropTypes.string,
-    selectedReport: PropTypes.number,
-    onSelectedReportChange: PropTypes.func.isRequired,
+	// eslint-disable-next-line react/forbid-prop-types
+	reports: PropTypes.array,
+	className: PropTypes.string,
+	selectedReport: PropTypes.number,
+	onSelectedReportChange: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-    className: undefined,
-    selectedReport: undefined,
-    reports: undefined,
+	className: undefined,
+	selectedReport: undefined,
+	reports: undefined,
 };
 
-const reportKeySelector = d => d.id;
+const reportKeySelector = (d) => d.id;
 
 export default class SituationReportSidePane extends React.PureComponent {
-    static propTypes = propTypes;
+	static propTypes = propTypes;
 
-    static defaultProps = defaultProps;
+	static defaultProps = defaultProps;
 
-    reportRendererParams = (key, data) => ({
-        title: data.title,
-        onClick: () => this.props.onSelectedReportChange(key),
-        isActive: key === this.props.selectedReport,
-    });
+	reportRendererParams = (key, data) => ({
+		title: data.title,
+		onClick: () => this.props.onSelectedReportChange(key),
+		isActive: key === this.props.selectedReport,
+	});
 
-    render() {
-        const {
-            className,
-            reports,
-        } = this.props;
+	render() {
+		const { className, reports } = this.props;
 
-        if (!reports) {
-            return undefined;
-        }
+		if (!reports) {
+			return undefined;
+		}
 
-        return (
-            <ListView
-                className={_cs(styles.sidePane, className)}
-                data={reports}
-                keySelector={reportKeySelector}
-                renderer={Report}
-                rendererParams={this.reportRendererParams}
-            />
-        );
-    }
+		return (
+			<ListView
+				className={_cs(styles.sidePane, className)}
+				data={reports}
+				keySelector={reportKeySelector}
+				renderer={Report}
+				rendererParams={this.reportRendererParams}
+			/>
+		);
+	}
 }

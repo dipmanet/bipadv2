@@ -1,12 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable indent */
+
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-tabs */
-/* eslint-disable max-len */
-import React from 'react';
+
+import React from "react";
 import {
 	Label,
 	Bar,
@@ -20,8 +17,8 @@ import {
 	Tooltip,
 	XAxis,
 	YAxis,
-} from 'recharts';
-import styles from '../LeftPane/styles.scss';
+} from "recharts";
+import styles from "../LeftPan./styles.module.scss";
 
 export default function PopulationChart(props) {
 	const { populationCustomTooltip, populationData, renderLegendPopulaion } = props;
@@ -31,23 +28,15 @@ export default function PopulationChart(props) {
 				<BarChart
 					data={populationData}
 					layout="vertical"
-					margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
-				>
+					margin={{ top: 30, bottom: 10, right: 20, left: 10 }}>
 					<CartesianGrid strokeDasharray="3 3" />
 					<XAxis
 						type="number"
-						tick={{ fill: '#94bdcf' }}
-						tickFormatter={tick => tick.toLocaleString()}
+						tick={{ fill: "#94bdcf" }}
+						tickFormatter={(tick) => tick.toLocaleString()}
 					/>
-					<YAxis
-						type="category"
-						dataKey="name"
-						tick={{ fill: '#94bdcf' }}
-					/>
-					<Tooltip
-						content={populationCustomTooltip}
-						cursor={{ fill: '#1c333f' }}
-					/>
+					<YAxis type="category" dataKey="name" tick={{ fill: "#94bdcf" }} />
+					<Tooltip content={populationCustomTooltip} cursor={{ fill: "#1c333f" }} />
 					{/* <Legend /> */}
 					<Legend
 						layout="horizontal"
@@ -58,12 +47,7 @@ export default function PopulationChart(props) {
 						align="center"
 						content={renderLegendPopulaion}
 					/>
-					<Bar
-						dataKey="MalePop"
-						fill="#ffbf00"
-						stackId="a"
-						barSize={15}
-					/>
+					<Bar dataKey="MalePop" fill="#ffbf00" stackId="a" barSize={15} />
 					<Bar
 						dataKey="FemalePop"
 						stackId="a"
@@ -71,12 +55,7 @@ export default function PopulationChart(props) {
 						fill="#347eff"
 						barSize={15}
 					/>
-					<Bar
-						dataKey="TotalHousehold"
-						radius={[0, 10, 10, 0]}
-						fill="#00d725"
-						barSize={15}
-					/>
+					<Bar dataKey="TotalHousehold" radius={[0, 10, 10, 0]} fill="#00d725" barSize={15} />
 					{/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
 				</BarChart>
 			</ResponsiveContainer>

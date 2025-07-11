@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import Gt from '#views/PalikaReport/utils';
 import Translations from '#views/PalikaReport/Constants/Translations';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 
 interface Props{
     chartData: any[];
