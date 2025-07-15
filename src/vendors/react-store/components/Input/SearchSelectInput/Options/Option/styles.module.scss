@@ -1,0 +1,24 @@
+@import '../../../../../stylesheets/button-base';
+
+.option {
+    @extend %button-base;
+    display: block;
+    cursor: pointer;
+    padding: var(--spacing-small) var(--spacing-small-alt);
+    width: 100%;
+    text-align: left;
+
+    &.focused {
+        background-color: var(--color-background-hover);
+    }
+
+    &.active {
+        background-color: var(--color-accent);
+        color: var(--color-text-on-accent);
+    }
+
+    &:hover {
+        background-color: var(--color-accent);
+        color: var(--color-text-on-accent);
+    }
+}

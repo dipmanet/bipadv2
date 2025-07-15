@@ -1,0 +1,24 @@
+
+.row-wrapper {
+    display: inline-block;
+    min-width: 100%;
+
+    .row {
+        display: flex;
+        height: 100%;
+        font-size: var(--font-size-medium);
+
+        .start-virtual-container {
+            flex-shrink: 0;
+        }
+
+        .visible-section {
+            display: flex;
+            flex-shrink: 0;
+        }
+
+        .end-virtual-container {
+            flex-shrink: 0;
+        }
+    }
+}

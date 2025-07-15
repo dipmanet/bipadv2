@@ -1,0 +1,24 @@
+
+.health-bar {
+    display: flex;
+    align-items: center;
+
+    .title {
+        flex-shrink: 0;
+        padding-right: var(--spacing-medium);
+        width: 64px;
+        text-transform: capitalize;
+        color: var(--color-text-label);
+        font-weight: var(--font-weight-bold);
+
+        &:after {
+            content: ':',
+        }
+    }
+
+    .segments {
+        display: flex;
+        flex-grow: 1;
+        height: 100%;
+    }
+}

@@ -1,0 +1,63 @@
+@import '../../../stylesheets/utils';
+@import '../../../stylesheets/visualizations';
+
+.diagram {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.diagram-view {
+    @extend %viz-content;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+    .header {
+
+        .right-content {
+            .color-scheme-input-container {
+                display: flex;
+                align-items: center;
+
+                .color-scheme-label {
+                    flex-shrink: 0;
+                    padding-right: var(--spacing-small);
+                    width: auto;
+                }
+
+                .select-input {
+                    flex-grow: 1;
+                    flex-shrink: 0;
+                }
+            }
+
+            .action-buttons {
+                flex-shrink: 0;
+                padding-left: var(--spacing-large);
+            }
+        }
+    }
+
+    .diagram {
+        flex-grow: 1;
+    }
+}
+
+.full-screen-container {
+    @extend %viz-content;
+
+    .heading {
+        .back-button {
+            padding: var(--spacing-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
+        }
+    }
+}
+
+.select-input-options {
+    z-index: 111;
+}

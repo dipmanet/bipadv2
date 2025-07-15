@@ -1,0 +1,50 @@
+@import '../../../stylesheets/utils';
+
+.spark-lines {
+    cursor: pointer;
+
+    .spark-line {
+        .area {
+            fill: var(--color-viz-blue);
+            stroke: none;
+            stroke-width: 0;
+            fill-opacity: 0.1;
+        }
+
+        .path {
+            stroke: var(--color-viz-blue);
+            stroke-width: 1;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        .focus {
+            fill: var(--color-viz-blue);
+            stroke: var(--color-viz-grey);
+
+            .line {
+                stroke: var(--color-viz-grey);
+            }
+        }
+    }
+}
+
+.tooltip {
+    @include shadow-medium;
+
+    display: block;
+    position: fixed;
+    z-index: 10;
+    background-color: var(--color-foreground);
+    padding: var(--spacing-small) var(--spacing-medium-alt);
+    color: var(--color-text);
+    pointer-events: none;
+
+    .yvalue {
+        display: block;
+    }
+
+    .xvalue {
+        display: block;
+    }
+}

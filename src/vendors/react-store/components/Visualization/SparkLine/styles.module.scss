@@ -1,0 +1,28 @@
+:root {
+    --sparkline-color: var(--color-accent);
+}
+
+.spark-lines {
+    width: 100%;
+    height: 100%;
+
+    svg {
+        width: 100%;
+        height: 100%;
+
+        path {
+            fill: none;
+            stroke: var(--sparkline-color);
+        }
+
+        circle {
+            fill: var(--sparkline-color);
+            stroke: var(--sparkline-color);
+            opacity: 0;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+}

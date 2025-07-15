@@ -1,0 +1,36 @@
+
+:root {
+    --color-text-on-positive: rgba(0, 0, 0, .5);
+    --color-text-on-negative: rgba(0, 0, 0, .5);
+}
+
+.gain-positive {
+    &.colored-numeral {
+        color: var(--color-positive);
+    }
+
+    &.block-numeral {
+        background-color: var(--color-positive);
+        color: var(--color-text-on-positive);
+    }
+}
+
+.gain-negative {
+    &.colored-numeral {
+        color: var(--color-negative);
+    }
+
+    &.block-numeral {
+        background-color: var(--color-negative);
+        color: var(--color-text-on-negative);
+    }
+}
+
+.block-numeral {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-medium);
+    min-width: 72px;
+}

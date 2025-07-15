@@ -1,0 +1,7 @@
+.drop-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--width-separator-medium) solid var(--color-separator);
+    color: var(--color-text-label);
+}

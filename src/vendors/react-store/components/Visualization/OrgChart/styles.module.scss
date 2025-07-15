@@ -1,0 +1,50 @@
+
+.org-chart {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .info-icon {
+        position: absolute;
+        top: var(--spacing-small);
+        right: var(--spacing-small);
+        cursor: pointer;
+        color: var(--color-accent);
+    }
+
+    .chart {
+        flex: 1 1 auto;
+
+        .link {
+            fill: none;
+            stroke: var(--color-text-label);
+        }
+
+        .node {
+            fill: var(--color-foreground);
+
+            rect {
+                stroke: var(--color-text-label);
+                fill: var(--color-foreground);
+                rx: var(--radius-border-medium);
+                ry: var(--radius-border-medium);
+            }
+
+            text {
+                fill: var(--color-text);
+                font-family: var(--font-family-sans-serif);
+            }
+
+            &.active {
+                rect {
+                    fill: var(--color-accent);
+                }
+
+                text {
+                    fill: var(--color-text-on-accent);
+                }
+            }
+        }
+    }
+}

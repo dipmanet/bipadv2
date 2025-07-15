@@ -1,0 +1,13 @@
+
+.fullscreen {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 12;
+    box-shadow: 0 var(--spacing-small) var(--spacing-extra-large) var(--color-shadow-medium);
+    background-color: var(--color-foreground);
+    overflow: auto;
+    animation: fade-in-from-top .3s ease forwards;
+}

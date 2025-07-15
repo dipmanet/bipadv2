@@ -1,0 +1,18 @@
+.header {
+    position: sticky;
+    top: 0;
+    border-bottom: var(--width-separator-thin) solid var(--color-separator);
+    background-color: var(--color-foreground);
+    padding: 0;
+    text-transform: uppercase;
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-normal);
+
+    &:not(:last-child) {
+        border-right: var(--width-separator-thin) solid var(--color-separator);
+    }
+
+    &.disabled {
+        color: var(--color-text-disabled);
+    }
+}
